@@ -4,26 +4,26 @@ description: Azure IaaS 中 Linux 虚拟机的名称解析方案，包括提供�
 services: virtual-machines
 documentationcenter: na
 author: RicksterCDN
-manager: jeconnoc
+manager: gwallace
 editor: tysonn
 ms.assetid: 787a1e04-cebf-4122-a1b4-1fcf0a2bbf5f
 ms.service: virtual-machines-linux
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 10/19/2016
 ms.author: rclaus
-ms.openlocfilehash: d899e037a144892d6d2c843fec08d63a9e3e514a
-ms.sourcegitcommit: 6fcd9e220b9cd4cb2d4365de0299bf48fbb18c17
-ms.translationtype: HT
+ms.openlocfilehash: 16dc7d16b3e8f2a4c95e93f9b85c74027291ce19
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/05/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70084044"
 ---
 # <a name="dns-name-resolution-options-for-linux-virtual-machines-in-azure"></a>Azure 中 Linux 虚拟机的 DNS 名称解析选项
 Azure 默认为单个虚拟网络中的所有虚拟机提供 DNS 名称解析。 在 Azure 托管的虚拟机上配置自己的 DNS 服务，即可实现自己的 DNS 名称解析解决方案。 以下方案有助于选择适合的解决方案。
 
-* [Azure 提供的名称解析](#azure-provided-name-resolution)
+* [Azure 提供的名称解析](#name-resolution-that-azure-provides)
 * [使用自己的 DNS 服务器的名称解析](#name-resolution-using-your-own-dns-server)
 
 使用哪种名称解析类型取决于虚拟机和角色实例彼此之间如何通信。
@@ -32,7 +32,7 @@ Azure 默认为单个虚拟网络中的所有虚拟机提供 DNS 名称解析。
 
 | **方案** | **解决方案** | **后缀** |
 | --- | --- | --- |
-| 在同一虚拟网络中的角色实例或虚拟机之间进行名称解析 |[Azure 提供的名称解析](#azure-provided-name-resolution) |主机名或完全限定域名 (FQDN) |
+| 在同一虚拟网络中的角色实例或虚拟机之间进行名称解析 |Azure 提供的名称解析 |主机名或完全限定域名 (FQDN) |
 | 在不同虚拟网络中的角色实例或虚拟机之间进行名称解析 |客户托管的 DNS 服务器，在虚拟网络之间转发查询供 Azure（DNS 代理）解析。 请参阅[使用自己的 DNS 服务器进行名称解析](#name-resolution-using-your-own-dns-server)。 |仅 FQDN |
 | 从 Azure 中的角色实例或虚拟机解析本地计算机和服务名称 |客户托管的 DNS 服务器（例如本地域控制器、本地只读域控制器或使用区域传送同步的 DNS 辅助服务器）。 请参阅[使用自己的 DNS 服务器进行名称解析](#name-resolution-using-your-own-dns-server)。 |仅 FQDN |
 | 解析本地计算机中的 Azure 主机名 |将查询转发到相应虚拟网络中客户托管的 DNS 代理服务器。 代理服务器将查询转发到 Azure 进行解析。 请参阅[使用自己的 DNS 服务器进行名称解析](#name-resolution-using-your-own-dns-server)。 |仅 FQDN |
@@ -71,7 +71,7 @@ Azure 默认为单个虚拟网络中的所有虚拟机提供 DNS 名称解析。
 Ubuntu（使用 resolvconf）
   * 安装 dnsmasq 包（“sudo apt-get install dnsmasq”）。
 
-**SUSE（使用 netconf）**：
+**SUSE（使用 netconf）** ：
 1. 安装 dnsmasq 包（“sudo zypper install dnsmasq”）。
 2. 启用 dnsmasq 服务（“systemctl enable dnsmasq.service”）。
 3. 启动 dnsmasq 服务（“systemctl start dnsmasq.service”）。
@@ -86,7 +86,7 @@ Rogue Wave Software 的 CentOS（之前为 OpenLogic；使用 NetworkManager）
 5. 重新启动网络服务（“service network restart”），将缓存设置为本地 DNS 解析程序
 
 > [!NOTE]
-> “dnsmasq”包只是适用于 Linux 的众多 DNS 缓存中的一个。 在使用之前，请检查其是否满足需求，并确认没有安装其他缓存。
+> :“dnsmasq”包只是适用于 Linux 的众多 DNS 缓存中的一个。 在使用之前，请检查其是否满足需求，并确认没有安装其他缓存。
 >
 >
 

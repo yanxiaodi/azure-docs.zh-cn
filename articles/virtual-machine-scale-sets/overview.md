@@ -3,8 +3,8 @@ title: Azure 虚拟机规模集概述 | Microsoft Docs
 description: 了解 Azure 虚拟机规模集和应用程序自动缩放方法。
 services: virtual-machine-scale-sets
 documentationcenter: ''
-author: gatneil
-manager: jeconnoc
+author: mayanknayar
+manager: drewm
 editor: ''
 tags: azure-resource-manager
 ms.assetid: ''
@@ -14,13 +14,14 @@ ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: overview
 ms.custom: mvc
-ms.date: 03/27/2018
-ms.author: negat
-ms.openlocfilehash: 8ded9b20bd70d18b8a68df0c9775f3a56f8b185b
-ms.sourcegitcommit: d74657d1926467210454f58970c45b2fd3ca088d
+ms.date: 05/21/2018
+ms.author: manayar
+ms.openlocfilehash: 98c183d65a18c186b515df8ec02ba26b8c2c4143
+ms.sourcegitcommit: 25a60179840b30706429c397991157f27de9e886
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/28/2018
+ms.lasthandoff: 05/28/2019
+ms.locfileid: "66258311"
 ---
 # <a name="what-are-virtual-machine-scale-sets"></a>什么是虚拟机规模集？
 使用 Azure 虚拟机规模集可以创建并管理一组完全相同的、负载均衡的 VM。 可以根据需求或定义的计划自动增减 VM 实例的数目。 规模集为应用程序提供高可用性，用于集中管理、配置和更新大量 VM。 可以使用虚拟机规模集为计算、大数据和容器工作负荷等领域构建大规模的服务。
@@ -45,14 +46,14 @@ Azure 虚拟机规模集为跨多个 VM 运行的应用程序提供管理功能�
     - 另外，自动缩放还可以尽量降低在需求较低时运行应用程序的不必要的 VM 实例数，并可让客户在需求增加时继续享受可以接受的性能级别，而且会自动添加更多的 VM 实例。 此功能有助于降低成本，并根据需要高效地创建 Azure 资源。
 
 - **大规模工作**
-    - 规模集最多支持 1,000 个 VM 实例。 如果创建和上传自己的自定义 VM 映像，则该限制为 300 个 VM 实例。
-    - 若要尽量提高生产工作负荷的性能，请使用 [Azure 托管磁盘](../virtual-machines/windows/managed-disks-overview.md)和[高级存储](../virtual-machines/windows/premium-storage.md)。
+    - 规模集最多支持 1,000 个 VM 实例。 如果创建和上传自己的自定义 VM 映像，则该限制为 600 个 VM 实例。
+    - 若要尽量提高生产工作负荷的性能，请使用 [Azure 托管磁盘](../virtual-machines/windows/managed-disks-overview.md)。
 
 
 ## <a name="differences-between-virtual-machines-and-scale-sets"></a>虚拟机和规模集的差异
 规模集是使用虚拟机构建的。 使用规模集时，会提供管理层和自动层来运行和缩放应用程序。 可以改用手动方式来创建和管理单个 VM，也可以集成现有的工具，以便构建类似级别的自动化。 下表概述了规模集的优势（与手动管理多个 VM 实例相比）。
 
-| 方案                           | VM 的手动组                                                                    | 虚拟机规模集 |
+| 场景                           | VM 的手动组                                                                    | 虚拟机规模集 |
 |------------------------------------|----------------------------------------------------------------------------------------|---------------------------|
 | 添加额外的 VM 实例        | 用于创建、配置和确保符合性的手动过程                             | 自动根据中心配置进行创建 |
 | 流量均衡和分发 | 用于创建和配置 Azure 负载均衡器或应用程序网关的手动过程      | 可以自动创建 Azure 负载均衡器或应用程序网关以及与之集成 |

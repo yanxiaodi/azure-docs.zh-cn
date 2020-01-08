@@ -1,25 +1,22 @@
 ---
-title: 在逻辑应用中添加 Office 365 Outlook 连接器 | Microsoft Docs
-description: 使用 Office 365 连接器创建逻辑应用，启用与 Office 365 的交互。 例如：创建、编辑和更新联系人和日历项。
-services: ''
-documentationcenter: ''
+title: 连接到 Office 365 Outlook - Azure 逻辑应用 | Microsoft Docs
+description: 使用 Office 365 REST API 和 Azure 逻辑应用管理电子邮件、联系人和日历
 author: ecfan
-manager: anneta
-editor: ''
-tags: connectors
-ms.assetid: b2f6cc2c-bba2-493a-b0ba-841785462a80
-ms.service: logic-apps
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: integration
+manager: jeconnoc
+ms.author: estfan
 ms.date: 10/18/2016
-ms.author: estfan; ladocs
-ms.openlocfilehash: ea0b2f657f808bb6ba4bf427497955b9e520c669
-ms.sourcegitcommit: 8aab1aab0135fad24987a311b42a1c25a839e9f3
-ms.translationtype: HT
+ms.topic: article
+ms.service: logic-apps
+services: logic-apps
+ms.reviewer: klam, LADocs
+ms.suite: integration
+tags: connectors
+ms.openlocfilehash: 52abf17e869216e65780129a7b48df79bd79f67a
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "62105048"
 ---
 # <a name="get-started-with-the-office-365-outlook-connector"></a>Office 365 Outlook 连接器入门
 Office 365 Outlook 连接器在 Office 365 中启用与 Outlook 的交互。 使用此连接器创建、编辑和更新联系人和日历项，还可以获取、发送和回复电子邮件。
@@ -53,7 +50,7 @@ Office 365 Outlook 连接器在 Office 365 中启用与 Outlook 的交互。 使
 1. 在逻辑应用中，键入“office 365”获取触发器列表：  
    
     ![](./media/connectors-create-api-office365-outlook/office365-trigger.png)
-2. 选择“Office 365 Outlook - 即将启动将要发生的事件时”。 如果连接已存在，从下拉列表中选择日历。
+2. 选择“Office 365 Outlook - 即将启动将要发生的活动时”。 如果连接已存在，从下拉列表中选择日历。
    
     ![](./media/connectors-create-api-office365-outlook/sample-calendar.png)
    
@@ -71,7 +68,7 @@ Office 365 Outlook 连接器在 Office 365 中启用与 Outlook 的交互。 使
 ## <a name="use-an-action"></a>使用操作
 操作是指在逻辑应用中定义的工作流所执行的操作。 [了解有关操作的详细信息](../logic-apps/logic-apps-overview.md#logic-app-concepts)。
 
-1. 选择加号。 可看到多个选项：“添加操作”、“添加条件”或“更多”选项之一。
+1. 选择加号。 看到多个选项：**添加操作**，**添加条件**，或某个**详细**选项。
    
     ![](./media/connectors-create-api-office365-outlook/add-action.png)
 2. 选择“添加操作”。

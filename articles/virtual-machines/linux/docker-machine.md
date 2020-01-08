@@ -1,10 +1,10 @@
 ---
-title: "使用 Docker Machine 在 Azure 中创建 Linux 主机 | Microsoft Docs"
-description: "介绍如何使用 Docker Machine 在 Azure 中创建 Docker 主机。"
+title: 使用 Docker Machine 在 Azure 中创建 Linux 主机 | Microsoft Docs
+description: 介绍如何使用 Docker Machine 在 Azure 中创建 Docker 主机。
 services: virtual-machines-linux
-documentationcenter: 
-author: iainfoulds
-manager: jeconnoc
+documentationcenter: ''
+author: cynthn
+manager: gwallace
 editor: tysonn
 ms.assetid: 164b47de-6b17-4e29-8b7d-4996fa65bea4
 ms.service: virtual-machines-linux
@@ -13,33 +13,34 @@ ms.topic: article
 ms.tgt_pltfrm: vm-linux
 ms.workload: infrastructure-services
 ms.date: 12/15/2017
-ms.author: iainfou
-ms.openlocfilehash: 26e54efc32aa316e1da93598cc861003aefff182
-ms.sourcegitcommit: 059dae3d8a0e716adc95ad2296843a45745a415d
-ms.translationtype: HT
+ms.author: cynthn
+ms.openlocfilehash: 1e946f82cf7dfcec0a6ff451012e6f5f0ac6e955
+ms.sourcegitcommit: 2e4b99023ecaf2ea3d6d3604da068d04682a8c2d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/09/2018
+ms.lasthandoff: 07/09/2019
+ms.locfileid: "67671554"
 ---
 # <a name="how-to-use-docker-machine-to-create-hosts-in-azure"></a>如何使用 Docker Machine 在 Azure 中创建主机
 本文详细介绍如何使用 [Docker Machine](https://docs.docker.com/machine/) 在 Azure 中创建主机。 `docker-machine` 命令在 Azure 中创建一个 Linux 虚拟机 (VM)，然后安装 Docker。 然后，可以使用相同的本地工具和工作流来管理 Azure 中的 Docker 主机。 若要在 Windows 10 中使用 docker-machine，必须使用 Linux bash。
 
 ## <a name="create-vms-with-docker-machine"></a>使用 Docker Machine 创建 VM
-首先，使用 [az account show](/cli/azure/account#az_account_show) 获取 Azure 订阅 ID，如下所示：
+首先，使用 [az account show](/cli/azure/account) 获取 Azure 订阅 ID，如下所示：
 
 ```azurecli
 sub=$(az account show --query "id" -o tsv)
 ```
 
-通过指定 Azure 作为驱动程序，在 Azure 中使用 `docker-machine create` 创建 Docker 主 VM。 有关详细信息，请参阅 [Docker Azure 驱动程序文档](https://docs.docker.com/machine/drivers/azure/)
+通过指定 Azure  作为驱动程序，在 Azure 中使用 `docker-machine create` 创建 Docker 主 VM。 有关详细信息，请参阅 [Docker Azure 驱动程序文档](https://docs.docker.com/machine/drivers/azure/)
 
-以下示例基于“标准 D2 v2”计划创建一个名为“myVM”的 VM，创建一个名为“azureuser”的用户帐户，并在主 VM 上打开端口 *80*。 按照任何提示登录你的 Azure 帐户，并授予 Docker Machine 创建和管理资源的权限。
+以下示例基于“标准 D2 v2”计划创建一个名为“myVM”  的 VM，创建一个名为“azureuser”  的用户帐户，并在主 VM 上打开端口 *80*。 按照任何提示登录你的 Azure 帐户，并授予 Docker Machine 创建和管理资源的权限。
 
 ```bash
 docker-machine create -d azure \
     --azure-subscription-id $sub \
     --azure-ssh-user azureuser \
     --azure-open-port 80 \
-    --azure-size "Standard_D2_v2" \
+    --azure-size "Standard_DS2_v2" \
     myvm
 ```
 
@@ -136,4 +137,4 @@ docker-machine ip myvm
 ![运行 ngnix 容器](./media/docker-machine/nginx.png)
 
 ## <a name="next-steps"></a>后续步骤
-也可以使用 [Docker VM 扩展](dockerextension.md)创建主机。 有关使用 Docker Compose 的示例，请参阅 [Azure 中的 Docker 和 Compose 入门](docker-compose-quickstart.md)。
+有关使用 Docker Compose 的示例，请参阅 [Azure 中的 Docker 和 Compose 入门](docker-compose-quickstart.md)。

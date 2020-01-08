@@ -2,21 +2,21 @@
 title: Azure Batch 池调整大小开始事件 | Microsoft Docs
 description: 批处理池调整大小开始事件参考。
 services: batch
-author: dlepow
-manager: jeconnoc
+author: laurenhughes
+manager: gwallace
 ms.assetid: ''
 ms.service: batch
-ms.devlang: multiple
 ms.topic: article
 ms.tgt_pltfrm: ''
 ms.workload: big-compute
 ms.date: 04/20/2017
-ms.author: danlep
-ms.openlocfilehash: b4412764c313669dc154fccaa56f22417262994d
-ms.sourcegitcommit: 20d103fb8658b29b48115782fe01f76239b240aa
-ms.translationtype: HT
+ms.author: lahugh
+ms.openlocfilehash: 965c1181399b76523b624d53dc47e59de0208ecb
+ms.sourcegitcommit: 267a9f62af9795698e1958a038feb7ff79e77909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/03/2018
+ms.lasthandoff: 09/04/2019
+ms.locfileid: "70258266"
 ---
 # <a name="pool-resize-start-event"></a>池调整大小开始事件
 
@@ -26,10 +26,12 @@ ms.lasthandoff: 04/03/2018
 
 ```
 {
-    "poolId": "myPool1",
-    "nodeDeallocationOption": "invalid",
-    "currentDedicated": 0,
-    "targetDedicated": 2,
+    "id": "myPool1",
+    "nodeDeallocationOption": "Invalid",
+    "currentDedicatedNodes": 0,
+    "targetDedicatedNodes": 2,
+    "currentLowPriorityNodes": 0,
+    "targetLowPriorityNodes": 2,
     "enableAutoScale": false,
     "isAutoPool": false
 }
@@ -37,9 +39,11 @@ ms.lasthandoff: 04/03/2018
 
 |元素|类型|说明|
 |-------------|----------|-----------|
-|poolId|String|池的 id。|
-|nodeDeallocationOption|String|指定何时从池中删除节点（如果池的大小正在减小）。<br /><br /> 可能的值包括：<br /><br /> **requeue** – 终止正在运行的任务并将其重新排队。 当作业启用时，任务将再次运行。 一旦任务终止，便会立即删除节点。<br /><br /> **terminate** – 终止正在运行的任务。 任务将不会再次运行。 一旦任务终止，便会立即删除节点。<br /><br /> **taskcompletion** – 允许完成当前正在运行的任务。 等待时不计划任何新任务。 在所有任务完成时，删除节点。<br /><br /> **Retaineddata** - 允许完成当前正在运行的任务，并等待所有任务数据保留期到期。 等待时不计划任何新任务。 在所有任务保留期都已过期时，删除节点。<br /><br /> 默认值为 requeue。<br /><br /> 如果池的大小正在增加，该值将设置为**无效**。|
-|currentDedicated|Int32|当前分配到池的计算节点数。|
-|targetDedicated|Int32|池请求的计算节点数。|
-|enableAutoScale|Bool|指定池大小是否随时间自动调整。|
-|isAutoPool|Bool|指定是否已通过作业的 AutoPool 机制创建池。|
+|`id`|String|池的 ID。|
+|`nodeDeallocationOption`|String|指定何时从池中删除节点（如果池的大小正在减小）。<br /><br /> 可能的值包括：<br /><br /> **requeue** – 终止正在运行的任务并将其重新排队。 当作业启用时，任务将再次运行。 一旦任务终止，便会立即删除节点。<br /><br /> **terminate** – 终止正在运行的任务。 任务将不会再次运行。 一旦任务终止，便会立即删除节点。<br /><br /> **taskcompletion** – 允许完成当前正在运行的任务。 等待时不计划任何新任务。 在所有任务完成时，删除节点。<br /><br /> **Retaineddata** - 允许完成当前正在运行的任务，并等待所有任务数据保留期到期。 等待时不计划任何新任务。 在所有任务保留期都已过期时，删除节点。<br /><br /> 默认值为 requeue。<br /><br /> 如果池的大小正在增加，该值将设置为**无效**。|
+|`currentDedicatedNodes`|Int32|当前分配到池的计算节点数。|
+|`targetDedicatedNodes`|Int32|池请求的计算节点数。|
+|`currentLowPriorityNodes`|Int32|当前分配到池的计算节点数。|
+|`targetLowPriorityNodes`|Int32|池请求的计算节点数。|
+|`enableAutoScale`|Bool|指定池大小是否随时间自动调整。|
+|`isAutoPool`|Bool|指定是否已通过作业的 AutoPool 机制创建池。|

@@ -1,11 +1,11 @@
 ---
-title: "向 VNet 添加多个 VPN 网关站点到站点连接：Azure 门户：Resource Manager | Microsoft Docs"
-description: "将多站点 S2S 连接添加到包含现有连接的 VPN 网关"
+title: 向 VNet 添加多个 VPN 网关站点到站点连接：Azure 门户：资源管理器 | Microsoft Docs
+description: 将多站点 S2S 连接添加到包含现有连接的 VPN 网关
 services: vpn-gateway
 documentationcenter: na
 author: cherylmc
 manager: jpconnock
-editor: 
+editor: ''
 tags: azure-resource-manager
 ms.assetid: f3e8b165-f20a-42ab-afbb-bf60974bb4b1
 ms.service: vpn-gateway
@@ -15,16 +15,17 @@ ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 02/14/2018
 ms.author: cherylmc
-ms.openlocfilehash: 5830b3a4bdcd12c01626d9ff3f814d2e7612eaaa
-ms.sourcegitcommit: d87b039e13a5f8df1ee9d82a727e6bc04715c341
-ms.translationtype: HT
+ms.openlocfilehash: 4b9f007e00d0912687b723bd4f7e747da893948d
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/21/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60760393"
 ---
 # <a name="add-a-site-to-site-connection-to-a-vnet-with-an-existing-vpn-gateway-connection"></a>将站点到站点连接添加到包含现有 VPN 网关连接的 VNet
 
 > [!div class="op_single_selector"]
-> * [Azure portal](vpn-gateway-howto-multi-site-to-site-resource-manager-portal.md)
+> * [Azure 门户](vpn-gateway-howto-multi-site-to-site-resource-manager-portal.md)
 > * [PowerShell（经典）](vpn-gateway-multi-site.md)
 >
 > 
@@ -34,7 +35,7 @@ ms.lasthandoff: 02/21/2018
 本文适用于具有基于路由的 VPN 网关的资源管理器 VNet。 本文中的步骤不适用于 ExpressRoute/站点到站点共存连接配置。 有关共存连接的信息，请参阅 [ExpressRoute/S2S 共存连接](../expressroute/expressroute-howto-coexist-resource-manager.md)。
 
 ### <a name="deployment-models-and-methods"></a>部署模型和方法
-[!INCLUDE [vpn-gateway-clasic-rm](../../includes/vpn-gateway-classic-rm-include.md)]
+[!INCLUDE [vpn-gateway-classic-rm](../../includes/vpn-gateway-classic-rm-include.md)]
 
 当我们发布有关此配置的新文章和其他可用工具时，会更新此表格。 有相关的文章发布时，我们会直接从此表格链接到该文章。
 
@@ -51,40 +52,40 @@ ms.lasthandoff: 02/21/2018
 * VPN 设备有一个面向外部的公共 IP 地址。 此 IP 地址不得位于 NAT 之后。
 
 ## <a name="part1"></a>第 1 部分 - 配置连接
-1. 从浏览器导航到 [Azure 门户](http://portal.azure.com)，并在必要时用 Azure 帐户登录。
+1. 从浏览器导航到 [Azure 门户](https://portal.azure.com)，并在必要时用 Azure 帐户登录。
 2. 单击“**所有资源**”，从资源列表中找到“**虚拟网络网关**”并单击它。
-3. 在“虚拟网络网关”页面上，单击“连接”。
+3. 在“虚拟网络网关”页面上，单击“连接”   。
    
     ![“连接”页](./media/vpn-gateway-howto-multi-site-to-site-resource-manager-portal/connectionsblade.png "“连接”页")<br>
-4. 在“连接”页面上，单击“+添加”。
+4. 在“连接”页面上，单击“+添加”   。
    
     ![添加连接按钮](./media/vpn-gateway-howto-multi-site-to-site-resource-manager-portal/addbutton.png "添加连接按钮")<br>
-5. 在“添加连接”页面上，填写以下字段：
+5. 在“添加连接”页面上，填写以下字段  ：
    
-   * **名称：**想与其建立连接的站点的名称。
-   * **连接类型：**选择“**站点到站点(IPsec)**”。
+   * **名称：** 想与其建立连接的站点的名称。
+   * **连接类型：** 选择“站点到站点 (IPsec)”  。
      
      ![“添加连接”页面](./media/vpn-gateway-howto-multi-site-to-site-resource-manager-portal/addconnectionblade.png "Add connection page")<br>
 
 ## <a name="part2"></a>第 2 部分 - 添加本地网络网关
-1. 单击“**本地网络网关**”“***选择本地网络网关***”。 这将打开“选择本地网络网关”页面。
+1. 单击“**本地网络网关**”“***选择本地网络网关***”。 这将打开“选择本地网络网关”页面  。
    
     ![选择本地网络网关](./media/vpn-gateway-howto-multi-site-to-site-resource-manager-portal/chooselng.png "选择本地网络网关")<br>
-2. 单击“新建”，打开“创建本地网络网关”页面。
+2. 单击“新建”，打开“创建本地网络网关”页面   。
    
     ![“创建本地网络网关”页面](./media/vpn-gateway-howto-multi-site-to-site-resource-manager-portal/createlngblade.png "Create local network gateway")<br>
-3. 在“创建本地网络网关”页面上，填写以下字段：
+3. 在“创建本地网络网关”页面上，填写以下字段  ：
    
-   * **名称：**要分配给本地网络网关资源的名称。
-   * **IP 地址：**站点上要连接到的 VPN 设备的公共 IP 地址。
-   * **地址空间：**要路由到新本地网络站点的地址空间。
-4. 在“创建本地网络网关”页面上单击“确定”保存所做更改。
+   * **名称：** 要分配给本地网络网关资源的名称。
+   * **IP 地址：** 站点上要连接到的 VPN 设备的公共 IP 地址。
+   * **地址空间：** 要路由到新本地网络站点的地址空间。
+4. 在“创建本地网络网关”页面上单击“确定”保存所做更改   。
 
 ## <a name="part3"></a>第 3 部分 - 添加共享密钥并创建连接
-1. 在“添加连接”页面上，添加要用于创建连接的共享密钥。 可以从 VPN 设备获取共享密钥，或者在此边栏选项卡中创建一个共享密钥，然后将 VPN 设备配置为使用这个共享密钥。 重要的一点是，这两个密钥必须完全相同。
+1. 在“添加连接”页面上，添加要用于创建连接的共享密钥  。 可以从 VPN 设备获取共享密钥，或者在此边栏选项卡中创建一个共享密钥，然后将 VPN 设备配置为使用这个共享密钥。 重要的一点是，这两个密钥必须完全相同。
    
     ![共享密钥](./media/vpn-gateway-howto-multi-site-to-site-resource-manager-portal/sharedkey.png "共享密钥")<br>
-2. 在页面底部，单击“确定”以创建连接。
+2. 在页面底部，单击“确定”  以创建连接。
 
 ## <a name="part4"></a>第 4 部分 - 验证 VPN 连接
 
@@ -93,4 +94,4 @@ ms.lasthandoff: 02/21/2018
 
 ## <a name="next-steps"></a>后续步骤
 
-连接完成后，即可将虚拟机添加到虚拟网络。 有关详细信息，请参阅虚拟机 [学习路径](https://azure.microsoft.com/documentation/learning-paths/virtual-machines) 。
+连接完成后，即可将虚拟机添加到虚拟网络。 有关详细信息，请参阅[虚拟机的学习路径](/learn/paths/deploy-a-website-with-azure-virtual-machines/)。

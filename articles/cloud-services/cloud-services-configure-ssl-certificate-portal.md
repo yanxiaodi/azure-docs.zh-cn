@@ -1,24 +1,19 @@
 ---
-title: "为云服务配置 SSL | Microsoft Docs"
-description: "了解如何为 Web 角色指定 HTTPS 终结点以及如何上传 SSL 证书来保护应用程序。 这些示例使用 Azure 门户。"
+title: 为云服务配置 SSL | Microsoft Docs
+description: 了解如何为 Web 角色指定 HTTPS 终结点以及如何上传 SSL 证书来保护应用程序。 这些示例使用 Azure 门户。
 services: cloud-services
 documentationcenter: .net
-author: Thraka
-manager: timlt
-editor: 
-ms.assetid: 371ba204-48b6-41af-ab9f-ed1d64efe704
+author: georgewallace
 ms.service: cloud-services
-ms.workload: tbd
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 05/26/2017
-ms.author: adegeo
-ms.openlocfilehash: 0e053ad7f1033317948b6ef0856984b21e56e425
-ms.sourcegitcommit: afc78e4fdef08e4ef75e3456fdfe3709d3c3680b
-ms.translationtype: HT
+ms.author: gwallace
+ms.openlocfilehash: 9e7b7526f13fa6b9ae648c4ddb4004a627d85154
+ms.sourcegitcommit: 4b647be06d677151eb9db7dccc2bd7a8379e5871
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 11/16/2017
+ms.lasthandoff: 07/19/2019
+ms.locfileid: "68359735"
 ---
 # <a name="configuring-ssl-for-an-application-in-azure"></a>在 Azure 中为应用程序配置 SSL
 
@@ -39,7 +34,7 @@ ms.lasthandoff: 11/16/2017
 
 * 证书必须包含私钥。
 * 必须为密钥交换创建证书，并且该证书可导出到个人信息交换 (.pfx) 文件。
-* 证书的使用者名称必须与用于访问云服务的域匹配。 无法从证书颁发机构 (CA) 处获取针对 cloudapp.net 域的 SSL 证书。 必须获取在访问服务时要使用的自定义域名。 在从 CA 请求证书时，该证书的使用者名称必须与用于访问应用程序的自定义域名匹配。 例如，如果自定义域名为 contoso.com，则将要从 CA 请求用于 *.contoso.com 或 www.contoso.com 的证书。
+* 证书的使用者名称必须与用于访问云服务的域匹配。 无法从证书颁发机构 (CA) 处获取针对 cloudapp.net 域的 SSL 证书。 必须获取在访问服务时要使用的自定义域名。 在从 CA 请求证书时，该证书的使用者名称必须与用于访问应用程序的自定义域名匹配。 例如, 如果自定义域名为**contoso.com** , 则需要从 CA 申请一个证书用于 * **. contoso.com**或**www\.contoso.com**。
 * 该证书必须使用至少 2048 位加密。
 
 出于测试目的，可以[创建](cloud-services-certs-create.md)并使用自签名证书。 自签名证书不通过 CA 进行身份验证并可使用 cloudapp.net 域作为网站 URL。 例如，以下任务使用其公用名 (CN) 为 **sslexample.cloudapp.net** 的自签名证书。
@@ -77,13 +72,13 @@ ms.lasthandoff: 11/16/2017
     </WebRole>
     ```
 
-   **Certificates** 节定义了我们的证书的名称、其位置及其所在存储的名称。
+   **Certificates** 节定义了证书的名称、位置及其所在存储的名称。
 
-   权限（`permisionLevel` 属性）可以设置为以下值之一：
+   权限（`permissionLevel` 属性）可以设置为以下值之一：
 
-   | 权限值 | 说明 |
+   | 权限值 | 描述 |
    | --- | --- |
-   | limitedOrElevated |**（默认）**所有角色进程都可以访问该私钥。 |
+   | limitedOrElevated |**（默认）** 所有角色进程都可以访问该私钥。 |
    | 提升的 |仅提升的进程可以访问该私钥。 |
 
 2. 在服务定义文件中，在 **Endpoints** 节中添加 **InputEndpoint** 元素以启用 HTTPS：
@@ -137,7 +132,7 @@ ms.lasthandoff: 11/16/2017
 
 现在已更新服务定义和服务配置文件，请打包部署以上传到 Azure。 如果使用的是 **cspack**，请勿使用 **/generateConfigurationFile** 标志，因为这会覆盖你刚插入的证书信息。
 
-## <a name="step-3-upload-a-certificate"></a>步骤 3：上传证书
+## <a name="step-3-upload-a-certificate"></a>步骤 3：上载证书
 连接到 Azure 门户和...
 
 1. 在门户的“所有资源”部分中，选择你的云服务。
@@ -161,10 +156,10 @@ ms.lasthandoff: 11/16/2017
 
    ![单击网站 URL](media/cloud-services-configure-ssl-certificate-portal/navigate.png)
 
-2. 在 Web 浏览器中，修改链接以使用 **https** 而不是 **http**，并访问该页。
+2. 在 Web 浏览器中，修改链接以使用 **https** 而不是 **http**，然后访问该页。
 
    > [!NOTE]
-   > 如果使用的是自签名证书，则浏览到与自签名证书关联的 HTTPS 终结点时，浏览器中可能显示一个证书错误。 使用由受信任的证书颁发机构签名的证书可避免此问题；同时，可以忽略此错误。 （另一个选项是将自签名证书添加到用户的受信任证书颁发机构证书存储中。）
+   > 如果使用的是自签名证书，则浏览到与自签名证书关联的 HTTPS 终结点时，浏览器中可能显示一个证书错误。 使用由受信任证书颁发机构签名的证书可消除此问题；同时，你可以忽略此错误。 （另一个选项是将自签名证书添加到用户的受信任证书颁发机构证书存储中。）
    >
    >
 

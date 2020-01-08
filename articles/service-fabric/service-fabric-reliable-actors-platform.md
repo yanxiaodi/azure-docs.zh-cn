@@ -4,7 +4,7 @@ description: 介绍 Reliable Actors 如何在 Reliable Services 上进行分层�
 services: service-fabric
 documentationcenter: .net
 author: vturecek
-manager: timlt
+manager: chackdan
 editor: amanbha
 ms.assetid: 45839a7f-0536-46f1-ae2b-8ba3556407fb
 ms.service: service-fabric
@@ -14,11 +14,12 @@ ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 3/9/2018
 ms.author: vturecek
-ms.openlocfilehash: b2369f9468c54f10d01203841b6d7ba44b7ba2de
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: bc7569c9f230abb7677a8df9fc0cc0268e57296f
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60725888"
 ---
 # <a name="how-reliable-actors-use-the-service-fabric-platform"></a>Reliable Actors 如何使用 Service Fabric 平台
 本文介绍了 Reliable Actors 如何使用 Azure Service Fabric 平台。 Reliable Actors 在有状态的可靠服务（称为*执行组件服务*）的实现托管的框架中运行。 执行组件服务包含管理执行组件的生命周期和消息发送所需的所有组件：
@@ -42,9 +43,6 @@ ms.lasthandoff: 05/16/2018
 * 共享给所有执行组件的功能，例如断路器。
 * 对执行组件服务自身和每个执行组件的远程过程调用。
 
-> [!NOTE]
-> Java/Linux 目前不支持有状态服务。
-
 有关详细信息，请参阅[在执行组件服务中实现服务级功能](service-fabric-reliable-actors-using.md)。
 
 ## <a name="application-model"></a>应用程序模型
@@ -53,7 +51,7 @@ ms.lasthandoff: 05/16/2018
 ### <a name="service-manifest"></a>服务清单
 执行组件框架生成工具自动生成执行组件服务的 ServiceManifest.xml 文件的内容。 此文件包括：
 
-* 执行组件服务类型。 根据执行组件项目名称生成此类型名称。 根据执行组件的持久性属性，还将相应设置 HasPersistedState 标志。
+* 执行组件服务类型。 根据执行组件项目名称生成此类型名称。 根据执行组件的持久性属性，还会相应设置 HasPersistedState 标志。
 * 代码包。
 * 配置包。
 * 资源和终结点。
@@ -95,15 +93,15 @@ ActorProxyBase.create(MyActor.class, new ActorId("myActorId"));
 ActorProxyBase.create(MyActor.class, new ActorId(1234));
 ```
 
-使用 GUID/UUID 和字符串时，这些值将经过哈希算法转换为 Int64。 但是，如果向 `ActorId` 显式提供 Int64，此 Int64 将直接映射到分区，而无需进行哈希转换。 可以使用此方法来控制将执行组件置于哪个分区。
+使用 GUID/UUID 和字符串时，这些值经过哈希算法转换为 Int64。 但是，如果向 `ActorId` 显式提供 Int64，此 Int64 会直接映射到分区，而无需进行哈希转换。 可以使用此方法来控制将执行组件置于哪个分区。
 
 
 ## <a name="next-steps"></a>后续步骤
 * [执行组件状态管理](service-fabric-reliable-actors-state-management.md)
 * [执行组件生命周期和垃圾回收](service-fabric-reliable-actors-lifecycle.md)
-* [执行组件 API 参考文档](https://msdn.microsoft.com/library/azure/dn971626.aspx)
+* [执行组件 API 参考文档](https://docs.microsoft.com/dotnet/api/microsoft.servicefabric.actors?redirectedfrom=MSDN&view=azure-dotnet)
 * [.NET 代码示例](https://github.com/Azure-Samples/service-fabric-dotnet-getting-started)
-* [Java 代码示例](http://github.com/Azure-Samples/service-fabric-java-getting-started)
+* [Java 代码示例](https://github.com/Azure-Samples/service-fabric-java-getting-started)
 
 <!--Image references-->
 [1]: ./media/service-fabric-reliable-actors-platform/actor-service.png

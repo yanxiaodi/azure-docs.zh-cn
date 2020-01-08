@@ -1,27 +1,23 @@
 ---
-title: 在工作流中使用 XML 消息 - Azure 逻辑应用 | Microsoft 文档
-description: 使用 Enterprise Integration Pack 处理、验证、转换和扩展逻辑应用和业务方案中的 XML 消息
+title: 用于 B2B 企业集成的 XML 消息 - Azure 逻辑应用 | Microsoft Docs
+description: 在带有 Enterprise Integration Pack 的 Azure 逻辑应用中针对 B2B 解决方案处理、验证、转换和扩展 XML 消息
 services: logic-apps
-documentationcenter: .net,nodejs,java
-author: divyaswarnkar
-manager: anneta
-editor: ''
-ms.assetid: 47672dc4-1caa-44e5-b8cb-68ec3a76b7dc
 ms.service: logic-apps
-ms.workload: integration
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.suite: integration
+author: divyaswarnkar
+ms.author: divswa
+ms.reviewer: jonfan, estfan, LADocs
 ms.topic: article
-ms.custom: H1Hack27Feb2017
+ms.assetid: 47672dc4-1caa-44e5-b8cb-68ec3a76b7dc
 ms.date: 02/27/2017
-ms.author: LADocs; divswa
-ms.openlocfilehash: 495cb44219ee9d8ca20ea17c373545668839f4c5
-ms.sourcegitcommit: 8aab1aab0135fad24987a311b42a1c25a839e9f3
-ms.translationtype: HT
+ms.openlocfilehash: a75ac9773072423c13eef85ecad29c632c13d024
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60996556"
 ---
-# <a name="validate-and-transform-xml-encode-and-decode-flat-files-and-enrich-messages-features-in-logic-apps"></a>在逻辑应用中验证和转换 XML、编码和解码平面文件，以及扩展消息功能
+# <a name="xml-messages-and-flat-files-in-azure-logic-apps-with-enterprise-integration-pack"></a>带有 Enterprise Integration Pack 的 Azure 逻辑应用中的 XML 消息和平面文件
 
 使用逻辑应用可以处理发送和接收的 XML 消息。 此功能是 Enterprise Integration Pack 随附的。 对于那些具有 BizTalk Server 使用背景的用户来说，Enterprise Integration Pack 提供的功能是类似的，可以转换和验证消息、使用平面文件，甚至可以使用 XPath 扩展或提取消息中的特定属性。 
 
@@ -35,7 +31,7 @@ Enterprise Integration Pack 包括：
 * [XPath](https://msdn.microsoft.com/library/mt643789.aspx) - 扩充消息以及从消息中提取特定属性。 然后，可以使用提取的属性将消息路由到目标或中间终结点。
 
 ## <a name="try-it-out"></a>试用
-使用 Azure 逻辑应用中的 XML 功能[部署完全正常运行的逻辑应用](https://github.com/Azure/azure-quickstart-templates/tree/master/201-logic-app-veter-pipeline)（GitHub 示例）。
+[部署完全正常运行的逻辑应用](https://github.com/Azure/azure-quickstart-templates/tree/master/201-logic-app-veter-pipeline)（GitHub 示例） 通过 Azure 逻辑应用中使用的 XML 功能。
 
 ## <a name="learn-more"></a>了解详细信息
 [了解有关 Enterprise Integration Pack 的详细信息](../logic-apps/logic-apps-enterprise-integration-overview.md "了解 Enterprise Integration Pack")

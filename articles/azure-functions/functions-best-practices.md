@@ -4,28 +4,24 @@ description: 了解 Azure Functions 的最佳做法和模式。
 services: functions
 documentationcenter: na
 author: wesmc7777
-manager: cfowler
-editor: ''
-tags: ''
+manager: jeconnoc
 keywords: Azure Functions, 模式, 最佳做法, Functions, 事件处理, webhook, 动态计算, 无服务体系结构
 ms.assetid: 9058fb2f-8a93-4036-a921-97a0772f503c
-ms.service: functions
-ms.devlang: multiple
-ms.topic: article
-ms.tgt_pltfrm: multiple
-ms.workload: na
+ms.service: azure-functions
+ms.topic: conceptual
 ms.date: 10/16/2017
 ms.author: glenga
 ms.custom: H1Hack27Feb2017
-ms.openlocfilehash: 19ca9d70f769a19556d131d1d131f1bc9d107ef0
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: 2782781fdfd560c0c8f322e362fcf74c796664bd
+ms.sourcegitcommit: f3f4ec75b74124c2b4e827c29b49ae6b94adbbb7
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 09/12/2019
+ms.locfileid: "70933052"
 ---
 # <a name="optimize-the-performance-and-reliability-of-azure-functions"></a>优化 Azure Functions 的性能和可靠性
 
-本文为提高[无服务器](https://azure.microsoft.com/overview/serverless-computing/)函数应用的性能和可靠性提供了指南。 
+本文为提高[无服务器](https://azure.microsoft.com/solutions/serverless/)函数应用的性能和可靠性提供了指南。 
 
 ## <a name="general-best-practices"></a>常规最佳做法
 
@@ -40,7 +36,7 @@ ms.lasthandoff: 03/23/2018
 
 ### <a name="cross-function-communication"></a>跨函数通信
 
-[Durable Functions](durable-functions-overview.md) 和 [Azure 逻辑应用](../logic-apps/logic-apps-overview.md)用于管理状态转换以及多个函数之间的通信。
+[Durable Functions](durable/durable-functions-overview.md) 和 [Azure 逻辑应用](../logic-apps/logic-apps-overview.md)用于管理状态转换以及多个函数之间的通信。
 
 如果不使用 Durable Functions 或逻辑应用来集成多个函数，将存储队列用于跨函数通信通常是最佳做法。  主要原因是因为存储队列成本更低、更易预配。 
 
@@ -77,13 +73,17 @@ ms.lasthandoff: 03/23/2018
 
 有许多因素会影响函数应用实例的缩放方式。 有关[函数缩放](functions-scale.md)的文档中提供了详细信息。  下面是确保以最佳方式缩放函数应用的最佳做法。
 
+### <a name="share-and-manage-connections"></a>共享和管理连接
+
+只要可能，请重用与外部资源的连接。  请参阅[如何管理 Azure Functions 中的连接](./manage-connections.md)。
+
 ### <a name="dont-mix-test-and-production-code-in-the-same-function-app"></a>请勿在同一函数应用中混合测试和生产代码
 
 Function App 中的各函数共享资源。 例如，共享内存。 如果生产中使用的是 Function App，则请勿向其添加与测试相关的函数和资源。 生产代码执行期间，这可能会导致意外的开销。
 
 请注意在生产 Function App 中加载的内容。 将内存平均分配给应用中的每个函数。
 
-如果在多个 .Net 函数中引用共享程序集，请将其放在常用的共享文件夹中。 如果使用 C# 脚本 (.csx)，请使用类似于以下示例的语句引用程序集： 
+如果在多个 .NET 函数中引用共享程序集，请将其放在常用的共享文件夹中。 如果使用 C# 脚本 (.csx)，请使用类似于以下示例的语句引用程序集： 
 
     #r "..\Shared\MyAssembly.dll". 
 
@@ -116,7 +116,8 @@ Function App 中的各函数共享资源。 例如，共享内存。 如果生�
 可[在主机配置文档中](functions-host-json.md)找到其他主机配置选项。
 
 ## <a name="next-steps"></a>后续步骤
+
 有关详细信息，请参阅以下资源：
 
-由于 Azure Functions 使用 Azure 应用服务，用户还应该了解应用服务准则。
-* [模式和实践 HTTP 性能优化](https://docs.microsoft.com/azure/architecture/antipatterns/improper-instantiation/)
+* [如何在 Azure Functions 中管理连接](manage-connections.md)
+* [Azure 应用服务最佳实践](../app-service/app-service-best-practices.md)

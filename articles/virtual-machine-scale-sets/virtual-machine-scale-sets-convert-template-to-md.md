@@ -1,10 +1,10 @@
 ---
-title: "转换 Azure 资源管理器规模集模板以使用托管磁盘 | Microsoft Docs"
-description: "将规模集模板转换为托管磁盘规模集模板。"
-keywords: "虚拟机规模集"
+title: 转换 Azure 资源管理器规模集模板以使用托管磁盘 | Microsoft Docs
+description: 将规模集模板转换为托管磁盘规模集模板。
+keywords: 虚拟机规模集
 services: virtual-machine-scale-sets
-documentationcenter: 
-author: gatneil
+documentationcenter: ''
+author: mayanknayar
 manager: jeconnoc
 editor: tysonn
 tags: azure-resource-manager
@@ -15,12 +15,13 @@ ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
 ms.date: 5/18/2017
-ms.author: negat
-ms.openlocfilehash: 760e30f5c6f4ecaff299bae1725548a6a7c5184c
-ms.sourcegitcommit: f46cbcff710f590aebe437c6dd459452ddf0af09
-ms.translationtype: HT
+ms.author: manayar
+ms.openlocfilehash: b2d1738b85799079b3af7ab39c5cb1799a38d382
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/20/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60731731"
 ---
 # <a name="convert-a-scale-set-template-to-a-managed-disk-scale-set-template"></a>将规模集模板转换为托管磁盘规模集模板
 
@@ -125,7 +126,7 @@ ms.lasthandoff: 12/20/2017
 
 ## <a name="data-disks"></a>数据磁盘数
 
-进行上述更改后，规模集将使用托管磁盘作为 OS 磁盘，但数据磁盘怎么办？ 若要添加数据磁盘，请在与“osDisk”同一级别的“storageProfile”下添加“dataDisks”属性。 该属性的值是 JSON 对象列表，其中每个对象均具有属性“lun”（必须对于 VM 上的每个数据磁盘唯一）、“createOption”（“empty”是当前唯一支持的选项）和“diskSizeGB”（磁盘的大小，以 GB 为单位；必须大于 0 且小于 1024）， 如以下示例所示： 
+进行上述更改后，规模集对 OS 磁盘使用托管磁盘，但是如果要使用数据磁盘呢？ 若要添加数据磁盘，请在与“osDisk”同一级别的“storageProfile”下添加“dataDisks”属性。 该属性的值是 JSON 对象列表，其中每个对象均具有属性“lun”（必须对于 VM 上的每个数据磁盘唯一）、“createOption”（“empty”是当前唯一支持的选项）和“diskSizeGB”（磁盘的大小，以 GB 为单位；必须大于 0 且小于 1024）， 如以下示例所示：
 
 ```
 "dataDisks": [
@@ -137,13 +138,13 @@ ms.lasthandoff: 12/20/2017
 ]
 ```
 
-如果在此数组中指定 `n` 个磁盘，则规模集中的每个 VM 会获得 `n` 个数据磁盘。 但是，请注意，这些数据磁盘是原始设备。 它们未进行格式化。 在使用这些磁盘之前，由客户负责附加它们并对其进行分区和格式化。 （可选）还可以在每个数据磁盘对象中指定 `"managedDisk": { "storageAccountType": "Premium_LRS" }`，以指定它应是高级数据磁盘。 只有 VM sku 中带大写或小写“s”的 VM 可以使用高级磁盘。
+如果在此数组中指定 `n` 个磁盘，则规模集中的每个 VM 将获得 `n` 个数据磁盘。 但是，请注意，这些数据磁盘是原始设备。 它们未进行格式化。 在使用这些磁盘之前，由客户负责附加它们并对其进行分区和格式化。 （可选）还可以在每个数据磁盘对象中指定 `"managedDisk": { "storageAccountType": "Premium_LRS" }`，以指定它应是高级数据磁盘。 只有 VM sku 中带大写或小写“s”的 VM 可以使用高级磁盘。
 
 若要详细了解如何在规模集中使用数据磁盘，请参阅[此文](./virtual-machine-scale-sets-attached-disks.md)。
 
 
 ## <a name="next-steps"></a>后续步骤
-有关使用规模集的示例 Resource Manager 模板，请在 [Azure 快速入门模板 github 存储库](https://github.com/Azure/azure-quickstart-templates)中搜索“vmss”。
+有关使用规模集的示例资源管理器模板，请在 [Azure 快速入门模板 GitHub 存储库](https://github.com/Azure/azure-quickstart-templates)中搜索“vmss”。
 
 有关一般信息，请参阅[规模集的主要登陆页](https://azure.microsoft.com/services/virtual-machine-scale-sets/)。
 

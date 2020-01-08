@@ -3,24 +3,23 @@ title: 适用于 Linux 的 Azure VM 扩展和功能 | Microsoft Docs
 description: 了解可为 Azure 虚拟机提供哪些扩展，这些虚拟机扩展按它们提供或改进的功能进行分组。
 services: virtual-machines-linux
 documentationcenter: ''
-author: danielsollondon
-manager: jeconnoc
+author: axayjo
+manager: gwallace
 editor: ''
 tags: azure-service-management,azure-resource-manager
 ms.assetid: 52f5d0ec-8f75-49e7-9e15-88d46b420e63
 ms.service: virtual-machines-linux
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-linux
 ms.workload: infrastructure-services
 ms.date: 03/30/2018
-ms.author: danis
-ms.openlocfilehash: 760f832bc12bccbf1cce77db25bf60413ad9a36b
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.author: akjosh
+ms.openlocfilehash: f66ec2ea9d0c042b698db1725980e981a27a55d0
+ms.sourcegitcommit: f2771ec28b7d2d937eef81223980da8ea1a6a531
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
-ms.locfileid: "33944999"
+ms.lasthandoff: 09/20/2019
+ms.locfileid: "71169014"
 ---
 # <a name="virtual-machine-extensions-and-features-for-linux"></a>适用于 Linux 的虚拟机扩展和功能
 
@@ -44,7 +43,7 @@ Azure 虚拟机 (VM) 扩展是小型应用程序，可在 Azure VM 上提供部�
 
 ### <a name="azure-vm-agent"></a>Azure VM 代理
 
-Azure VM 代理可管理 Azure VM 与 Azure 结构控制器之间的交互。 VM 代理负责部署和管理 Azure VM 的许多功能层面，包括运行 VM 扩展。 Azure VM 代理预先安装在 Azure Marketplace 映像上，并可手动安装在受支持的操作系统上。 适用于 Linux 的 Azure VM 代理称为 Linux 代理。
+Azure VM 代理可管理 Azure VM 与 Azure 结构控制器之间的交互。 VM 代理负责部署和管理 Azure VM 的许多功能层面，包括运行 VM 扩展。 Azure VM 代理预先安装在 Azure 市场映像上，并可手动安装在受支持的操作系统上。 适用于 Linux 的 Azure VM 代理称为 Linux 代理。
 
 有关受支持的操作系统以及安装说明的信息，请参阅 [Azure virtual machine agent](agent-linux.md)（Azure 虚拟机代理）。
 
@@ -54,7 +53,8 @@ Azure VM 代理可管理 Azure VM 与 Azure 结构控制器之间的交互。 VM
 
 #### <a name="supported-oses"></a>支持的 OS
 
-Linux 代理在多个 OS 上运行，但是，扩展框架对扩展的 OS 施加限制。 有关详细信息，请参阅 [此文] (https://support.microsoft.com/en-us/help/4078134/azure-extension-supported-operating-systems)。
+Linux 代理在多个 OS 上运行，但是，扩展框架对扩展的 OS 施加限制。 有关详细信息，请参阅[此文章](https://support.microsoft.com/en-us/help/4078134/azure-extension-supported-operating-systems
+)。
 
 某些扩展并非在所有 OS 上均受支持，可能会发出错误代码 51“不受支持的 OS”。 请查看相应的扩展文档来了解支持情况。
 
@@ -63,9 +63,9 @@ Linux 代理在多个 OS 上运行，但是，扩展框架对扩展的 OS 施加
 从 Azure 存储扩展存储库下载扩展包，将扩展状态上传内容发布到 Azure 存储。 如果使用[受支持](https://support.microsoft.com/en-us/help/4049215/extensions-and-virtual-machine-agent-minimum-version-support)版本的代理，则不需要允许对 VM 区域中 Azure 存储的访问，因为可以使用代理将通信重定向到 Azure 结构控制器，以进行代理通信。 如果使用不受支持的代理版本，则需要允许从 VM 对该区域中 Azure 存储的出站访问。
 
 > [!IMPORTANT]
-> 如果已使用来宾防火墙阻止对 168.63.129.1 的访问，则不管采用上述哪种方法，扩展都会失败。
+> 如果已使用来宾防火墙阻止对 168.63.129.16 的访问，则不管采用上述哪种方法，扩展都会失败。
 
-代理只可用于下载扩展包和报告状态。 例如，如果扩展安装需要从 GitHub 下载脚本（自定义脚本），或需要访问 Azure 存储（Azure 备份），则需要打开其他防火墙/网络安全组端口。 不同的扩展具有不同的要求，因为它们本身就是应用程序。 对于需要访问 Azure 存储的扩展，可以使用[存储](https://docs.microsoft.com/en-us/azure/virtual-network/security-overview#service-tags)的 Azure NSG 服务标记来允许访问。
+代理只可用于下载扩展包和报告状态。 例如，如果扩展安装需要从 GitHub 下载脚本（自定义脚本），或需要访问 Azure 存储（Azure 备份），则需要打开其他防火墙/网络安全组端口。 不同的扩展具有不同的要求，因为它们本身就是应用程序。 对于需要访问 Azure 存储的扩展，可以使用[存储](https://docs.microsoft.com/azure/virtual-network/security-overview#service-tags)的 Azure NSG 服务标记来允许访问。
 
 为了重定向代理流量请求，Linux 代理有代理服务器支持。 但是，此代理服务器支持不应用扩展。 必须配置每个单独的扩展来使用代理。
 
@@ -83,9 +83,9 @@ Azure VM 扩展在现有 VM 上运行，需要在已部署的 VM 上进行配置
 
 可使用以下方法针对现有 VM 运行扩展。
 
-### <a name="azure-cli-20"></a>Azure CLI 2.0
+### <a name="azure-cli"></a>Azure CLI
 
-Azure VM 扩展可以通过 [az vm extension set](/cli/azure/vm/extension#az-vm-extension-set) 命令针对现有 VM 运行。 下面的示例针对名为 myResourceGroup 的资源组中的名为 myVM 的 VM 运行自定义脚本扩展：
+Azure VM 扩展可以通过 [az vm extension set](/cli/azure/vm/extension#az-vm-extension-set) 命令针对现有 VM 运行。 下面的示例针对名为 myResourceGroup 的资源组中名为 myVM 的 VM 运行自定义脚本扩展。 将示例资源组名称、VM 名称和脚本替换为你自己的信息\/以运行（https：/raw.githubusercontent.com/me/project/hello.sh）。 
 
 ```azurecli
 az vm extension set `
@@ -220,8 +220,8 @@ VM 扩展可添加到 Azure 资源管理器模板，并在部署模板的过程�
 
 如果有更新可用，仅当发生了扩展更改或其他 VM 模型更改时，才会在 VM 上安装该项更新：
 
-- 数据磁盘数
-- 扩展
+- 数据磁盘
+- Extensions
 - 启动诊断容器
 - 来宾 OS 机密
 - VM 大小
@@ -259,7 +259,7 @@ Goal state agent: 2.2.18
 
 “目标状态代理”是自动更新版本。
 
-强烈建议始终自动更新代理，[AutoUpdate.Enabled=y](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/update-agent)。 如果不启用它，则需要始终手动更新代理，且不会获得 bug 和安全修补程序。
+强烈建议始终自动更新代理，[AutoUpdate.Enabled=y](https://docs.microsoft.com/azure/virtual-machines/linux/update-agent)。 如果不启用它，则需要始终手动更新代理，且不会获得 bug 和安全修补程序。
 
 #### <a name="extension-updates"></a>扩展更新
 
@@ -336,7 +336,7 @@ INFO [Microsoft.OSTCExtensions.LinuxDiagnostic-2.3.9027] Launch command:diagnost
 
 1. 若要查看 Linux 代理日志，请在 /var/log/waagent.log 中查看预配扩展时的活动
 
-2. 在 /var/log/azure/<extensionName> 中查看实际扩展日志，获取详细信息
+2. 在 */var/log/azure/\<extensionName>* 中查看实际扩展日志，以便获取详细信息
 
 3. 查看特定扩展文档中有关错误代码和已知问题等的故障排除部分。
 
@@ -403,12 +403,12 @@ az vm extension delete \
 
 ## <a name="common-vm-extension-reference"></a>常见 VM 扩展参考
 
-| 扩展名称 | 说明 | 详细信息 |
+| 扩展名称 | 描述 | 详细信息 |
 | --- | --- | --- |
 | 适用于 Linux 的自定义脚本扩展 |针对 Azure 虚拟机运行脚本 |[适用于 Linux 的自定义脚本扩展](custom-script-linux.md) |
 | VM 访问扩展 |重新获取对 Azure 虚拟机的访问权限 |[VM 访问扩展](https://github.com/Azure/azure-linux-extensions/tree/master/VMAccess) |
 | Azure 诊断扩展 |管理 Azure 诊断 |[Azure 诊断扩展](https://azure.microsoft.com/blog/windows-azure-virtual-machine-monitoring-with-wad-extension/) |
-| Azure VM 访问扩展 |管理用户和凭据 |[适用于 Linux 的 VM 访问扩展](https://azure.microsoft.com/en-us/blog/using-vmaccess-extension-to-reset-login-credentials-for-linux-vm/) |
+| Azure VM 访问扩展 |管理用户和凭据 |[适用于 Linux 的 VM 访问扩展](https://azure.microsoft.com/blog/using-vmaccess-extension-to-reset-login-credentials-for-linux-vm/) |
 
 ## <a name="next-steps"></a>后续步骤
 

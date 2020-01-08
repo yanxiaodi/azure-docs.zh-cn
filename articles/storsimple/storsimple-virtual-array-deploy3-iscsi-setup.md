@@ -1,30 +1,33 @@
 ---
-title: "Microsoft Azure StorSimple 虚拟阵列 iSCSI 服务器设置 | Microsoft 文档"
-description: "介绍如何进行初始设置、如何注册 StorSimple iSCSI 服务器，以及如何完成设备设置。"
+title: Microsoft Azure StorSimple 虚拟阵列 iSCSI 服务器设置 | Microsoft 文档
+description: 介绍如何进行初始设置、如何注册 StorSimple iSCSI 服务器，以及如何完成设备设置。
 services: storsimple
 documentationcenter: NA
 author: alkohli
 manager: carmonm
-editor: 
+editor: ''
 ms.assetid: 4db116d1-978b-48e8-b572-a719a8425dbc
 ms.service: storsimple
 ms.devlang: NA
 ms.topic: article
 ms.tgt_pltfrm: NA
 ms.workload: TBD
-ms.date: 02/27/2017
+ms.date: 07/25/2019
 ms.author: alkohli
-ms.openlocfilehash: 076df176d7cd40c009aea27004fe0f4415999c80
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.openlocfilehash: 4560ca2b07826e2a071f515f147dfab8cbec3624
+ms.sourcegitcommit: f5cc71cbb9969c681a991aa4a39f1120571a6c2e
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68516816"
 ---
 # <a name="deploy-storsimple-virtual-array--set-up-as-an-iscsi-server-via-azure-portal"></a>部署 StorSimple 虚拟阵列 - 通过 Azure 门户设置为 iSCSI 服务器
 
 ![iscsi 设置流程](./media/storsimple-virtual-array-deploy3-iscsi-setup/iscsi4.png)
 
 ## <a name="overview"></a>概述
+
+[!INCLUDE [storsimple-virtual-array-eol-banner](../../includes/storsimple-virtual-array-eol-banner.md)]
 
 本部署教程适用于 Microsoft Azure StorSimple 虚拟阵列。 本教程介绍如何进行初始安装、注册 StorSimple iSCSI 服务器、完成设备设置，并创建、装载、初始化和格式化配置为 iSCSI 服务器的 StorSimple 虚拟阵列上的卷。 
 
@@ -43,7 +46,7 @@ ms.lasthandoff: 10/11/2017
 使用以下分步说明设置和配置 StorSimple 虚拟阵列：
 
 * [步骤 1：完成本地 Web UI 设置并注册设备](#step-1-complete-the-local-web-ui-setup-and-register-your-device)
-* [步骤 2：完成所需的设备设置](#step-2-complete-the-required-device-setup)
+* 步骤 2：完成所需的设备设置
 * [步骤 3：添加卷](#step-3-add-a-volume)
 * [步骤 4：装载、初始化和格式化卷](#step-4-mount-initialize-and-format-a-volume)
 
@@ -74,7 +77,7 @@ ms.lasthandoff: 10/11/2017
 5. DNS 服务器是必需的，因为在设备尝试与云存储服务提供程序通信时，需要用到这些服务器；在按名称解析设备时，也需要用到这些配置为文件服务器的服务器。 在“DNS 服务器”下的“网络设置”页上：
    
    1. 将自动配置主 DNS 服务器和辅助 DNS 服务器。 如果选择配置静态 IP 地址，则可指定 DNS 服务器。 为了确保高可用性，建议同时配置主 DNS 服务器和辅助 DNS 服务器。
-   2. 单击“应用” 。 此时会应用和验证网络设置。
+   2. 单击“应用”。 此时会应用和验证网络设置。
 6. 在“设备设置”页上：
    
    1. 为设备指定唯一“名称”。 该名称长度为 1-15 个字符，并可包含字母、数字和连字符。
@@ -87,30 +90,30 @@ ms.lasthandoff: 10/11/2017
       > 如果将 iSCSI 服务器加入域，请确保虚拟阵列采用其自身的适用于 Microsoft Azure Active Directory 的组织单位 (OU)，没有对其应用任何组策略对象 (GPO)。
       > 
       > 
-   4. 此时会显示一个对话框。 按指定格式输入域凭据。 单击选中图标  ![选中图标](./media/storsimple-virtual-array-deploy3-iscsi-setup/image15.png)。 此时会验证域凭据。 如果凭据不正确，则会显示错误消息。
+   4. 此时会显示一个对话框。 按指定格式输入域凭据。 设置筛选器后，单击选中图标 ![勾号图标](./media/storsimple-virtual-array-deploy3-iscsi-setup/image15.png)。 此时会验证域凭据。 如果凭据不正确，则会显示错误消息。
       
        ![凭据](./media/storsimple-virtual-array-deploy3-iscsi-setup/image8.png)
-   5. 单击“应用” 。 此时会应用和验证设备设置。
+   5. 单击“应用”。 此时会应用和验证设备设置。
 7. （可选）配置 Web 代理服务器。 尽管 Web 代理服务器配置是可选项，仍应注意，在使用 Web 代理时，只能在此处配置它。
    
     ![配置 Web 代理](./media/storsimple-virtual-array-deploy3-iscsi-setup/image9.png)
    
     在“Web 代理”页上：
    
-   1. 以下述格式提供“Web 代理 URL”：*http://主机 IP 地址*或 *FDQN:端口号*。 请注意，不支持 HTTPS URL。
+   1. 提供此格式的**Web 代理 URL** : *\/http:/host-IP address*或*FQDN: 端口号*。 请注意，不支持 HTTPS URL。
    2. 将“身份验证”指定为“基本”或“无”。
    3. 如果使用身份验证，则还需提供“用户名”和“密码”。
-   4. 单击“应用” 。 此时会验证并应用配置的 Web 代理设置。
+   4. 单击“应用”。 此时会验证并应用配置的 Web 代理设置。
 8. （可选）配置设备的时间设置，例如时区以及主 NTP 服务器和辅助 NTP 服务器。 NTP 服务器是必需的，因为设备必须同步时间，才能通过云服务提供程序进行身份验证。
    
     ![时间设置](./media/storsimple-virtual-array-deploy3-iscsi-setup/image10.png)
    
     在“时间设置”页上：
    
-   1. 根据部署设备的地理位置，从下拉列表中选择相应的“时区” 。 设备的默认时区为太平洋标准时间。 设备将此时区用于所有计划操作。
-   2. 为设备指定“主 NTP 服务器”，或者接受默认值：time.windows.com。确保网络允许 NTP 流量从数据中心传递到 Internet。
+   1. 根据部署设备的地理位置，从下拉列表中选择相应的“时区”。 设备的默认时区为太平洋标准时间。 设备将此时区用于所有计划操作。
+   2. 为设备指定“主 NTP 服务器”，或者接受默认值：time.windows.com。 确保网络允许 NTP 流量从数据中心传递到 Internet。
    3. （可选）为设备指定“辅助 NTP 服务器”。
-   4. 单击“应用” 。 此时会验证并应用配置的时间设置。
+   4. 单击“应用”。 此时会验证并应用配置的时间设置。
 9. 配置设备的云设置。 此步骤需完成本地设备配置，然后将设备注册到 StorSimple Device Manager 服务。
    
    1. 输入在[部署 StorSimple 虚拟阵列 - 准备门户](storsimple-virtual-array-deploy1-portal-prep.md#step-2-get-the-service-registration-key)的“步骤 2：获取服务注册密钥”中获得的“服务注册密钥”。
@@ -194,12 +197,12 @@ ms.lasthandoff: 10/11/2017
 4. 在“iSCSI 发起程序属性”窗口中的“目标”选项卡上，找到“已发现目标”。 （每个卷都可以是已发现的目标。）设备状态应显示为 **非活动**。
    
     ![已发现的目标](./media/storsimple-virtual-array-deploy3-iscsi-setup/image24.png)
-5. 选择目标设备，并单击“连接”。 设备连接后，状态应更改为 **已连接**。 （有关使用 Microsoft iSCSI 发起程序的详细信息，请参阅[安装和配置 Microsoft iSCSI 发起程序][1]。
+5. 选择目标设备，并单击“连接”。 设备连接后，状态应更改为 **已连接**。 (有关使用 Microsoft iSCSI 发起程序的详细信息, 请参阅[安装和配置 Microsoft Iscsi 发起程序][1]。
    
     ![选择目标设备](./media/storsimple-virtual-array-deploy3-iscsi-setup/image25.png)
 6. 在 Windows 主机上，按 Windows 徽标键 + X，并单击“ **运行**”。
-7. 在“运行”对话框中，键入 **Diskmgmt.msc**。 单击“确定”，将出现“磁盘管理”对话框。 右窗格中会显示在主机上的卷。
-8. 在“ **磁盘管理** ”窗口中，已装载的卷会显示在以下所示的插图中。 右键单击“发现的卷”（单击磁盘名称），并单击“ **联机**”。
+7. 在“运行”对话框中，键入 **Diskmgmt.msc**。 单击“确定”，将出现“磁盘管理”对话框。 右窗格中将显示主机上的卷。
+8. 在“磁盘管理”窗口中，将显示已装载的卷，如以下插图所示。 右键单击“发现的卷”（单击磁盘名称），并单击“ **联机**”。
    
     ![磁盘管理](./media/storsimple-virtual-array-deploy3-iscsi-setup/image26.png)
 9. 右键单击，并选择“初始化磁盘”。

@@ -14,14 +14,15 @@ ms.devlang: na
 ms.topic: article
 ms.date: 02/04/2017
 ms.author: juliako
-ms.openlocfilehash: dce8d588a78b028223776e3ade737d4abd26094b
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 516df2f6177303987fc0354dde647c1fc26820ef
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61069430"
 ---
 # <a name="manage-azure-cdn-caching-policy-in-azure-media-services"></a>在 Azure 媒体服务中管理 Azure CDN 缓存策略
-Azure 媒体服务提供基于 HTTP 的自适应流式处理和渐进式下载。 基于 HTTP 的流式处理是高度可缩放的功能，具有可以在代理和 CDN 层中缓存以及在客户端缓存的优点。 流式处理终结点提供常用的流式处理功能以及针对 HTTP 缓存标头的配置。 流式处理终结点设置 HTTP Cache-Control: max-age 和 Expires 标头。 可以从 [W3.org](http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html) 获取更多有关 HTTP 缓存标头的信息。
+Azure 媒体服务提供基于 HTTP 的自适应流式处理和渐进式下载。 基于 HTTP 的流式处理是高度可缩放的功能，具有可以在代理和 CDN 层中缓存以及在客户端缓存的优点。 流式处理终结点提供常用的流式处理功能以及针对 HTTP 缓存标头的配置。 流式处理终结点设置 HTTP Cache-Control: max-age 和 Expires 标头。 可以从 [W3.org](https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html) 获取更多有关 HTTP 缓存标头的信息。
 
 ## <a name="default-caching-headers"></a>默认缓存标头
 默认情况下，流式处理终结点会对按需流式处理数据（实际的媒体片段/块）和清单（播放列表）应用缓存 3 天的标头。 如果是实时流式播放，流式处理终结点会对数据（实际的媒体片段/块）应用缓存 3 天的标头，对清单（播放列表）请求应用缓存 2 秒的标头。 当实时播放节目转为按需（实时存档）播放节目时，则会应用按需流式处理缓存标头。
@@ -38,8 +39,8 @@ Azure 媒体服务为流式处理终结点提供[集成 CDN](https://azure.micro
 可以使用 Azure 门户或 Azure 媒体服务 API 来配置缓存标头值。
 
 1. 若要使用 Azure 门户配置缓存标头，请参阅[如何管理流式处理终结点](../media-services/previous/media-services-portal-manage-streaming-endpoints.md)部分配置流式处理终结点。
-2. Azure 媒体服务 REST API，[StreamingEndpoint](https://msdn.microsoft.com/library/azure/dn783468.aspx#StreamingEndpointCacheControl)。
-3. Azure 媒体服务 .NET SDK，[StreamingEndpointCacheControl Properties](http://go.microsoft.com/fwlink/?LinkId=615302)。
+2. Azure 媒体服务 REST API，[StreamingEndpoint](/rest/api/media/operations/streamingendpoint#StreamingEndpointCacheControl)。
+3. Azure 媒体服务 .NET SDK，[StreamingEndpointCacheControl Properties](https://go.microsoft.com/fwlink/?LinkId=615302)。
 
 ## <a name="cache-configuration-precedence-order"></a>缓存配置优先顺序
 1. Azure 媒体服务配置的缓存值将覆盖默认值。

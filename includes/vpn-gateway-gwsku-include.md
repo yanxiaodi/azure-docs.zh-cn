@@ -5,17 +5,17 @@ services: vpn-gateway
 author: cherylmc
 ms.service: vpn-gateway
 ms.topic: include
-ms.date: 03/21/2018
+ms.date: 03/20/2019
 ms.author: cherylmc
 ms.custom: include file
-ms.openlocfilehash: 05dc8ae48a9164e4f7118d378ab0eb7c30a4249e
-ms.sourcegitcommit: 59914a06e1f337399e4db3c6f3bc15c573079832
-ms.translationtype: HT
+ms.openlocfilehash: b1a9d93d9fccf02ba1517e429625150736e539e9
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/20/2018
-ms.locfileid: "30196751"
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67172835"
 ---
-创建虚拟网络网关时，需要指定要使用的网关 SKU。 请根据工作负荷、吞吐量、功能和 SLA 的类型，选择满足需求的 SKU。
+创建虚拟网络网关时，需要指定要使用的网关 SKU。 请根据工作负荷、吞吐量、功能和 SLA 的类型，选择满足需求的 SKU。 虚拟网络网关 Azure 可用性区域中的 Sku，请参阅[Azure 可用性区域网关 Sku](../articles/vpn-gateway/about-zone-redundant-vnet-gateways.md)。
 
 ###  <a name="benchmark"></a>按隧道、连接和吞吐量列出的网关 SKU
 
@@ -29,8 +29,8 @@ ms.locfileid: "30196751"
 
 | **SKU**| **功能**|
 | ---    | ---         |
-|**基本** (\*\*)   | **基于路由的 VPN**：包含 P2S 的 10 个隧道；无适用于 P2S 的 RADIUS 身份验证；无适用于 P2S 的 IKEv2<br>基于策略的 VPN (IKEv1)：1 个隧道；不含 P2S|
-| VpnGw1、VpnGw2、VpnGw3 | 基于路由的 VPN：最多 30 个隧道 (\*)、P2S、BGP、主动-主动、自定义 IPsec/IKE 策略、ExpressRoute/VPN 共存 |
+|**基本** (\*\*)   | **基于路由的 VPN**：用于 S2S /连接的 10 个隧道；无适用于 P2S 的 RADIUS 身份验证；无适用于 P2S 的 IKEv2<br>**基于策略的 VPN**：(IKEv1)：1 个 S2S/连接隧道；无 P2S|
+|  VpnGw1、VpnGw2、VpnGw3 | 基于路由的 VPN：最多 30 个隧道 (\*)、P2S、BGP、主动-主动、自定义 IPsec/IKE 策略、ExpressRoute/VPN 共存  |
 |        |             |
 
 ( * ) 可以对“PolicyBasedTrafficSelectors”进行配置，以便将基于路由的 VPN 网关（VpnGw1、VpnGw2、VpnGw3）连接到多个本地的基于策略的防火墙设备。 有关详细信息，请参阅[使用 PowerShell 将 VPN 网关连接到多个本地的基于策略的 VPN 设备](../articles/vpn-gateway/vpn-gateway-connect-multiple-policybased-rm-ps.md)。
@@ -41,10 +41,10 @@ ms.locfileid: "30196751"
 
 由于 SLA 和功能集的差异，建议使用以下 SKU 比较生产与开发-测试：
 
-| **工作负载**                       | SKU               |
+| **工作负载**                       | SKU                |
 | ---                                | ---                    |
-| 生产、关键工作负荷 | VpnGw1、VpnGw2、VpnGw3 |
-| 开发-测试或概念证明   | 基本 (\*\*)                 |
+| 生产、关键工作负荷  | VpnGw1、VpnGw2、VpnGw3 |
+| 开发-测试或概念证明    | 基本 (\*\*)                 |
 |                                    |                        |
 
 (\*\*) 基本 SKU 被视为旧版 SKU，并且具有功能限制。 使用基本 SKU 前，请验证所需功能是否受支持。

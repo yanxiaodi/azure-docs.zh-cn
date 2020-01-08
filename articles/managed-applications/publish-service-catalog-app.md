@@ -3,23 +3,24 @@ title: 创建和发布 Azure 服务目录托管应用程序 | Microsoft Docs
 description: 演示如何创建适用于组织中成员的 Azure 托管应用程序。
 services: managed-applications
 author: tfitzmac
-manager: timlt
 ms.service: managed-applications
 ms.devlang: na
 ms.topic: tutorial
 ms.tgt_pltfrm: na
-ms.date: 05/15/2018
+ms.date: 10/04/2018
 ms.author: tomfitz
-ms.openlocfilehash: b7f8bbcad39000e7e71149824535a6a82b26c758
-ms.sourcegitcommit: 688a394c4901590bbcf5351f9afdf9e8f0c89505
+ms.openlocfilehash: 1d28a9d330dd001e3fdc05e37f7bbcdd2db7ee6e
+ms.sourcegitcommit: aa042d4341054f437f3190da7c8a718729eb675e
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/18/2018
-ms.locfileid: "34305304"
+ms.lasthandoff: 08/09/2019
+ms.locfileid: "71224543"
 ---
-# <a name="publish-a-managed-application-for-internal-consumption"></a>发布托管应用程序供内部使用
+# <a name="create-and-publish-a-managed-application-definition"></a>创建并发布托管应用程序定义
 
-可以创建和发布适用于组织中成员的 Azure [托管应用程序](overview.md)。 例如，IT 部门可发布确保符合组织标准的托管应用程序。 这些托管应用程序通过服务目录（而不是 Azure Marketplace）提供。
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
+
+可以创建和发布适用于组织中成员的 Azure [托管应用程序](overview.md)。 例如，IT 部门可发布符合组织标准的托管应用程序。 这些托管应用程序通过服务目录（而不是 Azure 市场）提供。
 
 若要发布服务目录的托管应用程序，必须执行以下操作：
 
@@ -29,11 +30,13 @@ ms.locfileid: "34305304"
 * 确定需要对客户订阅中的资源组具有访问权限的用户、组或应用程序。
 * 创建指向 .zip 包并请求标识访问权限的托管应用程序定义。
 
-对于本文，托管应用程序只包含存储帐户。 它用于说明发布托管应用程序的步骤。 有关完整示例，请参阅 [Azure 托管应用程序的示例项目](sample-projects.md)。
+对于本文，托管应用程序只具有存储帐户。 它用于说明发布托管应用程序的步骤。 有关完整示例，请参阅 [Azure 托管应用程序的示例项目](sample-projects.md)。
+
+本文中的 PowerShell 示例需要 Azure PowerShell 6.2 或更高版本。 如果需要，请[更新版本](/powershell/azure/install-Az-ps)。
 
 ## <a name="create-the-resource-template"></a>创建资源模板
 
-每个托管应用程序定义均包含一个名为 **mainTemplate.json** 的文件。 可在其中定义要预配的 Azure 资源。 该模板与常规资源管理器模板并没有不同。
+每个托管应用程序定义均包含一个名为 **mainTemplate.json** 的文件。 可在其中定义要部署的 Azure 资源。 该模板与常规资源管理器模板并没有不同。
 
 创建一个名为 **mainTemplate.json** 的文件。 该名称区分大小写。
 
@@ -82,20 +85,20 @@ ms.locfileid: "34305304"
 
 保存 mainTemplate.json 文件。
 
-## <a name="create-the-user-interface-definition"></a>创建用户接口定义
+## <a name="defining-your-create-experience-using-createuidefinitionjson"></a>使用 CreateUiDefinition.json 定义创建体验
 
-Azure 门户使用 **createUiDefinition.json** 文件为创建托管应用程序的用户生成用户界面。 定义用户如何为每个参数提供输入。 可以使用诸如下拉列表、文本框、密码框和其他输入工具之类的选项。 若要了解如何为托管应用程序创建 UI 定义文件，请参阅 [CreateUiDefinition 入门](create-uidefinition-overview.md)。
+作为发布者，可以使用 **createUiDefinition.json** 文件定义创建体验，该文件为创建托管应用程序的用户生成界面。 可以使用 [control elements] (create-uidefinition-elements.md)（包括下拉框、文本框和密码框）定义用户如何为每个参数提供输入。
 
-创建一个名为 **createUiDefinition.json** 的文件。 该名称区分大小写。
+创建一个名为 **createUiDefinition.json** 的文件（此名称区分大小写）
 
-将以下 JSON 添加到该文件。
+将以下起始 JSON 添加到该文件并保存。
 
 ```json
 {
-    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
-    "handler": "Microsoft.Compute.MultiVm",
-    "version": "0.1.2-preview",
-    "parameters": {
+   "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+   "handler": "Microsoft.Azure.CreateUIDef",
+   "version": "0.1.2-preview",
+   "parameters": {
         "basics": [
             {}
         ],
@@ -139,7 +142,7 @@ Azure 门户使用 **createUiDefinition.json** 文件为创建托管应用程序
 }
 ```
 
-保存 createUiDefinition.json 文件。
+若要了解详细信息，请参阅 [CreateUiDefinition 入门](create-uidefinition-overview.md)。
 
 ## <a name="package-the-files"></a>将文件打包
 
@@ -148,8 +151,8 @@ Azure 门户使用 **createUiDefinition.json** 文件为创建托管应用程序
 将包上传到可从中使用程序包的一个可访问位置。 
 
 ```powershell
-New-AzureRmResourceGroup -Name storageGroup -Location eastus
-$storageAccount = New-AzureRmStorageAccount -ResourceGroupName storageGroup `
+New-AzResourceGroup -Name storageGroup -Location eastus
+$storageAccount = New-AzStorageAccount -ResourceGroupName storageGroup `
   -Name "mystorageaccount" `
   -Location eastus `
   -SkuName Standard_LRS `
@@ -157,9 +160,9 @@ $storageAccount = New-AzureRmStorageAccount -ResourceGroupName storageGroup `
 
 $ctx = $storageAccount.Context
 
-New-AzureStorageContainer -Name appcontainer -Context $ctx -Permission blob
+New-AzStorageContainer -Name appcontainer -Context $ctx -Permission blob
 
-Set-AzureStorageBlobContent -File "D:\myapplications\app.zip" `
+Set-AzStorageBlobContent -File "D:\myapplications\app.zip" `
   -Container appcontainer `
   -Blob "app.zip" `
   -Context $ctx 
@@ -169,12 +172,12 @@ Set-AzureStorageBlobContent -File "D:\myapplications\app.zip" `
 
 ### <a name="create-an-azure-active-directory-user-group-or-application"></a>创建 Azure Active Directory 用户组或应用程序
 
-下一步是选择代表客户来管理资源的用户组或应用程序。 根据分配的角色，此用户组或应用程序对托管资源组具有权限。 角色可以是任何基于角色的访问控制 (RBAC) 的内置角色，如 Owner 或 Contributor。 也可以授权个体用户来管理资源，但通常会将此权限分配给用户组。 若要创建新的 Active Directory 用户组，请参阅[在 Azure Active Directory 中创建组并添加成员](../active-directory/active-directory-groups-create-azure-portal.md)。
+下一步是选择代表客户来管理资源的用户组或应用程序。 根据分配的角色，此用户组或应用程序对托管资源组具有权限。 角色可以是任何基于角色的访问控制 (RBAC) 的内置角色，如 Owner 或 Contributor。 也可以授权个体用户来管理资源，但通常会将此权限分配给用户组。 若要创建新的 Active Directory 用户组，请参阅[在 Azure Active Directory 中创建组并添加成员](../active-directory/fundamentals/active-directory-groups-create-azure-portal.md)。
 
 需要提供用户组的对象 ID 以用于管理资源。 
 
 ```powershell
-$groupID=(Get-AzureRmADGroup -DisplayName mygroup).Id
+$groupID=(Get-AzADGroup -DisplayName mygroup).Id
 ```
 
 ### <a name="get-the-role-definition-id"></a>获取角色定义 ID
@@ -182,7 +185,7 @@ $groupID=(Get-AzureRmADGroup -DisplayName mygroup).Id
 接下来，需要获取希望将其访问权限授予用户、用户组或应用程序的 RBAC 内置角色的角色定义 ID。 通常，你会使用“Owner”、“Contributor”或“Reader”角色。 以下命令展示了如何获取“Owner”角色的角色定义 ID：
 
 ```powershell
-$ownerID=(Get-AzureRmRoleDefinition -Name Owner).Id
+$ownerID=(Get-AzRoleDefinition -Name Owner).Id
 ```
 
 ### <a name="create-the-managed-application-definition"></a>创建托管应用程序定义
@@ -190,15 +193,15 @@ $ownerID=(Get-AzureRmRoleDefinition -Name Owner).Id
 如果还没有用于存储托管应用程序定义的资源组，请立即创建一个：
 
 ```powershell
-New-AzureRmResourceGroup -Name appDefinitionGroup -Location westcentralus
+New-AzResourceGroup -Name appDefinitionGroup -Location westcentralus
 ```
 
 现在，创建托管应用程序定义资源。
 
 ```powershell
-$blob = Get-AzureStorageBlob -Container appcontainer -Blob app.zip -Context $ctx
+$blob = Get-AzStorageBlob -Container appcontainer -Blob app.zip -Context $ctx
 
-New-AzureRmManagedApplicationDefinition `
+New-AzManagedApplicationDefinition `
   -Name "ManagedStorage" `
   -Location "westcentralus" `
   -ResourceGroupName appDefinitionGroup `
@@ -209,70 +212,11 @@ New-AzureRmManagedApplicationDefinition `
   -PackageFileUri $blob.ICloudBlob.StorageUri.PrimaryUri.AbsoluteUri
 ```
 
-## <a name="create-the-managed-application"></a>创建托管应用程序
+### <a name="make-sure-users-can-see-your-definition"></a>请确保用户可以看到你的定义
 
-可以通过门户、PowerShell 或 Azure CLI 部署托管应用程序。
-
-### <a name="powershell"></a>PowerShell
-
-首先，让我们使用 PowerShell 部署托管应用程序。
-
-```powershell
-# Create resource group
-New-AzureRmResourceGroup -Name applicationGroup -Location westcentralus
-
-# Get ID of managed application definition
-$appid=(Get-AzureRmManagedApplicationDefinition -ResourceGroupName appDefinitionGroup -Name ManagedStorage).ManagedApplicationDefinitionId
-
-# Create the managed application
-New-AzureRmManagedApplication `
-  -Name storageApp `
-  -Location westcentralus `
-  -Kind ServiceCatalog `
-  -ResourceGroupName applicationGroup `
-  -ManagedApplicationDefinitionId $appid `
-  -ManagedResourceGroupName "InfrastructureGroup" `
-  -Parameter "{`"storageAccountNamePrefix`": {`"value`": `"demostorage`"}, `"storageAccountType`": {`"value`": `"Standard_LRS`"}}"
-```
-
-托管应用程序和托管基础结构现已存在于订阅中。
-
-### <a name="portal"></a>门户
-
-现在，让我们使用门户部署托管应用程序。 可看到包中创建的用户界面。
-
-1. 转到 Azure 门户。 选择“+ 创建资源”并搜索“服务目录”。
-
-   ![搜索“服务目录”](./media/publish-service-catalog-app/create-new.png)
-
-1. 选择“服务目录托管应用程序”。
-
-   ![选择“服务目录”](./media/publish-service-catalog-app/select-service-catalog-managed-app.png)
-
-1. 选择**创建**。
-
-   ![选择“创建”](./media/publish-service-catalog-app/select-create.png)
-
-1. 从可用解决方案列表中查找要创建的托管应用程序并选择它。 选择**创建**。
-
-   ![查找托管应用程序](./media/publish-service-catalog-app/find-application.png)
-
-1. 提供托管应用程序所需的基本信息。 指定订阅和要包含托管应用程序的新资源组。 对于位置，选择“美国中西部”。 完成后，选择“确定”。
-
-   ![提供托管应用程序参数](./media/publish-service-catalog-app/add-basics.png)
-
-1. 提供特定于托管应用程序中的资源的值。 完成后，选择“确定”。
-
-   ![提供资源参数](./media/publish-service-catalog-app/add-storage-settings.png)
-
-1. 模板会验证你提供的值。 如果验证成功，请选择“确定”启动部署。
-
-   ![验证托管应用程序](./media/publish-service-catalog-app/view-summary.png)
-
-部署完成后，托管应用程序将存在于名为 applicationGroup 的资源组中。 存储帐户将存在于名为 applicationGroup 加上哈希字符串值的资源组中。
+你可以访问托管应用程序定义，但你希望确保组织中的其他用户可以访问它。 至少授予他们对定义的读者角色。 他们可能已从订阅或资源组继承了此级别的访问权限。 若要查看谁可以访问定义并添加用户或组，请参阅[使用基于角色的访问控制来管理对 Azure 订阅资源的访问权限](../role-based-access-control/role-assignments-portal.md)。
 
 ## <a name="next-steps"></a>后续步骤
 
-* 有关托管应用程序的简介，请参阅[托管应用程序概述](overview.md)。
-* 有关示例项目，请参阅 [Azure 托管应用程序的示例项目](sample-projects.md)。
-* 若要了解如何为托管应用程序创建 UI 定义文件，请参阅 [CreateUiDefinition 入门](create-uidefinition-overview.md)。
+* 若要将托管应用程序发布到 Azure 市场，请参阅[市场中的 Azure 托管应用程序](publish-marketplace-app.md)。
+* 若要部署托管应用程序实例，请参阅[通过 Azure 门户部署服务目录应用](deploy-service-catalog-quickstart.md)。

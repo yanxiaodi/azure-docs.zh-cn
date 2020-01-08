@@ -6,16 +6,18 @@ keywords: 剪辑;子剪辑;编码;媒体
 author: dbgeorge
 manager: jasonsue
 ms.author: dwgeo
-ms.date: 11/10/2017
+ms.date: 03/14/2019
 ms.topic: article
 ms.service: media-services
-ms.openlocfilehash: d6fa463f71c00787c994b41d84bb349dce676de5
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 2eb32b8ec265a4afa2581374c1f07ac06958a576
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61466100"
 ---
-# <a name="configure-azure-media-clipper-keyboard-shortcuts"></a>配置 Azure Media Clipper 键盘快捷方式
+# <a name="configure-azure-media-clipper-keyboard-shortcuts"></a>配置 Azure Media Clipper 键盘快捷方式 
+
 Azure Media Clipper 支持通过提供可选的 `keymap` JSON 参数自定义默认的键盘快捷方式。
 
 以下示例 JSON 说明默认的键盘快捷方式。 在初始化 Clipper 时更改键字段并传入参数，即可自定义这些设置。

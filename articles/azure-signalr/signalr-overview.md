@@ -1,69 +1,77 @@
 ---
-title: 什么是 Azure SignalR | Microsoft Docs
+title: 什么是 Azure SignalR 服务？
 description: Azure SignalR 服务概述。
-services: signalr
-documentationcenter: ''
-author: wesmc7777
-manager: cfowler
-editor: ''
+author: sffamily
 ms.service: signalr
-ms.devlang: na
 ms.topic: overview
-ms.workload: tbd
-ms.date: 04/17/2018
-ms.author: wesmc
-ms.openlocfilehash: bc144fb1d7db9251871e7e181b012417a32de7e6
-ms.sourcegitcommit: 870d372785ffa8ca46346f4dfe215f245931dae1
+ms.date: 06/20/2019
+ms.author: zhshang
+ms.openlocfilehash: e7bdc62f7fa46bbacce7f264d8f331ea64b05430
+ms.sourcegitcommit: a6718e2b0251b50f1228b1e13a42bb65e7bf7ee2
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/08/2018
-ms.locfileid: "33868103"
+ms.lasthandoff: 09/25/2019
+ms.locfileid: "71273691"
 ---
-# <a name="what-is-azure-signalr-service"></a>什么是 Azure SignalR 服务
+# <a name="what-is-azure-signalr-service"></a>什么是 Azure SignalR 服务？
 
-Microsoft Azure SignalR 服务目前提供[公共预览版](https://azure.microsoft.com/support/legal/preview-supplemental-terms/)。
-
-Azure SignalR 服务是基于 [ASP.NET Core SignalR](https://docs.microsoft.com/aspnet/core/signalr/introduction) 的 Azure 服务。 ASP.NET Core SignalR 是一个[开源库](https://github.com/aspnet/signalr)，可简化通过 HTTP 向应用程序添加实时 Web 功能的过程。 此实时功能允许 Web 服务器将内容更新推送到连接的客户端。 因此，无需轮询服务器，或提交针对更新的新 HTTP 请求，即可更新客户端。
-
-本文简要介绍了 Azure SignalR 服务。 如果想要入门，请从 [ASP.NET Core 快速入门](signalr-quickstart-dotnet-core.md)开始。
-
-## <a name="what-is-signalr-service-used-for"></a>SignalR 服务的用途是什么？ 
-
-存在多种需要实时内容更新的应用程序类型。 下面的示例应用程序类型适合使用 Azure SignalR 服务：
-
-* 需要从服务器进行高频率更新的应用。 示例包括游戏、社交网络、投票、拍卖、地图和 GPS 应用。
-* 仪表板和监视应用。 示例包括公司仪表板、即时销售更新或旅行警报。
-* 协作应用。 协作应用的示例包括白板应用和团队会议软件。
-* 需要通知的应用。 社交网络、电子邮件、聊天、游戏、旅行警报和很多其他应用都需使用通知。
-
-从内部而言，SignalR 是用于生成实时 Web 应用程序的多种技术的抽象。 [Websocket](https://wikipedia.org/wiki/WebSocket) 是最佳传输，但在其他选项不可用时，则使用[服务器发送事件 (SSE)](https://wikipedia.org/wiki/Server-sent_events) 和长轮询等其他技术。 基于服务器和客户端上受支持的功能，SignalR 自动检测并初始化合适的传输。
-
-## <a name="developing-signalr-apps"></a>开发 SignalR 应用
-
-目前，可在 Web 应用程序中使用两个版本的 SignalR：SignalR for ASP.NET 和 ASP.NET Core SignalR（此为最新版）。 Azure SignalR 服务是在 ASP.NET Core SignalR 上构建的 Azure 托管服务。 
-
-ASP.NET Core SignalR 是以前版本的重写。 因此，ASP.NET Core SignalR 不与早期的 SignalR 版本后向兼容。 API 和行为不同。 ASP.NET Core SignalR SDK 是 .NET Standard，因此仍可在 .NET Framework 中使用。 但是，必须改用新的 API（而不是旧的 API）。 如果正在使用 SignalR 并且想要迁移到 ASP.NET Core SignalR 或 Azure SignalR 服务，那么需要更改代码来处理 API 差异。
-
-通过 Azure SignalR 服务，ASP.NET Core SignalR 的服务器端组件托管在 Azure 中。 但是，由于该技术构建在 ASP.NET Core 之上，因此可在多个平台（Windows、Linux 和 MacOS）上运行实际 Web 应用程序，同时将其托管在 [Azure 应用服务](../app-service/app-service-web-overview.md)、[IIS](https://docs.microsoft.com/aspnet/core/host-and-deploy/iis/index)、[Nginx](https://docs.microsoft.com/aspnet/core/host-and-deploy/linux-nginx)、[Apache](https://docs.microsoft.com/aspnet/core/host-and-deploy/linux-apache) 和 [Docker](https://docs.microsoft.com/aspnet/core/host-and-deploy/docker/index) 中。 还可以在自己的进程中使用自托管。
-
-如果应用程序的目标包括：支持最新功能，通过实时内容更新实现 Web 客户端更新；跨多个平台（Azure、Windows、Linux 和 MacOS）运行；以及在不同环境中进行托管，那么最佳选项是利用 Azure SignalR 服务。
+Azure SignalR Service 简化了通过 HTTP 向应用程序添加实时 Web 功能的过程。 这种实时功能允许服务将内容更新推送到连接的客户端，例如单页 Web 或移动应用程序。 因此，无需轮询服务器，或提交针对更新的新 HTTP 请求，即可更新客户端。
 
 
-## <a name="why-not-deploy-signalr-myself"></a>为什么不自行部署 SignalR？
+本文简要介绍了 Azure SignalR Service。
 
-将支持 ASP.NET Core SignalR 的 Azure Web 应用部署为整个 Web 应用程序的后端组件仍是一个有效的方法。
+## <a name="what-is-azure-signalr-service-used-for"></a>Azure SignalR Service 的用途是什么？
 
-使用 Azure SignalR 服务的关键原因之一是其简便性。 借助 Azure SignalR 服务，无需处理性能、可伸缩性、可用性等问题。 已通过 99.9% 服务级别协议解决了这些问题。
+需要将数据从服务器实时推送到客户端的任何方案都可以使用 Azure SignalR 服务。
 
-此外，通常情况下，WebSocket 是支持实时内容更新的首选技术。 但是，缩放时，负载均衡大量持久性 WebSocket 连接是要解决的复杂问题。 常见解决方案通常利用：DNS 负载均衡、硬件负载均衡器和软件负载均衡。 Azure SignalR 服务为用户解决此问题。
+通常需要轮询服务器的传统实时功能也可以使用 Azure SignalR 服务。
 
-使用它的另一原因可能是因为完全不需要实际托管一个 Web 应用程序。 Web 应用程序的逻辑可利用[无服务器计算](https://azure.microsoft.com/overview/serverless-computing/)。 例如，可能仅通过 [Azure Functions](https://docs.microsoft.com/azure/azure-functions/) 触发器按需托管和执行代码。 这种情况可能会很棘手，因为代码仅按需运行，并且不会与客户端维持长久连接。 Azure SignalR 服务可以处理这种情况，因为该服务已为用户管理连接。
+Azure SignalR 服务已在各种行业中使用，适用于需要实时内容更新的任何应用类型。 下面是适合使用 Azure SignalR 服务的一些示例：
 
-## <a name="how-does-it-scale"></a>它如何缩放？
+* **高频率数据更新：** 游戏、投票、轮询、竞拍。
+* **仪表板和监视：** 公司仪表板、金融市场数据、即时销量更新、多玩家游戏排行榜和 IoT 监视。
+* **聊天：** 实时聊天室、聊天机器人、在线客户支持、实时购物助手、信使、游戏内聊天，等等。
+* **地图实时定位：** 物流跟踪、交货状态跟踪、运输状态更新、GPS 应用。
+* **实时定向广告：** 个性化的实时推送广告和套餐、交互式广告。
+* **协作式应用：** 共同著作、白板应用和团队会议软件。
+* **推送通知：** 社交网络、电子邮件、游戏、行程通知。
+* **实时广播：** 实时音频/视频广播、实时字幕、翻译、活动/新闻广播。
+* **IoT 和互联设备：** 实时 IoT 指标、远程控制、实时状态和位置跟踪。
+* **自动化：** 基于上游事件的实时触发器。
 
-通常使用 SQL Server、Azure 服务总线或 Redis Cache 对 SignalR 进行缩放。 Azure SignalR 服务为用户处理缩放方法。 其性能和成本可与不具备处理这些其他服务的复杂性的方法相媲美。 用户只需更新服务的单元计数。 每个服务单元最多支持 1000 个客户端连接。
+## <a name="what-are-the-benefits-using-azure-signalr-service"></a>使用 Azure SignalR 服务的优势是什么？
 
-## <a name="next-steps"></a>后续步骤
-* [快速入门：使用 Azure SignalR 创建聊天室](signalr-quickstart-dotnet-core.md)  
-  
+**基于标准：**
 
+SignalR 提供用于生成实时 Web 应用程序的多种技术的抽象概念。 [Websocket](https://wikipedia.org/wiki/WebSocket) 是最佳传输，但在其他选项不可用时，则使用[服务器发送事件 (SSE)](https://wikipedia.org/wiki/Server-sent_events) 和长轮询等其他技术。 基于服务器和客户端上受支持的功能，SignalR 自动检测并初始化合适的传输。
+
+**本机 ASP.NET Core 支持：**
+
+SignalR 服务通过 ASP.NET Core 和 ASP.NET 提供本机编程体验。 使用 SignalR 服务开发新的 SignalR 应用程序，或者从基于现有 SignalR 的应用程序迁移到 SignalR 服务只需付出少量的精力。
+SignalR 服务还支持 ASP.NET Core 的新功能：服务器端 Blazor。
+
+**广泛的客户端支持：**
+
+SignalR 服务适用于广泛的客户端，例如 Web 和移动浏览器、桌面应用、移动应用、服务器进程、IoT 设备和游戏控制台。 SignalR 服务以不同的语言提供 SDK。 除了本机 ASP.NET Core 或 ASP.NET C# SDK 以外，SignalR 服务还提供 JavaScript 客户端 SDK 来支持 Web 客户端和许多 JavaScript 框架。 Java 客户端 SDK 还支持 Java 应用程序，包括 Android 本机应用。 SignalR 服务支持 REST API，与 Azure Functions 和事件网格集成后无需服务器。
+
+**处理大规模客户端连接：**
+
+SignalR 服务是针对大规模实时应用程序设计的。 SignalR 服务允许多个实例配合工作，扩展到数百万个客户端连接。 该服务还支持多个全局区域，以实现分片、高可用性或灾难恢复目的。
+
+**消除了自承载 SignalR 的负担：**
+
+与自承载 SignalR 应用程序相比，改用 SignalR 服务后，无需管理用于处理规模和客户端连接的后端平面。 完全托管的服务还简化了 Web 应用程序并节省了托管成本。 SignalR 服务覆盖全球，提供一流的数据中心和网络，可扩展到数百万个连接，附带 SLA 保障，并且符合 Azure 的所有合规与安全标准。
+
+![托管的 Azure SignalR 服务](./media/signalr-overview/managed-signalr-service.png)
+
+**为不同的消息传送模式提供丰富的 API：**
+
+SignalR 服务允许服务器将消息发送到特定的连接、所有连接或属于特定用户或已放置在任意组中的连接子集。
+
+## <a name="how-to-use-azure-signalr-service"></a>如何使用 Azure SignalR Service
+
+可通过多种不同的方式对 Azure SignalR 服务编程，下面列出了一些示例：
+
+- [扩展 ASP.NET Core SignalR 应用](signalr-concept-scale-aspnet-core.md) - 将 Azure SignalR Service 与ASP.NET Core SignalR 应用程序集成，以扩展到成千上万的连接  。
+- [生成无服务器的实时应用](signalr-concept-azure-functions.md) - 使用 Azure Functions 与 Azure SignalR Service 的集成，以 JavaScript、C# 和 Java 等语言生成无服务器的实时应用  。
+- [通过 REST API 将消息从服务器发送到客户端](https://github.com/Azure/azure-signalr/blob/dev/docs/rest-api.md) - Azure SignalR Service 提供的 REST API 使应用程序能够以任何支持 REST 的编程语言向使用 SignalR Service 连接的客户端发送消息  。

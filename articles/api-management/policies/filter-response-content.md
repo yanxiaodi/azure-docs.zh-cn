@@ -9,15 +9,15 @@ editor: ''
 ms.service: api-management
 ms.workload: mobile
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 10/13/2017
 ms.author: apimpm
-ms.openlocfilehash: f6475b272239e9352211a80985e1b46da9c6f8e0
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.openlocfilehash: 462db76b06e5071571ae475d420a627e57dad92e
+ms.sourcegitcommit: 82499878a3d2a33a02a751d6e6e3800adbfa8c13
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70067754"
 ---
 # <a name="filter-response-content"></a>筛选响应内容
 
@@ -27,7 +27,7 @@ ms.lasthandoff: 05/10/2018
 
 将代码粘贴到“出站”块中。
 
-[!code-xml[Main](../../../api-management-policy-samples/Snippets/Filter response content based on product name.policy.xml)]
+[!code-xml[Main](../../../api-management-policy-samples/examples/Filter response content based on product name.policy.xml)]
 
 ## <a name="next-steps"></a>后续步骤
 

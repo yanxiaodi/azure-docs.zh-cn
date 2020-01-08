@@ -14,11 +14,12 @@ ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 02/05/2018
 ms.author: motanv
-ms.openlocfilehash: 26a954412b8755cd112bf2931ed9bdda291fd727
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: 7a22b17d45218c2f78220f980605b3c211495606
+ms.sourcegitcommit: 5bdd50e769a4d50ccb89e135cfd38b788ade594d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 07/03/2019
+ms.locfileid: "67543738"
 ---
 # <a name="induce-controlled-chaos-in-service-fabric-clusters"></a>在 Service Fabric 群集中引入受控的混沌测试
 大规模分布式系统，例如云基础结构，在本质上都是不可靠的。 Azure Service Fabric 可让开发人员在不可靠的基础结构之上编写可靠的分布式服务。 若要在不可靠的基础结构之上编写可靠的分布式服务，开发人员应能够在不可靠的底层基础结构因故障而进行复杂的状态转换时，测试其服务的稳定性。
@@ -33,7 +34,7 @@ ms.lasthandoff: 05/16/2018
 > 从目前来看，混沌测试只会引入安全的故障，这意味着，在没有外部故障的情况下，绝对不会发生仲裁丢失或数据丢失。
 >
 
-混沌测试在运行时，将生成不同的事件来捕获当前的运行状态。 例如，ExecutingFaultsEvent 包含混沌测试决定在该迭代中执行的所有故障。 ValidationFailedEvent 包含群集验证期间发现的验证故障（运行状况或稳定性问题）的详细信息。 可以调用 GetChaosReport API（C#、Powershell 或 REST）来获取混沌测试运行报告。 这些事件保存在一个 [Reliable Dictionary](https://docs.microsoft.com/azure/service-fabric/service-fabric-reliable-services-reliable-collections) 中，该字典的截断策略由两项配置决定：**MaxStoredChaosEventCount**（默认值为 25000）和 **StoredActionCleanupIntervalInSeconds**（默认值为 3600）。 混沌测试每隔 *StoredActionCleanupIntervalInSeconds* 进行一次检查，从 Reliable Dictionary 中清除除最新 *MaxStoredChaosEventCount* 事件以外的所有事件。
+混沌测试在运行时，将生成不同的事件来捕获当前的运行状态。 例如，ExecutingFaultsEvent 包含混沌测试决定在该迭代中执行的所有故障。 ValidationFailedEvent 包含群集验证期间发现的验证故障（运行状况或稳定性问题）的详细信息。 可以调用 GetChaosReport API（C#、Powershell 或 REST）来获取混沌测试运行报告。 这些事件持久保存在[可靠字典](https://docs.microsoft.com/azure/service-fabric/service-fabric-reliable-services-reliable-collections)中，该字典具有由两个配置控制的截断策略：**MaxStoredChaosEventCount**（默认值为 25000）和 **StoredActionCleanupIntervalInSeconds**（默认值为 3600）。 混沌测试每隔 *StoredActionCleanupIntervalInSeconds* 进行一次检查，从 Reliable Dictionary 中清除除最新 *MaxStoredChaosEventCount* 事件以外的所有事件。
 
 ## <a name="faults-induced-in-chaos"></a>在混沌测试中引入的故障
 混沌测试在整个 Service Fabric 群集中生成故障，将几个月或几年内出现的故障压缩成几小时。 通过将各种具有高故障率的交叉故障组合在一起，能够找出很有可能被忽视的极端状况。 运行这种混沌测试会使服务的代码质量得到显著提高。
@@ -107,28 +108,34 @@ class Program
             var startTimeUtc = DateTime.UtcNow;
 
             // The maximum amount of time to wait for all cluster entities to become stable and healthy. 
-            // Chaos executes in iterations and at the start of each iteration it validates the health of cluster entities. 
-            // During validation if a cluster entity is not stable and healthy within MaxClusterStabilizationTimeoutInSeconds, Chaos generates a validation failed event.
+            // Chaos executes in iterations and at the start of each iteration it validates the health of cluster
+            // entities. 
+            // During validation if a cluster entity is not stable and healthy within
+            // MaxClusterStabilizationTimeoutInSeconds, Chaos generates a validation failed event.
             var maxClusterStabilizationTimeout = TimeSpan.FromSeconds(30.0);
 
             var timeToRun = TimeSpan.FromMinutes(60.0);
 
             // MaxConcurrentFaults is the maximum number of concurrent faults induced per iteration. 
-            // Chaos executes in iterations and two consecutive iterations are separated by a validation phase. 
-            // The higher the concurrency, the more aggressive the injection of faults -- inducing more complex series of states to uncover bugs. 
+            // Chaos executes in iterations and two consecutive iterations are separated by a validation phase.
+            // The higher the concurrency, the more aggressive the injection of faults -- inducing more complex
+            // series of states to uncover bugs.
             // The recommendation is to start with a value of 2 or 3 and to exercise caution while moving up.
             var maxConcurrentFaults = 3;
 
-            // Describes a map, which is a collection of (string, string) type key-value pairs. The map can be used to record information about
-            // the Chaos run. There cannot be more than 100 such pairs and each string (key or value) can be at most 4095 characters long.
+            // Describes a map, which is a collection of (string, string) type key-value pairs. The map can be
+            // used to record information about the Chaos run. There cannot be more than 100 such pairs and
+            // each string (key or value) can be at most 4095 characters long.
             // This map is set by the starter of the Chaos run to optionally store the context about the specific run.
             var startContext = new Dictionary<string, string>{{"ReasonForStart", "Testing"}};
 
-            // Time-separation (in seconds) between two consecutive iterations of Chaos. The larger the value, the lower the fault injection rate.
+            // Time-separation (in seconds) between two consecutive iterations of Chaos. The larger the value, the
+            // lower the fault injection rate.
             var waitTimeBetweenIterations = TimeSpan.FromSeconds(10);
 
-            // Wait time (in seconds) between consecutive faults within a single iteration. 
-            // The larger the value, the lower the overlapping between faults and the simpler the sequence of state transitions that the cluster goes through. 
+            // Wait time (in seconds) between consecutive faults within a single iteration.
+            // The larger the value, the lower the overlapping between faults and the simpler the sequence of
+            // state transitions that the cluster goes through. 
             // The recommendation is to start with a value between 1 and 5 and exercise caution while moving up.
             var waitTimeBetweenFaults = TimeSpan.Zero;
 
@@ -140,13 +147,14 @@ class Program
                 MaxPercentUnhealthyNodes = 100
             };
 
-            // All types of faults, restart node, restart code package, restart replica, move primary replica, and move secondary replica will happen
-            // for nodes of type 'FrontEndType'
+            // All types of faults, restart node, restart code package, restart replica, move primary replica,
+            // and move secondary replica will happen for nodes of type 'FrontEndType'
             var nodetypeInclusionList = new List<string> { "FrontEndType"};
 
-            // In addition to the faults included by nodetypeInclusionList, 
-            // restart code package, restart replica, move primary replica, move secondary replica faults will happen for 'fabric:/TestApp2'
-            // even if a replica or code package from 'fabric:/TestApp2' is residing on a node which is not of type included in nodeypeInclusionList.
+            // In addition to the faults included by nodetypeInclusionList,
+            // restart code package, restart replica, move primary replica, move secondary replica faults will
+            // happen for 'fabric:/TestApp2' even if a replica or code package from 'fabric:/TestApp2' is residing
+            // on a node which is not of type included in nodeypeInclusionList.
             var applicationInclusionList = new List<string> { "fabric:/TestApp2" };
 
             // List of cluster entities to target for Chaos faults.
@@ -239,22 +247,26 @@ class Program
 $clusterConnectionString = "localhost:19000"
 $timeToRunMinute = 60
 
-# The maximum amount of time to wait for all cluster entities to become stable and healthy. 
-# Chaos executes in iterations and at the start of each iteration it validates the health of cluster entities. 
-# During validation if a cluster entity is not stable and healthy within MaxClusterStabilizationTimeoutInSeconds, Chaos generates a validation failed event.
+# The maximum amount of time to wait for all cluster entities to become stable and healthy.
+# Chaos executes in iterations and at the start of each iteration it validates the health of cluster entities.
+# During validation if a cluster entity is not stable and healthy within MaxClusterStabilizationTimeoutInSeconds,
+# Chaos generates a validation failed event.
 $maxClusterStabilizationTimeSecs = 30
 
-# MaxConcurrentFaults is the maximum number of concurrent faults induced per iteration. 
-# Chaos executes in iterations and two consecutive iterations are separated by a validation phase. 
-# The higher the concurrency, the more aggressive the injection of faults -- inducing more complex series of states to uncover bugs. 
+# MaxConcurrentFaults is the maximum number of concurrent faults induced per iteration.
+# Chaos executes in iterations and two consecutive iterations are separated by a validation phase.
+# The higher the concurrency, the more aggressive the injection of faults -- inducing more complex series of
+# states to uncover bugs.
 # The recommendation is to start with a value of 2 or 3 and to exercise caution while moving up.
 $maxConcurrentFaults = 3
 
-# Time-separation (in seconds) between two consecutive iterations of Chaos. The larger the value, the lower the fault injection rate.
+# Time-separation (in seconds) between two consecutive iterations of Chaos. The larger the value, the lower the
+# fault injection rate.
 $waitTimeBetweenIterationsSec = 10
 
-# Wait time (in seconds) between consecutive faults within a single iteration. 
-# The larger the value, the lower the overlapping between faults and the simpler the sequence of state transitions that the cluster goes through. 
+# Wait time (in seconds) between consecutive faults within a single iteration.
+# The larger the value, the lower the overlapping between faults and the simpler the sequence of state
+# transitions that the cluster goes through.
 # The recommendation is to start with a value between 1 and 5 and exercise caution while moving up.
 $waitTimeBetweenFaultsSec = 0
 
@@ -264,8 +276,9 @@ $clusterHealthPolicy.MaxPercentUnhealthyNodes = 100
 $clusterHealthPolicy.MaxPercentUnhealthyApplications = 100
 $clusterHealthPolicy.ConsiderWarningAsError = $False
 
-# Describes a map, which is a collection of (string, string) type key-value pairs. The map can be used to record information about
-# the Chaos run. There cannot be more than 100 such pairs and each string (key or value) can be at most 4095 characters long.
+# Describes a map, which is a collection of (string, string) type key-value pairs. The map can be used to record
+# information about the Chaos run.
+# There cannot be more than 100 such pairs and each string (key or value) can be at most 4095 characters long.
 # This map is set by the starter of the Chaos run to optionally store the context about the specific run.
 $context = @{"ReasonForStart" = "Testing"}
 
@@ -273,14 +286,15 @@ $context = @{"ReasonForStart" = "Testing"}
 $chaosTargetFilter = new-object -TypeName System.Fabric.Chaos.DataStructures.ChaosTargetFilter
 $chaosTargetFilter.NodeTypeInclusionList = new-object -TypeName "System.Collections.Generic.List[String]"
 
-# All types of faults, restart node, restart code package, restart replica, move primary replica, and move secondary replica will happen
-# for nodes of type 'FrontEndType'
+# All types of faults, restart node, restart code package, restart replica, move primary replica, and move
+# secondary replica will happen for nodes of type 'FrontEndType'
 $chaosTargetFilter.NodeTypeInclusionList.AddRange( [string[]]@("FrontEndType") )
 $chaosTargetFilter.ApplicationInclusionList = new-object -TypeName "System.Collections.Generic.List[String]"
 
 # In addition to the faults included by nodetypeInclusionList, 
-# restart code package, restart replica, move primary replica, move secondary replica faults will happen for 'fabric:/TestApp2'
-# even if a replica or code package from 'fabric:/TestApp2' is residing on a node which is not of type included in nodeypeInclusionList.
+# restart code package, restart replica, move primary replica, move secondary replica faults will happen for
+# 'fabric:/TestApp2' even if a replica or code package from 'fabric:/TestApp2' is residing on a node which is
+# not of type included in nodeypeInclusionList.
 $chaosTargetFilter.ApplicationInclusionList.Add("fabric:/TestApp2")
 
 Connect-ServiceFabricCluster $clusterConnectionString

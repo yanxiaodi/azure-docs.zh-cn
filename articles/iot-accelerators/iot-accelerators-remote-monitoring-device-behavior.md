@@ -1,22 +1,19 @@
 ---
 title: 远程监视解决方案中的模拟设备行为 - Azure | Microsoft Docs
 description: 本文介绍如何使用 JavaScript 来定义远程监视解决方案中模拟设备的行为。
-services: iot-suite
-suite: iot-suite
 author: dominicbetts
 manager: timlt
 ms.author: dobett
-ms.service: iot-suite
+ms.service: iot-accelerators
+services: iot-accelerators
 ms.date: 01/29/2018
-ms.topic: article
-ms.devlang: NA
-ms.tgt_pltfrm: NA
-ms.workload: NA
-ms.openlocfilehash: cd6c3c20f8d776996a7089873e010430fd2b570b
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.topic: conceptual
+ms.openlocfilehash: 04d2ad2f0e86ee977600af86a2ffd1e9d7680375
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "65823423"
 ---
 # <a name="implement-the-device-model-behavior"></a>实现设备模型的行为
 
@@ -24,6 +21,9 @@ ms.lasthandoff: 05/20/2018
 
 - 按固定间隔运行，更新设备内部状态的**状态** JavaScript 文件。
 - 解决方案在设备上调用方法时运行的**方法** JavaScript 文件。
+
+> [!NOTE]
+> 设备模型行为仅适用于在设备模拟服务中托管的模拟设备。 如果想要创建真实设备，请参阅[将设备连接到远程监视解决方案加速器](iot-accelerators-connecting-devices.md)。
 
 在本文中，学习如何：
 
@@ -34,7 +34,7 @@ ms.lasthandoff: 05/20/2018
 
 ## <a name="state-behavior"></a>状态行为
 
-设备模型架构的 [Simulation](iot-accelerators-remote-monitoring-device-schema.md#simulation) 节定义模拟设备的内部状态：
+设备模型架构的 [Simulation](../../articles/iot-accelerators/iot-accelerators-remote-monitoring-device-schema.md#simulation) 节定义模拟设备的内部状态：
 
 - `InitialState` 定义设备状态对象的所有属性的初始值。
 - `Script` 标识按计划运行的、更新设备状态的 JavaScript 文件。
@@ -156,11 +156,11 @@ function main(context, previousState, previousProperties) {
 }
 ```
 
-可以在 Github 上查看完整的 [chiller-01-state.js](https://github.com/Azure/device-simulation-dotnet/blob/master/Services/data/devicemodels/scripts/chiller-01-state.js)。
+可以在 GitHub 上查看完整的 [chiller-01-state.js](https://github.com/Azure/device-simulation-dotnet/blob/master/Services/data/devicemodels/scripts/chiller-01-state.js)。
 
 ## <a name="method-behavior"></a>方法行为
 
-设备模型架构的 [CloudToDeviceMethods](iot-accelerators-remote-monitoring-device-schema.md#cloudtodevicemethods) 节定义模拟设备响应的方法。
+设备模型架构的 [CloudToDeviceMethods](../../articles/iot-accelerators/iot-accelerators-remote-monitoring-device-schema.md#cloudtodevicemethods) 节定义模拟设备响应的方法。
 
 以下示例显示了模拟冷却器设备支持的方法列表：
 
@@ -254,7 +254,7 @@ function main(context, previousState, previousProperties) {
 
 如果存在语法错误，则解释器会失败，并在服务日志中写入一个 `Jint.Runtime.JavaScriptException` 条目。
 
-[创建模拟设备](iot-accelerators-remote-monitoring-test.md)一文介绍了如何在本地运行设备模拟服务。 在本地运行服务可以更方便地调试模拟设备，然后将其部署到云中。
+GitHub 上的[本地运行服务](https://github.com/Azure/device-simulation-dotnet#running-the-service-locally-eg-for-development-tasks)文章介绍了如何在本地运行设备模拟服务。 在本地运行服务可以更方便地调试模拟设备，然后将其部署到云中。
 
 ## <a name="next-steps"></a>后续步骤
 
@@ -266,7 +266,7 @@ function main(context, previousState, previousProperties) {
 > * 定义模拟设备如何响应来自远程监视解决方案的方法调用
 > * 调试脚本
 
-了解如何指定模拟设备的行为后，建议接下来继续学习如何[创建模拟设备](iot-accelerators-remote-monitoring-test.md)。
+了解如何指定模拟设备的行为后，建议接下来继续学习如何[创建模拟设备](iot-accelerators-remote-monitoring-create-simulated-device.md)。
 
 有关可供开发人员参考的远程监视解决方案详细信息，请参阅：
 

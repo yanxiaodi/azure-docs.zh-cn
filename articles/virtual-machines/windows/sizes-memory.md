@@ -4,24 +4,23 @@ description: 列出 Azure 中适用于 Windows 虚拟机的各种内存优化大
 services: virtual-machines-windows
 documentationcenter: ''
 author: jonbeck7
-manager: jeconnoc
+manager: gwallace
 editor: ''
 tags: azure-resource-manager,azure-service-management
 keywords: VM 隔离,隔离的 VM,隔离,隔离的
 ms.assetid: ''
 ms.service: virtual-machines-windows
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-windows
 ms.workload: infrastructure-services
-ms.date: 03/08/2017
+ms.date: 08/08/2019
 ms.author: jonbeck
-ms.openlocfilehash: 69b8811e42c602591889fbb1dfa79992971b21c4
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.openlocfilehash: 3920160a4550cc81c250b99cb0b5bdd78b42c770
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
-ms.locfileid: "33943967"
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70102299"
 ---
 # <a name="memory-optimized-virtual-machine-sizes"></a>内存优化虚拟机大小
 
@@ -36,6 +35,7 @@ ms.locfileid: "33943967"
 - [存储优化](sizes-storage.md)
 - [GPU 优化](sizes-gpu.md)
 - [高性能计算](sizes-hpc.md)
+- [前几代](sizes-previous-gen.md)
 
 ## <a name="next-steps"></a>后续步骤
 了解有关 [Azure 计算单元 (ACU)](acu.md) 如何帮助你跨 Azure SKU 比较计算性能的详细信息。

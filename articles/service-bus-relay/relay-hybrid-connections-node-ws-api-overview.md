@@ -1,11 +1,11 @@
 ---
-title: "Azure 中继 Node API 概述 | Microsoft Docs"
-description: "中继 Node API 概述"
+title: Azure 中继 Node API 概述 | Microsoft Docs
+description: 中继 Node API 概述
 services: service-bus-relay
 documentationcenter: na
-author: sethmanheim
+author: spelluru
 manager: timlt
-editor: 
+editor: ''
 ms.assetid: b7d6e822-7c32-4cb5-a4b8-df7d009bdc85
 ms.service: service-bus-relay
 ms.devlang: na
@@ -13,12 +13,13 @@ ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 01/23/2018
-ms.author: sethm
-ms.openlocfilehash: 696e3f77a283cc31d3c8f6007a839480ae8eb984
-ms.sourcegitcommit: 9890483687a2b28860ec179f5fd0a292cdf11d22
-ms.translationtype: HT
+ms.author: spelluru
+ms.openlocfilehash: 794e797e504d6064c13ffe0a4ed131e668d86e97
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/24/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64699393"
 ---
 # <a name="relay-hybrid-connections-node-api-overview"></a>中继混合连接 Node API 概述
 
@@ -130,7 +131,7 @@ var wss = new server(
 - `server`（必需）- 要侦听的混合连接名称的完全限定 URI，通常使用 WebSocket.createRelayListenUri() 帮助程序方法构造。
 - `token`（必需）- 此参数可以保留以前颁发的令牌字符串，也可以保留为获得此类令牌字符串而调用的回调函数。 在启用令牌续订时，首选回调选项。
 
-#### <a name="events"></a>活动
+#### <a name="events"></a>Events
 
 `RelayedServer` 实例将发出三个事件，使你能够处理传入的请求、建立连接，以及检测错误条件。 订阅 `connect` 事件后才能处理消息。 
 
@@ -157,7 +158,7 @@ function(socket)
 function(error)
 ```
 
-如果基础服务器发出错误，将转发到此处。  
+如果基础服务器发出错误，则会转发到此处。  
 
 #### <a name="helpers"></a>帮助程序
 

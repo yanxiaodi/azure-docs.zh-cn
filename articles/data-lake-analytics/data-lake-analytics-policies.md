@@ -1,25 +1,20 @@
 ---
-title: 管理 Azure Data Lake Analytics 策略 | Microsoft Docs
-description: 了解如何使用策略来控制 Data Lake Analytics 帐户的使用情况。
+title: 管理 Azure Data Lake Analytics 策略
+description: 了解如何使用策略来控制 Data Lake Analytics 帐户的使用情况，例如最大的澳大利亚和最大作业。
 services: data-lake-analytics
-documentationcenter: ''
-author: saveenr
-manager: kfile
-editor: cgronlun
-ms.assetid: 0a6102d1-7554-4df2-b487-4dae9a7287b6
 ms.service: data-lake-analytics
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: big-data
-ms.date: 04/30/2018
+author: saveenr
 ms.author: saveenr
-ms.openlocfilehash: db2712f0b57f2a5d60eae4aec21a4070c7a907a3
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.reviewer: jasonwhowell
+ms.assetid: 0a6102d1-7554-4df2-b487-4dae9a7287b6
+ms.topic: conceptual
+ms.date: 04/30/2018
+ms.openlocfilehash: 97b736d854661600a847b1d698af8f15ae58d237
+ms.sourcegitcommit: 2d9a9079dd0a701b4bbe7289e8126a167cfcb450
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
-ms.locfileid: "32771218"
+ms.lasthandoff: 09/29/2019
+ms.locfileid: "71672863"
 ---
 # <a name="manage-azure-data-lake-analytics-using-policies"></a>使用策略管理 Azure Data Lake Analytics
 
@@ -37,7 +32,7 @@ ms.locfileid: "32771218"
 1. 在 Azure 门户中转到 Data Lake Analytics 帐户。
 2. 单击“属性”。
 3. 在“最大 AU 数”下，移动滑块选择一个值，或在文本框中输入值。 
-4. 单击“ **保存**”。
+4. 单击“保存”。
 
 > [!NOTE]
 > 如果需要的数量大于默认 AU 数 (250)，在门户中单击“帮助 + 支持”提交支持请求。 可增加 Data Lake Analytics 帐户中可用的 AU 数。
@@ -51,7 +46,7 @@ ms.locfileid: "32771218"
 1. 在 Azure 门户中转到 Data Lake Analytics 帐户。
 2. 单击“属性”。
 3. 在“运行作业的最大数”下，移动滑块选择一个值，或在文本框中输入值。 
-4. 单击“ **保存**”。
+4. 单击“保存”。
 
 > [!NOTE]
 > 如果需运行的作业数大于默认作业数 (20)，请在门户中单击“帮助 + 支持”提交支持请求。 可增加 Data Lake Analytics 帐户中可同时运行的作业数。
@@ -65,7 +60,7 @@ ms.locfileid: "32771218"
 1. 在 Azure 门户中转到 Data Lake Analytics 帐户。
 2. 单击“属性”。
 3. 在“保留作业查询的天数”下，移动滑块选择一个值，或在文本框中输入值。  
-4. 单击“ **保存**”。
+4. 单击“保存”。
 
 ## <a name="job-level-policies"></a>作业级策略
 
@@ -73,8 +68,8 @@ ms.locfileid: "32771218"
 
 Data Lake Analytics 有两个可在作业级别设置的策略：
 
-* 每个作业的 AU 限制：用户只可以提交所含 AU 数不超过此数字的作业。 默认情况下，此限制与帐户的最大 AU 限制相同。
-* 优先级：用户只可提交优先级低于或等于此值的作业。 数字越大优先级越低。 默认情况下，此限制值设置为 1，这是可能的最高优先级。
+* **每个作业的 AU 限制**：用户只能提交具有此数量的澳大利亚的作业。 默认情况下，此限制与帐户的最大 AU 限制相同。
+* **优先级**：用户只能提交优先级低于或等于此值的作业。 数字越大优先级越低。 默认情况下，此限制值设置为 1，这是可能的最高优先级。
 
 对每个帐户都设有默认策略。 默认策略适用于帐户的所有用户。 可为特定用户和组设置其他策略。 
 
@@ -87,12 +82,12 @@ Data Lake Analytics 有两个可在作业级别设置的策略：
 1. 在 Azure 门户中转到 Data Lake Analytics 帐户。
 2. 单击“属性”。
 3. 在“作业提交限制”下，单击“添加策略”按钮。 然后选择或输入以下设置：
-    1. 计算策略名称：输入策略名称，提醒策略的用途。
-    2. 选择用户或组：选择此策略适用的用户或组。
-    3. 设置作业 AU 限制：设置适用于所选用户或组的 AU 限制。
-    4. 设置优先级限制：设置适用于所选用户或组的优先级限制。
+    1. **计算策略名称**：输入策略名称，提醒你该策略的用途。
+    2. **选择用户或组**：选择将应用此策略的用户或组。
+    3. **设置作业 AU 限制**：设置适用于所选用户或组的 AU 限制。
+    4. **设置优先级限制**：设置应用于所选用户或组的优先级限制。
 
-4. 单击“确定” 。
+4. 单击“确定”。
 
 5. 新策略在“默认”策略表的“作业提交限制”下列出。 
 

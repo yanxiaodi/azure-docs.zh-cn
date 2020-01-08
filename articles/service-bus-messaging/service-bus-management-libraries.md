@@ -1,24 +1,25 @@
 ---
-title: "Azure 服务总线管理库 | Microsoft Docs"
-description: "在 .NET 中管理服务总线命名空间和消息实体。"
+title: Azure 服务总线管理库 | Microsoft Docs
+description: 在 .NET 中管理服务总线命名空间和消息实体。
 services: service-bus-messaging
 documentationcenter: na
-author: sethmanheim
+author: axisc
 manager: timlt
-editor: 
-ms.assetid: 
+editor: spelluru
+ms.assetid: ''
 ms.service: service-bus-messaging
 ms.workload: na
 ms.tgt_pltfrm: na
 ms.devlang: dotnet
 ms.topic: article
-ms.date: 02/05/2018
-ms.author: sethm
-ms.openlocfilehash: 7946958bec8b2f444155b5a9701f1f7401fe4f3c
-ms.sourcegitcommit: 059dae3d8a0e716adc95ad2296843a45745a415d
-ms.translationtype: HT
+ms.date: 06/05/2019
+ms.author: aschhab
+ms.openlocfilehash: faf0a5893b7de276b9a411745500daef4d39da6b
+ms.sourcegitcommit: c8a102b9f76f355556b03b62f3c79dc5e3bae305
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/09/2018
+ms.lasthandoff: 08/06/2019
+ms.locfileid: "68816074"
 ---
 # <a name="service-bus-management-libraries"></a>服务总线管理库
 
@@ -49,7 +50,7 @@ Azure 服务总线管理库可以动态预配服务总线命名空间和实体�
    ```csharp
    var context = new AuthenticationContext($"https://login.microsoftonline.com/{tenantId}");
 
-   var result = await context.AcquireTokenAsync("https://management.core.windows.net/", new ClientCredential(clientId, clientSecret));
+   var result = await context.AcquireTokenAsync("https://management.azure.com/", new ClientCredential(clientId, clientSecret));
    ```
 2. 创建 `ServiceBusManagementClient` 对象：
 
@@ -75,7 +76,95 @@ Azure 服务总线管理库可以动态预配服务总线命名空间和实体�
    await sbClient.Queues.CreateOrUpdateAsync(resourceGroupName, namespaceName, QueueName, queueParams);
    ```
 
-## <a name="next-steps"></a>后续步骤
+## <a name="complete-code-to-create-a-queue"></a>完成创建队列的代码
+下面是创建服务总线队列的完整代码: 
 
-* [.NET 管理示例](https://github.com/Azure-Samples/service-bus-dotnet-management/)
-* [Microsoft.Azure.Management.ServiceBus API 参考](/dotnet/api/Microsoft.Azure.Management.ServiceBus)
+```csharp
+using System;
+using System.Threading.Tasks;
+
+using Microsoft.Azure.Management.ServiceBus;
+using Microsoft.Azure.Management.ServiceBus.Models;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Rest;
+
+namespace SBusADApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            CreateQueue().GetAwaiter().GetResult();
+        }
+
+        private static async Task CreateQueue()
+        {
+            try
+            {
+                var subscriptionID = "<SUBSCRIPTION ID>";
+                var resourceGroupName = "<RESOURCE GROUP NAME>";
+                var namespaceName = "<SERVICE BUS NAMESPACE NAME>";
+                var queueName = "<NAME OF QUEUE YOU WANT TO CREATE>";
+
+                var token = await GetToken();
+
+                var creds = new TokenCredentials(token);
+                var sbClient = new ServiceBusManagementClient(creds)
+                {
+                    SubscriptionId = subscriptionID,
+                };
+
+                var queueParams = new SBQueue();
+
+                Console.WriteLine("Creating queue...");
+                await sbClient.Queues.CreateOrUpdateAsync(resourceGroupName, namespaceName, queueName, queueParams);
+                Console.WriteLine("Created queue successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Could not create a queue...");
+                Console.WriteLine(e.Message);
+                throw e;
+            }
+        }
+
+        private static async Task<string> GetToken()
+        {
+            try
+            {
+                var tenantId = "<AZURE AD TENANT ID>";
+                var clientId = "<APPLICATION/CLIENT ID>";
+                var clientSecret = "<CLIENT SECRET>";
+
+                var context = new AuthenticationContext($"https://login.microsoftonline.com/{tenantId}");
+
+                var result = await context.AcquireTokenAsync(
+                    "https://management.azure.com/",
+                    new ClientCredential(clientId, clientSecret)
+                );
+
+                // If the token isn't a valid string, throw an error.
+                if (string.IsNullOrEmpty(result.AccessToken))
+                {
+                    throw new Exception("Token result is empty!");
+                }
+
+                return result.AccessToken;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Could not get a token...");
+                Console.WriteLine(e.Message);
+                throw e;
+            }
+        }
+
+    }
+}
+```
+
+> [!IMPORTANT]
+> 有关完整示例, 请参阅[GitHub 上的 .net 管理示例](https://github.com/Azure-Samples/service-bus-dotnet-management/)。 
+
+## <a name="next-steps"></a>后续步骤
+[Microsoft.Azure.Management.ServiceBus API 参考](/dotnet/api/Microsoft.Azure.Management.ServiceBus)

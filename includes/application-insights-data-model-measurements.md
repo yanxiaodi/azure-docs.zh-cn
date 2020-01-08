@@ -1,3 +1,16 @@
+---
+author: mrbullwinkle
+ms.service: application-insights
+ms.topic: include
+ms.date: 11/09/2018
+ms.author: mbullwin
+ms.openlocfilehash: 91141e314bf276d9138157c8a9d85d5262ac5907
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67172708"
+---
 自定义度量值的集合。 使用此集合报告与遥测项关联的命名度量值。 典型用例如下：
 - 依赖项遥测有效负载的大小
 - 由请求遥测处理的队列项数
@@ -12,6 +25,6 @@ customEvents
 ```
 
  > [!NOTE]
- > 与所属遥测项关联的自定义度量值。 这些度量值可以通过遥测项（包含这些度量值）采样。 使用[指标遥测](../articles/application-insights/app-insights-api-custom-events-metrics.md)跟踪其值独立于其他遥测类型的度量值。
+ > 与所属遥测项关联的自定义度量值。 这些度量值可以通过遥测项（包含这些度量值）采样。 使用[指标遥测](../articles/azure-monitor/app/api-custom-events-metrics.md)跟踪其值独立于其他遥测类型的度量值。
 
 最大密钥长度：150

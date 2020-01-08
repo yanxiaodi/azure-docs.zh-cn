@@ -1,87 +1,78 @@
 ---
-title: "通过 Azure CLI 在 Linux 上创建第一个函数（预览版）| Microsoft Docs"
-description: "了解如何使用 Azure CLI 创建第一个默认在 Linux 映像中运行的 Azure 函数。"
+title: 在 Azure 中的 Linux 上创建第一个函数
+description: 了解如何使用 Azure Functions Core Tools 和 Azure CLI 创建第一个托管在 Azure 中的 Linux 上的函数。
 services: functions
-keywords: 
+keywords: ''
 author: ggailey777
 ms.author: glenga
-ms.date: 11/15/2017
+ms.date: 03/12/2019
 ms.topic: quickstart
-ms.service: functions
-ms.custom: mvc
-ms.devlang: azure-cli
-manager: cfowler
-ms.openlocfilehash: 49931155339660fc7a0a39f5b60dc9443374b8b0
-ms.sourcegitcommit: 9d317dabf4a5cca13308c50a10349af0e72e1b7e
+ms.service: azure-functions
+ms.custom: mvc, fasttrack-edit
+ms.devlang: javascript
+manager: jeconnoc
+ms.openlocfilehash: 40a2d3ab4ec358b5b2d0105703cdc25cdb777c29
+ms.sourcegitcommit: 39d95a11d5937364ca0b01d8ba099752c4128827
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/01/2018
+ms.lasthandoff: 08/16/2019
+ms.locfileid: "69562984"
 ---
-# <a name="create-your-first-function-running-on-linux-using-the-azure-cli-preview"></a>使用 Azure CLI 创建第一个在 Linux 上运行的函数（预览版）
+# <a name="create-your-first-function-hosted-on-linux-using-core-tools-and-the-azure-cli"></a>使用 Core Tools 和 Azure CLI 创建第一个在 Linux 上托管的函数
 
-使用 Azure Functions 可将函数托管在 Linux 上的默认 Azure 应用服务容器中。 还可以[自带自定义的容器](functions-create-function-linux-custom-image.md)。 此功能目前为预览版，并且需要 [Functions 2.0 运行时](functions-versions.md)，后者也为预览版。
+Azure Functions 用于在[无服务器](https://azure.com/serverless) Linux 环境中执行代码，无需先创建 VM 或发布 Web 应用程序。 Linux 托管需要 [Functions 2.x 运行时](functions-versions.md)。 无服务器函数在[消耗计划](functions-scale.md#consumption-plan)中运行。
 
-本快速入门主题逐步讲解如何配合使用 Azure Functions 和 Azure CLI，在 Linux 上创建第一个托管在默认应用服务容器中的函数应用。 函数代码本身将部署到 GitHub 示例存储库中的映像。    
+本快速入门文章逐步讲解如何使用 Azure CLI 创建第一个在 Linux 上运行的函数应用。 函数代码在本地创建，然后使用 [Azure Functions Core Tools](functions-run-local.md) 部署到 Azure。
 
-支持在 Mac、Windows 或 Linux 计算机上执行以下步骤。 
+支持在 Mac、Windows 或 Linux 计算机上执行以下步骤。 本文展示了如何使用 JavaScript 或 C# 创建函数。 若要了解如何创建 Python 函数，请参阅[使用 Core Tools 和 Azure CLI 创建第一个 Python 函数](functions-create-first-function-python.md)。
 
-## <a name="prerequisites"></a>先决条件 
+## <a name="prerequisites"></a>先决条件
 
-若要完成本快速入门，你需要：
+运行此示例之前，必须做好以下准备：
+
+- 安装 [Azure Functions Core Tools](./functions-run-local.md#v2) 版本 2.6.666 或更高版本。
+
++ 安装 [Azure CLI]( /cli/azure/install-azure-cli)。 本文需要 Azure CLI 2.0 或更高版本。 运行 `az --version` 即可确定你拥有的版本。 你也可使用 [Azure Cloud Shell](https://shell.azure.com/bash)。
 
 + 一个有效的 Azure 订阅。
 
 [!INCLUDE [quickstarts-free-trial-note](../../includes/quickstarts-free-trial-note.md)]
 
-[!INCLUDE [cloud-shell-try-it.md](../../includes/cloud-shell-try-it.md)]
+[!INCLUDE [functions-create-function-app-cli](../../includes/functions-create-function-app-cli.md)]
 
-如果选择在本地安装并使用 CLI，本主题要求使用 Azure CLI 2.0.21 版或更高版本。 运行 `az --version` 即可确定你拥有的版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。 
+## <a name="enable-extension-bundles"></a>启用扩展捆绑包
+
+[!INCLUDE [functions-extension-bundles](../../includes/functions-extension-bundles.md)]
+
+[!INCLUDE [functions-create-function-core-tools](../../includes/functions-create-function-core-tools.md)]
+
+[!INCLUDE [functions-run-function-test-local](../../includes/functions-run-function-test-local.md)]
 
 [!INCLUDE [functions-create-resource-group](../../includes/functions-create-resource-group.md)]
 
 [!INCLUDE [functions-create-storage-account](../../includes/functions-create-storage-account.md)]
 
-## <a name="create-a-linux-app-service-plan"></a>创建 Linux 应用服务计划
+## <a name="create-a-linux-function-app-in-azure"></a>在 Azure 中创建 Linux 函数应用
 
-目前仅支持通过应用服务计划在 Linux 上托管 Functions。 尚不支持消耗计划托管。 若要了解有关托管的详细信息，请参阅 [Azure Functions 托管计划比较](functions-scale.md)。 
+必须使用函数应用在 Linux 上托管函数的执行。 此函数应用提供一个无服务器环境，用于执行函数代码。 它可让你将函数分组为一个逻辑单元，以便更轻松地管理、部署和共享资源。 使用 [az functionapp create](/cli/azure/functionapp#az-functionapp-create) 命令创建在 Linux 上运行的函数应用。
 
-[!INCLUDE [app-service-plan-no-h](../../includes/app-service-web-create-app-service-plan-linux-no-h.md)]
-
-## <a name="create-a-function-app-on-linux"></a>在 Linux 上创建函数应用
-
-必须使用函数应用在 Linux 上托管函数的执行。 函数应用提供一个用于执行函数代码的环境。 它可让你将函数分组为一个逻辑单元，以便更轻松地管理、部署和共享资源。 使用 [az functionapp create](/cli/azure/functionapp#az_functionapp_create) 命令在 Linux 应用服务计划中创建一个函数应用。 
-
-在以下命令中，请将 `<app_name>` 占位符替换成唯一函数应用名称，将 `<storage_name>` 替换为存储帐户名。 `<app_name>` 将用作 Function App 的默认 DNS 域，因此，该名称需要在 Azure 中的所有应用之间保持唯一。 _deployment-source-url_ 参数是 GitHub 中包含“Hello World”HTTP 触发函数的示例存储库。
+在以下命令中，请在 `<app_name>` 占位符处使用唯一的函数应用名称，在 `<storage_name>` 处使用存储帐户名称。 `<app_name>` 也是函数应用的默认 DNS 域。 此名称在 Azure 的所有应用中必须独一无二。 还应该通过 `dotnet` (C#)、`node` (JavaScript/TypeScript) 或 `python` 为函数应用设置 `<language>` 运行时。
 
 ```azurecli-interactive
-az functionapp create --name <app_name> --storage-account  <storage_name>  --resource-group myResourceGroup \
---plan myAppServicePlan --deployment-source-url https://github.com/Azure-Samples/functions-quickstart-linux
-```
-创建并部署函数应用后，Azure CLI 会显示类似于以下示例的信息：
-
-```json
-{
-  "availabilityState": "Normal",
-  "clientAffinityEnabled": true,
-  "clientCertEnabled": false,
-  "cloningInfo": null,
-  "containerSize": 1536,
-  "dailyMemoryTimeQuota": 0,
-  "defaultHostName": "quickstart.azurewebsites.net",
-  "enabled": true,
-  "enabledHostNames": [
-    "quickstart.azurewebsites.net",
-    "quickstart.scm.azurewebsites.net"
-  ],
-   ....
-    // Remaining output has been truncated for readability.
-}
+az functionapp create --resource-group myResourceGroup --consumption-plan-location westus --os-type Linux \
+--name <app_name> --storage-account  <storage_name> --runtime <language>
 ```
 
-由于 `myAppServicePlan` 是 Linux 计划，因此使用了内置的 Docker 映像来创建在 Linux 上运行函数应用的容器。 
+创建函数应用后，会看到以下消息：
 
->[!NOTE]  
->示例存储库目前包含两个脚本文件：[deploy.sh](https://github.com/Azure-Samples/functions-quickstart-linux/blob/master/deploy.sh) 和 [.deployment](https://github.com/Azure-Samples/functions-quickstart-linux/blob/master/.deployment)。 .deployment 文件告知部署过程要使用 deploy.sh 作为[自定义部署脚本](https://github.com/projectkudu/kudu/wiki/Custom-Deployment-Script)。 在当前预览版中，必须使用脚本在 Linux 映像中部署函数应用。  
+```output
+Your serverless Linux function app 'myfunctionapp' has been successfully created.
+To active this function app, publish your app content using Azure Functions Core Tools or the Azure portal.
+```
+
+现在，可以将项目发布到 Azure 中的新函数应用。
+
+[!INCLUDE [functions-publish-project](../../includes/functions-publish-project.md)]
 
 [!INCLUDE [functions-test-function-code](../../includes/functions-test-function-code.md)]
 

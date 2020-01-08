@@ -1,11 +1,11 @@
 ---
-title: "Microsoft Azure StorSimple Manager 虚拟阵列管理 | Microsoft Docs"
-description: "了解如何在 Azure 门户中使用 StorSimple Device Manager 服务管理本地 StorSimple 虚拟阵列。"
+title: Microsoft Azure StorSimple Manager 虚拟阵列管理 | Microsoft Docs
+description: 了解如何在 Azure 门户中使用 StorSimple Device Manager 服务管理本地 StorSimple 虚拟阵列。
 services: storsimple
-documentationcenter: 
+documentationcenter: ''
 author: alkohli
 manager: carmonm
-editor: 
+editor: ''
 ms.assetid: 958244a5-f9f5-455e-b7ef-71a65558872e
 ms.service: storsimple
 ms.devlang: na
@@ -14,11 +14,12 @@ ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 12/1/2016
 ms.author: alkohli
-ms.openlocfilehash: a74a160eae88a2d03460a1346479c333d8f9d524
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.openlocfilehash: bb6bb491ca71e5ced5aecc8137e9e1cbd950e80b
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "62123799"
 ---
 # <a name="use-the-storsimple-device-manager-service-to-administer-your-storsimple-virtual-array"></a>使用 StorSimple Device Manager 服务管理 StorSimple 虚拟阵列
 ![安装流程](./media/storsimple-virtual-array-manager-service-administration/manage4.png)
@@ -41,7 +42,7 @@ ms.lasthandoff: 10/11/2017
 StorSimple Device Manager 服务在 Microsoft Azure 中运行并连接到多个 StorSimple 虚拟阵列。 用户将使用在浏览器中运行的中央 Microsoft Azure 门户管理这些设备。 若要连接到 StorSimple Device Manager 服务，请执行以下操作。
 
 #### <a name="to-connect-to-the-service"></a>连接到服务
-1. 转到 [https://ms.portal.azure.com](https://ms.portal.azure.com)。
+1. 转到[https://ms.portal.azure.com](https://ms.portal.azure.com)。
 2. 使用 Microsoft 帐户凭据，登录到 Microsoft Azure 门户（位于窗格右上角）。
 3. 在 StorSimple Device Manager 中导航到“浏览”->“筛选器”，以查看给定订阅中的所有设备管理器。
 
@@ -52,7 +53,7 @@ StorSimple Device Manager 服务在 Microsoft Azure 中运行并连接到多个 
 
 #### <a name="storsimple-device-manager-workflows"></a>StorSimple Device Manager 工作流
 | 目标 | 使用此过程 |
-| --- | --- | --- |
+| --- | --- |
 | 创建服务</br>删除服务</br>获取服务注册密钥</br>重新生成服务注册密钥 |[部署 StorSimple Device Manager 服务](storsimple-virtual-array-manage-service.md) |
 | 查看活动日志 |[使用 StorSimple 服务摘要](storsimple-virtual-array-service-summary.md) |
 | 停用 Virtual Array</br>删除 Virtual Array |[停用或删除虚拟阵列](storsimple-virtual-array-deactivate-and-delete-device.md) |

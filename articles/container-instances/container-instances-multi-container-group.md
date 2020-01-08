@@ -1,36 +1,56 @@
 ---
-title: 在 Azure 容器实例中部署多容器组
-description: 了解如何在 Azure 容器实例中部署包含多个容器的容器组。
+title: 教程-在 Azure 容器实例中部署多容器组-模板
+description: 在本教程中, 将了解如何通过使用 Azure 资源管理器模板与 Azure CLI 在 Azure 容器实例中部署包含多个容器的容器组。
 services: container-instances
-author: neilpeterson
-manager: jeconnoc
+author: dlepow
+manager: gwallace
 ms.service: container-instances
 ms.topic: article
-ms.date: 04/29/2018
-ms.author: nepeters
+ms.date: 04/03/2019
+ms.author: danlep
 ms.custom: mvc
-ms.openlocfilehash: 8cbf379e167f854d495704bc0919789dcbafd8e1
-ms.sourcegitcommit: 6e43006c88d5e1b9461e65a73b8888340077e8a2
-ms.translationtype: HT
+ms.openlocfilehash: 7438b5a91d3bf0ce8330e33bc1c849a8b0329c6f
+ms.sourcegitcommit: 4b431e86e47b6feb8ac6b61487f910c17a55d121
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/01/2018
+ms.lasthandoff: 07/18/2019
+ms.locfileid: "68325901"
 ---
-# <a name="deploy-a-container-group"></a>部署容器组
+# <a name="tutorial-deploy-a-multi-container-group-using-a-resource-manager-template"></a>教程：使用资源管理器模板部署多容器组
 
-Azure 容器实例支持使用[容器组](container-instances-container-groups.md)将多个容器部署到单台主机上。 当生成应用程序 sidecar 以用于日志记录、监视或用于某些其他配置（其中服务需要第二个附加进程）时，这种方法很有用。
+> [!div class="op_single_selector"]
+> * [YAML](container-instances-multi-container-yaml.md)
+> * [资源管理器](container-instances-multi-container-group.md)
 
-本文档介绍如何使用 Azure 资源管理器模板运行简单的多容器 sidecar 配置。
+Azure 容器实例支持使用[容器组](container-instances-container-groups.md)将多个容器部署到单台主机上。 当生成用于日志记录、监视或服务需要另一个附加进程的任何其他配置的应用程序挎斗时, 容器组非常有用。
+
+在本教程中, 你将执行以下步骤, 通过使用 Azure CLI 部署 Azure 资源管理器模板来运行简单的双容器挎斗配置。 学习如何：
+
+> [!div class="checklist"]
+> * 配置多容器组模板
+> * 部署容器组
+> * 查看容器的日志
+
+当你需要使用容器组部署其他 Azure 服务资源 (例如, Azure 文件共享或虚拟网络) 时, 可以轻松地为方案改编资源管理器模板。 
 
 > [!NOTE]
-> 多容器组当前仅限于 Linux 容器。 我们正致力于为 Windows 容器提供全部功能，你可在 [Azure 容器实例的配额和区域可用性](container-instances-quotas.md)中了解当前的平台差异。
+> 多容器组当前仅限于 Linux 容器。 
 
-## <a name="configure-the-template"></a>配置模板
+如果还没有 Azure 订阅，可以在开始前创建一个[免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
 
-创建名为 `azuredeploy.json` 的文件，并将以下 JSON 复制到文件中。
+[!INCLUDE [cloud-shell-try-it.md](../../includes/cloud-shell-try-it.md)]
 
-在本示例中，定义了一个包含两个容器的容器组、一个公共 IP 地址和两个公开端口。 该组中的第一个容器运行面向 Internet 的应用程序。 第二个容器 sidecar 通过该组的本地网络向主要 Web 应用程序发出 HTTP 请求。
+## <a name="configure-a-template"></a>配置模板
 
-```json
+首先, 将以下 JSON 复制到名为`azuredeploy.json`的新文件。 在 Azure Cloud Shell 中, 可以使用 Visual Studio Code 在工作目录中创建文件:
+
+```
+code azuredeploy.json
+```
+
+此资源管理器模板定义的容器组包含两个容器、一个公共 IP 地址和两个公开端口。 该组中的第一个容器运行面向 Internet 的 Web 应用程序。 第二个容器 sidecar 通过该组的本地网络向主要 Web 应用程序发出 HTTP 请求。
+
+```JSON
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
@@ -45,15 +65,15 @@ Azure 容器实例支持使用[容器组](container-instances-container-groups.m
   },
   "variables": {
     "container1name": "aci-tutorial-app",
-    "container1image": "microsoft/aci-helloworld:latest",
+    "container1image": "mcr.microsoft.com/azuredocs/aci-helloworld:latest",
     "container2name": "aci-tutorial-sidecar",
-    "container2image": "microsoft/aci-tutorial-sidecar"
+    "container2image": "mcr.microsoft.com/azuredocs/aci-tutorial-sidecar"
   },
   "resources": [
     {
       "name": "[parameters('containerGroupName')]",
       "type": "Microsoft.ContainerInstance/containerGroups",
-      "apiVersion": "2018-04-01",
+      "apiVersion": "2018-10-01",
       "location": "[resourceGroup().location]",
       "properties": {
         "containers": [
@@ -116,9 +136,9 @@ Azure 容器实例支持使用[容器组](container-instances-container-groups.m
 }
 ```
 
-若要使用专用容器映像注册表，请采用以下格式向 JSON 文档添加对象。 有关此配置的示例实现，请参阅 [ACI 资源管理器模板引用][template-reference]文档。
+若要使用专用容器映像注册表，请采用以下格式向 JSON 文档添加对象。 有关此配置的示例实现, 请参阅[ACI 资源管理器模板参考][template-reference]文档。
 
-```json
+```JSON
 "imageRegistryCredentials": [
   {
     "server": "[parameters('imageRegistryLoginServer')]",
@@ -146,23 +166,23 @@ az group deployment create --resource-group myResourceGroup --template-file azur
 
 ## <a name="view-deployment-state"></a>查看部署状态
 
-若要查看部署状态，请使用 [az container show][az-container-show] 命令。 这会返回预配的公共 IP 地址，可通过该 IP 地址访问应用程序。
+若要查看部署状态, 请使用以下[az container show][az-container-show]命令:
 
 ```azurecli-interactive
 az container show --resource-group myResourceGroup --name myContainerGroup --output table
 ```
 
-输出：
+若要查看正在运行的应用程序，请在浏览器中转到它的 IP 地址。 例如，在此示例输出中，IP 为 `52.168.26.124`：
 
 ```bash
-Name              ResourceGroup    ProvisioningState    Image                                                           IP:ports               CPU/Memory       OsType    Location
-----------------  ---------------  -------------------  --------------------------------------------------------------  ---------------------  ---------------  --------  ----------
-myContainerGroup  myResourceGroup  Succeeded            microsoft/aci-helloworld:latest,microsoft/aci-tutorial-sidecar  52.168.26.124:80,8080  1.0 core/1.5 gb  Linux     westus
+Name              ResourceGroup    Status    Image                                                                                               IP:ports              Network    CPU/Memory       OsType    Location
+----------------  ---------------  --------  --------------------------------------------------------------------------------------------------  --------------------  ---------  ---------------  --------  ----------
+myContainerGroup  danlep0318r      Running   mcr.microsoft.com/azuredocs/aci-tutorial-sidecar,mcr.microsoft.com/azuredocs/aci-helloworld:latest  20.42.26.114:80,8080  Public     1.0 core/1.5 gb  Linux     eastus
 ```
 
-## <a name="view-logs"></a>查看日志
+## <a name="view-container-logs"></a>查看容器日志
 
-使用 [az container logs][az-container-logs] 命令查看容器的日志输出。 `--container-name` 参数指定从中拉取日志的容器。 在此示例中，指定第一个容器。
+使用[az container logs][az-container-logs]命令查看容器的日志输出。 `--container-name` 参数指定从中拉取日志的容器。 在此示例中, `aci-tutorial-app`指定了容器。
 
 ```azurecli-interactive
 az container logs --resource-group myResourceGroup --name myContainerGroup --container-name aci-tutorial-app
@@ -172,12 +192,12 @@ az container logs --resource-group myResourceGroup --name myContainerGroup --con
 
 ```bash
 listening on port 80
-::1 - - [09/Jan/2018:23:17:48 +0000] "HEAD / HTTP/1.1" 200 1663 "-" "curl/7.54.0"
-::1 - - [09/Jan/2018:23:17:51 +0000] "HEAD / HTTP/1.1" 200 1663 "-" "curl/7.54.0"
-::1 - - [09/Jan/2018:23:17:54 +0000] "HEAD / HTTP/1.1" 200 1663 "-" "curl/7.54.0"
+::1 - - [21/Mar/2019:23:17:48 +0000] "HEAD / HTTP/1.1" 200 1663 "-" "curl/7.54.0"
+::1 - - [21/Mar/2019:23:17:51 +0000] "HEAD / HTTP/1.1" 200 1663 "-" "curl/7.54.0"
+::1 - - [21/Mar/2019:23:17:54 +0000] "HEAD / HTTP/1.1" 200 1663 "-" "curl/7.54.0"
 ```
 
-若要查看 side-car 容器的日志，请运行指定第二个容器名的相同命令。
+若要查看挎斗容器的日志, 请运行指定`aci-tutorial-sidecar`容器的类似命令。
 
 ```azurecli-interactive
 az container logs --resource-group myResourceGroup --name myContainerGroup --container-name aci-tutorial-sidecar
@@ -186,7 +206,7 @@ az container logs --resource-group myResourceGroup --name myContainerGroup --con
 输出：
 
 ```bash
-Every 3s: curl -I http://localhost                          2018-01-09 23:25:11
+Every 3s: curl -I http://localhost                          2019-03-21 20:36:41
 
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
@@ -199,23 +219,30 @@ Last-Modified: Wed, 29 Nov 2017 06:40:40 GMT
 ETag: W/"67f-16006818640"
 Content-Type: text/html; charset=UTF-8
 Content-Length: 1663
-Date: Tue, 09 Jan 2018 23:25:11 GMT
+Date: Thu, 21 Mar 2019 20:36:41 GMT
 Connection: keep-alive
 ```
 
-如你所见，sidecar 通过该组的本地网络定期向主 Web 应用程序发出 HTTP 请求，确保其正在运行。 如果此 sidecar 示例收到的 HTTP 响应代码不是 200 OK，则可将其扩展以触发警报。
+如你所见，sidecar 通过该组的本地网络定期向主 Web 应用程序发出 HTTP 请求，确保其正在运行。 此挎斗示例可以扩展, 以在收到除之外`200 OK`的 HTTP 响应代码时触发警报。
 
 ## <a name="next-steps"></a>后续步骤
 
-本文档介绍部署多容器 Azure 容器实例所需的步骤。 若要从头到尾体验 Azure 容器实例，请参阅 Azure 容器实例教程。
+在本教程中, 已使用 Azure 资源管理器模板在 Azure 容器实例中部署多容器组。 你已了解如何：
 
-> [!div class="nextstepaction"]
-> [Azure 容器实例教程][aci-tutorial]
+> [!div class="checklist"]
+> * 配置多容器组模板
+> * 部署容器组
+> * 查看容器的日志
+
+有关其他模板示例, 请参阅 azure[容器实例的 azure 资源管理器模板](container-instances-samples-rm.md)。
+
+还可以使用[YAML 文件](container-instances-multi-container-yaml.md)指定多容器组。 由于 YAML 格式更简洁, 因此当部署仅包含容器实例时, 使用 YAML 文件进行部署是一个不错的选择。
+
 
 <!-- LINKS - Internal -->
 [aci-tutorial]: ./container-instances-tutorial-prepare-app.md
-[az-container-logs]: /cli/azure/container#az_container_logs
-[az-container-show]: /cli/azure/container#az_container_show
-[az-group-create]: /cli/azure/group#az_group_create
-[az-group-deployment-create]: /cli/azure/group/deployment#az_group_deployment_create
+[az-container-logs]: /cli/azure/container#az-container-logs
+[az-container-show]: /cli/azure/container#az-container-show
+[az-group-create]: /cli/azure/group#az-group-create
+[az-group-deployment-create]: /cli/azure/group/deployment#az-group-deployment-create
 [template-reference]: https://docs.microsoft.com/azure/templates/microsoft.containerinstance/containergroups

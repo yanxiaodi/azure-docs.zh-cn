@@ -1,25 +1,20 @@
 ---
-title: 了解如何保护对 Azure Cosmos DB 中数据的访问 | Microsoft Docs
+title: 了解如何保护对 Azure Cosmos DB 中数据的访问
 description: 了解有关 Azure Cosmos DB 中的访问控制概念，包括主密钥、只读密钥、用户和权限。
-services: cosmos-db
-author: SnehaGunda
-manager: kfile
-documentationcenter: ''
-ms.assetid: 8641225d-e839-4ba6-a6fd-d6314ae3a51c
+author: rimman
 ms.service: cosmos-db
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
-ms.date: 05/24/2017
-ms.author: sngun
-ms.openlocfilehash: 7a53dda7d6b49187d77ca44bcb55db5f9c305f64
-ms.sourcegitcommit: 5b2ac9e6d8539c11ab0891b686b8afa12441a8f3
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 05/21/2019
+ms.author: rimman
+ms.openlocfilehash: f2e01e42a53f6f099191c03f45d6521668ea73a1
+ms.sourcegitcommit: e42c778d38fd623f2ff8850bb6b1718cdb37309f
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 08/19/2019
+ms.locfileid: "69616671"
 ---
-# <a name="securing-access-to-azure-cosmos-db-data"></a>保护对 Azure Cosmos DB 数据的访问
+# <a name="secure-access-to-data-in-azure-cosmos-db"></a>保护对 Azure Cosmos DB 中数据的访问
+
 本文概述了如何保护对 [Microsoft Azure Cosmos DB](https://azure.microsoft.com/services/cosmos-db/) 中存储的数据的访问。
 
 Azure Cosmos DB 使用两种类型的密钥来验证用户身份并提供对其数据和资源的访问权限。 
@@ -27,15 +22,15 @@ Azure Cosmos DB 使用两种类型的密钥来验证用户身份并提供对其�
 |密钥类型|资源|
 |---|---|
 |[主密钥](#master-keys) |用于管理资源：数据库帐户、数据库、用户和权限|
-|[资源令牌](#resource-tokens)|用于应用程序资源：集合、文档、附件、存储过程、触发器和 UDF|
+|[资源令牌](#resource-tokens)|用于应用程序资源：容器、文档、附件、存储过程、触发器和 UDF|
 
 <a id="master-keys"></a>
 
 ## <a name="master-keys"></a>主密钥 
 
-主密钥提供对数据库帐户中所有管理资源的访问权限。 主密钥：  
+主密钥提供对数据库帐户的所有管理资源的访问权限。 主密钥：  
 - 提供对帐户、数据库、用户和权限的访问权限。 
-- 无法用于提供对集合和文档的精细访问权限。
+- 无法用于提供对容器和文档的精细访问权限。
 - 在创建帐户过程中创建。
 - 随时可重新生成。
 
@@ -43,7 +38,7 @@ Azure Cosmos DB 使用两种类型的密钥来验证用户身份并提供对其�
 
 Cosmos DB 帐户除了有两个主密钥以外，还有两个只读密钥。 这些只读密钥只允许针对帐户执行读取操作。 只读密钥不提供对资源的读取权限。
 
-可以使用 Azure 门户检索和重新生成主要、辅助、只读和读写主密钥。 有关说明，请参阅[查看、复制和重新生成访问密钥](manage-account.md#keys)。
+可以使用 Azure 门户检索和重新生成主要、辅助、只读和读写主密钥。 有关说明，请参阅[查看、复制和重新生成访问密钥](manage-with-cli.md#regenerate-account-key)。
 
 ![Azure 门户中的访问控制 (IAM) - 演示 NoSQL 数据库安全性](./media/secure-access-to-data/nosql-database-security-master-key-portal.png)
 
@@ -78,7 +73,7 @@ Database database = await client.CreateDatabaseAsync(
 ## <a name="resource-tokens"></a>资源令牌
 
 资源令牌提供对数据库中应用程序资源的访问权限。 资源令牌：
-- 提供对特定集合、分区键、文档、附件、存储过程、触发器和 UDF 的访问权限。
+- 提供对特定容器、分区键、文档、附件、存储过程、触发器和 UDF 的访问权限。
 - 向[用户](#users)授予对特定资源的[权限](#permissions)时创建。
 - 通过 POST、GET 或 PUT 调用操作权限资源时重新创建。
 - 使用专门针对用户、资源和权限构造的哈希资源令牌。
@@ -109,8 +104,8 @@ Cosmos DB 资源令牌提供一种安全的替代方案，使客户端能够根�
 
 <a id="users"></a>
 
-## <a name="users"></a>用户
-Cosmos DB 用户与 Cosmos DB 数据库关联。  每个数据库可以包含零个或多个 Cosmos DB 用户。  以下代码示例演示如何创建 Cosmos DB 用户资源。
+## <a name="users"></a>位用户
+Cosmos DB 用户与 Cosmos 数据库相关联。  每个数据库可以包含零个或多个 Cosmos DB 用户。  以下代码示例演示如何创建 Cosmos DB 用户资源。
 
 ```csharp
 //Create a user.
@@ -137,7 +132,7 @@ Cosmos DB 权限资源与 Cosmos DB 用户关联。  每个用户可能包含零
 * 只读：用户只能读取资源的内容，但无法对资源执行写入、更新或删除操作。
 
 > [!NOTE]
-> 为了运行 Cosmos DB 存储过程，用户必须具有对会在其中运行存储过程的集合的所有权限。
+> 为了运行 Cosmos DB 存储过程，用户必须具有对会在其中运行存储过程的容器的所有权限。
 > 
 > 
 
@@ -178,7 +173,25 @@ foreach (Permission perm in permFeed)
 DocumentClient userClient = new DocumentClient(new Uri(endpointUrl), permList);
 ```
 
+## <a name="add-users-and-assign-roles"></a>添加用户和分配角色
+
+若要将 Azure Cosmos DB 帐户读者访问权限添加到用户帐户，请让订阅所有者在 Azure 门户执行以下步骤。
+
+1. 打开 Azure 门户，并选择 Azure Cosmos DB 帐户。
+2. 单击“访问控制(IAM)”选项卡，然后单击“+ 添加角色分配”。
+3. 在“添加角色分配”窗格中的“角色”框中，选择“Cosmos DB 帐户读者角色”。
+4. 在“分配其访问权限”框中，选择“Azure AD 用户、组或应用程序”。
+5. 在你想要授予访问权限的目录中选择用户、组或应用程序。  可以通过显示名称、电子邮件地址或对象标识符搜索目录。
+    所选用户、组或应用程序会显示在所选成员列表中。
+6. 单击“保存”。
+
+实体现在便可以读取 Azure Cosmos DB 资源。
+
+## <a name="delete-or-export-user-data"></a>删除或导出用户数据
+用户可使用 Azure Cosmos DB 搜索、选择、修改和删除数据库或集合中的任何个人数据。 Azure Cosmos DB 提供可用于查找和删除个人数据的 API，但用户应负责使用该 API 并定义擦除个人数据必需的逻辑。 每个多模型 API（SQL、MongoDB、Gremlin、Cassandra、表）都包含不同的语言 SDK，这些 SDK 提供了各种用于搜索和删除个人数据的方法。 还可启用[生存时间 (TTL)](time-to-live.md)功能在指定时间段后自动删除数据，不会产生任何额外费用。
+
+[!INCLUDE [GDPR-related guidance](../../includes/gdpr-dsr-and-stp-note.md)]
+
 ## <a name="next-steps"></a>后续步骤
-* 若要详细了解 Cosmos DB 数据库安全性，请参阅 [Cosmos DB：数据库安全性](database-security.md)。
-* 若要了解如何管理主密钥和只读密钥，请参阅[如何管理 Azure Cosmos DB 帐户](manage-account.md#keys)。
+* 若要了解有关 Cosmos 数据库安全性的详细[信息, 请参阅 Cosmos DB:数据库安全性](database-security.md)。
 * 若要了解如何构造 Azure Cosmos DB 授权令牌，请参阅 [Azure Cosmos DB 资源的访问控制](https://docs.microsoft.com/rest/api/cosmos-db/access-control-on-cosmosdb-resources)。

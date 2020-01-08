@@ -1,27 +1,30 @@
 ---
-title: " 通过 Azure Site Recovery 管理配置服务器，以便进行物理服务器灾难恢复 | Microsoft Docs"
-description: 本文介绍了如何通过 Azure Site Recovery 服务管理现有配置服务器，以便进行物理服务器到 Azure 的灾难恢复。
+title: 使用 Azure Site Recovery 管理配置服务器，以便将本地物理服务器灾难恢复到 Azure | Microsoft Docs
+description: 本文介绍如何管理 Azure Site Recovery 配置服务器，以便将物理服务器灾难恢复到 Azure。
 services: site-recovery
-author: AnoopVasudavan
+author: mayurigupta13
 ms.service: site-recovery
 ms.topic: article
-ms.date: 04/11/2018
-ms.author: anoopkv
-ms.openlocfilehash: 580d32a51f6b38916ddccd46784b80b1179c29c4
-ms.sourcegitcommit: 59914a06e1f337399e4db3c6f3bc15c573079832
-ms.translationtype: HT
+ms.date: 02/28/2019
+ms.author: mayg
+ms.openlocfilehash: 10bec01a3b90776c8dd8c32a74ba7754264da131
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/19/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "62119718"
 ---
 # <a name="manage-the-configuration-server-for-physical-server-disaster-recovery"></a>为物理服务器灾难恢复管理配置服务器
 
 使用 [Azure Site Recovery](site-recovery-overview.md) 服务进行物理服务器到 Azure 的灾难恢复时，需要设置本地配置服务器。 配置服务器协调本地计算机与 Azure 之间的通信并管理数据复制。 本文概述部署配置服务器后对其进行管理时要执行的常见任务。
 
-## <a name="prerequisites"></a>先决条件
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
+
+## <a name="prerequisites"></a>必备组件
 
 此表汇总了用于部署本地配置服务器计算机的先决条件。
 
-| **组件** | **要求** |
+| 组件  | 要求  |
 | --- |---|
 | CPU 核心数| 8 |
 | RAM | 16 GB|
@@ -36,55 +39,55 @@ ms.lasthandoff: 04/19/2018
 | IIS | - 无预先存在的默认网站 <br> - 启用[匿名身份验证](https://technet.microsoft.com/library/cc731244(v=ws.10).aspx) <br> - 启用 [FastCGI](https://technet.microsoft.com/library/cc753077(v=ws.10).aspx) 设置  <br> - 端口 443 上没有预先存在的网站/应用程序侦听<br>|
 | NIC 类型 | VMXNET3（部署为 VMware VM 时） |
 | IP 地址类型 | 静态 |
-| Internet 访问权限 | 服务器需要以下 URL 的访问权限： <br> - \*.accesscontrol.windows.net<br> - \*.backup.windowsazure.com <br>- \*.store.core.windows.net<br> - \*.blob.core.windows.net<br> - \*.hypervrecoverymanager.windowsazure.com <br> - dc.services.visualstudio.com <br> - https://cdn.mysql.com/archives/mysql-5.5/mysql-5.5.37-win32.msi（横向扩展进程服务器不需要） <br> - time.nist.gov <br> - time.windows.com |
+| Internet 访问权限 | 服务器需要以下 URL 的访问权限： <br> - \*.accesscontrol.windows.net<br> - \*.backup.windowsazure.com <br>- \*.store.core.windows.net<br> - \*.blob.core.windows.net<br> - \*.hypervrecoverymanager.windowsazure.com <br> - https://management.azure.com <br> - *.services.visualstudio.com <br> - https://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-5.7.20.0.msi （横向扩展进程服务器不需要） <br> - time.nist.gov <br> - time.windows.com |
 | 端口 | 443（控制通道协调）<br>9443（数据传输）|
 
 ## <a name="download-the-latest-installation-file"></a>下载最新的安装文件
 
-Site Recovery 门户中提供了配置服务器安装文件的最新版本。 另外，还可以直接从 [Microsoft 下载中心](http://aka.ms/unifiedsetup)下载该代理。
+Site Recovery 门户中提供了配置服务器安装文件的最新版本。 另外，还可以直接从 [Microsoft 下载中心](https://aka.ms/unifiedsetup)下载该代理。
 
 1. 登录 Azure 门户并浏览到恢复服务保管库。
-2. 浏览到“Site Recovery 基础结构” > “配置服务器”（在“针对 VMware 和物理计算机”下面）。
-3. 单击“+服务器”按钮。
-4. 在“添加服务器”页中，单击“下载”按钮下载注册密钥。 在安装配置服务器的过程中，需要使用此密钥将它注册到 Azure Site Recovery 服务。
-5. 单击“下载 Microsoft Azure Site Recovery 统一安装程序”链接，下载最新版本的配置服务器。
+2. 浏览到“Site Recovery 基础结构”   > “配置服务器”  （在“针对 VMware 和物理计算机”下面）。
+3. 单击“+服务器”按钮。 
+4. 在“添加服务器”页中，单击“下载”按钮下载注册密钥。  在安装配置服务器的过程中，需要使用此密钥将它注册到 Azure Site Recovery 服务。
+5. 单击“下载 Microsoft Azure Site Recovery 统一安装程序”链接，下载最新版本的配置服务器。 
 
-  ![下载页](./media/physical-manage-configuration-server/downloadcs.png)
+   ![下载页](./media/physical-manage-configuration-server/downloadcs.png)
 
 
 ## <a name="install-and-register-the-server"></a>安装并注册服务器
 
 1. 运行统一安装程序安装文件。
-2. 在“开始之前”中，选择“安装配置服务器和进程服务器”。
+2. 在“开始之前”中，选择“安装配置服务器和进程服务器”。  
 
     ![开始之前](./media/physical-manage-configuration-server/combined-wiz1.png)
 
-3. 在“第三方软件许可证”中单击“我接受”，下载并安装 MySQL。
-4. 在“Internet 设置”中，指定配置服务器上运行的提供程序如何通过 Internet 连接到 Azure Site Recovery。 确保已允许所需的 URL。
+3. 在“第三方软件许可证”中单击“我接受”，下载并安装 MySQL。  
+4. 在“Internet 设置”中，指定配置服务器上运行的提供程序如何通过 Internet 连接到 Azure Site Recovery。  确保已允许所需的 URL。
 
-    - 如果想要使用当前已在计算机上设置的代理进行连接，请选择“使用代理服务器连接到 Azure Site Recovery”。
-    - 如果希望提供程序直接进行连接，请选择“在不使用代理服务器的情况下直接连接到 Azure Site Recovery”。
-    - 如果现有代理要求身份验证，或者你想要使用自定义代理进行提供程序连接，请选择“使用自定义代理设置进行连接”，并指定地址、端口和凭据。
+    - 如果想要使用当前已在计算机上设置的代理进行连接，请选择“使用代理服务器连接到 Azure Site Recovery”。 
+    - 如果希望提供程序直接进行连接，请选择“在不使用代理服务器的情况下直接连接到 Azure Site Recovery”  。
+    - 如果现有代理要求身份验证，或者你想要使用自定义代理进行提供程序连接，请选择“使用自定义代理设置进行连接”，并指定地址、端口和凭据。 
      ![防火墙](./media/physical-manage-configuration-server/combined-wiz4.png)
-6. 在“先决条件检查”设置中运行检查，确保安装可以运行。 如果看到有关**全局时间同步检查**的警告，请检查系统时钟的时间（“日期和时间”设置）是否与时区相同。
+6. 在“先决条件检查”设置中运行检查，确保安装可以运行。  如果看到有关**全局时间同步检查**的警告，请检查系统时钟的时间（“日期和时间”设置）是否与时区相同。 
 
-    ![先决条件](./media/physical-manage-configuration-server/combined-wiz5.png)
-7. 在“MySQL 配置”中，创建用于登录到要安装的 MySQL 服务器实例的凭据。
+    ![必备组件](./media/physical-manage-configuration-server/combined-wiz5.png)
+7. 在“MySQL 配置”中，创建用于登录到要安装的 MySQL 服务器实例的凭据。 
 
     ![MySQL](./media/physical-manage-configuration-server/combined-wiz6.png)
-8. 在“环境详细信息”中，选择是否要复制 VMware VM。 如果要复制，则安装程序会检查 PowerCLI 6.0 是否已安装。
-9. 在“安装位置”中，选择要安装二进制文件和存储缓存的位置。 所选驱动器必须至少有 5 GB 的可用磁盘空间，但我们建议选择至少有 600 GB 可用空间的缓存驱动器。
+8. 在“环境详细信息”中，选择是否要复制 VMware VM。  如果要复制，则安装程序会检查 PowerCLI 6.0 是否已安装。
+9. 在“安装位置”中，选择要安装二进制文件和存储缓存的位置。  所选驱动器必须至少有 5 GB 的可用磁盘空间，但建议选择至少有 600 GB 可用空间的缓存驱动器。
 
     ![安装位置](./media/physical-manage-configuration-server/combined-wiz8.png)
-10. 在“网络选择”中，指定侦听器（网络适配器和 SSL 端口），以便配置服务器在其上发送和接收复制数据。 端口 9443 是用于发送和接收复制流量的默认端口，但可以根据环境的要求修改此端口号。 除了端口 9443 以外，还要打开端口 443，Web 服务器将使用该端口协调复制操作。 请不要使用端口 443 来发送或接收复制流量。
+10. 在“网络选择”中，首先选择内置进程服务器用于发现的 NIC，将移动服务的安装推送到源计算机上，然后选择配置服务器用来与 Azure 连接的 NIC  。 端口 9443 是用于发送和接收复制流量的默认端口，但可以根据环境的要求修改此端口号。 除了端口 9443 以外，还要打开端口 443，Web 服务器将使用该端口协调复制操作。 请不要使用端口 443 来发送或接收复制流量。
 
     ![网络选择](./media/physical-manage-configuration-server/combined-wiz9.png)
 
 
-11. 在“摘要”中复查信息，并单击“安装”。 安装完成后，将生成通行短语。 启用复制时需要用到它，因此请复制并将它保存在安全的位置。
+11. 在“摘要”中复查信息，并单击“安装”。   安装完成后，将生成密码。 启用复制时需要用到它，因此请复制并将它保存在安全的位置。
 
 
-注册完成后，服务器会显示在保管库的“设置” > “服务器”边栏选项卡中。
+注册完成后，服务器会显示在保管库的“设置”   > “服务器”  边栏选项卡中。
 
 
 ## <a name="install-from-the-command-line"></a>从命令行安装
@@ -97,7 +100,7 @@ Site Recovery 门户中提供了配置服务器安装文件的最新版本。 �
 
 ### <a name="sample-usage"></a>示例用法
   ```
-  MicrosoftAzureSiteRecoveryUnifiedSetup.exe /q /xC:\Temp\Extracted
+  MicrosoftAzureSiteRecoveryUnifiedSetup.exe /q /x:C:\Temp\Extracted
   cd C:\Temp\Extracted
   UNIFIEDSETUP.EXE /AcceptThirdpartyEULA /servermode "CS" /InstallLocation "D:\" /MySQLCredsFilePath "C:\Temp\MySQLCredentialsfile.txt" /VaultCredsFilePath "C:\Temp\MyVault.vaultcredentials" /EnvType "VMWare"
   ```
@@ -105,14 +108,14 @@ Site Recovery 门户中提供了配置服务器安装文件的最新版本。 �
 
 ### <a name="parameters"></a>parameters
 
-|参数名称| Type | 说明| 值|
+|参数名称| Type | 描述| 值|
 |-|-|-|-|
 | /ServerMode|必选|指定是要同时安装配置服务器和进程服务器，还是只安装进程服务器|CS<br>PS|
 |/InstallLocation|必选|用于安装组件的文件夹| 计算机上的任意文件夹|
 |/MySQLCredsFilePath|必选|MySQL 服务器凭据存储到的文件路径|文件应采用以下指定格式|
-|/VaultCredsFilePath|必选|保管库凭据文件的路径|有效的文件路径|
-|/EnvType|必选|要保护的环境类型 |VMware<br>NonVMware|
-|/PSIP|必选|要用于复制数据传输的 NIC 的 IP 地址| 任何有效的 IP 地址|
+|/VaultCredsFilePath|需要|保管库凭据文件的路径|有效的文件路径|
+|/EnvType|需要|要保护的环境类型 |VMware<br>NonVMware|
+|/PSIP|需要|要用于复制数据传输的 NIC 的 IP 地址| 任何有效的 IP 地址|
 |/CSIP|必选|配置服务器侦听时所在的 NIC 的 IP 地址| 任何有效的 IP 地址|
 |/PassphraseFilePath|必选|通行短语文件位置的完整路径|有效的文件路径|
 |/BypassProxy|可选|指定配置服务器不使用代理连接到 Azure|若要从 Venu 获取此值|
@@ -127,15 +130,15 @@ Site Recovery 门户中提供了配置服务器安装文件的最新版本。 �
 ### <a name="create-file-input-for-mysqlcredsfilepath"></a>创建 MYSQLCredsFilePath 的文件输入
 
 MySQLCredsFilePath 参数使用某个文件作为输入。 创建使用以下格式的文件并将其作为输入 MySQLCredsFilePath 参数进行传递。
-```
+```ini
 [MySQLCredentials]
-MySQLRootPassword = "Password>"
+MySQLRootPassword = "Password"
 MySQLUserPassword = "Password"
 ```
 ### <a name="create-file-input-for-proxysettingsfilepath"></a>创建 ProxySettingsFilePath 的文件输入
 ProxySettingsFilePath 参数使用某个文件作为输入。 创建使用以下格式的文件并将其作为输入 ProxySettingsFilePath 参数进行传递。
 
-```
+```ini
 [ProxySettings]
 ProxyAuthentication = "Yes/No"
 Proxy IP = "IP Address"
@@ -149,42 +152,43 @@ ProxyPassword="Password"
 
 1. 登录到配置服务器。
 2. 使用桌面上的快捷方式启动 cspsconfigtool.exe。
-3. 单击“保管库注册”选项卡。
+3. 单击“保管库注册”选项卡。 
 4. 从门户下载新的保管库注册文件，并将其作为输入提供给该工具。
 
-  ![register-configuration-server](./media/physical-manage-configuration-server/register-csconfiguration-server.png)
-5. 提供新代理服务器的详细信息，并单击“注册”按钮。
+   ![register-configuration-server](./media/physical-manage-configuration-server/register-csconfiguration-server.png)
+5. 提供新代理服务器的详细信息，并单击“注册”按钮。 
 6. 打开管理员 PowerShell 命令窗口。
 7. 运行以下命令：
-  ```
-  $pwd = ConvertTo-SecureString -String MyProxyUserPassword
-  Set-OBMachineSetting -ProxyServer http://myproxyserver.domain.com -ProxyPort PortNumber – ProxyUserName domain\username -ProxyPassword $pwd
-  net stop obengine
-  net start obengine
-  ```
 
-  >[!WARNING]
-  如果向配置服务器附加了更多的进程服务器，则需要在部署中[修复所有横向扩展进程服务器上的代理设置](vmware-azure-manage-process-server.md#modify-proxy-settings-for-an-on-premises-process-server)。
+   ```powershell
+   $Pwd = ConvertTo-SecureString -String MyProxyUserPassword
+   Set-OBMachineSetting -ProxyServer http://myproxyserver.domain.com -ProxyPort PortNumber –ProxyUserName domain\username -ProxyPassword $Pwd
+   net stop obengine
+   net start obengine
+   ```
+
+   > [!WARNING]
+   > 如果向配置服务器附加了更多的进程服务器，则需要在部署中[修复所有横向扩展进程服务器上的代理设置](vmware-azure-manage-process-server.md#modify-proxy-settings-for-an-on-premises-process-server)。
 
 ## <a name="reregister-a-configuration-server-with-the-same-vault"></a>将配置服务器重新注册到同一保管库
-  1. 登录到配置服务器。
-  2. 使用桌面上的快捷方式启动 cspsconfigtool.exe。
-  3. 单击“保管库注册”选项卡。
-  4. 从门户下载新的注册文件，并将其作为输入提供给该工具。
-        ![register-configuration-server](./media/physical-manage-configuration-server/register-csconfiguration-server.png)
-  5. 提供代理服务器的详细信息，并单击“注册”按钮。  
-  6. 打开管理员 PowerShell 命令窗口。
-  7. 运行以下命令
+1. 登录到配置服务器。
+2. 使用桌面上的快捷方式启动 cspsconfigtool.exe。
+3. 单击“保管库注册”选项卡。 
+4. 从门户下载新的注册文件，并将其作为输入提供给该工具。
+      ![register-configuration-server](./media/physical-manage-configuration-server/register-csconfiguration-server.png)
+5. 提供代理服务器的详细信息，并单击“注册”按钮。   
+6. 打开管理员 PowerShell 命令窗口。
+7. 运行以下命令
 
-      ```
-      $pwd = ConvertTo-SecureString -String MyProxyUserPassword
-      Set-OBMachineSetting -ProxyServer http://myproxyserver.domain.com -ProxyPort PortNumber – ProxyUserName domain\username -ProxyPassword $pwd
-      net stop obengine
-      net start obengine
-      ```
+    ```powershell
+    $Pwd = ConvertTo-SecureString -String MyProxyUserPassword
+    Set-OBMachineSetting -ProxyServer http://myproxyserver.domain.com -ProxyPort PortNumber –ProxyUserName domain\username -ProxyPassword $Pwd
+    net stop obengine
+    net start obengine
+    ```
 
-  >[!WARNING]
-  如果有多个进程服务器，则需要[重新注册它们](vmware-azure-manage-process-server.md#reregister-a-process-server)。
+   > [!WARNING]
+   > 如果有多个进程服务器，则需要[重新注册它们](vmware-azure-manage-process-server.md#reregister-a-process-server)。
 
 ## <a name="register-a-configuration-server-with-a-different-vault"></a>将配置服务器注册到不同的保管库
 
@@ -199,14 +203,14 @@ ProxyPassword="Password"
     net stop dra
     ```
 3. 使用桌面上的快捷方式启动 cspsconfigtool.exe。
-4. 单击“保管库注册”选项卡。
+4. 单击“保管库注册”选项卡。 
 5. 从门户下载新的注册文件，并将其作为输入提供给该工具。
-6. 提供代理服务器的详细信息，并单击“注册”按钮。  
+6. 提供代理服务器的详细信息，并单击“注册”按钮。   
 7. 打开管理员 PowerShell 命令窗口。
 8. 运行以下命令
-    ```
+    ```powershell
     $pwd = ConvertTo-SecureString -String MyProxyUserPassword
-    Set-OBMachineSetting -ProxyServer http://myproxyserver.domain.com -ProxyPort PortNumber – ProxyUserName domain\username -ProxyPassword $pwd
+    Set-OBMachineSetting -ProxyServer http://myproxyserver.domain.com -ProxyPort PortNumber –ProxyUserName domain\username -ProxyPassword $pwd
     net stop obengine
     net start obengine
     ```
@@ -225,7 +229,7 @@ ProxyPassword="Password"
 1. 将更新安装程序文件下载到配置服务器上。
 2. 双击以运行安装程序。
 3. 安装程序检测计算机上运行的当前版本。
-4. 单击“确定”以确认并运行升级。 
+4. 单击“确定”  以确认并运行升级。 
 
 
 ## <a name="delete-or-unregister-a-configuration-server"></a>删除或取消注册配置服务器
@@ -238,53 +242,53 @@ ProxyPassword="Password"
 
 
 ### <a name="delete-the-configuration-server-from-azure-portal"></a>从 Azure 门户中删除配置服务器
-1. 在 Azure 门户中，从“保管库”菜单浏览到“Site Recovery 基础结构” > “配置服务器”。
+1. 在 Azure 门户中，从“保管库”菜单浏览到“Site Recovery 基础结构” > “配置服务器”。  
 2. 单击想要解除的配置服务器。
-3. 在配置服务器的详细信息页中，单击“删除”按钮。
-4. 单击“是”确认删除该服务器。
+3. 在配置服务器的详细信息页中，单击“删除”按钮。 
+4. 单击“是”确认删除该服务器。 
 
 ### <a name="uninstall-the-configuration-server-and-its-dependencies"></a>卸载配置服务器及其依赖项
-  > [!TIP]
-  如果打算再次结合 Azure Site Recovery 重新使用该配置服务器，可以直接跳到步骤 4
+> [!TIP]
+>   如果打算再次结合 Azure Site Recovery 重新使用该配置服务器，可以直接跳到步骤 4
 
 1. 以管理员身份登录到配置服务器。
 2. 打开“控制面板”>“程序”>“卸载程序”
 3. 按以下顺序卸载程序：
-  * Microsoft Azure 恢复服务代理
-  * Microsoft Azure Site Recovery 移动服务/主目标服务器
-  * Microsoft Azure Site Recovery 提供程序
-  * Microsoft Azure Site Recovery 配置服务器/进程服务器
-  * Microsoft Azure Site Recovery 配置服务器依赖项
-  * MySQL Server 5.5
+   * Microsoft Azure 恢复服务代理
+   * Microsoft Azure Site Recovery 移动服务/主目标服务器
+   * Microsoft Azure Site Recovery 提供程序
+   * Microsoft Azure Site Recovery 配置服务器/进程服务器
+   * Microsoft Azure Site Recovery 配置服务器依赖项
+   * MySQL Server 5.5
 4. 在管理员命令提示窗口中运行以下命令。
-  ```
-  reg delete HKLM\Software\Microsoft\Azure Site Recovery\Registration
-  ```
+   ```
+   reg delete HKLM\Software\Microsoft\Azure Site Recovery\Registration
+   ```
 
 ## <a name="delete-or-unregister-a-configuration-server-powershell"></a>删除或取消注册配置服务器 (PowerShell)
 
-1. [安装](https://docs.microsoft.com/powershell/azure/install-azurerm-ps?view=azurermps-4.4.0) Azure PowerShell 模块
+1. [安装](https://docs.microsoft.com/powershell/azure/install-Az-ps) Azure PowerShell 模块
 2. 使用命令登录到 Azure 帐户
     
-    `Connect-AzureRmAccount`
+    `Connect-AzAccount`
 3. 选择其下存在保管库的订阅
 
-     `Get-AzureRmSubscription –SubscriptionName <your subscription name> | Select-AzureRmSubscription`
+     `Get-AzSubscription –SubscriptionName <your subscription name> | Select-AzSubscription`
 3.  现在设置保管库上下文
     
-    ```
-    $vault = Get-AzureRmRecoveryServicesVault -Name <name of your vault>
-    Set-AzureRmSiteRecoveryVaultSettings -ARSVault $vault
+    ```powershell
+    $Vault = Get-AzRecoveryServicesVault -Name <name of your vault>
+    Set-AzSiteRecoveryVaultSettings -ARSVault $Vault
     ```
 4. 选择配置服务器
 
-    `$fabric = Get-AzureRmSiteRecoveryFabric -FriendlyName <name of your configuration server>`
+    `$Fabric = Get-AzSiteRecoveryFabric -FriendlyName <name of your configuration server>`
 6. 删除配置服务器
 
-    `Remove-AzureRmSiteRecoveryFabric -Fabric $fabric [-Force] `
+    `Remove-AzSiteRecoveryFabric -Fabric $Fabric [-Force]`
 
 > [!NOTE]
-> Remove-AzureRmSiteRecoveryFabric 中的 -Force 选项可用于强制执行删除配置服务器。
+> **-强制**中删除 AzSiteRecoveryFabric 选项可用于强制删除/删除的配置服务器。
 
 ## <a name="renew-ssl-certificates"></a>续订 SSL 证书
 配置服务器具有一个内置的 Web 服务器，该服务器协调连接到配置服务器的移动服务、进程服务器和主目标服务器的活动。 Web 服务器使用 SSL 证书对客户端进行身份验证。 该证书在三年后到期，并可随时续订。
@@ -295,13 +299,13 @@ ProxyPassword="Password"
 
 - 如果离到期日期有两个月或不到两个月，服务将开始在门户中发送通知以及通过电子邮件发送（如果订阅了 Azure Site Recovery 通知）。
 - 保管库资源页上将显示通知横幅。 单击横幅可了解更多详细信息。
-- 如果显示“立即升级”按钮，则表示环境中有些组件尚未升级到 9.4.xxxx.x 或更高版本。 在续订证书之前升级组件。 无法在旧版本中进行续订。
+- 如果显示“立即升级”  按钮，则表示环境中有些组件尚未升级到 9.4.xxxx.x 或更高版本。 在续订证书之前升级组件。 无法在旧版本中进行续订。
 
 ### <a name="renew-the-certificate"></a>续订证书
 
-1. 在保管库中，打开“Site Recovery 基础结构” > “配置服务器”，并单击所需配置服务器。
-2. 到期日期显示在“配置服务器运行状况”下
-3. 单击“续订证书”。 
+1. 在保管库中，打开“Site Recovery 基础结构”   > “配置服务器”  ，并单击所需配置服务器。
+2. 到期日期显示在“配置服务器运行状况”  下
+3. 单击“续订证书”  。 
 
 
 

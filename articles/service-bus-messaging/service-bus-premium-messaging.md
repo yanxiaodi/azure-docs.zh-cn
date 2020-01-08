@@ -3,22 +3,23 @@ title: Azure 服务总线高级和标准消息传送定价层概述 | Microsoft 
 description: 服务总线高级和标准消息传送层
 services: service-bus-messaging
 documentationcenter: .net
-author: djrosanova
+author: axisc
 manager: timlt
-editor: ''
+editor: spelluru
 ms.assetid: e211774d-821c-4d79-8563-57472d746c58
 ms.service: service-bus-messaging
 ms.workload: na
 ms.tgt_pltfrm: na
 ms.devlang: na
-ms.topic: get-started-article
-ms.date: 04/30/2018
-ms.author: sethm
-ms.openlocfilehash: 1b2c9b3a0b7565e7de40d4dc0e623a62313b79db
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 03/05/2019
+ms.author: aschhab
+ms.openlocfilehash: 600577ebf05a8bc89dbec35d3b3ee5162aa246e1
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64872727"
 ---
 # <a name="service-bus-premium-and-standard-messaging-tiers"></a>服务总线高级和标准消息传送层
 
@@ -36,7 +37,7 @@ ms.lasthandoff: 05/03/2018
 | 可以扩展和缩减工作负荷 |不适用 |
 | 消息大小最大为 1 MB |消息大小最大为 256 KB |
 
-**服务总线高级消息传送**在 CPU 和内存级别提供资源隔离，以便每个客户工作负荷以隔离方式运行。 此资源容器称为 *消息传送单元*。 每个高级命名空间至少会分配一个消息传送单元。 可以为每个服务总线高级命名空间购买 1、2 或 4 个消息传送单元。 单一工作负荷或实体可以跨多个消息传送单元，尽管计费以 24 小时或每天的费率收取，但仍然可以随意更改消息传送单元数。 从而为基于服务总线的解决方案提供可预测和稳定的性能。
+**服务总线高级消息传送**在 CPU 和内存级别提供资源隔离，以便每个客户工作负荷以隔离方式运行。 此资源容器称为 *消息传送单元*。 每个高级命名空间至少会分配一个消息传送单元。 可以为每个服务总线高级命名空间购买 1、2、4 或 8 个消息传送单元。 单一工作负荷或实体可以跨多个消息传送单元，可以随意更改消息传送单元数。 从而为基于服务总线的解决方案提供可预测和稳定的性能。
 
 此性能不仅更易于预测和实现，而且速度更快。 服务总线高级消息传送以在 [Azure 事件中心](https://azure.microsoft.com/services/event-hubs/)引入的存储引擎为基础。 使用高级消息传送，峰值性能比使用标准层快得多。
 
@@ -54,9 +55,24 @@ ms.lasthandoff: 05/03/2018
 
 如果有在标准传送下运行的代码并且希望将其移植到高级层，请确保将 [EnableExpress](/dotnet/api/microsoft.servicebus.messaging.queuedescription.enableexpress#Microsoft_ServiceBus_Messaging_QueueDescription_EnableExpress) 属性设置为 **false**（默认值）。
 
+## <a name="premium-messaging-resource-usage"></a>高级消息传送资源使用情况
+一般情况下，对实体的任何操作可能会导致 CPU 和内存使用情况。 下面是一些这些操作： 
+
+- 管理操作，例如 CRUD （创建、 检索、 更新和删除） 操作队列、 主题和订阅。
+- 运行时操作 （发送和接收消息）
+- 监视操作和警报
+
+此外但不定价的更多 CPU 和内存使用情况。 对于高级消息传送层中，没有消息单元的单个价格。
+
+CPU 和内存使用情况跟踪，并向你显示原因如下： 
+
+- 提供到系统内部的透明度
+- 了解资源购买的容量。
+- 容量规划，可帮助你决定增加/减少。
+
 ## <a name="get-started-with-premium-messaging"></a>高级消息传送入门
 
-高级消息传送很容易入门，其操作过程类似于标准消息传送。 一开始时，请在 [Azure 门户](https://portal.azure.com)中[创建命名空间](service-bus-create-namespace-portal.md)。 确保在“选择定价层”下选择“高级”。
+高级消息传送很容易入门，其操作过程类似于标准消息传送。 一开始时，请在 [Azure 门户](https://portal.azure.com)中[创建命名空间](service-bus-create-namespace-portal.md)。 确保在“定价层”下选择“高级”。   单击“查看完整的定价详细信息”  以查看有关每个层级的详细信息。
 
 ![create-premium-namespace][create-premium-namespace]
 
@@ -64,9 +80,9 @@ ms.lasthandoff: 05/03/2018
 
 ## <a name="next-steps"></a>后续步骤
 
-若要了解有关服务总线消息传送的详细信息，请参阅以下主题。
+若要了解有关服务总线消息传送的详细信息，请参阅以下链接：
 
-* [Azure 服务总线高级消息传送简介（博客文章）](http://azure.microsoft.com/blog/introducing-azure-service-bus-premium-messaging/)
+* [Azure 服务总线高级消息传送简介（博客文章）](https://azure.microsoft.com/blog/introducing-azure-service-bus-premium-messaging/)
 * [Azure 服务总线高级消息传送简介 (Channel9)](https://channel9.msdn.com/Blogs/Subscribe/Introducing-Azure-Service-Bus-Premium-Messaging)
 * [服务总线消息传送概述](service-bus-messaging-overview.md)
 * [服务总线队列入门](service-bus-dotnet-get-started-with-queues.md)

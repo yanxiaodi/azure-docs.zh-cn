@@ -8,24 +8,25 @@ ms.topic: include
 ms.date: 04/02/2018
 ms.author: spelluru
 ms.custom: include file
-ms.openlocfilehash: 752feca30fdca663aaf8bd88e6686781b9065682
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: c15d695e072e72c6e7be6dcf49f3ea049a9b70b7
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
-ms.locfileid: "33836675"
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67173541"
 ---
 发送模板通知时，只需提供一组属性。 在此方案中，这组属性包含当前新闻的本地化版本。
 
-    {
-        "News_English": "World News in English!",
-        "News_French": "World News in French!",
-        "News_Mandarin": "World News in Mandarin!"
-    }
-
-
+```json
+{
+    "News_English": "World News in English!",
+    "News_French": "World News in French!",
+    "News_Mandarin": "World News in Mandarin!"
+}
+```
 
 ### <a name="send-notifications-using-a-c-console-app"></a>使用 C# 控制台应用发送通知
+
 本部分演示如何使用控制台应用发送通知。 代码向 Windows 应用商店和 iOS 设备广播通知。 使用以下代码修改前面创建的控制台应用中的 `SendTemplateNotificationAsync` 方法：
 
 ```csharp
@@ -63,9 +64,10 @@ private static async void SendTemplateNotificationAsync()
 }
 ```
 
-无论使用何种平台，SendTemplateNotificationAsync 方法都会将本地化新闻传送到所有设备。 通知中心生成正确的本机有效负载并将其传送到已订阅特定标记的所有设备。
+无论使用何种平台，SendTemplateNotificationAsync 方法都会将本地化新闻传送到所有设备  。 通知中心生成正确的本机有效负载并将其传送到已订阅特定标记的所有设备。
 
 ### <a name="sending-notification-with-mobile-services"></a>使用移动服务发送通知
+
 在移动服务计划程序中，使用以下脚本：
 
 ```csharp
@@ -82,4 +84,3 @@ notificationHubService.send('World', notification, function(error) {
     }
 });
 ```
-

@@ -4,7 +4,7 @@ description: 本主题提供分步指导，引导用户使用 Azure 媒体服务
 services: media-services
 documentationcenter: ''
 author: Lichard
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: d6fa21b8-d80a-41b7-80c1-ff1761bc68f2
 ms.service: media-services
@@ -12,13 +12,15 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: dotnet
 ms.topic: article
-ms.date: 09/03/2017
-ms.author: rli; juliako;
-ms.openlocfilehash: d7a6abaeff0e939ed9e299e16e2fe59b65127aba
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.date: 03/20/2019
+ms.author: ril
+ms.reviewer: juliako
+ms.openlocfilehash: a8db8de6ef062dcf757f3d264379677d6550ea3a
+ms.sourcegitcommit: 4b8a69b920ade815d095236c16175124a6a34996
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 08/23/2019
+ms.locfileid: "69997680"
 ---
 # <a name="redact-faces-with-azure-media-analytics-walkthrough"></a>使用 Azure 媒体分析进行面部修订演练
 
@@ -34,11 +36,11 @@ ms.lasthandoff: 05/07/2018
 
 ## <a name="azure-media-services-explorer-workflow"></a>Azure 媒体服务资源管理器工作流
 
-使用 Redactor 的最简单方法是使用 github 上的开源 AMSE 工具。 如果不需要访问批注 json 或 jpg 面部图像，可通过**合并**模式运行简化的工作流。
+使用 Redactor 的最简单方法是使用 GitHub 上的开源 AMSE 工具。 如果不需要访问批注 json 或 jpg 面部图像，可通过**合并**模式运行简化的工作流。
 
 ### <a name="download-and-setup"></a>下载和安装
 
-1. 从[此处](https://github.com/Azure/Azure-Media-Services-Explorer)下载 AMSE 工具。
+1. 从[此处](https://aka.ms/amseforv2)下载 AMSE for AMS v2 工具。
 1. 使用服务密钥登录媒体服务帐户。
 
     若要获取帐户名称和密钥信息，请转到 [Azure 门户](https://portal.azure.com/)并选择 AMS 帐户。 然后，选择“设置”>“密钥”。 “管理密钥”窗口显示帐户名称、主密钥和辅助密钥。 复制帐户名称和主密钥的值。
@@ -76,7 +78,7 @@ ms.lasthandoff: 05/07/2018
 
 5. 下载或共享最终修正的输出资产。 
 
-    ![面部修订](./media/media-services-redactor-walkthrough/media-services-redactor-walkthrough008.png)
+    ![面部修正](./media/media-services-redactor-walkthrough/media-services-redactor-walkthrough008.png)
 
 ## <a name="azure-media-redactor-visualizer-open-source-tool"></a>Azure Media Redactor Visualizer 开源工具
 
@@ -129,6 +131,6 @@ ms.lasthandoff: 05/07/2018
 ## <a name="related-links"></a>相关链接
 [Azure 媒体服务分析概述](media-services-analytics-overview.md)
 
-[Azure 媒体分析演示](http://azuremedialabs.azurewebsites.net/demos/Analytics.html)
+[Azure 媒体分析演示](https://azuremedialabs.azurewebsites.net/demos/Analytics.html)
 
 [宣布推出 Azure 媒体分析的面部修订](https://azure.microsoft.com/blog/azure-media-redactor/)

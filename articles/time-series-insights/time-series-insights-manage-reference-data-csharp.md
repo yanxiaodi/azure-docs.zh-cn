@@ -1,43 +1,49 @@
 ---
 title: 使用 C# 管理 Azure 时序见解环境中的参考数据 | Microsoft Docs
 description: 本文介绍如何通过创建一个以 C# (c-sharp) .NET 语言编写的自定义应用来管理 Azure 时序见解环境中的参考数据。
-services: time-series-insights
 ms.service: time-series-insights
-author: venkatgct
-ms.author: venkatja
-manager: jhubbard
-editor: MicrosoftDocs/tsidocs
-ms.reviewer: jasonh, kfile, anshan
+services: time-series-insights
+author: ashannon7
+ms.author: dpalled
+manager: cshankar
+ms.reviewer: jasonh, kfile
 ms.devlang: csharp
 ms.workload: big-data
-ms.topic: article
-ms.date: 03/23/2018
-ms.openlocfilehash: 61375ae3b304959d5cda37c4ce0364d566d576a5
-ms.sourcegitcommit: d74657d1926467210454f58970c45b2fd3ca088d
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 08/08/2019
+ms.custom: seodec18
+ms.openlocfilehash: 2b9bd4b3516ee03ce78fcf255eba011f86f9c29c
+ms.sourcegitcommit: aa042d4341054f437f3190da7c8a718729eb675e
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/28/2018
+ms.lasthandoff: 08/09/2019
+ms.locfileid: "68883939"
 ---
-# <a name="manage-reference-data-for-an-azure-time-series-insights-environment-by-using-c"></a>使用 C# 管理 Azure 时序见解环境的引用数据
+# <a name="manage-ga-reference-data-for-an-azure-time-series-insights-environment-by-using-c"></a>使用 C# 管理 Azure 时序见解正式版环境的参考数据
 
 本文介绍可以进行编译以管理 Azure 时序见解环境参考数据的 C# 示例项目。
 
-## <a name="prerequistes"></a>先决条件
+## <a name="prerequisites"></a>先决条件
+
 在编译和运行示例代码之前，请完成以下步骤：
+
 1. [创建参考数据集](time-series-insights-add-reference-data-set.md)。
 
-2. 配置应用程序的授权访问令牌。 请确保通过 Azure Active Directory API 获取令牌。 应在每个查询 API 请求的 `Authorization` 标头中传递此令牌。 
- 
+1. 配置应用程序的授权访问令牌。 请确保通过 Azure Active Directory API 获取令牌。 应在每个查询 API 请求的 `Authorization` 标头中传递此令牌。
+
    有关如何设置非交互式应用程序的信息，请参阅[身份验证和授权](time-series-insights-authentication-and-authorization.md)。
 
-3. 编辑示例代码，以替换在代码开始处的 #DUMMY# 中指定的示例常数。 
+1. 编辑示例代码，以替换在代码开始处的 #DUMMY# 中指定的示例常数。
 
-还可在 [https://github.com/Azure-Samples/Azure-Time-Series-Insights](https://github.com/Azure-Samples/Azure-Time-Series-Insights) 中找到本示例代码
+> [!NOTE]
+> 查看 [https://github.com/Azure-Samples/Azure-Time-Series-Insights](https://github.com/Azure-Samples/Azure-Time-Series-Insights/tree/master/csharp-tsi-ga-sample) 中的正式版示例代码。
 
-## <a name="project-references"></a>项目引用
-为本示例添加 `Microsoft.IdentityModel.Clients.ActiveDirectory` 和 `Newtonsoft.Json` NuGet 程序包。 
+## <a name="project-dependencies"></a>项目依赖项
 
-## <a name="c-sample-code"></a>C# 示例代码 
+为本示例添加 `Microsoft.IdentityModel.Clients.ActiveDirectory` 和 `Newtonsoft.Json` NuGet 程序包。
+
+## <a name="c-sample-code"></a>C# 示例代码
+
 ```csharp
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 
@@ -133,7 +139,7 @@ namespace TimeSeriesInsightsReferenceDataSampleApp
     ""deleteproperties"": [{
         ""key"": {
             ""DeviceId"": ""Fan1""
-        },
+    },
         ""properties"": [""BladeCount""]
     }]
 }";
@@ -240,4 +246,5 @@ namespace TimeSeriesInsightsReferenceDataSampleApp
 ```
 
 ## <a name="next-steps"></a>后续步骤
-[参考数据 API](/rest/api/time-series-insights/time-series-insights-reference-reference-data-api)
+
+- 阅读[参考数据 API](https://docs.microsoft.com/rest/api/time-series-insights/ga-reference-data-api)。

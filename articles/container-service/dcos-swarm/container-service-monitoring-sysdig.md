@@ -1,5 +1,5 @@
 ---
-title: 通过 Sysdig 监视 Azure 容器服务群集
+title: （已弃用）通过 Sysdig 监视 Azure 容器服务群集
 description: 通过 Sysdig 监视 Azure 容器服务群集。
 services: container-service
 author: sauryadas
@@ -9,19 +9,21 @@ ms.topic: article
 ms.date: 08/08/2016
 ms.author: saudas
 ms.custom: mvc
-ms.openlocfilehash: 0c0f4fd1f3a8242061e198d7b5447656f9008e96
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.openlocfilehash: 39cd5a3fe7db0c442608e7943e7cbd6e3198edfb
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
-ms.locfileid: "32162130"
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60509486"
 ---
-# <a name="monitor-an-azure-container-service-cluster-with-sysdig"></a>通过 Sysdig 监视 Azure 容器服务群集
+# <a name="deprecated-monitor-an-azure-container-service-cluster-with-sysdig"></a>（已弃用）通过 Sysdig 监视 Azure 容器服务群集
+
+[!INCLUDE [ACS deprecation](../../../includes/container-service-deprecation.md)]
 
 在本文中，我们将 Sysdig 代理部署到 Azure 容器服务群集中的所有代理节点。 此配置需要具有 Sysdig 的帐户。 
 
-## <a name="prerequisites"></a>先决条件
-[部署](container-service-deployment.md)和[连接](../container-service-connect.md)由 Azure 容器服务配置的群集。 探究 [Marathon UI](container-service-mesos-marathon-ui.md)。 转到 [http://app.sysdigcloud.com](http://app.sysdigcloud.com) 设置 Sysdig 云帐户。 
+## <a name="prerequisites"></a>必备组件
+[部署](container-service-deployment.md)和[连接](../container-service-connect.md)由 Azure 容器服务配置的群集。 探究 [Marathon UI](container-service-mesos-marathon-ui.md)。 转到 [https://app.sysdigcloud.com](https://app.sysdigcloud.com) 设置 Sysdig 云帐户。 
 
 ## <a name="sysdig"></a>Sysdig
 Sysdig 是允许监视群集中容器的监视服务。 大家都知道 Sysdig 有助于进行故障排除，但它也具有基本的 CPU、网络、内存和 I/O 监控指标。 Sysdig 便于查看哪些容器的工作最为繁重、哪些容器实质上占用的内存和 CPU 最多。 此视图位于“概述”部分中，当前处于测试阶段。 

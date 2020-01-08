@@ -1,11 +1,11 @@
 ---
-title: "使用 Azure 网络观察程序安全组视图分析网络安全性 - REST API | Microsoft 文档"
-description: "本文介绍如何使用 PowerShell 通过安全组视图分析虚拟机安全性。"
+title: 使用 Azure 网络观察程序安全组视图分析网络安全性 - REST API | Microsoft 文档
+description: 本文介绍如何使用 PowerShell 通过安全组视图分析虚拟机安全性。
 services: network-watcher
 documentationcenter: na
-author: jimdial
-manager: timlt
-editor: 
+author: KumudD
+manager: twooley
+editor: ''
 ms.assetid: a2f418fe-f5d2-43ed-8dc3-df0ed2a4d4ac
 ms.service: network-watcher
 ms.devlang: na
@@ -13,36 +13,39 @@ ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 02/22/2017
-ms.author: jdial
-ms.openlocfilehash: 0eec45630fe3467db26620787038f6dd5a05cc72
-ms.sourcegitcommit: b5c6197f997aa6858f420302d375896360dd7ceb
-ms.translationtype: HT
+ms.author: kumud
+ms.openlocfilehash: 86fff39605fa91c1b09c1547dd0efa97b8fd26cd
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/21/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64687852"
 ---
 # <a name="analyze-your-virtual-machine-security-with-security-group-view-using-rest-api"></a>使用 REST API 通过安全组视图分析虚拟机安全性
 
 > [!div class="op_single_selector"]
 > - [PowerShell](network-watcher-security-group-view-powershell.md)
-> - [CLI 1.0](network-watcher-security-group-view-cli-nodejs.md)
-> - [CLI 2.0](network-watcher-security-group-view-cli.md)
+> - [Azure CLI](network-watcher-security-group-view-cli.md)
 > - [REST API](network-watcher-security-group-view-rest.md)
 
 安全组视图返回已应用于虚拟机的已配置的有效网络安全规则。 此功能可用于审核和诊断已在 VM 上配置以确保正确允许或拒绝流量的网络安全组和规则。 在本文中，我们将说明如何使用 REST API 检索应用于虚拟机的有效安全规则
 
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
+
 ## <a name="before-you-begin"></a>开始之前
 
-在此方案中，将调用网络观察程序 Rest API 获取虚拟机的安全组视图。 ARMclient 用于使用 PowerShell 调用 REST API。 根据 [Chocolatey 上的 ARMClient](https://chocolatey.org/packages/ARMClient) 中所述在 chocolatey 上找到 ARMClient
+在此方案中，将调用网络观察程序 Rest API 获取虚拟机的安全组视图。 通过 PowerShell 调用 REST API 时，使用的是 ARMclient。 根据 [Chocolatey 上的 ARMClient](https://chocolatey.org/packages/ARMClient) 中所述在 chocolatey 上找到 ARMClient
 
 此方案假定已按照[创建网络观察程序](network-watcher-create.md)中的步骤创建网络观察程序。 此外，本方案假设要使用一个包含有效虚拟机的资源组。
 
-## <a name="scenario"></a>方案
+## <a name="scenario"></a>场景
 
 本文中介绍的方案检索给定虚拟机的已应用有效安全规则。
 
 ## <a name="log-in-with-armclient"></a>使用 ARMClient 登录
 
-```PowerShell
+```powershell
 armclient login
 ```
 
@@ -50,7 +53,7 @@ armclient login
 
 运行以下脚本返回虚拟机。以下代码需要变量：
 
-- **subscriptionId** - 还可以使用 **Get-AzureRMSubscription** cmdlet 检索订阅 id。
+- **subscriptionId** - 还可以使用 **Get-AzSubscription** cmdlet 检索订阅 ID。
 - **resourceGroupName** - 包含虚拟机的资源组的名称。
 
 ```powershell

@@ -1,5 +1,5 @@
 ---
-title: PowerShell 脚本：在 Azure 实验室服务中设置允许的 VM 大小 | Microsoft Docs
+title: PowerShell 脚本：设置 Azure 实验室服务中允许的 VM 大小 |Microsoft Docs
 description: 此 PowerShell 脚本在 Azure 实验室服务中设置允许的 VM 大小。
 services: lab-services
 author: spelluru
@@ -12,24 +12,27 @@ ms.devlang: na
 ms.topic: article
 ms.date: 04/11/2018
 ms.author: spelluru
-ms.openlocfilehash: 2fc7001e5594b1c37e6566cde1ee586194737e3c
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 0c82e304d3e3d8df1206c7c05883399b74229af7
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66160544"
 ---
 # <a name="use-powershell-to-set-allowed-vm-sizes-in-azure-lab-services"></a>使用 PowerShell 在 Azure 实验室服务中设置允许的 VM 大小
 
 此示例 PowerShell 脚本在 Azure 实验室服务中设置允许的虚拟机 (VM) 大小。
 
-[!INCLUDE [sample-powershell-install](../../../includes/sample-powershell-install-no-ssh.md)]
+[!INCLUDE [updated-for-az](../../../includes/updated-for-az.md)]
 
-## <a name="prerequisites"></a>先决条件
-* **自定义实验室**。 此脚本要求拥有现有的自定义实验室。 
+[!INCLUDE [sample-powershell-install](../../../includes/sample-powershell-install-no-ssh-az.md)]
+
+## <a name="prerequisites"></a>必备组件
+* 实验室  。 此脚本要求拥有现有的实验室。 
 
 ## <a name="sample-script"></a>示例脚本
 
-[!code-powershell[main](../../../powershell_scripts/devtest-lab/set-allowed-vm-sizes-in-lab/set-allowed-vm-sizes-in-lab.ps1 "Add external user to a custom lab")]
+[!code-powershell[main](../../../powershell_scripts/devtest-lab/set-allowed-vm-sizes-in-lab/set-allowed-vm-sizes-in-lab.ps1 "Add external user to a lab")]
 
 ## <a name="script-explanation"></a>脚本说明
 
@@ -37,10 +40,10 @@ ms.lasthandoff: 05/07/2018
 
 | 命令 | 说明 |
 |---|---|
-| [Find-AzureRmResource](/module/azurerm.resources/find-azurermresource) | 基于指定参数搜索资源。 |
-| [Get-AzureRmResource](/powershell/module/azurerm.resources/get-azurermresource) | 获取资源。 |
-| [Set-AzureRmResource](/powershell/module/azurerm.resources/set-azurermresource) | 修改资源。 |
-| [New-AzureRmResource](/powershell/module/azurerm.resources/new-azurermresource) | 创建资源。 |
+| Find-AzResource | 基于指定参数搜索资源。 |
+| [Get-AzResource](/powershell/module/az.resources/get-azresource) | 获取资源。 |
+| [Set-AzResource](/powershell/module/az.resources/set-azresource) | 修改资源。 |
+| [New-AzResource](/powershell/module/az.resources/new-azresource) | 创建资源。 |
 
 ## <a name="next-steps"></a>后续步骤
 

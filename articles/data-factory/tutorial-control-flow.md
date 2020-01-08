@@ -3,27 +3,24 @@ title: Azure 数据工厂管道中的分支 | Microsoft Docs
 description: 了解如何通过分支和链接活动控制 Azure 数据工厂中的数据流。
 services: data-factory
 documentationcenter: ''
-author: sharonlo101
-manager: craigg
-ms.reviewer: douglasl
+author: djpmsft
+ms.author: daperlov
+manager: jroth
+ms.reviewer: maghan
 ms.service: data-factory
 ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: get-started-article
-ms.date: 01/22/2018
-ms.author: shlo
-ms.openlocfilehash: eec2b5f84d11c946c5cae1d7d90d0b96dacc9d8c
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
+ms.topic: tutorial
+ms.date: 02/20/2019
+ms.openlocfilehash: 264d8e049cc7b714e00aaa77441cdc81a1e0a0c9
+ms.sourcegitcommit: d200cd7f4de113291fbd57e573ada042a393e545
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70140732"
 ---
 # <a name="branching-and-chaining-activities-in-a-data-factory-pipeline"></a>数据工厂管道中的分支和链接活动
-在本教程中，我们将创建一个数据工厂管道来展示某些控制流功能。 此管道执行从 Azure Blob 存储容器中某个容器到同一存储帐户中另一个容器的简单复制。 如果复制活动成功，可以在告知成功结果的电子邮件中发送成功复制操作的详细信息（例如写入的数据量）。 如果复制活动失败，可以在告知失败结果的电子邮件中发送复制失败的详细信息（例如错误消息）。 整个教程讲解了如何传递参数。
 
-> [!NOTE]
-> 本文适用于目前处于预览状态的数据工厂版本 2。 如果使用数据工厂服务版本 1（即正式版 (GA)），请参阅[数据工厂版本 1 文档](v1/data-factory-copy-data-from-azure-blob-storage-to-sql-database.md)。
+在本教程中，我们将创建一个数据工厂管道来展示某些控制流功能。 此管道执行从 Azure Blob 存储容器中某个容器到同一存储帐户中另一个容器的简单复制。 如果复制活动成功，可以在告知成功结果的电子邮件中发送成功复制操作的详细信息（例如写入的数据量）。 如果复制活动失败，可以在告知失败结果的电子邮件中发送复制失败的详细信息（例如错误消息）。 整个教程讲解了如何传递参数。
 
 方案的综合概述：![概述](media/tutorial-control-flow/overview.png)
 
@@ -41,15 +38,15 @@ ms.lasthandoff: 03/23/2018
 
 本教程使用 .NET SDK。 可以使用其他机制来与 Azure 数据工厂交互，具体请参阅目录中的“快速入门”。
 
-如果你还没有 Azure 订阅，可以在开始前创建一个[免费](https://azure.microsoft.com/free/)帐户。
+如果没有 Azure 订阅，请在开始之前创建一个[免费](https://azure.microsoft.com/free/)帐户。
 
 ## <a name="prerequisites"></a>先决条件
 
-* **Azure 存储帐户**。 可将 Blob 存储用作**源**数据存储。 如果没有 Azure 存储帐户，请参阅[创建存储帐户](../storage/common/storage-create-storage-account.md#create-a-storage-account)一文获取创建步骤。
+* **Azure 存储帐户**。 可将 Blob 存储用作**源**数据存储。 如果没有 Azure 存储帐户，请参阅[创建存储帐户](../storage/common/storage-quickstart-create-account.md)一文获取创建步骤。
 * **Azure SQL 数据库**。 将数据库用作**接收器**数据存储。 如果没有 Azure SQL 数据库，请参阅[创建 Azure SQL 数据库](../sql-database/sql-database-get-started-portal.md)一文获取创建步骤。
 * **Visual Studio** 2013、2015 或 2017。 本文中的演练使用 Visual Studio 2017。
-* **下载并安装 [Azure .NET SDK](http://azure.microsoft.com/downloads/)**。
-* 遵照[这些说明](../azure-resource-manager/resource-group-create-service-principal-portal.md#create-an-azure-active-directory-application)**在 Azure Active Directory 中创建应用程序**。 记下要在后续步骤中使用的以下值：**应用程序 ID**、**身份验证密钥**和**租户 ID**。 遵照同一文章中的以下说明将应用程序分配到“参与者”角色。
+* **下载并安装 [Azure .NET SDK](https://azure.microsoft.com/downloads/)** 。
+* 遵照[这些说明](../active-directory/develop/howto-create-service-principal-portal.md#create-an-azure-active-directory-application)**在 Azure Active Directory 中创建应用程序**。 记下要在后续步骤中使用的以下值：**应用程序 ID**、**身份验证密钥**和**租户 ID**。 遵照同一文章中的以下说明将应用程序分配到“参与者”角色。 
 
 ### <a name="create-blob-table"></a>创建 Blob 表
 
@@ -59,26 +56,27 @@ ms.lasthandoff: 03/23/2018
     John|Doe
     Jane|Doe
     ```
-2. 使用 [Azure 存储资源管理器](http://storageexplorer.com/)等工具创建 **adfv2branch** 容器，并将 **input.txt** 文件上传到该容器。
+
+2. 使用 [Azure 存储资源管理器](https://storageexplorer.com/)等工具创建 **adfv2branch** 容器，并将 **input.txt** 文件上传到该容器。
 
 ## <a name="create-visual-studio-project"></a>创建 Visual Studio 项目
 
 使用 Visual Studio 2015/2017 创建 C# .NET 控制台应用程序。
 
 1. 启动 **Visual Studio**。
-2. 单击“文件”，指向“新建”并单击“项目”。 需要 .NET 4.5.2 或更高版本。
-3. 从右侧项目类型列表中选择“Visual C#” -> “控制台应用(.NET Framework)”。
+2. 单击“文件”，指向“新建”并单击“项目”。    需要 .NET 4.5.2 或更高版本。
+3. 从右侧项目类型列表中选择“Visual C#”   -> “控制台应用(.NET Framework)”  。
 4. 输入 **ADFv2BranchTutorial** 作为名称。
 5. 单击“确定”以创建该项目  。
 
 ## <a name="install-nuget-packages"></a>安装 NuGet 包
 
-1. 单击“工具” -> “NuGet 包管理器” -> “包管理器控制台”。
-2. 在“包管理器控制台”中，运行以下命令来安装包：
+1. 单击“工具”   -> “NuGet 包管理器”   -> “包管理器控制台”  。
+2. 在“包管理器控制台”  中，运行以下命令来安装包。 有关详细信息，请参阅 [Microsoft.Azure.Management.DataFactory nuget 包](https://www.nuget.org/packages/Microsoft.Azure.Management.DataFactory/)。
 
-    ```
-    Install-Package Microsoft.Azure.Management.DataFactory -Prerelease
-    Install-Package Microsoft.Azure.Management.ResourceManager -Prerelease
+    ```powershell
+    Install-Package Microsoft.Azure.Management.DataFactory
+    Install-Package Microsoft.Azure.Management.ResourceManager
     Install-Package Microsoft.IdentityModel.Clients.ActiveDirectory
     ```
 
@@ -95,8 +93,9 @@ ms.lasthandoff: 03/23/2018
     using Microsoft.Azure.Management.DataFactory;
     using Microsoft.Azure.Management.DataFactory.Models;
     using Microsoft.IdentityModel.Clients.ActiveDirectory;
+    ```
 
-2. Add these static variables to the **Program class**. Replace place-holders with your own values. Currently, Data Factory V2 allows you to create data factories only in the East US, East US2, and West Europe regions. The data stores (Azure Storage, Azure SQL Database, etc.) and computes (HDInsight, etc.) used by data factory can be in other regions.
+2. 将这些静态变量添加到 **Program 类**。 将占位符替换为自己的值。 若要查看目前提供数据工厂的 Azure 区域的列表，请在以下页面上选择感兴趣的区域，然后展开“分析”  以找到“数据工厂”  ：[各区域的产品可用性](https://azure.microsoft.com/global-infrastructure/services/)。 数据工厂使用的数据存储（Azure 存储、Azure SQL 数据库，等等）和计算资源（HDInsight 等）可以位于其他区域中。
 
     ```csharp
         // Set variables
@@ -141,6 +140,7 @@ ms.lasthandoff: 03/23/2018
     ```
 
 ## <a name="create-a-data-factory"></a>创建数据工厂
+
 在 Program.cs 文件中创建“CreateOrUpdateDataFactory”函数：
 
 ```csharp
@@ -175,6 +175,7 @@ Factory df = CreateOrUpdateDataFactory(client);
 ```
 
 ## <a name="create-an-azure-storage-linked-service"></a>创建 Azure 存储链接服务
+
 在 Program.cs 文件中创建“StorageLinkedServiceDefinition”函数：
 
 ```csharp
@@ -190,6 +191,7 @@ static LinkedServiceResource StorageLinkedServiceDefinition(DataFactoryManagemen
     return linkedService;
 }
 ```
+
 在 **Main** 方法中添加用于创建 **Azure 存储链接服务**的以下代码。 从 [Azure Blob 链接服务属性](connector-azure-blob-storage.md#linked-service-properties)了解更多有关受支持属性的信息及其细节。
 
 ```csharp
@@ -201,6 +203,7 @@ client.LinkedServices.CreateOrUpdate(resourceGroup, dataFactoryName, storageLink
 在本部分中创建两个数据集：一个用于源，另一个用于接收器。 
 
 ### <a name="create-a-dataset-for-source-azure-blob"></a>为源 Azure Blob 创建数据集
+
 向 **Main** 方法中添加用于创建 **Azure blob 数据集**的以下代码。 从 [Azure Blob 数据集属性](connector-azure-blob-storage.md#dataset-properties)了解更多有关受支持属性的信息及其细节。
 
 在 Azure Blob 中定义表示源数据的数据集。 此 Blob 数据集引用在上一步中创建的 Azure 存储链接服务，并说明以下信息：
@@ -260,6 +263,7 @@ client.Datasets.CreateOrUpdate(resourceGroup, dataFactoryName, blobSinkDatasetNa
 ```
 
 ## <a name="create-a-c-class-emailrequest"></a>创建 C# 类：EmailRequest
+
 在 C# 项目中，创建名为 **EmailRequest** 的类。 此类定义在发送电子邮件时，管道要在正文请求中发送哪些属性。 在本教程中，管道会将四个属性从管道发送到电子邮件：
 
 - **消息**：电子邮件的正文。 如果复制成功，此属性包含运行的详细信息（写入的数据量）。 如果复制失败，此属性包含错误详细信息。
@@ -291,10 +295,13 @@ client.Datasets.CreateOrUpdate(resourceGroup, dataFactoryName, blobSinkDatasetNa
         }
     }
 ```
+
 ## <a name="create-email-workflow-endpoints"></a>创建电子邮件工作流终结点
+
 若要触发电子邮件的发送，可以使用[逻辑应用](../logic-apps/logic-apps-overview.md)来定义工作流。 有关创建逻辑应用工作流的详细信息，请参阅[如何创建逻辑应用](../logic-apps/quickstart-create-first-logic-app-workflow.md)。 
 
 ### <a name="success-email-workflow"></a>成功电子邮件工作流 
+
 创建名为 `CopySuccessEmail` 的逻辑应用工作流。 将工作流触发器定义为 `When an HTTP request is received`，并添加 `Office 365 Outlook – Send an email` 操作。
 
 ![成功电子邮件工作流](media/tutorial-control-flow/success-email-workflow.png)
@@ -320,13 +327,14 @@ client.Datasets.CreateOrUpdate(resourceGroup, dataFactoryName, blobSinkDatasetNa
     "type": "object"
 }
 ```
+
 此值与前一部分中创建的 **EmailRequest** 类相符。 
 
 逻辑应用设计器中的请求应如下所示：
 
 ![逻辑应用设计器 - 请求](media/tutorial-control-flow/logic-app-designer-request.png)
 
-对于“发送电子邮件”操作，请使用传入请求正文 JSON 架构的属性来自定义如何设置电子邮件的格式。 下面是一个示例：
+对于“发送电子邮件”操作，请使用传入请求正文 JSON 架构的属性来自定义如何设置电子邮件的格式。  下面是一个示例：
 
 ![逻辑应用设计器 - 发送电子邮件操作](media/tutorial-control-flow/send-email-action.png)
 
@@ -338,6 +346,7 @@ https://prodxxx.eastus.logic.azure.com:443/workflows/000000/triggers/manual/path
 ```
 
 ## <a name="fail-email-workflow"></a>失败电子邮件工作流 
+
 克隆 **CopySuccessEmail**，并创建另一个 **CopyFailEmail** 逻辑应用工作流。 在请求触发器中，`Request Body JSON schema` 是相同的。 只需更改电子邮件的格式（例如 `Subject`）即可定制失败电子邮件。 下面是一个示例：
 
 ![逻辑应用设计器 - 失败电子邮件工作流](media/tutorial-control-flow/fail-email-workflow.png)
@@ -358,7 +367,9 @@ https://prodxxx.eastus.logic.azure.com:443/workflows/000000/triggers/manual/path
 //Fail Request Url
 https://prodxxx.eastus.logic.azure.com:443/workflows/000000/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=000000
 ```
+
 ## <a name="create-a-pipeline"></a>创建管道
+
 在 Main 方法中添加用于创建包含复制活动和 dependsOn 属性的管道的以下代码。 在本教程中，该管道包含一个活动：这是一个复制活动，它使用 Blob 数据集作为源，使用另一个 Blob 数据集作为接收器。 复制活动成功和失败时，会调用不同的电子邮件任务。
 
 在此管道中使用以下功能：
@@ -442,12 +453,15 @@ static PipelineResource PipelineDefinition(DataFactoryManagementClient client)
             return resource;
         }
 ```
+
 在 **Main** 方法中添加用于创建管道的以下代码：
 
 ```
 client.Pipelines.CreateOrUpdate(resourceGroup, dataFactoryName, pipelineName, PipelineDefinition(client));
 ```
+
 ### <a name="parameters"></a>parameters
+
 管道的第一个部分定义参数。 
 
 - sourceBlobContainer – 源 Blob 数据集使用的管道中的参数。
@@ -463,7 +477,9 @@ Parameters = new Dictionary<string, ParameterSpecification>
         { "receiver", new ParameterSpecification { Type = ParameterType.String } }
     },
 ```
+
 ### <a name="web-activity"></a>Web 活动
+
 Web 活动允许调用任何 REST 终结点。 有关该活动的详细信息，请参阅 [Web 活动](control-flow-web-activity.md)。 此管道使用 Web 活动调用逻辑应用电子邮件工作流。 创建两个 Web 活动：一个调用 **CopySuccessEmail** 工作流，另一个调用 **CopyFailWorkFlow**。
 
 ```csharp
@@ -483,16 +499,18 @@ Web 活动允许调用任何 REST 终结点。 有关该活动的详细信息，
             }
         }
 ```
+
 在“Url”属性中，相应地粘贴来自逻辑应用工作流的请求 URL 终结点。 在“Body”属性中，传递“EmailRequest”类的实例。 电子邮件请求包含以下属性：
 
 - 消息 – `@{activity('CopyBlobtoBlob').output.dataWritten` 的传递值。 访问前一复制活动的属性，并传递 dataWritten 的值。 失败时，传递错误输出而不是 `@{activity('CopyBlobtoBlob').error.message`。
 - 数据工厂名称 – `@{pipeline().DataFactory}` 的传递值。这是一个系统变量，用于访问相应的数据工厂名称。 有关系统变量的列表，请参阅[系统变量](control-flow-system-variables.md)一文。
 - 管道名称 – `@{pipeline().Pipeline}` 的传递值。 这也是系统变量，用于访问相应的管道名称。 
-- 收件人 – "@pipeline().parameters.receiver") 的传递值。 访问管道参数。
+- 接收方 – 传递 "\@pipeline().parameters.receiver") 的值。 访问管道参数。
  
 此代码根据上一个成功的复制活动创建新的活动依赖项。
 
 ## <a name="create-a-pipeline-run"></a>创建管道运行
+
 在 **Main** 方法中添加用于**触发管道运行**的以下代码。
 
 ```csharp
@@ -504,12 +522,13 @@ Dictionary<string, object> arguments = new Dictionary<string, object>
     { "sinkBlobContainer", outputBlobPath },
     { "receiver", emailReceiver }
 };
-
+ 
 CreateRunResponse runResponse = client.Pipelines.CreateRunWithHttpMessagesAsync(resourceGroup, dataFactoryName, pipelineName, arguments).Result.Body;
 Console.WriteLine("Pipeline run ID: " + runResponse.RunId);
 ```
 
 ## <a name="main-class"></a>Main 类 
+
 最终的 Main 方法应如下所示。 生成并运行程序以触发管道运行！
 
 ```csharp
@@ -541,6 +560,7 @@ Console.WriteLine("Pipeline run ID: " + runResponse.RunId);
 ```
 
 ## <a name="monitor-a-pipeline-run"></a>监视管道运行
+
 1. 在 **Main** 方法中添加以下代码用于持续检查管道运行状态，直到它完成数据复制为止。
 
     ```csharp
@@ -580,6 +600,7 @@ Console.WriteLine("Pipeline run ID: " + runResponse.RunId);
     ```
 
 ## <a name="run-the-code"></a>运行代码
+
 生成并启动应用程序，然后验证管道执行。
 控制台会输出数据工厂、链接服务、数据集、管道和管道运行的创建进度。 然后，检查管道运行状态。 请等到出现包含数据读取/写入大小的复制活动运行详细信息。 然后，使用 Azure 存储资源管理器等工具检查 Blob 是否已根据变量中的指定从“inputBlobPath”复制到“outputBlobPath”。
 
@@ -736,6 +757,7 @@ Press any key to exit...
 ```
 
 ## <a name="next-steps"></a>后续步骤
+
 已在本教程中执行了以下步骤： 
 
 > [!div class="checklist"]

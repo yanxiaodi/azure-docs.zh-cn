@@ -1,20 +1,20 @@
 ---
-title: "使用 Azure Site Recovery 将 VMM 云中的 Hyper-V VM 复制到辅助站点时的支持矩阵 | Microsoft Docs"
-description: "汇总了对使用 Azure Site Recovery 将 VMM 云中的 Hyper-V VM 复制到辅助站点的支持。"
-services: site-recovery
+title: 使用 Azure Site Recovery 在 VMM 云中将 Hyper-v Vm 灾难恢复到辅助站点的支持矩阵
+description: 汇总了对使用 Azure Site Recovery 将 VMM 云中的 Hyper-V VM 复制到辅助站点的支持。
 author: rayne-wiselman
 manager: carmonm
 ms.service: site-recovery
-ms.topic: article
-ms.date: 03/05/2018
+ms.topic: conceptual
+ms.date: 09/09/2019
 ms.author: raynew
-ms.openlocfilehash: 767b0e76b73c082ddb75374f51700b85272f713e
-ms.sourcegitcommit: 8c3267c34fc46c681ea476fee87f5fb0bf858f9e
-ms.translationtype: HT
+ms.openlocfilehash: 9c3a19d44a4ac0fba37f4815b65b17c26d257dbc
+ms.sourcegitcommit: fa4852cca8644b14ce935674861363613cf4bfdf
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/09/2018
+ms.lasthandoff: 09/09/2019
+ms.locfileid: "70813626"
 ---
-# <a name="support-matrix-for-replication-of-hyper-v-vms-to-a-secondary-site"></a>将 Hyper-V VM 复制到辅助站点时的支持矩阵
+# <a name="support-matrix-for-disaster-recovery-of-hyper-v-vms-to-a-secondary-site"></a>将 Hyper-V VM 灾难恢复到辅助站点时的支持矩阵
 
 本文汇总了使用 [Azure Site Recovery](site-recovery-overview.md) 服务将 System Center Virtual Machine Manager (VMM) 云中托管的 Hyper-V VM 复制到辅助站点时所支持的内容。 如果要将 Hyper-V VM 复制到 Azure，请查看[此支持矩阵](hyper-v-azure-support-matrix.md)。
 
@@ -61,7 +61,7 @@ Windows Server 2012 R2 | Windows Server 2012 R2 上的[Hyper-V 支持](https://d
 来宾 VM - NIC 组合 | 否
 来宾 VM - IPv4 | 是
 来宾 VM - IPv6 | 否
-来宾 - Windows/Linux - 静态 IP 地址 | 是
+来宾 VM - Windows/Linux - 静态 IP 地址 | 是
 来宾 VM - 多 NIC | 是
 
 
@@ -71,7 +71,7 @@ Windows Server 2012 R2 | Windows Server 2012 R2 上的[Hyper-V 支持](https://d
 
 **存储（主机）** | **支持**
 --- | --- 
-NFS | 不适用
+NFS | 不可用
 SMB 3.0 |  是
 SAN (ISCSI) | 是
 多路径 (MPIO) | 是
@@ -80,15 +80,15 @@ SAN (ISCSI) | 是
 
 **配置** | **支持**
 --- | --- | 
-VMDK |  不适用
+VMDK |  不可用
 VHD/VHDX | 是（最多 16 个磁盘）
 第 2 代 VM | 是
 共享群集磁盘 | 否
 加密磁盘 | 否
-UEFI| 不适用
+UEFI| 不可用
 NFS | 否
 SMB 3.0 | 否
-RDM | 不适用
+RDM | 不可用
 磁盘 > 1 TB | 是
 包含条带化磁盘的卷 > 1 TB<br/><br/> LVM | 是
 存储空间 | 是
@@ -108,8 +108,8 @@ RDM | 不适用
 该提供程序协调 VMM 服务器之间的通信。 
 
 **最新** | **更新**
---- | --- | --- | --- | ---
-5.1.19（[可从门户获取](http://aka.ms/downloaddra)） | [最新功能和修复](https://support.microsoft.com/kb/3155002)
+--- | --- 
+5.1.19（[可从门户获取](https://aka.ms/downloaddra)） | [最新功能和修复](https://support.microsoft.com/kb/3155002)
 
 
 

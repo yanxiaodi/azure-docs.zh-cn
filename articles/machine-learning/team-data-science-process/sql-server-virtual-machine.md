@@ -1,24 +1,22 @@
 ---
-title: 浏览 Azure 上 SQL Server 虚拟机中的数据 | Microsoft Docs
+title: 浏览 SQL Server 虚拟机中的数据 - Team Data Science Process
 description: 在 Azure 上的 SQL Server 虚拟机中浏览数据和生成功能
 services: machine-learning
-documentationcenter: ''
-author: deguhath
-manager: jhubbard
-editor: ''
-ms.assetid: 3949fb2c-ffab-49fb-908d-27d5e42f743b
+author: marktab
+manager: cgronlun
+editor: cgronlun
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 01/23/2017
-ms.author: deguhath
-ms.openlocfilehash: 31612f56e996ba0b609a34dd556ede3a0ac498f9
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: e407b26091ad559ab458f76d94e2460660ecd14f
+ms.sourcegitcommit: 0fab4c4f2940e4c7b2ac5a93fcc52d2d5f7ff367
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71036612"
 ---
 # <a name="heading"></a>在 Azure 上处理 SQL Server 虚拟机中的数据
 本文档介绍如何浏览数据，并针对存储在 Azure 的 SQL Server VM 中的数据生成功能。 可通过使用 SQL 或 Python 等编程语言的数据整理来实现上述目的。
@@ -38,7 +36,7 @@ ms.lasthandoff: 05/03/2018
 以下是几个可用于浏览存储在 SQL Server 中的数据的示例 SQL 脚本。
 
 > [!NOTE]
-> 有关实际的示例，可以使用 [NYC 出租车数据集](http://www.andresmh.com/nyctaxitrips/)，并参考名为[使用 IPython Notebook 和 SQL Server 的 NYC 数据整理](https://github.com/Azure/Azure-MachineLearning-DataScience/blob/master/Misc/DataScienceProcess/iPythonNotebooks/machine-Learning-data-science-process-sql-walkthrough.ipynb)的IPNB，以获取端到端的演练。
+> 有关实际的示例，可以使用 [NYC 出租车数据集](https://www.andresmh.com/nyctaxitrips/)，并参考名为[使用 IPython Notebook 和 SQL Server 的 NYC 数据整理](https://github.com/Azure/Azure-MachineLearning-DataScience/blob/master/Misc/DataScienceProcess/iPythonNotebooks/machine-Learning-data-science-process-sql-walkthrough.ipynb)的IPNB，以获取端到端的演练。
 > 
 > 
 
@@ -84,12 +82,12 @@ ms.lasthandoff: 05/03/2018
 ### <a name="sql-featurerollout"></a>从单个列推出功能
 在此部分中，将演示如何在表格中推出单列以生成其他功能。 该示例假定用户尝试在其中生成功能的表中，具有一个纬度或经度列。
 
-下面简要介绍纬度/经度位置数据（来自 stackoverflow 的资源[如何测量纬度和经度的准确性？](http://gis.stackexchange.com/questions/8650/how-to-measure-the-accuracy-of-latitude-and-longitude)）。 在特征化位置字段之前，了解以上知识会很有用：
+下面简要介绍纬度/经度位置数据（来自 stackoverflow 的资源[如何测量纬度和经度的准确性？](https://gis.stackexchange.com/questions/8650/how-to-measure-the-accuracy-of-latitude-and-longitude)）。 在特征化位置字段之前，了解以上知识会很有用：
 
 * 符号指示地球上的四个方向：东、南、西、北。
 * 非零的百位数代表经度，而不是纬度！
 * 十位数提供约 1000 公里的位置。 提供处于哪个大洲或海洋的有用信息。
-* 个位（十进制度）代表 111 公里以上的（60 海里，约 69 英里）位置。 它会告诉用户大致处于哪一个州或国家/地区。
+* 个位（十进制度）代表 111 公里以上的（60 海里，约 69 英里）位置。 它可以大致了解你所在的州、国家或地区。
 * 第一个小数位值达 11.1 km：可将相邻的大城市区分开。
 * 第二位小数值达 1.1 km：可将村庄分开。
 * 第三位小数值达 110 m：可以定大型农业区域或工业园区。
@@ -118,7 +116,7 @@ ms.lasthandoff: 05/03/2018
 > 
 
 ### <a name="sql-aml"></a>连接到 Azure 机器学习
-新生成的功能可作为列添加到现有表或存储在新表中，也可与原始表结合以进行机器学习。 如果已经创建，可使用 Azure 机器学习中的[导入数据][import-data]模块生成或访问功能，如下所示：
+新生成的功能可作为列添加到现有表或存储在新表中，也可与原始表结合以进行机器学习。 如果已创建功能，可以使用 Azure 机器学习中的 "[导入数据][import-data]" 模块生成或访问功能，如下所示：
 
 ![azureml 读取器][1] 
 
@@ -131,10 +129,10 @@ ms.lasthandoff: 05/03/2018
     import pyodbc    
     conn = pyodbc.connect('DRIVER={SQL Server};SERVER=<servername>;DATABASE=<dbname>;UID=<username>;PWD=<password>')
 
-Python 中的 [Pandas 库](http://pandas.pydata.org/)提供一组丰富的数据结构，以及针对 Python 编程的数据操作的数据分析工具。 下面的代码读取 SQL Server 数据库返回的结果到 Pandas 数据帧:
+Python 中的 [Pandas 库](https://pandas.pydata.org/)提供一组丰富的数据结构，以及针对 Python 编程的数据操作的数据分析工具。 下面的代码读取 SQL Server 数据库返回的结果到 Pandas 数据帧:
 
     # Query database and load the returned results in pandas data frame
-    data_frame = pd.read_sql('''select <columnname1>, <cloumnname2>... from <tablename>''', conn)
+    data_frame = pd.read_sql('''select <columnname1>, <columnname2>... from <tablename>''', conn)
 
 现可使用 Pandas 数据帧，如文章[处理数据科学环境中的 Azure Blob 数据](data-blob.md)所述。
 

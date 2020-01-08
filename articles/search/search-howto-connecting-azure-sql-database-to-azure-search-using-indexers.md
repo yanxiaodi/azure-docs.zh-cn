@@ -1,22 +1,23 @@
 ---
-title: 使用索引器将 Azure SQL 数据库连接到 Azure 搜索 | Microsoft Docs
-description: 了解如何使用索引器将数据从 Azure SQL 数据库提取到 Azure 搜索索引。
-author: chaosrealm
-manager: jlembicz
+title: 使用索引器连接 Azure SQL 数据库并为其内容编制索引 - Azure 搜索
+description: 了解如何使用索引器抓取 Azure SQL 数据库中的数据，以便在 Azure 搜索中进行全文搜索。 本文介绍连接、索引器配置和数据引入。
+ms.date: 05/02/2019
+author: mgottein
+manager: nitinme
+ms.author: magottei
 services: search
 ms.service: search
 ms.devlang: rest-api
 ms.topic: conceptual
-ms.date: 04/20/2018
-ms.author: eugenesh
-ms.openlocfilehash: 5545b2e40777496ab8c808a8c2692b346d3509c5
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.custom: seodec2018
+ms.openlocfilehash: 4ed218fdc1c6580e9b92364d123b081a1f34b441
+ms.sourcegitcommit: bb8e9f22db4b6f848c7db0ebdfc10e547779cccc
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
-ms.locfileid: "33778335"
+ms.lasthandoff: 08/20/2019
+ms.locfileid: "69656233"
 ---
-# <a name="connecting-azure-sql-database-to-azure-search-using-indexers"></a>使用索引器将 Azure SQL 数据库连接到 Azure 搜索
+# <a name="connect-to-and-index-azure-sql-database-content-using-azure-search-indexers"></a>使用 Azure 搜索索引器连接 Azure SQL 数据库并为其内容编制索引
 
 必须先使用数据填充 [Azure 搜索索引](search-what-is-an-index.md)，然后才能对其进行查询。 如果数据驻留在 Azure SQL 数据库中，则 **Azure SQL 数据库的 Azure 搜索索引器**（或简称 **Azure SQL 索引器**）可自动执行索引编制过程，这意味着需要编写的代码更少且需要考虑的基础结构更少。
 
@@ -62,7 +63,7 @@ ms.locfileid: "33778335"
 1. 创建数据源：
 
    ```
-    POST https://myservice.search.windows.net/datasources?api-version=2017-11-11
+    POST https://myservice.search.windows.net/datasources?api-version=2019-05-06
     Content-Type: application/json
     api-key: admin-key
 
@@ -81,7 +82,7 @@ ms.locfileid: "33778335"
 3. 通过为索引器命名并引用数据源和目标索引创建索引器：
 
     ```
-    POST https://myservice.search.windows.net/indexers?api-version=2017-11-11
+    POST https://myservice.search.windows.net/indexers?api-version=2019-05-06
     Content-Type: application/json
     api-key: admin-key
 
@@ -94,7 +95,7 @@ ms.locfileid: "33778335"
 
 通过此方式创建的索引器不包含计划。 它会在创建后自动运行一次。 可使用**运行索引器**请求随时再次运行：
 
-    POST https://myservice.search.windows.net/indexers/myindexer/run?api-version=2017-11-11
+    POST https://myservice.search.windows.net/indexers/myindexer/run?api-version=2019-05-06
     api-key: admin-key
 
 可自定义索引器行为的几个方面，例如批大小和可在索引器执行失败前跳过的文档数。 有关详细信息，请参阅[创建索引器 API](https://docs.microsoft.com/rest/api/searchservice/Create-Indexer)。
@@ -103,13 +104,13 @@ ms.locfileid: "33778335"
 
 若要监视索引器状态和执行历史记录（已编制索引的项目数、失败数等），请使用**索引器状态**请求：
 
-    GET https://myservice.search.windows.net/indexers/myindexer/status?api-version=2017-11-11
+    GET https://myservice.search.windows.net/indexers/myindexer/status?api-version=2019-05-06
     api-key: admin-key
 
 响应应类似于以下形式：
 
     {
-        "@odata.context":"https://myservice.search.windows.net/$metadata#Microsoft.Azure.Search.V2015_02_28.IndexerExecutionInfo",
+        "\@odata.context":"https://myservice.search.windows.net/$metadata#Microsoft.Azure.Search.V2015_02_28.IndexerExecutionInfo",
         "status":"running",
         "lastResult": {
             "status":"success",
@@ -140,12 +141,12 @@ ms.locfileid: "33778335"
     }
 
 执行历史记录包含最多 50 个最近完成的执行，它们按反向时间顺序排序（以便最新执行出现在响应中的第一个）。
-有关响应的其他信息可在[获取索引器状态](http://go.microsoft.com/fwlink/p/?LinkId=528198)中找到
+有关响应的其他信息可在[获取索引器状态](https://go.microsoft.com/fwlink/p/?LinkId=528198)中找到
 
 ## <a name="run-indexers-on-a-schedule"></a>按计划运行索引器
 还可以排列索引器，以按计划定期运行。 若要执行此操作，在创建或更新索引器时添加**计划**属性。 下面的示例显示了用于更新索引器的 PUT 请求：
 
-    PUT https://myservice.search.windows.net/indexers/myindexer?api-version=2017-11-11
+    PUT https://myservice.search.windows.net/indexers/myindexer?api-version=2019-05-06
     Content-Type: application/json
     api-key: admin-key
 
@@ -155,25 +156,9 @@ ms.locfileid: "33778335"
         "schedule" : { "interval" : "PT10M", "startTime" : "2015-01-01T00:00:00Z" }
     }
 
-**间隔**参数是必需的。 间隔是指开始两个连续的索引器执行之间的时间。 允许的最小间隔为 5 分钟；最长为一天。 必须将其格式化为 XSD“dayTimeDuration”值（[ISO 8601 持续时间](http://www.w3.org/TR/xmlschema11-2/#dayTimeDuration)值的受限子集）。 它的模式为：`P(nD)(T(nH)(nM))`。 示例：`PT15M` 为每隔 15 分钟，`PT2H` 为每隔 2 小时。
+**间隔**参数是必需的。 间隔是指开始两个连续的索引器执行之间的时间。 允许的最小间隔为 5 分钟；最长为一天。 必须将其格式化为 XSD“dayTimeDuration”值（[ISO 8601 持续时间](https://www.w3.org/TR/xmlschema11-2/#dayTimeDuration)值的受限子集）。 它的模式为：`P(nD)(T(nH)(nM))`。 示例：`PT15M` 为每隔 15 分钟，`PT2H` 为每隔 2 小时。
 
-可选 **startTime** 指示应该开始计划执行的时间。 如果省略，则使用当前 UTC 时间。 此时间可以是过去时间，在此情况下计划第一个执行，就像索引器在 startTime 之后连续运行一样。  
-
-一次只能运行一个索引器执行。 如果索引器在计划其执行时运行，该执行将推迟到下一个计划时间。
-
-让我们考虑更具体的示例。 假设我们已配置以下每小时计划：
-
-    "schedule" : { "interval" : "PT1H", "startTime" : "2015-03-01T00:00:00Z" }
-
-下面是发生的具体情况：
-
-1. 第一个索引器执行于 2015 年 3 月 1 日午夜 12:00 或大约时间开始。 UTC。
-2. 假设此执行需要 20 分钟（或小于 1 小时的任何时间）。
-3. 第二个执行于 2015 年 3 月 1 日凌晨 1:00 或大约时间开始。
-4. 现在，假设此执行需要超过 1 小时（例如 70 分钟），以便在大约凌晨 2:10 完成。
-5. 现在是凌晨 2:00，即将开始第三个执行。 但是，由于从凌晨 1:00 开始的第二个执行 仍在运行，将跳过第三个执行。 第三个执行于凌晨 3:00 开始。
-
-可使用 **PUT 索引器请求**针对现有索引器添加、更改或删除计划。
+有关定义索引器计划的详细信息, 请参阅[如何为 Azure 搜索计划索引器](search-howto-schedule-indexers.md)。
 
 <a name="CaptureChangedRows"></a>
 
@@ -193,7 +178,7 @@ Azure 搜索使用“增量索引编制”来避免索引器每次运行时都�
 + 在数据库上，为表[启用更改跟踪](https://docs.microsoft.com/sql/relational-databases/track-changes/enable-and-disable-change-tracking-sql-server)。 
 + 表上没有组合主键（包含多个列的主键）。  
 
-#### <a name="usage"></a>使用情况
+#### <a name="usage"></a>用法
 
 若要使用此策略，按如下所示创建或更新数据源：
 
@@ -208,6 +193,9 @@ Azure 搜索使用“增量索引编制”来避免索引器每次运行时都�
     }
 
 当使用 SQL 集成的更改跟踪策略时，不指定单独的数据删除检测策略 - 此策略具有对标识删除的行的内置支持。 但是，对于要“自动”检测的删除项，搜索索引中的文档键必须与 SQL 表中的主键相同。 
+
+> [!NOTE]  
+> 使用 [TRUNCATE TABLE](https://docs.microsoft.com/sql/t-sql/statements/truncate-table-transact-sql) 从 SQL 表中删除大量行时，需要[重置](https://docs.microsoft.com/rest/api/searchservice/reset-indexer)索引器才能重置更改跟踪状态，从而选取行删除项。
 
 <a name="HighWaterMarkPolicy"></a>
 
@@ -225,7 +213,7 @@ Azure 搜索使用“增量索引编制”来避免索引器每次运行时都�
 > [!IMPORTANT] 
 > 强烈建议为高使用标记列使用 [rowversion](https://docs.microsoft.com/sql/t-sql/data-types/rowversion-transact-sql) 数据类型。 如果使用其他任何数据类型，则当存在与索引器查询并发执行的事务时，不能保证更改跟踪捕获所有更改。 在具有只读副本的配置中使用 **rowversion** 时，必须将索引器指向主副本。 只有主副本可以用于数据同步方案。
 
-#### <a name="usage"></a>使用情况
+#### <a name="usage"></a>用法
 
 若要使用高使用标记策略，请按如下所示创建或更新数据源：
 
@@ -277,7 +265,7 @@ Azure 搜索使用“增量索引编制”来避免索引器每次运行时都�
         }
     }
 
-**SoftDeleteMarkerValue** 必须是字符串 - 使用实际值的字符串表示形式。 例如，如果有一个整数列（使用值 1 标记删除的行），则使用 `"1"`。 如果有一个 BIT 列（使用布尔值 true 标记删除的行），则使用 `"True"`。
+**SoftDeleteMarkerValue** 必须是字符串 - 使用实际值的字符串表示形式。 例如，如果有一个整数列（使用值 1 标记删除的行），则使用 `"1"`。 如果有一个 BIT 列（使用布尔值 true 标记删除的行），请使用字符串文本 `True` 或 `true`（不区分大小写）。
 
 <a name="TypeMapping"></a>
 
@@ -293,16 +281,16 @@ Azure 搜索使用“增量索引编制”来避免索引器每次运行时都�
 | smalldatetime、datetime、datetime2、date、datetimeoffset |Edm.DateTimeOffset、Edm.String | |
 | uniqueidentifer |Edm.String | |
 | geography |Edm.GeographyPoint |仅支持具有 SRID 4326（这是默认值）的类型 POINT 的地理实例 |
-| rowversion |不适用 |行版本列不能存储在搜索索引中，但可用于更改跟踪 |
-| time、timespan、binary、varbinary、image、xml、geometry、CLR 类型 |不适用 |不支持 |
+| rowversion |不可用 |行版本列不能存储在搜索索引中，但可用于更改跟踪 |
+| time、timespan、binary、varbinary、image、xml、geometry、CLR 类型 |不可用 |不支持 |
 
 ## <a name="configuration-settings"></a>配置设置
 SQL 索引器公开多个配置设置：
 
-| 设置 | 数据类型 | 目的 | 默认值 |
+| 设置 | 数据类型 | 用途 | 默认值 |
 | --- | --- | --- | --- |
-| queryTimeout |字符串 |设置 SQL 查询执行的超时 |5 分钟（“00:05:00”） |
-| disableOrderByHighWaterMarkColumn |bool |导致高使用标记策略使用的 SQL 查询省略 ORDER BY 子句。 请参阅[高使用标记策略](#HighWaterMarkPolicy) |false |
+| queryTimeout |string |设置 SQL 查询执行的超时 |5 分钟（“00:05:00”） |
+| disableOrderByHighWaterMarkColumn |bool |导致高使用标记策略使用的 SQL 查询省略 ORDER BY 子句。 请参阅[高使用标记策略](#HighWaterMarkPolicy) |假 |
 
 在索引器定义的 `parameters.configuration` 对象中使用这些设置。 例如，要将查询超时设置为 10 分钟，请使用以下配置创建或更新索引器：
 
@@ -314,17 +302,17 @@ SQL 索引器公开多个配置设置：
 
 ## <a name="faq"></a>常见问题
 
-**问：是否可以将 Azure SQL 索引器与在 Azure 中的 IaaS VM 上运行的 SQL 数据库配合使用？**
+**问：是否可以将 Azure SQL 索引器与在 Azure 中 IaaS VM 上运行的 SQL 数据库配合使用？**
 
 是的。 但是，需要允许搜索服务连接到数据库。 有关详细信息，请参阅[配置从 Azure 搜索索引器到 Azure VM 上 SQL Server 的连接](search-howto-connecting-azure-sql-iaas-to-azure-search-using-indexers.md)。
 
-**问：是否可以将 Azure SQL 索引器与在本地运行的 SQL 数据库配合使用？**
+**问：是否可以将 Azure SQL 索引器与本地运行的 SQL 数据库配合使用？**
 
 无法直接配合使用。 我们不建议使用也不支持直接连接，因为这样做需要使用 Internet 流量打开数据库。 对于此方案，客户已使用诸如 Azure 数据工厂之类的桥技术取得了成功。 有关详细信息，请参阅[使用 Azure 数据工厂将数据推送到 Azure 搜索索引](https://docs.microsoft.com/azure/data-factory/data-factory-azure-search-connector)。
 
-**问：是否可以将 Azure SQL 索引器与在 Azure 上的 IaaS 中运行的除 SQL Server 之外的其他数据库配合使用？**
+**问：是否可以将 Azure SQL 索引器与在 Azure 上 IaaS 中运行的非 SQL Server 数据库配合使用？**
 
-不会。 我们不支持此方案，因为我们尚未使用除 SQL Server 以外的任何数据库测试该索引器。  
+否。 我们不支持此方案，因为我们尚未使用除 SQL Server 以外的任何数据库测试该索引器。  
 
 **问：是否可以创建多个按计划运行的索引器？**
 
@@ -334,11 +322,11 @@ SQL 索引器公开多个配置设置：
 
 是的。 索引器在搜索服务中的一个节点上运行，该节点的资源在编制查询流量索引并进行处理和其他 API 请求之间共享。 如果运行密集型编制索引和查询工作负荷，并频繁遇到 503 错误或响应时间增加，请考虑[纵向扩展搜索服务](search-capacity-planning.md)。
 
-**问：是否可以将[故障转移群集](https://docs.microsoft.com/azure/sql-database/sql-database-geo-replication-overview)中的辅助副本用作数据源？**
+**问：是否可以将[故障转移群集](https://docs.microsoft.com/azure/sql-database/sql-database-geo-replication-overview)中的次要副本用作数据源？**
 
 视情况而定。 对于表或视图的完整索引编制，可以使用辅助副本。 
 
-对于增量索引编制，Azure 搜索支持两个更改检测策略：SQL 集成的更改跟踪和高使用标记。
+对于增量索引编制，Azure 搜索支持两个更改检测策略：SQL 集成的更改跟踪策略和高使用标记策略。
 
 在只读副本上，SQL 数据库不支持集成的更改跟踪。 因此，必须使用高使用标记策略。 
 

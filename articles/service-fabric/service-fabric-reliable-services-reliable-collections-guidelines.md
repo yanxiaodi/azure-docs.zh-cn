@@ -3,8 +3,8 @@ title: Azure Service Fabric 中 Reliable Collections 的相关指导原则和建
 description: 有关使用 Service Fabric Reliable Collections 的指导原则和建议
 services: service-fabric
 documentationcenter: .net
-author: mcoskun
-manager: timlt
+author: athinanthny
+manager: chackdan
 editor: masnider,rajak,zhol
 ms.assetid: 62857523-604b-434e-bd1c-2141ea4b00d1
 ms.service: service-fabric
@@ -13,12 +13,13 @@ ms.topic: conceptual
 ms.tgt_pltfrm: na
 ms.workload: required
 ms.date: 12/10/2017
-ms.author: mcoskun
-ms.openlocfilehash: 7a61fa9df5b5232c11f4a546ec5f050461c88e88
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.author: atsenthi
+ms.openlocfilehash: dc7d60cb846aa16f2facd41f5b6b7ce52bcc8f41
+ms.sourcegitcommit: fe6b91c5f287078e4b4c7356e0fa597e78361abe
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 07/29/2019
+ms.locfileid: "68599336"
 ---
 # <a name="guidelines-and-recommendations-for-reliable-collections-in-azure-service-fabric"></a>Azure Service Fabric 中 Reliable Collections 的相关指导原则和建议
 本章节提供有关使用可靠状态管理器和 Reliable Collections 的指导原则。 目的是帮助用户避免常见的问题。
@@ -31,6 +32,7 @@ ms.lasthandoff: 05/16/2018
 * 切勿在已提交、中止或释放一个事务之后使用该事务。
 * 切勿在对其创建的事务范围之外使用枚举。
 * 切勿在另一个事务的 `using` 语句内创建事务，因为它可能会导致死锁。
+* 不要通过 `IReliableStateManager.GetOrAddAsync` 创建可靠状态，请在同一事务中使用可靠状态。 这会导致 InvalidOperationException。
 * 务必确保 `IComparable<TKey>` 实现正确。 系统依赖 `IComparable<TKey>` 进行检查点和行的合并。
 * 意图更新某项而读取该项时，切勿更新锁以防止出现某类死锁。
 * 请考虑将每个分区的可靠集合数保持在 1000 个以下。 最好使用包含较多项的可靠集合，而不是可靠性更高但所含项目较少的集合。
@@ -48,6 +50,7 @@ ms.lasthandoff: 05/16/2018
 * 针对辅助副本的读取操作可能会读取未提交仲裁的版本。
   这意味着从单个辅助副本读取的数据版本可能被错误处理。
   从主副本读取的数据始终是可靠的，绝不会被错误处理。
+* 应用程序在可靠集合中保留的数据的安全性/隐私性是用户决定，并受到存储管理的保护；即 操作系统磁盘加密可用于保护静态数据。  
 
 ### <a name="next-steps"></a>后续步骤
 * [使用 Reliable Collections](service-fabric-work-with-reliable-collections.md)

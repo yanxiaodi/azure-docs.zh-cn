@@ -1,25 +1,21 @@
 ---
-title: 监视 Azure Cosmos DB 请求和存储 | Microsoft Docs
+title: 监视 Azure Cosmos DB 中的性能和存储指标
 description: 了解如何监视 Azure Cosmos DB 帐户的性能指标（如请求和服务器错误）以及使用情况指标（如存储消耗）。
-services: cosmos-db
-documentationcenter: ''
 author: SnehaGunda
-manager: kfile
-ms.assetid: 4c6a2e6f-6e78-48e3-8dc6-f4498b235a9e
 ms.service: cosmos-db
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
-ms.date: 09/19/2017
+ms.topic: conceptual
+ms.date: 05/23/2019
 ms.author: sngun
-ms.openlocfilehash: 008c47bbceeba1345c56b5171f5fbc1f8676b02c
-ms.sourcegitcommit: 5b2ac9e6d8539c11ab0891b686b8afa12441a8f3
-ms.translationtype: HT
+ms.custom: seodec18
+ms.openlocfilehash: d8e80594e0c56f57527d1703b0cf1323571cf351
+ms.sourcegitcommit: 670c38d85ef97bf236b45850fd4750e3b98c8899
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 08/08/2019
+ms.locfileid: "68855711"
 ---
-# <a name="monitor-azure-cosmos-db"></a>监视 Azure Cosmos DB
+# <a name="monitor-performance-and-storage-metrics-in-azure-cosmos-db"></a>监视 Azure Cosmos DB 中的性能和存储指标
+
 可以在 [Azure 门户](https://portal.azure.com/)中监视 Azure Cosmos DB 帐户。 对于每个 Azure Cosmos DB 帐户，一整套指标可用于监视吞吐量、存储、可用性、延迟和一致性。
 
 可在“帐户”页、新的“指标”页或 Azure Monitor.中查看指标。
@@ -52,6 +48,10 @@ ms.lasthandoff: 04/06/2018
 4. “指标”页显示有关请求总数的详细信息。 
 
 ## <a name="set-up-alerts-in-the-portal"></a>在门户中设置警报
+
+> [!NOTE]
+> Azure Monitor 中的经典警报即将停用。 Azure 门户提供[迁移工具](../azure-monitor/platform/alerts-using-migration-tool.md)来迁移经典警报规则。 但是, 并不是可以迁移 Azure Cosmos DB 度量值的所有经典警报, 但有一些例外情况, 请参阅[Azure monitor](../azure-monitor/platform/alerts-understand-migration.md#cosmos-db-metrics)一文, 了解无法迁移的经典警报的列表。 
+
 1. 在 [Azure 门户](https://portal.azure.com/)中，依次单击“所有服务”、“Azure Cosmos DB”，并单击要设置性能指标警报的 Azure Cosmos DB 帐户的名称。
 2. 在资源菜单中，单击“警报规则”打开“警报规则”页。  
    ![所选的警报规则部件的屏幕截图](./media/monitor-accounts/madocdb10.5.png)
@@ -63,7 +63,7 @@ ms.lasthandoff: 04/06/2018
    * 新的警报规则的说明。
    * 警报规则指标。
    * 确定何时激活警报的条件、阈值和时间段。 例如，在过去的 15 分钟服务器错误计数大于 5。
-   * 当警报被触发时，服务管理员和协同管理员是否将通过电子邮件得到通知。
+   * 当警报触发时，服务管理员和协同管理员是否会通过电子邮件得到通知。
    * 警报通知的其他电子邮件地址。  
      ![“添加警报规则”页的屏幕截图](./media/monitor-accounts/madocdb12.png)
 
@@ -71,7 +71,7 @@ ms.lasthandoff: 04/06/2018
 门户中提供的帐户级指标（如帐户存储使用率和总请求数）不可通过 SQL API 获得。 但是，可以使用 SQL API 在集合级别检索使用情况数据。 若要检索集合级别的数据，请执行以下操作：
 
 * 若要使用 REST API，请[对集合执行 GET](https://msdn.microsoft.com/library/mt489073.aspx)。 集合的配额和使用情况信息将返回到响应中的 x-ms-resource-quota 和 x-ms-resource-usage 标头中。
-* 要使用 .NET SDK，请使用 [DocumentClient.ReadDocumentCollectionAsync](https://msdn.microsoft.com/library/microsoft.azure.documents.client.documentclient.readdocumentcollectionasync.aspx) 方法，它将返回 [ResourceResponse](https://msdn.microsoft.com/library/dn799209.aspx)，其中包含大量使用情况属性，例如 **CollectionSizeUsage**、**DatabaseUsage**、**DocumentUsage** 等。
+* 要使用 .NET SDK，请使用 [DocumentClient.ReadDocumentCollectionAsync](https://msdn.microsoft.com/library/microsoft.azure.documents.client.documentclient.readdocumentcollectionasync.aspx) 方法，它返回 [ResourceResponse](https://msdn.microsoft.com/library/dn799209.aspx)，其中包含大量使用情况属性，例如 **CollectionSizeUsage**、**DatabaseUsage**、**DocumentUsage** 等。
 
 若要访问其他指标，请使用 [Azure Monitor SDK](https://www.nuget.org/packages/Microsoft.Azure.Insights)。 可以通过调用以下命令来检索可用的指标定义：
 
@@ -79,7 +79,7 @@ ms.lasthandoff: 04/06/2018
 
 用于检索各个指标的查询使用以下格式：
 
-    https://management.azure.com/subscriptions/{SubecriptionId}/resourceGroups/{ResourceGroup}/providers/Microsoft.DocumentDb/databaseAccounts/{DocumentDBAccountName}/metrics?api-version=2015-04-08&$filter=%28name.value%20eq%20%27Total%20Requests%27%29%20and%20timeGrain%20eq%20duration%27PT5M%27%20and%20startTime%20eq%202016-06-03T03%3A26%3A00.0000000Z%20and%20endTime%20eq%202016-06-10T03%3A26%3A00.0000000Z
+    https://management.azure.com/subscriptions/{SubscriptionId}/resourceGroups/{ResourceGroup}/providers/Microsoft.DocumentDb/databaseAccounts/{DocumentDBAccountName}/metrics?api-version=2015-04-08&$filter=%28name.value%20eq%20%27Total%20Requests%27%29%20and%20timeGrain%20eq%20duration%27PT5M%27%20and%20startTime%20eq%202016-06-03T03%3A26%3A00.0000000Z%20and%20endTime%20eq%202016-06-10T03%3A26%3A00.0000000Z
 
 有关详细信息，请参阅 [Retrieving Resource Metrics via the Azure Insights API](https://blogs.msdn.microsoft.com/cloud_solution_architect/2016/02/23/retrieving-resource-metrics-via-the-azure-insights-api/)（通过 Azure Monitor REST API 检索资源指标）。 请注意，已将“Azure Insights”重命名为“Azure Monitor”。  此博客条目引用的是旧名称。
 

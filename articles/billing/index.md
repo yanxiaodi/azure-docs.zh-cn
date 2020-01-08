@@ -10,14 +10,14 @@ ms.service: billing
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: landing-page
-ms.date: 05/24/2018
-ms.author: cwatson
-ms.openlocfilehash: 313d6cfd69fbf63066add46c7a467c5090604067
-ms.sourcegitcommit: 6cf20e87414dedd0d4f0ae644696151e728633b6
+ms.date: 02/19/2019
+ms.author: banders
+ms.openlocfilehash: e150525b6f5fd1814f13595fbd4ea7e3bccde4fc
+ms.sourcegitcommit: 3102f886aa962842303c8753fe8fa5324a52834a
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 06/06/2018
-ms.locfileid: "34807248"
+ms.lasthandoff: 04/23/2019
+ms.locfileid: "60368533"
 ---
 # <a name="azure-billing-and-cost-management-documentation"></a>Azure 计费和成本管理文档
 
@@ -49,9 +49,10 @@ ms.locfileid: "34807248"
                         <h3>管理成本</h3>
                         <p>
                         <a href="/azure/billing/billing-getting-started">防止意外成本</a><br/>
-                        <a href="/azure/billing/billing-set-up-alerts">设置计费警报</a><br/>
-                        <a href="https://azure.microsoft.com/pricing/calculator/">计算定价</a><br/>
-                        <a href="/azure/azure-resource-manager/resource-group-using-tags?toc=/azure/billing/TOC.json">使用资源标记</a>
+                        <a href="/azure/azure-resource-manager/resource-group-using-tags?toc=/azure/billing/TOC.json">使用资源标记</a><br/>
+                        <a href="/azure/cost-management/quick-acm-cost-analysis?toc=/azure/billing/TOC.json">开始分析成本</a><br/>
+                        <a href="/azure/cost-management/tutorial-acm-create-budgets?toc=/azure/billing/TOC.json">创建并管理预算</a><br/>
+                        <a href="/azure/cost-management/tutorial-acm-opt-recommendations?toc=/azure/billing/TOC.json">优化建议</a>
                         </p>
                     </div>
                 </div>
@@ -101,8 +102,8 @@ ms.locfileid: "34807248"
                         <p>
                         <a href="/azure/billing/billing-manage-access">授予对计费信息的访问权限</a><br/>
                         <a href="/azure/billing/billing-how-to-pay-by-invoice">按发票付款</a><br/>
-                        <a href="/azure/billing/billing-manage-reserved-vm-instance">管理预留实例</a><br/>
-                        <a href="/azure/billing/billing-understand-reserved-instance-usage-ea">预留实例的使用情况</a>
+                        <a href="/azure/billing/billing-manage-reserved-vm-instance">管理 Azure 预留项</a><br/>
+                        <a href="/azure/billing/billing-understand-reserved-instance-usage-ea">Azure 预留项的使用情况</a>
                         </p>
                     </div>
                 </div>
@@ -131,11 +132,12 @@ ms.locfileid: "34807248"
             <div class="cardPadding">
                 <div class="card">
                     <div class="cardText">
-                        <h3>借助虚拟机预留实例实现节约</h3>
+                        <h3>通过 Azure 预留项进行保存</h3>
                         <p>
-                        <a href="/azure/billing/billing-save-compute-costs-reservations">什么是预留实例？</a><br/>
-                        <a href="/azure/virtual-machines/windows/prepay-reserved-vm-instances?toc=/azure/billing/TOC.json">购买预留实例</a><br/>
-                        <a href="/azure/billing/billing-understand-vm-reservation-charges">如何应用折扣</a><br/>
+                        <a href="/azure/billing/billing-save-compute-costs-reservations">什么是 Azure 预留项？</a> <br/>
+                        <a href="/azure/virtual-machines/windows/prepay-reserved-vm-instances?toc=/azure/billing/TOC.json">购买虚拟机预留实例</a><br/>
+                        <a href="/azure/sql-database/sql-database-reserved-capacity?toc=/azure/billing/TOC.json">购买 SQL 数据库预留容量</a><br/>
+                        <a href="/azure/billing/billing-understand-vm-reservation-charges">如何应用 VM 折扣</a><br/>
                         <a href="/azure/billing/billing-reserved-instance-windows-software-costs">未包括软件成本</a>
                         </p>
                     </div>
@@ -165,17 +167,22 @@ ms.locfileid: "34807248"
             <div class="cardPadding">
                 <div class="card">
                     <div class="cardText">
-                        <h3>故障排除</h3>
+                        <h3>企业订阅：需要 EA 门户访问</h3>
                         <p>
-                        <a href="/azure/billing/billing-no-subscriptions-found">“未找到订阅”</a><br/>
-                        <a href="https://support.microsoft.com/help/4042960/troubleshoot-why-your-debit-card-or-credit-card-is-declined-at-azure-s">银行卡被拒绝</a><br/>
-                        <a href="https://support.microsoft.com/help/4042959/troubleshoot-why-you-can-t-sign-up-for-azure">注册问题</a><br/>
-                        <a href="https://support.microsoft.com/help/4042961/troubleshoot-why-you-can-t-sign-in-to-manage-your-azure-subscription">登录问题</a>
+                        <a class="p-test" href="https://ea.azure.com/helpdocs/createADepartment" data-linktype="external">管理部门<span class="docon docon-navigate-external"></span></a>
+                        <br>
+                        <a class="p-test" href="https://ea.azure.com/helpdocs/addNewAccount" data-linktype="external">管理帐户<span class="docon docon-navigate-external"></span></a>
+                        <br>
+                        <a class="p-test" href="https://ea.azure.com/helpdocs/createANewSubscription" data-linktype="external">创建订阅<span class="docon docon-navigate-external"></span></a>
+                        <br>
+                        <a class="p-test" href="https://ea.azure.com/helpdocs/viewPriceSheet" data-linktype="external">查看价目表<span class="docon docon-navigate-external"></span></a>
+                        <br>
+                        <a class="p-test" href="https://ea.azure.com/helpdocs/usageDetailReport" data-linktype="external">查看使用情况详细信息<span class="docon docon-navigate-external"></span></a>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     </li>
-    
+
 </ul>

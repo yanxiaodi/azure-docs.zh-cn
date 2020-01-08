@@ -1,24 +1,22 @@
 ---
-title: 清理和准备 Azure 机器学习的数据 | Microsoft 文档
-description: 预处理和清理数据以为机器学习做准备。
+title: 清理和准备 Azure 机器学习的数据 - Team Data Science Process
+description: 预处理和清理数据，使其有效地用于机器学习。
 services: machine-learning
-documentationcenter: ''
-author: deguhath
+author: marktab
 manager: cgronlun
 editor: cgronlun
-ms.assetid: bdf659ec-4881-4324-8b9c-747cbfa0c3cd
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/09/2017
-ms.author: deguhath
-ms.openlocfilehash: f3d05030e293c53c958aa1ba501fe9a2ba7a11b5
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: 2b3ec3352d6e1939b195bbba87b8a824404346ae
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61044593"
 ---
 # <a name="tasks-to-prepare-data-for-enhanced-machine-learning"></a>用于准备数据以进行增强型机器学习的任务
 预处理和清理数据是重要的任务，通常必须先执行此任务才能有效地使用数据集进行机器学习。 原始数据通常具有干扰性且不可靠，还可能缺少值。 使用此类数据进行建模会产生误导性结果。 这些任务是 Team Data Science Process (TDSP) 的一部分，通常对用于发现和计划所需预处理的数据集进行初步探索。 有关 TDSP 过程的详细说明，请参阅 [Team Data Science Process](overview.md) 中概述的步骤。
@@ -68,7 +66,7 @@ ms.lasthandoff: 05/03/2018
 若要处理缺失值，最好先确定缺少值的原因以更好地解决问题。 通常的缺失值处理方法包括：
 
 * **删除**：删除具有缺失值的记录
-* **虚拟替换**：使用虚拟值替换缺失值：例如，用 unknown 替换分类值，或用 0 替换数值。
+* **虚拟替换**：使用虚拟值替换缺失值：例如，用 unknown 替换分类值，或用 0 替换数值  。
 * **平均值替换**：如果缺失的数据是数字，则使用平均值替换缺失值。
 * **常用项替换**：如果缺失的是分类数据，则使用最常用的项替换缺失值
 * **回归替换**：使用回归方法，将缺失值替换为回归值。  
@@ -76,7 +74,7 @@ ms.lasthandoff: 05/03/2018
 ## <a name="how-to-normalize-data"></a>如何规范化数据？
 数据规范化将数值重新调整到指定范围。 常用的数据规范化方法包括：
 
-* **最小 - 最大值规范化**：将数据线性转换到某一范围（例如 0 和 1 之间），这会最小值缩放为 0，最大值缩放为 1。
+* **最小 - 最大值规范化**：将数据线性转换到某一范围（例如 0 和 1 之间），这会将最小值缩放为 0，最大值缩放为 1。
 * **Z 分数规范化**：基于平均值和标准偏差缩放数据：将数据和平均值之间的差除以标准偏差。
 * **小数缩放**：通过移动属性值的小数点缩放数据。  
 
@@ -99,7 +97,7 @@ ms.lasthandoff: 05/03/2018
 **数据浏览**支持提前预览数据。 执行该步骤时会发现多个数据问题，可应用相应的方法解决这些问题。  提问非常重要，例如问题的源是什么以及问题是如何引入的。 这还有助于确定需采取哪些数据处理步骤来解决这些问题。 从数据中获得的见解也可用于确定数据处理操作的优先级。
 
 ## <a name="references"></a>参考
-> 《数据挖掘：概念和技术》，第三版，Morgan Kaufmann 出版社，2011，Jiawei Han、Micheline Kamber 和 Jian Pei
+> 《数据挖掘：  概念和技术》，第三版，Morgan Kaufmann 出版社，2011，Jiawei Han、Micheline Kamber 和 Jian Pei
 > 
 > 
 

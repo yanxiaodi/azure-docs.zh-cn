@@ -3,25 +3,24 @@ title: Azure PowerShell 示例 - Service Fabric | Microsoft Docs
 description: Azure PowerShell 示例 - Service Fabric
 services: service-fabric
 documentationcenter: service-fabric
-author: rwike77
-manager: timlt
+author: athinanthny
+manager: chackdan
 editor: ''
 tags: ''
 ms.assetid: b48d1137-8c04-46e0-b430-101e07d7e470
 ms.service: service-fabric
-ms.devlang: na
 ms.topic: sample
 ms.tgt_pltfrm: na
 ms.workload: service-fabric
-ms.date: 04/09/2018
-ms.author: ryanwi
+ms.date: 11/29/2018
+ms.author: atsenthi
 ms.custom: mvc
-ms.openlocfilehash: 65f6252ecfa4e5850824fc7aa2e6eca2bdb88692
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
+ms.openlocfilehash: 73e88e692b68d73c90176a6f5b8fce06bdf8b8c7
+ms.sourcegitcommit: 18061d0ea18ce2c2ac10652685323c6728fe8d5f
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
-ms.locfileid: "34205750"
+ms.lasthandoff: 08/15/2019
+ms.locfileid: "69035798"
 ---
 # <a name="azure-powershell-samples"></a>Azure PowerShell 示例
 
@@ -33,7 +32,6 @@ ms.locfileid: "34205750"
 |-|-|
 | **创建群集** ||
 | [创建群集 (Azure)](./scripts/service-fabric-powershell-create-secure-cluster-cert.md)| 创建 Azure Service Fabric 群集。 |
-|[创建测试群集 (Azure)](./scripts/service-fabric-powershell-create-test-cluster.md)| 在 Azure 上创建三节点测试 Service Fabric 群集。|
 | **管理群集、节点和基础结构** ||
 | [添加应用程序证书](./scripts/service-fabric-powershell-add-application-certificate.md)| 将应用程序 X.509 证书添加到群集中的所有节点。 |
 | [更新群集 VM 上的 RDP 端口范围](./scripts/service-fabric-powershell-change-rdp-port-range.md)|更改已部署群集中群集节点 VM 上的 RDP 端口范围。|

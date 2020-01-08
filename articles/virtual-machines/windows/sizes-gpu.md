@@ -4,22 +4,22 @@ description: 列出 Azure 中适用于 Windows 虚拟机的各种 GPU 优化大�
 services: virtual-machines-windows
 documentationcenter: ''
 author: jonbeck7
-manager: jeconnoc
+manager: gwallace
 editor: ''
 tags: azure-resource-manager,azure-service-management
 ms.assetid: ''
 ms.service: virtual-machines-windows
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-windows
 ms.workload: infrastructure-services
-ms.date: 03/01/2018
+ms.date: 06/11/2019
 ms.author: jonbeck
-ms.openlocfilehash: d7f4bbe5e9950f864c6998b6a7c8844503083559
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.openlocfilehash: 0e809690f0453806402c27773ad0029fc5f64be2
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/24/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70102351"
 ---
 # <a name="gpu-optimized-virtual-machine-sizes"></a>GPU 优化虚拟机大小
 
@@ -27,9 +27,11 @@ ms.lasthandoff: 04/24/2018
 
 [!INCLUDE [virtual-machines-common-sizes-table-defs](../../../includes/virtual-machines-common-sizes-table-defs.md)]
 
-[!INCLUDE [virtual-machines-n-series-windows-support](../../../includes/virtual-machines-n-series-windows-support.md)]
+## <a name="supported-operating-systems-and-drivers"></a>支持的操作系统和驱动程序
 
-有关驱动程序安装和验证步骤，请参阅[适用于 Windows 的 N 系列驱动程序安装程序](n-series-driver-setup.md)。
+若要利用运行 Windows 的 Azure N 系列 VM 的 GPU 功能，必须安装 NVIDIA GPU 驱动程序。 [NVIDIA GPU 驱动程序扩展](../extensions/hpccompute-gpu-windows.md)可在 N 系列 VM 上安装适当的 NVIDIA CUDA 或 GRID 驱动程序。 请使用 Azure 门户或工具（例如 Azure PowerShell 或 Azure 资源管理器模板）安装或管理该扩展。 有关受支持的操作系统和部署步骤，请参阅 [NVIDIA GPU 驱动程序扩展文档](../extensions/hpccompute-gpu-windows.md)。 有关 VM 扩展的常规信息，请参阅 [Azure 虚拟机扩展和功能](../extensions/overview.md)。
+
+如果选择手动安装 NVIDIA GPU 驱动程序，请参阅[适用于 Windows 的 N 系列 GPU 驱动程序安装](n-series-driver-setup.md)，了解受支持的操作系统、驱动程序以及安装和验证步骤。
 
 [!INCLUDE [virtual-machines-n-series-considerations](../../../includes/virtual-machines-n-series-considerations.md)]
 
@@ -39,6 +41,7 @@ ms.lasthandoff: 04/24/2018
 - [高性能计算](sizes-hpc.md)
 - [内存优化](sizes-memory.md)
 - [存储优化](sizes-storage.md)
+- [前几代](sizes-previous-gen.md)
 
 ## <a name="next-steps"></a>后续步骤
 了解有关 [Azure 计算单元 (ACU)](acu.md) 如何帮助你跨 Azure SKU 比较计算性能的详细信息。

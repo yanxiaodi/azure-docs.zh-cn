@@ -3,8 +3,8 @@ title: 诊断网络之间的通信问题 - 教程 - Azure 门户 | Microsoft Doc
 description: 了解如何使用网络观察程序的 VPN 诊断功能诊断通过 Azure 虚拟网关连接到本地虚拟网络或其他虚拟网络的 Azure 虚拟网络之间的通信问题。
 services: network-watcher
 documentationcenter: na
-author: jimdial
-manager: jeconnoc
+author: KumudD
+manager: twooley
 editor: ''
 Customer intent: I need to determine why resources in a virtual network can't communicate with resources in a different network.
 ms.service: network-watcher
@@ -13,13 +13,14 @@ ms.topic: tutorial
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 04/27/2018
-ms.author: jdial
+ms.author: kumud
 ms.custom: mvc
-ms.openlocfilehash: d89c5a3f2545edd7c02b67fa9d2e2b78937a9791
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
+ms.openlocfilehash: e4dc66a5ca6e18b12586b5b03742fba3d6c3d6c4
+ms.sourcegitcommit: 44a85a2ed288f484cc3cdf71d9b51bc0be64cc33
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 04/28/2019
+ms.locfileid: "64704221"
 ---
 # <a name="tutorial-diagnose-a-communication-problem-between-networks-using-the-azure-portal"></a>教程：使用 Azure 门户诊断网络之间的通信问题
 
@@ -30,13 +31,16 @@ ms.lasthandoff: 05/03/2018
 > * 诊断网关连接问题
 > * 解决网关问题
 
-如果你还没有 Azure 订阅，可以在开始前创建一个 [免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
+如果没有 Azure 订阅，请在开始之前创建一个[免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
+
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
 ## <a name="prerequisites"></a>先决条件
 
 若要使用 VPN 诊断，必须有一个现成的正在运行的 VPN 网关。 如果没有现成的需要诊断的 VPN 网关，可以使用 [PowerShell 脚本](../vpn-gateway/scripts/vpn-gateway-sample-site-to-site-powershell.md?toc=%2fazure%2fnetwork-watcher%2ftoc.json)部署一个。 可通过以下程序运行 PowerShell 脚本：
-    - **本地安装的 PowerShell**：脚本要求使用 AzureRM PowerShell 模块 5.7.0 或更高版本。 运行 `Get-Module -ListAvailable AzureRM` 查找已安装的版本。 如果需要升级，请参阅[安装 Azure PowerShell](/powershell/azure/install-azurerm-ps)。 如果在本地运行 PowerShell，则还需运行 `Login-AzureRmAccount` 以创建与 Azure 的连接。
-    - **Azure Cloud Shell**：[Azure Cloud Shell](https://shell.azure.com/powershell) 安装并配置了最新版的 PowerShell，并允许登录到 Azure。
+- **本地安装的 PowerShell**：此脚本需要 Azure PowerShell `Az` 模块。 运行 `Get-Module -ListAvailable Az` 查找已安装的版本。 如果需要升级，请参阅[安装 Azure PowerShell](/powershell/azure/install-Az-ps)。 如果在本地运行 PowerShell，则还需运行 `Connect-AzAccount` 来创建与 Azure 的连接。
+- **Azure Cloud Shell**：[Azure Cloud Shell](https://shell.azure.com/powershell) 安装并配置了最新版的 PowerShell，并允许登录到 Azure。
 
 脚本需要大约一小时来创建 VPN 网关。 剩余步骤假定要诊断的网关是通过此脚本部署的。 如果改为诊断你自己的现有网关，结果会有所不同。
 
@@ -75,7 +79,7 @@ ms.lasthandoff: 05/03/2018
     可以看到“故障排除状态”为“不正常”，还可以在“状态”选项卡上看到问题的“摘要”和“详细信息”。
 10. 选择“操作”选项卡时，VPN 诊断会提供其他信息。 在下图所示的示例中，VPN 诊断指示应检查每个连接的运行状况：
 
-  ![操作](./media/diagnose-communication-problem-between-networks/action.png)
+    ![操作](./media/diagnose-communication-problem-between-networks/action.png)
 
 ## <a name="diagnose-a-gateway-connection"></a>诊断网关连接
 

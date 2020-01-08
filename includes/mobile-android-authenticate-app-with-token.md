@@ -1,4 +1,16 @@
-
+---
+author: conceptdev
+ms.service: app-service-mobile
+ms.topic: include
+ms.date: 11/25/2018
+ms.author: crdun
+ms.openlocfilehash: deb94cab97bd9a402676cdc5c0239da8d07ed8b2
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67173638"
+---
 上一示例介绍了标准登录过程，此过程要求在应用每次启动时客户端同时联系标识提供者和后端 Azure 服务。 此方法效率较低，并且许多用户同时启动应用时可能产生使用率相关方面的问题。 更好的方法是缓存 Azure 服务返回的授权令牌，并在使用基于提供者的登录之前首先尝试使用此令牌。
 
 > [!NOTE]
@@ -72,10 +84,10 @@
         {
             createTable();
         }
-        // If we failed to load a token cache, login and create a token cache
+        // If we failed to load a token cache, sign in and create a token cache
         else
         {
-            // Login using the Google provider.
+            // Sign in using the Google provider.
             mClient.login(MobileServiceAuthenticationProvider.Google, "{url_scheme_of_your_app}", GOOGLE_LOGIN_REQUEST_CODE);
         }
     }
@@ -84,16 +96,16 @@
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // When request completes
         if (resultCode == RESULT_OK) {
-            // Check the request code matches the one we send in the login request
+            // Check the request code matches the one we send in the sign-in request
             if (requestCode == GOOGLE_LOGIN_REQUEST_CODE) {
                 MobileServiceActivityResult result = mClient.onActivityResult(data);
                 if (result.isLoggedIn()) {
-                    // login succeeded
-                    createAndShowDialog(String.format("You are now logged in - %1$2s", mClient.getCurrentUser().getUserId()), "Success");
+                    // sign-in succeeded
+                    createAndShowDialog(String.format("You are now signed in - %1$2s", mClient.getCurrentUser().getUserId()), "Success");
                     cacheUserToken(mClient.getCurrentUser());
                     createTable();
                 } else {
-                    // login failed, check the error message
+                    // sign-in failed, check the error message
                     String errorMessage = result.getErrorMessage();
                     createAndShowDialog(errorMessage, "Error");
                 }

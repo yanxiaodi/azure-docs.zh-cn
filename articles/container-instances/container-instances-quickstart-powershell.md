@@ -1,60 +1,69 @@
 ---
-title: 快速入门 - 使用 PowerShell 创建首个 Azure 容器实例容器
-description: 在本快速入门中，我们将使用 Azure PowerShell 在 Azure 容器实例中部署一个 Windows 容器
+title: 快速入门 - 将 Docker 容器部署到 Azure 容器实例 - PowerShell
+description: 本快速入门将使用 Azure PowerShell 快速部署在隔离的 Azure 容器实例中运行的容器化 Web 应用
 services: container-instances
-author: mmacy
-manager: jeconnoc
+author: dlepow
+manager: gwallace
 ms.service: container-instances
 ms.topic: quickstart
-ms.date: 05/11/2018
-ms.author: marsma
-ms.custom: mvc
-ms.openlocfilehash: 4a1d338304dbd5e2845768b7bf0273eed23af0ec
-ms.sourcegitcommit: fc64acba9d9b9784e3662327414e5fe7bd3e972e
+ms.date: 03/21/2019
+ms.author: danlep
+ms.custom: seodec18, mvc
+ms.openlocfilehash: 7fe199d2ac228ddb0ccfd1e5bc980e680e160acf
+ms.sourcegitcommit: 4b431e86e47b6feb8ac6b61487f910c17a55d121
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/12/2018
+ms.lasthandoff: 07/18/2019
+ms.locfileid: "68325828"
 ---
-# <a name="quickstart-create-your-first-container-in-azure-container-instances"></a>快速入门：在 Azure 容器实例中创建第一个容器
+# <a name="quickstart-deploy-a-container-instance-in-azure-using-azure-powershell"></a>快速入门：使用 Azure PowerShell 在 Azure 中部署容器实例
 
-使用 Azure 容器实例，可以在 Azure 中轻松创建和管理 Docker 容器，无需预配虚拟机或采用更高级别的服务。 在本快速入门中，我们将在 Azure 中创建一个 Windows 容器，并使用完全限定的域名 (FQDN) 向 Internet 公开此容器。 此操作通过单个命令完成。 就在几分钟之内，便可在浏览器中看到正在运行的应用程序：
+使用 Azure 容器实例在 Azure 中快速方便地运行无服务器 Docker 容器。 当你不需要像 AzureKubernetes 服务这样的完整容器业务流程平台时，可以按需将应用程序部署到容器实例。
 
-![在浏览器中显示的使用 Azure 容器实例部署的应用][qs-powershell-01]
+本快速入门将使用 Azure PowerShell 部署一个独立的 Windows 容器，并使其应用程序可通过完全限定的域名 (FQDN) 使用。 在执行单个部署命令几秒钟之后，可以浏览到正在容器中运行的应用程序：
 
-如果你还没有 Azure 订阅，可以在开始前创建一个 [免费帐户](https://azure.microsoft.com/free/)。
+![在浏览器中显示的已部署到 Azure 容器实例的应用][qs-powershell-01]
 
-[!INCLUDE [cloud-shell-powershell.md](../../includes/cloud-shell-powershell.md)]
+如果没有 Azure 订阅，请在开始之前创建一个[免费帐户](https://azure.microsoft.com/free/)。
 
-如果选择在本地安装并使用 PowerShell，则本教程需要 Azure PowerShell 模块 5.5 或更高版本。 运行 `Get-Module -ListAvailable AzureRM` 即可查找版本。 如果需要升级，请参阅[安装 Azure PowerShell 模块](/powershell/azure/install-azurerm-ps)。 如果在本地运行 PowerShell，则还需运行 `Connect-AzureRmAccount` 以创建与 Azure 的连接。
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
+
+[!INCLUDE [cloud-shell-try-it.md](../../includes/cloud-shell-try-it.md)]
+
+如果选择在本地安装并使用 PowerShell，则本教程需要 Azure PowerShell 模块。 运行 `Get-Module -ListAvailable Az` 即可查找版本。 如果需要升级，请参阅[安装 Azure PowerShell 模块](/powershell/azure/install-Az-ps)。 如果在本地运行 PowerShell，则还需运行 `Connect-AzAccount` 来创建与 Azure 的连接。
 
 ## <a name="create-a-resource-group"></a>创建资源组
 
-使用 [New-AzureRmResourceGroup][New-AzureRmResourceGroup] 创建 Azure 资源组。 资源组是在其中部署和管理 Azure 资源的逻辑容器。
+Azure 容器实例（例如所有 Azure 资源）都必须部署到资源组中。 使用资源组可以组织和管理相关的 Azure 资源。
+
+首先，使用以下 [New-AzResourceGroup][New-AzResourceGroup] 命令在 eastus 位置创建名为 myResourceGroup 的资源组   ：
 
  ```azurepowershell-interactive
-New-AzureRmResourceGroup -Name myResourceGroup -Location EastUS
+New-AzResourceGroup -Name myResourceGroup -Location EastUS
 ```
 
 ## <a name="create-a-container"></a>创建容器
 
-在 [New-AzureRmContainerGroup][New-AzureRmContainerGroup] cmdlet 中提供名称、Docker 映像和 Azure 资源组可创建容器。 可以选择性地使用 DNS 名称标签向 Internet 公开容器。
+创建资源组后，可在 Azure 中运行容器。 若要使用 Azure PowerShell 创建容器实例，请在 [New-AzContainerGroup][New-AzContainerGroup] cmdlet 中提供资源组名称、容器实例名称和 Docker 容器映像。 本快速入门将使用公共 `mcr.microsoft.com/windows/servercore/iis:nanoserver` 映像。 此映像打包了 Microsoft Internet Information Services (IIS)，以在 Nano Server 中运行。
 
-执行以下命令，启动运行 Internet Information Services (IIS) 的 Nano Server 容器。 `-DnsNameLabel` 值必须在创建实例时所在的 Azure 区域中唯一，因此可能需要对此值进行修改，以确保唯一性。
+可以通过指定要打开的一个或多个端口、一个 DNS 名称标签（或同时指定两者）来向 Internet 公开容器。 在本快速入门中，你将部署一个具有 DNS 名称标签的容器，以便 IIS 可供公开访问。
+
+执行类似于以下的命令以启动容器实例。 设置在创建实例的 Azure 区域中唯一的 `-DnsNameLabel` 值。 如果收到“DNS 名称标签不可用”错误消息，请尝试使用一个不同的 DNS 名称标签。
 
  ```azurepowershell-interactive
-New-AzureRmContainerGroup -ResourceGroupName myResourceGroup -Name mycontainer -Image microsoft/iis:nanoserver -OsType Windows -DnsNameLabel aci-demo-win
+New-AzContainerGroup -ResourceGroupName myResourceGroup -Name mycontainer -Image mcr.microsoft.com/windows/servercore/iis:nanoserver -OsType Windows -DnsNameLabel aci-demo-win
 ```
 
-在数秒内应该就会收到请求的响应。 容器一开始处于“正在创建”状态，但会在一两分钟内启动。 可以使用 [Get-AzureRmContainerGroup][Get-AzureRmContainerGroup] cmdlet 检查部署状态：
+在几秒钟内，应会收到来自 Azure 的响应。 容器的 `ProvisioningState` 最初为 **Creating**，但在一到两分钟内，应会改为 **Succeeded**。 使用 [Get-AzContainerGroup][Get-AzContainerGroup] cmdlet 检查部署状态：
 
  ```azurepowershell-interactive
-Get-AzureRmContainerGroup -ResourceGroupName myResourceGroup -Name mycontainer
+Get-AzContainerGroup -ResourceGroupName myResourceGroup -Name mycontainer
 ```
 
 容器的预配状态、完全限定的域名 (FQDN) 和 IP 地址会显示在 cmdlet 的输出中：
 
 ```console
-PS Azure:\> Get-AzureRmContainerGroup -ResourceGroupName myResourceGroup -Name mycontainer
+PS Azure:\> Get-AzContainerGroup -ResourceGroupName myResourceGroup -Name mycontainer
 
 
 ResourceGroupName        : myResourceGroup
@@ -77,21 +86,21 @@ State                    : Pending
 Events                   : {}
 ```
 
-容器的 **ProvisioningState** 变成 `Succeeded` 后，请在浏览器中导航到容器的 `Fqdn`：
+容器的 `ProvisioningState` 变为 **Succeeded** 后，请在浏览器中导航到其 `Fqdn`。 如果看到类似于下图的网页，那么恭喜你！ 现已成功将 Docker 容器中运行的应用程序部署到 Azure。
 
 ![在浏览器中显示的使用 Azure 容器实例部署的 IIS][qs-powershell-01]
 
 ## <a name="clean-up-resources"></a>清理资源
 
-完成容器的操作后，可使用 [Remove-AzureRmContainerGroup][Remove-AzureRmContainerGroup] cmdlet 将其删除：
+使用完容器后，可使用 [Remove-AzContainerGroup][Remove-AzContainerGroup] cmdlet 将其删除：
 
  ```azurepowershell-interactive
-Remove-AzureRmContainerGroup -ResourceGroupName myResourceGroup -Name mycontainer
+Remove-AzContainerGroup -ResourceGroupName myResourceGroup -Name mycontainer
 ```
 
 ## <a name="next-steps"></a>后续步骤
 
-在本快速入门中，从公共 Docker 中心注册表中的映像创建了 Azure 容器实例。 若要从专用 Azure 容器注册表自行生成容器映像并将其部署到 Azure 容器实例，请继续阅读 Azure 容器实例教程。
+在本快速入门中，你已基于公共 Docker 中心注册表中的映像创建了 Azure 容器实例。 若要基于专用 Azure 容器注册表生成容器映像并部署它，请继续学习 Azure 容器实例教程。
 
 > [!div class="nextstepaction"]
 > [Azure 容器实例教程](./container-instances-tutorial-prepare-app.md)
@@ -100,7 +109,7 @@ Remove-AzureRmContainerGroup -ResourceGroupName myResourceGroup -Name mycontaine
 [qs-powershell-01]: ./media/container-instances-quickstart-powershell/qs-powershell-01.png
 
 <!-- LINKS -->
-[New-AzureRmResourceGroup]: /powershell/module/azurerm.resources/new-azurermresourcegroup
-[New-AzureRmContainerGroup]: /powershell/module/azurerm.containerinstance/new-azurermcontainergroup
-[Get-AzureRmContainerGroup]: /powershell/module/azurerm.containerinstance/get-azurermcontainergroup
-[Remove-AzureRmContainerGroup]: /powershell/module/azurerm.containerinstance/remove-azurermcontainergroup
+[New-AzResourceGroup]: /powershell/module/az.resources/new-Azresourcegroup
+[New-AzContainerGroup]: /powershell/module/az.containerinstance/new-Azcontainergroup
+[Get-AzContainerGroup]: /powershell/module/az.containerinstance/get-Azcontainergroup
+[Remove-AzContainerGroup]: /powershell/module/az.containerinstance/remove-Azcontainergroup

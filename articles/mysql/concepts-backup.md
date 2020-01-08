@@ -1,27 +1,25 @@
 ---
-title: "在 Azure Database for MySQL 中进行备份和还原"
-description: "了解如何自动备份和还原 Azure Database for MySQL 服务器。"
-services: mysql
-author: kamathsun
-ms.author: sukamat
-manager: kfile
-editor: jasonwhowell
-ms.service: mysql-database
-ms.topic: article
+title: 在 Azure Database for MySQL 中进行备份和还原
+description: 了解如何自动备份和还原 Azure Database for MySQL 服务器。
+author: ajlam
+ms.author: andrela
+ms.service: mysql
+ms.topic: conceptual
 ms.date: 02/28/2018
-ms.openlocfilehash: 1cc2c6ccb4459c5c942297cab46378502b63c5bc
-ms.sourcegitcommit: c765cbd9c379ed00f1e2394374efa8e1915321b9
-ms.translationtype: HT
+ms.openlocfilehash: dfbf416c93c78e6ba5e23819084d69e57c47edc8
+ms.sourcegitcommit: a6718e2b0251b50f1228b1e13a42bb65e7bf7ee2
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/28/2018
+ms.lasthandoff: 09/25/2019
+ms.locfileid: "71273656"
 ---
 # <a name="backup-and-restore-in-azure-database-for-mysql"></a>在 Azure Database for MySQL 中进行备份和还原
 
 Azure Database for MySQL 可自动创建服务器备份并将其存储在用户配置的本地冗余或异地冗余存储中。 备份可以用来将服务器还原到某个时间点。 备份和还原是任何业务连续性策略的基本组成部分，因为它们可以保护数据免遭意外损坏或删除。
 
-## <a name="backups"></a>备份
+## <a name="backups"></a>备用
 
-Azure Database for MySQL 可以进行完整备份、差异备份和事务日志备份。 可以通过这些备份将服务器还原到所配置的备份保留期中的任意时间点。 默认的备份保留期为七天。 可以选择将其配置为长达 35 天。 所有备份都使用 AES 256 位加密进行加密。
+Azure Database for MySQL 可以进行完整备份、差异备份和事务日志备份。 可以通过这些备份将服务器还原到所配置的备份保留期中的任意时间点。 默认的备份保留期为七天。 你可以[根据需要将其配置](howto-restore-server-portal.md#set-backup-configuration)为35天。 所有备份都使用 AES 256 位加密进行加密。
 
 ### <a name="backup-frequency"></a>备份频率
 
@@ -52,7 +50,7 @@ Azure Database for MySQL 最高可以提供 100% 的已预配服务器存储作�
 估计的恢复时间取决于若干因素，包括数据库大小、事务日志大小、网络带宽，以及在同一区域同时进行恢复的数据库总数。 恢复时间通常少于 12 小时。
 
 > [!IMPORTANT]
-> 如果删除服务器，则属于该服务器的所有数据库也会被删除且不可恢复。 无法还原已删除的服务器。
+> 删除的服务器无法还原。 如果删除服务器，则属于该服务器的所有数据库也会被删除且不可恢复。 为了防止服务器资源在部署后遭意外删除或意外更改，管理员可以利用[管理锁](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-lock-resources)。
 
 ### <a name="point-in-time-restore"></a>时间点还原
 
@@ -65,6 +63,8 @@ Azure Database for MySQL 最高可以提供 100% 的已预配服务器存储作�
 ### <a name="geo-restore"></a>异地还原
 
 如果已将服务器配置为进行异地冗余备份，则可将服务器还原到另一 Azure 区域，只要服务在该区域可用即可。 当服务器因其所在的区域发生事故而不可用时，异地还原是默认的恢复选项。 如果区域中出现的大规模事件导致数据库应用程序不可用，可以根据异地冗余备份将服务器还原到任何其他区域中的服务器。 提取备份后，会延迟一段时间才会将其复制到其他区域中。 此延迟可能长达一小时，因此发生灾难时，会有长达 1 小时的数据丢失风险。
+
+在异地还原过程中，可以更改的服务器配置包括计算的代、vCore、备份保持期和备份冗余选项。 不支持在异地还原过程中更改定价层（“基本”、“常规用途”或“内存优化”）或存储大小。
 
 ### <a name="perform-post-restore-tasks"></a>执行还原后任务
 

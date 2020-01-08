@@ -2,24 +2,23 @@
 title: 在 Mac OS X 上设置兼容 Azure Service Fabric 的开发环境 | Microsoft Docs
 description: 安装运行时、SDK 和工具并创建本地开发群集。 完成此设置后，就可以在 Mac OS X 上开始生成应用程序了。
 services: service-fabric
-documentationcenter: java
-author: sayantancs
-manager: timlt
+documentationcenter: linux
+author: suhuruli
+manager: chackdan
 editor: ''
 ms.assetid: bf84458f-4b87-4de1-9844-19909e368deb
 ms.service: service-fabric
-ms.devlang: java
-ms.topic: get-started-article
+ms.topic: conceptual
 ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 11/17/2017
-ms.author: saysa
-ms.openlocfilehash: 3046e944726bf049b7a6771d626fea357a5abf30
-ms.sourcegitcommit: 688a394c4901590bbcf5351f9afdf9e8f0c89505
-ms.translationtype: HT
+ms.author: suhuruli
+ms.openlocfilehash: 2ce8d944e7334b071a4a48f38f8c4fafaeff4c47
+ms.sourcegitcommit: 18061d0ea18ce2c2ac10652685323c6728fe8d5f
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/18/2018
-ms.locfileid: "34305195"
+ms.lasthandoff: 08/15/2019
+ms.locfileid: "69035292"
 ---
 # <a name="set-up-your-development-environment-on-mac-os-x"></a>在 Mac OS X 上设置开发环境
 > [!div class="op_single_selector"]
@@ -53,19 +52,19 @@ Azure Service Fabric 不在 Mac OS X 本机上运行。为了运行本地 Servic
         "fixed-cidr-v6": "fd00::/64"
     }
     ```
-    可以在 Docker 安装路径的 daemon.json 文件中直接更新这些设置。
+    可以在 Docker 安装路径的 daemon.json 文件中直接更新这些设置。 可直接在 Docker 中修改守护程序配置设置。 选择 **Docker 图标**，然后选择“首选项” > “守护程序” > “高级”。
     
     >[!NOTE]
     >
-    >daemon.json 文件的位置因计算机而异。 例如，~/Library/Containers/com.docker.docker/Data/database/com.docker.driver.amd64-linux/etc/docker/daemon.json。
+    >建议直接在 Docker 中修改守护程序，因为 daemon.json 文件的位置可能会因计算机而异。 例如，~/Library/Containers/com.docker.docker/Data/database/com.docker.driver.amd64-linux/etc/docker/daemon.json。
     >
-    >建议直接在 Docker 中修改守护程序配置设置。 选择 **Docker 图标**，然后选择“首选项” > “守护程序” > “高级”。
-    >
+
+    >[!TIP]
     >测试大型应用程序时，我们建议增加分配给 Docker 的资源。 为此，可以选择 **Docker 图标**，然后选择“高级”来调整核心数量和内存量。
 
 2. 在新目录中创建名为 `Dockerfile` 的文件，以生成 Service Fabric 映像：
 
-    ```dockerfile
+    ```Dockerfile
     FROM microsoft/service-fabric-onebox
     WORKDIR /home/ClusterDeployer
     RUN ./setup.sh
@@ -99,7 +98,7 @@ Azure Service Fabric 不在 Mac OS X 本机上运行。为了运行本地 Servic
 4. 现在，每当有需要时，都可以运行以下命令，快速启动 Service Fabric 的本地副本：
 
     ```bash 
-    docker run --name sftestcluster -d -p 19080:19080 -p 19000:19000 -p 25100-25200:25100-25200 mysfcluster
+    docker run --name sftestcluster -d -v /var/run/docker.sock:/var/run/docker.sock -p 19080:19080 -p 19000:19000 -p 25100-25200:25100-25200 mysfcluster
     ```
 
     >[!TIP]
@@ -110,7 +109,7 @@ Azure Service Fabric 不在 Mac OS X 本机上运行。为了运行本地 Servic
     >`docker run -itd -p 19080:19080 -p 8080:8080 --name sfonebox microsoft/service-fabric-onebox`
     >
 
-5. 群集需要一小段时间来启动，可以使用以下命令查看日志，或者通过 [http://localhost:19080](http://localhost:19080) 跳转到仪表板来查看群集运行状况：
+5. 群集需要一小段时间来启动。 运行时，可以使用以下命令查看日志，或者通过跳转到仪表板来查看群集运行状况 [http://localhost:19080](http://localhost:19080)：
 
     ```bash 
     docker logs sftestcluster
@@ -118,7 +117,7 @@ Azure Service Fabric 不在 Mac OS X 本机上运行。为了运行本地 Servic
 
 
 
-6. 完成后，可以使用以下命令来停止并清理容器：
+6. 若要停止并清理容器，请使用以下命令。 但是，我们将在下一步中使用此容器。
 
     ```bash 
     docker rm -f sftestcluster
@@ -152,25 +151,31 @@ Service Fabric 提供基架工具，可以借助此类工具，使用 Yeoman 模
     node -v
     npm -v
     ```
-2. 通过 NPM 在计算机上安装 [Yeoman](http://yeoman.io/) 模板生成器：
+2. 通过 NPM 在计算机上安装 [Yeoman](https://yeoman.io/) 模板生成器：
 
     ```bash
     npm install -g yo
     ```
-3. 请按入门[文档](service-fabric-get-started-linux.md)中的步骤，安装首选的 Yeoman 生成器。 若要使用 Yeoman 来创建 Service Fabric 应用程序，请执行以下步骤：
+3. 请按入门[文档](service-fabric-get-started-linux.md#set-up-yeoman-generators-for-containers-and-guest-executables)中的步骤，安装首选的 Yeoman 生成器。 若要使用 Yeoman 来创建 Service Fabric 应用程序，请执行以下步骤：
 
     ```bash
     npm install -g generator-azuresfjava       # for Service Fabric Java Applications
     npm install -g generator-azuresfguest      # for Service Fabric Guest executables
     npm install -g generator-azuresfcontainer  # for Service Fabric Container Applications
     ```
-4. 若要在 Mac 上生成 Service Fabric Java 应用程序，必须在主机上安装 JDK 1.8 和 Gradle。 此软件可以使用 [HomeBrew](https://brew.sh/) 进行安装，如下所示： 
+4. 安装生成器后，可通过运行 `yo azuresfguest` 或 `yo azuresfcontainer` 分别创建来宾可执行文件或容器服务。
+
+5. 若要在 Mac 上生成 Service Fabric Java 应用程序，必须在主机上安装 JDK 1.8 和 Gradle。 此软件可以使用 [HomeBrew](https://brew.sh/) 进行安装，如下所示： 
 
     ```bash
     brew update
     brew cask install java
     brew install gradle
     ```
+
+    > [!IMPORTANT]
+    > 的`brew cask install java`当前版本可能安装最新版本的 JDK。
+    > 请确保安装 JDK 8。
 
 ## <a name="deploy-your-application-on-your-mac-from-the-terminal"></a>通过 Terminal 在 Mac 上部署应用程序
 

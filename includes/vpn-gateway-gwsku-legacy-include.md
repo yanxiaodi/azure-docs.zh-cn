@@ -1,3 +1,16 @@
+---
+author: cherylmc
+ms.service: vpn-gateway
+ms.topic: include
+ms.date: 11/09/2018
+ms.author: cherylmc
+ms.openlocfilehash: f2ee442d0d6fecf34449ad28f058615a1274bbea
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67172838"
+---
 旧版（老版）VPN 网关 SKU 为：
 
 * 基本

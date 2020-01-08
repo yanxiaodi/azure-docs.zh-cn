@@ -1,42 +1,38 @@
 ---
-title: 使用 SQL 和 Python 在 SQL Server 中为数据创建特征 | Microsoft Docs
-description: 处理 SQL Azure 中的数据
+title: 使用 SQL 和 Python 在 SQL Server 中创建功能 - Team Data Science Process
+description: 使用 SQL 和 Python 为 Azure 上的 SQL Server VM 中存储的数据生存功能 - 这是 Team Data Science Process 的一部分。
 services: machine-learning
-documentationcenter: ''
-author: deguhath
+author: marktab
 manager: cgronlun
-editor: ''
-ms.assetid: bf1f4a6c-7711-4456-beb7-35fdccd46a44
+editor: cgronlun
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/21/2017
-ms.author: deguhath
-ms.openlocfilehash: 206ae59ff84699eb8419d068d2f2102759ac82c1
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: 7bc44d8e755af3d212d616425c6a1fd925172298
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "65602932"
 ---
 # <a name="create-features-for-data-in-sql-server-using-sql-and-python"></a>使用 SQL 和 Python 在 SQL Server 中为数据创建功能
 本文档演示如何在 Azure 上为存储于 SQL Server VM 中的数据生成功能，用于帮助算法更有效地从数据中进行学习。 可以使用 SQL 或 Python 等编程语言来完成此任务。 下面演示了这两种方法。
 
-[!INCLUDE [cap-create-features-data-selector](../../../includes/cap-create-features-selector.md)]
-
-该**菜单**链接到介绍如何在各种环境中为数据创建特征的主题。 此任务是[团队数据科学过程 (TDSP)](https://azure.microsoft.com/documentation/learning-paths/cortana-analytics-process/) 中的一个步骤。
+此任务是[团队数据科学过程 (TDSP)](https://docs.microsoft.com/azure/machine-learning/team-data-science-process/) 中的一个步骤。
 
 > [!NOTE]
-> 有关实际的示例，可以参阅 [NYC 出租车数据集](http://www.andresmh.com/nyctaxitrips/) [使用 IPython Notebook 和 SQL Server 处理 NYC 数据](https://github.com/Azure/Azure-MachineLearning-DataScience/blob/master/Misc/DataScienceProcess/iPythonNotebooks/machine-Learning-data-science-process-sql-walkthrough.ipynb)获取端到端的演练。
+> 有关实际的示例，可以参阅 [NYC 出租车数据集](https://www.andresmh.com/nyctaxitrips/) [使用 IPython Notebook 和 SQL Server 处理 NYC 数据](https://github.com/Azure/Azure-MachineLearning-DataScience/blob/master/Misc/DataScienceProcess/iPythonNotebooks/machine-Learning-data-science-process-sql-walkthrough.ipynb)获取端到端的演练。
 > 
 > 
 
-## <a name="prerequisites"></a>先决条件
+## <a name="prerequisites"></a>必备组件
 本文假设用户具备以下条件：
 
-* 已创建 Azure 存储帐户。 如果需要说明，请参阅[创建 Azure 存储帐户](../../storage/common/storage-create-storage-account.md#create-a-storage-account)
-* 在 SQL Server 中存储的数据。 如果尚未存储，请参阅[将数据移到 Azure 机器学习 Azure SQL Database](move-sql-azure.md) 以便获取有关如何移动数据的说明。
+* 已创建 Azure 存储帐户。 如果需要说明，请参阅[创建 Azure 存储帐户](../../storage/common/storage-quickstart-create-account.md)
+* 在 SQL Server 中存储的数据。 如果尚未存储，请参阅[将数据移到 Azure 机器学习的 Azure SQL 数据库](move-sql-azure.md)以便获取有关如何移动数据的说明。
 
 ## <a name="sql-featuregen"></a>使用 SQL 生成特征
 在本部分中，介绍使用 SQL 生成功能的方法：  
@@ -67,12 +63,12 @@ ms.lasthandoff: 05/03/2018
 ### <a name="sql-featurerollout"></a>从单个列推出功能
 在此部分中，将演示如何在表格中推出单列以生成其他功能。 该示例假定用户尝试在其中生成功能的表中，具有一个纬度或经度列。
 
-下面简要介绍纬度/经度位置数据（来自 stackoverflow 的资源`http://gis.stackexchange.com/questions/8650/how-to-measure-the-accuracy-of-latitude-and-longitude`）。 下面是一些有用的信息，可帮助在从字段创建特征之前，了解位置数据：
+下面简要介绍纬度/经度位置数据（来自 stackoverflow 的资源`https://gis.stackexchange.com/questions/8650/how-to-measure-the-accuracy-of-latitude-and-longitude`）。 下面是一些有用的信息，可帮助在从字段创建特征之前，了解位置数据：
 
 * 符号指示我们在地球上的北部还是南部、东部还是西部。
 * 非零百位数指示使用的是经度，而不是纬度。
 * 十位数提供约 1000 公里的位置。 它提供处于哪个大陆或大洋的有用信息。
-* 个位（十进制度）代表 111 公里以上的（60 海里，约 69 英里）位置。 它指示大致处于哪一个大州或国家/地区。
+* 个位（十进制度）代表 111 公里以上的（60 海里，约 69 英里）位置。 它指示大致，哪一个大州或国家/地区中我们是。
 * 第一个小数位值达 11.1 km：可将相邻的大城市区分开。
 * 第二位小数值达 1.1 km：可将村庄分开。
 * 第三位小数值达 110 m：可以定大型农业区域或工业园区。
@@ -115,10 +111,10 @@ ms.lasthandoff: 05/03/2018
     import pyodbc
     conn = pyodbc.connect('DRIVER={SQL Server};SERVER=<servername>;DATABASE=<dbname>;UID=<username>;PWD=<password>')
 
-Python 中的 [Pandas 库](http://pandas.pydata.org/)提供一组丰富的数据结构，以及针对 Python 编程的数据操作的数据分析工具。 以下代码读取从 SQL Server 数据库返回到 Pandas 数据帧的结果：
+Python 中的 [Pandas 库](https://pandas.pydata.org/)提供一组丰富的数据结构，以及针对 Python 编程的数据操作的数据分析工具。 以下代码读取从 SQL Server 数据库返回到 Pandas 数据帧的结果：
 
     # Query database and load the returned results in pandas data frame
-    data_frame = pd.read_sql('''select <columnname1>, <cloumnname2>... from <tablename>''', conn)
+    data_frame = pd.read_sql('''select <columnname1>, <columnname2>... from <tablename>''', conn)
 
 现在可根据 [Panda 创建 Azure blob 存储数据](create-features-blob.md) 主题中的说明来使用 Pandas 数据框架。
 

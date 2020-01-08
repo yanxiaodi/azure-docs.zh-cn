@@ -1,3 +1,16 @@
+---
+author: clemensv
+ms.service: service-bus-relay
+ms.topic: include
+ms.date: 11/09/2018
+ms.author: clemensv
+ms.openlocfilehash: 9d4f7faa18ee7fae158afb42b8c42287e61dd103
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67173537"
+---
 ### <a name="create-a-nodejs-application"></a>创建 Node.js 应用程序
 
 创建一个名为 `sender.js` 的新 JavaScript 文件。

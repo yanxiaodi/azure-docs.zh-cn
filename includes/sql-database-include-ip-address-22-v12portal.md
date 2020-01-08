@@ -1,26 +1,28 @@
-
-<!--
-includes/sql-database-include-ip-address-22-v12portal.md
-
-Latest Freshness check:  2016-03-21 , daleche.
-
-As of circa 2015-09-04, the following topics might include this include:
-articles/sql-database/sql-database-configure-firewall-settings.md
-articles/sql-database/sql-database-connect-query.md
-
-
-## Server-level firewall rules
-
-### Add a server-level firewall rule through the new Azure portal
--->
-
-
+---
+title: 服务器级别防火墙规则
+description: 服务器级别防火墙规则
+keywords: sql 连接, 连接字符串
+services: sql-database
+author: dalechen
+manager: craigg
+ms.service: sql-database
+ms.custom: develop apps
+ms.topic: include
+ms.date: 07/13/2018
+ms.author: ninarn
+ms.openlocfilehash: 8d0f9899dbb7599340b8d15ca010a0157011fb9e
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67173029"
+---
 1. 登录到 [Azure 门户](https://portal.azure.com/)。
 
-2. 在左侧的列表中，选择“所有服务”。 
+2. 在左侧的列表中，选择“所有服务”  。
 
 3. 滚动并选择“SQL Server”。 
-   
+
     ![在门户中找到 Azure SQL 数据库服务器][b21-FindServerInPortal]
 5. 在筛选器文本框中，开始键入服务器的名称。 此时会显示行。
 
@@ -28,17 +30,16 @@ articles/sql-database/sql-database-connect-query.md
 
 7. 在服务器边栏选项卡上选择“设置”。 
 
-8. 选择“防火墙”。 
-   
+8. 选择“防火墙”  。
+
     ![选择“设置”>“防火墙”][b31-SettingsFirewallNavig]
-9. 选择“添加客户端 IP”。 在第一个文本框中键入新规则的名称。
+9. 选择“添加客户端 IP”。  在第一个文本框中键入新规则的名称。
 
 10. 键入要启用的范围的下限和上限 IP 地址值。
-    
+
     * 为方便起见，可以让下限值以 **.0** 结尾，让上限值以 **.255** 结尾。
-    
-    ![添加允许的 IP 地址范围][b41-AddRange]
-11. 选择“保存”。
+
+11. 选择“保存”。 
 
 <!-- Image references. -->
 

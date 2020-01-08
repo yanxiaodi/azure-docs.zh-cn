@@ -1,25 +1,25 @@
 ---
-title: 在 Azure 搜索中对多组织建模 | Microsoft Docs
+title: 在一个服务中针对内容隔离进行多租户建模 - Azure 搜索
 description: 了解使用 Azure 搜索时多租户 SaaS 应用程序的通用设计模式。
-manager: jlembicz
-author: ashmaka
+manager: nitinme
+author: LiamCavanagh
 services: search
 ms.service: search
-ms.devlang: NA
 ms.topic: conceptual
-ms.date: 11/09/2017
-ms.author: ashmaka
-ms.openlocfilehash: 765f9c4600f762efdd7d57681529751e99c13894
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.date: 07/30/2018
+ms.author: liamca
+ms.openlocfilehash: 8b7538da41241f005298537c2969e5fce72b3c38
+ms.sourcegitcommit: 7a6d8e841a12052f1ddfe483d1c9b313f21ae9e6
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 08/30/2019
+ms.locfileid: "70182232"
 ---
 # <a name="design-patterns-for-multitenant-saas-applications-and-azure-search"></a>多租户 SaaS 应用程序与 Azure 搜索的设计模式
 多租户应用程序可以为无法看到或共享任何其他租户数据的任意数量的租户，提供相同服务和功能。 本文档讨论的租户隔离策略适用于使用 Azure 搜索生成的多租户应用程序。
 
 ## <a name="azure-search-concepts"></a>Azure 搜索概念
-作为一种搜索即服务解决方案，Azure 搜索允许开发人员将丰富的搜索体验添加到应用程序中，而无需管理任何基础结构，或者成为信息检索方面的专家。 数据上载到服务，并存储在云中。 通过对 Azure 搜索 API 发出简单请求，即可修改和搜索数据。 [此文](http://aka.ms/whatisazsearch)提供了服务概述。 在讨论设计模式之前，应务必了解 Azure 搜索中的某些概念。
+作为一种搜索即服务解决方案，Azure 搜索允许开发人员将丰富的搜索体验添加到应用程序中，而无需管理任何基础结构，或者成为信息检索方面的专家。 数据上载到服务，并存储在云中。 通过对 Azure 搜索 API 发出简单请求，即可修改和搜索数据。 [此文](https://aka.ms/whatisazsearch)提供了服务概述。 在讨论设计模式之前，应务必了解 Azure 搜索中的某些概念。
 
 ### <a name="search-services-indexes-fields-and-documents"></a>搜索服务、索引、字段和文档
 使用 Azure 搜索时，即已订阅一种*搜索服务*。 当数据上传到 Azure 搜索后，将存储在搜索服务内的一个*索引*中。 单个服务中可能有大量索引。 若要利用熟悉的数据库概念，搜索服务可以比作一个数据库，而服务中的索引可以比作数据库中的表。
@@ -42,9 +42,7 @@ Azure 搜索中有一些不同的[定价层](https://azure.microsoft.com/pricing
 | 每个服务的副本数上限 |3 |12 |12 |12 |12 |
 | 每个服务的分区数上限 |1 |12 |12 |12 |3 |
 | 每个服务的搜索单位数上限（副本*分区） |3 |36 |36 |36 |36（最多 3 个分区） |
-| 每个服务的文档数上限 |1 百万 |1.8 亿 |7.2 亿 |14 亿 |6 亿 |
 | 每个服务的存储上限 |2 GB |300 GB |1.2 TB |2.4 TB |600 GB |
-| 每个分区的文档数上限 |1 百万 |1500 万 |6000 万 |1.2 亿 |2 亿 |
 | 每个分区的存储上限 |2 GB |25 GB |100 GB |200 GB |200 GB |
 | 每个服务的索引数上限 |5 |50 |200 |200 |3000（最多 1000 个索引/分区） |
 
@@ -58,20 +56,20 @@ S3 HD 通过以使用分区扩展索引的能力，换得在单个服务中承�
 ## <a name="considerations-for-multitenant-applications"></a>多租户应用程序注意事项
 多租户应用程序必须在租户之间高效分配资源，同时在各租户之间保持一定程度的隐私。 设计此类应用程序的体系结构时需要了解几个注意事项：
 
-* *租户隔离*：应用程序开发人员需要采取适当措施确保没有未经授权的租户，或者不会出现对其他租户数据的意外访问。 从数据隐私的角度之上来看，租户隔离策略需要有效管理共享资源并且避免受到干扰性邻户影响。
-* *云资源成本：*与任何其他应用程序一样，软件解决方案必须将保持成本竞争力作为多租户应用程序的一部分考虑。
-* *操作易用性：*开发多租户体系结构时，对应用程序操作和复杂性的影响是一个重要的考虑因素。 Azure 搜索具有 [99.9% SLA](https://azure.microsoft.com/support/legal/sla/search/v1_0/)。
-* *全球分布：*多租户应用程序可能需要高效地为分布在全球范围内的租户提供服务。
-* *可扩展性：*应用程序开发人员需要考虑如何在以下二者之间进行协调：维护足够低级别的应用程序复杂性和设计随着租户数量和租户数据与工作负载增加进行缩放的应用程序。
+* *租户隔离：* 应用程序开发人员需要采取适当措施，确保任何租户都无法对其他租户的数据进行未经授权或未经允许的访问。 从数据隐私的角度之上来看，租户隔离策略需要有效管理共享资源并且避免受到干扰性邻户影响。
+* *云资源成本：* 与任何其他应用程序一样，软件解决方案必须将保持成本竞争力作为多租户应用程序的一部分考虑。
+* *操作易用性：* 开发多租户体系结构时，对应用程序操作和复杂性的影响是一个重要的考虑因素。 Azure 搜索具有 [99.9% SLA](https://azure.microsoft.com/support/legal/sla/search/v1_0/)。
+* *全球分布：* 多租户应用程序可能需要高效地为分布在全球范围内的租户提供服务。
+* *可伸缩性：* 应用程序开发人员需要考虑如何在以下二者之间进行协调：保持应用程序复杂性级别足够低，以及所设计的应用程序可随着租户数量和租户数据与工作负荷大小的增加而进行扩展。
 
 Azure 搜索提供几个可用于隔离租户数据和工作负载的边界。
 
 ## <a name="modeling-multitenancy-with-azure-search"></a>使用 Azure 搜索对多组织建模
 对于多租户方案，应用程序开发人员使用一个或多个搜索服务，并在各服务和/或各索引中划分其租户。 Azure 搜索具有一些适用于对多租户方案建模的常见模式：
 
-1. *每租户索引：*每个租户都在搜索服务中有自己的索引，可与其他租户共享。
-2. *每租户服务：*每个租户都有自己专用的 Azure 搜索服务，从而提供最高级别的数据和工作负载分隔。
-3. *二者混合：*为较大、活跃度较高的租户分配专用服务，而为较小的租户分配共享服务中的各个索引。
+1. *每租户索引：* 每个租户都在搜索服务中有自己与其他租户共享的索引。
+2. *每租户服务：* 每个租户都有自己专用的 Azure 搜索服务，从而提供最高级别的数据和工作负荷分隔。
+3. *二者混合：* 为较大、活跃度较高的租户分配专用服务，而为较小的租户分配共享服务中的单个索引。
 
 ## <a name="1-index-per-tenant"></a>1.每租户索引
 ![每租户索引模型描绘](./media/search-modeling-multitenant-saas-applications/azure-search-index-per-tenant.png)
@@ -127,7 +125,7 @@ Azure 搜索允许各索引和索引总数的规模增加。 如果选择相应�
 > 
 
 ## <a name="next-steps"></a>后续步骤
-Azure 搜索对于许多应用程序而言都是一个极具吸引力的选择，[阅读有关该服务可靠功能的更多信息](http://aka.ms/whatisazsearch)。 评估多租户应用程序的各个设计模式时，请考虑[各个定价层](https://azure.microsoft.com/pricing/details/search/)和各自的[服务限制](search-limits-quotas-capacity.md)，定制最合适的 Azure 搜索以满足所有大小的应用程序工作负载和体系结构需求。
+Azure 搜索对于许多应用程序而言都是一个极具吸引力的选择，[阅读有关该服务可靠功能的更多信息](https://aka.ms/whatisazsearch)。 评估多租户应用程序的各个设计模式时，请考虑[各个定价层](https://azure.microsoft.com/pricing/details/search/)和各自的[服务限制](search-limits-quotas-capacity.md)，定制最合适的 Azure 搜索以满足所有大小的应用程序工作负载和体系结构需求。
 
 有关 Azure 搜索和多租户方案的任何疑问都可发往 azuresearch_contact@microsoft.com。
 

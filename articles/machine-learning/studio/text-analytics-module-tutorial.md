@@ -1,27 +1,25 @@
 ---
-title: 在 Azure 机器学习工作室中创建文本分析模型 | Microsoft Docs
+title: 创建情绪分析模型
+titleSuffix: Azure Machine Learning Studio
 description: 如何使用文本预处理、N 元语法或特征哈希模块在 Azure 机器学习工作室中创建文本分析模型
 services: machine-learning
-documentationcenter: ''
-author: rastala
-ms.author: roastala
-manager: cgronlun
-editor: ''
-ms.assetid: 08cd6723-3ae6-4e99-a924-e650942e461b
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.subservice: studio
+ms.topic: conceptual
+author: xiaoharper
+ms.author: amlstudiodocs
+ms.custom: seodec18
 ms.date: 03/14/2018
-ms.openlocfilehash: 6a89d77c84f7a7dd15b9d73252ac7373a7f1faf9
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: 08d62e7a6c9503d415fe144da57eee72ce3bfafd
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60636546"
 ---
-# <a name="create-text-analytics-models-in-azure-machine-learning-studio"></a>在 Azure 机器学习工作室中创建文本分析模型
-可以使用 Azure 机器学习构建和实现文本分析模型的操作化。 例如，这些模型可以帮助你解决文档分类或情绪分析问题。
+# <a name="create-a-sentiment-analysis-model-in-azure-machine-learning-studio"></a>在 Azure 机器学习工作室中创建情绪分析模型
+
+可以使用 Azure 机器学习工作室构建和实现文本分析模型的操作化。 例如，这些模型可以帮助你解决文档分类或情绪分析问题。
 
 在文本分析实验中，通常需要：
 
@@ -31,13 +29,13 @@ ms.lasthandoff: 03/23/2018
 4. 评分和验证模型
 5. 将模型部署到生产环境
 
-在本教程中，当我们使用“Amazon 书评数据集”逐步解说情绪分析模型时，可以学到这些步骤（请参阅研究报告 ”Biographies, Bollywood, Boom-boxes and Blenders: Domain Adaptation for Sentiment Classification”，作者：Association of Computational Linguistics (ACL) 的 John Blitzer、Mark Dredze 和 Fernando Pereira，2007 年）。此数据集是由评论分数（1-2 或 4-5）和自由格式文字组成。 目标是预测评论分数：低 (1-2) 或高 (4-5)。
+在本教程中，我们将使用 Amazon Book Reviews 数据集浏览情绪分析模型，同时学习这些步骤（请参阅以下研究论文：“Biographies, Bollywood, Boom-boxes and Blenders:Domain Adaptation for Sentiment Classification”，作者：John Blitzer、Mark Dredze 和 Fernando Pereira；Association of Computational Linguistics (ACL)，2007。）此数据集是由评论分数（1-2 或 4-5）和自由格式文字组成。 目标是预测评论分数：低 (1-2) 或高 (4-5)。
 
 可以在 Azure AI 库中找到本教程中涵盖的实验：
 
-[预测书评](https://gallery.cortanaintelligence.com/Experiment/Predict-Book-Reviews-1)
+[预测书评](https://gallery.azure.ai/Experiment/Predict-Book-Reviews-1)
 
-[预测书评 - 预测实验](https://gallery.cortanaintelligence.com/Experiment/Predict-Book-Reviews-Predictive-Experiment-1)
+[预测书评 - 预测实验](https://gallery.azure.ai/Experiment/Predict-Book-Reviews-Predictive-Experiment-1)
 
 ## <a name="step-1-clean-and-preprocess-text-dataset"></a>步骤 1：清除并预处理的文本数据集
 首先，我们将评论分数划分为低和高两类，这样可将问题公式化为双类别分类。 我们使用[编辑元数据](https://msdn.microsoft.com/library/azure/dn905986.aspx)和[分组分类值](https://msdn.microsoft.com/library/azure/dn906014.aspx)模块。
@@ -52,7 +50,7 @@ ms.lasthandoff: 03/23/2018
 
 预处理完毕后，我们将数据拆分为定型和测试集。
 
-## <a name="step-2-extract-numeric-feature-vectors-from-pre-processed-text"></a>步骤2：从预处理文本中提取数值特征向量
+## <a name="step-2-extract-numeric-feature-vectors-from-pre-processed-text"></a>步骤 2：从预处理文本中提取数值特征向量
 要生成文本数据模型，通常需要将自由格式文本转换为数字特征向量。 在此示例中，我们使用[从文本提取 N 元语法功能](https://msdn.microsoft.com/library/azure/mt762916.aspx)模块，将文本数据转换为此类格式。 此模块使用一列以空格分隔的字词，并计算出现在数据集中的字典的字词，或 N 元语法的字词。 然后，它将计算每条记录中每个字词或 N 元语法出现的次数，并从这些计数创建特征向量。 在本教程中，我们将 N 元语法大小设置为 2，这样我们的特征向量可包含单个字词和两个后续字词的组合。
 
 ![提取 N 元语法](./media/text-analytics-module-tutorial/extract-ngrams.png)
@@ -68,7 +66,7 @@ ms.lasthandoff: 03/23/2018
 ## <a name="step-3-train-classification-or-regression-model"></a>步骤 3：定型分类或回归模型
 文本现已转换为数值特征列。 数据集仍包含上一阶段中的字符串列，因此我们使用“选择数据集中的列中”来将其排除。
 
-然后，我们使用[二元逻辑回归](https://msdn.microsoft.com/library/azure/dn905994.aspx)来预测我们的目标：高或低评论分数。 在这种情况下，文本分析问题已转换为常规分类问题。 可以使用 Azure 机器学习中提供的工具来改进模型。 例如，可以实验不同的分类器，以了解如何它们给出结果的准确度，或使用超参数调整改进准确度。
+然后，我们使用[二元逻辑回归](https://msdn.microsoft.com/library/azure/dn905994.aspx)来预测我们的目标：高或低评论分数。 在这种情况下，文本分析问题已转换为常规分类问题。 可以使用 Azure 机器学习工作室中提供的工具来改进模型。 例如，可以实验不同的分类器，以了解如何它们给出结果的准确度，或使用超参数调整改进准确度。
 
 ![定型和评分](./media/text-analytics-module-tutorial/scoring-text.png)
 

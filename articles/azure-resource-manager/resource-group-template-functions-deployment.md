@@ -1,24 +1,17 @@
 ---
 title: Azure 资源管理器模板函数 - 部署 | Microsoft Docs
 description: 介绍可在 Azure 资源管理器模板中使用的用于检索部署信息的函数。
-services: azure-resource-manager
-documentationcenter: na
 author: tfitzmac
-manager: timlt
-editor: tysonn
-ms.assetid: ''
 ms.service: azure-resource-manager
-ms.devlang: na
-ms.topic: reference
-ms.tgt_pltfrm: na
-ms.workload: na
-ms.date: 09/05/2017
+ms.topic: conceptual
+ms.date: 09/13/2019
 ms.author: tomfitz
-ms.openlocfilehash: 725bc41f96359d4bf0d9d570f73f91dba5da2cab
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.openlocfilehash: 12698d1655c414b1ee3b9866cc975dc53e4ef095
+ms.sourcegitcommit: 909ca340773b7b6db87d3fb60d1978136d2a96b0
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
+ms.lasthandoff: 09/13/2019
+ms.locfileid: "70983995"
 ---
 # <a name="deployment-functions-for-azure-resource-manager-templates"></a>用于 Azure 资源管理器模板的部署函数 
 
@@ -32,7 +25,7 @@ Resource Manager 提供以下函数，用于从与部署相关的模板和值部
 
 <a id="deployment" />
 
-## <a name="deployment"></a>部署
+## <a name="deployment"></a>deployment
 `deployment()`
 
 返回有关当前部署操作的信息。
@@ -85,6 +78,8 @@ Resource Manager 提供以下函数，用于从与部署相关的模板和值部
 }
 ```
 
+[部署到 Azure 订阅](deploy-to-subscription.md)而不是资源组时，返回对象包含 `location` 属性。 部署本地模板或外部模板时包含 location 属性。
+
 ### <a name="remarks"></a>备注
 
 可以根据父模板的 URI，使用 deployment() 链接到另一个模板。
@@ -94,6 +89,8 @@ Resource Manager 提供以下函数，用于从与部署相关的模板和值部
     "sharedTemplateUrl": "[uri(deployment().properties.templateLink.uri, 'shared-resources.json')]"  
 }
 ```  
+
+如果从门户中的部署历史记录重新部署模板，则该模板将部署为本地文件。 部署函数不返回 `templateLink` 属性。 如果模板依赖于 `templateLink` 来构建指向另一个模板的链接，请不要使用门户进行重新部署， 而是使用最初部署模板时使用的命令。
 
 ### <a name="example"></a>示例
 
@@ -137,30 +134,20 @@ Resource Manager 提供以下函数，用于从与部署相关的模板和值部
 }
 ```
 
-要使用 Azure CLI 部署此示例模板，请使用：
-
-```azurecli-interactive
-az group deployment create -g functionexamplegroup --template-uri https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/azure-resource-manager/functions/deployment.json
-```
-
-要使用 PowerShell 部署此示例模板，请使用：
-
-```powershell
-New-AzureRmResourceGroupDeployment -ResourceGroupName functionexamplegroup -TemplateUri https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/azure-resource-manager/functions/deployment.json
-```
+对于使用部署功能的订阅级别模板，请参阅[订阅部署功能](https://github.com/Azure/azure-docs-json-samples/blob/master/azure-resource-manager/functions/deploymentsubscription.json)。 它使用 `az deployment create` 或 `New-AzDeployment` 命令进行部署。
 
 <a id="parameters" />
 
-## <a name="parameters"></a>parameters
+## <a name="parameters"></a>参数
 `parameters(parameterName)`
 
 返回一个参数值。 指定的参数名称必须已在模板的 parameters 节中定义。
 
-### <a name="parameters"></a>parameters
+### <a name="parameters"></a>Parameters
 
-| 参数 | 必选 | Type | 说明 |
+| 参数 | 必填 | 类型 | 描述 |
 |:--- |:--- |:--- |:--- |
-| parameterName |是 |字符串 |要返回的参数名称。 |
+| parameterName |是 |string |要返回的参数名称。 |
 
 ### <a name="return-value"></a>返回值
 
@@ -245,25 +232,15 @@ New-AzureRmResourceGroupDeployment -ResourceGroupName functionexamplegroup -Temp
 
 上面具有默认值的示例的输出为：
 
-| 名称 | Type | 值 |
+| 姓名 | 类型 | ReplTest1 |
 | ---- | ---- | ----- |
 | stringOutput | String | option 1 |
-| intOutput | int | 1 |
-| objectOutput | 对象 | {"one": "a", "two": "b"} |
-| arrayOutput | Array | [1, 2, 3] |
+| intOutput | Int | 1 |
+| objectOutput | Object | {"one": "a", "two": "b"} |
+| arrayOutput | 阵列 | [1, 2, 3] |
 | crossOutput | String | option 1 |
 
-要使用 Azure CLI 部署此示例模板，请使用：
-
-```azurecli-interactive
-az group deployment create -g functionexamplegroup --template-uri https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/azure-resource-manager/functions/parameters.json
-```
-
-要使用 PowerShell 部署此示例模板，请使用：
-
-```powershell
-New-AzureRmResourceGroupDeployment -ResourceGroupName functionexamplegroup -TemplateUri https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/azure-resource-manager/functions/parameters.json
-```
+有关使用参数的详细信息，请参阅[Azure 资源管理器模板中的参数](template-parameters.md)。
 
 <a id="variables" />
 
@@ -272,9 +249,9 @@ New-AzureRmResourceGroupDeployment -ResourceGroupName functionexamplegroup -Temp
 
 返回变量的值。 指定的变量名称必须已在模板的 variables 节中定义。
 
-### <a name="parameters"></a>parameters
+### <a name="parameters"></a>Parameters
 
-| 参数 | 必选 | Type | 说明 |
+| 参数 | 必填 | type | 描述 |
 |:--- |:--- |:--- |:--- |
 | variableName |是 |String |要返回的变量名称。 |
 
@@ -348,28 +325,18 @@ New-AzureRmResourceGroupDeployment -ResourceGroupName functionexamplegroup -Temp
 
 上面具有默认值的示例的输出为：
 
-| 名称 | Type | 值 |
+| 姓名 | 类型 | ReplTest1 |
 | ---- | ---- | ----- |
 | exampleOutput1 | String | myVariable |
-| exampleOutput2 | Array | [1, 2, 3, 4] |
+| exampleOutput2 | 阵列 | [1, 2, 3, 4] |
 | exampleOutput3 | String | myVariable |
-| exampleOutput4 |  对象 | {"property1": "value1", "property2": "value2"} |
+| exampleOutput4 |  Object | {"property1": "value1", "property2": "value2"} |
 
-要使用 Azure CLI 部署此示例模板，请使用：
-
-```azurecli-interactive
-az group deployment create -g functionexamplegroup --template-uri https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/azure-resource-manager/functions/variables.json
-```
-
-要使用 PowerShell 部署此示例模板，请使用：
-
-```powershell
-New-AzureRmResourceGroupDeployment -ResourceGroupName functionexamplegroup -TemplateUri https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/azure-resource-manager/functions/variables.json
-```
+有关使用变量的详细信息，请参阅[Azure 资源管理器模板中的变量](template-variables.md)。
 
 ## <a name="next-steps"></a>后续步骤
 * 有关 Azure 资源管理器模板中各部分的说明，请参阅[创作 Azure 资源管理器模板](resource-group-authoring-templates.md)。
-* 要合并多个模板，请参阅[将链接的模板与 Azure 资源管理器配合使用](resource-group-linked-templates.md)。
+* 若要合并多个模板，请参阅[将链接的模板与 Azure 资源管理器配合使用](resource-group-linked-templates.md)。
 * 若要在创建资源类型时迭代指定的次数，请参阅[在 Azure 资源管理器中创建多个资源实例](resource-group-create-multiple.md)。
-* 若要查看如何部署已创建的模板，请参阅[使用 Azure 资源管理器模板部署应用程序](resource-group-template-deploy.md)。
+* 要查看如何部署已创建的模板，请参阅[使用 Azure 资源管理器模板部署应用程序](resource-group-template-deploy.md)。
 

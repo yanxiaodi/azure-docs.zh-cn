@@ -1,32 +1,28 @@
 ---
-title: "在 Azure Data Lake Analytics 中使用 R 扩展 U-SQL 脚本 | Microsoft Docs"
-description: "了解如何在 U-SQL 脚本中运行 R 代码"
+title: 在 Azure Data Lake Analytics 中使用 R 扩展 U-SQL 脚本
+description: 了解如何使用 Azure Data Lake Analytics 在 U SQL 脚本中运行 R 代码。 嵌入 R 代码内联或从文件引用。
 services: data-lake-analytics
-documentationcenter: 
-author: saveenr
-manager: sukvg
-editor: cgronlun
-ms.assetid: c1c74e5e-3e4a-41ab-9e3f-e9085da1d315
 ms.service: data-lake-analytics
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: big-data
-ms.date: 06/20/2017
+author: saveenr
 ms.author: saveenr
-ms.openlocfilehash: d479af515566f497d9611e75426f6acb8f8276d9
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.reviewer: jasonwhowell
+ms.assetid: c1c74e5e-3e4a-41ab-9e3f-e9085da1d315
+ms.topic: conceptual
+ms.date: 06/20/2017
+ms.openlocfilehash: c5dd3f493e85afc925b639c142a293eed1e8cbd7
+ms.sourcegitcommit: 2d9a9079dd0a701b4bbe7289e8126a167cfcb450
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 09/29/2019
+ms.locfileid: "71672695"
 ---
-# <a name="tutorial-get-started-with-extending-u-sql-with-r"></a>教程：使用 R 扩展 U-SQL 入门
+# <a name="extend-u-sql-scripts-with-r-code-in-azure-data-lake-analytics"></a>在 Azure Data Lake Analytics 中使用 R 代码扩展 U-SQL 脚本
 
 以下示例演示了用于部署 R 代码的基本步骤：
 * 使用 `REFERENCE ASSEMBLY` 语句为 U-SQL 脚本启用 R 扩展。
-* 使用 ` REDUCE` 操作对某个键的输入数据进行分区。
+* 使用 `REDUCE` 操作对某个键的输入数据进行分区。
 * U-SQL 的 R 扩展包括内置化简器 (`Extension.R.Reducer`)，可在分配给化简器的每个顶点上运行 R 代码。 
-* 名为 `inputFromUSQL` 和 `outputToUSQL ` 的专用命名数据框分别用于在 U-SQL 和 R 之间传递数据。已修复输入和输出数据框标识符名称（即，用户无法更改这些预定义的输入和输出数据框标识符名称）。
+* 使用名为 `inputFromUSQL` 的专用命名数据帧和第 1 @no__t 的专用命名数据帧，在数据帧和 R 之间传递数据。输入和输出的标识符名称是固定的（即，用户无法更改输入和输出数据帧标识符的预定义名称）。
 
 ## <a name="embedding-r-code-in-the-u-sql-script"></a>在 U-SQL 脚本中嵌入 R 代码
 
@@ -177,7 +173,7 @@ ms.lasthandoff: 10/11/2017
     DEPLOY RESOURCE @"/magrittr_1.5.zip";
 
     DECLARE @IrisData string =  @"/usqlext/samples/R/iris.csv";
-    DECLARE @OutputFileModelSummary string = @"/R/Output/CustomePackages.txt";
+    DECLARE @OutputFileModelSummary string = @"/R/Output/CustomPackages.txt";
 
     // R script to run
     DECLARE @myRScript = @"
@@ -212,5 +208,5 @@ ms.lasthandoff: 10/11/2017
 
 ## <a name="next-steps"></a>后续步骤
 * [Microsoft Azure Data Lake Analytics 概述](data-lake-analytics-overview.md)
-* [通过 Visual Studio 的 Data Lake 工具开发 U-SQL 脚本](data-lake-analytics-data-lake-tools-get-started.md)
+* [使用用于 Visual Studio 的 Data Lake 工具开发 U-SQL 脚本](data-lake-analytics-data-lake-tools-get-started.md)
 * [对 Azure Data Lake Analytics 作业使用 U-SQL 开窗函数](data-lake-analytics-use-window-functions.md)

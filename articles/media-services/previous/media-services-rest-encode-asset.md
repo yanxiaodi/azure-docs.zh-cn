@@ -4,7 +4,7 @@ description: 了解如何使用 Media Encoder Standard 为 Azure 媒体服务上
 services: media-services
 documentationcenter: ''
 author: Juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: 2a7273c6-8a22-4f82-9bfe-4509ff32d4a4
 ms.service: media-services
@@ -12,13 +12,14 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 12/07/2017
+ms.date: 03/20/2019
 ms.author: juliako
-ms.openlocfilehash: 78087bbb43d12af65bfbde93f54e2f29309ac093
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 8db9e60e9ce99eaf2621821825620966b8b8b4ae
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60640066"
 ---
 # <a name="how-to-encode-an-asset-by-using-media-encoder-standard"></a>如何使用 Media Encoder Standard 对资产进行编码
 > [!div class="op_single_selector"]
@@ -29,14 +30,15 @@ ms.lasthandoff: 05/07/2018
 >
 
 ## <a name="overview"></a>概述
+
 若要通过 Internet 传送数字视频，必须压缩媒体文件。 数字视频文件较大，可能因过大而无法通过 Internet 传送或者无法在客户的设备上正常显示。 编码是压缩视频和音频以便客户能够查看媒体的过程。
 
-编码作业是 Azure 媒体服务中最常见的处理操作之一。 可通过创建编码作业将媒体文件从一种编码转换为另一种编码。 编码时，可以使用媒体服务的内置编码器（Media Encoder Standard）。 还可使用媒体服务合作伙伴提供的编码器。 可通过 Azure Marketplace 获取第三方编码器。 可以使用为编码器定义的预设字符串或预设配置文件来指定编码任务的详细信息。 若要查看可用预设的类型，请参阅 [Media Encoder Standard 的任务预设](http://msdn.microsoft.com/library/mt269960)。
+编码作业是 Azure 媒体服务中最常见的处理操作之一。 可通过创建编码作业将媒体文件从一种编码转换为另一种编码。 编码时，可以使用媒体服务的内置编码器（Media Encoder Standard）。 还可使用媒体服务合作伙伴提供的编码器。 可通过 Azure 市场获取第三方编码器。 可以使用为编码器定义的预设字符串或预设配置文件来指定编码任务的详细信息。 若要查看可用预设的类型，请参阅 [Media Encoder Standard 的任务预设](https://msdn.microsoft.com/library/mt269960)。
 
 每个作业可以有一个或多个任务，具体因要完成的处理类型而异。 通过 REST API，可采用以下两种方式之一创建作业及相关任务：
 
 * 可通过作业实体上的任务导航属性以内联方式定义任务。
-* 使用 OData 批处理。
+* 使用 OData 批处理
 
 建议始终将源文件编码为自适应比特率 MP4 集，然后使用[动态打包](media-services-dynamic-packaging-overview.md)将该集转换为所需格式。
 
@@ -53,16 +55,17 @@ ms.lasthandoff: 05/07/2018
 若要了解如何连接到 AMS API，请参阅[通过 Azure AD 身份验证访问 Azure 媒体服务 API](media-services-use-aad-auth-to-access-ams-api.md)。 
 
 ## <a name="create-a-job-with-a-single-encoding-task"></a>创建包含单个编码任务的作业
+
 > [!NOTE]
 > 使用媒体服务 REST API 时，需注意以下事项：
 >
 > 访问媒体服务中的实体时，必须在 HTTP 请求中设置特定标头字段和值。 有关详细信息，请参阅[媒体服务 REST API 开发的设置](media-services-rest-how-to-use.md)。
 >
-> 使用 JSON 并指定在请求（例如，引用某个链接对象的请求）中使用 **__metadata** 关键字时，必须将 **Accept** 标头设置为 [JSON 详细格式](http://www.odata.org/documentation/odata-version-3-0/json-verbose-format/)：Accept: application/json;odata=verbose。
+> 使用 JSON 并指定在请求中使用 __metadata 关键字（例如，为了引用某个链接对象）时，必须将 Accept 标头设置为 [JSON 详细格式](https://www.odata.org/documentation/odata-version-3-0/json-verbose-format/)   ：Accept: application/json;odata=verbose。
 >
 >
 
-以下示例说明了如何使用一个任务集来创建和发布作业，从而以特定分辨率和质量对视频进行编码。 使用 Media Encoder Standard 编码时，可以使用[此处](http://msdn.microsoft.com/library/mt269960)指定的任务配置预设。
+以下示例说明了如何使用一个任务集来创建和发布作业，从而以特定分辨率和质量对视频进行编码。 使用 Media Encoder Standard 编码时，可以使用[此处](https://msdn.microsoft.com/library/mt269960)指定的任务配置预设。
 
 请求：
 
@@ -91,14 +94,14 @@ ms.lasthandoff: 05/07/2018
 
 ## <a name="considerations"></a>注意事项
 * TaskBody 属性必须使用文本 XML 来定义任务使用的输入资产或输出资产的数量。 任务文章包含 XML 的 XML 架构定义。
-* 在 TaskBody 定义中，必须将 <inputAsset> 和 <outputAsset> 的每个内部值设置为 JobInputAsset(value) 或 JobOutputAsset(value)。
+* 在 TaskBody 定义中，必须将 `<inputAsset>` 和 `<outputAsset>` 的每个内部值设置为 JobInputAsset(value) 或 JobOutputAsset(value)。
 * 一个任务可以有多个输出资产。 作为作业任务的输出，一个 JobOutputAsset(x) 只能使用一次。
 * 可以将 JobInputAsset 或 JobOutputAsset 指定为某任务的输入资产。
 * 任务不得构成循环。
 * 传递给 JobInputAsset 或 JobOutputAsset 的 value 参数代表资产的索引值。 在作业实体定义的 InputMediaAssets 和 OutputMediaAssets 导航属性中定义实际资产。
 * 由于媒体服务基于 OData v3，因此 InputMediaAssets 和 OutputMediaAssets 导航属性集合中的单个资产将通过“__metadata : uri”名称/值对进行引用。
 * InputMediaAssets 映射到已在媒体服务中创建的一个或多个资产。 OutputMediaAssets 由系统创建。 它们不引用现有资产。
-* 可使用 assetName 属性来命名 OutputMediaAssets。 如果该属性不存在，则 OutputMediaAsset 的名称为 <outputAsset> 元素的任意内部文本值，并以作业名称值或作业 ID 值（在没有定义名称属性的情况下）为后缀。 例如，如果将 assetName 的值设置为“Sample”，则会将 OutputMediaAsset 名称属性设置为“Sample”。 但是，如果未设置 assetName 的值，但已将作业名称设置为“NewJob”，则 OutputMediaAsset 名称为“JobOutputAsset(value)_NewJob”。
+* 可使用 assetName 属性来命名 OutputMediaAssets。 如果该属性不存在，则 OutputMediaAsset 的名称为 `<outputAsset>` 元素的任意内部文本值，并以作业名称值或作业 ID 值（在没有定义名称属性的情况下）为后缀。 例如，如果将 assetName 的值设置为“Sample”，则会将 OutputMediaAsset 名称属性设置为“Sample”。 但是，如果未设置 assetName 的值，但已将作业名称设置为“NewJob”，则 OutputMediaAsset 名称为“JobOutputAsset(value)_NewJob”。
 
 ## <a name="create-a-job-with-chained-tasks"></a>创建包含连锁任务的作业
 在许多应用程序方案中，开发人员希望创建一系列处理任务。 在媒体服务中，可以创建一系列连锁任务。 每个任务执行不同的处理步骤，并且可以使用不同的媒体处理器。 连锁任务可以将资产从一个任务转给另一个任务，从而对资产执行线性序列的任务。 但是，在作业中执行的任务不需要处于序列中。 创建连锁任务时，连锁 **ITask** 对象在单个 **IJob** 对象中创建。
@@ -148,7 +151,7 @@ ms.lasthandoff: 05/07/2018
 * 必须至少有一个任务的输入是作业中另一个任务的输出。
 
 ## <a name="use-odata-batch-processing"></a>使用 OData 批处理
-以下示例演示如何使用 OData 批处理来创建作业和任务。 有关批处理的信息，请参阅 [Open Data Protocol (OData) 批处理](http://www.odata.org/documentation/odata-version-3-0/batch-processing/)。
+以下示例演示如何使用 OData 批处理来创建作业和任务。 有关批处理的信息，请参阅 [Open Data Protocol (OData) 批处理](https://www.odata.org/documentation/odata-version-3-0/batch-processing/)。
 
     POST https://media.windows.net/api/$batch HTTP/1.1
     DataServiceVersion: 1.0;NetFx

@@ -4,26 +4,26 @@ description: 在 Linux 虚拟机上部署 Stackify Retrace Linux 代理。
 services: virtual-machines-linux
 documentationcenter: ''
 author: darinhoward
-manager: jeconnoc
+manager: gwallace
 editor: ''
 ms.assetid: ''
 ms.service: virtual-machines-linux
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-linux
 ms.workload: infrastructure-services
 ms.date: 04/12/2018
-ms.author: danis
-ms.openlocfilehash: 376c5a087f74fbe087db9fa2df38b2ba4e6cf1ff
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.author: akjosh
+ms.openlocfilehash: 2278f1bef3a72408b097f9a2d676931fd07369f4
+ms.sourcegitcommit: f2771ec28b7d2d937eef81223980da8ea1a6a531
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
-ms.locfileid: "33944839"
+ms.lasthandoff: 09/20/2019
+ms.locfileid: "71173974"
 ---
 # <a name="stackify-retrace-linux-agent-extension"></a>Stackify Retrace Linux 代理扩展
 
 ## <a name="overview"></a>概述
+
 Stackify 提供跟踪应用程序详细信息的产品，帮助快速查找和修复问题。 对于开发人员团队来说，Retrace 是一款完全集成、多环境且应用性能超级强大的工具。 它可与每个开发团队所需的一系列工具相结合。
 
 Retrace 是唯一可以在单一平台中的所有环境下提供以下所有功能的工具。
@@ -40,22 +40,25 @@ Retrace 是唯一可以在单一平台中的所有环境下提供以下所有功
 ## <a name="prerequisites"></a>先决条件
 
 ### <a name="operating-system"></a>操作系统 
+
 Retrace 代理可以针对这些 Linux 分发运行
 
-| 分发 | 版本 |
+| 分发 | Version |
 |---|---|
 | Ubuntu | 16.04 LTS、14.04 LTS、16.10 和 17.04 |
 | Debian | 7.9+ 和 8.2+、9 |
-| RedHat | 6.7+、7.1+ |
+| Red Hat | 6.7+、7.1+ |
 | CentOS | 6.3+、7.0+ |
 
 ### <a name="internet-connectivity"></a>Internet 连接
+
 适用于 Linux 的 Stackify 代理扩展要求目标虚拟机已连接到 Internet。 
 
-可能需要调整网络配置才可连接到 Stackify，请参阅 https://support.stackify.com/hc/en-us/articles/207891903-Adding-Exceptions-to-a-Firewall。 
+可能需要调整网络配置才可连接到 Stackify，请参阅 https://support.stackify.com/hc/en-us/articles/207891903-Adding-Exceptions-to-a-Firewall 。 
 
 
 ## <a name="extension-schema"></a>扩展架构
+
 ---
 
 以下 JSON 显示 Stackify Retrace 代理扩展的架构。 该扩展需要 `environment` 和 `activationKey`。
@@ -147,15 +150,15 @@ Retrace 代理可以针对这些 Linux 分发运行
 
 ## <a name="powershell-deployment"></a>PowerShell 部署
 
-可以使用 `Set-AzureRmVMExtension` 命令将 Stackify Retrace Linux 代理虚拟机扩展部署到现有的虚拟机。 运行命令之前，需将公共和专用配置存储在 PowerShell 哈希表中。
+可以使用 `Set-AzVMExtension` 命令将 Stackify Retrace Linux 代理虚拟机扩展部署到现有的虚拟机。 运行命令之前，需将公共和专用配置存储在 PowerShell 哈希表中。
 
 该扩展需要 `environment` 和 `activationKey`。
 
-```
+```powershell
 $PublicSettings = @{"environment" = "myEnvironment"}
 $ProtectedSettings = @{"activationKey" = "myActivationKey"}
 
-Set-AzureRmVMExtension -ExtensionName "Stackify.LinuxAgent.Extension" `
+Set-AzVMExtension -ExtensionName "Stackify.LinuxAgent.Extension" `
     -ResourceGroupName "myResourceGroup" `
     -VMName "myVM" `
     -Publisher "Stackify.LinuxAgent.Extension" `
@@ -188,7 +191,7 @@ az vm extension set --publisher 'Stackify.LinuxAgent.Extension' --version 1.0 --
 | 40 | 安装错误 | 必需 activationKey |
 | 51 | 安装错误 | 不支持 OS 发行版 |
 | 60 | 安装错误 | 必需环境 |
-| 70 | 安装错误 | Unknown |
+| 70 | 安装错误 | 未知 |
 | 80 | 启用错误 | 服务安装失败 |
 | 90 | 启用错误 | 服务启动失败 |
 | 100 | 禁用错误 | 服务停止失败 |

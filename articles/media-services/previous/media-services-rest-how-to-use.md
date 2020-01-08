@@ -4,7 +4,7 @@ description: 媒体服务 REST API 概述
 services: media-services
 documentationcenter: ''
 author: Juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: a5f1c5e7-ec52-4e26-9a44-d9ea699f68d9
 ms.service: media-services
@@ -12,16 +12,20 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: dotnet
 ms.topic: article
-ms.date: 12/05/2017
-ms.author: juliako;johndeu
-ms.openlocfilehash: af83e876802b176d4e097535d45df91e8a986dfb
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.date: 03/20/2019
+ms.author: juliako
+ms.reviewer: johndeu
+ms.openlocfilehash: 29b995d722cd304cc85580ac4f2f38a0b0d9cecd
+ms.sourcegitcommit: de47a27defce58b10ef998e8991a2294175d2098
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/15/2019
+ms.locfileid: "69014854"
 ---
-# <a name="media-services-operations-rest-api-overview"></a>媒体服务操作 REST API 概述
-[!INCLUDE [media-services-selector-setup](../../../includes/media-services-selector-setup.md)]
+# <a name="media-services-operations-rest-api-overview"></a>媒体服务操作 REST API 概述 
+
+> [!NOTE]
+> 不会向媒体服务 v2 添加任何新特性或新功能。 <br/>查看最新版本：[媒体服务 v3](https://docs.microsoft.com/azure/media-services/latest/)。 另请参阅[从 v2 到 v3 的迁移指南](../latest/migrate-from-v2-to-v3.md)
 
 媒体服务操作 REST API 用于在媒体服务帐户中创建作业、资产、实时频道和其他资源。 有关详细信息，请参阅 [Media Services Operations REST API reference](https://docs.microsoft.com/rest/api/media/operations/azure-media-services-rest-api-reference)（媒体服务操作 REST API 参考）。
 
@@ -34,7 +38,7 @@ ms.lasthandoff: 05/07/2018
 使用 REST 时需考虑下列事项：
 
 * 查询实体时，一次返回的实体数限制为 1000 个，因为公共 REST v2 将查询结果数限制为 1000 个。 需要使用[此 .NET 示例](media-services-dotnet-manage-entities.md#enumerating-through-large-collections-of-entities)和[此 REST API 示例](media-services-rest-manage-entities.md#enumerating-through-large-collections-of-entities)中所述的 **Skip** 和 **Take** (.NET)/ **top** (REST)。 
-* 使用 JSON 并指定在请求中使用 **__metadata** 关键字（例如，为了引用某个链接对象）时，必须将 **Accept** 标头设置为 [JSON 详细格式](http://www.odata.org/documentation/odata-version-3-0/json-verbose-format/)（参阅以下示例）。 Odata 并不了解请求中的 **__metadata** 属性，除非将其设置为 verbose。  
+* 使用 JSON 并指定在请求中使用 **__metadata** 关键字（例如，为了引用某个链接对象）时，必须将 **Accept** 标头设置为 [JSON 详细格式](https://www.odata.org/documentation/odata-version-3-0/json-verbose-format/)（参阅以下示例）。 Odata 并不了解请求中的 **__metadata** 属性，除非将其设置为 verbose。  
   
         POST https://media.windows.net/API/Jobs HTTP/1.1
         Content-Type: application/json;odata=verbose
@@ -54,12 +58,12 @@ ms.lasthandoff: 05/07/2018
 ## <a name="standard-http-request-headers-supported-by-media-services"></a>媒体服务支持的标准 HTTP 请求标头
 每次调用媒体服务时，必须在请求中包括一组必需标头，还可以根据需要包括一组可选标头。 下表列出了必需的标头：
 
-| 标头 | Type | 值 |
+| Header | type | ReplTest1 |
 | --- | --- | --- |
 | 授权 |持有者 |持有者是唯一接受的授权机制。 该值还必须包括由 Azure Active Directory 提供的访问令牌。 |
-| x-ms-version |小数 |2.17（或最新版本）|
-| DataServiceVersion |小数 |3.0 |
-| MaxDataServiceVersion |小数 |3.0 |
+| x-ms-version |Decimal |2.17（或最新版本）|
+| DataServiceVersion |Decimal |3.0 |
+| MaxDataServiceVersion |Decimal |3.0 |
 
 > [!NOTE]
 > 由于媒体服务使用 OData 公开其 REST API，因此所有请求中均应包括 DataServiceVersion 和 MaxDataServiceVersion 标头，但如果未包括这些标头，则当前媒体服务会假定使用的 DataServiceVersion 值为 3.0。
@@ -68,11 +72,11 @@ ms.lasthandoff: 05/07/2018
 
 以下是一组可选标头：
 
-| 标头 | Type | 值 |
+| Header | type | ReplTest1 |
 | --- | --- | --- |
-| 日期 |RFC 1123 日期 |请求的时间戳 |
+| Date |RFC 1123 日期 |请求的时间戳 |
 | Accept |内容类型 |响应的请求内容类型，例如：<p> -application/json;odata=verbose<p> - application/atom+xml<p> 响应可能具有不同的内容类型，如 BLOB 提取，在该类型中成功的响应包含 BLOB 流作为负载。 |
-| Accept-Encoding |Gzip、deflate |GZIP 和 DEFLATE 编码（如果适用）。 注意：对于大型资源，媒体服务可能会忽略此标头并返回未经压缩的数据。 |
+| Accept-Encoding |Gzip、deflate |GZIP 和 DEFLATE 编码（如果适用）。 注意:对于大型资源，媒体服务可能会忽略此标头并返回未经压缩的数据。 |
 | Accept-Language |“en”、“es”等。 |指定响应的首选语言。 |
 | Accept-Charset |字符集类型，如“UTF-8” |默认值为 UTF-8。 |
 | X-HTTP-Method |HTTP 方法 |允许不支持 HTTP 方法（例如 PUT 或 DELETE）的客户端或防火墙使用这些通过 GET 调用隧道化的方法。 |
@@ -80,25 +84,25 @@ ms.lasthandoff: 05/07/2018
 | client-request-id |String |调用方定义的值，用于标识给定请求。 如果指定，会在响应消息中包括此值，作为一种映射请求的方法。 <p><p>**重要说明**<p>值的上限应为 2096b (2k)。 |
 
 ## <a name="standard-http-response-headers-supported-by-media-services"></a>媒体服务支持的标准 HTTP 响应标头
-下面是可以根据你请求的资源以及要执行的操作返回给一组标头。
+下面是可以根据所请求的资源以及要执行的操作返回的一组标头。
 
-| 标头 | Type | 值 |
+| 标头 | type | ReplTest1 |
 | --- | --- | --- |
 | request-id |String |当前操作的唯一标识符，由服务生成。 |
 | client-request-id |String |调用方在原始请求（如果存在）中指定的标识符。 |
-| 日期 |RFC 1123 日期 |处理请求的日期/时间。 |
+| Date |RFC 1123 日期 |处理请求的日期/时间。 |
 | Content-Type |多种多样 |响应正文的内容类型。 |
 | Content-Encoding |多种多样 |Gzip 或 deflate（视情况而定）。 |
 
 ## <a name="standard-http-verbs-supported-by-media-services"></a>媒体服务支持的标准 HTTP 谓词
 下面是在提出 HTTP 请求时可以使用的 HTTP 谓词的完整列表：
 
-| Verb | 说明 |
+| Verb | 描述 |
 | --- | --- |
 | GET |返回对象的当前值。 |
 | POST |根据提供的数据创建对象，或提交命令。 |
 | PUT |替换对象，或创建命名对象（如果适用）。 |
-| 删除 |删除对象。 |
+| DELETE |删除对象。 |
 | MERGE |使用指定的属性更改更新现有对象。 |
 | HEAD |为 GET 响应返回对象的元数据。 |
 

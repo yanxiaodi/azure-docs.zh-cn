@@ -1,41 +1,43 @@
 ---
-title: 与 Data Lake Store 兼容的大数据应用程序 | Microsoft Docs
-description: 用于 Azure Data Lake Store 的开放源代码应用程序列表
+title: 与 Data Lake Storage Gen1 兼容的大数据应用程序 | Microsoft Docs
+description: 用于 Azure Data Lake Storage Gen1（以前称为 Azure Data Lake Store）的开源应用程序列表
 services: data-lake-store
 documentationcenter: ''
-author: nitinme
-manager: jhubbard
-editor: cgronlun
-ms.assetid: 699e1805-cb76-4807-9ac1-8bd9d9bbb72b
+author: twooley
+manager: mtillman
 ms.service: data-lake-store
 ms.devlang: na
 ms.topic: conceptual
-ms.date: 01/09/2018
-ms.author: nitinme
-ms.openlocfilehash: 7e8ba230f8f0a21bf98e1bfeb96f7a40a9553de2
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.date: 06/27/2018
+ms.author: twooley
+ms.openlocfilehash: 37bf26db5f7ae08734410d36a892aaeb2380bd9f
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60878879"
 ---
-# <a name="open-source-big-data-applications-that-work-with-azure-data-lake-store"></a>用于 Azure Data Lake Store 的开放源代码应用程序
-本文列出了用于 Azure Data Lake Store 的开放源代码大数据应用程序。 对于下表中的应用程序，仅支持所列分配可用的版本。 有关 HDInsight 可用的应用程序版本，请参阅 [HDInsight 组件版本](../hdinsight/hdinsight-component-versioning.md)。
+# <a name="open-source-big-data-applications-that-work-with-azure-data-lake-storage-gen1"></a>用于 Azure Data Lake Storage Gen1 的开源大数据应用程序
+
+[!INCLUDE [data-lake-storage-gen1-rename-note.md](../../includes/data-lake-storage-gen1-rename-note.md)]
+
+本文列出了用于 Azure Data Lake Storage Gen1 的开放源代码大数据应用程序。 对于下表中的应用程序，仅支持所列分配可用的版本。 有关 HDInsight 可用的应用程序版本，请参阅 [HDInsight 组件版本](../hdinsight/hdinsight-component-versioning.md)。
 
 | 开放源代码软件 | 分发 |
 | --- | --- |
-| [Apache Sqoop](http://sqoop.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
-| [MapReduce](http://hadoop.apache.org/docs/r1.0.4/mapred_tutorial.html) |HDInsight 3.2、3.4、3.5 和 3.6 |
+| [Apache Sqoop](https://sqoop.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
+| [MapReduce](https://hadoop.apache.org/docs/r1.0.4/mapred_tutorial.html) |HDInsight 3.2、3.4、3.5 和 3.6 |
 | [Apache Storm](https://storm.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
-| [Apache Hive](http://hive.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
+| [Apache Hive](https://hive.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
 | [HCatalog](https://cwiki.apache.org/confluence/display/Hive/HCatalog) |HDInsight 3.2、3.4、3.5 和 3.6 |
-| [Apache Mahout](http://mahout.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
-| [Apache Pig/Pig Latin](http://pig.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
-| [Apache Oozie](http://oozie.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
-| [Apache Zookeeper](http://zookeeper.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
-| [Apache Tez](http://tez.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
-| [Apache Spark](http://spark.apache.org/) |HDInsight 3.4、3.5 和 3.6 |
+| [Apache Mahout](https://mahout.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
+| [Apache Pig/Pig Latin](https://pig.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
+| [Apache Oozie](https://oozie.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
+| [Apache Zookeeper](https://zookeeper.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
+| [Apache Tez](https://tez.apache.org/) |HDInsight 3.2、3.4、3.5 和 3.6 |
+| [Apache Spark](https://spark.apache.org/) |HDInsight 3.4、3.5 和 3.6 |
 
 
 ## <a name="see-also"></a>另请参阅
-* [Overview of Azure Data Lake Store](data-lake-store-overview.md)
+* [Azure Data Lake Storage Gen1 概述](data-lake-store-overview.md)
 

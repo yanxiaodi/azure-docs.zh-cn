@@ -1,22 +1,20 @@
 ---
 title: 使用 Azure Maps 查找多条路线 | Microsoft Docs
 description: 使用 Azure Maps 查找不同出行模式的路线
-services: azure-maps
-keywords: ''
-author: kgremban
-ms.author: kgremban
-ms.date: 05/07/2018
+author: walsehgal
+ms.author: v-musehg
+ms.date: 03/07/2019
 ms.topic: tutorial
 ms.service: azure-maps
-documentationcenter: ''
+services: azure-maps
 manager: timlt
-ms.devlang: na
 ms.custom: mvc
-ms.openlocfilehash: b45394cedcb7bbcb46b9730b7e445b04c8cf4f18
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
+ms.openlocfilehash: 664a2a77203ae1bebd95391fa6a4ae906121465a
+ms.sourcegitcommit: 083aa7cc8fc958fc75365462aed542f1b5409623
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 09/11/2019
+ms.locfileid: "70916304"
 ---
 # <a name="find-routes-for-different-modes-of-travel-using-azure-maps"></a>使用 Azure Maps 查找不同出行模式的路线
 
@@ -30,25 +28,37 @@ ms.lasthandoff: 05/07/2018
 
 ## <a name="prerequisites"></a>先决条件
 
-在执行下一个操作前，请按照第一个教程中的步骤[创建 Azure Maps 帐户](./tutorial-search-location.md#createaccount)并且[获取帐户的订阅密钥](./tutorial-search-location.md#getkey)。 
+在继续操作之前，请按照[管理帐户](https://docs.microsoft.com/azure/azure-maps/how-to-manage-account-keys#create-a-new-account)中的说明使用 S1 定价层创建 Azure Maps 帐户订阅，并按照[获取主密钥](./tutorial-search-location.md#getkey)中的步骤获取适用于你的帐户的主订阅密钥。
 
+## <a name="create-a-new-map"></a>创建新地图
 
-## <a name="create-a-new-map"></a>创建新地图 
-以下步骤说明如何使用 Map Control API 创建一个嵌入式静态 HTML 页面。 
+以下步骤说明如何使用 Map Control API 创建一个嵌入式静态 HTML 页面。
 
-1. 在本地计算机上，创建一个新文件并将其命名为 MapTruckRoute.html。 
+1. 在本地计算机上，创建一个新文件并将其命名为 MapTruckRoute.html  。
 2. 将以下 HTML 组件添加到该文件：
 
     ```HTML
     <!DOCTYPE html>
-    <html lang="en">
-
+    <html>
     <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, user-scalable=no" />
-        <title>Map Truck Route</title>
-        <link rel="stylesheet" href="https://atlas.microsoft.com/sdk/css/atlas.min.css?api-version=1.0" type="text/css" />
-        <script src="https://atlas.microsoft.com/sdk/js/atlas.min.js?api-version=1.0"></script>
+        <title>Map Route</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Add references to the Azure Maps Map control JavaScript and CSS files. -->
+        <link rel="stylesheet" href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.css" type="text/css">
+        <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js"></script>
+
+        <!-- Add a reference to the Azure Maps Services Module JavaScript file. -->
+        <script src="https://atlas.microsoft.com/sdk/javascript/service/2/atlas-service.min.js"></script>
+
+        <script>
+            var map, datasource, client;
+
+            function GetMap() {
+                //Add Map Control JavaScript code here.
+            }
+        </script>
         <style>
             html,
             body {
@@ -58,233 +68,213 @@ ms.lasthandoff: 05/07/2018
                 margin: 0;
             }
 
-            #map {
+            #myMap {
                 width: 100%;
                 height: 100%;
             }
         </style>
     </head>
-    
-    <body>
-        <div id="map"></div>
-        <script>
-            // Embed Map Control JavaScript code here
-        </script>
+    <body onload="GetMap()">
+        <div id="myMap"></div>
     </body>
-
     </html>
     ```
-    HTML 标头如何为 Azure Maps 库嵌入 CSS 和 JavaScript 文件的资源位置。 HTML 正文的脚本段将包含地图的内联 JavaScript 代码。
-3. 将以下 JavaScript 代码添加到 HTML 文件的 *script* 块。 使用从 Maps 帐户复制的主要密钥替换字符串 \<your account key\>。
+
+    请注意，HTML 标头包含 Azure 地图控件库托管的 CSS 和 JavaScript 资源文件。 请注意页面正文中的 `onload` 事件。当页面正文加载时，此事件会调用 `GetMap` 函数。 此函数会包含用于访问 Azure Maps API 的内联 JavaScript 代码。
+
+3. 将以下 JavaScript 代码添加到 `GetMap` 函数。 将字符串 `<Your Azure Maps Key>` 替换为从 Maps 帐户复制的主密钥。
 
     ```JavaScript
-    // Instantiate map to the div with id "map"
-    var MapsAccountKey = "<your account key>";
-    var map = new atlas.Map("map", {
-        "subscription-key": MapsAccountKey
+    //Instantiate a map object
+    var map = new atlas.Map("myMap", {
+        //Add your Azure Maps subscription key to the map SDK. Get an Azure Maps key at https://azure.com/maps
+        authOptions: {
+            authType: 'subscriptionKey',
+            subscriptionKey: '<Your Azure Maps Key>'
+        }
     });
     ```
-    Atlas.Map 提供一个可视和交互式的 Web 地图控件，它是 Azure Map Control API 的一个组件。
 
-4. 保存文件并在浏览器中打开它。 此时，你有一个可以进一步开发的基础地图。 
+    `atlas.Map` 类提供一个可视和交互式 Web 地图的控件，是 Azure Map Control API 的一个组件。
+
+4. 保存文件并在浏览器中打开它。 此时，你有一个可以进一步开发的基础地图。
 
    ![查看基础地图](./media/tutorial-prioritized-routes/basic-map.png)
 
 ## <a name="visualize-traffic-flow"></a>可视化交通流量
 
-1. 如果未向地图指示焦点位置，则显示全世界视图。 若要查看交通流量，请在地图上设置中心点和缩放级别。 使用以下 JavaScript 代码替换声明 `new atlas.Map` 的代码： 
-    
-    ```JavaScript
-    var map = new atlas.Map("map", {
-        "subscription-key": MapsAccountKey,
-        center: [-118.2437,34.0522],
-        zoom: 12
+1. 将交通流量显示添加到地图。 地图 `ready` 事件会一直等待，直至地图资源加载完毕并做好安全交互准备。
+
+    ```javascript
+    map.events.add("ready", function() {
+        // Add Traffic Flow to the Map
+        map.setTraffic({
+            flow: "relative"
+        });
     });
     ```
 
-    此代码设置地图的中心点并声明缩放级别，以便可以默认聚焦于一个特定区域。 
+    在地图 `ready` 事件处理程序中，地图上的交通流设置已设置为 `relative`，这是相对于自由流动的道路速度。 此外，还可以将其设置为道路的 `absolute` 速度或 `relative-delay`，它会显示与自由流动不同的相对速度。
 
-1. 将交通流量显示添加到地图：
-
-    ```JavaScript
-    // Add Traffic Flow to the Map
-    map.setTraffic({
-        flow: "relative"
-    });
-    ```
-    此代码将交通流量设置为 `relative`，这是相对于自由流动的道路的速度。 此外，还可以将其设置为道路的 `absolute` 速度或 `relative-delay`，它会显示与自由流动不同的相对速度。 
-
-2. 保存“MapTruckRoute.html”文件并刷新浏览器中的页。 应看到洛杉矶街道及其当前交通数据。
+2. 保存“MapTruckRoute.html”文件并刷新浏览器中的页  。 如果与地图交互并放大“洛杉矶”地图，应会看到街道和当前交通数据。
 
    ![查看交通地图](./media/tutorial-prioritized-routes/traffic-map.png)
 
 <a id="queryroutes"></a>
 
-## <a name="set-start-and-end-points"></a>设置起点和终点
+## <a name="define-how-the-route-will-be-rendered"></a>定义路线的呈现方式
 
-在本教程中，将起点设为西雅图一家名为 Fabrikam 的虚构公司，终点设为 Microsoft 办公室。 
+在本教程中，将会计算两条线路并在地图上呈现它们。 一条线路使用供汽车行驶的道路，另一条线路使用供卡车行驶的道路。 在呈现时，我们将针对路线的起点和终点显示符号图标，用不同颜色的线来表示各个路线路径。
 
-1. 添加以下 JavaScript 代码，创建路线起点和终点的 PIN：
+1. 初始化地图后，在地图 `ready` 事件处理程序中添加以下 JavaScript 代码。
 
     ```JavaScript
-    // Create the GeoJSON objects which represent the start and end point of the route
-    var startPoint = new atlas.data.Point([-122.356099, 47.580045]);
-    var startPin = new atlas.data.Feature(startPoint, {
-        title: "Fabrikam, Inc.",
-        icon: "pin-round-blue"
-    });
+    //Wait until the map resources have fully loaded.
+    map.events.add('ready', function () {
 
-    var destinationPoint = new atlas.data.Point([-122.130137, 47.644702]);
-    var destinationPin = new atlas.data.Feature(destinationPoint, {
-        title: "Microsoft",
-        icon: "pin-blue"
+        //Create a data source and add it to the map.
+        datasource = new atlas.source.DataSource();
+        map.sources.add(datasource);
+
+        //Add a layer for rendering the route lines and have it render under the map labels.
+        map.layers.add(new atlas.layer.LineLayer(datasource, null, {
+            strokeColor: ['get', 'strokeColor'],
+            strokeWidth: ['get', 'strokeWidth'],
+            lineJoin: 'round',
+            lineCap: 'round'
+        }), 'labels');
+
+        //Add a layer for rendering point data.
+        map.layers.add(new atlas.layer.SymbolLayer(datasource, null, {
+            iconOptions: {
+                image: ['get', 'icon'],
+                allowOverlap: true
+            },
+            textOptions: {
+                textField: ['get', 'title'],
+                offset: [0, 1.2]
+            },
+            filter: ['any', ['==', ['geometry-type'], 'Point'], ['==', ['geometry-type'], 'MultiPoint']] //Only render Point or MultiPoints in this layer.
+        }));
     });
     ```
-    此代码创建两个 [GeoJSON 对象](https://en.wikipedia.org/wiki/GeoJSON)来表示路线的起点和终点。 
-
-2. 添加以下 JavaScript 代码，将起点和终点添加到地图中：
+    
+    在地图 `ready` 事件处理程序中，将会创建一个数据源来存储路线以及起点和终点。 将会创建一个路线层并将其附加到数据源，以便定义路线的呈现方式。 使用表达式从路线功能的属性中检索路线宽度和颜色。 向地图添加此层时，会传递另一个值为 `'labels'` 的参数，指定在地图标签下呈现此层。 这样可确保路线不覆盖道路标签。 将会创建一个符号层并将其附加到数据源。 此层指定起点和终点的呈现方式。此示例中添加了表达式，用于从每个点对象的属性中检索图标图像和文本标签信息。 
+    
+2. 在本教程中，将起点设为西雅图一家名为 Fabrikam 的虚构公司，终点设为 Microsoft 办公室。 在地图 `ready` 事件处理程序中，请添加以下代码。
 
     ```JavaScript
-    // Fit the map window to the bounding box defined by the start and destination points
-    var swLon = Math.min(startPoint.coordinates[0], destinationPoint.coordinates[0]);
-    var swLat = Math.min(startPoint.coordinates[1], destinationPoint.coordinates[1]);
-    var neLon = Math.max(startPoint.coordinates[0], destinationPoint.coordinates[0]);
-    var neLat = Math.max(startPoint.coordinates[1], destinationPoint.coordinates[1]);
-    map.setCameraBounds({
-        bounds: [swLon, swLat, neLon, neLat],
+    //Create the GeoJSON objects which represent the start and end point of the route.
+    var startPoint = new atlas.data.Feature(new atlas.data.Point([-122.356099, 47.580045]), {
+        title: 'Fabrikam, Inc.',
+        icon: 'pin-blue'
+    });
+
+    var endPoint = new atlas.data.Feature(new atlas.data.Point([-122.201164, 47.616940]), {
+        title: 'Microsoft - Lincoln Square',
+        icon: 'pin-round-blue'
+    });
+    ```
+
+    此代码创建两个 [GeoJSON 对象](https://en.wikipedia.org/wiki/GeoJSON)来表示路线的起点和终点。 将会向每个点添加 `title` 和 `icon` 属性。
+
+3. 接下来，添加以下 JavaScript 代码，将起点和终点的图钉添加到地图中：
+
+    ```JavaScript
+    //Add the data to the data source.
+    datasource.add([startPoint, endPoint]);
+
+    //Fit the map window to the bounding box defined by the start and end positions.
+    map.setCamera({
+        bounds: atlas.data.BoundingBox.fromData([startPoint, endPoint]),
         padding: 100
     });
+    ```
 
-    // Add pins to the map for the start and end point of the route
-    map.addPins([startPin, destinationPin], {
-        name: "route-pins",
-        textFont: "SegoeUi-Regular",
-        textOffset: [0, -20]
-    });
-    ``` 
-    map.setCameraBounds 调用根据起点和终点的坐标调整地图窗口。 API **map.addPins** 将这些点作为可视组件添加到地图控件中。
+    起点和终点会添加到数据源。 起点和终点的边框使用 `atlas.data.BoundingBox.fromData` 函数计算。 此边框用于通过 `map.setCamera` 函数设置基于整个路线的地图相机视图。 将会添加一个衬距来弥补符号图标的像素尺寸。
 
-3. 保存文件并刷新浏览器以查看地图上显示的图钉。 即使已经声明将地图的中心点设在洛杉矶，map.setCameraBounds 仍会移动视图以显示起点和终点。 
+4. 保存文件并刷新浏览器以查看地图上显示的图钉。 现在，地图的中心为西雅图，可以看到标记起点的圆形蓝色图钉和标记终点的蓝色图钉。
 
    ![查看有起点和终点的地图](./media/tutorial-prioritized-routes/pins-map.png)
-
 
 <a id="multipleroutes"></a>
 
 ## <a name="render-routes-prioritized-by-mode-of-travel"></a>呈现按行驶模式划分优先级的路线
 
-本部分介绍如何使用 Maps 的路线服务 API 根据运输模式查找从指定起点到目的地的多个路线。 路线服务提供多个 API，在考虑到当前交通状况的情况下，规划两个地点之间最快、最短、环保或令人兴奋的路线。 此外，它还允许用户使用 Azure 广泛的历史交通数据库和预测任何一天任何时间的路线时间来规划路线。 有关详细信息，请参阅 [Get route directions](https://docs.microsoft.com/rest/api/maps/route/getroutedirections)（获取路线指示）。
+本部分介绍如何使用 Maps 的路线服务 API 根据运输模式查找从给定起点到终点的多个路线。 路线服务提供多个 API，在考虑到当前交通状况的情况下，规划两个地点之间最快、最短、环保或令人兴奋的路线     。 此外，它还允许用户使用 Azure 广泛的历史交通数据库和预测任何一天任何时间的路线时间来规划路线。 有关详细信息，请参阅 [Get Route directions](https://docs.microsoft.com/rest/api/maps/route/getroutedirections)（获取路线指示）。 应该**在 map load eventListener 中**添加以下所有代码块，以确保它们在地图完全加载之后加载。
 
-
-1. 首先，在地图上添加一个新层以显示路线路径或 linestring。 在本教程中，有两种不同的路线 -“汽车路线”和“卡车路线”，每种路线有自己的样式。 将以下 JavaScript 代码添加到脚本块：
+1. 在 GetMap 函数中，将以下内容添加到 JavaScript 代码。
 
     ```JavaScript
-    // Place route layers on the map
-    var carRouteLayerName = "car-route";
-    map.addLinestrings([], {
-        name: carRouteLayerName,
-        color: "#B76DAB",
-        width: 5,
-        cap: "round",
-        join: "round",
-        before: "labels"
+    // Use SubscriptionKeyCredential with a subscription key
+    var subscriptionKeyCredential = new atlas.service.SubscriptionKeyCredential(atlas.getSubscriptionKey());
+
+    // Use subscriptionKeyCredential to create a pipeline
+    var pipeline = atlas.service.MapsURL.newPipeline(subscriptionKeyCredential);
+
+    // Construct the RouteURL object
+    var routeURL = new atlas.service.RouteURL(pipeline);
+    ```
+
+   `SubscriptionKeyCredential` 创建 `SubscriptionKeyCredentialPolicy` 以使用订阅密钥验证对 Azure Maps 的 HTTP 请求。 `atlas.service.MapsURL.newPipeline()` 接受 `SubscriptionKeyCredential` 策略并创建[管道](https://docs.microsoft.com/javascript/api/azure-maps-rest/atlas.service.pipeline?view=azure-maps-typescript-latest)实例。 `routeURL` 表示 Azure Maps [Route](https://docs.microsoft.com/rest/api/maps/route) 操作的 URL。
+
+2. 设置凭据和 URL 后，添加以下 JavaScript 代码，为运输 USHazmatClass2 类货物的卡车构造从起点到终点的路线，并显示结果。
+
+    ```JavaScript
+    //Start and end point input to the routeURL
+    var coordinates= [[startPoint.geometry.coordinates[0], startPoint.geometry.coordinates[1]], [endPoint.geometry.coordinates[0], endPoint.geometry.coordinates[1]]];
+
+    //Make a search route request for a truck vehicle type
+    routeURL.calculateRouteDirections(atlas.service.Aborter.timeout(10000), coordinates,{
+        travelMode: 'truck',
+        vehicleWidth: 2,
+        vehicleHeight: 2,
+        vehicleLength: 5,
+        vehicleLoadType: 'USHazmatClass2'
+    }).then((directions) => {
+        //Get data features from response
+        var data = directions.geojson.getFeatures();
+
+        //Get the route line and add some style properties to it.  
+        var routeLine = data.features[0];
+        routeLine.properties.strokeColor = '#2272B9';
+        routeLine.properties.strokeWidth = 9;
+
+        //Add the route line to the data source. We want this to render below the car route which will likely be added to the data source faster, so insert it at index 0.
+        datasource.add(routeLine, 0);
     });
+    ```
 
-    var truckRouteLayerName = "truck-route";
-    map.addLinestrings([], {
-        name: truckRouteLayerName,
-        color: "#2272B9",
-        width: 9,
-        cap: "round",
-        join: "round",
-        before: carRouteLayerName
+    上述代码片段通过 [getRouteDirections](https://docs.microsoft.com/javascript/api/azure-maps-rest/atlas.service.models.routedirectionsrequestbody?view=azure-maps-typescript-latest) 方法查询 Azure Maps 路线服务。 然后，从使用 `geojson.getFeatures()` 方法提取的响应中的 GeoJSON 特征集合提取路线。 该路线行随后将添加到数据源。 它还会添加索引 0，以确保在数据源中的其他任何行之前呈现该路线行。 之所以这样做，是因为卡车路线的计算通常会慢于汽车路线的计算，如果卡车路线在汽车路线之后添加到数据源，则会在其上进行呈现。 将会向卡车路线添加两个属性，一个是蓝色的描边色，另一个是九像素的描边宽度。
+
+3. 添加以下 JavaScript 代码，以构造车辆路线并显示结果。
+
+    ```JavaScript
+    routeURL.calculateRouteDirections(atlas.service.Aborter.timeout(10000), coordinates).then((directions) => {
+
+        //Get data features from response
+        var data = directions.geojson.getFeatures();
+
+        //Get the route line and add some style properties to it.  
+        var routeLine = data.features[0];
+        routeLine.properties.strokeColor = '#B76DAB';
+        routeLine.properties.strokeWidth = 5;
+
+        //Add the route line to the data source. We want this to render below the car route which will likely be added to the data source faster, so insert it at index 0.  
+        datasource.add(routeLine);
     });
     ```
 
-2. 将以下 JavaScript 代码添加到脚本块，请求卡车路线并在地图上显示结果：
+    上述代码片段通过 [getRouteDirections](https://docs.microsoft.com/javascript/api/azure-maps-rest/atlas.service.models.routedirectionsrequestbody?view=azure-maps-typescript-latest) 方法查询 Azure Maps 路线服务。 然后，从使用 `geojson.getFeatures()` 方法提取的响应中的 GeoJSON 特征集合提取路线。 该路线行随后将添加到数据源。 将会向汽车路线添加两个属性，一个是紫色的描边色，另一个是五像素的描边宽度。  
 
-    ```JavaScript
-    // Perform a request to the route service and draw the resulting truck route on the map
-    var xhttpTruck = new XMLHttpRequest();
-    xhttpTruck.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var response = JSON.parse(this.responseText);
-
-            var route = response.routes[0];
-            var routeCoordinates = [];
-            for (var leg of route.legs) {
-                var legCoordinates = leg.points.map((point) => [point.longitude, point.latitude]);
-                routeCoordinates = routeCoordinates.concat(legCoordinates);
-            }
-
-            var routeLinestring = new atlas.data.LineString(routeCoordinates);
-            map.addLinestrings([new atlas.data.Feature(routeLinestring)], {
-                name: truckRouteLayerName
-            });
-        }
-    };
-
-    var truckRouteUrl = "https://atlas.microsoft.com/route/directions/json?";
-    truckRouteUrl += "&api-version=1.0";
-    truckRouteUrl += "&subscription-key=" + MapsAccountKey;
-    truckRouteUrl += "&query=" + startPoint.coordinates[1] + "," + startPoint.coordinates[0] + ":" +
-        destinationPoint.coordinates[1] + "," + destinationPoint.coordinates[0];
-    truckRouteUrl += "&travelMode=truck";
-    truckRouteUrl += "&vehicleWidth=2";
-    truckRouteUrl += "&vehicleHeight=2";
-    truckRouteUrl += "&vehicleLength=5";
-    truckRouteUrl += "&vehicleLoadType=USHazmatClass2";
-
-    xhttpTruck.open("GET", truckRouteUrl, true);
-    xhttpTruck.send();
-    ```
-    此代码片段将创建一个 [XMLHttpRequest](https://xhr.spec.whatwg.org/)，并添加事件处理程序以分析传入的响应。 对于成功的响应，它创建返回路线的坐标数组并将其添加地图的 `truckRouteLayerName` 层。 
-    
-    此代码片段还使用帐户密钥创建 Maps 路线服务的查询。 该查询包含起点坐标、终点坐标和指示该路线适用于重型卡车的可选参数。
-
-2. 添加下面的 JavaScript 代码，请求汽车路线并显示结果：
-
-    ```JavaScript
-    // Perform a request to the route service and draw the resulting car route on the map
-    var xhttpCar = new XMLHttpRequest();
-    xhttpCar.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var response = JSON.parse(this.responseText);
-
-            var route = response.routes[0];
-            var routeCoordinates = [];
-            for (var leg of route.legs) {
-                var legCoordinates = leg.points.map((point) => [point.longitude, point.latitude]);
-                routeCoordinates = routeCoordinates.concat(legCoordinates);
-            }
-
-            var routeLinestring = new atlas.data.LineString(routeCoordinates);
-            map.addLinestrings([new atlas.data.Feature(routeLinestring)], {
-                name: carRouteLayerName
-            });
-        }
-    };
-
-    var carRouteUrl = "https://atlas.microsoft.com/route/directions/json?";
-    carRouteUrl += "&api-version=1.0";
-    carRouteUrl += "&subscription-key=" + MapsAccountKey;
-    carRouteUrl += "&query=" + startPoint.coordinates[1] + "," + startPoint.coordinates[0] + ":" +
-        destinationPoint.coordinates[1] + "," + destinationPoint.coordinates[0];
-
-    xhttpCar.open("GET", carRouteUrl, true);
-    xhttpCar.send();
-    ```
-    此代码片段将创建另一个 [XMLHttpRequest](https://xhr.spec.whatwg.org/)，并添加事件处理程序以分析传入的响应。 对于成功的响应，它创建返回路线的坐标数组并将其添加到地图的 `carRouteLayerName` 层。 
-    
-    此代码片段还使用帐户密钥创建 Maps 路线服务的查询。 查询包含起点坐标和终点坐标。 因为未提供其他参数，路线服务的出行模式默认为“汽车”。 
-
-3. 保存“MapTruckRoute.html”文件并刷新浏览器以查看结果。 要成功连接 Maps 的 API，应看到类似于以下内容的地图。 
+4. 保存“MapTruckRoute.html”文件并刷新浏览器以查看结果  。 要成功连接 Maps 的 API，应看到类似于以下内容的地图。
 
     ![使用 Azure 路线服务设置路线的优先级](./media/tutorial-prioritized-routes/prioritized-routes.png)
 
-    卡车路线是蓝色的粗线，而汽车路线是紫色的细线。 汽车路线经 I-90 穿过华盛顿湖，由于这条路线经过居民区下的隧道，所以会限制危险货物。 卡车路线（指定 USHazmatClass2 货物类型）正确指向不同的公路。 
+    卡车路线是蓝色的粗线，而汽车路线是紫色的细线。 汽车路线经 I-90 穿过华盛顿湖，由于这条路线经过居民区下的隧道，所以会限制危险货物。 卡车路线（指定 USHazmatClass2 货物类型）正确指向不同的公路。
 
 ## <a name="next-steps"></a>后续步骤
+
 本教程介绍了如何：
 
 > [!div class="checklist"]
@@ -293,6 +283,16 @@ ms.lasthandoff: 05/07/2018
 > * 创建声明出行模式的路线查询
 > * 在地图上显示多条路线
 
-若要了解有关 Azure Maps 的覆盖率和功能的详细信息，请参阅[缩放级别和磁贴网格](zoom-levels-and-tile-grid.md)以及其他概念型文章。 
+> [!div class="nextstepaction"]
+> [查看完整源代码](https://github.com/Azure-Samples/AzureMapsCodeSamples/blob/master/AzureMapsCodeSamples/Tutorials/truckRoute.html)
 
-有关更多代码示例和交互式编码体验，请参阅[如何使用地图控件](how-to-use-map-control.md)和其他操作说明型指南。 
+> [!div class="nextstepaction"]
+> [查看实时示例](https://azuremapscodesamples.azurewebsites.net/?sample=Multiple%20routes%20by%20mode%20of%20travel)
+
+下一教程演示使用 Azure Maps 创建简单商店定位器的过程。
+
+> [!div class="nextstepaction"]
+> [使用 Azure Maps 创建商店定位器](./tutorial-create-store-locator.md)
+
+> [!div class="nextstepaction"]
+> [使用数据驱动样式表达式](data-driven-style-expressions-web-sdk.md)

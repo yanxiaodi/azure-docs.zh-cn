@@ -1,180 +1,54 @@
 ---
-title: 使用 Bash in Azure Cloud Shell 运行 Ansible
-description: 了解如何使用 Bash in Azure Cloud Shell 执行各种 Ansible 任务
-ms.service: ansible
+title: 快速入门 - 通过 Azure Cloud Shell 中的 Bash 运行 Ansible Playbook | Microsoft Docs
+description: 本快速入门介绍如何使用 Azure Cloud Shell 中的 Bash 执行各种 Ansible 任务
 keywords: ansible, azure, devops, bash, cloudshell, playbook, bash
-author: tomarcher
-manager: routlaw
+ms.topic: quickstart
+ms.service: ansible
+author: tomarchermsft
+manager: jeconnoc
 ms.author: tarcher
-ms.date: 02/01/2018
-ms.topic: article
-ms.openlocfilehash: 9fe65f4cf10119002bcb7a3855d112d850e20f1a
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.date: 04/30/2019
+ms.openlocfilehash: 083d10de94c39ab134b8e475b66ebf2df30088bc
+ms.sourcegitcommit: 6f043a4da4454d5cb673377bb6c4ddd0ed30672d
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 05/08/2019
+ms.locfileid: "65407649"
 ---
-# <a name="run-ansible-with-bash-in-azure-cloud-shell"></a>使用 Bash in Azure Cloud Shell 运行 Ansible
+# <a name="quickstart-run-ansible-playbooks-via-bash-in-azure-cloud-shell"></a>快速入门：通过 Azure Cloud Shell 中的 Bash 运行 Ansible Playbook
 
-本教程介绍如何从 Bash in Cloud Shell 执行各种 Ansible 任务。 这些任务包括连接到虚拟机，以及创建用于创建和删除 Azure 资源组的 Ansible playbook。
+Azure Cloud Shell 是一个用于管理 Azure 资源的交互式的可通过浏览器访问的 shell。 Cloud Shell 允许使用 Bash 或 Powershell 命令行。 在本文中，你将使用 Azure Cloud Shell 中的 Bash 运行一个 Ansible Playbook。
 
 ## <a name="prerequisites"></a>先决条件
 
-- **Azure 订阅** - 如果没有 Azure 订阅，请在开始前创建一个[免费帐户](https://azure.microsoft.com/free/?ref=microsoft.com&utm_source=microsoft.com&utm_medium=docs&utm_campaign=visualstudio)。
+[!INCLUDE [open-source-devops-prereqs-azure-subscription.md](../../includes/open-source-devops-prereqs-azure-subscription.md)]
+- **配置 Azure Cloud Shell** - 如果你是 Azure Cloud Shell 的新手，请参阅 [Azure Cloud Shell 中的 Bash 快速入门](https://docs.microsoft.com/azure/cloud-shell/quickstart)。
+[!INCLUDE [cloud-shell-try-it.md](../../includes/cloud-shell-try-it.md)]
 
-- **Azure 凭据** - [创建 Azure 凭据和配置 Ansible](/azure/virtual-machines/linux/ansible-install-configure#create-azure-credentials)
+## <a name="automatic-credential-configuration"></a>自动凭据配置
 
-- **配置 Azure Cloud Shell** - 如果不熟悉 Azure Cloud Shell，[Bash in Azure Cloud Shell 快速入门](https://docs.microsoft.com/azure/cloud-shell/quickstart)一文演示了如何启动和配置 Cloud Shell。 在此处启动 Cloud Shell 专用的网站：
+登录 Cloud Shell 后，Ansible 将通过 Azure 进行身份验证以管理基础架构，无需任何其他配置。 
 
-[![启动 Cloud Shell](https://shell.azure.com/images/launchcloudshell.png "启动 Cloud Shell")](https://shell.azure.com)
+使用多个订阅时，请通过导出 `AZURE_SUBSCRIPTION_ID` 环境变量来指定 Ansible 使用的订阅。 
 
-## <a name="use-ansible-to-connect-to-a-vm"></a>使用 Ansible 连接到 VM
-Ansible 已创建了一个名为 [azure_rm.py](https://github.com/ansible/ansible/blob/devel/contrib/inventory/azure_rm.py) 的 Python 脚本，该脚本可通过向 Azure 资源管理器发出 API 请求生成 Azure 资源的动态清单。 以下步骤引导你完成使用 `azure_rm.py` 脚本连接到 Azure 虚拟机：
+要列出所有 Azure 订阅，请运行以下命令：
 
-1. 打开 Bash in Cloud Shell。 Shell 类型在 Cloud Shell 窗口左侧表示。
+```azurecli-interactive
+az account list
+```
 
-1. 如果没有可使用的虚拟机，请在 Cloud Shell 中输入以下命令，以创建用于测试的虚拟机：
+按如下所示使用 Azure 订阅 ID 设置 `AZURE_SUBSCRIPTION_ID`：
 
-  ```azurecli-interactive
-  az group create --resource-group ansible-test-rg --location eastus
-  ```
+```azurecli-interactive
+export AZURE_SUBSCRIPTION_ID=<your-subscription-id>
+```
 
-  ```azurecli-interactive
-  az vm create --resource-group ansible-test-rg --name ansible-test-vm --image UbuntuLTS --generate-ssh-keys
-  ```
+## <a name="verify-the-configuration"></a>验证配置
+若要验证配置是否成功，请使用 Ansible 创建一个 Azure 资源组。
 
-1. 使用 GNU `wget` 命令检索 `azure_rm.py` 脚本：
-
-  ```azurecli-interactive
-  wget https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/azure_rm.py
-  ```
-
-1. 使用 `chmod` 命令更改对 `azure_rm.py` 脚本的访问权限。 以下命令使用 `+x` 参数允许执行（运行）指定的文件 (`azure_rm.py`)：
-
-  ```azurecli-interactive
-  chmod +x azure_rm.py
-  ```
-
-1. 使用 [ansible 命令](https://docs.ansible.com/ansible/2.4/ansible.html) 连接到虚拟机： 
-
-  ```azurecli-interactive
-  ansible -i azure_rm.py ansible-test-vm -m ping
-  ```
-
-  连接后，应看到结果类似于以下输出：
-
-  ```Output
-  The authenticity of host 'nn.nnn.nn.nn (nn.nnn.nn.nn)' can't be established.
-  ECDSA key fingerprint is SHA256:&lt;some value>.
-  Are you sure you want to continue connecting (yes/no)? yes
-  test-ansible-vm | SUCCESS => {
-      "changed": false,
-      "failed": false,
-      "ping": "pong"
-  }
-  ```
-
-1. 如果在本部分中创建了资源组和虚拟机
-
-  ```azurecli-interactive
-  az group delete -n <resourceGroup>
-  ```
-
-## <a name="run-a-playbook-in-cloud-shell"></a>在 Cloud Shell 中运行 Playbook
-[ansible-playbook](https://docs.ansible.com/ansible/2.4/ansible-playbook.html) 命令执行 Ansible playbook，并在目标主机上运行任务。 本部分介绍如何使用 Cloud Shell 创建和执行两个 playbook（一个用于创建资源组，另一个用于删除资源组）。 
-
-1. 创建一个名为 `rg.yml` 的文件，如下所示：
-
-  ```azurecli-interactive
-  vi rg.yml
-  ```
-
-1. 将以下内容复制到 Cloud Shell 窗口（现在承载 VI 编辑器的一个实例）：
-
-  ```yml
-  - name: My first Ansible Playbook
-    hosts: localhost
-    connection: local
-    tasks:
-    - name: Create a resource group
-      azure_rm_resourcegroup:
-        name: demoresourcegroup
-        location: eastus
-  ```
-
-1. 保存该文件，并通过输入 `:wq` 和按 &lt;Enter> 退出 VI 编辑器。
-
-1. 使用 `ansible-playbook` 命令运行 `rg.yml` playbook：
-
-  ```azurecli-interactive
-  ansible-playbook rg.yml
-  ```
-
-1. 应看到结果类似于以下输出：
-
-  ```Output
-  PLAY [My first Ansible Playbook] **********
-
-  TASK [Gathering Facts] **********
-  ok: [localhost]
-
-  TASK [Create a resource group] **********
-  changed: [localhost]
-
-  PLAY RECAP **********
-  localhost : ok=2 changed=1 unreachable=0 failed=0
-  ```
-
-1. 验证部署：
-
-  ```azurecli-interactive
-  az group show -n demoresourcegroup
-  ```
-
-1. 现在已创建了资源组，将创建第二个 Ansible playbook 来删除该资源组：
-
-  ```azurecli-interactive
-  vi rg2.yml
-  ```
-
-1. 将以下内容复制到 Cloud Shell 窗口（现在承载 VI 编辑器的一个实例）：
-
-  ```yml
-  - name: My second Ansible Playbook
-    hosts: localhost
-    connection: local
-    tasks:
-    - name: Delete a resource group
-      azure_rm_resourcegroup:
-        name: demoresourcegroup
-        state: absent
-  ```
-
-1. 保存该文件，并通过输入 `:wq` 和按 &lt;Enter> 退出 VI 编辑器。
-
-1. 使用 `ansible-playbook` 命令运行 `rg2.yml` playbook：
-
-  ```azurecli-interactive
-  ansible-playbook rg.yml
-  ```
-
-1. 应看到结果类似于以下输出：
-
-  ```Output
-  The output is as following. 
-  PLAY [My second Ansible Playbook] **********
-
-  TASK [Gathering Facts] **********
-  ok: [localhost]
-
-  TASK [Delete a resource group] **********
-  changed: [localhost]
-
-  PLAY RECAP **********
-  localhost : ok=2 changed=1 unreachable=0 failed=0
-  ```
+[!INCLUDE [create-resource-group-with-ansible.md](../../includes/ansible-snippet-create-resource-group.md)]
 
 ## <a name="next-steps"></a>后续步骤
 
 > [!div class="nextstepaction"] 
-> [使用 Ansible 在 Azure 中创建基本的虚拟机](/azure/virtual-machines/linux/ansible-create-vm)
+> [快速入门：使用 Ansible 在 Azure 中配置虚拟机](/azure/virtual-machines/linux/ansible-create-vm)

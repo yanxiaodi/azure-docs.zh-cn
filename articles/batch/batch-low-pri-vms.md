@@ -1,21 +1,22 @@
 ---
-title: 在经济高效低优先级的 VM 上运行 Azure Batch 工作负荷 | Microsoft 文档
+title: 在经济高效低优先级的 VM 上运行工作负荷 - Azure Batch | Microsoft Docs
 description: 了解如何预配低优先级 VM，以降低 Azure Batch 工作负载的成本。
 services: batch
 author: mscurrell
-manager: jeconnoc
+manager: gwallace
 ms.assetid: dc6ba151-1718-468a-b455-2da549225ab2
 ms.service: batch
-ms.devlang: multiple
 ms.topic: article
 ms.workload: na
 ms.date: 03/19/2018
 ms.author: markscu
-ms.openlocfilehash: a05c816bd876f7c66a1e62515dea44c6fd969c8c
-ms.sourcegitcommit: 20d103fb8658b29b48115782fe01f76239b240aa
-ms.translationtype: HT
+ms.custom: seodec18
+ms.openlocfilehash: 33d448bc95f4cb12f5a06232cbab168a43d522c1
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/03/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70095200"
 ---
 # <a name="use-low-priority-vms-with-batch"></a>将低优先级 VM 与 Batch 配合使用
 
@@ -41,11 +42,11 @@ Azure Batch 可提供低优先级虚拟机 (VM) 来降低 Batch 工作负荷的�
 
 适合使用低优先级 VM 的批处理用例示例包括：
 
--   开发和测试：具体而言，开发大规模解决方案时可以实现极大的节省。 所有类型的测试都可以受益，但大规模负载测试和回归测试可以获得极大的好处。
+-   **开发和测试**：具体而言，开发大规模解决方案时可以实现极大的节省。 所有类型的测试都可以受益，但大规模负载测试和回归测试可以获得极大的好处。
 
--   补充按需容量：低优先级 VM 可用于补充普通的专用 VM - 如果有可用的容量，则作业可以扩展，因而能够以更低的成本、更快的速度完成；如果没有可用的容量，则仍可遵循专用 VM 的基准。
+-   **补充按需容量**：低优先级 VM 可用于补充常规的专用 VM - 如果可用，则作业可以扩展，因而能够以更低的成本、更快的速度完成；如果不可用，则仍可遵循专用 VM 的基准。
 
--   灵活的作业执行时间：如果作业必须完成的时间比较灵活，则可以容忍潜在的容量下降；但是，增加的低优先级 VM 作业往往能够以更低的成本、更快的速度运行。
+-   **灵活的作业执行时间**：如果作业必须完成的时间比较灵活，则可以容忍潜在的容量下降；但是，增加的低优先级 VM 作业往往能够以更低的成本、更快的速度运行。
 
 可以根据作业执行时间的灵活度，通过多种方式将 Batch 池配置为使用低优先级 VM。
 
@@ -84,7 +85,7 @@ CloudPool pool = batchClient.PoolOperations.CreatePool(
     targetDedicatedComputeNodes: 5,
     targetLowPriorityComputeNodes: 20,
     virtualMachineSize: "Standard_D2_v2",
-    cloudServiceConfiguration: new CloudServiceConfiguration(osFamily: "4") // WS 2012 R2
+    cloudServiceConfiguration: new CloudServiceConfiguration(osFamily: "5") // WS 2016
 );
 ```
 
@@ -94,7 +95,7 @@ CloudPool pool = batchClient.PoolOperations.CreatePool(
 ImageReference imageRef = new ImageReference(
     publisher: "Canonical",
     offer: "UbuntuServer",
-    sku: "16.04.0-LTS",
+    sku: "16.04-LTS",
     version: "latest");
 
 // Create the pool

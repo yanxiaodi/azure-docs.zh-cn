@@ -1,71 +1,55 @@
 ---
-title: 在远程监视解决方案中检测设备问题 - Azure | Microsoft Docs
+title: 教程：在远程监视解决方案中检测设备问题 - Azure | Microsoft Docs
 description: 本教程介绍如何使用规则和操作在远程监视解决方案中自动检测基于阈值的设备问题。
-services: iot-suite
-suite: iot-suite
 author: dominicbetts
 manager: timlt
 ms.author: dobett
-ms.service: iot-suite
-ms.date: 05/01/2018
-ms.topic: article
-ms.devlang: NA
-ms.tgt_pltfrm: NA
-ms.workload: NA
-ms.openlocfilehash: f3583b27b2fb9959e65a9c66a75c1174ebf3e238
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
+ms.service: iot-accelerators
+services: iot-accelerators
+ms.date: 11/08/2018
+ms.topic: tutorial
+ms.custom: mvc
+ms.openlocfilehash: 91ee5087e5f41cda3648c2ecadcfcf16fd32a249
+ms.sourcegitcommit: 4eeeb520acf8b2419bcc73d8fcc81a075b81663a
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
+ms.lasthandoff: 12/19/2018
+ms.locfileid: "53598664"
 ---
-# <a name="detect-issues-using-threshold-based-rules"></a>使用基于阈值的规则检测问题
+# <a name="tutorial-detect-issues-with-devices-connected-to-your-monitoring-solution"></a>教程：检测连接到监视解决方案的设备问题
 
-本教程介绍远程监视解决方案中的规则引擎的功能。 为了介绍这些功能，本教程在 Contoso IoT 应用程序中使用了一个方案。
+在本教程中，我们将配置远程监视解决方案加速器，以检测联网 IoT 设备的问题。 若要检测设备问题，请添加可在解决方案仪表板上生成警报的规则。
 
-Contoso 的某个规则可在**冷却器**设备报告的压力超过 250 PSI 时生成关键警报。 操作员希望能够通过查找初始压力峰值，来识别可能出现传感器问题的**冷却器**设备。 为了识别这些设备，我们将创建一个规则，以便在压力超过 150 PSI 时生成警告。
+为了介绍规则和警报，本教程使用了一个模拟冷却器设备。 该冷却器由一家称作 Contoso 的组织进行管理，并已连接到远程监视解决方案加速器。 Contoso 已创建一个规则，当冷却器中的压力超过 298 PSI 时，该规则会生成严重警报。 Contoso 的操作员希望能够通过查找初始压力峰值，来识别可能出现传感器问题的冷却器设备。 若要识别此类设备，请添加一个规则，当冷却器器的压力超过 150 PSI 时，该规则会生成警告性警报。
 
-而且已经告知你，当**冷却器**设备在过去 5 分钟内的平均湿度大于 80% 且**冷却器**设备在过去 5 分钟内的温度高于 75 华氏度时，需要触发一个严重警报。
+此外，如果在过去 5 分钟内，设备中的平均平均湿度超过 80% 并且设备的温度超过 75 华氏度，则操作员必须针对冷却器创建严重警报。
 
-本教程介绍如何执行下列操作：
+本教程介绍以下操作：
 
 >[!div class="checklist"]
 > * 在解决方案中查看规则
-> * 创建新规则
-> * 创建具有多个条件的新规则
+> * 创建规则
+> * 创建具有多个条件的规则
 > * 编辑现有规则
-> * 删除规则
+> * 打开和关闭规则
 
-## <a name="prerequisites"></a>先决条件
+如果没有 Azure 订阅，请在开始之前创建一个[免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
 
-若要遵循本教程，需在 Azure 订阅中部署远程监视解决方案的实例。
+[!INCLUDE [iot-accelerators-tutorial-prereqs](../../includes/iot-accelerators-tutorial-prereqs.md)]
 
-如果尚未部署远程监视解决方案，应完成[部署远程监视解决方案加速器](iot-accelerators-remote-monitoring-deploy.md)教程。
+## <a name="review-the-existing-rules"></a>查看现有规则
 
-## <a name="view-the-rules-in-your-solution"></a>在解决方案中查看规则
+解决方案加速器中的“规则”页显示所有当前规则的列表：
 
-解决方案中的“规则”页显示所有当前规则的列表：
+[![“规则”页](./media/iot-accelerators-remote-monitoring-automate/rulesactions_v2-inline.png)](./media/iot-accelerators-remote-monitoring-automate/rulesactions_v2-expanded.png#lightbox)
 
-![“规则和操作”页](./media/iot-accelerators-remote-monitoring-automate/rulesactions_v2.png)
+若要仅查看应用于冷却器设备的规则，请应用筛选器。 在列表中选择某个规则后，可以查看其详细信息并对其进行编辑：
 
-如果只想查看应用于**冷却器**设备的规则，请应用筛选器：
+[![查看规则详细信息](./media/iot-accelerators-remote-monitoring-automate/rulesactionsdetail_v2-inline.png)](./media/iot-accelerators-remote-monitoring-automate/rulesactionsdetail_v2-expanded.png#lightbox)
 
-![筛选规则列表](./media/iot-accelerators-remote-monitoring-automate/rulesactionsfilter_v2.png)
+## <a name="create-a-rule"></a>创建规则
 
-在列表中选择某个规则后，可以查看其详细信息并对其进行编辑：
-
-![查看规则详细信息](./media/iot-accelerators-remote-monitoring-automate/rulesactionsdetail_v2.png)
-
-若要禁用、启用或删除一个或多个规则，请在列表中选择多个规则：
-
-![选择多个规则](./media/iot-accelerators-remote-monitoring-automate/rulesactionsmultiselect_v2.png)
-
-## <a name="create-a-new-rule"></a>创建新规则
-
-若要添加一个可在**冷却器**设备中的压力超过 150 PSI 时生成警告的新规则，请选择“新建规则”：
-
-![创建规则](./media/iot-accelerators-remote-monitoring-automate/rulesactionsnewrule_v2.png)
-
-使用以下值创建规则：
+若要创建一个可在冷却器设备中的压力超过 150 PSI 时生成警告的规则，请单击“新建规则”。 使用以下值创建规则：
 
 | 设置          | 值                                 |
 | ---------------- | ------------------------------------- |
@@ -73,22 +57,22 @@ Contoso 的某个规则可在**冷却器**设备报告的压力超过 250 PSI �
 | 说明      | 冷却器压力超过 150 PSI |
 | 设备组     | “冷却器”设备组             |
 | 计算      | 即时                               |
-| 条件 1 字段| 压强                              |
+| 条件 1 字段| 压力                              |
 | 条件 1 运算符 | 大于                      |
 | 条件 1 值    | 150                               |
 | 严重性级别  | 警告                               |
 
-若要保存新规则，请选择“应用”。
+[![创建警告规则](./media/iot-accelerators-remote-monitoring-automate/rulesactionsnewrule_v2-inline.png)](./media/iot-accelerators-remote-monitoring-automate/rulesactionsnewrule_v2-expanded.png#lightbox)
 
-可以在“规则”页或“仪表板”页上查看规则的触发时间。
+若要保存新规则，请单击“应用”。
 
-## <a name="create-a-new-rule-with-multiple-conditions"></a>创建具有多个条件的新规则
+可以在“规则”页或“仪表板”页上查看规则的触发时间：
 
-若要创建具有多个条件的新规则，使其在**冷却器**设备在过去 5 分钟内的平均湿度大于 80% 且**冷却器**设备在过去 5 分钟内的温度高于 75 华氏度时生成一个严重警报，请选择“新建规则”：
+[![触发的警告规则](./media/iot-accelerators-remote-monitoring-automate/warningruletriggered-inline.png)](./media/iot-accelerators-remote-monitoring-automate/warningruletriggered-expanded.png#lightbox)
 
-![创建多条件规则](./media/iot-accelerators-remote-monitoring-automate/rulesactionsnewrule_mult_v2.png)
+## <a name="create-an-advanced-rule"></a>创建高级规则
 
-使用以下值创建规则：
+若要创建一个可在过去 5 分钟内当冷却器设备中的平均平均湿度超过 80% 并且平均温度超过 75 华氏度时生成严重警报的、具有多个条件的规则，请单击“新建规则”。 使用以下值创建规则：
 
 | 设置          | 值                                 |
 | ---------------- | ------------------------------------- |
@@ -99,14 +83,12 @@ Contoso 的某个规则可在**冷却器**设备报告的压力超过 250 PSI �
 | 时间段      | 5                                     |
 | 条件 1 字段| 湿度                              |
 | 条件 1 运算符 | 大于                      |
-| 条件 1 值    | 80                               |
+| 条件 1 值    | 80                                |
 | 严重性级别  | 严重                              |
 
-若要添加第二个条件，请单击“+ 添加条件”。
+[![创建多条件规则 - 第一部分](./media/iot-accelerators-remote-monitoring-automate/rulesactionsnewrule_mult_v2-inline.png)](./media/iot-accelerators-remote-monitoring-automate/rulesactionsnewrule_mult_v2-expanded.png#lightbox)
 
-![创建条件 2](./media/iot-accelerators-remote-monitoring-automate/rulesactionsnewrule_mult_cond2_v2.png)
-
-在新条件中使用以下值：
+若要添加第二个条件，请单击“+ 添加条件”。 为新条件使用以下值：
 
 | 设置          | 值                                 |
 | ---------------- | ------------------------------------- |
@@ -114,45 +96,45 @@ Contoso 的某个规则可在**冷却器**设备报告的压力超过 250 PSI �
 | 条件 2 运算符 | 大于                      |
 | 条件 2 值    | 75                                |
 
-若要保存新规则，请选择“应用”。
+[![创建多条件规则 - 第二部分](./media/iot-accelerators-remote-monitoring-automate/rulesactionsnewrule_mult_cond2_v2-inline.png)](./media/iot-accelerators-remote-monitoring-automate/rulesactionsnewrule_mult_cond2_v2-expanded.png#lightbox)
 
-可以在“规则”页或“仪表板”页上查看规则的触发时间。
+若要保存新规则，请单击“应用”。
+
+可以在“规则”页或“仪表板”页上查看规则的触发时间：
+
+[![触发的多条件规则](./media/iot-accelerators-remote-monitoring-automate/criticalruletriggered-inline.png)](./media/iot-accelerators-remote-monitoring-automate/criticalruletriggered-expanded.png#lightbox)
 
 ## <a name="edit-an-existing-rule"></a>编辑现有规则
 
-若要对某个现有规则进行更改，请在规则列表中选择该规则。
+若要对某个现有规则进行更改，请在规则列表中选择该规则，然后单击“编辑”：
 
-![编辑规则](./media/iot-accelerators-remote-monitoring-automate/rulesactionsedit_v2.png)
+[![编辑规则](./media/iot-accelerators-remote-monitoring-automate/rulesactionsedit_v2-inline.png)](./media/iot-accelerators-remote-monitoring-automate/rulesactionsedit_v2-expanded.png#lightbox)
 
-<!--## Disable a rule
+## <a name="disable-a-rule"></a>禁用规则
 
-To temporarily switch off a rule, you can disable it in the list of rules. Choose the rule to disable, and then choose **Disable**. The **Status** of the rule in the list changes to indicate the rule is now disabled. You can re-enable a rule that you previously disabled using the same procedure.
+若要暂时关闭某个规则，可以在规则列表中禁用该规则。 选择要禁用的规则，然后选择“禁用”。 列表中规则的“状态”会更改，指示该规则现已禁用。 可以使用相同的过程重新启用先前已禁用的规则。
 
-![Disable rule](./media/iot-accelerators-remote-monitoring-automate/rulesactionsdisable.png)
+[![禁用规则](./media/iot-accelerators-remote-monitoring-automate/rulesactionsdisable-inline.png)](./media/iot-accelerators-remote-monitoring-automate/rulesactionsdisable-expanded.png#lightbox)
 
-You can enable and disable multiple rules at the same time if you select multiple rules in the list.-->
+在列表中选择多个规则可以同时启用和禁用多个规则。
 
-<!--## Delete a rule
+## <a name="delete-a-rule"></a>删除规则
 
-To permanently delete a rule, choose the rule in the list of rules and then choose **Delete**.
+若要永久删除某个规则，可以在规则列表中删除它。 选择要删除的规则，然后选择“删除”。
 
-You can delete multiple rules at the same time if you select multiple rules in the list.-->
+[![删除规则](./media/iot-accelerators-remote-monitoring-automate/rulesactionsdelete-inline.png)](./media/iot-accelerators-remote-monitoring-automate/rulesactionsdelete-expanded.png#lightbox)
+
+确认要删除此规则后，系统会允许你在“维护”页中删除与此规则关联的任何警报。
+
+[![删除规则](./media/iot-accelerators-remote-monitoring-automate/rulesactionsdeletetidy-inline.png)](./media/iot-accelerators-remote-monitoring-automate/rulesactionsdeletetidy-expanded.png#lightbox)
+
+一次只能删除一项规则。
+
+[!INCLUDE [iot-accelerators-tutorial-cleanup](../../includes/iot-accelerators-tutorial-cleanup.md)]
 
 ## <a name="next-steps"></a>后续步骤
 
-本教程已介绍以下操作：
+本教程介绍了如何使用远程监视解决方案加速器中的“规则”页来创建和管理可在解决方案中触发警报的规则。 若要了解如何使用解决方案加速器来管理和配置联网设备，请继续学习下一篇教程。
 
-<!-- Repeat task list from intro -->
->[!div class="checklist"]
-> * 在解决方案中查看规则
-> * 创建新规则
-> * 编辑现有规则
-> * 删除规则
-
-了解如何使用基于阈值的规则检测问题后，我们建议接下来了解以下操作：
-
-* [管理和配置设备](iot-accelerators-remote-monitoring-manage.md)。
-* [排查和修正设备问题](iot-accelerators-remote-monitoring-maintain.md)。
-* [使用模拟设备测试解决方案](iot-accelerators-remote-monitoring-test.md)。
-
-<!-- Next tutorials in the sequence -->
+> [!div class="nextstepaction"]
+> [配置并管理连接到监视解决方案的设备](iot-accelerators-remote-monitoring-manage.md)

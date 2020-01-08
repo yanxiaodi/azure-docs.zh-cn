@@ -1,44 +1,44 @@
 ---
-title: "在 Azure 中的 OpenSUSE VM 上安装 MySQL | Microsoft Docs"
-description: "了解如何在 Azure 中的 OpenSUSE Linux 虚拟机上安装 MySQL。"
+title: 在 Azure 中的 OpenSUSE VM 上安装 MySQL | Microsoft Docs
+description: 了解如何在 Azure 中的 OpenSUSE Linux 虚拟机上安装 MySQL。
 services: virtual-machines-linux
-documentationcenter: 
+documentationcenter: ''
 author: cynthn
-manager: jeconnoc
-editor: 
+manager: gwallace
+editor: ''
 tags: azure-resource-manager
 ms.assetid: 1594e10e-c314-455a-9efb-a89441de364b
 ms.service: virtual-machines-linux
 ms.workload: infrastructure-services
 ms.tgt_pltfrm: vm-linux
-ms.devlang: na
 ms.topic: article
-ms.date: 01/22/2018
+ms.date: 07/11/2018
 ms.author: cynthn
-ms.openlocfilehash: 88bd895cb3a384f1ada0394fe2da206aca86b981
-ms.sourcegitcommit: 5ac112c0950d406251551d5fd66806dc22a63b01
-ms.translationtype: HT
+ms.openlocfilehash: 891eade6aaaf8db9813566d10cdceed113560dc7
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/23/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70091877"
 ---
 # <a name="install-mysql-on-a-virtual-machine-running-opensuse-linux-in-azure"></a>在 Azure 中运行 OpenSUSE Linux 的虚拟机上安装 MySQL
 
-[MySQL](http://www.mysql.com) 是一种常用的开源 SQL 数据库。 本教程介绍如何创建运行 OpenSUSE Linux 的虚拟机，并安装 MySQL。
+[MySQL](https://www.mysql.com) 是一种常用的开源 SQL 数据库。 本教程介绍如何创建运行 OpenSUSE Linux 的虚拟机，并安装 MySQL。
 
 
 [!INCLUDE [cloud-shell-try-it.md](../../../includes/cloud-shell-try-it.md)]
 
-如果选择在本地安装并使用 CLI，需要 Azure CLI 2.0 版或更高版本。 若要查找版本，请运行 `az --version`。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。
+如果选择在本地安装并使用 CLI，需要 Azure CLI 2.0 版或更高版本。 要查找版本，请运行 `az --version`。 如果需要进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。
 
 ## <a name="create-a-virtual-machine-running-opensuse-linux"></a>创建运行 OpenSUSE Linux 的虚拟机
 
-首先创建一个资源组。 在此示例中，我们将该资源组命名为 *mySQSUSEResourceGroup*，并在*美国东部*区域中创建它。
+首先创建一个资源组。 在此示例中，资源组名为 *mySQSUSEResourceGroup*，并在“美国东部”区域中创建。
 
 ```azurecli-interactive
 az group create --name mySQLSUSEResourceGroup --location eastus
 ```
 
-创建 VM。 在此示例中，我们将该 VM 命名为 *myVM*。 我们还将使用 VM 大小 *Standard_D2s_v3*，但应选择你认为最适合你的工作负荷的 [VM 大小](sizes.md)。
+创建 VM。 在此示例中，VM 名为 *myVM*，VM 大小为 *Standard_D2s_v3*，但应选择你认为最适合你的工作负荷的 [VM 大小](sizes.md)。
 
 ```azurecli-interactive
 az vm create --resource-group mySQLSUSEResourceGroup \
@@ -95,17 +95,30 @@ systemctl is-enabled mysql
 
 这应返回：已启用。
 
+重新启动服务器。
+
+```bash
+sudo reboot
+```
+
 
 ## <a name="mysql-password"></a>MySQL 密码
 
 在安装后，MySQL 根密码默认为空。 运行 **mysql\_secure\_installation** 脚本来保护 MySQL。 该脚本会提示更改 MySQL 根密码、删除匿名用户帐户、禁用远程根登录、删除测试数据库以及重新加载特权表。 
+
+服务器重新启动后，重新通过 ssh 连接到 VM。
+
+```azurecli-interactive  
+ssh 10.111.112.113
+```
+
 
 
 ```bash
 mysql_secure_installation
 ```
 
-## <a name="log-in-to-mysql"></a>登录到 MySQL
+## <a name="sign-in-to-mysql"></a>登录到 MySQL
 
 现在，可以登录并输入 MySQL 提示符。
 
@@ -116,7 +129,7 @@ mysql -u root -p
 
 现在，新建 MySQL 用户。
 
-```   
+```sql
 CREATE USER 'mysqluser'@'localhost' IDENTIFIED BY 'password';
 ```
    
@@ -128,16 +141,16 @@ CREATE USER 'mysqluser'@'localhost' IDENTIFIED BY 'password';
 
 创建数据库，并授予 `mysqluser` 用户权限。
 
-```   
+```sql
 CREATE DATABASE testdatabase;
 GRANT ALL ON testdatabase.* TO 'mysqluser'@'localhost' IDENTIFIED BY 'password';
 ```
    
 数据库用户名和密码仅由连接到数据库的脚本使用。  数据库用户帐户名称不一定表示系统上的实际用户帐户。
 
-允许从另一台计算机登录。 在此示例中，要从其登录的计算机的 IP 地址是 *10.112.113.114*。
+允许从另一台计算机登录。 在此示例中，允许从其登录的计算机的 IP 地址是 *10.112.113.114*。
 
-```   
+```sql
 GRANT ALL ON testdatabase.* TO 'mysqluser'@'10.112.113.114' IDENTIFIED BY 'password';
 ```
    
@@ -149,7 +162,7 @@ quit
 
 
 ## <a name="next-steps"></a>后续步骤
-有关 MySQL 的详细信息，请参阅 [MySQL 文档](http://dev.mysql.com/doc/index-topic.html)。
+有关 MySQL 的详细信息，请参阅 [MySQL 文档](https://dev.mysql.com/doc)。
 
 
 

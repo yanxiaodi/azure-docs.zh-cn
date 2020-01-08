@@ -9,29 +9,29 @@ ms.assetid: 888d9ebc-2500-4071-b6d1-0f6bd1b5997c
 ms.service: data-factory
 ms.workload: data-services
 ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/10/2018
 ms.author: jingwang
 robots: noindex
-ms.openlocfilehash: 4ee466c85b68ebc72dbd55849db84a473d584ffb
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: a652e157ec0e7e33c8dce7be2f4af2c240edac9e
+ms.sourcegitcommit: 64798b4f722623ea2bb53b374fb95e8d2b679318
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 07/11/2019
+ms.locfileid: "67839916"
 ---
 # <a name="move-data-from-postgresql-using-azure-data-factory"></a>使用 Azure 数据工厂从 PostgreSQL 移动数据
-> [!div class="op_single_selector" title1="Select the version of Data Factory service you are using:"]
-> * [版本 1 - 正式版](data-factory-onprem-postgresql-connector.md)
-> * [版本 2 - 预览版](../connector-postgresql.md)
+> [!div class="op_single_selector" title1="选择所使用的数据工厂服务版本："]
+> * [版本 1](data-factory-onprem-postgresql-connector.md)
+> * [版本 2（当前版本）](../connector-postgresql.md)
 
 > [!NOTE]
-> 本文适用于数据工厂版本 1（正式版 (GA)）。 如果使用数据工厂服务版本 2（预览版），请参阅 [V2 中的 PostgreSQL 连接器](../connector-postgresql.md)。
+> 本文适用于数据工厂版本 1。 如果使用当前版本数据工厂服务，请参阅 [V2 中的 PostgreSQL 连接器](../connector-postgresql.md)。
 
 
 本文介绍如何使用 Azure 数据工厂中的复制活动从本地 PostgreSQL 数据库移动数据。 它基于[数据移动活动](data-factory-data-movement-activities.md)一文，其中总体概述了如何使用复制活动移动数据。
 
-可以将数据从本地 PostgreSQL 数据存储复制到任何支持的接收器数据存储。 有关复制活动支持用作接收器的数据存储列表，请参阅[支持的数据存储](data-factory-data-movement-activities.md#supported-data-stores-and-formats)。 数据工厂当前支持将数据从 PostgreSQL 数据库移至其他数据存储，而不支持将数据从其他数据存储移至 PostgreSQL 数据库。 
+可以将数据从本地 PostgreSQL 数据存储复制到任何支持的接收器数据存储。 有关复制活动支持用作接收器的数据存储列表，请参阅[支持的数据存储](data-factory-data-movement-activities.md#supported-data-stores-and-formats)。 数据工厂当前支持将数据从 PostgreSQL 数据库移至其他数据存储，而不支持将数据从其他数据存储移至 PostgreSQL 数据库。
 
 ## <a name="prerequisites"></a>先决条件
 
@@ -43,29 +43,28 @@ ms.lasthandoff: 03/23/2018
 > 请参阅[网关问题故障排除](data-factory-data-management-gateway.md#troubleshooting-gateway-issues)，了解连接/网关相关问题的故障排除提示。
 
 ## <a name="supported-versions-and-installation"></a>支持的版本和安装
-为使数据管理网关连接到 PostgreSQL 数据库，请在数据管理网关所在的同一系统上安装 2.0.12 版到 3.1.9 版之间的[用于 PostgreSQL 的 Ngpsql 数据提供程序](http://go.microsoft.com/fwlink/?linkid=282716)。 支持 7.4 版本和更高版本的 PostgreSQL。
+为使数据管理网关连接到 PostgreSQL 数据库，请在数据管理网关所在的同一系统上安装 2.0.12 版到 3.1.9 版之间的[用于 PostgreSQL 的 Ngpsql 数据提供程序](https://go.microsoft.com/fwlink/?linkid=282716)。 支持 7.4 版本和更高版本的 PostgreSQL。
 
 ## <a name="getting-started"></a>入门
-可以使用不同的工具/API 创建包含复制活动的管道，以从本地 PostgreSQL 数据存储移动数据。 
+可以使用不同的工具/API 创建包含复制活动的管道，以从本地 PostgreSQL 数据存储移动数据。
 
-- 创建管道的最简单方法是使用**复制向导**。 请参阅[教程：使用复制向导创建管道](data-factory-copy-data-wizard-tutorial.md)，以快速了解如何使用复制数据向导创建管道。 
-- 还可以使用以下工具来创建管道： 
-    - Azure 门户
-    - Visual Studio
-    - Azure PowerShell
-    - Azure 资源管理器模板
-    - .NET API
-    - REST API
+- 创建管道的最简单方法是使用  复制向导。 有关分步说明，请参阅[教程：使用复制向导创建管道](data-factory-copy-data-wizard-tutorial.md)，以快速了解如何使用复制数据向导创建管道。
+- 还可以使用以下工具来创建管道：
+  - Visual Studio
+  - Azure PowerShell
+  - Azure 资源管理器模板
+  - .NET API
+  - REST API
 
-     有关创建包含复制活动的管道的分步说明，请参阅[复制活动教程](data-factory-copy-data-from-azure-blob-storage-to-sql-database.md)。 
+    有关创建包含复制活动的管道的分步说明，请参阅[复制活动教程](data-factory-copy-data-from-azure-blob-storage-to-sql-database.md)。
 
 无论使用工具还是 API，执行以下步骤都可创建管道，以便将数据从源数据存储移到接收器数据存储：
 
-1. 创建**链接服务**可将输入和输出数据存储链接到数据工厂。
-2. 创建**数据集**以表示复制操作的输入和输出数据。 
-3. 创建包含复制活动的**管道**，该活动将一个数据集作为输入，将一个数据集作为输出。 
+1. 创建链接服务可将输入和输出数据存储链接到数据工厂  。
+2. 创建数据集以表示复制操作的输入和输出数据  。
+3. 创建包含复制活动的管道，该活动将一个数据集作为输入，将一个数据集作为输出  。
 
-使用向导时，会自动创建这些数据工厂实体（链接服务、数据集和管道）的 JSON 定义。 使用工具/API（.NET API 除外）时，使用 JSON 格式定义这些数据工厂实体。  有关用于从本地 PostgreSQL 数据存储复制数据的数据工厂实体的 JSON 定义示例，请参阅本文的 [JSON 示例：将数据从 PostgreSQL 复制到 Azure Blob](#json-example-copy-data-from-postgresql-to-azure-blob) 部分。 
+使用向导时，会自动创建这些数据工厂实体（链接服务、数据集和管道）的 JSON 定义。 使用工具/API（.NET API 除外）时，使用 JSON 格式定义这些数据工厂实体。 有关用于从本地 PostgreSQL 数据存储复制数据的数据工厂实体的 JSON 定义示例，请参阅本文的 [JSON 示例：将数据从 PostgreSQL 复制到 Azure Blob](#json-example-copy-data-from-postgresql-to-azure-blob) 部分。
 
 对于特定于 PostgreSQL 数据存储的数据工厂实体，以下部分提供了有关用于定义这些实体的 JSON 属性的详细信息：
 
@@ -78,17 +77,17 @@ ms.lasthandoff: 03/23/2018
 | server |PostgreSQL 服务器的名称。 |是 |
 | database |PostgreSQL 数据库的名称。 |是 |
 | schema |数据库中架构的名称。 架构名称区分大小写。 |否 |
-| authenticationType |用于连接到 PostgreSQL 数据库的身份验证类型。 可能的值为：Anonymous、Basic 和 Windows。 |是 |
-| username |如果使用基本或 Windows 身份验证，请指定用户名。 |否 |
+| authenticationType |用于连接到 PostgreSQL 数据库的身份验证类型。 可能的值包括：Anonymous、Basic 和 Windows。 |是 |
+| userName |如果使用基本或 Windows 身份验证，请指定用户名。 |否 |
 | password |指定为用户名指定的用户帐户的密码。 |否 |
 | gatewayName |网关的名称 - 数据工厂服务应使用此网关连接到本地 PostgreSQL 数据库。 |是 |
 
 ## <a name="dataset-properties"></a>数据集属性
-有关可用于定义数据集的节和属性的完整列表，请参阅 [Creating datasets](data-factory-create-datasets.md)（创建数据集）一文。 数据集 JSON 的结构、可用性和策略等节类似于所有数据集类型。
+有关可用于定义数据集的节和属性的完整列表，请参阅[创建数据集](data-factory-create-datasets.md)一文。 数据集 JSON 的结构、可用性和策略等节类似于所有数据集类型。
 
 每种数据集的 typeProperties 节有所不同，该部分提供有关数据在数据存储区中的位置信息。 **RelationalTable** 类型的数据集的 typeProperties 部分（包括 PostgreSQL 数据集）具有以下属性：
 
-| 属性 | 说明 | 必选 |
+| 属性 | 说明 | 需要 |
 | --- | --- | --- |
 | tableName |链接服务引用的 PostgreSQL 数据库实例中表的名称。 TableName 区分大小写。 |否（如果指定了 **RelationalSource** 的**query**） |
 
@@ -104,14 +103,14 @@ ms.lasthandoff: 03/23/2018
 | query |使用自定义查询读取数据。 |SQL 查询字符串。 例如：`"query": "select * from \"MySchema\".\"MyTable\""`。 |否（如果指定了**数据集**的 **tableName**） |
 
 > [!NOTE]
-> 架构和表名称区分大小写。 在查询中将名称括在 `""`（双引号）中。  
+> 架构和表名称区分大小写。 在查询中将名称括在 `""`（双引号）中。
 
 **示例：**
 
  `"query": "select * from \"MySchema\".\"MyTable\""`
 
 ## <a name="json-example-copy-data-from-postgresql-to-azure-blob"></a>JSON 示例：将数据从 PostgreSQL 复制到 Azure Blob
-此示例提供示例 JSON 定义，可使用这些定义通过 [Azure 门户](data-factory-copy-activity-tutorial-using-azure-portal.md)、[Visual Studio](data-factory-copy-activity-tutorial-using-visual-studio.md) 或 [Azure PowerShell](data-factory-copy-activity-tutorial-using-powershell.md) 创建管道。 它们演示如何将数据从 PostgreSQL 数据库复制到 Azure Blob 存储。 但是，可使用 Azure 数据工厂中的复制活动将数据复制到[此处](data-factory-data-movement-activities.md#supported-data-stores-and-formats)所述的任何接收器。   
+此示例提供示例 JSON 定义，可用于通过使用创建的管道[Visual Studio](data-factory-copy-activity-tutorial-using-visual-studio.md)或[Azure PowerShell](data-factory-copy-activity-tutorial-using-powershell.md)。 它们演示如何将数据从 PostgreSQL 数据库复制到 Azure Blob 存储。 但是，可使用 Azure 数据工厂中的复制活动将数据复制到[此处](data-factory-data-movement-activities.md#supported-data-stores-and-formats)所述的任何接收器。
 
 > [!IMPORTANT]
 > 此示例提供 JSON 代码段。 它不包括创建数据工厂的分步说明。 请参阅文章[在本地位置和云之间移动数据](data-factory-move-data-between-onprem-and-cloud.md)以获取分步说明。
@@ -153,10 +152,10 @@ ms.lasthandoff: 03/23/2018
 {
     "name": "AzureStorageLinkedService",
     "properties": {
-    "type": "AzureStorage",
-    "typeProperties": {
-        "connectionString": "DefaultEndpointsProtocol=https;AccountName=<AccountName>;AccountKey=<AccountKey>"
-    }
+        "type": "AzureStorage",
+        "typeProperties": {
+            "connectionString": "DefaultEndpointsProtocol=https;AccountName=<AccountName>;AccountKey=<AccountKey>"
+        }
     }
 }
 ```
@@ -191,7 +190,7 @@ ms.lasthandoff: 03/23/2018
 
 **Azure Blob 输出数据集：**
 
-数据将写入到新 blob，每小时进行一次（频率：小时，间隔：1）。 根据处理中切片的开始时间，动态评估 blob 的文件夹路径和文件名。 文件夹路径使用开始时间的年、月、日和小时部分。
+数据将写入到新 blob，每隔一小时进行一次（频率：小时，间隔：1）。 根据处理中切片的开始时间，动态评估 blob 的文件夹路径和文件名。 文件夹路径使用开始时间的年、月、日和小时部分。
 
 ```json
 {
@@ -251,7 +250,7 @@ ms.lasthandoff: 03/23/2018
 
 **包含复制活动的管道：**
 
-管道包含配置为使用输入和输出数据集，且计划每小时运行一次的复制活动。 在管道 JSON 定义中， **源** 类型设置为 **RelationalSource****接收器** 类型设置为 **BlobSink**。 为 **query** 属性指定的 SQL 查询从 PostgreSQL 数据库的 public.usstates 表中选择数据。
+管道包含配置为使用输入和输出数据集，且计划每小时运行一次的复制活动。 在管道 JSON 定义中， **源** 类型设置为 **RelationalSource** **接收器** 类型设置为 **BlobSink**。 为 **query** 属性指定的 SQL 查询从 PostgreSQL 数据库的 public.usstates 表中选择数据。
 
 ```json
 {
@@ -306,46 +305,46 @@ ms.lasthandoff: 03/23/2018
 
 | PostgreSQL 数据库类型 | PostgresSQL 别名 | .NET Framework 类型 |
 | --- | --- | --- |
-| abstime | |Datetime | &nbsp;
+| abstime | |Datetime |
 | bigint |int8 |Int64 |
 | bigserial |serial8 |Int64 |
-| bit [(n)] | |Byte[], String | &nbsp;
+| bit [(n)] | |Byte[], String |
 | bit varying [ (n) ] |varbit |Byte[], String |
-| 布尔值 |bool |布尔 |
-| box | |Byte[], String |&nbsp;
-| bytea | |Byte[], String |&nbsp;
+| boolean |bool |Boolean |
+| box | |Byte[], String |
+| bytea | |Byte[], String |
 | character [(n)] |char [(n)] |String |
-| character varying [(n)] |varchar [(n)] |String |
-| cid | |String |&nbsp;
-| cidr | |String |&nbsp;
-| circle | |Byte[], String |&nbsp;
-| 日期 | |Datetime |&nbsp;
-| daterange | |String |&nbsp;
-| 双精度 |float8 |Double |
-| inet | |Byte[], String |&nbsp;
-| intarry | |String |&nbsp;
-| int4range | |String |&nbsp;
-| int8range | |String |&nbsp;
+| character varying [(n)] |varchar [(n)] |字符串 |
+| cid | |String |
+| cidr | |String |
+| circle | |Byte[], String |
+| date | |Datetime |
+| daterange | |String |
+| double precision |float8 |Double |
+| inet | |Byte[], String |
+| intarry | |字符串 |
+| int4range | |字符串 |
+| int8range | |String |
 | integer |int, int4 |Int32 |
-| interval [fields] [(p)] | |Timespan |&nbsp;
-| json | |String |&nbsp;
-| jsonb | |Byte[] |&nbsp;
-| 折线图 | |Byte[], String |&nbsp;
-| lseg | |Byte[], String |&nbsp;
-| macaddr | |Byte[], String |&nbsp;
-| money | |小数 |&nbsp;
-| numeric [(p, s)] |decimal [(p, s)] |小数 |
-| numrange | |String |&nbsp;
-| oid | |Int32 |&nbsp;
-| 路径 | |Byte[], String |&nbsp;
-| pg_lsn | |Int64 |&nbsp;
-| point | |Byte[], String |&nbsp;
-| polygon | |Byte[], String |&nbsp;
+| interval [fields] [(p)] | |Timespan |
+| json | |字符串 |
+| jsonb | |Byte[] |
+| line | |Byte[], String |
+| lseg | |Byte[], String |
+| macaddr | |Byte[], String |
+| money | |Decimal |
+| numeric [(p, s)] |decimal [(p, s)] |Decimal |
+| numrange | |字符串 |
+| oid | |Int32 |
+| path | |Byte[], String |
+| pg_lsn | |Int64 |
+| point | |Byte[], String |
+| polygon | |Byte[], String |
 | real |float4 |Single |
 | smallint |int2 |Int16 |
 | smallserial |serial2 |Int16 |
 | serial |serial4 |Int32 |
-| text | |String |&nbsp;
+| text | |String |
 
 ## <a name="map-source-to-sink-columns"></a>将源映射到接收器列
 要了解如何将源数据集中的列映射到接收器数据集中的列，请参阅[映射 Azure 数据工厂中的数据集列](data-factory-map-columns.md)。
@@ -354,4 +353,4 @@ ms.lasthandoff: 03/23/2018
 从关系数据源复制数据时，请注意可重复性，以免发生意外结果。 在 Azure 数据工厂中，可手动重新运行切片。 还可以为数据集配置重试策略，以便在出现故障时重新运行切片。 无论以哪种方式重新运行切片，都需要确保读取相同的数据，而与运行切片的次数无关。 请参阅[从关系源进行可重复读取](data-factory-repeatable-copy.md#repeatable-read-from-relational-sources)。
 
 ## <a name="performance-and-tuning"></a>性能和优化
-请参阅[复制活动性能和优化指南](data-factory-copy-activity-performance.md)，了解影响 Azure 数据工厂中数据移动（复制活动）性能的关键因素及各种优化方法。
+若要了解影响 Azure 数据工厂中数据移动（复制活动）性能的关键因素及各种优化方法，请参阅[复制活动性能和优化指南](data-factory-copy-activity-performance.md)。

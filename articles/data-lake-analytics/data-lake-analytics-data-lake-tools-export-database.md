@@ -1,28 +1,24 @@
 ---
-title: "使用针对 Visual Studio 的 Azure Data Lake 工具导出 U-SQL 数据库 | Microsoft Docs"
-description: "了解如何使用针对 Visual Studio 的 Azure Data Lake 工具导出 U-SQL 数据库并自动将其导入本地帐户。"
+title: 导出 U-SQL 数据库-针对 Visual Studio 的 Azure Data Lake 工具
+description: 了解如何使用针对 Visual Studio 的 Azure Data Lake 工具导出 U-SQL 数据库并自动将其导入本地帐户。
 services: data-lake-analytics
-documentationcenter: 
 author: yanancai
-manager: 
-editor: 
+ms.author: yanacai
+ms.reviewer: jasonwhowell
 ms.assetid: dc9b21d8-c5f4-4f77-bcbc-eff458f48de2
 ms.service: data-lake-analytics
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: big-data
+ms.topic: conceptual
 ms.date: 11/27/2017
-ms.author: yanacai
-ms.openlocfilehash: 441606258f9541c9552925e7c0cbc9b3a9effb4d
-ms.sourcegitcommit: 7136d06474dd20bb8ef6a821c8d7e31edf3a2820
-ms.translationtype: HT
+ms.openlocfilehash: e5a52de0342e864cb108d8d590583fe64f72e3b6
+ms.sourcegitcommit: 9fba13cdfce9d03d202ada4a764e574a51691dcd
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/05/2017
+ms.lasthandoff: 09/26/2019
+ms.locfileid: "71315792"
 ---
 # <a name="export-a-u-sql-database"></a>导出 U-SQL 数据库
 
-本文介绍如何使用[针对 Visual Studio 的 Azure Data Lake 工具](http://aka.ms/adltoolsvs)将 U-SQL 数据库导出为单个 U-SQL 脚本和下载的资源。 可以使用相同的过程将导出的数据库导入本地帐户。
+本文介绍如何使用[针对 Visual Studio 的 Azure Data Lake 工具](https://aka.ms/adltoolsvs)将 U-SQL 数据库导出为单个 U-SQL 脚本和下载的资源。 可以使用相同的过程将导出的数据库导入本地帐户。
 
 客户通常会维护多个环境进行开发、测试和生产。 这些环境托管在开发人员本地计算机上的本地帐户中，以及 Azure 上的 Azure Data Lake Analytics 帐户中。 
 
@@ -30,7 +26,7 @@ ms.lasthandoff: 12/05/2017
 
 ## <a name="export-steps"></a>导出步骤
 
-### <a name="step-1-export-the-database-in-server-explorer"></a>步骤 1：在服务器资源管理器中导出数据库
+### <a name="step-1-export-the-database-in-server-explorer"></a>步骤 1：导出数据库服务器资源管理器
 
 你有权访问的所有 Data Lake Analytics 帐户都列在服务器资源管理器中。 若要导出数据库，请执行以下操作：
 
@@ -39,9 +35,9 @@ ms.lasthandoff: 12/05/2017
    
     ![服务器资源管理器 - 导出数据库](./media/data-lake-analytics-data-lake-tools-export-database/export-database.png)
 
-     如果“导出”菜单选项不可用，需要[将工具更新到最新版本](http://aka.ms/adltoolsvs)。
+     如果“导出”菜单选项不可用，需要[将工具更新到最新版本](https://aka.ms/adltoolsvs)。
 
-### <a name="step-2-configure-the-objects-that-you-want-to-export"></a>步骤 2：配置想要导出的对象
+### <a name="step-2-configure-the-objects-that-you-want-to-export"></a>步骤 2：配置要导出的对象
 
 如果只需要某个大型数据库的一小部分，可以在导出向导中配置所要导出的对象子集。 
 
@@ -55,7 +51,7 @@ ms.lasthandoff: 12/05/2017
 
 还可以配置导出目标的其他设置。 下表列出了配置说明：
 
-|配置|说明|
+|配置|描述|
 |-------------|-----------|
 |目标名称|此名称指示要将导出的数据库资源保存到的位置。 这些资源的示例包括程序集、附加文件和示例数据。 将在本地数据根文件夹下创建使用此名称的文件夹。|
 |项目目录|此路径定义要将导出的 U-SQL 脚本保存到的位置。 所有数据库对象定义都保存在此位置。|
@@ -88,7 +84,7 @@ ms.lasthandoff: 12/05/2017
 
 ## <a name="next-steps"></a>后续步骤
 
-* [了解 U-SQL 数据库](https://msdn.microsoft.com/library/azure/mt621299.aspx) 
+* [了解 U-SQL 数据库](/u-sql/data-definition-language-ddl-statements) 
 * [使用本地运行和 Azure Data Lake U-SQL SDK 来测试及调试 U-SQL 作业](data-lake-analytics-data-lake-tools-local-run.md)
 
 

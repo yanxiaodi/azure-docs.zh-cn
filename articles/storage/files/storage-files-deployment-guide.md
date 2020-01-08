@@ -1,24 +1,18 @@
 ---
-title: "如何部署 Azure 文件 | Microsoft Docs"
-description: "了解如何从头至尾部署 Azure 文件。"
-services: storage
-documentationcenter: 
-author: wmgries
-manager: klaasl
-editor: jgerend
-ms.assetid: 297f3a14-6b3a-48b0-9da4-db5907827fb5
+title: 如何部署 Azure 文件 | Microsoft Docs
+description: 了解如何从头至尾部署 Azure 文件。
+author: roygara
 ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
-ms.date: 10/08/2017
-ms.author: wgries
-ms.openlocfilehash: c33639723657d3c2875ed9607a887775d558be16
-ms.sourcegitcommit: 2a70752d0987585d480f374c3e2dba0cd5097880
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 05/22/2018
+ms.author: rogarana
+ms.subservice: files
+ms.openlocfilehash: 802b4deb91f1df784ac0aed2952d3f915b54ce73
+ms.sourcegitcommit: 800f961318021ce920ecd423ff427e69cbe43a54
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/19/2018
+ms.lasthandoff: 07/31/2019
+ms.locfileid: "68699717"
 ---
 # <a name="how-to-deploy-azure-files"></a>如何部署 Azure 文件
 [Azure 文件](storage-files-introduction.md)在云中提供完全托管的文件共享，这些共享项可通过行业标准 SMB 协议进行访问。 本文介绍如何在组织内实际部署 Azure 文件。
@@ -34,8 +28,8 @@ ms.lasthandoff: 01/19/2018
 ## <a name="transfer-data-into-azure-files"></a>将数据传输到 Azure 文件
 可能需要将现有文件共享（例如本地存储的文件共享）迁移到新的 Azure 文件共享。 本部分介绍如何通过[规划指南](storage-files-planning.md#data-transfer-method)中详述的几种常用方法将数据移动到 Azure 文件共享
 
-### <a name="azure-file-sync-preview"></a>Azure 文件同步（预览版）
-借助 Azure 文件同步（预览版），既可将组织的文件共享集中在 Azure 文件中，又不失本地文件服务器的灵活性、性能和兼容性。 它通过将 Windows Server 转换为 Azure 文件共享的快速缓存来实现这一点。 你可以使用 Windows Server 上的任意可用协议在本地访问数据（包括 SMB、NFS 和 FTPS），并且可以在世界各地获取所需的缓存数。
+### <a name="azure-file-sync"></a>Azure 文件同步
+借助 Azure 文件同步，既可将组织的文件共享集中在 Azure 文件中，又不失本地文件服务器的灵活性、性能和兼容性。 它通过将 Windows Server 转换为 Azure 文件共享的快速缓存来实现这一点。 你可以使用 Windows Server 上的任意可用协议在本地访问数据（包括 SMB、NFS 和 FTPS），并且可以在世界各地获取所需的缓存数。
 
 Azure 文件同步也可用于将数据迁移到 Azure 文件共享，即使长期使用不需要此同步机制。 若要深入了解如何使用 Azure 文件同步将数据传输到 Azure 文件共享，请参阅[规划 Azure 文件同步部署](storage-sync-files-planning.md)和[如何部署 Azure 文件同步](storage-sync-files-deployment-guide.md)。
 
@@ -82,7 +76,7 @@ Azure 文件同步也可用于将数据迁移到 Azure 文件共享，即使长�
     
     有关详细信息，请参阅[准备驱动器集 CSV 文件](../common/storage-import-export-tool-preparing-hard-drives-import.md?toc=%2fazure%2fstorage%2ffiles%2ftoc.json#prepare-initialdriveset-or-additionaldriveset-csv-file)。
 
-6. 使用 [WAImportExport 工具](http://download.microsoft.com/download/3/6/B/36BFF22A-91C3-4DFC-8717-7567D37D64C5/WAImportExport.zip)将数据复制到一个或多个硬盘驱动器。
+6. 使用 [WAImportExport 工具](https://www.microsoft.com/download/details.aspx?id=55280)将数据复制到一个或多个硬盘驱动器。
 
     ```
     WAImportExport.exe PrepImport /j:<JournalFile> /id:<SessionId> [/logdir:<LogDirectory>] [/sk:<StorageAccountKey>] [/silentmode] [/InitialDriveSet:<driveset.csv>] DataSet:<dataset.csv>
@@ -91,7 +85,7 @@ Azure 文件同步也可用于将数据迁移到 Azure 文件共享，即使长�
     > [!Warning]  
     > 完成磁盘准备操作以后，请勿修改硬盘驱动器上的数据，也勿修改日志文件。
 
-7. [创建导入作业](../common/storage-import-export-service.md?toc=%2fazure%2fstorage%2ffiles%2ftoc.json#create-an-export-job)。
+7. [创建导入作业](../common/storage-import-export-data-to-files.md#step-2-create-an-import-job)。
     
 ### <a name="robocopy"></a>Robocopy
 Robocopy 是 Windows 和 Windows Server 自带的一款知名复制工具。 Robocopy 可用于将数据传输到 Azure 文件，方法是在本地装载文件共享，然后使用装载位置作为 Robocopy 命令的目标位置。 Robocopy 操作非常简单：
@@ -113,7 +107,7 @@ Robocopy 是 Windows 和 Windows Server 自带的一款知名复制工具。 Rob
 ### <a name="azcopy"></a>AzCopy
 AzCopy 是一个命令行实用程序，专用于使用具有优化性能的简单命令在 Azure 文件和 Azure Blob 存储中复制/粘贴数据。 AzCopy 操作简单：
 
-1. 下载[最新版本的 AzCopy on Windows](http://aka.ms/downloadazcopy) 或 [AzCopy on Linux](../common/storage-use-azcopy-linux.md?toc=%2fazure%2fstorage%2ffiles%2ftoc.json#download-and-install-azcopy)。
+1. 下载[最新版本的 AzCopy on Windows](https://aka.ms/downloadazcopy) 或 [AzCopy on Linux](https://docs.microsoft.com/previous-versions/azure/storage/storage-use-azcopy-linux#download-and-install-azcopy)。
 2. 在命令行处使用 `azcopy` 将数据移动到 Azure 文件共享。 对于 Windows，其语法如下： 
 
     ```
@@ -137,7 +131,7 @@ AzCopy 是一个命令行实用程序，专用于使用具有优化性能的简�
 ### <a name="windows"></a>Windows
 可使用 PowerShell 在多台电脑上运行装载命令。 在以下示例中，需要手动填充 `$computers`，但你可以生成要自动装载的计算机列表。 例如，可使用 Active Directory 中的结果填充此变量。
 
-```PowerShell
+```powershell
 $computer = "MyComputer1", "MyComputer2", "MyComputer3", "MyComputer4"
 $computer | ForEach-Object { Invoke-Command -ComputerName $_ -ScriptBlock { net use <desired-drive-letter>: \\<storage-account-name>.file.core.windows.net\<share-name> <storage-account-key> /user:Azure\<storage-account-name> /PERSISTENT:YES } }
 ```

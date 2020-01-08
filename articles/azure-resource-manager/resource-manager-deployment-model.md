@@ -1,31 +1,30 @@
 ---
 title: Resource Manager 和经典部署 | Microsoft Docs
 description: 介绍 Resource Manager 部署模型与经典（或服务管理）部署模型之间的差异。
-services: azure-resource-manager
-documentationcenter: na
 author: tfitzmac
-manager: timlt
-editor: tysonn
 ms.service: azure-resource-manager
-ms.devlang: na
-ms.topic: overview
-ms.tgt_pltfrm: na
-ms.workload: na
-ms.date: 11/15/2017
+ms.topic: conceptual
+ms.date: 08/22/2019
 ms.author: tomfitz
-ms.openlocfilehash: 2fd128ce04ac883396948e6114582dd15288390a
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.openlocfilehash: 9356a1603a39f2ac4d18b27445bf0f8d3a555d7e
+ms.sourcegitcommit: 6d2a147a7e729f05d65ea4735b880c005f62530f
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
-ms.locfileid: "34359734"
+ms.lasthandoff: 08/22/2019
+ms.locfileid: "69982473"
 ---
-# <a name="azure-resource-manager-vs-classic-deployment-understand-deployment-models-and-the-state-of-your-resources"></a>Azure 资源管理器与经典部署：了解部署模型和资源状态
+# <a name="azure-resource-manager-vs-classic-deployment-understand-deployment-models-and-the-state-of-your-resources"></a>Azure 资源管理器和经典部署：了解部署模型和资源状态
+
+> [!NOTE]
+> 仅当从经典部署迁移到 Azure 资源管理器部署时，才会使用本文中提供的信息。
+
 本文介绍 Azure 资源管理器和经典部署模型。 Resource Manager 和经典部署模型表示部署和管理 Azure 解决方案的两种不同方式。 通过两个不同的 API 集来处理它们，且部署的资源可能包含重要差异。 这两个模型相互不兼容。 本文介绍这些差异。
 
 若要简化资源部署和管理，Microsoft 建议为所有新资源使用 Resource Manager。 如果可能，Microsoft 建议通过 Resource Manager 重新部署现有资源。
 
 如果不熟悉资源管理器，请先查看 [Azure 资源管理器概述](resource-group-overview.md)中定义的术语。
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
 ## <a name="history-of-the-deployment-models"></a>部署模型的历史
 Azure 最初只提供经典部署模型。 在此模型中，每个资源彼此独立；无法将相关的资源组合在一起。 因此，必须手动跟踪构成解决方案或应用程序的资源 ，并记得以协调的方式管理。 部署解决方案有两种方式：通过门户单独创建每个资源；或创建一个脚本，以正确的顺序部署所有资源。 若要删除解决方案，必须逐个删除每个资源。 无法轻松应用和更新相关资源的访问控制策略。 最后，无法将标记应用到资源，因此无法使用有助于监视资源和管理计费的术语来标记资源。
@@ -42,6 +41,7 @@ Azure 在 2014 年引入了 Resource Manager，增加了资源组这一概念。
 添加 Resource Manager 时，所有资源都追溯性地添加到默认资源组。 如果现在通过经典部署创建资源，无论部署时指定资源组与否，资源都会在该服务默认的资源组中自动创建。 但是，资源位于资源组内并不意味着其已转换为 Resource Manager 模型。
 
 ## <a name="understand-support-for-the-models"></a>了解对模型的支持
+
 下面是需要了解的三种情况：
 
 1. 云服务不支持资源管理器部署模型。
@@ -53,7 +53,7 @@ Azure 在 2014 年引入了 Resource Manager，增加了资源组这一概念。
 在某些情况下，Resource Manager 命令可以检索通过经典部署创建的资源信息，或者执行管理任务，例如将经典资源移到另一个资源组。 但这些情况并不意味着该类型支持 Resource Manager 操作。 例如，假设某个资源组包含使用经典部署创建的虚拟机。 如果运行以下 Resource Manager PowerShell 命令：
 
 ```powershell
-Get-AzureRmResource -ResourceGroupName ExampleGroup -ResourceType Microsoft.ClassicCompute/virtualMachines
+Get-AzResource -ResourceGroupName ExampleGroup -ResourceType Microsoft.ClassicCompute/virtualMachines
 ```
 
 这会返回虚拟机：
@@ -68,10 +68,10 @@ Location          : westus
 SubscriptionId    : {guid}
 ```
 
-但是，Resource Manager cmdlet **Get-AzureRmVM** 仅返回通过 Resource Manager 部署的虚拟机。 以下命令不返回通过经典部署创建的虚拟机。
+但是，资源管理器 cmdlet **Get-AzVM** 仅返回通过资源管理器部署的虚拟机。 以下命令不返回通过经典部署创建的虚拟机。
 
 ```powershell
-Get-AzureRmVM -ResourceGroupName ExampleGroup
+Get-AzVM -ResourceGroupName ExampleGroup
 ```
 
 只有通过 Resource Manager 创建的资源才支持标记。 不能将标记应用到经典资源。
@@ -84,7 +84,7 @@ Get-AzureRmVM -ResourceGroupName ExampleGroup
 请注意资源之间的以下关系：
 
 * 所有资源都存在于资源组中。
-* 虚拟机依赖在存储资源提供程序中定义的特定存储帐户，以将其磁盘存储在 Blob 存储中（必需）。
+* 虚拟机依赖在存储资源提供程序中定义的具体存储帐户，在 Blob 存储中存储其磁盘（必需）。
 * 虚拟机引用在网络资源提供程序中定义的特定 NIC（必需）和在计算资源提供程序中定义的可用性集（可选）。
 * NIC 引用虚拟机的指定 IP 地址（必需）、虚拟机虚拟网络的子网（必需）和网络安全组（可选）。
 * 虚拟网络内的子网引用网络安全组（可选）。
@@ -102,7 +102,7 @@ Get-AzureRmVM -ResourceGroupName ExampleGroup
 
 下表介绍了计算、网络和存储资源提供程序交互方式的更改：
 
-| Item | 经典 | 资源管理器 |
+| 项 | 经典 | Resource Manager |
 | --- | --- | --- |
 | 面向虚拟机的云服务 |云服务是一个容器，用于容纳要求平台可用性和负载均衡的虚拟机。 |使用新模型，云服务不再是创建虚拟机所必需的对象。 |
 | 虚拟网络 |可以选择将虚拟机用于虚拟网络。 如果包含虚拟机，则无法使用 Resource Manager 部署虚拟网络。 |虚拟机需要已使用 Resource Manager 部署的虚拟网络。 |
@@ -114,7 +114,7 @@ Get-AzureRmVM -ResourceGroupName ExampleGroup
 | 保留 IP 地址 |可以在 Azure 中保留一个 IP 地址并将其与一个云服务关联在一起，以确保该 IP 地址具有粘性。 |可以在“静态”模式下创建公共 IP 地址，并且该地址提供与“保留 IP 地址”相同的功能。 |
 | 每个虚拟机一个公共 IP 地址 (PIP) |公共 IP 地址也可以直接关联到 VM。 |公共 IP 地址是 Microsoft.Network 提供程序提供的一个资源。 公共 IP 地址既可以是静态（保留）的，也可以是动态的。 |
 | 终结点 |需要在虚拟机上配置输入终结点，用于打开某些端口的连接。 这是通过设置输入终结点来连接到虚拟机的一个常见模式。 |可以在负载均衡器上配置入站 NAT 规则，实现在具体端口上启用终结点以连接到虚拟机的相同功能。 |
-| DNS 名称 |云服务会得到一个隐式的全局唯一 DNS 名称。 例如： `mycoffeeshop.cloudapp.net`。 |DNS 名称是可在一个公共 IP 地址资源中指定的可选参数。 FQDN 采用以下格式 - `<domainlabel>.<region>.cloudapp.azure.com`。 |
+| DNS 名称 |云服务会得到一个隐式的全局唯一 DNS 名称。 例如： `mycoffeeshop.cloudapp.net`。 |DNS 名称是可在一个公共 IP 地址资源上指定的可选参数。 FQDN 采用以下格式 - `<domainlabel>.<region>.cloudapp.azure.com`。 |
 | 网络接口 |作为虚拟机的网络配置定义主网络接口和辅助网络接口及其属性。 |网络接口是 Microsoft.Network 提供程序提供的一个资源。 网络接口的生命周期与虚拟机无关。 它引用虚拟机的分配 IP 地址（必需）、虚拟机虚拟网络的子网（必需）和网络安全组（可选）。 |
 
 若要了解如何从不同部署模型连接虚拟网络，请参阅[从门户中的不同部署模型中连接虚拟网络](../vpn-gateway/vpn-gateway-connect-different-deployment-models-portal.md)。
@@ -142,13 +142,14 @@ Get-AzureRmVM -ResourceGroupName ExampleGroup
 
 **我能通过 Resource Manager API 继续使用自动化脚本来预配虚拟机、虚拟网络和存储帐户资源吗？**
 
-所构建的所有自动化和脚本将继续适用于在 Azure 服务管理模式下创建的现有虚拟机和虚拟网络。 然而，必须更新这些脚本以使用新的架构，通过 Resource Manager 模式来创建相同的资源。
+已经构建的所有自动化和脚本继续适用于在 Azure 服务管理模式下创建的现有虚拟机和虚拟网络。 然而，必须更新这些脚本以使用新的架构，通过 Resource Manager 模式来创建相同的资源。
 
-**在哪里可以找到 Azure 资源管理器模板的示例？**
+**在哪里可以找到 Azure Resource Manager 模板的示例？**
 
 可以在 [Azure 资源管理器快速入门模板](https://azure.microsoft.com/documentation/templates/)中找到一系列综合的初学者模板。
 
 ## <a name="next-steps"></a>后续步骤
+
 * 若要演练如何创建用于定义虚拟机、存储帐户和虚拟网络的模板，请参阅 [Resource Manager 模板演练](resource-manager-template-walkthrough.md)。
 * 若要查看用于部署模板的命令，请参阅[使用 Azure 资源管理器模板部署应用程序](resource-group-template-deploy.md)。
 

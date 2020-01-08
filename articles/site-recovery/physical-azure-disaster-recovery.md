@@ -1,18 +1,19 @@
 ---
-title: 使用 Azure Site Recovery 针对物理本地服务器设置到 Azure 的灾难恢复 | Microsoft Docs
+title: 为具有 Azure Site Recovery 的物理本地服务器设置到 Azure 的灾难恢复
 description: 了解如何使用 Azure Site Recovery 服务针对本地 Windows 和 Linux 服务器设置到 Azure 的灾难恢复。
 services: site-recovery
 author: rayne-wiselman
 manager: carmonm
 ms.service: site-recovery
 ms.topic: article
-ms.date: 03/08/2018
+ms.date: 09/09/2019
 ms.author: raynew
-ms.openlocfilehash: 207ff17f7b113bf4a94bb6c157cf53e7b1c46b45
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: 55b375c1e98518a6c3bc2926030cfe072963216c
+ms.sourcegitcommit: fa4852cca8644b14ce935674861363613cf4bfdf
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 09/09/2019
+ms.locfileid: "70814557"
 ---
 # <a name="set-up-disaster-recovery-to-azure-for-on-premises-physical-servers"></a>针对本地物理服务器设置到 Azure 的灾难恢复
 
@@ -31,19 +32,24 @@ ms.lasthandoff: 04/16/2018
 
 完成本教程：
 
-- 请确保了解[方案体系结构和组件](physical-azure-architecture.md)。
+- 请确保了解此方案的[体系结构和组件](physical-azure-architecture.md)。
 - 查看所有组件的[支持要求](vmware-physical-secondary-support-matrix.md)。
 - 请确保想要复制的服务器符合 [Azure VM 要求](vmware-physical-secondary-support-matrix.md#replicated-vm-support)。
 - 准备 Azure。 需要 Azure 订阅、Azure 虚拟网络和存储帐户。
 - 准备一个帐户用于在要复制的每个服务器上自动安装移动服务。
 
-> [!NOTE]
-> 在开始之前，请注意，故障转移到 Azure 后，物理服务器将不能故障回复到本地物理计算机。 只能故障回复到 VMware VM。 
+在开始之前，请注意：
+
+- 故障转移到 Azure 后，物理服务器将不能故障回复到本地物理计算机。 只能故障回复到 VMware VM。 
+- 本教程使用最简单的设置设置到 Azure 的物理服务器灾难恢复。 如果想要了解其他选项，请通读我们的操作方法指南：
+    - 设置[复制源](physical-azure-set-up-source.md)，包括 Site Recovery 配置服务器。
+    - 设置[复制目标](physical-azure-set-up-target.md)。
+    - 配置[复制策略](vmware-azure-set-up-replication.md)并[启用复制](vmware-azure-enable-replication.md)。
 
 
 ### <a name="set-up-an-azure-account"></a>设置 Azure 帐户
 
-获取 Microsoft [Azure 帐户](http://azure.microsoft.com/)。
+获取 Microsoft [Azure 帐户](https://azure.microsoft.com/)。
 
 - 可以从 [免费试用版](https://azure.microsoft.com/pricing/free-trial/)开始。
 - 了解 [Site Recovery 定价](site-recovery-faq.md#pricing)，并获取[定价详细信息](https://azure.microsoft.com/pricing/details/site-recovery/)。
@@ -68,13 +74,10 @@ ms.lasthandoff: 04/16/2018
 
 ## <a name="set-up-an-azure-storage-account"></a>设置 Azure 存储帐户
 
-设置 [Azure 存储帐户](../storage/common/storage-create-storage-account.md#create-a-storage-account)。
+设置 [Azure 存储帐户](../storage/common/storage-quickstart-create-account.md)。
 
 - Site Recovery 将本地计算机复制到 Azure 存储。 发生故障转移后，将从存储中创建 Azure VM。
 - 存储帐户必须位于与恢复服务保管库相同的区域。
-- 存储帐户可以是标准帐户，也可以是[高级](../virtual-machines/windows/premium-storage.md)帐户。
-- 如果创建的是高级帐户，还需要额外使用标准帐户来记录数据。
-
 
 
 ### <a name="prepare-an-account-for-mobility-service-installation"></a>准备一个帐户用于安装移动服务
@@ -116,19 +119,25 @@ ms.lasthandoff: 04/16/2018
 
 开始之前，请执行以下操作： 
 
-- 在配置服务器计算机上，确保将系统时钟与[时间服务器](https://technet.microsoft.com/windows-server-docs/identity/ad-ds/get-started/windows-time-service/windows-time-service)进行同步。 它应与之匹配。 如果它提前或落后 15 分钟，安装程序可能会失败。
-- 请确保计算机可访问这些 URL：[!INCLUDE [site-recovery-URLS](../../includes/site-recovery-URLS.md)]
+#### <a name="verify-time-accuracy"></a>验证时间准确性
+在配置服务器计算机上，确保将系统时钟与[时间服务器](https://technet.microsoft.com/windows-server-docs/identity/ad-ds/get-started/windows-time-service/windows-time-service)进行同步。 它应与之匹配。 如果它提前或落后 15 分钟，安装程序可能会失败。
 
-- 基于 IP 地址的防火墙规则应允许与 Azure 通信。
-- 允许 [Azure 数据中心 IP 范围](https://www.microsoft.com/download/confirmation.aspx?id=41653)和 HTTPS (443) 端口。
-- 允许订阅的 Azure 区域的 IP 地址范围以及美国西部的 IP 地址范围（用于访问控制和标识管理）。
+#### <a name="verify-connectivity"></a>验证连接性
+确保计算机可以根据你的环境访问这些 URL： 
 
+[!INCLUDE [site-recovery-URLS](../../includes/site-recovery-URLS.md)]  
+
+基于 IP 地址的防火墙规则应允许通过 HTTPS (443) 端口与上面列出的所有 Azure URL 进行通信。 为了简化和限制 IP 范围，建议进行 URL 筛选。
+
+- **商用 IP**：允许 [Azure 数据中心 IP 范围](https://www.microsoft.com/download/confirmation.aspx?id=41653)和 HTTPS (443) 端口。 允许订阅的 Azure 区域的 IP 地址范围以支持 AAD、备份、复制和存储 URL。  
+- **政府 IP**：允许所有 USGov 区域（弗吉尼亚州、德克萨斯州、亚利桑那州和爱荷华州）的 [Azure 政府数据中心 IP 范围](https://www.microsoft.com/en-us/download/details.aspx?id=57063)和 HTTPS (443) 端口，以支持 AAD、备份、复制和存储 URL。  
+
+#### <a name="run-setup"></a>运行安装程序
 以本地管理员身份运行统一安装程序，安装配置服务器。 进程服务器和主目标服务器也默认安装在配置服务器上。
 
 [!INCLUDE [site-recovery-add-configuration-server](../../includes/site-recovery-add-configuration-server.md)]
 
 注册完成后，配置服务器会显示在保管库的“设置” > “服务器”页中。
-
 
 ## <a name="set-up-the-target-environment"></a>设置目标环境
 

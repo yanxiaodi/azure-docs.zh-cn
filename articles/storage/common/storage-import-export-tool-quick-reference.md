@@ -1,24 +1,19 @@
 ---
-title: "Azure 导入/导出工具的导入作业命令快速参考 | Microsoft Docs"
-description: "Azure 导入/导出工具的常用导入作业命令参考。"
+title: Azure 导入/导出工具的导入作业命令快速参考 | Microsoft Docs
+description: Azure 导入/导出工具的常用导入作业命令参考。
 author: muralikk
-manager: syadav
-editor: tysonn
 services: storage
-documentationcenter: 
-ms.assetid: 
 ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 01/15/2017
 ms.author: muralikk
-ms.openlocfilehash: d51ae35ead0e7d8289de663e5b7b48d28271e810
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.subservice: common
+ms.openlocfilehash: 7d21ab42188d5b8d6cb8c179a28d1b5bee822f05
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61478413"
 ---
 # <a name="quick-reference-for-frequently-used-commands-for-import-jobs"></a>导入作业的常用命令快速参考
 

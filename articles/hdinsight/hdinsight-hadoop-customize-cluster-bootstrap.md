@@ -1,28 +1,31 @@
 ---
-title: 使用 Bootstrap 自定义 HDInsight 群集 — Azure | Microsoft Docs
-description: 了解如何使用 Bootstrap 自定义 HDInsight 群集。
-services: hdinsight
-documentationcenter: ''
-author: mumian
-manager: jhubbard
-editor: cgronlun
-tags: azure-portal
-ms.assetid: ab2ebf0c-e961-4e95-8151-9724ee22d769
+title: 使用 bootstrap 自定义 Azure HDInsight 群集配置
+description: 了解如何使用 .Net、PowerShell 和资源管理器模板以编程方式自定义 HDInsight 群集配置。
+author: hrasheed-msft
+ms.author: hrasheed
+ms.reviewer: jasonh
 ms.service: hdinsight
 ms.custom: hdinsightactive
-ms.devlang: na
 ms.topic: conceptual
-ms.date: 05/14/2018
-ms.author: jgao
-ms.openlocfilehash: 2fdbb8730d350023035038d60d17a5ad12c98bc0
-ms.sourcegitcommit: 96089449d17548263691d40e4f1e8f9557561197
-ms.translationtype: HT
+ms.date: 04/19/2019
+ms.openlocfilehash: 15d08b14e38f097e8e9c3e0db893efb1d6efe44d
+ms.sourcegitcommit: cd70273f0845cd39b435bd5978ca0df4ac4d7b2c
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/17/2018
+ms.lasthandoff: 09/18/2019
+ms.locfileid: "71098667"
 ---
 # <a name="customize-hdinsight-clusters-using-bootstrap"></a>使用 Bootstrap 自定义 HDInsight 群集
 
-有时，用户可能需要配置配置文件，包括：
+Bootstrap 脚本允许你以编程方式在 Azure HDInsight 中安装和配置组件。
+
+在创建 HDInsight 群集时，有三种方式可用来设置配置文件设置：
+
+* 使用 Azure PowerShell
+* 使用 .NET SDK
+* 使用 Azure 资源管理器模板
+
+例如，使用这些编程方法，你可以在以下文件中配置选项：
 
 * clusterIdentity.xml
 * core-site.xml
@@ -41,33 +44,32 @@ ms.lasthandoff: 05/17/2018
 * yarn-site.xml
 * server.properties（kafka-broker 配置）
 
-Bootstrap 的使用方式有三种：
+有关在创建时在 HDInsight 群集上安装其他组件的信息，请参阅[使用脚本操作自定义 HDInsight 群集 (Linux)](hdinsight-hadoop-customize-cluster-linux.md)。
 
-* 使用 Azure PowerShell
-* 使用 .NET SDK
-* 使用 Azure 资源管理器模板
+## <a name="prerequisites"></a>先决条件
 
-[!INCLUDE [upgrade-powershell](../../includes/hdinsight-use-latest-powershell.md)]
-
-有关在创建时在 HDInsight 群集上安装其他组件的信息，请参阅：
-
-* [使用脚本操作自定义 HDInsight 群集 (Linux)](hdinsight-hadoop-customize-cluster-linux.md)
+* 如果使用 PowerShell，你将需要 [Az 模块](https://docs.microsoft.com/powershell/azure/overview)。
 
 ## <a name="use-azure-powershell"></a>使用 Azure PowerShell
-以下 PowerShell 代码将自定义 Hive 配置：
+
+以下 PowerShell 代码将自定义 [Apache Hive](https://hive.apache.org/) 配置：
+
+> [!IMPORTANT]  
+> 参数 `Spark2Defaults` 可能需要与 [Add-AzHDInsightConfigValues](https://docs.microsoft.com/powershell/module/az.hdinsight/add-azhdinsightconfigvalue) 一起使用。 你可以向参数传递空值，如以下代码示例中所示。
 
 ```powershell
 # hive-site.xml configuration
 $hiveConfigValues = @{ "hive.metastore.client.socket.timeout"="90" }
 
-$config = New-AzureRmHDInsightClusterConfig `
-    | Set-AzureRmHDInsightDefaultStorage `
+$config = New-AzHDInsightClusterConfig `
+    | Set-AzHDInsightDefaultStorage `
         -StorageAccountName "$defaultStorageAccountName.blob.core.windows.net" `
         -StorageAccountKey $defaultStorageAccountKey `
-    | Add-AzureRmHDInsightConfigValues `
-        -HiveSite $hiveConfigValues 
+    | Add-AzHDInsightConfigValue `
+        -HiveSite $hiveConfigValues `
+        -Spark2Defaults @{}
 
-New-AzureRmHDInsightCluster `
+New-AzHDInsightCluster `
     -ResourceGroupName $existingResourceGroupName `
     -ClusterName $clusterName `
     -Location $location `
@@ -76,7 +78,7 @@ New-AzureRmHDInsightCluster `
     -OSType Linux `
     -Version "3.6" `
     -HttpCredential $httpCredential `
-    -Config $config 
+    -Config $config
 ```
 
 可在[附录](#appendix-powershell-sample)中找到完整的有效 PowerShell 脚本。
@@ -110,7 +112,6 @@ $MapRedConfigValues = @{ "mapreduce.task.timeout"="1200000" } #default 600000
 # oozie-site.xml configuration
 $OozieConfigValues = @{ "oozie.service.coord.normal.default.timeout"="150" }  # default 120
 ```
-有关详细信息，请参阅 Azim Uddin 的标题为[自定义 HDInsight 群集创建](http://blogs.msdn.com/b/bigdatasupport/archive/2014/04/15/customizing-hdinsight-cluster-provisioning-via-powershell-and-net-sdk.aspx)的博客。
 
 ## <a name="use-net-sdk"></a>使用 .NET SDK
 请参阅[使用 .NET SDK 在 HDInsight 中创建基于 Linux 的群集](hdinsight-hadoop-create-linux-clusters-dotnet-sdk.md#use-bootstrap)。
@@ -120,7 +121,6 @@ $OozieConfigValues = @{ "oozie.service.coord.normal.default.timeout"="150" }  # 
 
 ```json
 "configurations": {
-    …
     "hive-site": {
         "hive.metastore.client.connect.retry.delay": "5",
         "hive.execution.engine": "mr",
@@ -129,25 +129,27 @@ $OozieConfigValues = @{ "oozie.service.coord.normal.default.timeout"="150" }  # 
 }
 ```
 
-![HDInsight Hadoop 自定义群集 Bootstrap Azure 资源管理器模板](./media/hdinsight-hadoop-customize-cluster-bootstrap/hdinsight-customize-cluster-bootstrap-arm.png)
+![Hadoop 自定义群集启动 Azure 资源管理器模板](./media/hdinsight-hadoop-customize-cluster-bootstrap/hdinsight-customize-cluster-bootstrap-arm.png)
 
-## <a name="see-also"></a>另请参阅
-* [在 HDInsight 中创建 Hadoop 群集][hdinsight-provision-cluster]提供了有关如何使用其他自定义选项创建 HDInsight 群集的说明。
+## <a name="see-also"></a>请参阅
+
+* [在 HDInsight 中创建 Apache Hadoop 群集][hdinsight-provision-cluster]提供了有关如何使用其他自定义选项创建 HDInsight 群集的说明。
 * [为 HDInsight 开发脚本操作脚本][hdinsight-write-script]
-* [在 HDInsight 群集上安装并使用 Spark][hdinsight-install-spark]
-* [在 HDInsight 群集上安装并使用 Solr](hdinsight-hadoop-solr-install.md)。
-* [在 HDInsight 群集上安装并使用 Giraph](hdinsight-hadoop-giraph-install.md)。
+* [在 HDInsight 群集上安装并使用 Apache Spark][hdinsight-install-spark]
+* [在 HDInsight 群集上安装并使用 Apache Giraph](hdinsight-hadoop-giraph-install.md)。
 
 [hdinsight-install-spark]: hdinsight-hadoop-spark-install.md
-[hdinsight-write-script]: hdinsight-hadoop-script-actions.md
+[hdinsight-write-script]: hdinsight-hadoop-script-actions-linux.md
 [hdinsight-provision-cluster]: hdinsight-hadoop-provision-linux-clusters.md
 [powershell-install-configure]: /powershell/azureps-cmdlets-docs
-
-
 [img-hdi-cluster-states]: ./media/hdinsight-hadoop-customize-cluster/HDI-Cluster-state.png "群集创建期间的阶段"
 
 ## <a name="appendix-powershell-sample"></a>附录：PowerShell 示例
-此 PowerShell 脚本将创建一个 HDInsight 群集并自定义 Hive 设置：
+
+此 PowerShell 脚本创建一个 HDInsight 群集并自定义 Hive 设置。 请确保为 `$nameToken`、`$httpPassword` 和 `$sshPassword` 输入值。
+
+> [!WARNING]  
+> 存储帐户类型 `BlobStorage` 不能用于 HDInsight 群集。
 
 ```powershell
 ####################################
@@ -159,10 +161,10 @@ $nameToken = "<ENTER AN ALIAS>"
 
 #region - cluster user accounts
 $httpUserName = "admin"  #HDInsight cluster username
-$httpPassword = "<ENTER A PASSWORD>" #"<Enter a Password>"
+$httpPassword = '<ENTER A PASSWORD>' 
 
 $sshUserName = "sshuser" #HDInsight ssh user name
-$sshPassword = "<ENTER A PASSWORD>" #"<Enter a Password>"
+$sshPassword = '<ENTER A PASSWORD>' 
 #endregion
 
 ####################################
@@ -176,19 +178,24 @@ $hdinsightClusterName = $namePrefix + "hdi"
 $defaultStorageAccountName = $namePrefix + "store"
 $defaultBlobContainerName = $hdinsightClusterName
 
-$location = "East US 2"
+$location = "East US"
 #endregion
 
-# Treat all errors as terminating
-$ErrorActionPreference = "Stop"
 
 ####################################
 # Connect to Azure
 ####################################
 #region - Connect to Azure subscription
 Write-Host "`nConnecting to your Azure subscription ..." -ForegroundColor Green
-try{Get-AzureRmContext}
-catch{Connect-AzureRmAccount}
+$sub = Get-AzSubscription -ErrorAction SilentlyContinue
+if(-not($sub))
+{
+    Connect-AzAccount
+}
+
+# If you have multiple subscriptions, set the one to use
+# Select-AzSubscription -SubscriptionId "<SUBSCRIPTIONID>"
+
 #endregion
 
 #region - Create an HDInsight cluster
@@ -196,38 +203,43 @@ catch{Connect-AzureRmAccount}
 # Create dependent components
 ####################################
 Write-Host "Creating a resource group ..." -ForegroundColor Green
-New-AzureRmResourceGroup `
+New-AzResourceGroup `
     -Name  $resourceGroupName `
     -Location $location
 
 Write-Host "Creating the default storage account and default blob container ..."  -ForegroundColor Green
-New-AzureRmStorageAccount `
+New-AzStorageAccount `
     -ResourceGroupName $resourceGroupName `
     -Name $defaultStorageAccountName `
     -Location $location `
-    -Type Standard_GRS
+    -SkuName Standard_LRS `
+    -Kind StorageV2 `
+    -EnableHttpsTrafficOnly 1
 
-$defaultStorageAccountKey = (Get-AzureRmStorageAccountKey `
+$defaultStorageAccountKey = (Get-AzStorageAccountKey `
                                 -ResourceGroupName $resourceGroupName `
                                 -Name $defaultStorageAccountName)[0].Value
-$defaultStorageContext = New-AzureStorageContext `
+
+$defaultStorageContext = New-AzStorageContext `
                                 -StorageAccountName $defaultStorageAccountName `
                                 -StorageAccountKey $defaultStorageAccountKey
-New-AzureStorageContainer `
+
+New-AzStorageContainer `
     -Name $defaultBlobContainerName `
     -Context $defaultStorageContext #use the cluster name as the container name
 
 ####################################
 # Create a configuration object
 ####################################
-$hiveConfigValues = @{ "hive.metastore.client.socket.timeout"="90" }
+$hiveConfigValues = @{"hive.metastore.client.socket.timeout"="90"}
 
-$config = New-AzureRmHDInsightClusterConfig `
-    | Set-AzureRmHDInsightDefaultStorage `
+$config = New-AzHDInsightClusterConfig `
+    | Set-AzHDInsightDefaultStorage `
         -StorageAccountName "$defaultStorageAccountName.blob.core.windows.net" `
         -StorageAccountKey $defaultStorageAccountKey `
-    | Add-AzureRmHDInsightConfigValues `
-        -HiveSite $hiveConfigValues 
+    | Add-AzHDInsightConfigValue `
+        -HiveSite $hiveConfigValues `
+        -Spark2Defaults @{}
 
 ####################################
 # Create an HDInsight cluster
@@ -238,7 +250,7 @@ $httpCredential = New-Object System.Management.Automation.PSCredential($httpUser
 $sshPW = ConvertTo-SecureString -String $sshPassword -AsPlainText -Force
 $sshCredential = New-Object System.Management.Automation.PSCredential($sshUserName,$sshPW)
 
-New-AzureRmHDInsightCluster `
+New-AzHDInsightCluster `
     -ResourceGroupName $resourceGroupName `
     -ClusterName $hdinsightClusterName `
     -Location $location `
@@ -253,7 +265,8 @@ New-AzureRmHDInsightCluster `
 ####################################
 # Verify the cluster
 ####################################
-Get-AzureRmHDInsightCluster -ClusterName $hdinsightClusterName
+Get-AzHDInsightCluster `
+    -ClusterName $hdinsightClusterName
 
 #endregion
 ```

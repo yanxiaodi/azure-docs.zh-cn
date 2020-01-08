@@ -1,26 +1,19 @@
 ---
 title: 在 Power BI 工作区集合中在报表的查看和编辑模式之间切换 | Microsoft Docs
 description: 了解在 Power BI 工作区集合中如何在报表的查看和编辑模式之间切换。
-services: power-bi-embedded
-documentationcenter: ''
-author: markingmyname
-manager: kfile
-editor: ''
-tags: ''
-ROBOTS: NOINDEX
-ms.assetid: ''
+services: power-bi-workspace-collections
 ms.service: power-bi-embedded
-ms.devlang: NA
+author: rkarlin
+ms.author: rkarlin
 ms.topic: article
-ms.tgt_pltfrm: NA
 ms.workload: powerbi
 ms.date: 09/20/2017
-ms.author: maghan
-ms.openlocfilehash: 23a8c4f0dd626a623df56de9546258a23d549d1a
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: 327f2fdcd4d1bc9e71e3aabb3541c6fd30f02811
+ms.sourcegitcommit: 2e4b99023ecaf2ea3d6d3604da068d04682a8c2d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 07/09/2019
+ms.locfileid: "67672366"
 ---
 # <a name="toggle-between-view-and-edit-mode-for-reports-in-power-bi-workspace-collections"></a>在 Power BI 工作区集合中在报表的查看和编辑模式之间切换
 
@@ -34,9 +27,9 @@ ms.lasthandoff: 04/16/2018
 需要创建一个访问令牌，令牌可授予你查看和编辑报表的能力。 要编辑并保存报表，需要 **Report.ReadWrite** 令牌权限。 有关详细信息，请参阅[在 Power BI 工作区集合中进行身份验证和授权](app-token-flow.md)。
 
 > [!NOTE]
-> 这可以让你编辑现有报表并保存更改。 如果还需要支持“另存为”的功能，则需要提供额外的权限。 有关详细信息，请参阅[作用域](app-token-flow.md#scopes)。
+> 这可以让你编辑现有报表并保存更改。 如果还需要支持“另存为”  的功能，则需要提供额外的权限。 有关详细信息，请参阅[作用域](app-token-flow.md#scopes)。
 
-```
+```csharp
 using Microsoft.PowerBI.Security;
 
 // rlsUsername and roles are optional
@@ -52,9 +45,10 @@ var token = embedToken.Generate("{access key}");
 
 例如，在 JavaScript 中：
 
-```
+```html
    <div id="reportContainer"></div>
 
+    <script>
     // Get models. Models, it contains enums that can be used.
     var models = window['powerbi-client'].models;
 
@@ -80,15 +74,16 @@ var token = embedToken.Generate("{access key}");
 
     // Embed the report and display it within the div container.
     var report = powerbi.embed(reportContainer, config);
+    </script>
 ```
 
-这表示会根据设置为 models.ViewMode.View 的 viewMode 在查看模式下嵌入报表。
+这表示会根据设置为 models.ViewMode.View  的 viewMode  在查看模式下嵌入报表。
 
 ## <a name="view-mode"></a>查看模式
 
 如果处于编辑模式下，可以使用以下 JavaScript 切换到查看模式。
 
-```
+```javascript
 // Get a reference to the embedded report HTML element
 var reportContainer = $('#reportContainer')[0];
 
@@ -104,7 +99,7 @@ report.switchMode("view");
 
 如果处于查看模式下，可以使用以下 JavaScript 切换到编辑模式。
 
-```
+```javascript
 // Get a reference to the embedded report HTML element
 var reportContainer = $('#reportContainer')[0];
 
@@ -116,14 +111,14 @@ report.switchMode("edit");
 
 ```
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 
 [示例入门](get-started-sample.md)  
 [嵌入报表](embed-report.md)  
 [在 Power BI 工作区集合中进行身份验证和授权](app-token-flow.md)  
-[CreateReportEmbedToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken?redirectedfrom=MSDN#methods_)  
+[CreateReportEmbedToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken?redirectedfrom=MSDN)  
 [JavaScript 嵌入示例](https://microsoft.github.io/PowerBI-JavaScript/demo/)  
 [PowerBI-CSharp Git 存储库](https://github.com/Microsoft/PowerBI-CSharp)  
 [PowerBI-Node Git 存储库](https://github.com/Microsoft/PowerBI-Node)  
 
-有更多问题？ [尝试 Power BI 社区](http://community.powerbi.com/)
+有更多问题？ [尝试 Power BI 社区](https://community.powerbi.com/)

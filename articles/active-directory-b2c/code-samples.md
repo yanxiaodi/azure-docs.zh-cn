@@ -2,17 +2,20 @@
 title: Azure Active Directory B2C 代码示例 | Microsoft Docs
 description: Azure Active Directory B2C 移动、桌面、Web 和单页应用程序的代码示例。
 services: active-directory-b2c
-author: davidmu1
-ms.author: davidmu
+author: mmacy
+manager: celestedg
+ms.author: marsma
 ms.date: 01/23/2018
 ms.custom: mvc
-ms.topic: tutorial
-ms.service: active-directory-b2c
-ms.openlocfilehash: 42a9ce6f8a5a04f641ccf9471151334632c9b11e
-ms.sourcegitcommit: 1362e3d6961bdeaebed7fb342c7b0b34f6f6417a
+ms.topic: sample
+ms.service: active-directory
+ms.subservice: B2C
+ms.openlocfilehash: 5db3b978193ab51fc60f1bcb97d83b4d24037b54
+ms.sourcegitcommit: adb6c981eba06f3b258b697251d7f87489a5da33
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/18/2018
+ms.lasthandoff: 06/04/2019
+ms.locfileid: "66511403"
 ---
 # <a name="azure-active-directory-b2c-code-samples"></a>Azure Active Directory B2C 代码示例
 

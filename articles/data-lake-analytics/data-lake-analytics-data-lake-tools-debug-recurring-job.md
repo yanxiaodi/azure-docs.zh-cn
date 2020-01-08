@@ -1,50 +1,45 @@
 ---
-title: 调试定期作业 | Microsoft 文档
+title: 调试 Azure Data Lake Analytics 中的定期作业
 description: 了解如何使用针对 Visual Studio 的 Azure Data Lake 工具调试异常的定期作业。
 services: data-lake-analytics
-documentationcenter: ''
 author: yanancai
-manager: ''
-editor: ''
+ms.author: yanacai
+ms.reviewer: jasonwhowell
 ms.assetid: dc9b21d8-c5f4-4f77-bcbc-eff458f48de2
 ms.service: data-lake-analytics
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: big-data
+ms.topic: conceptual
 ms.date: 05/20/2018
-ms.author: yanacai
-ms.openlocfilehash: 02f33fed7f8758066e34ee4e643efd9b696a0e8d
-ms.sourcegitcommit: c47ef7899572bf6441627f76eb4c4ac15e487aec
-ms.translationtype: HT
+ms.openlocfilehash: 5a2935d559a967151c5bdc01c4b0806fe52179b4
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/04/2018
-ms.locfileid: "33205663"
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60629688"
 ---
 # <a name="troubleshoot-an-abnormal-recurring-job"></a>对异常的定期作业进行疑难解答
 
-本文展示了如何使用[针对 Visual Studio 的 Azure Data Lake 工具](http://aka.ms/adltoolsvs)对定期作业的问题进行疑难解答。 从 [Azure Data Lake 和 Azure HDInsight 博客](https://blogs.msdn.microsoft.com/azuredatalake/2017/09/19/managing-pipeline-recurring-jobs-in-azure-data-lake-analytics-made-easy/)中详细了解管道和定期作业。
+本文展示了如何使用[针对 Visual Studio 的 Azure Data Lake 工具](https://aka.ms/adltoolsvs)对定期作业的问题进行疑难解答。 从 [Azure Data Lake 和 Azure HDInsight 博客](https://blogs.msdn.microsoft.com/azuredatalake/2017/09/19/managing-pipeline-recurring-jobs-in-azure-data-lake-analytics-made-easy/)中详细了解管道和定期作业。
 
 定期作业通常共享相同的查询逻辑和类似的输入数据。 例如，假定你有一个定期作业，该作业在每个星期一上午 8 点运行， 用于计算上周的每周活动用户。 这些作业的脚本共享一个包含查询逻辑的脚本模板。 这些作业的输入是上周的使用情况数据。 共享相同的查询逻辑和类似的输入通常意味着这些作业的性能类似且稳定。 如果你的定期作业之一突然性能异常、失败或执行速度大幅降低，则你可能希望：
 
 - 查看定期作业的以前运行的统计信息报告来了解发生了什么。
 - 对异常作业和正常作业进行比较，找出已更改的内容。
 
-针对 Visual Studio 的 Azure Data Lake 工具中的“相关作业视图”可帮助加快这两个案例的故障排除进度。
+针对 Visual Studio 的 Azure Data Lake 工具中的“相关作业视图”可帮助加快这两个案例的故障排除进度  。
 
-## <a name="step-1-find-recurring-jobs-and-open-related-job-view"></a>步骤 1：查找定期作业，并打开相关作业视图
+## <a name="step-1-find-recurring-jobs-and-open-related-job-view"></a>步骤 1：查找定期作业并打开相关作业视图
 
 要使用相关作业视图对定期作业问题进行故障排除，需先在 Visual Studio 中找到定期作业，然后打开相关作业视图。
 
 ### <a name="case-1-you-have-the-url-for-the-recurring-job"></a>案例 1：拥有定期作业的 URL
 
-通过“工具” > “Data Lake” > “作业视图”，可以在 Visual Studio 中粘贴作业 URL 以打开作业视图。 选择“查看相关作业”以打开相关作业视图。
+通过“工具” > “Data Lake” > “作业视图”，可以在 Visual Studio 中粘贴作业 URL 以打开作业视图。    选择“查看相关作业”  以打开相关作业视图。
 
 ![Data Lake Analytics 工具中的“查看相关作业”链接](./media/data-lake-analytics-data-lake-tools-debug-recurring-job/view-related-job.png)
  
-### <a name="case-2-you-have-the-pipeline-for-the-recurring-job-but-not-the-url"></a>案例 2：拥有定期作业的管道，但没有 URL
+### <a name="case-2-you-have-the-pipeline-for-the-recurring-job-but-not-the-url"></a>案例 2：必须为定期作业，但不是 URL 的管道
 
-在 Visual Studio 中，可以通过“服务器资源管理器”> 你的 Azure Data Lake Analytics 帐户 >“管道”打开管道浏览器。 （如果在服务器资源管理器中没有发现此节点，请[下载最新插件](http://aka.ms/adltoolsvs)。） 
+在 Visual Studio 中，可以通过“服务器资源管理器”> 你的 Azure Data Lake Analytics 帐户 >“管道”  打开管道浏览器。 （如果在服务器资源管理器中没有发现此节点，请[下载最新插件](https://aka.ms/adltoolsvs)。） 
 
 ![选择“管道”节点](./media/data-lake-analytics-data-lake-tools-debug-recurring-job/pipeline-browser.png)
 
@@ -61,7 +56,7 @@ ms.locfileid: "33205663"
 
 ![用于检查统计信息的流程图](./media/data-lake-analytics-data-lake-tools-debug-recurring-job/recurring-job-metrics-debugging-flow.png)
 
-## <a name="step-3-compare-the-abnormal-job-to-a-normal-job"></a>步骤 3：将异常作业与正常作业进行比较
+## <a name="step-3-compare-the-abnormal-job-to-a-normal-job"></a>步骤 3：异常作业和正常作业进行比较
 
 通过相关作业视图底部的作业列表，可以找到所有已提交的定期作业。 若要找到更多见解和潜在的解决方案，请右键单击异常作业。 使用“作业差异”视图将异常作业与前面的正常作业进行比较。
 

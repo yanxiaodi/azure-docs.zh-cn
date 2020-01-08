@@ -1,28 +1,21 @@
 ---
-title: Azure Cosmos DB：SQL Java API、SDK 和资源 | Microsoft Docs
+title: Azure Cosmos DB：SQL Java API、SDK 和资源
 description: 了解有关 SQL Java API 和 SDK 的所有信息，包括发布日期、停用日期和 Azure Cosmos DB SQL Java SDK 各版本之间所做的更改。
-services: cosmos-db
-documentationcenter: java
-author: rnagpal
-manager: kfile
-editor: cgronlun
-ms.assetid: 7861cadf-2a05-471a-9925-0fec0599351b
+author: SnehaGunda
 ms.service: cosmos-db
-ms.workload: data-services
-ms.tgt_pltfrm: na
+ms.subservice: cosmosdb-sql
 ms.devlang: java
-ms.topic: article
-ms.date: 05/16/2018
-ms.author: khdang
-ms.custom: H1Hack27Feb2017
-ms.openlocfilehash: 62941b3654204533d982b11f56b6ca08d591a72f
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.topic: reference
+ms.date: 03/13/2019
+ms.author: sngun
+ms.openlocfilehash: bf89d419bcd97c276df35701bc4fd808f599094a
+ms.sourcegitcommit: 3877b77e7daae26a5b367a5097b19934eb136350
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
-ms.locfileid: "34360142"
+ms.lasthandoff: 07/30/2019
+ms.locfileid: "68637692"
 ---
-# <a name="azure-cosmos-db-java-sdk-for-sql-api-release-notes-and-resources"></a>用于 SQL API 的 Azure Cosmos DB Java SDK：发行说明和资源
+# <a name="azure-cosmos-db-java-sdk-for-sql-api-release-notes-and-resources"></a>适用于 SQL API 的 Azure Cosmos DB Java SDK：发行说明和资源
 > [!div class="op_single_selector"]
 > * [.NET](sql-api-sdk-dotnet.md)
 > * [.NET 更改源](sql-api-sdk-dotnet-changefeed.md)
@@ -33,28 +26,57 @@ ms.locfileid: "34360142"
 > * [Python](sql-api-sdk-python.md)
 > * [REST](https://docs.microsoft.com/rest/api/cosmos-db/)
 > * [REST 资源提供程序](https://docs.microsoft.com/rest/api/cosmos-db-resource-provider/)
-> * [SQL](https://msdn.microsoft.com/library/azure/dn782250.aspx)
-> * [BulkExecutor - .NET](sql-api-sdk-bulk-executor-dot-net.md)
-> * [BulkExecutor - Java](sql-api-sdk-bulk-executor-java.md)
+> * [SQL](sql-api-query-reference.md)
+> * [大容量执行程序-.NET](sql-api-sdk-bulk-executor-dot-net.md)
+> * [批量执行程序-Java](sql-api-sdk-bulk-executor-java.md)
 
 SQL API Java SDK 支持同步操作。 如需异步支持，请使用 [SQL API Async Java SDK](sql-api-sdk-async-java.md)。 
 
-<table>
-
-<tr><td>**SDK 下载**</td><td>[Maven](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.microsoft.azure%22%20AND%20a%3A%22azure-documentdb%22)</td></tr>
-
-<tr><td>**API 文档**</td><td>[Java API 参考文档](/java/api/com.microsoft.azure.documentdb)</td></tr>
-
-<tr><td>**参与 SDK**</td><td>[GitHub](https://github.com/Azure/azure-documentdb-java/)</td></tr>
-
-<tr><td>**入门**</td><td>[Java SDK 入门](sql-api-java-get-started.md)</td></tr>
-
-<tr><td>**Web 应用教程**</td><td>[使用 Azure Cosmos DB 进行 Web 应用程序开发](sql-api-java-application.md)</td></tr>
-
-<tr><td>受支持的最小运行时</td><td>[JDK 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)</td></tr>
-</table></br>
+| |  |
+|---|---|
+|**SDK 下载**|[Maven](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.microsoft.azure%22%20AND%20a%3A%22azure-documentdb%22)|
+|**API 文档**|[Java API 参考文档](/java/api/com.microsoft.azure.documentdb)|
+|**参与 SDK**|[GitHub](https://github.com/Azure/azure-documentdb-java/)|
+|**入门**|[Java SDK 入门](sql-api-java-get-started.md)|
+|**Web 应用教程**|[使用 Azure Cosmos DB 进行 Web 应用程序开发](sql-api-java-application.md)|
+|受支持的最小运行时|[Java 开发工具包 (JDK) 7+](https://aka.ms/azure-jdks)|
 
 ## <a name="release-notes"></a>发行说明
+
+### <a name="a-name213213"></a><a name="2.1.3"/>2.1.3
+* 修复了哈希 V2 PartitionKey 中的 bug。
+
+### <a name="a-name212212"></a><a name="2.1.2"/>2.1.2
+* 添加了对组合索引的支持。
+* 修复了全局终结点管理器中的 bug 以强制刷新。
+* 修复了直接模式下条件为 upsert 的错误。
+
+### <a name="a-name211211"></a><a name="2.1.1"/>2.1.1
+* 修复了网关地址缓存中的 bug。
+
+### <a name="a-name210210"></a><a name="2.1.0"/>2.1.0
+* 为直接模式添加了多区域写入支持。
+* 添加了对处理从代理作为 ServiceUnavailable 异常引发的 IOExceptions 的支持。
+* 修复了终结点发现重试策略中的 bug。
+* 修复了 bug，以确保 BaseDatabaseAccountConfigurationProvider 不会引发空指针异常。
+* 修复了一个 bug, 以确保 QueryIterator 不返回 null。
+* 修复了 bug，以确保允许较大的 PartitionKey
+
+### <a name="a-name200200"></a><a name="2.0.0"/>2.0.0
+* 为网关模式添加了多区域写入支持。
+
+### <a name="a-name11641164"></a><a name="1.16.4"/>1.16.4
+* 修复了读取查询的分区键范围时的 bug。
+
+### <a name="a-name11631163"></a><a name="1.16.3"/>1.16.3
+* 修复了在 DirectHttps 模式下设置继续标记标头大小时的 bug。
+
+### <a name="a-name11621162"></a><a name="1.16.2"/>1.16.2
+* 添加了流式故障转移支持。
+* 添加了对自定义元数据的支持。
+* 改进了会话处理逻辑。
+* 修复了分区键范围缓存中的 bug。
+* 修复了直接模式下的 NPE bug。
 
 ### <a name="a-name11611161"></a><a name="1.16.1"/>1.16.1
 * 添加了对唯一索引的支持。
@@ -101,11 +123,11 @@ SQL API Java SDK 支持同步操作。 如需异步支持，请使用 [SQL API A
 * 修复了会话容器中的一些 Bug，这些 Bug 可能会在创建集合后立即导致“找不到所有者资源”请求异常。
 
 ### <a name="a-name195195"></a><a name="1.9.5"/>1.9.5
-* 添加了对聚合查询（COUNT、MIN、MAX、SUM、AVG）的支持。 请参阅[聚合支持](sql-api-sql-query.md#Aggregates)。
+* 添加了对聚合查询（COUNT、MIN、MAX、SUM、AVG）的支持。 请参阅[聚合支持](sql-query-aggregates.md)。
 * 添加了对更改源的支持。
 * 通过 RequestOptions.setPopulateQuotaInfo 添加了对集合配额信息的支持。
 * 通过 RequestOptions.setScriptLoggingEnabled 添加了对存储过程脚本日志记录的支持。
-* 修复了一个 bug，该 bug 导致 DirectHttps 模式的查询在遇到限制失败时可能会挂起。
+* 修复了一个 bug, 其中在 DirectHttps 模式下查询可能会在遇到中止失败时停止响应。
 * 修复了一个会话一致性模式的 bug。
 * 修复了一个 bug，该 bug 可能会导致在请求率很高时，在 HttpContext 中出现 NullReferenceException。
 * 改进了 DirectHttps 模式的性能。
@@ -120,7 +142,7 @@ SQL API Java SDK 支持同步操作。 如需异步支持，请使用 [SQL API A
 
 ### <a name="a-name193193"></a><a name="1.9.3"/>1.9.3
 * 修复了连接管理中的 bug，防止直接连接模式下的连接泄漏。
-* 修复了 TOP 查询中可能会引发 NullReferenece 异常的 bug。
+* 修复了 TOP 查询中可能会引发 NullReference 异常的 bug。
 * 通过减少调用内部缓存的网络数提高了性能。
 * 在 DocumentClientException 中添加了状态代码、ActivityID 和请求 URI，以更好地进行故障排除。
 
@@ -139,7 +161,7 @@ SQL API Java SDK 支持同步操作。 如需异步支持，请使用 [SQL API A
 * 添加了对强一致性的支持。
 * 添加了对使用直接连接时基于名称的请求的支持。
 * 修复问题，以便使所有请求重试上的 ActivityId保持一致。
-* 修复了重新创建具有相同名称的集合期间与会话缓存相关的 bug。
+* 修复了在重新创建同名集合时与会话缓存相关的 bug。
 * 为地域隔离的空间查询指定集合索引策略的同时，已添加多边形和 LineString 数据类型。
 * 解决 Java 文档中的 Java 1.8 的问题。
 
@@ -153,7 +175,7 @@ SQL API Java SDK 支持同步操作。 如需异步支持，请使用 [SQL API A
 * 已弃用基于 IPartitionResolver 的自定义分区代码。 请使用分区集合来提高存储和吞吐量。
 
 ### <a name="a-name171171"></a><a name="1.7.1"/>1.7.1
-* 对限制添加了重试策略支持。  
+* 添加了对速率限制的重试策略支持。  
 
 ### <a name="a-name170170"></a><a name="1.7.0"/>1.7.0
 * 对文档添加了生存时间 (TTL) 支持。
@@ -193,42 +215,55 @@ Microsoft 至少会在停用 SDK 的 **12 个月**之前发出通知，以便顺
 使用已停用的 SDK 对 Cosmos DB 发出的任何请求都会被服务拒绝。
 
 > [!WARNING]
-> 1.0.0 版之前的所有 Azure SQL SDK for Java 版本都已在 2016 年 2 月 29 日停用。
+> SQL SDK for Java 的**所有版本 1.x**将于**5 月 30 2020 日**停用。
+> 
+>
+
+> [!WARNING]
+> 1\.0.0 版之前的所有 Azure SQL SDK for Java 版本都已在 2016 年 2 月 29 日停用。
 > 
 > 
 
 <br/>
 
-| 版本 | 发布日期 | 停用日期 |
+| Version | 发布日期 | 停用日期 |
 | --- | --- | --- |
-| [1.16.1](#1.16.1) |2018 年 5 月 16日 |--- |
-| [1.16.0](#1.16.0) |2018 年 3 月 15 日 |--- |
-| [1.15.0](#1.15.0) |2017 年 11 月 14 日 |--- |
-| [1.14.0](#1.14.0) |2017 年 10 月 28日 |--- |
-| [1.13.0](#1.13.0) |2017 年 8 月25 日 |--- |
-| [1.12.0](#1.12.0) |2017 年 7 月 11 日 |--- |
-| [1.11.0](#1.11.0) |2017 年 5 月 10 日 |--- |
-| [1.10.0](#1.10.0) |2017 年 3 月 11 日 |--- |
-| [1.9.6](#1.9.6) |2017 年 2 月 21 日 |--- |
-| [1.9.5](#1.9.5) |2017 年 1 月 31 日 |--- |
-| [1.9.4](#1.9.4) |2016 年 11 月 24 日 |--- |
-| [1.9.3](#1.9.3) |2016 年 10 月 30 日 |--- |
-| [1.9.2](#1.9.2) |2016 年 10 月 28 日 |--- |
-| [1.9.1](#1.9.1) |2016 年 10 月 26 日 |--- |
-| [1.9.0](#1.9.0) |2016 年 10 月 3 日 |--- |
-| [1.8.1](#1.8.1) |2016 年 6 月 30 日 |--- |
-| [1.8.0](#1.8.0) |2016 年 6 月 14 日 |--- |
-| [1.7.1](#1.7.1) |2016 年 4 月 30 日 |--- |
-| [1.7.0](#1.7.0) |2016 年 4 月 27 日 |--- |
-| [1.6.0](#1.6.0) |2016 年 3 月 29 日 |--- |
-| [1.5.1](#1.5.1) |2015 年 12 月 31 日 |--- |
-| [1.5.0](#1.5.0) |2015 年 12 月 4 日 |--- |
-| [1.4.0](#1.4.0) |2015 年 10 月 5 日 |--- |
-| [1.3.0](#1.3.0) |2015 年 10 月 5 日 |--- |
-| [1.2.0](#1.2.0) |2015 年 8 月 5 日 |--- |
-| [1.1.0](#1.1.0) |2015 年 7 月 9 日 |--- |
-| [1.0.1](#1.0.1) |2015 年 5 月 12 日 |--- |
-| [1.0.0](#1.0.0) |2015 年 4 月 7 日 |--- |
+| [2.1.3](#2.1.3) |3月13日, 2018 |--- |
+| [2.1.2](#2.1.2) |三月 09, 2018 |--- |
+| [2.1.1](#2.1.1) |12月13日, 2018 |--- |
+| [2.1.0](#2.1.0) |2018年11月20日 |--- |
+| [2.0.0](#2.0.0) |2018 年 9 月 21 日 |--- |
+| [1.16.4](#1.16.4) |2018 年 9 月 10 日 |5月30日, 2020 |
+| [1.16.3](#1.16.3) |2018 年 9 月 9 日 |5月30日, 2020 |
+| [1.16.2](#1.16.2) |2018 年 6 月 29日 |5月30日, 2020 |
+| [1.16.1](#1.16.1) |2018 年 5 月 16日 |5月30日, 2020 |
+| [1.16.0](#1.16.0) |2018 年 3 月 15 日 |5月30日, 2020 |
+| [1.15.0](#1.15.0) |2017 年 11 月 14 日 |5月30日, 2020 |
+| [1.14.0](#1.14.0) |2017 年 10 月 28日 |5月30日, 2020 |
+| [1.13.0](#1.13.0) |2017 年 8 月25 日 |5月30日, 2020 |
+| [1.12.0](#1.12.0) |2017 年 7 月 11 日 |5月30日, 2020 |
+| [1.11.0](#1.11.0) |2017 年 5 月 10 日 |5月30日, 2020 |
+| [1.10.0](#1.10.0) |2017 年 3 月 11 日 |5月30日, 2020 |
+| [1.9.6](#1.9.6) |2017 年 2 月 21 日 |5月30日, 2020 |
+| [1.9.5](#1.9.5) |2017 年 1 月 31 日 |5月30日, 2020 |
+| [1.9.4](#1.9.4) |2016 年 11 月 24 日 |5月30日, 2020 |
+| [1.9.3](#1.9.3) |2016 年 10 月 30 日 |5月30日, 2020 |
+| [1.9.2](#1.9.2) |2016 年 10 月 28 日 |5月30日, 2020 |
+| [1.9.1](#1.9.1) |2016 年 10 月 26 日 |5月30日, 2020 |
+| [1.9.0](#1.9.0) |2016 年 10 月 3 日 |5月30日, 2020 |
+| [1.8.1](#1.8.1) |2016 年 6 月 30 日 |5月30日, 2020 |
+| [1.8.0](#1.8.0) |2016 年 6 月 14 日 |5月30日, 2020 |
+| [1.7.1](#1.7.1) |2016 年 4 月 30 日 |5月30日, 2020 |
+| [1.7.0](#1.7.0) |2016 年 4 月 27 日 |5月30日, 2020 |
+| [1.6.0](#1.6.0) |2016 年 3 月 29 日 |5月30日, 2020 |
+| [1.5.1](#1.5.1) |2015 年 12 月 31 日 |5月30日, 2020 |
+| [1.5.0](#1.5.0) |2015 年 12 月 4 日 |5月30日, 2020 |
+| [1.4.0](#1.4.0) |2015 年 10 月 5 日 |5月30日, 2020 |
+| [1.3.0](#1.3.0) |2015 年 10 月 5 日 |5月30日, 2020 |
+| [1.2.0](#1.2.0) |2015 年 8 月 5 日 |5月30日, 2020 |
+| [1.1.0](#1.1.0) |2015 年 7 月 9 日 |5月30日, 2020 |
+| 1.0.1 |2015 年 5 月 12 日 |5月30日, 2020 |
+| [1.0.0](#1.0.0) |2015 年 4 月 7 日 |5月30日, 2020 |
 | 0.9.5-prelease |2015 年 3 月 9 日 |2016 年 2 月 29 日 |
 | 0.9.4-prelease |2015 年 2 月 17 日 |2016 年 2 月 29 日 |
 | 0.9.3-prelease |2015 年 1 月 13 日 |2016 年 2 月 29 日 |
@@ -239,6 +274,6 @@ Microsoft 至少会在停用 SDK 的 **12 个月**之前发出通知，以便顺
 ## <a name="faq"></a>常见问题
 [!INCLUDE [cosmos-db-sdk-faq](../../includes/cosmos-db-sdk-faq.md)]
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 若要了解有关 Cosmos DB 的详细信息，请参阅 [Microsoft Azure Cosmos DB](https://azure.microsoft.com/services/cosmos-db/) 服务页。
 

@@ -1,25 +1,19 @@
 ---
-title: Azure CLI 脚本示例 - 创建使用 SignalR 服务和 GitHub 身份验证的 Web 应用 | Microsoft Docs
+title: Azure CLI 脚本示例 - 创建使用 SignalR 服务和 GitHub 身份验证的 Web 应用
 description: Azure CLI 脚本示例 - 创建使用 SignalR 服务和 GitHub 身份验证的 Web 应用
-services: signalr
-documentationcenter: signalr
-author: wesmc7777
-manager: cfowler
-editor: ''
-tags: azure-service-management
+author: sffamily
 ms.service: signalr
 ms.devlang: azurecli
 ms.topic: sample
-ms.tgt_pltfrm: na
-ms.workload: signalr
 ms.date: 04/22/2018
-ms.author: wesmc
+ms.author: zhshang
 ms.custom: mvc
-ms.openlocfilehash: ec095572dc8fe20c913d543ffcf926355b5715df
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
+ms.openlocfilehash: 16fa44c5fa0b674fe27e2ec8e2dc8e640742ec63
+ms.sourcegitcommit: d2785f020e134c3680ca1c8500aa2c0211aa1e24
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/04/2019
+ms.locfileid: "67565774"
 ---
 # <a name="create-a-web-app-that-uses-signalr-service-and-github-authentication"></a>创建使用 SignalR 服务和 GitHub 身份验证的 Web 应用
 
@@ -29,11 +23,11 @@ ms.lasthandoff: 05/07/2018
 
 [!INCLUDE [cloud-shell-try-it.md](../../../includes/cloud-shell-try-it.md)]
 
-如果选择在本地安装并使用 CLI，本文要求运行 Azure CLI 2.0 版或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。 
+如果选择在本地安装并使用 CLI，本文要求运行 Azure CLI 2.0 版或更高版本。 运行 `az --version` 即可查找版本。 如需进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。 
 
 ## <a name="sample-script"></a>示例脚本
 
-此脚本使用适用于 Azure CLI 的 signalr 扩展。 使用此示例脚本前，执行以下命令，安装适用于 Azure CLI 的 signalr 扩展：
+此脚本使用适用于 Azure CLI 的 signalr 扩展  。 使用此示例脚本前，执行以下命令，安装适用于 Azure CLI 的 signalr 扩展  ：
 
 ```azurecli-interactive
 az extension add -n signalr
@@ -64,4 +58,4 @@ az extension add -n signalr
 
 有关 Azure CLI 的详细信息，请参阅 [Azure CLI 文档](/cli/azure)。
 
-可在 [Azure SignalR 服务文档](../signalr-cli-samples.md)中找到其他 Azure SignalR 服务 CLI 脚本示例。
+可在 [Azure SignalR 服务文档](../signalr-reference-cli.md)中找到其他 Azure SignalR 服务 CLI 脚本示例。

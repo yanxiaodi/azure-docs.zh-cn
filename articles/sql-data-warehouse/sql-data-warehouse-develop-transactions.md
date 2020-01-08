@@ -2,24 +2,25 @@
 title: 使用 Azure SQL 数据仓库中的事务 | Microsoft Docs
 description: 有关在开发解决方案时实现 Azure SQL 数据仓库中的事务的技巧。
 services: sql-data-warehouse
-author: ckarst
-manager: craigg-msft
+author: XiaoyuMSFT
+manager: craigg
 ms.service: sql-data-warehouse
 ms.topic: conceptual
-ms.component: implement
-ms.date: 04/17/2018
-ms.author: cakarst
+ms.subservice: development
+ms.date: 03/22/2019
+ms.author: xiaoyul
 ms.reviewer: igorstan
-ms.openlocfilehash: 7fa3d19cc0fca81616969773a40c3d3dbccc4a26
-ms.sourcegitcommit: 59914a06e1f337399e4db3c6f3bc15c573079832
-ms.translationtype: HT
+ms.openlocfilehash: 7f00f8a25d0abf3af6d76b372b44145546a79879
+ms.sourcegitcommit: 75a56915dce1c538dc7a921beb4a5305e79d3c7a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/19/2018
+ms.lasthandoff: 07/24/2019
+ms.locfileid: "68479610"
 ---
 # <a name="using-transactions-in-sql-data-warehouse"></a>使用 SQL 数据仓库中的事务
 有关在开发解决方案时实现 Azure SQL 数据仓库中的事务的技巧。
 
-## <a name="what-to-expect"></a>期望
+## <a name="what-to-expect"></a>预期结果
 与预期一样，SQL 数据仓库支持将事务纳入数据仓库工作负载。 但是，为了确保 SQL 数据仓库的性能维持在一定的程度，相比于 SQL Server，其某些功能会受到限制。 本文将突出两者的差异，并列出其他信息。 
 
 ## <a name="transaction-isolation-levels"></a>事务隔离级别
@@ -33,7 +34,30 @@ SQL 数据仓库实现 ACID 事务。 但是，事务支持的隔离级别受限
 * 出现平均数据分布 
 * 平均行长度为 250 个字节
 
-| [DWU](sql-data-warehouse-overview-what-is.md) | 每个分布的上限（GiB） | 分布的数量 | 最大事务大小（GiB） | 每分发的行数 | 每个事务的最大行数 |
+## <a name="gen2"></a>第 2 代
+
+| [DWU](sql-data-warehouse-overview-what-is.md) | 每个分布的上限 (GB) | 分布的数量 | 最大事务大小 (GB) | 每分发的行数 | 每个事务的最大行数 |
+| --- | --- | --- | --- | --- | --- |
+| DW100c |1 |60 |60 |4,000,000 |240,000,000 |
+| DW200c |1.5 |60 |90 |6,000,000 |360,000,000 |
+| DW300c |2.25 |60 |135 |9,000,000 |540,000,000 |
+| DW400c |3 |60 |180 |12,000,000 |720,000,000 |
+| DW500c |3.75 |60 |225 |15,000,000 |900,000,000 |
+| DW1000c |7.5 |60 |450 |30,000,000 |1,800,000,000 |
+| DW1500c |11.25 |60 |675 |45,000,000 |2,700,000,000 |
+| DW2000c |15 |60 |900 |60,000,000 |3,600,000,000 |
+| DW2500c |18.75 |60 |1125 |75,000,000 |4,500,000,000 |
+| DW3000c |22.5 |60 |1,350 |90,000,000 |5,400,000,000 |
+| DW5000c |37.5 |60 |2,250 |150,000,000 |9,000,000,000 |
+| DW6000c |45 |60 |2,700 |180,000,000 |10,800,000,000 |
+| DW7500c |56.25 |60 |3,375 |225,000,000 |13,500,000,000 |
+| DW10000c |75 |60 |4,500 |300,000,000 |18,000,000,000 |
+| DW15000c |112.5 |60 |6,750 |450,000,000 |27,000,000,000 |
+| DW30000c |225 |60 |13,500 |900,000,000 |54,000,000,000 |
+
+## <a name="gen1"></a>第 1 代
+
+| [DWU](sql-data-warehouse-overview-what-is.md) | 每个分布的上限 (GB) | 分布的数量 | 最大事务大小 (GB) | 每分发的行数 | 每个事务的最大行数 |
 | --- | --- | --- | --- | --- | --- |
 | DW100 |1 |60 |60 |4,000,000 |240,000,000 |
 | DW200 |1.5 |60 |90 |6,000,000 |360,000,000 |
@@ -89,8 +113,8 @@ BEGIN TRAN
 
         IF @@TRANCOUNT > 0
         BEGIN
-            PRINT 'ROLLBACK';
             ROLLBACK TRAN;
+            PRINT 'ROLLBACK';
         END
 
     END CATCH;

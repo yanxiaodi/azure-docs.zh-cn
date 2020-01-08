@@ -2,17 +2,18 @@
 title: include 文件
 description: include 文件
 services: virtual-network
-author: genli
+author: genlin
 ms.service: virtual-network
 ms.topic: include
 ms.date: 04/13/2018
 ms.author: genli
 ms.custom: include file
-ms.openlocfilehash: 29b2ac1a5dc128028dbd40e683c1b45e6208d124
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: 2b1f9990985951a4e6ef260954968c0e1466c298
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67172866"
 ---
 ## <a name="scenario"></a>场景
 

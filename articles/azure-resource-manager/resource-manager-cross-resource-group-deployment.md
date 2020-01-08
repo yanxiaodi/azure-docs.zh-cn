@@ -1,25 +1,21 @@
 ---
 title: 将 Azure 资源部署到多个订阅和资源组 | Microsoft Docs
 description: 介绍如何在部署期间将多个 Azure 订阅和资源组作为目标。
-services: azure-resource-manager
-documentationcenter: na
 author: tfitzmac
-manager: timlt
-editor: ''
 ms.service: azure-resource-manager
-ms.devlang: na
 ms.topic: conceptual
-ms.tgt_pltfrm: na
-ms.workload: na
-ms.date: 03/13/2018
+ms.date: 06/02/2018
 ms.author: tomfitz
-ms.openlocfilehash: c7e9807e7195be47bf7874837ff9428c90abbcee
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.openlocfilehash: 33b0a998206b68f1807f5bfa3c3f39164798842c
+ms.sourcegitcommit: b7a44709a0f82974578126f25abee27399f0887f
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67205474"
 ---
 # <a name="deploy-azure-resources-to-more-than-one-subscription-or-resource-group"></a>将 Azure 资源部署到多个订阅或资源组
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
 通常情况下，将模板中的所有资源部署到单个[资源组](resource-group-overview.md)。 不过，在某些情况下，你可能希望将一组资源部署在一起但将其放置在不同的资源组或订阅中。 例如，你可能希望将 Azure Site Recovery 的备份虚拟机部署到一个单独的资源组和位置。 资源管理器允许使用嵌套的模板将不同于父模板所用订阅和资源组的多个不同订阅和资源组作为目标。
 
@@ -47,7 +43,7 @@ ms.lasthandoff: 05/20/2018
 ]
 ```
 
-如果资源组位于同一订阅中，则可以删除“subscriptionId”值。
+如果资源组位于同一订阅中，则可以删除“subscriptionId”值  。
 
 以下示例部署两个存储帐户 - 一个在部署期间指定的资源组中，另一个在 `secondResourceGroup` 参数指定的资源组中：
 
@@ -126,13 +122,11 @@ ms.lasthandoff: 05/20/2018
 
 如果将 `resourceGroup` 设置为不存在的资源组的名称，则部署会失败。
 
-若要部署示例模板，请使用 Azure PowerShell 4.0.0 或更高版本，也可以使用 Azure CLI 2.0.0 或更高版本。
+## <a name="use-the-resourcegroup-and-subscription-functions"></a>使用 resourceGroup() 和 subscription() 函数
 
-## <a name="use-the-resourcegroup-function"></a>使用 resourceGroup() 函数
+对于跨资源组部署，[resourceGroup()](resource-group-template-functions-resource.md#resourcegroup) 和 [subscription()](resource-group-template-functions-resource.md#subscription) 函数根据指定嵌套模板的方式以不同的方式解析。 
 
-对于跨资源组部署，[resourceGroup() 函数](resource-group-template-functions-resource.md#resourcegroup)根据指定嵌套模板的方式而以不同的方式解析。 
-
-如果在一个模板内嵌入另一个模板，嵌套模板中的 resourceGroup() 会解析至父资源组。 被嵌入的模板使用以下格式：
+如果在一个模板内嵌入另一个模板，嵌套模板中的函数会解析到父资源组和订阅。 被嵌入的模板使用以下格式：
 
 ```json
 "apiVersion": "2017-05-10",
@@ -143,12 +137,12 @@ ms.lasthandoff: 05/20/2018
     "mode": "Incremental",
     "template": {
         ...
-        resourceGroup() refers to parent resource group
+        resourceGroup() and subscription() refer to parent resource group/subscription
     }
 }
 ```
 
-如果链接到单独的模板，则链接模板的 resourceGroup() 会解析到嵌套资源组。 链接模板使用以下格式：
+如果链接到单独的模板，则链接模板中的函数会解析到嵌套资源组和订阅。 链接模板使用以下格式：
 
 ```json
 "apiVersion": "2017-05-10",
@@ -159,7 +153,7 @@ ms.lasthandoff: 05/20/2018
     "mode": "Incremental",
     "templateLink": {
         ...
-        resourceGroup() in linked template refers to linked resource group
+        resourceGroup() and subscription() in linked template refer to linked resource group/subscription
     }
 }
 ```
@@ -168,23 +162,23 @@ ms.lasthandoff: 05/20/2018
 
 以下模板演示多个资源组部署。 部署模板的脚本显示在表格之后。
 
-|模板  |说明  |
+|模板  |描述  |
 |---------|---------|
 |[跨订阅模板](https://github.com/Azure/azure-docs-json-samples/blob/master/azure-resource-manager/crosssubscription.json) |将一个存储帐户部署到一个资源组，将另一个存储帐户部署到第二个资源组。 如果第二个资源组位于其他订阅，请包含该订阅的 ID 值。 |
 |[跨资源组模板属性](https://github.com/Azure/azure-docs-json-samples/blob/master/azure-resource-manager/crossresourcegroupproperties.json) |演示如何解析 `resourceGroup()` 函数。 此模板不部署任何资源。 |
 
 ### <a name="powershell"></a>PowerShell
 
-对于 PowerShell，若要将两个存储帐户部署到同一订阅中的两个资源组，请使用：
+对于 PowerShell，若要将两个存储帐户部署到同一订阅中的两个资源组，请使用： 
 
 ```azurepowershell-interactive
 $firstRG = "primarygroup"
 $secondRG = "secondarygroup"
 
-New-AzureRmResourceGroup -Name $firstRG -Location southcentralus
-New-AzureRmResourceGroup -Name $secondRG -Location eastus
+New-AzResourceGroup -Name $firstRG -Location southcentralus
+New-AzResourceGroup -Name $secondRG -Location eastus
 
-New-AzureRmResourceGroupDeployment `
+New-AzResourceGroupDeployment `
   -ResourceGroupName $firstRG `
   -TemplateUri https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/azure-resource-manager/crosssubscription.json `
   -storagePrefix storage `
@@ -192,7 +186,7 @@ New-AzureRmResourceGroupDeployment `
   -secondStorageLocation eastus
 ```
 
-对于 PowerShell，若要将两个存储帐户部署到两个订阅，请使用：
+对于 PowerShell，若要将两个存储帐户部署到两个订阅，请使用： 
 
 ```azurepowershell-interactive
 $firstRG = "primarygroup"
@@ -201,13 +195,13 @@ $secondRG = "secondarygroup"
 $firstSub = "<first-subscription-id>"
 $secondSub = "<second-subscription-id>"
 
-Select-AzureRmSubscription -Subscription $secondSub
-New-AzureRmResourceGroup -Name $secondRG -Location eastus
+Select-AzSubscription -Subscription $secondSub
+New-AzResourceGroup -Name $secondRG -Location eastus
 
-Select-AzureRmSubscription -Subscription $firstSub
-New-AzureRmResourceGroup -Name $firstRG -Location southcentralus
+Select-AzSubscription -Subscription $firstSub
+New-AzResourceGroup -Name $firstRG -Location southcentralus
 
-New-AzureRmResourceGroupDeployment `
+New-AzResourceGroupDeployment `
   -ResourceGroupName $firstRG `
   -TemplateUri https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/azure-resource-manager/crosssubscription.json `
   -storagePrefix storage `
@@ -216,14 +210,14 @@ New-AzureRmResourceGroupDeployment `
   -secondSubscriptionID $secondSub
 ```
 
-对于 PowerShell，若要测试如何解析父模板、内联模板和链接模板的资源组对象，请使用：
+对于 PowerShell，若要测试如何解析父模板、内联模板和链接模板的资源组对象，请使用： 
 
 ```azurepowershell-interactive
-New-AzureRmResourceGroup -Name parentGroup -Location southcentralus
-New-AzureRmResourceGroup -Name inlineGroup -Location southcentralus
-New-AzureRmResourceGroup -Name linkedGroup -Location southcentralus
+New-AzResourceGroup -Name parentGroup -Location southcentralus
+New-AzResourceGroup -Name inlineGroup -Location southcentralus
+New-AzResourceGroup -Name linkedGroup -Location southcentralus
 
-New-AzureRmResourceGroupDeployment `
+New-AzResourceGroupDeployment `
   -ResourceGroupName parentGroup `
   -TemplateUri https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/azure-resource-manager/crossresourcegroupproperties.json
 ```
@@ -261,7 +255,7 @@ New-AzureRmResourceGroupDeployment `
 
 ### <a name="azure-cli"></a>Azure CLI
 
-对于 Azure CLI，若要将两个存储帐户部署到同一订阅中的两个资源组，请使用：
+对于 Azure CLI，若要将两个存储帐户部署到同一订阅中的两个资源组，请使用： 
 
 ```azurecli-interactive
 firstRG="primarygroup"
@@ -276,7 +270,7 @@ az group deployment create \
   --parameters storagePrefix=tfstorage secondResourceGroup=$secondRG secondStorageLocation=eastus
 ```
 
-对于 Azure CLI，若要将两个存储帐户部署到两个订阅，请使用：
+对于 Azure CLI，若要将两个存储帐户部署到两个订阅，请使用： 
 
 ```azurecli-interactive
 firstRG="primarygroup"
@@ -298,7 +292,7 @@ az group deployment create \
   --parameters storagePrefix=storage secondResourceGroup=$secondRG secondStorageLocation=eastus secondSubscriptionID=$secondSub
 ```
 
-对于 Azure CLI，若要测试如何解析父模板、内联模板和链接模板的资源组对象，请使用：
+对于 Azure CLI，若要测试如何解析父模板、内联模板和链接模板的资源组对象，请使用： 
 
 ```azurecli-interactive
 az group create --name parentGroup --location southcentralus

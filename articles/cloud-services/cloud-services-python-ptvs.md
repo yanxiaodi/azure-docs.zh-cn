@@ -3,51 +3,47 @@ title: Python 和 Azure 云服务入门 | Microsoft 文档
 description: 有关使用 Python Tools for Visual Studio 来创建包括 Web 角色和辅助角色的 Azure 云服务的概述。
 services: cloud-services
 documentationcenter: python
-author: thraka
-manager: timlt
-editor: ''
-ms.assetid: 5489405d-6fa9-4b11-a161-609103cbdc18
+author: georgewallace
 ms.service: cloud-services
-ms.workload: tbd
-ms.tgt_pltfrm: na
 ms.devlang: python
-ms.topic: hero-article
+ms.topic: conceptual
 ms.date: 07/18/2017
-ms.author: adegeo
-ms.openlocfilehash: f6bd89c160387abbb2b0339a5a5f62d998c0c84e
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.author: gwallace
+ms.openlocfilehash: 981b1cc4a7adb98ba68ebf3a7673b7116479e704
+ms.sourcegitcommit: 13d5eb9657adf1c69cc8df12486470e66361224e
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/31/2019
+ms.locfileid: "68359573"
 ---
 # <a name="python-web-and-worker-roles-with-python-tools-for-visual-studio"></a>用于 Visual Studio 的 Python 工具中的 Python Web 角色和辅助角色
 
-本文概述了如何在[用于 Visual Studio 的 Python 工具][Python Tools for Visual Studio]中使用 Python Web 角色和辅助角色。 介绍如何使用 Visual Studio 来创建和部署使用 Python 的基本云服务。
+本文概述了如何在 [Python Tools for Visual Studio][Python Tools for Visual Studio]中使用 Python Web 角色和辅助角色。 介绍如何使用 Visual Studio 来创建和部署使用 Python 的基本云服务。
 
 ## <a name="prerequisites"></a>先决条件
 * [Visual Studio 2013、2015 或 2017](https://www.visualstudio.com/)
-* [Python Tools for Visual Studio][Python Tools for Visual Studio]（用于 Visual Studio 的 Python 工具，简称 PTVS）
-* [用于 VS 2013 的 Azure SDK 工具][Azure SDK Tools for VS 2013]或  
-[用于 VS 2015 的 Azure SDK 工具][Azure SDK Tools for VS 2015]或  
-[用于 VS 2017 的 Azure SDK 工具][Azure SDK Tools for VS 2017]
-* [Python 2.7（32 位）][Python 2.7 32-bit]或 [Python 3.5（32 位）][Python 3.5 32-bit]
+* [Python Tools for Visual Studio][Python Tools for Visual Studio] （用于 Visual Studio 的 Python 工具，简称 PTVS）
+* [适用于 VS 2013 或的 Azure SDK Tools][Azure SDK Tools for VS 2013]  
+[适用于 VS 2015 或的 Azure SDK Tools][Azure SDK Tools for VS 2015]  
+[适用于 VS 2017 的 Azure SDK Tools][Azure SDK Tools for VS 2017]
+* [Python 2.7 32 位][Python 2.7 32-bit]或[python 3.5 32][Python 3.5 32-bit]
 
 [!INCLUDE [create-account-and-websites-note](../../includes/create-account-and-websites-note.md)]
 
 ## <a name="what-are-python-web-and-worker-roles"></a>什么是 Python Web 角色和辅助角色？
-Azure 为运行应用程序提供了三种计算模型：[Azure 应用服务中的 Web 应用功能][execution model-web sites]、[Azure 虚拟机][execution model-vms]和 [Azure 云服务][execution model-cloud services]。 这三种模型都支持 Python。 云服务（包括 Web 角色和辅助角色）提供了 *平台即服务 (PaaS)*。 在云服务中，Web 角色提供专用的 Internet Information Services (IIS) Web 服务器来托管前端 Web 应用程序，而辅助角色可独立于用户交互或输入运行异步任务、运行时间较长的任务或永久性任务。
+Azure 提供了三种用于运行应用程序的计算模型：Azure App Service、 [Azure 虚拟机][execution model-vms]和[azure 云服务][execution model-cloud services][中的 Web 应用功能][execution model-web sites]。 这三种模型都支持 Python。 云服务（包括 Web 角色和辅助角色）提供了 *平台即服务 (PaaS)* 。 在云服务中，Web 角色提供专用的 Internet Information Services (IIS) Web 服务器来托管前端 Web 应用程序，而辅助角色可独立于用户交互或输入运行异步任务、运行时间较长的任务或永久性任务。
 
 有关详细信息，请参阅 [什么是云服务？]。
 
 > [!NOTE]
 > *想要构建一个简单的网站？*
-> 如果方案只涉及一个简单的网站前端，请考虑使用 Azure 应用服务中的轻型 Web 应用功能。 随着网站的不断扩大和需求的变化，可以轻松升级到云服务。 请参阅 <a href="/develop/python/">Python 开发人员中心</a>关于如何在 Azure 应用服务中开发 Web 应用功能的文章。
+> 如果方案只涉及一个简单的网站前端，请考虑使用 Azure 应用服务中的轻型 Web 应用功能。 随着网站的不断扩大和需求的变化，可以轻松升级到云服务。 请参阅 [Python 开发人员中心](https://azure.microsoft.com/develop/python/)关于如何在 Azure 应用服务中开发 Web 应用功能的文章。
 > <br />
 > 
 > 
 
 ## <a name="project-creation"></a>创建项目
-在 Visual Studio 中，可以选择“新建项目”对话框中“Python”下的“Azure 云服务”。
+在 Visual Studio 中，可以选择“新建项目”对话框中“Python”下的“Azure 云服务”。   
 
 ![“新建项目”对话框](./media/cloud-services-python-ptvs/new-project-cloud-service.png)
 
@@ -59,7 +55,7 @@ Azure 为运行应用程序提供了三种计算模型：[Azure 应用服务中�
 
 ![云服务解决方案](./media/cloud-services-python-ptvs/worker.png)
 
-可以随时将 Web 角色或辅助角色添加到现有的云服务。  可以选择在解决方案中添加现有项目或创建新项目。
+可以随时将 Web 角色或辅助角色添加到现有的云服务。  用户可以选择在解决方案中添加现有项目或创建新项目。
 
 ![添加角色命令](./media/cloud-services-python-ptvs/add-new-or-existing-role.png)
 
@@ -100,7 +96,7 @@ Azure 为运行应用程序提供了三种计算模型：[Azure 应用服务中�
 </Startup>
 ```
 
-必须将 PYTHON2 和 PYPATH 变量添加到辅助角色启动任务。 仅当 **PYTHON2** 变量设置为 **on** 时，才使用 **PYPATH** 变量。
+必须将 PYTHON2  和 PYPATH  变量添加到辅助角色启动任务。 仅当 **PYTHON2** 变量设置为 **on** 时，才使用 **PYPATH** 变量。
 
 ```xml
 <Runtime>
@@ -245,7 +241,7 @@ if (-not $is_emulated){
 
 #### <a name="modify-launchworkerps1"></a>修改 LaunchWorker.ps1
 > [!NOTE]
-> 对于**辅助角色**项目，需要 **LauncherWorker.ps1** 文件才能执行启动文件。 在“Web 角色”  项目中，会在项目属性中定义该启动文件。
+> 对于**辅助角色**项目，需要 **LauncherWorker.ps1** 文件才能执行启动文件。 在“Web 角色” 项目中，会在项目属性中定义该启动文件。
 > 
 > 
 
@@ -307,12 +303,12 @@ if not exist "%DiagnosticStore%\LogFiles" mkdir "%DiagnosticStore%\LogFiles"
 
 虽然 PTVS 支持在模拟器中启动，调试（例如断点）将无法工作。
 
-要调试 Web 角色和辅助角色，可以将角色项目设置为启动项目并对其进行调试。  还可以设置多个启动项目。  右键单击解决方案并选择“设置启动项目”。
+要调试 Web 角色和辅助角色，可以将角色项目设置为启动项目并对其进行调试。  还可以设置多个启动项目。  右键单击解决方案并选择“设置启动项目”。 
 
 ![解决方案启动项目属性](./media/cloud-services-python-ptvs/startup.png)
 
 ## <a name="publish-to-azure"></a>发布到 Azure
-要进行发布，请右键单击解决方案中的云服务项目，并选择“发布”。
+要进行发布，请右键单击解决方案中的云服务项目，并选择“发布”。 
 
 ![Microsoft Azure 发布登录](./media/cloud-services-python-ptvs/publish-sign-in.png)
 
@@ -345,7 +341,7 @@ if not exist "%DiagnosticStore%\LogFiles" mkdir "%DiagnosticStore%\LogFiles"
 <!--Link references-->
 
 [什么是云服务？]: cloud-services-choose-me.md
-[execution model-web sites]: ../app-service/app-service-web-overview.md
+[execution model-web sites]: ../app-service/overview.md
 [execution model-vms]:../virtual-machines/windows/overview.md
 [execution model-cloud services]: cloud-services-choose-me.md
 [Python Developer Center]: /develop/python/
@@ -359,11 +355,11 @@ if not exist "%DiagnosticStore%\LogFiles" mkdir "%DiagnosticStore%\LogFiles"
 
 <!--External Link references-->
 
-[Python Tools for Visual Studio]: http://aka.ms/ptvs
-[Python Tools for Visual Studio Documentation]: http://aka.ms/ptvsdocs
-[Cloud Service Projects]: http://go.microsoft.com/fwlink/?LinkId=624028
-[Azure SDK Tools for VS 2013]: http://go.microsoft.com/fwlink/?LinkId=746482
-[Azure SDK Tools for VS 2015]: http://go.microsoft.com/fwlink/?LinkId=746481
-[Azure SDK Tools for VS 2017]: http://go.microsoft.com/fwlink/?LinkId=746483
+[Python Tools for Visual Studio]: https://aka.ms/ptvs
+[Python Tools for Visual Studio Documentation]: https://aka.ms/ptvsdocs
+[Cloud Service Projects]: https://docs.microsoft.com/visualstudio/python/python-azure-cloud-service-project-template
+[Azure SDK Tools for VS 2013]: https://go.microsoft.com/fwlink/?LinkId=746482
+[Azure SDK Tools for VS 2015]: https://go.microsoft.com/fwlink/?LinkId=746481
+[Azure SDK Tools for VS 2017]: https://go.microsoft.com/fwlink/?LinkId=746483
 [Python 2.7 32-bit]: https://www.python.org/downloads/
 [Python 3.5 32-bit]: https://www.python.org/downloads/

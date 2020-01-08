@@ -1,36 +1,33 @@
 ---
-title: "创建用于连接到 Azure Cosmos DB 的 Azure Function | Microsoft Docs"
-description: "Azure CLI 脚本示例 - 创建用于连接到 Azure Cosmos DB 的 Azure Function"
+title: 创建用于连接到 Azure Cosmos DB 的 Azure Function | Microsoft Docs
+description: Azure CLI 脚本示例 - 创建用于连接到 Azure Cosmos DB 的 Azure Function
 services: functions
 documentationcenter: functions
 author: ggailey777
-manager: cfowler
-editor: 
-tags: functions
-ms.assetid: 
-ms.service: functions
+manager: jeconnoc
+ms.assetid: ''
+ms.service: azure-functions
 ms.devlang: azurecli
 ms.topic: sample
-ms.tgt_pltfrm: na
-ms.workload: 
-ms.date: 01/22/2018
+ms.date: 07/03/2018
 ms.author: glenga
 ms.custom: mvc
-ms.openlocfilehash: 092e0681b0491fc1c54c19e234aafdac6d428fd1
-ms.sourcegitcommit: 8c3267c34fc46c681ea476fee87f5fb0bf858f9e
+ms.openlocfilehash: 15a7cc1940a01486c6b660ec65b47f072dc7996e
+ms.sourcegitcommit: 5d837a7557363424e0183d5f04dcb23a8ff966bb
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/09/2018
+ms.lasthandoff: 12/06/2018
+ms.locfileid: "52970660"
 ---
 # <a name="create-an-azure-function-that-connects-to-an-azure-cosmos-db"></a>创建用于连接到 Azure Cosmos DB 的 Azure Function
 
-此 Azure Functions 示例脚本先创建一个函数应用，然后将该函数连接到 Azure Cosmos DB 数据库。 创建的应用设置（包含连接）可以与 [Azure Cosmos DB 触发器或绑定](..\functions-bindings-cosmosdb.md)配合使用。
+此 Azure Functions 示例脚本先创建一个函数应用，然后将该函数连接到 Azure Cosmos DB 数据库。 创建的应用设置（包含连接）可以与 [Azure Cosmos DB 触发器或绑定](../functions-bindings-cosmosdb.md)配合使用。
 
 [!INCLUDE [quickstarts-free-trial-note](../../../includes/quickstarts-free-trial-note.md)]
 
 [!INCLUDE [cloud-shell-try-it.md](../../../includes/cloud-shell-try-it.md)]
 
-如果在本地使用 CLI，请确保运行 Azure CLI 2.0 或更高版本。 若要查找版本，请运行 `az --version`。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0](/cli/azure/install-azure-cli)。 
+如果在本地使用 CLI，请确保运行 Azure CLI 2.0 或更高版本。 要查找版本，请运行 `az --version`。 如需进行安装或升级，请参阅[安装 Azure CLI](/cli/azure/install-azure-cli)。 
 
 ## <a name="sample-script"></a>示例脚本
 
@@ -46,12 +43,10 @@ ms.lasthandoff: 03/09/2018
 
 | 命令 | 说明 |
 |---|---|
-| [az login](https://docs.microsoft.com/cli/azure/reference-index#az_login) | 登录 Azure。 |
-| [az group create](https://docs.microsoft.com/cli/azure/group#az_group_create) | 使用相关位置创建资源组 |
-| [az storage accounts create](https://docs.microsoft.com/cli/azure/storage/account) | 创建存储帐户 |
-| [az functionapp create](https://docs.microsoft.com/cli/azure/functionapp#az_functionapp_create) | 创建一个新的 Function App |
-| [az cosmosdb create](https://docs.microsoft.com/cli/azure/cosmosdb#az_cosmosdb_create) | 创建 cosmosdb 数据库 |
-| [az group delete](https://docs.microsoft.com/cli/azure/group#az_group_delete) | 清理 |
+| [az group create](https://docs.microsoft.com/cli/azure/group#az-group-create) | 使用相关位置创建资源组 |
+| [az storage accounts create](https://docs.microsoft.com/cli/azure/storage/account#az-storage-account-create) | 创建存储帐户 |
+| [az functionapp create](https://docs.microsoft.com/cli/azure/functionapp#az-functionapp-create) | 在无服务器[消耗计划](../functions-scale.md#consumption-plan)中创建函数应用。 |
+| [az cosmosdb create](https://docs.microsoft.com/cli/azure/cosmosdb#az-cosmosdb-create) | 创建 Azure Cosmos DB 数据库。 |
 
 ## <a name="next-steps"></a>后续步骤
 

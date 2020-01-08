@@ -1,5 +1,5 @@
 ---
-title: 为应用服务环境配置 Web 应用程序防火墙 (WAF)
+title: 为应用服务环境配置 Web 应用程序防火墙 (WAF) - Azure
 description: 了解如何在应用服务环境的前面配置 Web 应用程序防火墙。
 services: app-service\web
 documentationcenter: ''
@@ -10,23 +10,23 @@ ms.assetid: a2101291-83ba-4169-98a2-2c0ed9a65e8d
 ms.service: app-service
 ms.workload: web
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: tutorial
 ms.date: 03/03/2018
 ms.author: naziml
-ms.custom: mvc
-ms.openlocfilehash: bc59d8671d904cf5096d616213cc4674ef5743b8
-ms.sourcegitcommit: 6fcd9e220b9cd4cb2d4365de0299bf48fbb18c17
+ms.custom: seodec18
+ms.openlocfilehash: 01224e4270ba8a7c7df4a311823dd6156038438a
+ms.sourcegitcommit: 82499878a3d2a33a02a751d6e6e3800adbfa8c13
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/05/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70070048"
 ---
 # <a name="configuring-a-web-application-firewall-waf-for-app-service-environment"></a>为应用服务环境配置 Web 应用程序防火墙 (WAF)
 ## <a name="overview"></a>概述
 
-Web 应用程序防火墙 (WAF) 会检查入站 Web 流量，并阻止 SQL 注入、跨站点脚本、恶意软件上传和应用程序 DDoS 及其他攻击，有助于保护 Web 应用程序的安全。 为了进行数据丢失防护 (DLP)，该防火墙还会检查后端 Web 服务器的响应。 与隔离功能以及应用服务环境提供的附加缩放相结合，它可以提供一个理想的环境，用于托管需要承受恶意请求和大量流量的业务关键型 Web 应用程序。 Azure 通过[应用程序网关](http://docs.microsoft.com/azure/application-gateway/application-gateway-introduction)提供 WAF 功能。  若要了解如何将应用服务环境与应用程序网关集成，请阅读[将 ILB ASE 与应用程序网关集成](http://docs.microsoft.com/azure/app-service/environment/integrate-with-application-gateway)文档。
+Web 应用程序防火墙 (WAF) 会检查入站 Web 流量，并阻止 SQL 注入、跨站点脚本、恶意软件上传和应用程序 DDoS 及其他攻击，有助于保护 Web 应用程序的安全。 为了进行数据丢失防护 (DLP)，该防火墙还会检查后端 Web 服务器的响应。 与隔离功能以及应用服务环境提供的附加缩放相结合，它可以提供一个理想的环境，用于托管需要承受恶意请求和大量流量的业务关键型 Web 应用程序。 Azure 通过[应用程序网关](https://docs.microsoft.com/azure/application-gateway/application-gateway-introduction)提供 WAF 功能。  若要了解如何将应用服务环境与应用程序网关集成，请阅读[将 ILB ASE 与应用程序网关集成](https://docs.microsoft.com/azure/app-service/environment/integrate-with-application-gateway)文档。
 
-除了 Azure 应用程序网关，还有多个 Marketplace 选项，例如 [Barracuda WAF for Azure](https://www.barracuda.com/programs/azure)，在 [Azure Marketplace](https://azure.microsoft.com/marketplace/partners/barracudanetworks/waf-byol/) 中提供。 本文档其余部分重点介绍如何将应用服务环境与 Barracuda WAF 设备集成。
+除了 Azure 应用程序网关，还有多个市场选项，例如 [Barracuda WAF for Azure](https://www.barracuda.com/programs/azure)，在 [Azure 市场](https://azure.microsoft.com/marketplace/partners/barracudanetworks/waf-byol/)中提供。 本文档其余部分重点介绍如何将应用服务环境与 Barracuda WAF 设备集成。
 
 [!INCLUDE [app-service-web-to-api-and-mobile](../../../includes/app-service-web-to-api-and-mobile.md)] 
 
@@ -65,7 +65,7 @@ Barracuda WAF 使用 TCP 端口 8000 通过其管理门户进行配置。 如果
 
 ![添加管理终结点][AddManagementEndpoint]
 
-使用浏览器浏览到云服务上的管理终结点。 如果云服务名称为 test.cloudapp.net，则浏览到 http://test.cloudapp.net:8000 即可访问此终结点。 应会看到与下图类似的登录页，在此页上，可以使用在 WAF VM 设置阶段指定的凭据登录。
+使用浏览器浏览到云服务上的管理终结点。 如果云服务名称为 test.cloudapp.net，则浏览到 `http://test.cloudapp.net:8000` 即可访问此终结点。 应会看到与下图类似的登录页，在此页上，可以使用在 WAF VM 设置阶段指定的凭据登录。
 
 ![管理登录页][ManagementLoginPage]
 
@@ -73,12 +73,12 @@ Barracuda WAF 使用 TCP 端口 8000 通过其管理门户进行配置。 如果
 
 ![管理仪表板][ManagementDashboard]
 
-单击“服务”选项卡可以根据 WAF 保护的服务配置 WAF。 有关配置 Barracuda WAF 的详细信息，请参阅[相关文档](https://techlib.barracuda.com/waf/getstarted1)。 在以下示例中，已配置处理 HTTP 和 HTTPS 流量的 Azure Web 应用。
+单击“服务”选项卡可以根据 WAF 保护的服务配置 WAF  。 有关配置 Barracuda WAF 的详细信息，请参阅[相关文档](https://techlib.barracuda.com/waf/getstarted1)。 在以下示例中，已配置处理 HTTP 和 HTTPS 流量的应用服务应用。
 
 ![管理添加服务][ManagementAddServices]
 
 > [!NOTE]
-> 根据应用程序的配置方式与应用服务环境中正在使用的功能，需要转发非 80 和 443 TCP 端口的流量（例如，如果为 Web 应用设置了 IP SSL）。 有关应用服务环境中使用的网络端口的列表，请参阅[控制入站流量文档](app-service-app-service-environment-control-inbound-traffic.md)中的“网络端口”部分。
+> 根据应用程序的配置方式与应用服务环境中正在使用的功能，需要转发非 80 和 443 TCP 端口的流量（例如，如果为应用服务应用设置了 IP SSL）。 有关应用服务环境中使用的网络端口的列表，请参阅[控制入站流量文档](app-service-app-service-environment-control-inbound-traffic.md)中的“网络端口”部分。
 > 
 > 
 
@@ -87,7 +87,7 @@ Barracuda WAF 使用 TCP 端口 8000 通过其管理门户进行配置。 如果
 
 ![流量管理器终结点][TrafficManagerEndpoint]
 
-如果应用程序需要身份验证，请确保有某个资源不需要任何身份验证，使流量管理器能够 ping 出应用程序的可用性。 可以在 [Azure 门户](https://portal.azure.com)的“配置”页上配置 URL，如下图所示：
+如果应用程序需要身份验证，请确保有某个资源不需要任何身份验证，使流量管理器能够 ping 出应用程序的可用性。 可以在 [Azure 门户](https://portal.azure.com)的“配置”  页上配置 URL，如下图所示：
 
 ![配置流量管理器][ConfigureTrafficManager]
 

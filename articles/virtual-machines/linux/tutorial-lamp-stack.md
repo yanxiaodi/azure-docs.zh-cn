@@ -3,8 +3,8 @@ title: 教程 - 在 Azure 中的 Linux 虚拟机上部署 LAMP | Microsoft Docs
 description: 本教程介绍如何在 Azure 中的 Linux 虚拟机上安装 LAMP 堆栈
 services: virtual-machines-linux
 documentationcenter: virtual-machines
-author: dlepow
-manager: jeconnoc
+author: cynthn
+manager: gwallace
 editor: ''
 tags: azure-resource-manager
 ms.assetid: 6c12603a-e391-4d3e-acce-442dd7ebb2fe
@@ -13,13 +13,14 @@ ms.workload: infrastructure-services
 ms.tgt_pltfrm: vm-linux
 ms.devlang: azurecli
 ms.topic: tutorial
-ms.date: 11/27/2017
-ms.author: danlep
-ms.openlocfilehash: bd102645e7546d9ad9d3ce6b064ae9fa0ce415bd
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.date: 01/30/2019
+ms.author: cynthn
+ms.openlocfilehash: 66b7d7692d9143c8db813ad135b0b9c70b8869d2
+ms.sourcegitcommit: c105ccb7cfae6ee87f50f099a1c035623a2e239b
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 07/09/2019
+ms.locfileid: "67708590"
 ---
 # <a name="tutorial-install-a-lamp-web-server-on-a-linux-virtual-machine-in-azure"></a>教程：在 Azure 中的 Linux 虚拟机上安装 LAMP Web 服务器
 
@@ -36,7 +37,7 @@ ms.lasthandoff: 04/28/2018
 
 [!INCLUDE [cloud-shell-try-it.md](../../../includes/cloud-shell-try-it.md)]
 
-如果选择在本地安装并使用 CLI，本教程要求运行 Azure CLI 2.0.30 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。
+如果选择在本地安装并使用 CLI，本教程要求运行 Azure CLI 2.0.30 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。
 
 [!INCLUDE [virtual-machines-linux-tutorial-stack-intro.md](../../../includes/virtual-machines-linux-tutorial-stack-intro.md)]
 
@@ -49,15 +50,12 @@ ms.lasthandoff: 04/28/2018
 sudo apt update && sudo apt install lamp-server^
 ```
 
-
-系统会提示安装包和其他依赖项。 出现提示时，请为 MySQL 设置 root 密码，并按 [Enter] 继续。 遵照剩余的提示操作。 此股从会安装最低要求的 PHP 扩展，这些扩展是通过 MySQL 使用 PHP 所必需的。 
-
-![MySQL root 密码页][1]
+系统会提示安装包和其他依赖项。 此股从会安装最低要求的 PHP 扩展，这些扩展是通过 MySQL 使用 PHP 所必需的。  
 
 ## <a name="verify-installation-and-configuration"></a>验证安装和配置
 
 
-### <a name="apache"></a>Apache
+### <a name="verify-apache"></a>验证 Apache
 
 使用以下命令检查 Apache 版本：
 ```bash
@@ -69,7 +67,7 @@ apache2 -v
 ![Apache 默认页][3]
 
 
-### <a name="mysql"></a>MySQL
+### <a name="verify-and-secure-mysql"></a>验证并保护 MySQL
 
 使用以下命令检查 MySQL 版本（请注意大写的 `V` 参数）：
 
@@ -77,23 +75,23 @@ apache2 -v
 mysql -V
 ```
 
-若要帮助保护 MySQL 的安装，请运行 `mysql_secure_installation` 脚本。 如果只是设置临时服务器，则可以跳过此步骤。
+若要帮助保护 MySQL 安装，包括设置 root 密码，请运行 `mysql_secure_installation` 脚本。 
 
 ```bash
-mysql_secure_installation
+sudo mysql_secure_installation
 ```
 
-输入 MySQL 的 root 密码，并配置环境的安全设置。
+还可以选择设置“验证密码”插件（推荐）。 然后，为 MySQL root 用户设置一个密码，并为您的环境配置剩余的安全设置。 建议对所有问题都回答“Y”（是）。
 
 如果想要试用 MySQL 功能（创建 MySQL 数据库、添加用户或更改配置设置），请登录到 MySQL。 此步骤非本教程必需步骤。
 
 ```bash
-mysql -u root -p
+sudo mysql -u root -p
 ```
 
 完成后，键入 `\q` 退出 mysql 提示符。
 
-### <a name="php"></a>PHP
+### <a name="verify-php"></a>验证 PHP
 
 使用以下命令检查 PHP 版本：
 
@@ -113,7 +111,6 @@ sudo sh -c 'echo "<?php phpinfo(); ?>" > /var/www/html/info.php'
 
 [!INCLUDE [virtual-machines-linux-tutorial-wordpress.md](../../../includes/virtual-machines-linux-tutorial-wordpress.md)]
 
-
 ## <a name="next-steps"></a>后续步骤
 
 本教程在 Azure 中部署了一台 LAMP 服务器。 你已了解如何：
@@ -130,6 +127,5 @@ sudo sh -c 'echo "<?php phpinfo(); ?>" > /var/www/html/info.php'
 > [!div class="nextstepaction"]
 > [使用 SSL 保护 Web 服务器](tutorial-secure-web-server.md)
 
-[1]: ./media/tutorial-lamp-stack/configmysqlpassword-small.png
 [2]: ./media/tutorial-lamp-stack/phpsuccesspage.png
 [3]: ./media/tutorial-lamp-stack/apachesuccesspage.png

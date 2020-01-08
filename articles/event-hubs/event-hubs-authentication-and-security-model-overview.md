@@ -1,9 +1,9 @@
 ---
-title: Azure 事件中心身份验证和安全模型概述 | Microsoft Docs
-description: 事件中心身份验证和安全模型概述。
+title: 身份验证和安全模型 - Azure事件中心 | Microsoft Docs
+description: 本文介绍 Azure 事件中心的身份验证和安全模型。
 services: event-hubs
 documentationcenter: na
-author: sethmanheim
+author: ShubhaVijayasarathy
 manager: timlt
 editor: ''
 ms.assetid: 93841e30-0c5c-4719-9dc1-57a4814342e7
@@ -12,15 +12,17 @@ ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: na
-ms.date: 04/30/2018
-ms.author: sethm
-ms.openlocfilehash: 5264930dcb802c2a58abc179bdd0041acc9f58d0
-ms.sourcegitcommit: 6e43006c88d5e1b9461e65a73b8888340077e8a2
-ms.translationtype: HT
+ms.custom: seodec18
+ms.date: 12/06/2018
+ms.author: shvija
+ms.openlocfilehash: 19b347423c28b4c615f90f325ead462b9d3e8e9e
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/01/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60822584"
 ---
-# <a name="event-hubs-authentication-and-security-model-overview"></a>事件中心身份验证和安全模型概述
+# <a name="azure-event-hubs---authentication-and-security-model"></a>Azure 事件中心 - 身份验证和安全模型
 
 Azure 事件中心安全模型满足以下要求：
 
@@ -38,11 +40,11 @@ Azure 事件中心安全模型满足以下要求：
 
 可为设备配置令牌，用于授予对事件中心的直接访问权限，但不建议这样做。 持有此令牌的任何设备都可以直接将消息发送到该事件中心。 此类设备将不会受到限制。 此外，无法将设备列入阻止列表，使其无法向该事件中心发送消息。
 
-所有令牌使用 SAS 密钥进行签名。 通常，所有令牌使用同一密钥进行签名。 客户端不知道密钥；这可以防止其他客户端生成令牌。
+所有令牌都使用 SAS 密钥进行签名。 通常，所有令牌使用同一密钥进行签名。 客户端不知道密钥；这可以防止其他客户端生成令牌。
 
 ### <a name="create-the-sas-key"></a>创建 SAS 密钥
 
-创建事件中心命名空间时，此服务自动生成名为 RootManageSharedAccessKey 的 256 位 SAS 密钥。 此规则具有关联的主密钥对和辅助密钥对，可用于向命名空间授予发送、侦听和管理权限。 还可创建其他密钥。 建议生成一个密钥，用于授予对特定事件中心的发送权限。 对于本主题的其余部分，假设将此密钥命名为 **EventHubSendKey**。
+创建事件中心命名空间时，此服务自动生成名为 RootManageSharedAccessKey 的 256 位 SAS 密钥  。 此规则具有关联的主密钥对和辅助密钥对，可用于向命名空间授予发送、侦听和管理权限。 还可创建其他密钥。 建议生成一个密钥，用于授予对特定事件中心的发送权限。 对于本主题的其余部分，假设将此密钥命名为 **EventHubSendKey**。
 
 在创建事件中心时，以下示例将创建一个仅限发送的密钥：
 
@@ -66,13 +68,13 @@ nm.CreateEventHub(ed);
 
 ### <a name="generate-tokens"></a>生成令牌
 
-可以使用 SAS 密钥生成令牌。 对于每个客户端只能生成一个令牌。 然后，可以使用以下方法生成令牌。 所有令牌都使用 **EventHubSendKey** 密钥生成。 将为每个令牌分配一个唯一 URI。
+可以使用 SAS 密钥生成令牌。 对于每个客户端只能生成一个令牌。 然后，可以使用以下方法生成令牌。 所有令牌都使用 **EventHubSendKey** 密钥生成。 将为每个令牌分配一个唯一 URI。 'resource' 参数对应于服务（在此示例中为事件中心）的 URI 终结点。
 
 ```csharp
 public static string SharedAccessSignatureTokenProvider.GetSharedAccessSignature(string keyName, string sharedAccessKey, string resource, TimeSpan tokenTimeToLive)
 ```
 
-调用此方法时，应将 URI 指定为 `//<NAMESPACE>.servicebus.windows.net/<EVENT_HUB_NAME>/publishers/<PUBLISHER_NAME>`。 所有令牌的 URI 都是相同的，但每个令牌的 `PUBLISHER_NAME` 应该不同。 `PUBLISHER_NAME` 最好是表示接收该令牌的客户端 ID。
+调用此方法时，应将 URI 指定为 `https://<NAMESPACE>.servicebus.windows.net/<EVENT_HUB_NAME>/publishers/<PUBLISHER_NAME>`。 所有令牌的 URI 都是相同的，但每个令牌的 `PUBLISHER_NAME` 应该不同。 `PUBLISHER_NAME` 最好是表示接收该令牌的客户端 ID。
 
 此方法将生成具有以下结构的令牌：
 

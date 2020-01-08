@@ -1,11 +1,11 @@
 ---
-title: "安装 Microsoft Azure StorSimple 8600 设备 | Microsoft 文档"
-description: "介绍如何在部署和配置软件之前打开 StorSimple 8600 设备的包装并进行机架安装和布线。"
+title: 安装 Microsoft Azure StorSimple 8600 设备 | Microsoft 文档
+description: 介绍如何在部署和配置软件之前打开 StorSimple 8600 设备的包装并进行机架安装和布线。
 services: storsimple
 documentationcenter: NA
 author: alkohli
 manager: jeconnoc
-editor: 
+editor: ''
 ms.assetid: 3d82ba5f-3e34-40dc-9c33-50f952bc6be8
 ms.service: storsimple
 ms.devlang: NA
@@ -14,13 +14,17 @@ ms.tgt_pltfrm: NA
 ms.workload: TBD
 ms.date: 01/09/2018
 ms.author: alkohli
-ms.openlocfilehash: 5a8b460441323cb668a3d9939cce434636afc44d
-ms.sourcegitcommit: 9292e15fc80cc9df3e62731bafdcb0bb98c256e1
-ms.translationtype: HT
+ms.openlocfilehash: 571c8b729408d7b9e805b875baccfd9ac8d6b9be
+ms.sourcegitcommit: 5d6c8231eba03b78277328619b027d6852d57520
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/10/2018
+ms.lasthandoff: 08/13/2019
+ms.locfileid: "68965273"
 ---
 # <a name="unpack-rack-mount-and-cable-your-storsimple-8600-device"></a>打开 StorSimple 8600 设备的包装并进行机架安装和布线
+
+[!INCLUDE [storsimple-8000-eol-banner](../../includes/storsimple-8000-eol-banner.md)]
+
 ## <a name="overview"></a>概述
 Microsoft Azure StorSimple 8600 是一种双机箱设备，由主机箱和 EBOD 机箱组成。 本教程介绍如何在配置 StorSimple 软件之前打开 StorSimple 8600 设备的包装并进行机架安装和布线。
 
@@ -45,7 +49,7 @@ Microsoft Azure StorSimple 8600 是一种双机箱设备，由主机箱和 EBOD 
    
     **存储设备解包后的视图**
    
-   | 标签 | 说明 |
+   | Label | 描述 |
    | --- | --- |
    |   1 |包装箱 |
    |   2 |SAS 电缆（位于配件和电缆槽中） |
@@ -109,7 +113,7 @@ Microsoft Azure StorSimple 8600 是一种双机箱设备，由主机箱和 EBOD 
    
     **在机箱侧面安装导轨**
    
-   | 标签 | 说明 |
+   | Label | 描述 |
    | --- | --- |
    |  1 |M 3x4 圆头螺丝 |
    |  2 |底架滑轨 |
@@ -122,7 +126,7 @@ Microsoft Azure StorSimple 8600 是一种双机箱设备，由主机箱和 EBOD 
    
     **将导轨组件固定到机架上**
    
-   | 标签 | 说明 |
+   | Label | 描述 |
    | --- | --- |
    |   1 |旋紧螺丝 |
    |   2 |方孔前机架立柱螺丝 |
@@ -148,7 +152,7 @@ Microsoft Azure StorSimple 8600 是一种双机箱设备，由主机箱和 EBOD 
    
     **安装法兰帽**
    
-   | 标签 | 说明 |
+   | Label | 描述 |
    | --- | --- |
    |   1 |机箱紧固螺丝 |
 
@@ -167,7 +171,7 @@ EBOD 机箱安装完成后，需按照相同步骤安装主机箱。
 ## <a name="cable-your-storsimple-8600-device"></a>进行 StorSimple 8600 设备布线
 以下过程阐释了如何针对电源、网络和串行连接进行 StorSimple 8600 设备布线。
 
-### <a name="prerequisites"></a>系统必备
+### <a name="prerequisites"></a>先决条件
 在开始设备布线之前，需要：
 
 * 主机箱和 EBOD 机箱（完全解包）
@@ -201,7 +205,7 @@ EBOD 机箱安装完成后，需按照相同步骤安装主机箱。
    
     **设备背面显示数据端口**
    
-   | 标签 | 说明 |
+   | Label | 描述 |
    | --- | --- |
    |   0,1,4,5 |1 GbE 网络接口 |
    |   2,3 |10 GbE 网络接口 |
@@ -212,7 +216,7 @@ EBOD 机箱安装完成后，需按照相同步骤安装主机箱。
 
 **设备网络布线**
 
-| 标签 | 说明 |
+| Label | 描述 |
 | --- | --- |
 | A |具有 Internet 访问的 LAN |
 | B |控制器 0 |
@@ -259,7 +263,7 @@ EBOD 机箱安装完成后，需按照相同步骤安装主机箱。
 6. 在控制台中按 Enter 键确认连接是否正常。 将出现串行控制台菜单。
 
 > [!NOTE]
-> **无人值守管理**：当设备安装在远程数据中心或有限访问的计算机机房中时，请确保与两个控制器的串行连接始终连接到串行控制台交换机或类似设备。 如果发生网络中断或意外故障，这可实现带外远程控制和支持操作。
+> **无人照看管理:** 如果设备安装在远程数据中心或具有有限访问权限的计算机房中, 请确保与两个控制器的串行连接始终连接到串行控制台交换机或类似设备。 如果发生网络中断或意外故障，这可实现带外远程控制和支持操作。
 > 
 > 
 

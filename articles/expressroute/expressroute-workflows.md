@@ -1,48 +1,43 @@
 ---
-title: "ExpressRoute 线路配置工作流 | Microsoft Docs"
-description: "本页指导完成配置 ExpressRoute 线路和对等互连的工作流"
-documentationcenter: na
+title: 线路配置工作流 - ExpressRoute:Azure | Microsoft Docs
+description: 本页显示配置 ExpressRoute 线路和对等互连的工作流
 services: expressroute
 author: cherylmc
-manager: carmonm
-editor: 
-ms.assetid: 55e0418c-e0bf-44a7-9aa1-720076df9297
 ms.service: expressroute
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: infrastructure-services
-ms.date: 05/12/2017
+ms.topic: conceptual
+ms.date: 09/18/2018
 ms.author: cherylmc
-ms.openlocfilehash: cba1b2cfee379e7d2b079bcb3089981ef1044d66
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.custom: seodec18
+ms.openlocfilehash: 1e0f4d356bb6addf735bf148a80e6be3ca550c8f
+ms.sourcegitcommit: fad368d47a83dadc85523d86126941c1250b14e2
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 09/19/2019
+ms.locfileid: "71123384"
 ---
 # <a name="expressroute-workflows-for-circuit-provisioning-and-circuit-states"></a>ExpressRoute 线路预配工作流和线路状态
 本页从较高层面引导完成服务预配和路由配置工作流。
 
-![](./media/expressroute-workflows/expressroute-circuit-workflow.png)
+![线路工作流](./media/expressroute-workflows/expressroute-circuit-workflow.png)
 
 下图和相应的步骤说明了预配端到端 ExpressRoute 线路所要执行的任务。 
 
 1. 使用 PowerShell 配置 ExpressRoute 线路。 有关更多详细信息，请遵循[创建 ExpressRoute 线路](expressroute-howto-circuit-classic.md)一文中的说明。
 2. 从服务提供商订购连接。 此过程根据情况而有所不同。 有关如何订购连接的详细信息，请联系连接服务提供商。
 3. 通过 PowerShell 验证 ExpressRoute 线路预配状态，以确保线路预配成功。 
-4. 配置路由域 如果连接服务提供商管理第 3 层，则他们将为线路配置路由。 如果连接服务提供商只提供第 2 层服务，则必须根据[路由要求](expressroute-routing.md)和[路由配置](expressroute-howto-routing-classic.md)页中所述的指导原则来配置路由。
+4. 配置路由域 如果连接服务提供商管理第 3 层，他们将为你的线路配置路由。 如果连接服务提供商只提供第 2 层服务，必须根据[路由要求](expressroute-routing.md)和[路由配置](expressroute-howto-routing-classic.md)页中所述的每条指导原则来配置路由。
    
-   * 启用 Azure 专用对等互连 - 只有启用此对等互连才能连接到部署在虚拟网络中的 VM/云服务。
-   * 启用 Azure 公共对等互连 - 如果想要连接到托管在公共 IP 地址上的 Azure 服务，则必须启用 Azure 公共对等互连。 如果已选择为 Azure 专用对等互连启用默认路由并想要访问 Azure 资源，则必须执行上述操作。
-   * 启用 Microsoft 对等互连 - 必须启用此对等互连才能访问 Office 365 和 Dynamics 365。 
+   * 启用 Azure 专用对等互连 - 启用此对等互连以连接到部署在虚拟网络中的 VM/云服务。
+
+   * 启用 Microsoft 对等互连-启用此项以访问 Office 365。 此外，所有的 Azure PaaS 服务也可通过 Microsoft 对等互连访问。
      
      > [!IMPORTANT]
      > 必须确保使用独立的代理/边缘，而不是用于 Internet 的 代理/边缘来连接 Microsoft。 对 ExpressRoute 和 Internet 使用相同的边缘会导致路由不对称，并造成网络连接中断。
      > 
      > 
      
-     ![](./media/expressroute-workflows/routing-workflow.png)
-5. 将虚拟网络链接到 ExpressRoute 线路 - 可以将虚拟网络链接到 ExpressRoute 线路。 请按照说明[将 VNet 链接](expressroute-howto-linkvnet-arm.md)到用户的线路。 这些 VNet 可以位于 ExpressRoute 线路所在的同一 Azure 订阅中，也可以位于不同的订阅中。
+     ![路由工作流](./media/expressroute-workflows/routing-workflow.png)
+5. 将虚拟网络链接到 ExpressRoute 线路 - 可以将虚拟网络链接到 ExpressRoute 线路。 请按照说明[将 VNet 链接](expressroute-howto-linkvnet-arm.md)到你的线路。 这些 VNet 可以位于 ExpressRoute 线路所在的同一 Azure 订阅中，也可以位于不同的订阅中。
 
 ## <a name="expressroute-circuit-provisioning-states"></a>ExpressRoute 线路预配状态
 每条 ExpressRoute 线路有两种状态：

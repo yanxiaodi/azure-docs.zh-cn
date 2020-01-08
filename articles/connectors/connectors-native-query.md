@@ -1,11 +1,11 @@
 ---
-title: "在逻辑应用中添加查询操作 | Microsoft Docs"
-description: "用于执行筛选数组等操作的查询操作的概述。"
-services: 
-documentationcenter: 
+title: 在逻辑应用中添加查询操作 | Microsoft Docs
+description: 用于执行筛选数组等操作的查询操作的概述。
+services: ''
+documentationcenter: ''
 author: jeffhollan
 manager: erikre
-editor: 
+editor: ''
 tags: connectors
 ms.assetid: 34e702c7-f9e5-4885-9266-fc7404adecfe
 ms.service: logic-apps
@@ -15,11 +15,12 @@ ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 07/20/2016
 ms.author: jehollan
-ms.openlocfilehash: 05dd4ae3c4ee439d66401a3f5595f9104051f8ee
-ms.sourcegitcommit: be9a42d7b321304d9a33786ed8e2b9b972a5977e
-ms.translationtype: HT
+ms.openlocfilehash: 2a82afe396039857e5b9ad6b8a6d0e710573037f
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/19/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60538208"
 ---
 # <a name="get-started-with-the-query-action"></a>查询操作入门
 通过使用查询操作，可使用批处理和数组完成工作流，以便：
@@ -30,15 +31,16 @@ ms.lasthandoff: 01/19/2018
 若要开始在逻辑应用中使用查询操作，请参阅[创建逻辑应用](../logic-apps/quickstart-create-first-logic-app-workflow.md)。
 
 ## <a name="use-the-query-action"></a>使用查询操作
-操作是由在逻辑应用中定义的工作流执行的操作。 [了解有关操作的详细信息](connectors-overview.md)。  
+操作是由在逻辑应用中定义的工作流执行的操作。 
+[了解有关操作的详细信息](../connectors/apis-list.md)。  
 
 查询操作当前具有一个在设计器中公开的操作，称为筛选数组。 这允许查询数组并返回一组已筛选的结果。
 
 下面是在逻辑应用中添加它的方法：
 
-1. 选择“新步骤”按钮。
-2. 选择“添加操作”。
-3. 在操作搜索框中，键入“筛选”列出“筛选数组”操作。
+1. 选择“新步骤”  按钮。
+2. 选择“添加操作”  。
+3. 在操作搜索框中，键入“筛选”  列出“筛选数组”  操作。
    
     ![选择查询操作](./media/connectors-native-query/using-action-1.png)
 4. 选择要筛选的数组。 （以下屏幕截图显示来自 Twitter 搜索的结果数组。）
@@ -54,7 +56,7 @@ ms.lasthandoff: 01/19/2018
 ## <a name="query-action"></a>Query 操作
 下面是此连接器支持的操作的详细信息。 连接器具有一个可能的操作。
 
-| 操作 | 说明 |
+| 操作 | 描述 |
 | --- | --- |
 | 筛选数组 |为数组中的每个项目评估条件并返回结果 |
 
@@ -63,9 +65,9 @@ ms.lasthandoff: 01/19/2018
 
 ### <a name="filter-array"></a>筛选数组
 下面是操作的输入字段，该操作发出 HTTP 出站请求。
-* 表示它是必填字段。
+\* 表示它是必填字段。
 
-| 显示名称 | 属性名称 | 说明 |
+| Display name | 属性名称 | 描述 |
 | --- | --- | --- |
 | 来自* |from |要筛选的数组 |
 | 条件* |其中 |要为每个项目评估的条件 |
@@ -75,7 +77,7 @@ ms.lasthandoff: 01/19/2018
 ### <a name="output-details"></a>输出详细信息
 下面是 HTTP 响应的输出详细信息。
 
-| 属性名称 | 数据类型 | 说明 |
+| 属性名称 | 数据类型 | 描述 |
 | --- | --- | --- |
 | 已筛选的数组 |数组 |为每个已筛选的结果包含一个对象的数组 |
 

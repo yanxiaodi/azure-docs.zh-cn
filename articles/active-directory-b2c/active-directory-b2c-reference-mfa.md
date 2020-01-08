@@ -1,57 +1,51 @@
 ---
-title: Azure Active Directory B2C：多重身份验证 | Microsoft Docs
-description: 如何在由 Azure Active Directory B2C 保护的面向用户的应用程序中启用多重身份验证
+title: Azure Active Directory B2C 中的多重身份验证 | Microsoft Docs
+description: 如何在由 Azure Active Directory B2C 保护的面向用户的应用程序中启用多重身份验证。
 services: active-directory-b2c
-documentationcenter: ''
-author: davidmu1
-manager: mtillman
-editor: ''
-ms.service: active-directory-b2c
+author: mmacy
+manager: celestedg
+ms.service: active-directory
 ms.workload: identity
-ms.topic: article
-ms.date: 12/06/2016
-ms.author: davidmu
-ms.openlocfilehash: f439c65d9b4fbeb78623312c426767f89dfd9fab
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 11/30/2018
+ms.author: marsma
+ms.subservice: B2C
+ms.openlocfilehash: 0b872fcfbc2ead2cebdd32ff718b582c13af314e
+ms.sourcegitcommit: f209d0dd13f533aadab8e15ac66389de802c581b
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71065581"
 ---
-# <a name="azure-active-directory-b2c-enable-multi-factor-authentication-in-your-consumer-facing-applications"></a>Azure Active Directory B2C：启用面向用户的应用程序中的多重身份验证
-Azure Active Directory (Azure AD) B2C 直接集成了 [Azure 多重身份验证](../active-directory/authentication/multi-factor-authentication.md)，以便可以在面向消费者的应用程序中将第二层安全性添加到注册和登录体验。 可以这样操作而无需编写单行代码。 目前我们支持电话和短信验证。 如果已经创建了注册和登录策略，则仍然可以启用多重身份验证。
+# <a name="enable-multi-factor-authentication-in-azure-active-directory-b2c"></a>在 Azure Active Directory B2C 中启用多重身份验证
 
-> [!NOTE]
-> 除了可以通过编辑现有策略之外，还可以在创建注册和登录策略时启用多重身份验证。
-> 
-> 
+Azure Active Directory B2C （Azure AD B2C）直接与[Azure 多重身份验证](../active-directory/authentication/multi-factor-authentication.md)集成，以便你可以在应用程序中添加另一个安全层来注册和登录体验。 无需编写一行代码便可启用多重身份验证。 如果已经创建了注册和登录用户流，则仍然可以启用多重身份验证。
 
 此功能有助于应用程序处理以下方案：
 
-* 不需要多重身份验证即可访问一个应用程序，但需要多重身份验证才能访问另一个应用程序。 例如，使用者可以用社交或本地帐户登录汽车保险应用程序，但是必须在访问在同一目录中注册的家庭保险应用程序之前验证电话号码。
-* 通常不需要多重身份验证即可访问一个应用程序，但需要它才能访问其中的敏感部分。 例如，使用者可以使用社交或本地帐户登录银行应用程序并查询帐户余额，但必须在尝试进行电子转账前验证电话号码。
+- 不需要多重身份验证即可访问一个应用程序，但需要多重身份验证才能访问另一个应用程序。 例如，客户可以使用社交或本地帐户登录汽车保险应用程序，但是必须在访问在同一目录中注册的家庭保险应用程序之前验证电话号码。
+- 通常不需要多重身份验证即可访问一个应用程序，但需要它才能访问其中的敏感部分。 例如，客户可以使用社交或本地帐户登录银行应用程序并查询帐户余额，但必须在尝试进行电子转账前验证电话号码。
 
-## <a name="modify-your-sign-up-policy-to-enable-multi-factor-authentication"></a>修改注册策略以启用多重身份验证
-1. [请按照以下步骤导航到 Azure 门户上的 B2C 功能边栏选项卡](active-directory-b2c-app-registration.md#navigate-to-b2c-settings)。
-2. 单击“注册策略”。
-3. 单击注册策略（例如，“B2C_1_SiUp”）将其打开。
-4. 单击“多重身份验证”，然后将“状态”设置为“开启”。 单击“确定”。
-5. 单击边栏选项卡顶部的“保存”。
+## <a name="set-multi-factor-authentication"></a>设置多重身份验证
 
-可以使用策略上的“立即运行”功能来验证用户体验。 确认符合以下条件：
+在创建用户流时，可以选择启用多重身份验证。
 
-在执行多重身份验证步骤之前，会在目录中创建一个使用者帐户。 在步骤中，会要求使用者提供他/她的电话号码并且进行验证。 如果验证成功，则电话号码将附加到使用者帐户以供日后使用。 即使消费者取消或退出登录，也可能要求他/她在下次登录时再次验证电话号码（启用多重身份验证）。
+![设置多重身份验证](./media/active-directory-b2c-reference-mfa/add-policy.png)
 
-## <a name="modify-your-sign-in-policy-to-enable-multi-factor-authentication"></a>修改登录策略以启用多重身份验证
-1. [请按照以下步骤导航到 Azure 门户上的 B2C 功能边栏选项卡](active-directory-b2c-app-registration.md#navigate-to-b2c-settings)。
-2. 单击“登录策略”。
-3. 单击登录策略（例如，“B2C_1_SiIn”）将其打开。 单击边栏选项卡顶部的“编辑”。
-4. 单击“多重身份验证”，并将“状态”设置为“开启”。 单击“确定”。
-5. 单击边栏选项卡顶部的“保存”。
+将“多重身份验证”设置为“启用”。
 
-可以使用策略上的“立即运行”功能来验证用户体验。 确认符合以下条件：
+可以使用“运行用户流”来验证体验。 确认以下场景：
 
-当使用者登录（使用社交或本地帐户）时，如果验证的电话号码附加到使用者帐户，则会要求他/她进行验证。 如果没有附加电话号码，则要求使用者提供一个电话号码并对其进行验证。 验证成功后，则电话号码将附加到使用者帐户以供日后使用。
+在多重身份验证步骤发生之前，在租户中创建了一个客户帐户。 在执行此步骤期间，会要求客户提供一个电话号码并对其进行验证。 如果验证成功，则会将电话号码附加到帐户供以后使用。 即使客户取消或退出登录，也可能会要求客户在下次登录时再次验证电话号码（启用了多重身份验证时）。
 
-## <a name="multi-factor-authentication-on-other-policies"></a>针对其他策略的多重身份验证
-如上面的注册和登录策略所述，还可以在注册或登录策略和密码重置策略中启用多重身份验证。 它很快就可用于配置文件编辑策略。
+## <a name="add-multi-factor-authentication"></a>添加多重身份验证
+
+可以在之前创建的用户流上启用多重身份验证。
+
+若要启用多重身份验证，请执行以下操作：
+
+1. 打开用户流，然后选择“属性”。
+2. 在“多重身份验证”旁边，选择“启用”。
+3. 单击页顶部的“保存”。
+
 

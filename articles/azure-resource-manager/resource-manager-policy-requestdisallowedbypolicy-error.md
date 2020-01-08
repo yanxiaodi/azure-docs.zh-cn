@@ -4,20 +4,21 @@ description: 说明 RequestDisallowedByPolicy 错误的原因。
 services: azure-resource-manager
 documentationcenter: ''
 author: genlin
-manager: cshepard
+manager: dcscontentpm
 editor: ''
 ms.service: azure-resource-manager
 ms.workload: multiple
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: troubleshooting
-ms.date: 03/09/2018
+ms.date: 10/31/2018
 ms.author: genli
-ms.openlocfilehash: 474400d92660b68fd7fef906216b8e37c6e8c94d
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.openlocfilehash: e862637c688fd473b112fdfc0ee197da0444d02f
+ms.sourcegitcommit: fad368d47a83dadc85523d86126941c1250b14e2
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
+ms.lasthandoff: 09/19/2019
+ms.locfileid: "71121235"
 ---
 # <a name="requestdisallowedbypolicy-error-with-azure-resource-policy"></a>Azure 资源策略的 RequestDisallowedByPolicy 错误
 
@@ -36,21 +37,23 @@ ms.lasthandoff: 05/20/2018
 }
 ```
 
-## <a name="troubleshooting"></a>故障排除
+## <a name="troubleshooting"></a>疑难解答
 
 若要检索有关阻止部署的策略的详细信息，请使用以下方法之一：
 
 ### <a name="powershell"></a>PowerShell
 
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
+
 在 PowerShell 中，提供该策略标识符作为 `Id` 参数，检索有关阻止部署的策略的详细信息。
 
-```PowerShell
-(Get-AzureRmPolicyDefinition -Id "/subscriptions/{guid}/providers/Microsoft.Authorization/policyDefinitions/regionPolicyDefinition").Properties.policyRule | ConvertTo-Json
+```powershell
+(Get-AzPolicyDefinition -Id "/subscriptions/{guid}/providers/Microsoft.Authorization/policyDefinitions/regionPolicyDefinition").Properties.policyRule | ConvertTo-Json
 ```
 
 ### <a name="azure-cli"></a>Azure CLI
 
-在 Azure CLI 2.0 中，提供策略定义的名称：
+在 Azure CLI 中，提供策略定义的名称：
 
 ```azurecli
 az policy definition show --name regionPolicyAssignment
@@ -63,5 +66,5 @@ az policy definition show --name regionPolicyAssignment
 
 有关详细信息，请参阅以下文章：
 
-- [什么是 Azure 策略？](../azure-policy/azure-policy-introduction.md)
-- [创建和管理策略以强制实施符合性](../azure-policy/create-manage-policy.md)
+- [什么是 Azure Policy？](../governance/policy/overview.md)
+- [创建和管理策略以强制实施符合性](../governance/policy/tutorials/create-and-manage.md)

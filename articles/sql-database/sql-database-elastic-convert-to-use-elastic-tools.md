@@ -2,18 +2,21 @@
 title: 迁移要扩展的现有数据库 | Microsoft Docs
 description: 通过创建分片映射管理器来转换分片数据库，以使用弹性数据库工具
 services: sql-database
-author: stevestein
-manager: craigg
 ms.service: sql-database
-ms.custom: scale out apps
-ms.topic: article
-ms.date: 04/01/2018
+ms.subservice: scale-out
+ms.custom: ''
+ms.devlang: ''
+ms.topic: conceptual
+author: stevestein
 ms.author: sstein
-ms.openlocfilehash: 41652717417f47858698b80eac83a4022dcfe13b
-ms.sourcegitcommit: 3a4ebcb58192f5bf7969482393090cb356294399
-ms.translationtype: HT
+ms.reviewer: ''
+ms.date: 01/25/2019
+ms.openlocfilehash: 2d6d5c51cb381c089633ba010a1d64c8486ddcd8
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68568722"
 ---
 # <a name="migrate-existing-databases-to-scale-out"></a>迁移要扩展的现有数据库
 使用 Azure SQL 数据库数据库工具（例如[弹性数据库客户端库](sql-database-elastic-database-client-library.md)）轻松管理现有的扩展共享数据库。 先转换现有数据库集，再使用[分片映射管理器](sql-database-elastic-scale-shard-map-management.md)。 
@@ -26,7 +29,7 @@ ms.lasthandoff: 04/06/2018
 3. 准备各个分片。  
 4. 将映射添加到分片映射。
 
-可以使用 [.NET Framework 客户端库](http://www.nuget.org/packages/Microsoft.Azure.SqlDatabase.ElasticScale.Client/)或者 [Azure SQL DB - 弹性数据库工具脚本](https://gallery.technet.microsoft.com/scriptcenter/Azure-SQL-DB-Elastic-731883db)中提供的 PowerShell 脚本来实现这些技巧。 以下示例使用 PowerShell 脚本。
+可以使用 [.NET Framework 客户端库](https://www.nuget.org/packages/Microsoft.Azure.SqlDatabase.ElasticScale.Client/)或者 [Azure SQL DB - 弹性数据库工具脚本](https://gallery.technet.microsoft.com/scriptcenter/Azure-SQL-DB-Elastic-731883db)中提供的 PowerShell 脚本来实现这些技巧。 以下示例使用 PowerShell 脚本。
 
 有关 ShardMapManager 的详细信息，请参阅[分片映射管理](sql-database-elastic-scale-shard-map-management.md)。 有关弹性数据库工具的概述，请参[阅弹性数据库功能概述](sql-database-elastic-scale-introduction.md)。
 
@@ -65,11 +68,11 @@ ms.lasthandoff: 04/06/2018
 
 ![列表映射][1]
 
-多租户模型将数个租户分配给单一数据库（可以跨多个数据库分布租户组。） 当希望每个租户具有较小数据需求时使用此模型。 在此模型中，使用范围映射将一系列用户分配到数据库。 
+多租户模型将数个租户分配给单个数据库（可跨多个数据库分布租户组）。 当希望每个租户具有较小数据需求时使用此模型。 在此模型中，使用范围映射将一系列用户分配到数据库。 
 
 ![范围映射][2]
 
-或者可以使用*列表映射*来实现多租户数据库模型，以将多个租户分配给单一数据库。 例如，DB1 用于存储租户 ID 1 和 5 的相关信息，而 DB2 用于存储租户 7 和租户 10 的数据。 
+或可以使用列表映射来实现多租户数据库模型，以将多个租户分配给单个数据库。 例如，DB1 用于存储租户 ID 1 和 5 的相关信息，而 DB2 用于存储租户 7 和租户 10 的数据。 
 
 ![单一数据库上的多个租户][3] 
 
@@ -94,7 +97,7 @@ ms.lasthandoff: 04/06/2018
     -RangeShardMapName 'RangeShardMap' 
     -ShardMapManager $ShardMapManager 
 
-### <a name="option-3-list-mappings-on-a-single-database"></a>选项 3：单一数据库上的列表映射
+### <a name="option-3-list-mappings-on-an-individual-database"></a>选项 3：单个数据库的列表映射
 设置此模式也需要创建列表映射，如步骤 2，选项 1 中所示。
 
 ## <a name="step-3-prepare-individual-shards"></a>步骤 3：准备各个分片
@@ -108,7 +111,7 @@ ms.lasthandoff: 04/06/2018
 
 
 ## <a name="step-4-add-mappings"></a>步骤 4：添加映射
-添加映射的操作取决于创建的分片映射种类。 如果已创建列表映射，请添加列表映射。 如果已创建范围映射，请添加范围映射。
+添加映射的操作取决于创建的分片映射种类。 如果创建的是列表映射，则添加列表映射。 如果创建的是范围映射，则添加范围映射。
 
 ### <a name="option-1-map-the-data-for-a-list-mapping"></a>选项 1：映射列表映射的数据
 通过为每个租户添加列表映射来映射数据。  
@@ -134,7 +137,7 @@ ms.lasthandoff: 04/06/2018
     -SqlDatabaseName '<shard_database_name>' 
 
 
-### <a name="step-4-option-3-map-the-data-for-multiple-tenants-on-a-single-database"></a>步骤 4，选项 3：映射单一数据库上多个租户的数据
+### <a name="step-4-option-3-map-the-data-for-multiple-tenants-on-an-individual-database"></a>步骤 4，选项 3：映射单个数据库上多个租户的数据
 对于每个租户，运行 Add-ListMapping（选项 1）。 
 
 ## <a name="checking-the-mappings"></a>检查映射
@@ -144,7 +147,7 @@ ms.lasthandoff: 04/06/2018
     Get-Shards -ShardMap $ShardMap 
     Get-Mappings -ShardMap $ShardMap 
 
-## <a name="summary"></a>摘要
+## <a name="summary"></a>总结
 完成设置后，可以开始使用弹性数据库客户端库。 还可以使用[数据依赖型路由](sql-database-elastic-scale-data-dependent-routing.md)和[多分片查询](sql-database-elastic-scale-multishard-querying.md)。
 
 ## <a name="next-steps"></a>后续步骤
@@ -158,7 +161,7 @@ GitHub 上也提供了这些工具：[Azure/elastic-db-tools](https://github.com
 有关多租户软件即服务 (SaaS) 数据库应用程序的常见数据体系结构模式的信息，请参阅 [包含 Azure SQL 数据库的多租户 SaaS 应用程序的设计模式](sql-database-design-patterns-multi-tenancy-saas-applications.md)。
 
 ## <a name="questions-and-feature-requests"></a>问题和功能请求
-如有问题，请通过 [SQL 数据库论坛](http://social.msdn.microsoft.com/forums/azure/home?forum=ssdsgetstarted)联系我们；对于功能请求，请将其添加到 [SQL 数据库反馈论坛](https://feedback.azure.com/forums/217321-sql-database/)。
+如有问题，请通过 [SQL 数据库论坛](https://social.msdn.microsoft.com/forums/azure/home?forum=ssdsgetstarted)联系我们；对于功能请求，请将其添加到 [SQL 数据库反馈论坛](https://feedback.azure.com/forums/217321-sql-database/)。
 
 <!--Image references-->
 [1]: ./media/sql-database-elastic-convert-to-use-elastic-tools/listmapping.png

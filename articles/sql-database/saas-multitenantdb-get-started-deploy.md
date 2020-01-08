@@ -1,23 +1,24 @@
 ---
 title: 部署使用 Azure SQL 数据库的分片多租户数据库 SaaS 应用程序 | Microsoft 文档
 description: 部署和浏览分片 Wingtip Tickets SaaS 多租户数据库应用程序，演示使用 Azure SQL 数据库的 SaaS 模式。
-keywords: sql 数据库教程
 services: sql-database
-author: MightyPen
-manager: craigg
 ms.service: sql-database
-ms.custom: scale out apps
-ms.workload: data-management
-ms.topic: article
-ms.date: 04/01/2018
+ms.subservice: scenario
+ms.custom: ''
+ms.devlang: ''
+ms.topic: conceptual
+author: MightyPen
 ms.author: genemi
-ms.openlocfilehash: 4cbf758b82bccae8efe77e197d23a090d71fd7e5
-ms.sourcegitcommit: 3a4ebcb58192f5bf7969482393090cb356294399
-ms.translationtype: HT
+ms.reviewer: billgib, stein
+ms.date: 10/16/2018
+ms.openlocfilehash: 2ddb1fe40507da5caa218f73284a1095035df951
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68570384"
 ---
-# <a name="deploy-and-explore-a-sharded-multi-tenant-application-that-uses-azure-sql-database"></a>部署和浏览使用 Azure SQL 数据库的分片多租户应用程序
+# <a name="deploy-and-explore-a-sharded-multi-tenant-application"></a>部署和浏览分片多租户应用程序
 
 在本教程中，你将部署和浏览名为 Wingtip Tickets 的示例多租户 SaaS 多租户应用程序。 Wingtip Tickets 应用旨在展示可简化 SaaS 方案实现的 Azure SQL 数据库功能。
 
@@ -25,15 +26,15 @@ Wingtip Tickets 的这个实现将使用分片多租户数据库模式。 分片
 
 此数据库模式允许在每个分片或数据库中存储一个或多个租户。 你可以通过让多个租户共享每个数据库来优化最低成本。 或者可以通过让每个数据库只存储一个租户来优化隔离。 可针对每个特定租户独立进行优化选择。 可以在首次存储租户时进行选择，也可以稍后再进行更改。 无论采用哪种方式，应用程序均可正常运行。
 
-#### <a name="app-deploys-quickly"></a>应用程序快速部署
+## <a name="app-deploys-quickly"></a>应用程序快速部署
 
 Wingtip 应用在 Azure 云中运行，并使用 Azure SQL 数据库。 下面的部署部分提供了蓝色的“部署到 Azure”按钮。 按下按钮时，应用程序将在五分钟内完全部署到你的 Azure 订阅。 你具有完全访问权限，可以使用各个应用程序组件。
 
 此应用程序部署了三个示例租户的数据。 这些租户一起存储在一个多租户数据库中。
 
-任何人都可以从 [GitHub 存储库][link-github-wingtip-multitenantdb-55g]下载 Wingtip Tickets 的 C# 和 PowerShell 源代码。
+任何人都可以C#从[其 GitHub 存储库][link-github-wingtip-multitenantdb-55g]下载 Wingtip 票证的和 PowerShell 源代码。
 
-#### <a name="learn-in-this-tutorial"></a>学习本教程
+## <a name="learn-in-this-tutorial"></a>学习本教程
 
 > [!div class="checklist"]
 > - 如何部署 Wingtip Tickets SaaS 应用程序。
@@ -53,20 +54,20 @@ Wingtip 应用在 Azure 云中运行，并使用 Azure SQL 数据库。 下面�
 
 ## <a name="deploy-the-wingtip-tickets-app"></a>部署 Wingtip Tickets 应用
 
-#### <a name="plan-the-names"></a>对名称进行计划
+### <a name="plan-the-names"></a>对名称进行计划
 
 通过执行本部分中的步骤，提供用户值，用于确保资源名称为全局唯一，以及一个资源组的名称，该资源组包含部署应用时创建的所有资源。 如果一个人名叫 Ann Finley，则建议输入以下名称：
-- 用户：af1（首字母缩写加数字。如果是第二次部署应用，则使用不同的值，例如 af2。）
-- *资源组：***wingtip-mt-af1** *（wingtip-mt 指示这是分片式多租户应用。追加用户名 af1 会将资源组名称与它包含的资源的名称相关联。）*
+- *用户:* **af1** *(其首字母缩写和一个数字。  如果是第二次部署应用，则使用不同的值，例如 af2。）*
+- *资源组：* **wingtip-mt-af1** *（wingtip-mt 指示这是分片式多租户应用。追加用户名 af1 会将资源组名称与它包含的资源的名称相关联。）*
 
 现在请选择自己的名称，并将其写下来。 
 
-#### <a name="steps"></a>Steps
+### <a name="steps"></a>步骤
 
 1. 单击下面的“部署到 Azure”蓝色按钮。
-    - 带有 Wingtip Tickets SaaS 部署模板的 Azure 门户随即打开。
+   - 带有 Wingtip Tickets SaaS 部署模板的 Azure 门户随即打开。
 
-    [![“部署到 Azure”按钮。][image-deploy-to-azure-blue-48d]][link-aka-ms-deploywtp-mtapp-52k]
+     [!["部署到 Azure" 按钮。][image-deploy-to-azure-blue-48d]][link-aka-ms-deploywtp-mtapp-52k]
 
 1. 输入该部署所需的参数值。
 
@@ -99,7 +100,7 @@ Wingtip 应用在 Azure 云中运行，并使用 Azure SQL 数据库。 下面�
 3. 单击“下载 ZIP”并保存文件。
 4. 右键单击“WingtipTicketsSaaS-MultiTenantDb-master.zip”文件，然后选择“属性”。
 5. 在“常规”选项卡上，选择“取消阻止”，然后单击“应用”。
-6. 单击“确定”。
+6. 单击 **“确定”** 。
 7. 解压缩文件。
 
 脚本位于 *..\\WingtipTicketsSaaS-MultiTenantDb-master\\Learning Modules\\* 文件夹中。
@@ -123,26 +124,26 @@ Wingtip 应用在 Azure 云中运行，并使用 Azure SQL 数据库。 下面�
 中心式“事件中心”网页提供特定部署中租户的链接列表。 请执行以下步骤，体验**事件中心**网页和单个的 Web 应用：
 
 1. 在 Web 浏览器中打开“事件中心”：
-    - http://events.wingtip-mt.&lt;user&gt;.trafficmanager.net &nbsp; *（将 &lt;user&gt; 替换为部署的用户值。）*
+   - http://events.wingtip-mt.&lt ;user&gt;.trafficmanager.net &nbsp; *（将 &lt; user&gt; 替换为部署的用户值。）*
 
-    ![事件中心](media/saas-multitenantdb-get-started-deploy/events-hub.png)
+     ![事件中心](media/saas-multitenantdb-get-started-deploy/events-hub.png)
 
 2. 单击“活动中心”中的“Fabrikam 爵士乐俱乐部”。
 
-   ![活动](./media/saas-multitenantdb-get-started-deploy/fabrikam.png)
+   ![事件](./media/saas-multitenantdb-get-started-deploy/fabrikam.png)
 
-#### <a name="azure-traffic-manager"></a>Azure 流量管理器
+### <a name="azure-traffic-manager"></a>Azure 流量管理器
 
 Wingtip 应用使用 [Azure 流量管理器](../traffic-manager/traffic-manager-overview.md)来控制传入请求的分配。 每个租户的事件页都会在其 URL 中包括租户名称。 每个 URL 还包括特定的“用户”值。 每个 URL 都通过以下步骤遵循所显示的格式：
 
-- http://events.wingtip-mt.&lt;user&gt;.trafficmanager.net/*fabrikamjazzclub*
+- http://events.wingtip-mt.&lt ;user&gt;.trafficmanager.net/*fabrikamjazzclub*
 
 1. 事件应用可以从 URL 分析租户名称。 在前一示例 URL 中，租户名称为 *fabrikamjazzclub*。
 2. 然后，该应用会对租户名称进行哈希处理，以便创建密钥，从而使用[分片映射管理](sql-database-elastic-scale-shard-map-management.md)来访问目录。
 3. 应用在目录中查找密钥，并获取租户数据库的相应位置。
 4. 应用使用位置信息来查找和访问包含租户的所有数据的那个数据库。
 
-#### <a name="events-hub"></a>事件中心
+### <a name="events-hub"></a>事件中心
 
 1. “事件中心”将列出在目录中注册的所有租户及其场所。
 2. “事件中心”使用目录中扩展的元数据来检索与每个映射关联的租户名称以构造 URL。
@@ -174,7 +175,7 @@ Demo-LoadGenerator.ps1 脚本将打开运行负载生成器的另一个 PowerShe
    > [!NOTE]
    > 必须按 **F5** 键来运行 PowerShell 脚本，而不是按 **F8** 来运行脚本的选定部分。 **F8** 的问题是 *$PSScriptRoot* 变量不会进行计算。 许多脚本需要此变量来导航文件夹、调用其他脚本或导入模块。
 
-新的 Red Maple Racing 租户已添加到 Tenants1 数据库中，并且已在目录中注册。 新租户的票证销售“事件”站点将在浏览器中打开：
+新的 Red Maple Racing 租户已添加到 Tenants1数据库中，并且已在目录中注册。 新租户的票证销售“事件”站点将在浏览器中打开：
 
 ![新租户](./media/saas-multitenantdb-get-started-deploy/red-maple-racing.png)
 
@@ -183,6 +184,7 @@ Demo-LoadGenerator.ps1 脚本将打开运行负载生成器的另一个 PowerShe
 ## <a name="provision-a-new-tenant-in-its-own-database"></a>在其自己数据库中预配新租户
 
 分片多租户模型允许选择是在包含其他租户的数据库中预配新租户，还是在其自己的数据库中进行预配。 租户在其自己的数据库中隔离具有以下好处：
+
 - 可以在不需考虑其他租户需求的情况下，管理租户数据库的性能。
 - 必要时可将数据库还原到较早的时间点，因为其他租户不会受影响。
 
@@ -205,7 +207,7 @@ Demo-LoadGenerator.ps1 脚本将打开运行负载生成器的另一个 PowerShe
 
 现在我们看一些已部署的资源：
 
-1. 在 [Azure 门户](http://portal.azure.com)中，浏览到资源组的列表。 打开你在部署应用程序时创建的资源组。
+1. 在 [Azure 门户](https://portal.azure.com)中，浏览到资源组的列表。 打开你在部署应用程序时创建的资源组。
 
    ![资源组](./media/saas-multitenantdb-get-started-deploy/resource-group.png)
 
@@ -215,10 +217,9 @@ Demo-LoadGenerator.ps1 脚本将打开运行负载生成器的另一个 PowerShe
 
 3. 返回到该资源组并选择保存租户数据库的 tenants1-mt 服务器。
     - tenants1 数据库是一个多租户数据库，其中存储有初始的三个租户以及你添加的第一个租户。 它被配置为 50 个 DTU 标准数据库。
-    - Salixsalsa 数据库将 Salix Salsa 舞蹈场所保存为其唯一租户。 它被配置为标准版本数据库，默认有 50 个 DTU。
+    - Salixsalsa数据库将 Salix Salsa 舞蹈场所保存为其唯一租户。 它被配置为标准版本数据库，默认有 50 个 DTU。
 
    ![租户服务器](./media/saas-multitenantdb-get-started-deploy/tenants-server.png)
-
 
 ## <a name="monitor-the-performance-of-the-database"></a>监测数据库的性能
 
@@ -234,9 +235,9 @@ Demo-LoadGenerator.ps1 脚本将打开运行负载生成器的另一个 PowerShe
 
    ![salixsalsa 数据库](./media/saas-multitenantdb-get-started-deploy/monitor-salix.png)
 
-负载生成器正在向每个租户应用类似负载，而不管每个租户在哪个数据库中。 在 salixsalsa 数据库中只有一个租户的情况下，你可以看到该数据库可以承受比有多个租户的数据库高得多的负载。 
+负载生成器正在向每个租户应用类似负载，而不管每个租户在哪个数据库中。 在 salixsalsa数据库中只有一个租户的情况下，你可以看到该数据库可以承受比有多个租户的数据库高得多的负载。 
 
-#### <a name="resource-allocations-vary-by-workload"></a>资源分配因工作负荷而异
+### <a name="resource-allocations-vary-by-workload"></a>资源分配因工作负荷而异
 
 有时候，为了维持好的性能，多租户数据库需要比单租户数据库更多的资源，但情况并非总是如此。 资源的优化分配取决于系统中租户的具体工作负荷特征。
 
@@ -247,8 +248,9 @@ Demo-LoadGenerator.ps1 脚本将打开运行负载生成器的另一个 PowerShe
 - 若要了解多租户 SaaS 应用程序，请参阅[多租户 SaaS 应用程序的设计模式](saas-tenancy-app-design-patterns.md)。
 
 - 若要了解弹性池，请参阅：
-    - [弹性池有助于管理和缩放多个 Azure SQL 数据库](sql-database-elastic-pool.md)
-    - [Scaling out with Azure SQL Database（使用 Azure SQL 数据库进行扩展）](sql-database-elastic-scale-introduction.md)
+
+  - [弹性池有助于管理和缩放多个 Azure SQL 数据库](sql-database-elastic-pool.md)
+  - [Scaling out with Azure SQL Database（使用 Azure SQL 数据库进行扩展）](sql-database-elastic-scale-introduction.md)
 
 ## <a name="next-steps"></a>后续步骤
 
@@ -272,7 +274,7 @@ A [series of related tutorials] is available that build upon this initial deploy
 
 -->
 
-[link-aka-ms-deploywtp-mtapp-52k]: http://aka.ms/deploywtp-mtapp
+[link-aka-ms-deploywtp-mtapp-52k]: https://aka.ms/deploywtp-mtapp
 
 
 [link-azure-get-started-powershell-41q]: https://docs.microsoft.com/powershell/azure/get-started-azureps
@@ -283,7 +285,7 @@ A [series of related tutorials] is available that build upon this initial deploy
 
 <!--  Image references.
 
-[image-deploy-to-azure-blue-48d]: http://aka.ms/deploywtp-mtapp "Button for Deploy to Azure."
+[image-deploy-to-azure-blue-48d]: https://aka.ms/deploywtp-mtapp "Button for Deploy to Azure."
 -->
 
 [image-deploy-to-azure-blue-48d]: media/saas-multitenantdb-get-started-deploy/deploy.png "部署到 Azure 所需的按钮。"

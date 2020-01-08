@@ -1,24 +1,24 @@
 ---
-title: "使用 Azure 自动化管理 Azure 云服务 | Microsoft Docs"
-description: "了解如何使用 Azure 自动化服务管理大规模 Azure 云服务。"
+title: 使用 Azure 自动化管理 Azure 云服务 | Microsoft Docs
+description: 了解如何使用 Azure 自动化服务管理大规模 Azure 云服务。
 services: cloud-services, automation
-documentationcenter: 
+documentationcenter: ''
 author: jodoglevy
 manager: timlt
-editor: 
+editor: ''
 ms.assetid: 3789810a-2892-4eef-bf29-c781c1b5af48
 ms.service: cloud-services
 ms.workload: tbd
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 06/20/2016
 ms.author: timlt
-ms.openlocfilehash: 6b5acac1b8647c324988c316cd5602b3dba98a1d
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.openlocfilehash: 1fc1ac9668454578ee137a2ddd1b85319fea0a28
+ms.sourcegitcommit: 124c3112b94c951535e0be20a751150b79289594
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 08/10/2019
+ms.locfileid: "68945501"
 ---
 # <a name="managing-azure-cloud-services-using-azure-automation"></a>使用 Azure 自动化管理 Azure 云服务
 本指南介绍 Azure 自动化服务，以及如何使用它来简化 Azure 云服务的管理。
@@ -31,7 +31,7 @@ Azure 自动化能够提供高度可靠且长期可用的工作流执行引擎�
 通过将云管理任务改为由 Azure 自动化自动运行，可以降低运营开销，解放 IT/开发运营人员，让他们将精力集中在增加企业价值的工作上。
 
 ## <a name="how-can-azure-automation-help-manage-azure-cloud-services"></a>Azure 自动化如何帮助管理 Azure 云服务？
-可以使用 [Azure PowerShell 工具](https://msdn.microsoft.com/library/azure/jj156055.aspx)中提供的 PowerShell cmdlet 在 Azure 自动化中管理 Azure 云服务。 Azure 自动化现成地提供了这些云服务 PowerShell cmdlet，因此，可以在该服务中执行所有云服务管理任务。 还可以将 Azure 自动化中的 cmdlet 与其他 Azure 服务的 cmdlet 搭配使用，以自动完成跨 Azure 服务和第三方系统的复杂任务。
+可以使用 [Azure PowerShell 工具](/powershell/)中提供的 PowerShell cmdlet 在 Azure 自动化中管理 Azure 云服务。 Azure 自动化现成地提供了这些云服务 PowerShell cmdlet，因此，可以在该服务中执行所有云服务管理任务。 还可以将 Azure 自动化中的 cmdlet 与其他 Azure 服务的 cmdlet 搭配使用，以自动完成跨 Azure 服务和第三方系统的复杂任务。
 
 使用 Azure 自动化管理 Azure 云服务的部分示例包括：
 

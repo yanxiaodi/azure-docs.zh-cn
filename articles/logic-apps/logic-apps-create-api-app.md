@@ -1,39 +1,35 @@
 ---
-title: "为 Azure 逻辑应用创建 Web API 和 REST API | Microsoft Docs"
-description: "为实现系统集成，在逻辑应用工作流中创建 Web API 和 REST API 以调用 API、服务或系统"
-keywords: "Web API, REST API, 工作流, 系统集成"
+title: 为 Azure 逻辑应用创建 Web API 和 REST API | Microsoft Docs
+description: 创建用于调用 API、服务或系统的 Web API 和 REST API，以便在 Azure 逻辑应用中进行系统集成
 services: logic-apps
-author: jeffhollan
-manager: anneta
-editor: 
-documentationcenter: 
-ms.assetid: bd229179-7199-4aab-bae0-1baf072c7659
 ms.service: logic-apps
-ms.workload: integration
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.suite: integration
+author: ecfan
+ms.author: estfan
+ms.reviewer: klam, jehollan, LADocs
 ms.topic: article
-ms.date: 5/26/2017
-ms.author: LADocs; jehollan
-ms.openlocfilehash: ec7fe2adfb89edd635adcf247eea0b98f7007b1b
-ms.sourcegitcommit: be9a42d7b321304d9a33786ed8e2b9b972a5977e
-ms.translationtype: HT
+ms.assetid: bd229179-7199-4aab-bae0-1baf072c7659
+ms.date: 05/26/2017
+ms.openlocfilehash: e5dc913d682088296f84fb6bd7595a09d9d3fe7b
+ms.sourcegitcommit: 6cff17b02b65388ac90ef3757bf04c6d8ed3db03
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/19/2018
+ms.lasthandoff: 07/29/2019
+ms.locfileid: "68609866"
 ---
-# <a name="create-custom-apis-that-you-can-call-from-logic-app-workflows"></a>创建可从逻辑应用工作流调用的自定义 API
+# <a name="create-custom-apis-you-can-call-from-azure-logic-apps"></a>创建可从 Azure 逻辑应用调用的自定义 API
 
-虽然 Azure 逻辑应用提供可用于逻辑应用工作流的 [100 多个内置连接器](../connectors/apis-list.md)，但建议调用不作为连接器提供的 API、系统和服务。 可以创建自己的 API，提供在逻辑应用中使用的操作和触发器。 下面是一些其他理由，解释为何建议创建可从逻辑应用工作流调用的自定义 API：
+虽然 Azure 逻辑应用提供了[数百个](../connectors/apis-list.md)可在逻辑应用工作流中使用的连接器, 但你可能想要调用不可用作连接器的 api、系统和服务。 可以创建自己的 API，提供在逻辑应用中使用的操作和触发器。 下面是一些其他理由，解释为何建议创建可从逻辑应用工作流调用的自定义 API：
 
 * 扩展当前系统集成和数据集成工作流。
 * 帮助客户使用服务来管理专业或个人任务。
 * 扩展服务的市场宣传、可发现性和使用。
 
-连接器本质上是 Web API，此类 API 将 REST 用于可插入接口、将 [Swagger 元数据格式](http://swagger.io/specification/)用于文档、将 JSON 用作其数据交换格式。 因为连接器是通过 HTTP 终结点进行通信的 REST API，所以可以使用任何语言生成连接器，如 .NET、Java 或 Node.js。 此外，还可在 [Azure 应用服务](../app-service/app-service-web-overview.md)上托管API，前者是一款平台即服务 (PaaS) 产品，可为 API 托管提供一种最简单且可缩放性最高的最佳方法。 
+连接器本质上是 Web API，此类 API 将 REST 用于可插入接口、将 [Swagger 元数据格式](https://swagger.io/specification/)用于文档、将 JSON 用作其数据交换格式。 因为连接器是通过 HTTP 终结点进行通信的 REST Api, 所以可以使用任何语言 (如 .NET、Java、Python 或 node.js) 来构建连接器。 此外，还可在 [Azure 应用服务](../app-service/overview.md)上托管API，前者是一款平台即服务 (PaaS) 产品，可为 API 托管提供一种最简单且可缩放性最高的最佳方法。 
 
 对于要用于逻辑应用的自定义 API，API 可以提供在逻辑应用工作流中执行特定任务的[操作](./logic-apps-overview.md#logic-app-concepts)。 API 还可充当[触发器](./logic-apps-overview.md#logic-app-concepts)，在新数据或事件满足指定条件时启动逻辑应用工作流。 本主题介绍根据想要 API 提供的行为，在 API 中生成操作和触发器可以遵循的常见模式。
 
-可在 [Azure App Service](../app-service/app-service-web-overview.md) 上托管API，它是一款平台即服务 (PaaS) 产品，可提供简单的高缩放性 API 托管。
+可在 [Azure App Service](../app-service/overview.md) 上托管API，它是一款平台即服务 (PaaS) 产品，可提供简单的高缩放性 API 托管。
 
 > [!TIP] 
 > 虽然可以将 API 部署为 Web 应用，但请考虑将 API 部署为 API 应用，这样可以更轻松地在云和本地生成、托管和使用 API。 不必更改 API 中的任何代码 - 可直接将代码部署到 API 应用。 例如，了解如何生成使用以下语言创建的 API 应用： 
@@ -42,13 +38,14 @@ ms.lasthandoff: 01/19/2018
 > * [Java](../app-service/app-service-web-get-started-java.md)
 > * [Node.js](../app-service/app-service-web-get-started-nodejs.md)
 > * [PHP](../app-service/app-service-web-get-started-php.md)
-> * [Python](../app-service/app-service-web-get-started-python.md)
+> * [Python](../app-service/containers/quickstart-python.md)
+> * [Ruby](../app-service/containers/quickstart-ruby.md)
 >
-> 有关为逻辑应用生成的 API 应用示例，请访问 [Azure 逻辑应用 GitHub 存储库](http://github.com/logicappsio)或[博客](http://aka.ms/logicappsblog)。
+> 有关为逻辑应用生成的 API 应用示例，请访问 [Azure 逻辑应用 GitHub 存储库](https://github.com/logicappsio)或[博客](https://aka.ms/logicappsblog)。
 
 ## <a name="how-do-custom-apis-differ-from-custom-connectors"></a>自定义 API 和自定义连接器有何不同？
 
-本质上来说，自定义 API 和[自定义连接器](../logic-apps/custom-connector-overview.md)都是 Web API，此类 API 将 REST 用于可插入接口、将 [Swagger 元数据格式](http://swagger.io/specification/)用于文档、将 JSON 用作其数据交换格式。 因为这些 API 和连接器是通过 HTTP 终结点进行通信的 REST API，所以可以使用任何语言生成自定义 API 和连接器，如 .NET、Java 或 Node.js。
+本质上来说，自定义 API 和[自定义连接器](../logic-apps/custom-connector-overview.md)都是 Web API，此类 API 将 REST 用于可插入接口、将 [Swagger 元数据格式](https://swagger.io/specification/)用于文档、将 JSON 用作其数据交换格式。 由于这些 Api 和连接器是通过 HTTP 终结点进行通信的 REST Api, 因此可以使用任何语言 (如 .NET、Java、Python 或 node.js) 来构建自定义 Api 和连接器。
 
 自定义 API 允许调用非连接器 API，并提供可使用 HTTP + Swagger、Azure API 管理或应用程序服务调用的终结点。 自定义连接器的工作方式与自定义 API 类似，但它还具有以下属性：
 
@@ -66,7 +63,7 @@ ms.lasthandoff: 01/19/2018
 
 ## <a name="helpful-tools"></a>有用的工具
 
-当 API 也具有描述 API 操作和参数的 [Swagger 文档](http://swagger.io/specification/)时，自定义 API 最适用于逻辑应用。
+当 API 也具有描述 API 操作和参数的 [Swagger 文档](https://swagger.io/specification/)时，自定义 API 最适用于逻辑应用。
 许多库（如 [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle)）可自动为你生成 Swagger 文件。 若要批注 Swagger 文件的显示名称、属性类型等，也可使用 [TRex](https://github.com/nihaue/TRex) 以便 Swagger 文件更适用于逻辑应用。
 
 <a name="actions"></a>
@@ -107,9 +104,9 @@ ms.lasthandoff: 01/19/2018
    
    `202 ACCEPTED` 响应应包含这些标头：
    
-   * 必需：用于指定逻辑应用引擎检查 API 作业状态的 URL 的绝对路径的 `location` 标头
+   * 必需：`location` 标头，用于指定逻辑应用引擎检查 API 作业状态的 URL 的绝对路径
 
-   * 可选：用于指定引擎检查 `location` URL 获知作业状态之前应等待秒数的 `retry-after` 标头。 
+   * *可选*：`retry-after` 标头，用于指定引擎检查 `location` URL 获知作业状态之前应等待的秒数。 
 
      默认情况下，引擎每隔 20 秒检查一次。 若要指定不同的时间间隔，请包括 `retry-after` 标头和下次轮询前的秒数。
 
@@ -137,14 +134,14 @@ ms.lasthandoff: 01/19/2018
 
 对于此模式，在控制器上设置两个终结点：`subscribe` 和 `unsubscribe`
 
-*  `subscribe` 终结点：当执行到达工作流中的 API 操作时，逻辑应用引擎调用 `subscribe` 终结点。 此步骤导致逻辑应用创建 API 将存储的回叫 URL，然后等待工作完成时 API 的回叫。 API 通过 HTTP POST 回叫 URL，并将任何返回的内容和标头作为输入传递到逻辑应用。
+*  `subscribe` 终结点：在执行到达工作流中的 API 操作时，逻辑应用引擎调用 `subscribe` 终结点。 此步骤导致逻辑应用创建 API 将存储的回叫 URL，然后等待工作完成时 API 的回叫。 API 通过 HTTP POST 回叫 URL，并将任何返回的内容和标头作为输入传递到逻辑应用。
 
-* `unsubscribe` 终结点： 如果逻辑应用运行已取消，逻辑应用引擎将调用 `unsubscribe` 终结点。 然后 API 可以取消注册回叫 URL，并根据需要停止任何进程。
+* `unsubscribe` 终结点：如果已取消逻辑应用运行，逻辑应用引擎调用 `unsubscribe` 终结点。 然后 API 可以取消注册回叫 URL，并根据需要停止任何进程。
 
 ![Webhook 操作模式](./media/logic-apps-create-api-app/custom-api-webhook-action-pattern.png)
 
 > [!NOTE]
-> 目前，逻辑应用设计器不支持通过 Swagger 发现 Webhook 终结点。 因此对于此模式，需要添加 [Webhook 操作](../connectors/connectors-native-webhook.md)并指定 URL、标头以及请求正文。 另请参阅[工作流操作和触发器](logic-apps-workflow-actions-triggers.md#apiconnection-webhook-action)。 若要传入回叫 URL，可以根据需要使用以前任何字段中的 `@listCallbackUrl()` 工作流函数。
+> 目前，逻辑应用设计器不支持通过 Swagger 发现 Webhook 终结点。 因此对于此模式，需要添加 [Webhook操作](../connectors/connectors-native-webhook.md)并指定 URL、标头以及请求正文。 另请参阅[工作流操作和触发器](logic-apps-workflow-actions-triggers.md#apiconnection-webhook-action)。 若要传入回叫 URL，可以根据需要使用以前任何字段中的 `@listCallbackUrl()` 工作流函数。
 
 > [!TIP]
 > 有关 Webhook 模式的示例，查看 [GitHub 中的 Webhook 触发器示例](https://github.com/logicappsio/LogicAppTriggersExample/blob/master/LogicAppTriggers/Controllers/WebhookTriggerController.cs)。
@@ -170,8 +167,8 @@ ms.lasthandoff: 01/19/2018
 
 | 找到新数据或事件？  | API 响应 | 
 | ------------------------- | ------------ |
-| 已找到 | 返回 HTTP `200 OK` 状态与响应有效负载（下一步的输入）。 <br/>此响应创建逻辑应用实例，并启动工作流。 | 
-| 未找到 | 返回 HTTP `202 ACCEPTED` 状态与 `location` 标头和 `retry-after` 标头。 <br/>对于触发器，`location` 标头还应包含 `triggerState` 查询参数，通常是“时间戳”。 API 可以使用此标识符跟踪上次触发逻辑应用的时间。 | 
+| 找到 | 返回 HTTP `200 OK` 状态与响应有效负载（下一步的输入）。 <br/>此响应创建逻辑应用实例，并启动工作流。 | 
+| 找不到 | 返回 HTTP `202 ACCEPTED` 状态与 `location` 标头和 `retry-after` 标头。 <br/>对于触发器，`location` 标头还应包含 `triggerState` 查询参数，通常是“时间戳”。 API 可以使用此标识符跟踪上次触发逻辑应用的时间。 | 
 ||| 
 
 例如，若要定期检查服务的新文件，可生成具有以下行为的轮询触发器：
@@ -233,7 +230,7 @@ Webhook 触发器的行为非常类似于之前本主题中所述的 [Webhook �
 
 * 有关问题，请访问 [Azure 逻辑应用论坛](https://social.msdn.microsoft.com/Forums/en-US/home?forum=azurelogicapps)。
 
-* 为帮助改进逻辑应用，敬请在[逻辑应用用户反馈网站](http://aka.ms/logicapps-wish)上投票或发表看法。 
+* 为帮助改进逻辑应用，敬请在[逻辑应用用户反馈网站](https://aka.ms/logicapps-wish)上投票或发表看法。 
 
 ## <a name="next-steps"></a>后续步骤
 

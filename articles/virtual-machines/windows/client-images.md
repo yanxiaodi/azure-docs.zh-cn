@@ -1,24 +1,24 @@
 ---
-title: "在 Azure 中使用 Windows 客户端映像 | Microsoft Docs"
-description: "如何使用 Visual Studio 订阅权益，在 Azure 中针对开发/测试方案部署 Windows 7、Windows 8 或 Windows 10"
+title: 在 Azure 中使用 Windows 客户端映像 | Microsoft Docs
+description: 如何使用 Visual Studio 订阅权益，在 Azure 中针对开发/测试方案部署 Windows 7、Windows 8 或 Windows 10
 services: virtual-machines-windows
-documentationcenter: 
-author: iainfoulds
-manager: jeconnoc
-editor: 
+documentationcenter: ''
+author: cynthn
+manager: gwallace
+editor: ''
 ms.assetid: 91c3880a-cede-44f1-ae25-f8f9f5b6eaa4
 ms.service: virtual-machines-windows
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-windows
 ms.workload: infrastructure-services
 ms.date: 12/15/2017
-ms.author: iainfou
-ms.openlocfilehash: aaab69f452db9d4f11af2b5cfd2cd9ff6ac79954
-ms.sourcegitcommit: 79683e67911c3ab14bcae668f7551e57f3095425
-ms.translationtype: HT
+ms.author: cynthn
+ms.openlocfilehash: dbb771351ee774a7fea33e5aaad3ae4d0c70f8b1
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/25/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70079905"
 ---
 # <a name="use-windows-client-in-azure-for-devtest-scenarios"></a>在 Azure 中使用 Windows 客户端实现开发/测试方案
 如果有相应的 Visual Studio（以前为 MSDN）订阅，可以在 Azure 中使用 Windows 7、Windows 8 或 Windows 10 企业版 (x64) 实施开发/测试方案。 本文概述在 Azure 中运行 Windows 7、Windows 8.1、Windows 10 企业版和使用以下 Azure 库映像所要满足的条件。
@@ -47,7 +47,7 @@ ms.lasthandoff: 01/25/2018
 | [Visual Studio Premium with MSDN（权益）](https://azure.microsoft.com/offers/ms-azr-0061p/) |0061P |Windows 10 |
 | [Visual Studio Enterprise 订户](https://azure.microsoft.com/offers/ms-azr-0063p/) |0063P |Windows 10 |
 | [Visual Studio Enterprise (BizSpark) 订户](https://azure.microsoft.com/offers/ms-azr-0064p/) |0064P |Windows 10 |
-| [Enterprise 开发/测试](https://azure.microsoft.com/ofers/ms-azr-0148p/) |0148P |Windows 10 |
+| [Enterprise 开发/测试](https://azure.microsoft.com/offers/ms-azr-0148p/) |0148P |Windows 10 |
 
 ## <a name="check-your-azure-subscription"></a>检查 Azure 订阅
 如果不知道自己的产品 ID，可以使用以下两种方式之一通过 Azure 门户获取：  
@@ -58,7 +58,7 @@ ms.lasthandoff: 01/25/2018
 
 - 或者，单击“计费”，并单击订阅 ID。 产品 ID 会显示在“计费”窗口中。
 
-也可以从 Azure 帐户门户的 [订阅](http://account.windowsazure.com/Subscriptions) 选项卡查看产品 ID：
+也可以从 Azure 帐户门户的 [订阅](https://account.windowsazure.com/Subscriptions) 选项卡查看产品 ID：
 
 ![Azure 帐户门户中的产品 ID 详细信息](./media/client-images/offer-id-azure-account-portal.png) 
 

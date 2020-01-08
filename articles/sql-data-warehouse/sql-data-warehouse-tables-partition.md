@@ -2,19 +2,20 @@
 title: 对 Azure SQL 数据仓库中的表进行分区 | Microsoft Docs
 description: 在 Azure SQL 数据仓库中使用表分区的建议和示例。
 services: sql-data-warehouse
-author: ronortloff
-manager: craigg-msft
+author: XiaoyuMSFT
+manager: craigg
 ms.service: sql-data-warehouse
 ms.topic: conceptual
-ms.component: implement
-ms.date: 04/17/2018
-ms.author: rortloff
+ms.subservice: development
+ms.date: 03/18/2019
+ms.author: xiaoyul
 ms.reviewer: igorstan
-ms.openlocfilehash: ada55950ee36222e70809e2ef423c63612cd61ed
-ms.sourcegitcommit: 1362e3d6961bdeaebed7fb342c7b0b34f6f6417a
-ms.translationtype: HT
+ms.openlocfilehash: 6791ff2f2a9719a19d2c9abc4ff480435de7bb00
+ms.sourcegitcommit: 75a56915dce1c538dc7a921beb4a5305e79d3c7a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/18/2018
+ms.lasthandoff: 07/24/2019
+ms.locfileid: "68477090"
 ---
 # <a name="partitioning-tables-in-sql-data-warehouse"></a>对 SQL 数据仓库中的表进行分区
 在 Azure SQL 数据仓库中使用表分区的建议和示例。
@@ -108,27 +109,6 @@ GROUP BY    s.[name]
 ;
 ```
 
-## <a name="workload-management"></a>工作负荷管理
-需要纳入表分区决策的最后一项考虑事项是[工作负荷管理](resource-classes-for-workload-management.md)。 在 SQL 数据仓库中，工作负荷管理主要是管理内存和并发。 在 SQL 数据仓库中，资源类控制在查询执行期间分配给每个分布的最大内存。 理想情况下，调整分区大小需考虑其他因素，例如在构建聚集列存储索引时的内存需求。 为聚集列存储索引分配更多内存对其有很大好处。 因此，需要确保重建分区索引不会耗尽内存。 从默认角色 (smallrc) 切换到其他某个角色（例如 largerc），即可增加查询能够使用的内存量。
-
-查询 Resource Governor 动态管理视图即可获取每个分布的内存分配信息。 事实上，内存授予小于以下查询的结果。 不过，此查询在一定程度上提供了指导，可用于设置数据管理操作分区大小。 尽量避免将分区大小调整超过超大型资源类所提供的内存授予。 如果分区成长超过此数据，就冒着内存压力的风险，进而导致比较不理想的压缩。
-
-```sql
-SELECT  rp.[name]                                AS [pool_name]
-,       rp.[max_memory_kb]                        AS [max_memory_kb]
-,       rp.[max_memory_kb]/1024                    AS [max_memory_mb]
-,       rp.[max_memory_kb]/1048576                AS [mex_memory_gb]
-,       rp.[max_memory_percent]                    AS [max_memory_percent]
-,       wg.[name]                                AS [group_name]
-,       wg.[importance]                            AS [group_importance]
-,       wg.[request_max_memory_grant_percent]    AS [request_max_memory_grant_percent]
-FROM    sys.dm_pdw_nodes_resource_governor_workload_groups    wg
-JOIN    sys.dm_pdw_nodes_resource_governor_resource_pools    rp ON wg.[pool_id] = rp.[pool_id]
-WHERE   wg.[name] like 'SloDWGroup%'
-AND     rp.[name]    = 'SloDWPool'
-;
-```
-
 ## <a name="partition-switching"></a>分区切换
 SQL 数据仓库支持分区拆分、合并和切换。 这些函数每个都使用 [ALTER TABLE](/sql/t-sql/statements/alter-table-transact-sql) 语句执行。
 
@@ -165,15 +145,7 @@ INSERT INTO dbo.FactInternetSales
 VALUES (1,19990101,1,1,1,1,1,1);
 INSERT INTO dbo.FactInternetSales
 VALUES (1,20000101,1,1,1,1,1,1);
-
-
-CREATE STATISTICS Stat_dbo_FactInternetSales_OrderDateKey ON dbo.FactInternetSales(OrderDateKey);
 ```
-
-> [!NOTE]
-> 通过创建统计信息对象，可以确保表元数据更加准确。 如果省略了统计信息，则 SQL 数据仓库将使用默认值。 有关统计信息的详细信息，请参阅[统计信息](sql-data-warehouse-tables-statistics.md)。
-> 
-> 
 
 以下查询使用 `sys.partitions` 目录视图查找行计数：
 
@@ -251,6 +223,31 @@ ALTER TABLE dbo.FactInternetSales_20000101_20010101 SWITCH PARTITION 2 TO dbo.Fa
 
 ```sql
 UPDATE STATISTICS [dbo].[FactInternetSales];
+```
+
+### <a name="load-new-data-into-partitions-that-contain-data-in-one-step"></a>通过一个步骤将新数据加载到包含数据的分区中
+将数据加载到使用分区开关的分区中可以很方便地将新数据暂存在对用户不可见的表中，然后将新数据切换进来。  在繁忙且需要处理与分区切换相关联的锁定争用的系统中，这可能很具挑战性。  在过去，若要清除分区中的现有数据，需要使用 `ALTER TABLE` 将数据切换出来，  然后需要使用另一 `ALTER TABLE` 将新数据切换进去。  在 SQL 数据仓库中，支持在 `ALTER TABLE` 命令中使用 `TRUNCATE_TARGET` 选项。  带 `TRUNCATE_TARGET` 的 `ALTER TABLE` 命令会使用新数据覆盖分区中的现有数据。  下面是一个示例。此示例使用 `CTAS` 创建一个包含现有数据的新表，插入新数据，然后将所有数据切换回目标表中，覆盖现有的数据。
+
+```sql
+CREATE TABLE [dbo].[FactInternetSales_NewSales]
+    WITH    (   DISTRIBUTION = HASH([ProductKey])
+            ,   CLUSTERED COLUMNSTORE INDEX
+            ,   PARTITION   (   [OrderDateKey] RANGE RIGHT FOR VALUES
+                                (20000101,20010101
+                                )
+                            )
+            )
+AS
+SELECT  *
+FROM    [dbo].[FactInternetSales]
+WHERE   [OrderDateKey] >= 20000101
+AND     [OrderDateKey] <  20010101
+;
+
+INSERT INTO dbo.FactInternetSales_NewSales
+VALUES (1,20000101,2,2,2,2,2,2);
+
+ALTER TABLE dbo.FactInternetSales_NewSales SWITCH PARTITION 2 TO dbo.FactInternetSales PARTITION 2 WITH (TRUNCATE_TARGET = ON);  
 ```
 
 ### <a name="table-partitioning-source-control"></a>表分区源代码管理

@@ -1,74 +1,73 @@
 ---
-title: Team Data Science Process 项目主管任务 - Azure | Microsoft Docs
-description: 数据科学团队项目的项目主管任务概述。
-documentationcenter: ''
-author: deguhath
+title: Team Data Science Process 中项目主管的任务
+description: 项目主管预期要在数据科学团队项目中完成的任务的概述。
+author: marktab
 manager: cgronlun
 editor: cgronlun
-ms.assetid: ''
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/13/2017
-ms.author: deguhath
-ms.openlocfilehash: 3cc938e7d573c146b688acabdcfcb8e674e185cf
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: 00b1b58a39724951f2d5e4e688df8eb178654bbb
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "65952836"
 ---
-# <a name="project-lead-tasks"></a>项目主管任务
+# <a name="tasks-for-the-project-lead-in-the-team-data-science-process"></a>Team Data Science Process 中项目主管的任务
 
-本教程概述项目主管预期要在其项目团队中完成的任务。 目标在于创建致力于标准化 [Team Data Science Process](overview.md) (TDSP) 的协作型团队环境。 TDSP 是 Microsoft 开发的一个框架，它提供结构化的活动序列，可高效地执行基于云的预测分析解决方案。 有关致力于标准化此流程的数据科学团队要处理的人员角色及其相关任务的概述，请参阅 [Team Data Science Process 角色和任务](roles-tasks.md)。
+本教程概述项目主管的任务应为其项目团队完成。 目标在于创建致力于标准化 [Team Data Science Process](overview.md) (TDSP) 的协作型团队环境。 TDSP 是 Microsoft 开发的一个框架，它提供结构化的活动序列，可高效地执行基于云的预测分析解决方案。 有关致力于标准化此流程的数据科学团队要处理的人员角色及其相关任务的概述，请参阅 [Team Data Science Process 角色和任务](roles-tasks.md)。
 
 **项目主管**管理特定数据科学项目各个数据科学家的日常活动。 下图描绘了项目主管设置此环境时所要完成的任务的工作流：
 
-![1](./media/project-lead-tasks/project-leads-1-tdsp-creating-projects.png)
+![第](./media/project-lead-tasks/project-leads-1-tdsp-creating-projects.png)
 
 本主题目前包括项目主管工作流的任务 1、2 和 6。
 
->[AZURE.NOTE] 以下说明概述了使用 Visual Studio Team Services (VSTS) 设置项目 TDSP 团队环境所要执行的步骤。 本文指定了如何使用 VSTS 完成这些任务，因为这是我们在 Microsoft 中实现 TDSP 的方法。 如果组使用其他代码托管平台，团队主管需要完成的任务通常不会发生变化。 但是完成这些任务的方法会有所不同。
+> [!NOTE]
+> 以下说明概述了使用 Azure DevOps 设置项目 TDSP 团队环境所要执行的步骤。 本文指定了如何使用 Azure DevOps 完成这些任务，因为这是我们在 Microsoft 中实现 TDSP 的方法。 如果组使用其他代码托管平台，团队主管需要完成的任务通常不会发生变化。 但是完成这些任务的方法会有所不同。
 
 
 ## <a name="repositories-and-directories"></a>存储库和目录
 
 本教程使用存储库和目录的缩写名称。 使用这些名称，更易于跟踪存储库和目录之间的操作。 以下部分使用了此表示法（R 表示 Git 存储库，D 表示 DSVM 上的本地目录）：
 
-- **R3**：团队主管在 Git 上设置的团队 **ProjectTemplate** 存储库。
+- **R3**：团队主管在 Git 上设置的团队 ProjectTemplate 存储库。
 - **R5**：在 Git 上为项目设置的项目存储库。
 - **D3**：从 R3 克隆的本地目录。
 - **D5**：从 R5 克隆的本地目录。
 
 
-## <a name="0-prerequisites"></a>0.先决条件
+## <a name="0-prerequisites"></a>0.必备组件
 
 通过完成根据[数据科学团队的组管理员任务](group-manager-tasks.md)中所述分配给组管理员的任务，以及根据[数据科学团队的团队主管任务](team-lead-tasks.md)中所述分配给团队主管的任务，来满足先决条件。 
 
-在开始执行团队主管任务之前，需要满足以下汇总要求： 
+在此处汇总一下，在开始执行团队主管任务之前，需要满足以下要求： 
 
-- 组管理员已设置**组 VSTS 服务器**（或其他某个代码托管平台上的组帐户）。
+- 组管理员已设置**组 Azure DevOps Services**（或其他某个代码托管平台上的组帐户）。
 - 团队主管已在计划使用的代码托管平台上你的组帐户下设置了 **TeamProjectTemplate 存储库** (R3)。
 - 团队主管**已授权**你在团队的组帐户中创建存储库。
 - 计算机上必须安装 Git。 如果使用的是数据科学虚拟机 (DSVM)，则已预安装 Git，可以继续操作。 否则，请参阅[平台和工具附录](platforms-and-tools.md#appendix)。  
 - 如果使用的是 **Windows DSVM**，则需要在计算机上安装 [Git 凭据管理器 (GCM)](https://github.com/Microsoft/Git-Credential-Manager-for-Windows)。 在 README.md 文件中，向下滚动到“下载并安装”部分，然后单击“最新安装程序”。 随后会转到最新安装程序页。 从此处下载 .exe 安装程序并运行它。 
-- 如果使用的是 **Linux DSVM**，则在 DSVM 上创建一个 SSH 公钥，然后将它添加到组 VSTS 服务器。 有关 SSH 的详细信息，请参阅[平台和工具附录](platforms-and-tools.md#appendix)中的**创建 SSH 公钥**部分。 
+- 如果使用的是 **Linux DSVM**，则在 DSVM 上创建一个 SSH 公钥，然后将它添加到组 Azure DevOps Services。 有关 SSH 的详细信息，请参阅[平台和工具附录](platforms-and-tools.md#appendix)中的**创建 SSH 公钥**部分。 
 
 
 ## <a name="1-create-a-project-repository-r5"></a>1.创建项目存储库 (R5)
 
-- 通过 *https://\<VSTS 服务器名称\>.visualstudio.com* 登录到组 VSTS 服务器。 
-- 在“最近的项目和团队”下面单击“浏览”。 此时会弹出一个窗口，其中列出了 VSTS 服务器上的所有团队项目。 
+- 登录到你的组 Azure DevOps Services，网址为 *https://\<Azure DevOps Services 名称\>.visualstudio.com*。 
+- 在“最近的项目和团队”下面单击“浏览”。 此时会弹出一个窗口，其中列出了 Azure DevOps Services 上的所有项目。 
 
     ![2](./media/project-lead-tasks/project-leads-2-create-project-repo.png)
 
-- 单击要在其中创建项目存储库的团队项目名称。 在本示例中，请单击“MyTeam”。 
-- 然后，单击“导航”定向到团队项目 **MyTeam** 的主页：
+- 单击要在其中创建项目存储库的项目名称。 在本示例中，请单击“MyTeam”。 
+- 然后单击“导航”，定向到项目 **MyTeam** 的主页：
 
     ![3](./media/project-lead-tasks/project-leads-3-create-project-repo-2.png)
 
-- 单击“围绕代码开展协作”，定向到团队项目的 git 主页。  
+- 单击“围绕代码开展协作”，定向到项目的 git 主页。  
 
     ![4](./media/project-lead-tasks/project-leads-4-create-project-repo-3.png)
 
@@ -85,33 +84,33 @@ ms.lasthandoff: 05/03/2018
 
 ## <a name="2-seed-the-dsproject1-project-repository"></a>2.设定 DSProject1 项目存储库的种子
 
-此处的任务是从团队项目模板存储库 (R3) 设定 **DSProject1** 项目存储库 (R5) 的种子。 种子设定过程使用本地 DSVM 上的目录 D3 和 D5 作为中间过渡站点。 概括而言，种子设定路径为：R3 -> D3 -> D5 -> R5。
+此处的任务是从项目模板存储库 (R3) 设定 **DSProject1** 项目存储库 (R5) 的种子。 种子设定过程使用本地 DSVM 上的目录 D3 和 D5 作为中间过渡站点。 概括而言，种子设定路径为：R3 -> D3 -> D5 -> R5。
 
-如果需要根据某些具体的项目需求自定义 **DSProject1** 项目存储库，可在以下过程的倒数第二个步骤中执行此操作。 下面是用于设定 **DSProject1** 项目存储库内容种子的步骤摘要。 各个步骤对应于种子设定过程中的小节：
+如果需要根据某些具体的项目需求自定义 **DSProject1** 项目存储库，可在以下过程的倒数第二个步骤中执行此操作。 下面是用于设定 **DSProject1** 项目存储库内容种子的步骤摘要。 各个步骤对应于种子设定过程中的各个小节：
 
-- 将团队项目模板存储库克隆到本地目录：团队 R3 - 克隆到 -> 本地 D3。
+- 将项目模板存储库克隆到本地目录：团队 R3 - 克隆到 -> 本地 D3。
 - 将 DSProject1 存储库克隆到本地目录：团队 R5 - 克隆到 -> 本地 D5。
-- 将克隆的团队项目模板内容复制到 DSProject1 存储库的本地复本：D3 - 内容复制到 -> D5。
+- 将克隆的项目模板内容复制到 DSProject1 存储库的本地克隆：D3 - 复制内容到 -> D5。
 - （可选）自定义本地 D5。
-- 将本地 DSProject1 内容推送到团队存储库：D5 - 内容添加到 -> 团队 R5。
+- 将本地 DSProject1 内容推送到团队存储库：D5 - 添加内容到 -> 团队 R5。
 
 
-### <a name="clone-your-team-project-template-repository-r3-to-a-directory-d3-on-your-local-machine"></a>将团队项目模板存储库 (R3) 克隆到本地计算机上的某个目录 (D3)。
+### <a name="clone-your-project-template-repository-r3-to-a-directory-d3-on-your-local-machine"></a>将项目模板存储库 (R3) 克隆到本地计算机上的某个目录 (D3)。
 
 在本地计算机上创建一个目录：
 
 - *C:\GitRepos\MyTeamCommon*（对于 Windows） 
 - *$home/GitRepos/MyTeamCommon*（对于 Linux）
 
-切换到该目录。 然后运行以下命令，将团队项目模板存储库克隆到本地计算机。 
+切换到该目录。 然后运行以下命令，将项目模板存储库克隆到本地计算机。 
 
 **Windows**
             
     git clone <the HTTPS URL of the TeamProjectTemplate repository>
     
-如果使用 VSTS 作为代码托管平台，则团队项目模板存储库的 HTTPS URL 通常为：
+如果使用 Azure DevOps 作为代码托管平台，则项目模板存储库的 HTTPS URL 通常为：
 
- ***https://\<VSTS 服务器名称\>.visualstudio.com/\<团队项目名称\>/_git/\<团队项目模板存储库名称\>***。 
+ ***https://\<Azure DevOps Services 名称\>.visualstudio.com/\<项目名称\>/_git/\<项目模板存储库名称\>***。 
 
 本示例使用：
 
@@ -125,13 +124,13 @@ ms.lasthandoff: 05/03/2018
         
 ![8](./media/project-lead-tasks/project-leads-8-clone-team-project-template-linux.png)
 
-如果使用 VSTS 作为代码托管平台，团队项目模板存储库的 SSH URL 通常为：
+如果使用 Azure DevOps 作为代码托管平台，项目模板存储库的 SSH URL 通常为：
 
-***ssh://\<VSTS 服务器名称\>@\<VSTS 服务器名称\>.visualstudio.com:22/\<团队项目名称>/_git/\<团队项目模板存储库名称\>。*** 
+***ssh://\<Azure DevOps Services 名称\>\@\<Azure DevOps Services 名称\>.visualstudio.com:22/\<项目名称>/_git/\<项目模板存储库名称\>.*** 
 
 本示例使用：
 
-***ssh://mysamplegroup@mysamplegroup.visualstudio.com:22/MyTeam/_git/MyTeamProjectTemplate***： 
+***ssh://mysamplegroup\@mysamplegroup.visualstudio.com:22/MyTeam/_git/MyTeamProjectTemplate***。 
 
 ### <a name="clone-dsproject1-repository-r5-to-a-directory-d5-on-your-local-machine"></a>将 DSProject1 存储库 (R5) 克隆到本地计算机上的某个目录 (D5)
 
@@ -143,7 +142,7 @@ ms.lasthandoff: 05/03/2018
 
 ![9](./media/project-lead-tasks/project-leads-9-clone-project-repository.png)
 
-如果使用 VSTS 作为代码托管平台，项目存储库的 HTTPS URL 通常为 ***https://\<VSTS 服务器名称\>.visualstudio.com/\<团队项目名称>/_git/<项目存储库名称\>***。 本示例使用 ***https://mysamplegroup.visualstudio.com/MyTeam/_git/DSProject1***。
+如果使用 Azure DevOps 作为代码托管平台，项目存储库的 HTTPS URL 通常为 ***https://\<Azure DevOps Services 名称\>.visualstudio.com/\<项目名称>/_git/<项目存储库名称\>***。 本示例使用 ***https://mysamplegroup.visualstudio.com/MyTeam/_git/DSProject1*** 。
 
 **Linux**
 
@@ -151,7 +150,7 @@ ms.lasthandoff: 05/03/2018
 
 ![10](./media/project-lead-tasks/project-leads-10-clone-project-repository-linux.png)
 
-如果使用 VSTS 作为代码托管平台，项目存储库的 SSH URL 通常为 _ssh://<VSTS 服务器名称\>@<VSTS 服务器名称\>.visualstudio.com:22/<Your Team Project Name>/\_git/<项目存储库名称\>。 本示例使用 ***ssh://mysamplegroup@mysamplegroup.visualstudio.com:22/MyTeam/_git/DSProject1***。
+如果通常情况下，作为代码托管平台，使用 Azure DevOps_项目存储库的 SSH URL_为 _ssh: / / < Azure DevOps 服务名称\>@< Azure DevOps 服务名称\>.visualstudio.com:22/ < 你的项目名称\>/\_git / < 项目存储库名称\>。 在此示例中，我们有***ssh://mysamplegroup\@mysamplegroup.visualstudio.com:22/MyTeam/_git/DSProject1***。
 
 ### <a name="copy-contents-of-d3-to-d5"></a>将 D3 的内容复制到 D5 
 
@@ -182,11 +181,11 @@ ms.lasthandoff: 05/03/2018
 
 ### <a name="customize-d5-if-you-need-to-optional"></a>根据需要自定义 D5（可选）
 
-如果项目需要某些特定的目录或文档，则现在可以自定义 D5 的内容，但从团队项目模板获取的（已在上一步骤中复制到 D5 目录）的内容除外。 
+如果项目需要某些特定的目录或文档，则现在可以自定义 D5 的内容，但从项目模板获取的（已在上一步骤中复制到 D5 目录）的内容除外。 
 
-### <a name="add-contents-of-dsproject1-in-d5-to-r5-on-your-group-vsts-server"></a>将 D5 中 DSProject1 的内容添加到组 VSTS 服务器上的 R5
+### <a name="add-contents-of-dsproject1-in-d5-to-r5-on-your-group-azure-devops-services"></a>将 D5 中 DSProject1 的内容添加到组 Azure DevOps Services 上的 R5
 
-现在，需要将 **_DSProject1_** 中的内容推送到组 VSTS 服务器上团队项目中的 _R5_ 存储库。 
+现在，需要将 **_DSProject1_** 中的内容推送到组 Azure DevOps Services 上项目中的 _R5_ 存储库。 
 
 
 - 切换到目录 **D5**。 
@@ -197,7 +196,8 @@ ms.lasthandoff: 05/03/2018
     
 - 提交更改并推送。 
 
->[AZURE.NOTE] 如果这是首次提交到 Git 存储库，则需要在运行 `git commit` 命令之前，配置全局参数 *user.name* 和 *user.email*。 运行以下两个命令：
+> [!NOTE]
+> 如果这是首次提交到 Git 存储库，则需要在运行 `git commit` 命令之前，配置全局参数 *user.name* 和 *user.email*。 运行以下两个命令：
         
     git config --global user.name <your name>
     git config --global user.email <your email address>

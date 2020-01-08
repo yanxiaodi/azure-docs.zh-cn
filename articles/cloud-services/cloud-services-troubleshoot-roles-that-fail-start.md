@@ -4,22 +4,22 @@ description: 以下是云服务角色无法启动的一些常见原因。 此外
 services: cloud-services
 documentationcenter: ''
 author: simonxjx
-manager: felixwu
+manager: dcscontentpm
 editor: ''
 tags: top-support-issue
 ms.assetid: 674b2faf-26d7-4f54-99ea-a9e02ef0eb2f
 ms.service: cloud-services
-ms.devlang: na
 ms.topic: troubleshooting
 ms.tgt_pltfrm: na
 ms.workload: tbd
-ms.date: 11/03/2017
+ms.date: 06/15/2018
 ms.author: v-six
-ms.openlocfilehash: 36966151b616a14e429807feb63df93503e7b249
-ms.sourcegitcommit: a0be2dc237d30b7f79914e8adfb85299571374ec
-ms.translationtype: HT
+ms.openlocfilehash: 869453d92f536a62aacc2be52598223158566ae0
+ms.sourcegitcommit: fad368d47a83dadc85523d86126941c1250b14e2
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/12/2018
+ms.lasthandoff: 09/19/2019
+ms.locfileid: "71122736"
 ---
 # <a name="troubleshoot-cloud-service-roles-that-fail-to-start"></a>对无法启动的云服务角色进行故障排除
 以下是一些与无法启动的 Azure 云服务角色相关的常见问题和解决方案。
@@ -53,7 +53,7 @@ DLL 或程序集缺失的症状可能为：
     ```xml
     <customErrors mode="Off" />
     ```
-4. 保存文件。
+4. 保存该文件。
 5. 重新打包并重新部署服务。
 
 重新部署服务后，会看到错误消息，其中包含缺失的程序集或 DLL 的名称。
@@ -74,8 +74,8 @@ DLL 或程序集缺失的症状可能为：
 现在，导航到网站将返回更明确的错误消息：
 
 * '/' 应用程序中出现服务器错误。
-* 说明：执行当前 Web 请求期间，出现未处理的异常。 请检查堆栈跟踪信息，以了解有关该错误以及代码中导致错误的出处的详细信息。
-* 异常详细信息：System.IO.FIleNotFoundException：未能加载文件或程序集“Microsoft.WindowsAzure.StorageClient, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf856ad364e35”或它的某一个依赖项。 系统找不到指定的文件。
+* 说明:执行当前 web 请求期间发生未处理的异常。 请检查堆栈跟踪信息，以了解有关该错误以及代码中导致错误的出处的详细信息。
+* 异常详细信息：System.IO.FIleNotFoundException:无法加载文件或程序集 "Windowsazure.storage. StorageClient，Version = 1.1.0.0，Culture = 中立，PublicKeyToken = 31bf856ad364e35" 或其依赖项之一。 系统找不到指定的文件。
 
 例如：
 
@@ -95,7 +95,7 @@ DLL 或程序集缺失的症状可能为：
 7. 角色启动后，会在 Internet Explorer 中看到详细的错误信息。 还可使用标准的 Windows 故障排除工具来进一步诊断问题。
 
 ## <a name="diagnose-issues-by-using-intellitrace"></a>使用 IntelliTrace 诊断问题
-对于使用 .NET Framework 4 的辅助角色和 Web 角色，可以使用 Microsoft Visual Studio Enterprise 中提供的 [IntelliTrace](https://msdn.microsoft.com/library/dd264915.aspx)。
+对于使用 .NET Framework 4 的辅助角色和 Web 角色，可以使用 Microsoft Visual Studio Enterprise 中提供的 [IntelliTrace](/visualstudio/debugger/intellitrace)。
 
 请按照以下步骤操作来部署启用了 IntelliTrace 的服务：
 
@@ -116,7 +116,7 @@ DLL 或程序集缺失的症状可能为：
 1. 在 Visual Studio 中打开解决方案。
 2. 在“**解决方案资源管理器**”中，打开 **References** 文件夹。
 3. 单击错误中标识的程序集。
-4. 在“**属性**”窗格中，找到“**复制本地属性**”并将值设置为 **True**。
+4. 在“属性”窗格中，找到“复制本地属性”并将值设置为“True”。
 5. 重新部署云服务。
 
 确认所有错误均已更正后，可以在不选中“**为 .NET 4 角色启用 IntelliTrace**”复选框的情况下部署服务。
@@ -124,4 +124,4 @@ DLL 或程序集缺失的症状可能为：
 ## <a name="next-steps"></a>后续步骤
 查看更多针对云服务的[故障排除文章](https://azure.microsoft.com/documentation/articles/?tag=top-support-issue&product=cloud-services)。
 
-若要了解如何使用 Azure PaaS 计算机诊断数据对云服务角色问题进行故障排除，请参阅 [Kevin Williamson 博客系列](http://blogs.msdn.com/b/kwill/archive/2013/08/09/windows-azure-paas-compute-diagnostics-data.aspx)。
+若要了解如何使用 Azure PaaS 计算机诊断数据对云服务角色问题进行故障排除，请参阅 [Kevin Williamson 博客系列](https://blogs.msdn.com/b/kwill/archive/2013/08/09/windows-azure-paas-compute-diagnostics-data.aspx)。

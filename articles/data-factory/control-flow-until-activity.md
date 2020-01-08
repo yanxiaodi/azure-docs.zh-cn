@@ -3,27 +3,23 @@ title: Azure 数据工厂中的 Until 活动 | Microsoft 文档
 description: Until 活动将在循环中执行一组活动，直到与活动相关联的条件的计算结果为 true 或超时。
 services: data-factory
 documentationcenter: ''
-author: sharonlo101
-manager: craigg
-ms.reviewer: douglasl
+author: djpmsft
+ms.author: daperlov
+manager: jroth
+ms.reviewer: maghan
 ms.service: data-factory
 ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/10/2018
-ms.author: shlo
-ms.openlocfilehash: f3462bfda5437ed66f58025deb98e4dbb3860f1d
-ms.sourcegitcommit: 59914a06e1f337399e4db3c6f3bc15c573079832
-ms.translationtype: HT
+ms.openlocfilehash: 80eebf0813b6403d5e1e8ff510003f7f0f57c821
+ms.sourcegitcommit: d200cd7f4de113291fbd57e573ada042a393e545
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/19/2018
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70142450"
 ---
 # <a name="until-activity-in-azure-data-factory"></a>Azure 数据工厂中的 Until 活动
 Until 活动提供的功能与 do-until 循环结构以编程语言提供的功能相同。 它在循环中将执行一组活动，直到与活动相关联的条件的计算结果为 true。 你可以在数据工厂中为 Until 活动指定超时值。 
-
-> [!NOTE]
-> 本文适用于目前处于预览版的数据工厂版本 2。 如果使用数据工厂服务版本 1（即正式版 (GA），请参阅[数据工厂 V1 文档](v1/data-factory-introduction.md)。
 
 ## <a name="syntax"></a>语法
 
@@ -55,13 +51,13 @@ Until 活动提供的功能与 do-until 循环结构以编程语言提供的功�
 
 ## <a name="type-properties"></a>Type 属性
 
-属性 | 说明 | 允许的值 | 必选
+属性 | 说明 | 允许的值 | 必填
 -------- | ----------- | -------------- | --------
-名称 | `Until` 活动的名称。 | String | 是
+name | `Until` 活动的名称。 | String | 是
 type | 必须设置为 Until。 | String | 是
-表达式 | 计算结果必须为 true 或 false 的表达式 | 表达式。  | 是
-timeout | 此处在指定的时间之后 do-until 循环超时。 | 字符串。 `d.hh:mm:ss` 或 `hh:mm:ss` 默认值为 7 天。 最大值为 90 天。 | 否
-活动 | 在表达式计算结果为 `true` 前将执行的活动集。 | 活动数组 |  是
+expression | 计算结果必须为 true 或 false 的表达式 | 表达式。  | 是
+超时 | 此处在指定的时间之后 do-until 循环超时。 | 字符串。 `d.hh:mm:ss` 或 `hh:mm:ss` 默认值为 7 天。 最大值为：90 天。 | 否
+activities | 在表达式计算结果为 `true` 前将执行的活动集。 | 活动数组 |  是
 
 ## <a name="example-1"></a>示例 1
 
@@ -69,7 +65,7 @@ timeout | 此处在指定的时间之后 do-until 循环超时。 | 字符串。
 > 本部分提供运行管道的 JSON 定义和示例 PowerShell 命令。 有关使用 Azure PowerShell 和 JSON 定义创建数据工厂管道的分步说明演练，请参阅[教程：使用 Azure PowerShell 创建数据工厂](quickstart-create-data-factory-powershell.md)。
 
 ### <a name="pipeline-with-until-activity"></a>包含 Until 活动的管道
-在此示例中，管道具有两个活动：**Until** 和 **Wait**。 在循环中运行 Web 活动之前，Wait 活动会等待指定的期间。 若要了解数据工厂中的表达式和函数，请参阅[表达式语言和函数](control-flow-expression-language-functions.md)。 
+在此示例中，管道包含两个活动：**Until** 和 **Wait**。 在循环中运行 Web 活动之前，Wait 活动会等待指定的期间。 若要了解数据工厂中的表达式和函数，请参阅[表达式语言和函数](control-flow-expression-language-functions.md)。 
 
 ```json
 {
@@ -213,7 +209,7 @@ timeout | 此处在指定的时间之后 do-until 循环超时。 | 字符串。
 ```
 
 ### <a name="parameterized-azure-blob-dataset-blobdatasetjson"></a>参数化的 Azure Blob 数据集 (BlobDataset.json)
-管道将 folderPath 设置为管道参数 outputPath1 或 outputPath2 的值。 
+管道将 folderPath设置为管道参数 outputPath1或 outputPath2的值。 
 
 ```json
 {
@@ -250,25 +246,28 @@ timeout | 此处在指定的时间之后 do-until 循环超时。 | 字符串。
 ```
 
 ### <a name="powershell-commands"></a>PowerShell 命令
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
+
 这些命令假设你已将 JSON 文件保存到文件夹 C:\ADF。 
 
 ```powershell
-Connect-AzureRmAccount
-Select-AzureRmSubscription "<Your subscription name>"
+Connect-AzAccount
+Select-AzSubscription "<Your subscription name>"
 
 $resourceGroupName = "<Resource Group Name>"
 $dataFactoryName = "<Data Factory Name. Must be globally unique>";
-Remove-AzureRmDataFactoryV2 $dataFactoryName -ResourceGroupName $resourceGroupName -force
+Remove-AzDataFactoryV2 $dataFactoryName -ResourceGroupName $resourceGroupName -force
 
 
-Set-AzureRmDataFactoryV2 -ResourceGroupName $resourceGroupName -Location "East US" -Name $dataFactoryName
-Set-AzureRmDataFactoryV2LinkedService -DataFactoryName $dataFactoryName -ResourceGroupName $resourceGroupName -Name "AzureStorageLinkedService" -DefinitionFile "C:\ADF\AzureStorageLinkedService.json"
-Set-AzureRmDataFactoryV2Dataset -DataFactoryName $dataFactoryName -ResourceGroupName $resourceGroupName -Name "BlobDataset" -DefinitionFile "C:\ADF\BlobDataset.json"
-Set-AzureRmDataFactoryV2Pipeline -DataFactoryName $dataFactoryName -ResourceGroupName $resourceGroupName -Name "Adfv2QuickStartPipeline" -DefinitionFile "C:\ADF\Adfv2QuickStartPipeline.json"
-$runId = Invoke-AzureRmDataFactoryV2Pipeline -DataFactoryName $dataFactoryName -ResourceGroupName $resourceGroupName -PipelineName "Adfv2QuickStartPipeline" -ParameterFile C:\ADF\PipelineParameters.json
+Set-AzDataFactoryV2 -ResourceGroupName $resourceGroupName -Location "East US" -Name $dataFactoryName
+Set-AzDataFactoryV2LinkedService -DataFactoryName $dataFactoryName -ResourceGroupName $resourceGroupName -Name "AzureStorageLinkedService" -DefinitionFile "C:\ADF\AzureStorageLinkedService.json"
+Set-AzDataFactoryV2Dataset -DataFactoryName $dataFactoryName -ResourceGroupName $resourceGroupName -Name "BlobDataset" -DefinitionFile "C:\ADF\BlobDataset.json"
+Set-AzDataFactoryV2Pipeline -DataFactoryName $dataFactoryName -ResourceGroupName $resourceGroupName -Name "Adfv2QuickStartPipeline" -DefinitionFile "C:\ADF\Adfv2QuickStartPipeline.json"
+$runId = Invoke-AzDataFactoryV2Pipeline -DataFactoryName $dataFactoryName -ResourceGroupName $resourceGroupName -PipelineName "Adfv2QuickStartPipeline" -ParameterFile C:\ADF\PipelineParameters.json
 
 while ($True) {
-    $run = Get-AzureRmDataFactoryV2PipelineRun -ResourceGroupName $resourceGroupName -DataFactoryName $DataFactoryName -PipelineRunId $runId
+    $run = Get-AzDataFactoryV2PipelineRun -ResourceGroupName $resourceGroupName -DataFactoryName $DataFactoryName -PipelineRunId $runId
 
     if ($run) {
         if ($run.Status -ne 'InProgress') {
@@ -278,7 +277,7 @@ while ($True) {
         }
         Write-Host  "Pipeline is running...status: InProgress" -foregroundcolor "Yellow"
         Write-Host "Activity run details:" -foregroundcolor "Yellow"
-        $result = Get-AzureRmDataFactoryV2ActivityRun -DataFactoryName $dataFactoryName -ResourceGroupName $resourceGroupName -PipelineRunId $runId -RunStartedAfter (Get-Date).AddMinutes(-30) -RunStartedBefore (Get-Date).AddMinutes(30)
+        $result = Get-AzDataFactoryV2ActivityRun -DataFactoryName $dataFactoryName -ResourceGroupName $resourceGroupName -PipelineRunId $runId -RunStartedAfter (Get-Date).AddMinutes(-30) -RunStartedBefore (Get-Date).AddMinutes(30)
         $result
 
         Write-Host "Activity 'Output' section:" -foregroundcolor "Yellow"

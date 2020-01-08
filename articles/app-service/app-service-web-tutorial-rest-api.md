@@ -1,5 +1,5 @@
 ---
-title: Azure 应用服务中启用了 CORS 的 RESTful API | Microsoft Docs
+title: 教程：使用 CORS 托管 RESTful API - Azure 应用服务
 description: 了解如何通过 Azure 应用服务来托管包含 CORS 支持的 RESTful API。
 services: app-service\api
 documentationcenter: dotnet
@@ -12,18 +12,19 @@ ms.workload: web
 ms.tgt_pltfrm: na
 ms.devlang: dotnet
 ms.topic: tutorial
-ms.date: 02/28/2018
+ms.date: 11/21/2018
 ms.author: cephalin
-ms.custom: mvc, devcenter
-ms.openlocfilehash: 4b5e432a9c553f5221f138b19a180f92420e6058
-ms.sourcegitcommit: 5b2ac9e6d8539c11ab0891b686b8afa12441a8f3
+ms.custom: seodec18
+ms.openlocfilehash: 137b569820ea7394b6a3beb24129c905a2efd123
+ms.sourcegitcommit: 86d49daccdab383331fc4072b2b761876b73510e
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 09/06/2019
+ms.locfileid: "70743864"
 ---
 # <a name="tutorial-host-a-restful-api-with-cors-in-azure-app-service"></a>教程：在 Azure 应用服务中托管启用了 CORS 的 RESTful API
 
-[Azure 应用服务](app-service-web-overview.md)提供高度可缩放、自修补的 Web 托管服务。 另外，应用服务还为 RESTful API 提供对[跨域资源共享 (CORS)](https://wikipedia.org/wiki/Cross-Origin_Resource_Sharing) 的内置支持。 本教程介绍如何将 ASP.NET Core API 应用部署到提供 CORS 支持的应用服务。 请使用命令行工具来配置应用，使用 Git 来部署应用。 
+[Azure 应用服务](overview.md)提供高度可缩放、自修补的 Web 托管服务。 另外，应用服务还为 RESTful API 提供对[跨域资源共享 (CORS)](https://wikipedia.org/wiki/Cross-Origin_Resource_Sharing) 的内置支持。 本教程介绍如何将 ASP.NET Core API 应用部署到提供 CORS 支持的应用服务。 请使用命令行工具来配置应用，使用 Git 来部署应用。 
 
 本教程介绍如何执行下列操作：
 
@@ -57,7 +58,7 @@ ms.lasthandoff: 04/06/2018
 git clone https://github.com/Azure-Samples/dotnet-core-api
 ```
 
-此存储库包含的应用是根据以下教程创建的：[使用 Swagger 的 ASP.NET Core Web API 帮助页](/aspnet/core/tutorials/web-api-help-pages-using-swagger?tabs=visual-studio)。 它使用 Swagger 生成器来提供 [Swagger UI](https://swagger.io/swagger-ui/) 和 Swagger JSON 终结点。
+此存储库包含基于以下教程创建的应用：[使用 Swagger 的 ASP.NET Core Web API 帮助页](/aspnet/core/tutorials/web-api-help-pages-using-swagger?tabs=visual-studio)。 它使用 Swagger 生成器来提供 [Swagger UI](https://swagger.io/swagger-ui/) 和 Swagger JSON 终结点。
 
 ### <a name="run-the-application"></a>运行应用程序
 
@@ -131,7 +132,7 @@ To https://<app_name>.scm.azurewebsites.net/<app_name>.git
  * [new branch]      master -> master
 ```
 
-### <a name="browse-to-the-azure-web-app"></a>浏览到 Azure Web 应用
+### <a name="browse-to-the-azure-app"></a>浏览到 Azure 应用
 
 在浏览器中导航到 `http://<app_name>.azurewebsites.net/swagger`，开始使用 Swagger UI。
 
@@ -157,7 +158,7 @@ To https://<app_name>.scm.azurewebsites.net/<app_name>.git
 dotnet run
 ```
 
-导航到浏览器应用 (`http://localhost:5000`)。 在浏览器中打开开发人员工具窗口（在用于 Windows 的 Chrome 中使用 `Ctrl`+`Shift`+`i`），检查“控制台”选项卡。此时会看到错误消息：`No 'Access-Control-Allow-Origin' header is present on the requested resource`。
+导航到浏览器应用 (`http://localhost:5000`)。 在浏览器中打开开发人员工具窗口（在用于 Windows 的 Chrome 中使用 `Ctrl`+`Shift`+`i`），检查“控制台”选项卡。  此时会看到错误消息：`No 'Access-Control-Allow-Origin' header is present on the requested resource`。
 
 ![浏览器客户端中的 CORS 错误](./media/app-service-web-tutorial-rest-api/cors-error.png)
 
@@ -167,7 +168,7 @@ dotnet run
 
 ### <a name="enable-cors"></a>启用 CORS 
 
-在 Cloud Shell 中，使用 [`az resource update`](/cli/azure/resource#az_resource_update) 命令对客户端的 URL 启用 CORS。 替换 _&lt;appname>_ 占位符。
+在 Cloud Shell 中，使用 [`az resource update`](/cli/azure/resource#az-resource-update) 命令对客户端的 URL 启用 CORS。 替换 _&lt;appname>_ 占位符。
 
 ```azurecli-interactive
 az resource update --name web --resource-group myResourceGroup --namespace Microsoft.Web --resource-type config --parent sites/<app_name> --set properties.cors.allowedOrigins="['http://localhost:5000']" --api-version 2015-06-01
@@ -175,9 +176,12 @@ az resource update --name web --resource-group myResourceGroup --namespace Micro
 
 可以在 `properties.cors.allowedOrigins` (`"['URL1','URL2',...]"`) 中设置多个客户端 URL。 也可使用 `"['*']"` 启用所有客户端 URL。
 
+> [!NOTE]
+> 如果应用要求发送凭据（例如 Cookie 或身份验证令牌），则浏览器会要求在响应中包含 `ACCESS-CONTROL-ALLOW-CREDENTIALS` 标头。 若要在应用服务中启用此功能，请在 CORS 配置中将 `properties.cors.supportCredentials` 设置为 `true`。当 `allowedOrigins` 包含 `'*'` 时，不能启用此功能。
+
 ### <a name="test-cors-again"></a>再次测试 CORS
 
-刷新浏览器应用 (`http://localhost:5000`)。 “控制台”窗口中的错误消息现在已消失，可以看到已部署 API 中的数据并与之交互。 远程 API 现在支持对本地运行的浏览器应用使用 CORS。 
+刷新浏览器应用 (`http://localhost:5000`)。 “控制台”窗口中的错误消息现在已消失，  可以看到已部署 API 中的数据并与之交互。 远程 API 现在支持对本地运行的浏览器应用使用 CORS。 
 
 ![CORS 在浏览器客户端中成功](./media/app-service-web-tutorial-rest-api/cors-success.png)
 

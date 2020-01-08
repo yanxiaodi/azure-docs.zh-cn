@@ -1,5 +1,5 @@
 ---
-title: 在 Azure 中还原应用
+title: 还原应用 - Azure 应用服务
 description: 了解如何从备份还原应用。
 services: app-service
 documentationcenter: ''
@@ -10,24 +10,25 @@ ms.assetid: 4444dbf7-363c-47e2-b24a-dbd45cb08491
 ms.service: app-service
 ms.workload: na
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 07/06/2016
 ms.author: cephalin
-ms.openlocfilehash: 5c37a693e1594f9afe40effba45d7b05a68fd49c
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.custom: seodec18
+ms.openlocfilehash: 519cf5388b095c7ca6e0ae7d978608f0824dc3a2
+ms.sourcegitcommit: 82499878a3d2a33a02a751d6e6e3800adbfa8c13
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70066517"
 ---
 # <a name="restore-an-app-in-azure"></a>在 Azure 中还原应用
-本文将演示如何在 [Azure 应用服务](../app-service/app-service-web-overview.md) 中还原已事先备份的应用（请参阅[在 Azure 中备份应用](web-sites-backup.md)）。 可以根据需要将应用及其链接的数据库还原到以前的状态，或者基于原始应用的备份之一创建新的应用。 Azure 应用服务支持用于备份和还原的以下数据库：
+本文将演示如何在 [Azure 应用服务](../app-service/overview.md) 中还原已事先备份的应用（请参阅[在 Azure 中备份应用](manage-backup.md)）。 可以根据需要将应用及其链接的数据库还原到以前的状态，或者基于原始应用的备份之一创建新的应用。 Azure 应用服务支持用于备份和还原的以下数据库：
 - [SQL 数据库](https://azure.microsoft.com/services/sql-database/)
-- [Azure Database for MySQL)](https://azure.microsoft.com/services/mysql)
-- [Azure Database for PostgreSQL](https://azure.microsoft.com/services/postgres)
+- [Azure Database for MySQL](https://azure.microsoft.com/services/mysql)
+- [Azure Database for PostgreSQL](https://azure.microsoft.com/services/postgresql)
 - [MySQL 应用内产品](https://blogs.msdn.microsoft.com/appserviceteam/2017/03/06/announcing-general-availability-for-mysql-in-app)
 
-从备份还原适用于在**标准**和**高级**层中运行的应用。 有关向上缩放应用的信息，请参阅[在 Azure 中向上缩放应用](web-sites-scale.md)。 相比于**标准**层，**高级**层允许执行更多的每日备份量。
+从备份还原适用于在**标准**和**高级**层中运行的应用。 有关向上缩放应用的信息，请参阅[在 Azure 中向上缩放应用](manage-scale-up.md)。 相比于**标准**层，**高级**层允许执行更多的每日备份量。
 
 <a name="PreviousBackup"></a>
 
@@ -47,13 +48,18 @@ ms.lasthandoff: 04/28/2018
     ![](./media/web-sites-restore/022ChooseDestination1.png)
    
    > [!WARNING]
-   > 如果选择“覆盖”，将清除并覆盖当前应用中所有的现有数据。 在单击“确定”之前，请确保该操作正是想要执行的操作。
+   > 如果选择“覆盖”，则会清除并覆盖当前应用中所有的现有数据。 在单击“确定”之前，请确保该操作正是想要执行的操作。
+   > 
+   > 
+   
+   > [!WARNING]
+   > 如果应用服务在还原数据库时正在向数据库写入数据，则可能会导致违反主键和数据丢失等症状。 建议在开始还原数据库之前先停止应用服务。
    > 
    > 
    
     可选择“现有应用”将应用备份还原到同一资源组中的其他应用。 使用此选项之前，应已使用应用备份中定义的镜像数据库配置在资源组中创建了其他应用。 还可以创建“新”应用来将内容还原到其中。
 
-4. 单击“确定”。
+4. 单击 **“确定”** 。
 
 <a name="StorageAccount"></a>
 
@@ -84,8 +90,8 @@ ms.lasthandoff: 04/28/2018
 
 相关示例如下所示：
 
-- [Azure CLI 示例](app-service-cli-samples.md)
-- [Azure PowerShell 示例](app-service-powershell-samples.md)
+- [Azure CLI 示例](samples-cli.md)
+- [Azure PowerShell 示例](samples-powershell.md)
 
 <!-- ## Next Steps
 You can backup and restore App Service apps using REST API. -->

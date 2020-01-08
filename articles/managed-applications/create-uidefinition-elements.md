@@ -4,20 +4,19 @@ description: 介绍了为 Azure 门户构造 UI 定义时要使用的元素。
 services: managed-applications
 documentationcenter: na
 author: tfitzmac
-manager: timlt
-editor: tysonn
 ms.service: managed-applications
 ms.devlang: na
 ms.topic: reference
 ms.tgt_pltfrm: na
 ms.workload: na
-ms.date: 03/30/2018
+ms.date: 09/19/2018
 ms.author: tomfitz
-ms.openlocfilehash: 0a69f46294fc370b1eb403440af5bb3c25ef995d
-ms.sourcegitcommit: 688a394c4901590bbcf5351f9afdf9e8f0c89505
-ms.translationtype: HT
+ms.openlocfilehash: 41a583a77f85bb1524112fa20d9098e18bc4f431
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/18/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60587932"
 ---
 # <a name="createuidefinition-elements"></a>CreateUiDefinition 元素
 本文介绍了 CreateUiDefinition 的所有受支持元素的架构和属性。 
@@ -39,9 +38,9 @@ ms.lasthandoff: 05/18/2018
 }
 ```
 
-| 属性 | 必选 | 说明 |
+| 属性 | 需要 | 描述 |
 | -------- | -------- | ----------- |
-| 名称 | 是 | 一个内部标识符，用于引用元素的特定实例。 元素名称最常用于 `outputs` 中，其中指定元素的输出值映射到模板的参数。 还可以使用它将元素的输出值绑定到其他元素的 `defaultValue`。 |
+| name | 是 | 一个内部标识符，用于引用元素的特定实例。 元素名称最常用于 `outputs` 中，其中指定元素的输出值映射到模板的参数。 还可以使用它将元素的输出值绑定到其他元素的 `defaultValue`。 |
 | type | 是 | 要为元素呈现的 UI 控件。 有关支持的类型的列表，请参阅[元素](#elements)。 |
 | label | 是 | 元素的显示文本。 某些元素类型包含多个标签，因此，值可能是包含多个字符串的对象。 |
 | defaultValue | 否 | 元素的默认值。 某些元素类型支持复杂的默认值，因此，值可能是对象。 |
@@ -65,7 +64,6 @@ ms.lasthandoff: 05/18/2018
 - [Microsoft.Compute.CredentialsCombo](microsoft-compute-credentialscombo.md)
 - [Microsoft.Compute.SizeSelector](microsoft-compute-sizeselector.md)
 - [Microsoft.Compute.UserNameTextBox](microsoft-compute-usernametextbox.md)
-- [Microsoft.Network.AvailabilityZoneDropDown](microsoft-network-availabilityzonedropdown.md)
 - [Microsoft.Network.PublicIpAddressCombo](microsoft-network-publicipaddresscombo.md)
 - [Microsoft.Network.VirtualNetworkCombo](microsoft-network-virtualnetworkcombo.md)
 - [Microsoft.Storage.MultiStorageAccountCombo](microsoft-storage-multistorageaccountcombo.md)

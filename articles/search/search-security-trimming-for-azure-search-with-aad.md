@@ -1,18 +1,20 @@
 ---
-title: 用于使用 Active Directory 标识修剪 Azure 搜索结果的安全筛选器 | Microsoft Docs
-description: 使用安全筛选器和 Active Directory 标识对 Azure 搜索内容进行访问控制。
-author: revitalbarletz
-manager: jlembicz
+title: 使用 Active Directory 修剪结果的安全筛选器 - Azure 搜索
+description: 使用安全筛选器和 Azure Active Directory (AAD) 标识对 Azure 搜索内容进行访问控制。
+author: brjohnstmsft
+manager: nitinme
 services: search
 ms.service: search
 ms.topic: conceptual
 ms.date: 11/07/2017
-ms.author: revitalb
-ms.openlocfilehash: 7c1723e01c78132169d8975473a0e9f5466a066c
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.author: brjohnst
+ms.custom: seodec2018
+ms.openlocfilehash: 8bcc1dcd1d86c0ca18ed03dc60834884a42a39c9
+ms.sourcegitcommit: 7a6d8e841a12052f1ddfe483d1c9b313f21ae9e6
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 08/30/2019
+ms.locfileid: "70186528"
 ---
 # <a name="security-filters-for-trimming-azure-search-results-using-active-directory-identities"></a>用于使用 Active Directory 标识修剪 Azure 搜索结果的安全筛选器
 
@@ -20,14 +22,14 @@ ms.lasthandoff: 04/23/2018
 
 本文涵盖以下任务：
 > [!div class="checklist"]
-- 创建 AAD 组和用户
-- 将用户与创建的组相关联
-- 缓存新组
-- 使用关联的组编制文档索引
-- 使用组标识符筛选器发出搜索请求
-
->[!NOTE]
-> 本文中的示例代码片段是用 C# 语言编写的。 可以 [在 GitHub 上](http://aka.ms/search-dotnet-howto)找到完整的源代码。 
+> - 创建 AAD 组和用户
+> - 将用户与创建的组相关联
+> - 缓存新组
+> - 使用关联的组编制文档索引
+> - 使用组标识符筛选器发出搜索请求
+> 
+> [!NOTE]
+> 本文中的示例代码片段是用 C# 语言编写的。 可以 [在 GitHub 上](https://aka.ms/search-dotnet-howto)找到完整的源代码。 
 
 ## <a name="prerequisites"></a>先决条件
 
@@ -62,7 +64,7 @@ Azure 搜索中的索引必须有一个[安全字段](search-security-trimming-f
 
 用户和组的成员身份可能很不稳定，尤其是在大型组织中。 生成用户和组标识的代码应该以足够高的频率运行，以拾取组织成员身份的更改。 同样，Azure 搜索索引需有类似的更新计划，以反映受允许用户和资源的当前状态。
 
-### <a name="step-1-create-aad-grouphttpsdevelopermicrosoftcomgraphdocsapi-referencev10apigrouppostgroups"></a>步骤 1：创建 [AAD 组](https://developer.microsoft.com/graph/docs/api-reference/v1.0/api/group_post_groups) 
+### <a name="step-1-create-aad-grouphttpsdocsmicrosoftcomgraphapigroup-post-groupsviewgraph-rest-10"></a>步骤 1：创建 [AAD 组](https://docs.microsoft.com/graph/api/group-post-groups?view=graph-rest-1.0) 
 ```csharp
 // Instantiate graph client 
 GraphServiceClient graph = new GraphServiceClient(new DelegateAuthenticationProvider(...));
@@ -76,7 +78,7 @@ Group group = new Group()
 Group newGroup = await graph.Groups.Request().AddAsync(group);
 ```
    
-### <a name="step-2-create-aad-userhttpsdevelopermicrosoftcomgraphdocsapi-referencev10apiuserpostusers"></a>步骤 2：创建 [AAD 用户](https://developer.microsoft.com/graph/docs/api-reference/v1.0/api/user_post_users) 
+### <a name="step-2-create-aad-userhttpsdocsmicrosoftcomgraphapiuser-post-usersviewgraph-rest-10"></a>步骤 2：创建 [AAD 用户](https://docs.microsoft.com/graph/api/user-post-users?view=graph-rest-1.0)
 ```csharp
 User user = new User()
 {
@@ -97,7 +99,7 @@ await graph.Groups[newGroup.Id].Members.References.Request().AddAsync(newUser);
 ```
 
 ### <a name="step-4-cache-the-groups-identifiers"></a>步骤 4：缓存组标识符
-（可选）为了降低网络延迟，可以缓存用户与组之间的关联，以便在发出搜索请求后，可以从缓存返回组，免除与 AAD 之间的一次往返。 可以使用 (AAD Batch API)[https://developer.microsoft.com/graph/docs/concepts/json_batching] 发送包含多个用户的单个 Http 请求并生成缓存。
+（可选）为了降低网络延迟，可以缓存用户与组之间的关联，以便在发出搜索请求后，可以从缓存返回组，免除与 AAD 之间的一次往返。 可以使用 [AAD Batch API](https://developer.microsoft.com/graph/docs/concepts/json_batching) 发送包含多个用户的单个 Http 请求并生成缓存。
 
 Microsoft Graph 能够处理大量的请求。 如果发出无以数计的请求，Microsoft Graph 将会失败并返回 HTTP 状态代码 429。 有关详细信息，请参阅 [Microsoft Graph 限制](https://developer.microsoft.com/graph/docs/concepts/throttling)。
 
@@ -137,7 +139,7 @@ _indexClient.Documents.Index(batch);
 
 ### <a name="step-1-retrieve-users-group-identifiers"></a>步骤 1：检索用户的组标识符
 
-如果用户的组尚未缓存或缓存已过期，请发出[组](https://developer.microsoft.com/graph/docs/api-reference/v1.0/api/directoryobject_getmembergroups)请求
+如果用户的组尚未缓存或缓存已过期，请发出[组](https://docs.microsoft.com/graph/api/directoryobject-getmembergroups?view=graph-rest-1.0)请求
 ```csharp
 private static void RefreshCacheIfRequired(string user)
 {
@@ -185,7 +187,7 @@ DocumentSearchResult<SecuredFiles> results = _indexClient.Documents.Search<Secur
 
 本演练已介绍如何使用 AAD 登录名筛选 Azure 搜索结果中的文档，以及修剪与请求中提供的筛选器不匹配的文档结果。
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 
 + [使用 Azure 搜索筛选器进行基于标识的访问控制](search-security-trimming-for-azure-search.md)
 + [Azure 搜索中的筛选器](search-filters.md)

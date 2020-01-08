@@ -1,31 +1,27 @@
 ---
 title: 连接的工厂解决方案功能 - Azure | Microsoft Docs
 description: 连接的工厂预配置解决方案的功能概述。
-services: iot-suite
-suite: iot-suite
-documentationcenter: ''
 author: dominicbetts
 manager: timlt
-editor: ''
-ms.assetid: ''
-ms.service: iot-suite
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: na
-ms.date: 04/20/2018
+ms.service: iot-accelerators
+services: iot-accelerators
+ms.topic: conceptual
+ms.date: 06/10/2019
 ms.author: dobett
-ms.openlocfilehash: 7ee86a59e7c47406ea1a890f1a9d1eb2ed4ad772
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.openlocfilehash: 2a11640959a8c7fdd0d238aba92698eb47934969
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "67080451"
 ---
-# <a name="what-is-azure-iot-suite-connected-factory"></a>什么是 Azure IoT 套件连接的工厂？
+# <a name="what-is-connected-factory-iot-solution-accelerator"></a>什么是连接的工厂 IoT 解决方案加速器？
 
-连接的工厂是 Microsoft 的 Azure 工业 IoT 参考体系结构的实现，打包为开源解决方案。 可以使用它作为商业产品的起点。 可以通过 [Azure IoT 套件](https://www.azureiotsuite.com/#solutions/types/CF)将连接的工厂解决方案的预构建版本部署到 Azure 订阅。
+连接的工厂是 Microsoft 的 Azure 工业 IoT 参考体系结构的实现，打包为开源解决方案。 可以使用它作为商业产品的起点。 可以通过 [Azure IoT 解决方案加速器](https://www.azureiotsolutions.com/#solutions/types/CF)将连接的工厂解决方案的预构建版本部署到 Azure 订阅。
 
 ![连接的工厂解决方案仪表板](./media/iot-accelerators-connected-factory-features/dashboard.png)
+
+[GitHub](https://github.com/Azure/azure-iot-connected-factory) 上提供了连接的工厂解决方案加速器。
 
 连接的工厂包括以下功能：
 
@@ -37,7 +33,7 @@ ms.lasthandoff: 05/20/2018
 
 ## <a name="remote-management"></a>远程管理
 
-- 从云仪表板配置 OPC UA 资产（调用方法，读取以及写入数据）。
+- 从云仪表板配置 OPC UA 资产（调用方法、读写数据）。
 - 从云仪表板发布和取消发布来自 OPC UA 资产的遥测数据。
 
 ## <a name="cloud-dashboard"></a>云仪表板
@@ -64,12 +60,9 @@ ms.lasthandoff: 05/20/2018
 
 ## <a name="customizability"></a>可定制性
 
-- [自定义](../iot-suite/iot-suite-v1-guidance-on-customizing-preconfigured-solutions.md)解决方案来满足特定的业务需求。
+- 自定义解决方案来满足特定的业务需求。
 - GitHub 上提供了完整的解决方案源代码。 请参阅[连接的工厂预配置解决方案](https://github.com/Azure/azure-iot-connected-factory)存储库。
 
 ## <a name="next-steps"></a>后续步骤
 
-通过阅读下列文章，详细了解连接的工厂预配置解决方案：
-
-* [连接的工厂预配置解决方案演练](iot-accelerators-connected-factory-sample-walkthrough.md)
-* [为连接的工厂部署网关]( iot-accelerators-connected-factory-gateway-deployment.md)
+若要了解有关连接工厂解决方案加速器的详细信息，请参阅快速入门[尝试基于云的解决方案来管理我的工业 IoT 设备](quickstart-connected-factory-deploy.md)。

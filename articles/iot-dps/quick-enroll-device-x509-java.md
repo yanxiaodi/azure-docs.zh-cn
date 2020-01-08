@@ -1,61 +1,56 @@
 ---
-title: "使用 Java 将 X.509 设备注册到 Azure 设备预配服务 | Microsoft Docs"
-description: "Azure 快速入门 - 使用 Java 服务 SDK 将 X.509 设备注册到 Azure IoT 中心设备预配服务"
-services: iot-dps
-keywords: 
-author: dsk-2015
-ms.author: dkshir
+title: 本快速入门展示了如何使用 Java 将 X.509 设备注册到 Azure 设备预配服务 | Microsoft Docs
+description: 本快速入门使用组注册和单独注册。 在本快速入门中，需使用 Java 将 X.509 设备注册到 Azure IoT 中心设备预配服务。
+author: wesmc7777
+ms.author: wesmc
 ms.date: 12/20/2017
-ms.topic: hero-article
+ms.topic: quickstart
 ms.service: iot-dps
-documentationcenter: 
+services: iot-dps
 manager: timlt
-ms.devlang: na
+ms.devlang: java
 ms.custom: mvc
-ms.openlocfilehash: b1d21278c821c4501c121266823e153490a50df5
-ms.sourcegitcommit: 059dae3d8a0e716adc95ad2296843a45745a415d
+ms.openlocfilehash: 3eec6628ca7dbc16e0cc01701620f1699ba8d368
+ms.sourcegitcommit: 6135cd9a0dae9755c5ec33b8201ba3e0d5f7b5a1
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/09/2018
+ms.lasthandoff: 10/31/2018
+ms.locfileid: "50412765"
 ---
-# <a name="enroll-x509-devices-to-iot-hub-device-provisioning-service-using-java-service-sdk"></a>使用 Java 服务 SDK 将 X.509 设备注册到 IoT 中心设备预配服务
+# <a name="quickstart-enroll-x509-devices-to-the-device-provisioning-service-using-java"></a>快速入门：使用 Java 将 X.509 设备注册到设备预配服务
 
 [!INCLUDE [iot-dps-selector-quick-enroll-device-x509](../../includes/iot-dps-selector-quick-enroll-device-x509.md)]
 
-以下步骤借助一个示例 Java 应用程序，演示了如何使用 [Java 服务 SDK](https://azure.github.io/azure-iot-sdk-java/service/) 通过编程方式将一组 X.509 模拟设备注册到 Azure IoT 中心设备预配服务。 虽然 Java 服务 SDK 在 Windows 和 Linux 计算机上均适用，但本文使用 Windows 开发计算机来演示注册过程。
+本快速入门展示了如何使用 Java 以编程方式将一组 X.509 模拟设备注册到 Azure IoT 中心设备预配服务。 通过创建[注册组](concepts-service.md#enrollment-group)或[个人注册](concepts-service.md#individual-enrollment)将设备注册到预配服务实例。 本快速入门展示了如何创建这两种类型的注册。 该注册是在参考示例 Java 应用程序的情况下使用 [Java 服务 SDK](https://azure.github.io/azure-iot-sdk-java/service/) 创建的。 
 
-在继续操作之前，请确保[通过 Azure 门户设置 IoT 中心设备预配服务](./quick-setup-auto-provision.md)。
+本快速入门假设你已创建了 IoT 中心和设备预配服务实例。 如果尚未创建这些资源，请先完成[使用 Azure 门户设置 IoT 中心设备预配服务](./quick-setup-auto-provision.md)快速入门，然后再继续学习本文。
 
-<a id="setupdevbox"></a>
+虽然 Java 服务 SDK 在 Windows 和 Linux 计算机上均适用，但本文使用 Windows 开发计算机来演示注册过程。
 
-## <a name="prepare-the-development-environment"></a>准备开发环境 
+[!INCLUDE [quickstarts-free-trial-note](../../includes/quickstarts-free-trial-note.md)]
 
-1. 确保已在计算机上安装 [Java SE 开发工具包 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)。 
+## <a name="prerequisites"></a>先决条件
 
-2. 设置 Java 安装的环境变量。 `PATH` 变量应包括 *jdk1.8.x\bin* 目录的完整路径。 如果这是计算机的首次 Java 安装，则请创建名为 `JAVA_HOME` 的新的环境变量，将其指向 *jdk1.8.x* 目录的完整路径。 在 Windows 计算机上，该目录通常位于 *C:\\Program Files\\Java\\* 文件夹中。可以通过在 Windows 计算机的“控制面板”上搜索“编辑系统环境变量”来创建或编辑环境变量。 
+* 安装 [Java SE 开发工具包 8](https://aka.ms/azure-jdks)。
+* 安装 [Maven 3](https://maven.apache.org/download.cgi)。 可以通过运行以下命令来验证当前的 Maven 版本：
 
-  可以在命令窗口中运行以下命令，查看 Java 是否已成功安装在计算机上：
-
-    ```cmd\sh
-    java -version
-    ```
-
-3. 将 [Maven 3](https://maven.apache.org/download.cgi) 下载并解压缩到计算机上。 
-
-4. 编辑环境变量 `PATH`，使之指向 Maven 解压缩时所在文件夹中的 *apache-maven-3.x.x\\bin* 文件夹。 可以在命令窗口中运行以下命令，确认 Maven 已成功安装：
-
-    ```cmd\sh
+    ```cmd/sh
     mvn --version
     ```
 
-5. 确保在计算机上安装 [git](https://git-scm.com/download/) 并将其添加到环境变量 `PATH`。 
+* 安装 [Git](https://git-scm.com/download/)。
 
 
 <a id="javasample"></a>
 
 ## <a name="download-and-modify-the-java-sample-code"></a>下载并修改 Java 示例代码
 
-此部分演示如何向示例代码添加 X.509 设备的预配详细信息。 
+本部分中将使用自签名 X.509 证书，请务必记住以下要点：
+
+* 自签名证书仅用于测试，不应在生产环境中使用。
+* 自签名证书的默认过期日期为一年。
+
+下面的步骤展示了如何向示例代码添加 X.509 设备的预配详细信息。 
 
 1. 打开命令提示符。 使用 Java 服务 SDK 克隆设备注册代码示例的 GitHub 存储库：
     
@@ -114,7 +109,7 @@ ms.lasthandoff: 02/09/2018
                         "-----END CERTIFICATE-----\n";
                 ```
 
-        9. 关闭命令窗口，或者在系统提示输入“验证码”时输入 **n**。 
+        9. 关闭命令窗口，或者在系统提示输入“验证码”时输入 。 
  
     3. 也可选择通过示例代码配置预配服务：
         - 若要将此配置添加到示例，请执行以下步骤：
@@ -204,7 +199,7 @@ ms.lasthandoff: 02/09/2018
     Attestation attestation = X509Attestation.createFromClientCertificates(PUBLIC_KEY_CERTIFICATE_STRING);
     ```
 
-4. 使用[生成并运行单个注册的示例代码](quick-enroll-device-tpm-java.md#runjavasample)部分的步骤保存、生成和运行单个注册示例文件。
+4. 使用[生成并运行个人注册的示例代码](quick-enroll-device-tpm-java.md#runjavasample)部分的步骤保存、生成和运行个人注册示例文件。
 
 
 ## <a name="clean-up-resources"></a>清理资源

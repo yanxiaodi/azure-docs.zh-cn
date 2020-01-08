@@ -5,22 +5,23 @@ services: vpn-gateway
 author: cherylmc
 ms.service: vpn-gateway
 ms.topic: include
-ms.date: 03/21/2018
+ms.date: 10/17/2018
 ms.author: cherylmc
 ms.custom: include file
-ms.openlocfilehash: 591da67e6411d0e859076f0a3c3c38afc1ebe1f5
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: c1b5560e16b68565c37365ac9c2cba217d9b1b90
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67172782"
 ---
 可使用“Get-AzureVNetConnection”cmdlet 来验证连接是否已成功。
 
 1. 使用以下 cmdlet 示例，配置符合自己需要的值。 如果虚拟网络的名称包含空格，必须将该名称括在引号中。
 
-  ```powershell
-  Get-AzureVNetConnection "Group ClassicRG ClassicVNet"
-  ```
+   ```azurepowershell
+   Get-AzureVNetConnection "Group ClassicRG ClassicVNet"
+   ```
 2. cmdlet 运行完毕后，查看该值。 在以下示例中，“连接状态”显示为“已连接”，且可以看到入口和出口字节数。
 
         ConnectivityState         : Connected

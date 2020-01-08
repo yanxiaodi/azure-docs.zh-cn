@@ -1,0 +1,149 @@
+### YamlMime:Landing
+title: Azure 事件中心文档
+summary: 了解如何使用事件中心从已连接的设备和应用程序每秒引入数百万个事件。
+metadata:
+  title: Azure 事件中心文档
+  description: 了解如何使用事件中心从已连接的设备和应用程序每秒引入数百万个事件。
+  services: event-hubs
+  ms.service: event-hubs
+  ms.subservice: 
+  ms.topic: landing-page
+  ms.collection: collection
+  author: spelluru
+  ms.author: spelluru
+  ms.date: 09/05/2019
+  ms.openlocfilehash: 8a4d99c195cd1341e491e5112a4f58013b074115
+  ms.sourcegitcommit: 083aa7cc8fc958fc75365462aed542f1b5409623
+  ms.translationtype: HT
+  ms.contentlocale: zh-CN
+  ms.lasthandoff: 09/11/2019
+  ms.locfileid: "70915435"
+landingContent:
+- title: 关于事件中心
+  linkLists:
+  - linkListType: overview
+    links:
+    - text: 什么是事件中心？
+      url: event-hubs-about.md
+    - text: 什么是适用于 Apache Kafka 的事件中心？
+      url: event-hubs-for-kafka-ecosystem-overview.md
+    - text: 什么是事件中心捕获？
+      url: event-hubs-capture-overview.md
+    - text: 什么是事件中心专用层？
+      url: event-hubs-dedicated-overview.md
+- title: 创建事件中心
+  linkLists:
+  - linkListType: quickstart
+    links:
+    - text: Azure 门户
+      url: event-hubs-create.md
+    - text: Azure CLI
+      url: event-hubs-quickstart-cli.md
+    - text: Azure PowerShell
+      url: event-hubs-quickstart-powershell.md
+    - text: Azure 资源管理器模板
+      url: event-hubs-resource-manager-namespace-event-hub.md
+- title: 创建专用群集
+  linkLists:
+  - linkListType: overview
+    links:
+    - text: 什么是事件中心专用层？
+      url: event-hubs-dedicated-overview.md
+  - linkListType: quickstart
+    links:
+    - text: 创建专用事件中心群集
+      url: event-hubs-dedicated-cluster-create-portal.md
+- title: 与 Apache Kafka 集成
+  linkLists:
+  - linkListType: overview
+    links:
+    - text: 什么是适用于 Apache Kafka 的事件中心？
+      url: event-hubs-for-kafka-ecosystem-overview.md
+  - linkListType: quickstart
+    links:
+    - text: 流式传输到用于 Apache Kafka 的事件中心
+      url: event-hubs-quickstart-kafka-enabled-event-hubs.md
+  - linkListType: tutorial
+    links:
+    - text: 使用流分析处理事件
+      url: event-hubs-kafka-stream-analytics.md
+  - linkListType: how-to-guide
+    links:
+    - text: 创建启用了 Apache Kafka 的事件中心
+      url: event-hubs-create-kafka-enabled.md
+    - text: 在事件中心镜像 Kafka 代理
+      url: event-hubs-kafka-mirror-maker-tutorial.md
+    - text: 将 Apache Spark 连接到事件中心
+      url: event-hubs-kafka-spark-tutorial.md
+    - text: 将 Apache Flink 连接到事件中心
+      url: event-hubs-kafka-flink-tutorial.md
+    - text: 将 Apache Kafka Connect 与事件中心集成
+      url: event-hubs-kafka-connect-tutorial.md
+    - text: 将 Akka 流连接到事件中心
+      url: event-hubs-kafka-akka-streams-tutorial.md
+- title: 发送和接收事件
+  linkLists:
+  - linkListType: quickstart
+    links:
+    - text: .NET Core
+      url: event-hubs-dotnet-standard-getstarted-send.md
+    - text: Java
+      url: event-hubs-java-get-started-send.md
+    - text: Python
+      url: event-hubs-python-get-started-send.md
+    - text: Node.js
+      url: event-hubs-node-get-started-send.md
+    - text: Apache Kafka
+      url: event-hubs-quickstart-kafka-enabled-event-hubs.md#send-and-receive-messages-with-kafka-in-event-hubs
+    - text: Apache Storm（仅接收）
+      url: event-hubs-storm-getstarted-receive.md
+    - text: Go
+      url: event-hubs-go-get-started-send.md
+- title: 捕获事件
+  linkLists:
+  - linkListType: overview
+    links:
+    - text: 将事件捕获到 Azure Blob 存储或 Azure Data Lake Storage 中
+      url: event-hubs-dedicated-overview.md
+  - linkListType: quickstart
+    links:
+    - text: 使用 Azure 门户启用事件捕获
+      url: event-hubs-capture-enable-through-portal.md
+    - text: 使用 Resource Manager 模板
+      url: event-hubs-resource-manager-namespace-event-hub-enable-capture.md
+    - text: 从 Python 应用程序启用捕获
+      url: event-hubs-capture-python.md
+- title: 处理事件
+  linkLists:
+  - linkListType: tutorial
+    links:
+    - text: 直观显示事件中心数据流的数据异常
+      url: event-hubs-tutorial-visualize-anomalies.md
+    - text: 使用流分析处理适用于 Apache Kafka 的事件中心的事件
+      url: event-hubs-kafka-stream-analytics.md
+    - text: 使用事件中心将数据流式传输到 Azure Databricks
+      url: ../azure-databricks/databricks-stream-from-eventhubs.md
+- title: 监视和管理
+  linkLists:
+  - linkListType: how-to-guide
+    links:
+    - text: 使用 Azure Monitor 监视事件中心
+      url: event-hubs-metrics-azure-monitor.md
+    - text: 设置诊断日志
+      url: event-hubs-diagnostic-logs.md
+    - text: 自动增加吞吐量单位
+      url: event-hubs-auto-inflate.md
+    - text: 排查异常
+      url: event-hubs-messaging-exceptions.md
+- title: 安全
+  linkLists:
+  - linkListType: how-to-guide
+    links:
+    - text: 使用防火墙规则
+      url: event-hubs-ip-filtering.md
+    - text: 使用虚拟网络服务终结点
+      url: event-hubs-service-endpoints.md
+    - text: 配置客户管理的密钥以加密静态数据
+      url: configure-customer-managed-key.md
+    - text: 启用虚拟网络集成和防火墙
+      url: event-hubs-tutorial-virtual-networks-firewalls.md

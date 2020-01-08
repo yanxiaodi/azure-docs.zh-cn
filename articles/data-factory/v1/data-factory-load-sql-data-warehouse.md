@@ -9,20 +9,20 @@ ms.assetid: a6c133c0-ced2-463c-86f0-a07b00c9e37f
 ms.service: data-factory
 ms.workload: data-services
 ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/10/2018
 ms.author: jingwang
 robots: noindex
-ms.openlocfilehash: 3266e4b571878eb55c55e235ecb10995cbd58439
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: 50a653648f3ae4b40e0bfe2c6f168cfb890bcc59
+ms.sourcegitcommit: 64798b4f722623ea2bb53b374fb95e8d2b679318
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 07/11/2019
+ms.locfileid: "67839104"
 ---
 # <a name="load-1-tb-into-azure-sql-data-warehouse-under-15-minutes-with-data-factory"></a>在不到 15 分钟的时间里通过数据工厂将 1 TB 的数据加载到 Azure SQL 数据仓库
 > [!NOTE]
-> 本文适用于数据工厂版本 1（正式版 (GA)）。 如果使用数据工厂服务版本 2（即预览版），请参阅[使用数据工厂版本 2 在 Azure SQL 数据仓库中复制或粘贴数据](../connector-azure-sql-data-warehouse.md)。
+> 本文适用于数据工厂版本 1。 如果使用当前版本数据工厂服务，请参阅[使用 Azure 数据工厂将数据复制到 Azure SQL 数据仓库或从 Azure SQL 数据仓库复制数据](../connector-azure-sql-data-warehouse.md)。
 
 
 [Azure SQL 数据仓库](../../sql-data-warehouse/sql-data-warehouse-overview-what-is.md)是一种基于云的向外扩展数据库，可以处理大量数据（关系数据和非关系数据）。  SQL 数据仓库在大规模并行处理 (MPP) 体系结构的基础上构建，已针对企业数据仓库工作负荷进行优化。  它通过灵活地缩放存储以及独立计算提供云灵活性。
@@ -41,12 +41,12 @@ ms.lasthandoff: 03/23/2018
 > [!NOTE]
 >  有关数据工厂将数据移入/移出 Azure SQL 数据仓库的功能的一般信息，请参阅[使用 Azure 数据工厂将数据移入和移出 Azure SQL 数据仓库](data-factory-azure-sql-data-warehouse-connector.md)一文。
 >
-> 还可以使用 Azure 门户、Visual Studio、PowerShell 等生成管道。有关在 Azure 数据工厂中使用复制活动的分步说明的快速演练，请参阅[教程：将数据从 Azure Blob 复制到 Azure SQL 数据库](data-factory-copy-data-from-azure-blob-storage-to-sql-database.md)。  
+> 此外可以生成使用 Visual Studio、 PowerShell 等的管道。有关分步说明，请参阅[教程：将数据从 Azure Blob 复制到 Azure SQL 数据库](data-factory-copy-data-from-azure-blob-storage-to-sql-database.md)。  
 >
 >
 
 ## <a name="prerequisites"></a>先决条件
-* Azure Blob 存储：此试验使用 Azure Blob 存储 (GRS) 来存储 TPC-H 测试数据集。  如果还没有 Azure 存储帐户，请参阅[如何创建存储帐户](../../storage/common/storage-create-storage-account.md#create-a-storage-account)。
+* Azure Blob 存储：此试验使用 Azure Blob 存储 (GRS) 来存储 TPC-H 测试数据集。  如果还没有 Azure 存储帐户，请参阅[如何创建存储帐户](../../storage/common/storage-quickstart-create-account.md)。
 * [TPC-H](http://www.tpc.org/tpch/) 数据：我们将使用 TPC-H 作为测试数据集。  为此，需要使用 TPC-H 工具包中的 `dbgen`，它将有助于生成数据集。  可以从 [TPC 工具](http://www.tpc.org/tpc_documents_current_versions/current_specifications.asp)下载 `dbgen` 的源代码，并自己进行编译，或从 [GitHub](https://github.com/Azure/Azure-DataFactory/tree/master/Samples/TPCHTools) 下载已编译的二进制。  使用以下命令运行 dbgen.exe，为分布在 10 个文件中的 `lineitem` 表生成 1 TB 的平面文件：
 
   * `Dbgen -s 1000 -S **1** -C 10 -T L -v`
@@ -70,11 +70,11 @@ ms.lasthandoff: 03/23/2018
 
     ![性能滑块](media/data-factory-load-sql-data-warehouse/performance-slider.png)
 
-    对于未配置为 6,000 DWU 的现有数据库，可以使用 Azure 门户对其进行扩展。  导航到 Azure 门户中的数据库，在“概述”面板中有一个“缩放”按钮，如下图所示：
+    对于未配置为 6,000 DWU 的现有数据库，可以使用 Azure 门户对其进行扩展。  导航到 Azure 门户中的数据库，在“概述”  面板中有一个“缩放”  按钮，如下图所示：
 
     ![“缩放”按钮](media/data-factory-load-sql-data-warehouse/scale-button.png)    
 
-    单击“缩放”按钮以打开以下面板，将滑块移动到最大值，然后单击“保存”按钮。
+    单击“缩放”  按钮以打开以下面板，将滑块移动到最大值，然后单击“保存”  按钮。
 
     ![“缩放”对话框](media/data-factory-load-sql-data-warehouse/scale-dialog.png)
 
@@ -109,29 +109,29 @@ ms.lasthandoff: 03/23/2018
         CLUSTERED COLUMNSTORE INDEX
     )
     ```
-完成必需的步骤后，现在可以准备使用复制向导配置复制活动。
+  完成必需的步骤后，现在可以准备使用复制向导配置复制活动。
 
 ## <a name="launch-copy-wizard"></a>启动复制向导
 1. 登录到 [Azure 门户](https://portal.azure.com)。
-2. 单击左上角的“创建资源”，单击“智能 + 分析”，然后单击“数据工厂”。
-3. 在“新建数据工厂”窗格中：
+2. 单击左上角的“创建资源”  ，单击“智能 + 分析”  ，然后单击“数据工厂”  。
+3. 在“新建数据工厂”  窗格中：
 
    1. 输入 **LoadIntoSQLDWDataFactory** 作为**名称**。
        Azure 数据工厂的名称必须全局唯一。 如果收到错误：**数据工厂名称“LoadIntoSQLDWDataFactory”不可用**，请更改该数据工厂名称（例如改为“yournameLoadIntoSQLDWDataFactory”），并尝试再次创建。 有关数据工厂项目命名规则，请参阅 [Data Factory - Naming Rules](data-factory-naming-rules.md) （数据工厂 - 命名规则）主题。  
    2. 选择 **Azure 订阅**。
    3. 对于资源组，请执行以下步骤之一：
-      1. 选择“使用现有资源组”并选择一个现有的资源组。
-      2. 选择“新建”并输入资源组的名称。
+      1. 选择“使用现有资源组”并选择一个现有的资源组。 
+      2. 选择“新建”并输入资源组的名称。 
    4. 选择数据工厂的**位置**。
-   5. 选中位于边栏选项卡底部的“固定到仪表板”复选框。  
-   6. 单击“创建”。
-4. 完成创建后，将看到如下图所示的“数据工厂”边栏选项卡：
+   5. 选中位于边栏选项卡底部的“固定到仪表板”复选框。   
+   6. 单击“创建”。 
+4. 完成创建后，将看到如下图所示的“数据工厂”边栏选项卡： 
 
    ![数据工厂主页](media/data-factory-load-sql-data-warehouse/data-factory-home-page-copy-data.png)
-5. 在“数据工厂”主页上，单击“复制数据”磁贴，启动“复制向导”。
+5. 在“数据工厂”主页上，单击“复制数据”磁贴，启动“复制向导”。  
 
    > [!NOTE]
-   > 如果 Web 浏览器卡在“正在授权...”处，请禁用或取消选中“阻止第三方 Cookie 和站点数据”设置，或在保持启用该项的状态下为 **login.microsoftonline.com** 创建一个例外，然后尝试再次启动该向导。
+   > 如果 Web 浏览器卡在“正在授权...”处，请禁用或取消选中“阻止第三方 Cookie 和站点数据”设置，或在保持启用该项的状态下为 **login.microsoftonline.com** 创建一个例外，然后尝试再次启动该向导。 
    >
    >
 
@@ -141,65 +141,65 @@ ms.lasthandoff: 03/23/2018
 在“属性”  页中：
 
 1. 输入 **CopyFromBlobToAzureSqlDataWarehouse** 作为**任务名称**
-2. 选择“立即运行一次”选项。   
-3. 单击“资源组名称” 的 Azure 数据工厂。  
+2. 选择“立即运行一次”  选项。   
+3. 单击“下一步”  。  
 
     ![复制向导 - 属性页](media/data-factory-load-sql-data-warehouse/copy-wizard-properties-page.png)
 
 ## <a name="step-2-configure-source"></a>步骤 2：配置源
-本部分说明配置源的步骤：包含 1-TB TPC-H 行项目文件的 Azure Blob。
+本部分介绍配置以下源的步骤：包含 1-TB TPC-H 行项目文件的 Azure Blob。
 
-1. 选择“Azure Blob 存储”作为数据存储，并单击“下一步”。
+1. 选择“Azure Blob 存储”  作为数据存储，并单击“下一步”  。
 
     ![复制向导 - 选择源页](media/data-factory-load-sql-data-warehouse/select-source-connection.png)
 
-2. 填写 Azure Blob 存储帐户的连接信息，并单击“下一步”。
+2. 填写 Azure Blob 存储帐户的连接信息，并单击“下一步”  。
 
     ![复制向导 - 源连接信息](media/data-factory-load-sql-data-warehouse/source-connection-info.png)
 
-3. 选择包含 TPC-H 行项目文件的“文件夹”，并单击“下一步”。
+3. 选择包含 TPC-H 行项目文件的“文件夹”  ，并单击“下一步”  。
 
     ![复制向导 - 选择输入文件夹](media/data-factory-load-sql-data-warehouse/select-input-folder.png)
 
-4. 单击“下一步”时会自动检测文件格式设置。  请检查，以确保列分隔符为“|”而非默认的逗号“，”。  预览数据后，单击“下一步”。
+4. 单击“下一步”  时会自动检测文件格式设置。  请检查，以确保列分隔符为“|”而非默认的逗号“，”。  预览数据后，单击“下一步”  。
 
     ![复制向导 - 文件格式设置](media/data-factory-load-sql-data-warehouse/file-format-settings.png)
 
 ## <a name="step-3-configure-destination"></a>步骤 3：配置目标
 本部分演示如何配置目标：Azure SQL 数据仓库数据库中的 `lineitem` 表。
 
-1. 选择“Azure SQL 数据仓库”作为目标存储，并单击“下一步”。
+1. 选择“Azure SQL 数据仓库”  作为目标存储，并单击“下一步”  。
 
     ![复制向导 - 选择目标数据存储](media/data-factory-load-sql-data-warehouse/select-destination-data-store.png)
 
-2. 填写 Azure SQL 数据仓库的连接信息。  请确保指定作为 `xlargerc` 角色的成员的用户（有关详细说明，请参阅**先决条件**部分），并单击“下一步”。
+2. 填写 Azure SQL 数据仓库的连接信息。  请确保指定作为 `xlargerc` 角色的成员的用户（有关详细说明，请参阅**先决条件**部分），并单击“下一步”  。
 
     ![复制向导 - 目标连接信息](media/data-factory-load-sql-data-warehouse/destination-connection-info.png)
 
-3. 选择目标表，并单击“下一步”。
+3. 选择目标表，并单击“下一步”  。
 
     ![复制向导 - 表映射页](media/data-factory-load-sql-data-warehouse/table-mapping-page.png)
 
-4. 在架构映射页中，保留“应用列映射”选项的未勾选状态，并单击“下一步”。
+4. 在架构映射页中，保留“应用列映射”选项的未勾选状态，并单击“下一步”  。
 
 ## <a name="step-4-performance-settings"></a>步骤 4：性能设置
 
-默认选中“允许 polybase”。  单击“资源组名称” 的 Azure 数据工厂。
+默认选中“允许 polybase”  。  单击“下一步”  。
 
 ![复制向导 - 架构映射页](media/data-factory-load-sql-data-warehouse/performance-settings-page.png)
 
 ## <a name="step-5-deploy-and-monitor-load-results"></a>步骤 5：部署和监视加载结果
-1. 单击“完成”按钮以便部署。
+1. 单击“完成”  按钮以便部署。
 
     ![复制向导 - 摘要页](media/data-factory-load-sql-data-warehouse/summary-page.png)
 
-2. 部署完成后，单击 `Click here to monitor copy pipeline` 以监视副本运行进度。 选择在“活动窗口”列表中创建的副本管道。
+2. 部署完成后，单击 `Click here to monitor copy pipeline` 以监视副本运行进度。 选择在“活动窗口”  列表中创建的副本管道。
 
     ![复制向导 - 摘要页](media/data-factory-load-sql-data-warehouse/select-pipeline-monitor-manage-app.png)
 
-    可以在右侧面板中的“活动窗口资源管理器”中查看副本运行的详细信息，包括从源中读取和写入到目标中的数据量、持续时间以及运行的平均吞吐量。
+    可以在右侧面板中的“活动窗口资源管理器”  中查看副本运行的详细信息，包括从源中读取和写入到目标中的数据量、持续时间以及运行的平均吞吐量。
 
-    如以下屏幕截图所示，将 1 TB 数据从 Azure Blob 存储复制到 SQL 数据仓库花费 14 分钟，从而有效地实现了 1.22 GBps 的吞吐量！
+    您可以看到以下屏幕截图中，将 1 TB 从 Azure Blob 存储复制到 SQL 数据仓库花费 14 分钟，有效地实现了 1.22 GBps 的吞吐量 ！
 
     ![复制向导 - “成功”对话框](media/data-factory-load-sql-data-warehouse/succeeded-info.png)
 

@@ -1,11 +1,11 @@
 ---
-title: "StorSimple Snapshot Manager 备份策略 | Microsoft Docs"
-description: "介绍如何使用 StorSimple Snapshot Manager MMC 管理单元创建和管理控制计划备份的备份策略。"
+title: StorSimple Snapshot Manager 备份策略 | Microsoft Docs
+description: 介绍如何使用 StorSimple Snapshot Manager MMC 管理单元创建和管理控制计划备份的备份策略。
 services: storsimple
 documentationcenter: NA
 author: SharS
 manager: timlt
-editor: 
+editor: ''
 ms.assetid: 04415d0b-42f0-4737-8afa-257fb2dbe5d0
 ms.service: storsimple
 ms.devlang: NA
@@ -14,11 +14,12 @@ ms.tgt_pltfrm: NA
 ms.workload: TBD
 ms.date: 06/05/2017
 ms.author: v-sharos
-ms.openlocfilehash: 218c89e403673c16c72da95aa2c1d685bbed5a86
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.openlocfilehash: 7dac26b058b959011e38b4373369b8a1115d2705
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64687281"
 ---
 # <a name="use-storsimple-snapshot-manager-to-create-and-manage-backup-policies"></a>使用 StorSimple Snapshot Manager 创建和管理备份策略
 ## <a name="overview"></a>概述
@@ -57,7 +58,7 @@ ms.lasthandoff: 10/11/2017
    2. 在“**设置**”下，选择“**一次**”、“**每日**”、“**每周**”或“**每月**”。
    3. 在“**开始**”文本框中，单击日历图标并选择开始日期。
    4. 在“**高级设置**”下，可以设置可选的重复计划和结束日期。
-   5. 单击 **“确定”**。
+   5. 单击“确定”。 
 
 创建备份策略后，以下信息会显示在“**结果**”窗格中：
 
@@ -66,7 +67,7 @@ ms.lasthandoff: 10/11/2017
 * **卷组** – 与策略关联的卷组。
 * **保留** – 保留的快照数目；最大值为 64。
 * **创建日期** – 创建此策略的日期。
-* **已启用** – 该策略当前是否生效：**True** 表示已生效，**False** 表示未生效。
+* **启用**– 该策略当前是否生效：**True**指示它是有效;**False**指示它不起作用。
 
 ## <a name="edit-a-backup-policy"></a>编辑备份策略
 使用以下过程编辑现有的备份策略。

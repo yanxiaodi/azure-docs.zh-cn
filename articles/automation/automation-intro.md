@@ -3,18 +3,19 @@ title: Azure 自动化概述
 description: 了解如何使用 Azure 自动化自动完成基础结构和应用程序的生命周期。
 services: automation
 ms.service: automation
-ms.component: process-automation
+ms.subservice: process-automation
 author: eamonoreilly
 ms.author: eamono
 keywords: azure 自动化, DSC, powershell, desired state configuration, 更新管理, 更改跟踪, 清单, runbook, python, 图形
-ms.date: 03/15/2018
+ms.date: 10/18/2018
 ms.custom: mvc
 ms.topic: overview
-ms.openlocfilehash: ce30a9eb11cd951ca7d8197c15c3becba333f5a9
-ms.sourcegitcommit: d28bba5fd49049ec7492e88f2519d7f42184e3a8
+ms.openlocfilehash: b14550d0e03382a6709924ca5671cb26d09fcc35
+ms.sourcegitcommit: 9999fe6e2400cf734f79e2edd6f96a8adf118d92
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/11/2018
+ms.lasthandoff: 01/22/2019
+ms.locfileid: "54434047"
 ---
 # <a name="an-introduction-to-azure-automation"></a>Azure 自动化简介
 
@@ -39,18 +40,26 @@ Azure 自动化 [Desired State Configuration](automation-dsc-overview.md) 是一
 
 通过 Azure 自动化跨混合环境更新 Windows 和 Linux 系统。 可以在 Azure 中、本地和其他云中了解更新符合性。 可以创建计划性部署，在定义的维护时段协调各种更新的安装。 如果不应在计算机上安装某个更新，可以将该更新从部署中排除。
 
-### <a name="shared-capabilities"></a>共享功能
+### <a name="shared-resources"></a>共享资源
 
 Azure 自动化包含一组共享资源，方便用户大规模地完成环境的自动化操作和配置。
 
-* **[基于角色的访问控制](automation-role-based-access-control.md)** - 通过自动化操作员角色控制帐户访问权限，这样就可以在不提供创作功能的情况下运行任务。
-* **[变量](automation-variables.md)** - 通过变量来保存那些可以跨 Runbook 和配置使用的内容。 可以更改值而不需修改引用这些值的 Runbook 和配置。
-* **[凭据](automation-credentials.md)** - 安全地存储可供 Runbook 和配置在运行时使用的敏感信息。
-* **[证书](automation-certificates.md)** - 存储证书，使之在运行时可供用于身份验证，确保已部署资源的安全。
-* **[连接](automation-connections.md)** - 以名称/值对的形式存储信息。在连接资源中连接到系统时，需要使用其中包含的常用信息。 连接由模块作者定义，在运行时的 Runbook 和配置中使用。
 * **[计划](automation-schedules.md)** - 用在服务中，在预定义的时间触发自动化。
-* **[与源代码管理集成](automation-source-control-integration.md)** - 在可以将 Runbook 或配置签入到源代码管理系统中的情况下，以代码的形式提升配置。
-* **[PowerShell 模块](automation-integration-modules.md)** -  可以使用模块来管理 Azure 和其他系统。 请将其导入到适用于 Microsoft、第三方、社区或自定义 cmdlet 和 DSC 资源的自动化帐户中。
+* **[模块](automation-integration-modules.md)** - 模块用于管理 Azure 和其他系统。 请将其导入到适用于 Microsoft、第三方、社区或自定义 cmdlet 和 DSC 资源的自动化帐户中。
+* **[模块库](automation-runbook-gallery.md)** - 与 PowerShell 库进行本机集成以查看 runbook 并将其导入自动化帐户。
+* **[Python 2 包](python-packages.md)** - 将 Python 2 包添加到自动化帐户以在 Python runbook 中使用。
+* **[凭据](automation-credentials.md)** - 安全地存储可供 Runbook 和配置在运行时使用的敏感信息。
+* **[连接](automation-connections.md)** - 以名称/值对的形式存储信息。在连接资源中连接到系统时，需要使用其中包含的常用信息。 连接由模块作者定义，在运行时的 Runbook 和配置中使用。
+* **[证书](automation-certificates.md)** - 存储证书，使之在运行时可供用于身份验证，确保已部署资源的安全。
+* **[变量](automation-variables.md)** - 通过变量来保存那些可以跨 Runbook 和配置使用的内容。 可以更改值而不需修改引用这些值的 Runbook 和配置。
+
+### <a name="source-control-integration"></a>源代码管理集成
+
+Azure 自动化能够[与源代码管理集成](source-control-integration.md)，这会在可将 runbook 或配置签入源代码管理系统的情况下，改进代码配置。
+
+### <a name="role-based-access-control"></a>基于角色的访问控制
+
+Azure 自动化支持基于角色的访问控制来控制对自动化帐户及其资源的访问。有关自动化帐户、runbook 和作业的配置 RBAC 的详细信息，请参阅[适用于 Azure 自动化的基于角色的访问控制](automation-role-based-access-control.md)。
 
 ### <a name="windows-and-linux"></a>Windows 和 Linux
 
@@ -64,7 +73,7 @@ Azure 自动化包含一组共享资源，方便用户大规模地完成环境�
 
 Azure 自动化可以在基础结构和应用程序的整个生命周期中进行管理。 可以将有关组织如何交付和维护工作负荷的知识传输到系统中； 可以使用 PowerShell、Desired State Configuration、Python、图形 Runbook 等常用语言进行创作； 可以获取已部署资源的完整清单，以便进行针对性操作、完成相关报告并了解符合性情况； 确定哪些更改可能导致配置错误，哪些更改可以改进操作符合性。
 
-* **生成/部署资源** - 使用 Runbook 和 Azure 资源管理器模板在混合环境中部署 VM。 可以集成到 Jenkins 和 Visual Studio Team Services 之类的开发工具中。
+* **生成/部署资源** - 使用 Runbook 和 Azure 资源管理器模板在混合环境中部署 VM。 可以集成到 Jenkins 和 Azure DevOps 之类的开发工具中。
 * **配置 VM** - 使用基础结构和应用程序所需的配置评估和配置 Windows 和 Linux 计算机。
 * **监视** - 确定计算机上那些导致问题的更改，进行相应的补救，或者将其升级到管理系统。
 * **保护** - 在已引发安全警报的情况下隔离 VM。 设置来宾内要求。
@@ -78,3 +87,4 @@ Azure 自动化可以在基础结构和应用程序的整个生命周期中进�
 
 > [!div class="nextstepaction"]
 > [创建自动化帐户](automation-quickstart-create-account.md)
+

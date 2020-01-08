@@ -4,7 +4,7 @@ description: 了解如何在 Service Fabric 中解析服务、建立连接以及
 services: service-fabric
 documentationcenter: .net
 author: vturecek
-manager: timlt
+manager: chackdan
 editor: msfussell
 ms.assetid: 7d1052ec-2c9f-443d-8b99-b75c97266e6c
 ms.service: service-fabric
@@ -14,20 +14,17 @@ ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 11/01/2017
 ms.author: vturecek
-ms.openlocfilehash: 2b6fd2373a9cd0b376a6c8729d5952c5fc48ddf8
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: 55a0a1a8097ea46c7a3407b5f42824973edcf1a2
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60882235"
 ---
 # <a name="connect-and-communicate-with-services-in-service-fabric"></a>在 Service Fabric 中与服务建立连接和通信
 在 Service Fabric 中，服务在 Service Fabric 群集（通常分布在多个 VM 间）中的某个位置运行。 它可以从一个位置移动到另一个位置（由服务所有者移动或由 Service Fabric 自动移动）。 服务不以静态方式绑定到特定计算机或地址。
 
 Service Fabric 应用程序通常由许多不同服务组成，其中每个服务执行专门任务。 这些服务可能会相互进行通信以形成一个完整功能，如呈现 Web 应用程序的不同部分。 其中也有连接到服务并与之通信的客户端应用程序。 本文档介绍如何在 Service Fabric 中设置与服务进行的通信以及服务之间的通信。
-
-此 Microsoft Virtual Academy 视频还介绍了服务通信：<center><a target="_blank" href="https://mva.microsoft.com/en-US/training-courses/building-microservices-applications-on-azure-service-fabric-16747?l=iYFCk76yC_6706218965">  
-<img src="./media/service-fabric-connect-and-communicate-with-services/CommunicationVid.png" WIDTH="360" HEIGHT="244">  
-</a></center>
 
 ## <a name="bring-your-own-protocol"></a>自带协议
 Service Fabric 可帮助管理服务的生命周期，但是它不会制定有关服务执行的操作的决策。 这包括通信。 服务由 Service Fabric 打开时，服务可以使用所需的任何协议或通信堆栈为传入请求设置终结点。 服务会使用任何寻址方案（如 URI）来侦听通常的 **IP:端口**地址。 多个服务实例或副本可能会共享主机进程，在这种情况下，它们需要使用不同端口，或使用端口共享机制（例如 Windows 中的 http.sys 内核驱动程序）。 在任一情况下，主机进程中的每个服务实例或副本都必须可唯一寻址。
@@ -70,16 +67,16 @@ Service Fabric 提供一种服务发现和解析服务，称为“命名服务�
 有关如何使用反向代理服务的更多详细信息，请参阅 [Azure Service Fabric 中的反向代理](service-fabric-reverseproxy.md)一文。
 
 ## <a name="connections-from-external-clients"></a>来自外部客户端的连接
-在群集内相互连接的服务通常可以直接访问其他服务的终结点，因为群集中的节点处于相同的本地网络上。 但是在某些环境中，群集可能位于通过一组有限端口对外部传入流量进行路由的负载均衡器之后。 在这些情况下，服务仍可以使用命名服务相互通信和解析地址，但必须执行额外步骤才能允许外部客户端连接到服务。
+在群集内相互连接的服务通常可以直接访问其他服务的终结点，因为群集中的节点处于相同的本地网络上。 但是在某些环境中，群集可能位于通过一组有限端口对外部入口流量进行路由的负载均衡器之后。 在这些情况下，服务仍可以使用命名服务相互通信和解析地址，但必须执行额外步骤才能允许外部客户端连接到服务。
 
 ## <a name="service-fabric-in-azure"></a>Azure 中的 Service Fabric
 Azure 中的 Service Fabric 群集位于 Azure 负载均衡器之后。 发送到群集的所有外部流量都必须穿过该负载均衡器。 该负载均衡器会自动在给定端口上将入站流量转发到打开了相同端口的随机*节点*。 Azure 负载均衡器只了解*节点*上打开的端口，它不了解各个*服务*打开的端口。
 
 ![Azure 负载均衡器和 Service Fabric 拓扑][3]
 
-例如，若要在端口 **80** 上接受外部流量，必须配置以下内容：
+例如，若要在端口 **80**上接受外部流量，必须配置以下项：
 
-1. 编写侦听端口 80 的服务。 在服务的 ServiceManifest.xml 中配置端口 80，并在服务中打开一个侦听器，例如自承载的 Web 服务器。
+1. 编写侦听端口 80 的服务。 在服务的 ServiceManifest.xml 中配置端口 80，并在服务中打开一个侦听器，例如自托管的 Web 服务器。
 
     ```xml
     <Resources>
@@ -159,7 +156,7 @@ Azure 中的 Service Fabric 群集位于 Azure 负载均衡器之后。 发送�
             ...
         }
     ```
-2. 在 Azure 中创建 Service Fabric 群集，并将端口 **80** 指定为将承载服务的节点类型的自定义终结点端口。 如果具有多种节点类型，则可以对服务设置*放置约束*，以确保它只在打开了自定义终结点端口的节点类型上运行。
+2. 在 Azure 中创建 Service Fabric 群集，并将端口 **80** 指定为要承载服务的节点类型的自定义终结点端口。 如果具有多种节点类型，则可以对服务设置*放置约束*，以确保它只在打开了自定义终结点端口的节点类型上运行。
 
     ![在节点类型上打开端口][4]
 3. 创建了群集之后，在群集的资源组中配置 Azure 负载均衡器以在端口 80 上转发流量。 通过 Azure 门户创建群集时，会为每个已配置的自定义终结点端口自动设置此项。
@@ -182,7 +179,7 @@ Reliable Services 框架附带几个预建的通信选项。 可以根据所选�
 服务可以使用任何协议或框架进行通信，无论它是 TCP 套接字上的自定义二进制协议，还是通过 [Azure 事件中心](https://azure.microsoft.com/services/event-hubs/)或 [Azure IoT 中心](https://azure.microsoft.com/services/iot-hub/)实现的流式处理事件。 Service Fabric 提供了通信 API，可以将通信堆栈插入其中，同时将用于发现和连接的所有工作与你分离。 有关更多详细信息，请参阅这篇有关 [Reliable Service 通信模型](service-fabric-reliable-services-communication.md)的文章。
 
 ## <a name="next-steps"></a>后续步骤
-了解有关 [Reliable Services 通信模型](service-fabric-reliable-services-communication.md)中可用的概念和 API 的详细信息，并快速开始使用[服务远程处理](service-fabric-reliable-services-communication-remoting.md)或深入了解如何使用[具有 OWIN 自承载的 Web API](service-fabric-reliable-services-communication-webapi.md) 编写通信侦听器。
+了解有关 [Reliable Services 通信模型](service-fabric-reliable-services-communication.md)中可用的概念和 API 的详细信息，然后快速开始使用[服务远程处理](service-fabric-reliable-services-communication-remoting.md)或深入了解如何使用[具有 OWIN 自承载的 Web API](service-fabric-reliable-services-communication-webapi.md) 编写通信侦听器。
 
 [1]: ./media/service-fabric-connect-and-communicate-with-services/serviceendpoints.png
 [2]: ./media/service-fabric-connect-and-communicate-with-services/namingservice.png

@@ -1,26 +1,21 @@
 ---
-title: Azure Marketplace 文档 | Microsoft Docs
-description: 了解 Azure Marketplace。
+title: Azure 市场文档
+description: 了解 Azure 市场。
 services: Azure, marketplace
 author: jm-aditi-ms
-manager: pabutler
-editor: ''
 layout: LandingPage
-ms.assetid: ''
 ms.service: marketplace
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: landing-page
 ms.date: 06/04/2018
 ms.author: ellacroi
-ms.openlocfilehash: 338eb409ad04dd3d0da066f94acb0d418497c581
-ms.sourcegitcommit: 3017211a7d51efd6cd87e8210ee13d57585c7e3b
+ms.openlocfilehash: 8f42fd627a5d5ae0d18cf75d0c2758e8e09b5bf6
+ms.sourcegitcommit: 36c50860e75d86f0d0e2be9e3213ffa9a06f4150
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 06/06/2018
-ms.locfileid: "34823744"
+ms.lasthandoff: 05/16/2019
+ms.locfileid: "65800323"
 ---
-# <a name="azure-marketplace-documentation"></a>Azure Marketplace 文档
+# <a name="azure-marketplace-documentation"></a>Azure 市场文档
 
 了解 Azure Marketplace（一个联机应用程序和服务市场，它支持从初创公司到企业的 ISV 向全球客户提供解决方案）。
 
@@ -36,7 +31,7 @@ ms.locfileid: "34823744"
                         </div>
                     </div>
                     <div class="cardText">
-                        <h3>AppSource 和 Azure Marketplace 发布者指南</h3>
+                        <h3>AppSource 和 Azure 市场发布者指南</h3>
                     </div>
                 </div>
             </div>
@@ -44,7 +39,7 @@ ms.locfileid: "34823744"
         </a>
     </li>
     <li>
-        <a href="/azure/marketplace/cloud-partner-portal/cloud-partner-portal-what-is-the-cloud-partner-portal">
+        <a href="/azure/marketplace/cloud-partner-portal-orig/cloud-partner-portal-getting-started-with-the-cloud-partner-portal">
         <div class="cardSize">
             <div class="cardPadding">
                 <div class="card">
@@ -60,5 +55,23 @@ ms.locfileid: "34823744"
             </div>
         </div>
         </a>
-    </li>    
+    </li>
+    <li>
+        <a href="/azure/marketplace/partner-center-portal/commercial-marketplace-overview">
+        <div class="cardSize">
+            <div class="cardPadding">
+                <div class="card">
+                    <div class="cardImageOuter">
+                        <div class="cardImage">
+                            <img src="media/index/i_dashboard.svg" alt="" />
+                        </div>
+                    </div>
+                    <div class="cardText">
+                        <h3>合作伙伴中心内的商业市场门户</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </a>
+    </li>
 </ul>

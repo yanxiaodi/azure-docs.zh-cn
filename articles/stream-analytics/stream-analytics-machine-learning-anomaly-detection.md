@@ -1,255 +1,165 @@
 ---
-title: Azure 流分析（预览）中的异常检测
+title: Azure 流分析中的异常情况检测
 description: 本文介绍如何将 Azure 流分析与 Azure 机器学习一起使用以检测异常。
 services: stream-analytics
-author: dubansal
-ms.author: dubansal
-manager: kfile
+author: mamccrea
+ms.author: mamccrea
 ms.reviewer: jasonh
 ms.service: stream-analytics
 ms.topic: conceptual
-ms.date: 04/09/2018
-ms.openlocfilehash: e7274e4507d901a209ed5832e98ca630feefda4f
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.date: 06/21/2019
+ms.openlocfilehash: e2fd226f1c605821f0fd595832b2cbe26d994fb4
+ms.sourcegitcommit: 6a42dd4b746f3e6de69f7ad0107cc7ad654e39ae
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 07/07/2019
+ms.locfileid: "67612340"
 ---
-# <a name="anomaly-detection-in-azure-stream-analytics"></a>Azure 流分析中的异常检测
+# <a name="anomaly-detection-in-azure-stream-analytics"></a>Azure 流分析中的异常情况检测
 
-> [!IMPORTANT]
-> 此功能目前以预览版提供，不建议在生产环境中使用。
+Azure 流分析可在云和 Azure IoT Edge 中使用，它提供内置的机器学习异常情况检测功能，此功能可用于监视两种最常见的异常情况：暂时性异常和永久性异常。 使用 **AnomalyDetection_SpikeAndDip** 和 **AnomalyDetection_ChangePoint** 函数可以直接在流分析作业中执行异常情况检测。
 
-可以使用 **AnomalyDetection** 运算符在事件流中检测不同类型的异常。 例如，在一段较长时间内可用内存缓慢减少，可能预示存在内存泄露，或稳定在一定范围的 Web 服务请求数有可能显著增加或减少。  
+机器学习模型采用统一采样的时序。 如果时序不统一，你可以在调用异常情况检测之前使用翻转窗口插入一个聚合步骤。
 
-AnomalyDetection 运算符检测三种类型的异常： 
+机器学习操作不支持季节性趋势或多重 variate 相关性这一次。
 
-* **双向级别更改**：值的级别持续向上和向下增大或减小。 此值不同于峰值和降值，属于瞬时或短时间的更改。  
+## <a name="model-behavior"></a>模型行为
 
-* **慢速正趋势**：一段时间内趋势的缓慢递增。  
+一般情况下，模型的准确度会随着滑动窗口中数据的增多而提升。 指定的滑动窗口中的数据被视为该时间范围内其正态值范围的一部分。 检查当前事件是否为异常事件时，模型只考虑滑动窗口中的事件历史记录。 当滑动窗口移动时，将从模型的训练中逐出旧值。
 
-* **慢速负趋势**：一段时间内趋势的缓慢递减。  
+函数的工作方式是根据它们到目前为止所观测到的值建立特定的法线。 通过在置信度级别内根据建立的法线进行比较来识别离群值。 窗口大小应该基于训练正常行为模型所需的最小事件数，这样，在发生异常时，该模型才能识别它。
 
-使用 AnomalyDetection 运算符时，必须指定 **Limit Duration** 子句。 此子句指定在检测异常时应考虑时间间隔（历史记录发生在当前事件之前的多长时间）。 可以选择使用  **When**  子句将此运算符限制为仅匹配某种属性或条件的事件。 此运算符还可根据  **Partition by**  子句中指定的关键字选择单独处理事件组。 可对每个分区独立进行训练和预测。 
+模型的响应时间随着历史记录的大小，因为它需要与更多的过去的事件进行比较。 建议仅包含所需数量的事件，以提高性能。
 
-## <a name="syntax-for-anomalydetection-operator"></a>AnomalyDetection 运算符的语法
+时序中的间隙可能是模型在特定的时间点未接收事件而造成的。 这种情况下处理通过 Stream Analytics 使用插补的逻辑。 历史记录大小以及同一滑动窗口的持续时间用于计算事件预期抵达的平均速率。
 
-`ANOMALYDETECTION(<scalar_expression>) OVER ([PARTITION BY <partition key>] LIMIT DURATION(<unit>, <length>) [WHEN boolean_expression])` 
+可用的异常情况生成器[此处](https://aka.ms/asaanomalygenerator)可用于源和数据具有不同的异常模式的 Iot 中心。 可以使用这些异常情况检测函数来读取此 Iot 中心和检测异常设置 ASA 作业。
 
-**示例用法**  
+## <a name="spike-and-dip"></a>高峰和低谷
 
-`SELECT id, val, ANOMALYDETECTION(val) OVER(PARTITION BY id LIMIT DURATION(hour, 1) WHEN id > 100) FROM input`
+时序事件流中的暂时性异常称为高峰和低谷。 可以使用基于机器学习的运算符 [AnomalyDetection_SpikeAndDip](https://docs.microsoft.com/stream-analytics-query/anomalydetection-spikeanddip-azure-stream-analytics
+) 来监视高峰和低谷。
 
-### <a name="arguments"></a>参数
+![高峰和低谷异常示例](./media/stream-analytics-machine-learning-anomaly-detection/anomaly-detection-spike-dip.png)
 
-* **scalar_expression** - 执行异常检测所用的标量表达式。 此参数的允许值包括返回单个（标量）值的浮点数据类型或 Bigint 数据类型。 不可使用通配符表达式**\***。 scalar_expression 不能包含其他分析函数或外部函数。 
+在同一滑动窗口中，如果第二个高峰小于第一个高峰，则相比于在指定的置信度级别内为第一个高峰计算的评分，较小高峰的计算评分可能不够明显。 你可以尝试减少模型的置信度级别，以检测此类异常。 但是，如果开始收到过多的警报，则可以使用更高的置信度间隔。
 
-* **partition_by_clause** - `PARTITION BY <partition key>` 子句将学习和训练划分为不同分区。 换言之，将根据 `<partition key>` 的值使用单独的模型，仅含有该值的事件才会用于该模型中的学习和培训。 例如，以下查询训练一个读数，并仅对照同一传感器的其他读数进行评分：
+以下示例查询假设在 2 分钟的滑动窗口中，以每秒 1 个事件的统一速率输入事件，历史记录中包含 120 个事件。 最终的 SELECT 语句将提取事件，并输出评分和置信度级别为 95% 的异常状态。
 
-  `SELECT sensorId, reading, ANOMALYDETECTION(reading) OVER(PARTITION BY sensorId LIMIT DURATION(hour, 1)) FROM input`
-
-* **limit_duration 子句** `DURATION(<unit>, <length>)` - 指定在检测异常时应考虑时间间隔（历史记录发生在当前事件之前的多长时间）。 有关受支持的单位及其缩写的详细说明，请参阅 [DATEDIFF](https://msdn.microsoft.com/azure/stream-analytics/reference/datediff-azure-stream-analytics)。 
-
-* **when_clause** - 为异常检测计算中考虑的事件指定布尔条件。
-
-### <a name="return-types"></a>返回类型
-
-AnomalyDetection 运算符返回一个包含所有三种评分的记录作为输出。 与不同类型异常检测器相关联的属性为：
-
-- BiLevelChangeScore
-- SlowPosTrendScore
-- SlowNegTrendScore
-
-要从记录中提取单个值，请使用 GetRecordPropertyValue 函数。 例如：
-
-`SELECT id, val FROM input WHERE (GetRecordPropertyValue(ANOMALYDETECTION(val) OVER(LIMIT DURATION(hour, 1)), 'BiLevelChangeScore')) > 3.25` 
-
-上述异常评分如果有一项超过阈值，将检测到某个异常。 阈值可以是任意浮点数 >= 0。 阈值是敏感度和置信度之间的权衡值。 例如，过低的阈值使得检测对变化更敏感，生成更多警报，而较高的阈值会使检测的敏感性下降，其置信度虽然变高，但容易过滤某些异常。 阈值的精确值取决于具体情况。 虽然不设上限，但建议使用 3.25-5 范围内的值。 
-
-示例中显示的值 3.25 只是一个建议的起点。 请通过对自己的数据集运行操作来微调值，并观察输出值，直至达到一个可容许的阈值。
-
-## <a name="anomaly-detection-algorithm"></a>异常检测算法
-
-* AnomalyDetection 运算符使用**非监督式学习法**，不假设事件中存在任何类型的分布。 一般情况下，在任意给定时间同时维护两个模型，其中至少一个模型用于评分，另一个模型在后台训练。 异常检测模型是使用当前流中的数据训练的，而不是使用带外机制训练的。 用于训练的数据量取决于用户在 Limit Duration 参数中指定的窗口大小 d。 每个模型最终根据 d 到 2d 事件值进行训练。 为获得最佳结果，建议在每个窗口中至少保留 50 个事件。 
-
-* AnomalyDetection 运算符使用**滑动窗口语义**来训练模型以及为事件评分。 这意味着，将评估每个事件中的异常并返回评分。 评分表示该异常的置信度级别。 
-
-* AnomalyDetection 运算符提供**可重复性保证**，相同的输入始终生成相同的评分，不管作业输出开始时间如何。 作业输出开始时间表示作业生成第一个输出事件的时间。 用户可将此值设置为当前时间、自定义值或上次输出时间（如果作业以前生成了输出）。 
-
-### <a name="training-the-models"></a>训练模型 
-
-随着时间的推移，将使用不同的数据训练模型。 若要生成有意义的评分，最好是了解用于训练模型的基础机制。 此处，**t<sub>0</sub>** 是**作业输出开始时间**，**d** 是 Limit Duration 参数中的**窗口大小**。 假设时间划分为从 `01/01/0001 00:00:00` 开始的**大小为 d 的跃点**。 使用以下步骤训练模型并为事件评分：
-
-* 当作业启动时，它会从 t<sub>0</sub> – 2d 开始读取数据。  
-* 当时间到达下一跃点时，将创建新模型 M1 并开始对其进行训练。  
-* 当时间继续转到下一跃点时，将创建新模型 M2 并开始对其进行训练。  
-* 当时间到达 t<sub>0</sub> 时，将会激活 M1 并开始输出其评分。  
-* 在下一跃点，同时执行三个操作：  
-
-  * 不再需要 M1，因此将其丢弃。  
-  * M2 已经过足够的训练，可用于评分。  
-  * 创建新模型 M3，并开始在后台对其进行训练。  
-
-* 此周期针对每个跃点重复：丢弃活动的模型、切换到并行模型，然后开始在后台训练第三个模型。 
-
-步骤图示如下： 
-
-![训练模型](media/stream-analytics-machine-learning-anomaly-detection/training_model.png)
-
-|**Model** | **训练开始时间** | **开始使用模型评分的时间** |
-|---------|---------|---------|
-|M1     | 11:20   | 11:33   |
-|M2     | 11:30   | 11:40   |
-|M3     | 11:40   | 11:50   |
-
-* 模型 M1 在上午 11:20 开始训练，这是作业开始在上午 11:13 读取数据后到达的下一跃点。 在使用 13 分钟的数据训练 M1 后，它会在上午 11:33 生成第一个输出。 
-
-* 新模型 M2 也开始在上午 11:30 训练，但只会在使用 10 分钟的数据训练该模型之后，才会在上午 11:40 开始使用其评分。 
-
-* M3 遵循与 M2 相同的模式。 
-
-### <a name="scoring-with-the-models"></a>使用模型评分 
-
-在机器学习级别，异常检测算法通过将每个传入事件的奇异值与历史记录窗口中的事件进行比较来计算该值。 每种类型的异常的奇异值计算各不相同。  
-
-让我们详细了解奇异值计算（假设存在一组包含事件的历史窗口）： 
-
-1. **双向级别更改：**根据历史记录窗口，正常操作范围计算方式为 [第 10 百分位, 第 90 百分位]，即，第 10 百分位表示下限，第 90 百分位值表示上限。 当前事件的奇异值计算方式为：  
-
-   - 如果 event_value 在正常操作范围内，则为 0  
-   - 如果 event_value > 90th_percentile，则为 event_value/90th_percentile  
-   - 如果 event_value < 10th_percentile，则为 10th_percentile/event_value  
-
-2. **慢速正趁势：**根据历史记录窗口中的事件值计算趋势线，并且该操作将查找该线中的正趋势。 奇异值计算方式为：  
-
-   - 如果斜率为正，则为斜率  
-   - 否则为 0 
-
-3. **慢速负趁势：**根据历史记录窗口中的事件值计算趋势线，并且该操作将查找该线中的负趋势。 奇异值计算方式为： 
-
-   - 如果斜率为负，则为斜率  
-   - 否则为 0  
-
-计算传入事件的奇异值后，可根据计算该奇异值计算鞅值（有关如何计算鞅值的详细信息，请参阅[机器学习博客](https://blogs.technet.microsoft.com/machinelearning/2014/11/05/anomaly-detection-using-machine-learning-to-detect-abnormalities-in-time-series-data/)）。 此鞅值作为异常评分返回。 鞅值在响应奇异值时缓慢递增，因此，检测器能够稳定地检测偶发性更改并减少误报。 它也是一个有用的属性： 
-
-概率 [例如 M<sub>t</sub> > λ] < 1/λ，其中，M<sub>t</sub> 是瞬时 t 处的鞅值，λ 是实际值。 例如，如果 M<sub>t</sub>> 100 时存在警报，则误报概率小于 1/100。  
-
-## <a name="guidance-for-using-the-bi-directional-level-change-detector"></a>有关使用双向级别更改检测器的指导 
-
-可以在断电、恢复或高峰流量等场合下使用双向级别更改检测器。但是，它的工作方式为：一旦使用某些数据对模型进行训练，则当且仅当新值高于前一上限（对于向上级别更改的情况）或低于前一下限（对于向下级别更低的情况）时，另一个级别更改才是异常的。 因此，模型在其训练窗口的新级别（向上或向下）范围中，不会看到任何被视为异常的数据值。 
-
-使用此检测器时，请注意以下几点： 
-
-1. 当时序突然发现值增大或下降时，AnomalyDetection 运算符会检测该更改。 但检测恢复正常状态需要更多的规划。 时序在异常之前是否处于稳定状态。这可以通过将 AnomalyDetection 运算符的检测窗口设置为异常长度的最多一半来实现这种检测。 此方案假设可以提前评估异常的最短持续时间，并且该时间范围中有足够的事件可用于充分训练模型（至少 50 个事件）。 
-
-   下图 1 和 2 使用上限更改显示了此方案（相同的逻辑适用于下限更改）。 在这两个示意图中，波形表示异常级别更改。 橙色竖线表示跃点边界，跃点大小与 AnomalyDetection 运算符中指定的检测窗口相同。 绿线表示训练窗口的大小。 在图 1 中，跃点大小与异常持续时间相同。 在图 2 中，跃点大小是异常持续时间的一半。 在所有情况下，都会检测向上更改，因为用于评分的模型是根据正常数据训练的。 但是，根据双向级别更改检测器的工作原理，它必须从为恢复正常状态评分的模型的训练窗口中排除正常值。 在图 1 中，评分模型的训练包括一些正常事件，因此无法检测恢复正常状态。 但在图 2 中，训练仅包括异常部分，因此可确保检测恢复正常状态。 出于相同的原因，任何小于一半的项目也适用，而任何更大的项目最终会包括一部分正常事件。 
-
-   ![窗口大小等于异常长度的 AD](media/stream-analytics-machine-learning-anomaly-detection/windowsize_equal_anomaly_length.png)
-
-   ![窗口大小等于异常长度一半的 AD](media/stream-analytics-machine-learning-anomaly-detection/windowsize_equal_half_anomaly_length.png)
-
-2. 如果无法预测异常的长度，则此探测器会尽最大努力检测。 但是，选择较窄的时间窗口会限制训练数据，从而提高检测到恢复正常状态的概率。 
-
-3. 在以下方案中，检测不到较长持续时间的异常，因为训练窗口已包括具有相同高值的异常。 
-
-   ![大小相同的异常](media/stream-analytics-machine-learning-anomaly-detection/anomalies_with_same_length.png)
-
-## <a name="example-query-to-detect-anomalies"></a>用于检测异常的示例查询 
-
-可使用下列查询在检测到异常时输出警报。
-当输入流不一致时，聚合步骤可帮助将其转换为一致的时序。 该示例使用了 AVG，但聚合的特定类型取决于用户方案本身。 此外，当时序的间隙大于聚合窗口时，（根据滑动窗口语义）时序中将不再有任何能触发异常检测的事件。 因此，当下一事件到达时，一致性假设将不成立。 在这种情况下，应在时序中填充间隙。 一种可行方法是在每个跳跃窗口中采用最后一个事件，如下所示。
-
-```sql
-    WITH AggregationStep AS 
-    (
-         SELECT
-               System.Timestamp as tumblingWindowEnd,
-
-               AVG(value) as avgValue
-
-         FROM input
-         GROUP BY TumblingWindow(second, 5)
-    ),
-
-    FillInMissingValuesStep AS
-    (
-          SELECT
-                System.Timestamp AS hoppingWindowEnd,
-
-                TopOne() OVER (ORDER BY tumblingWindowEnd DESC) AS lastEvent
-
-         FROM AggregationStep
-         GROUP BY HOPPINGWINDOW(second, 300, 5)
-
-    ),
-
-    AnomalyDetectionStep AS
-    (
-
-          SELECT
-                hoppingWindowEnd,
-                lastEvent.tumblingWindowEnd as lastTumblingWindowEnd,
-                lastEvent.avgValue as lastEventAvgValue,
-                system.timestamp as anomalyDetectionStepTimestamp,
-
-                ANOMALYDETECTION(lastEvent.avgValue) OVER (LIMIT DURATION(hour, 1)) as
-                scores
-
-          FROM FillInMissingValuesStep
-    )
-
+```SQL
+WITH AnomalyDetectionStep AS
+(
     SELECT
-          alert = 1,
-          hoppingWindowEnd,
-          lastTumblingWindowEnd,
-          lastEventAvgValue,
-          anomalyDetectionStepTimestamp,
-          scores
-
-    INTO output
-
-    FROM AnomalyDetectionStep
-
-    WHERE
-
-        CAST(GetRecordPropertyValue(scores, 'BiLevelChangeScore') as float) >= 3.25
-
-        OR CAST(GetRecordPropertyValue(scores, 'SlowPosTrendScore') as float) >=
-        3.25
-
-       OR CAST(GetRecordPropertyValue(scores, 'SlowNegTrendScore') as float) >=
-       3.25
+        EVENTENQUEUEDUTCTIME AS time,
+        CAST(temperature AS float) AS temp,
+        AnomalyDetection_SpikeAndDip(CAST(temperature AS float), 95, 120, 'spikesanddips')
+            OVER(LIMIT DURATION(second, 120)) AS SpikeAndDipScores
+    FROM input
+)
+SELECT
+    time,
+    temp,
+    CAST(GetRecordPropertyValue(SpikeAndDipScores, 'Score') AS float) AS
+    SpikeAndDipScore,
+    CAST(GetRecordPropertyValue(SpikeAndDipScores, 'IsAnomaly') AS bigint) AS
+    IsSpikeAndDipAnomaly
+INTO output
+FROM AnomalyDetectionStep
 ```
 
-## <a name="performance-guidance"></a>性能指南
+## <a name="change-point"></a>变化点
 
-* 为作业使用六个流单元。 
-* 以最少一秒的间隔发送事件。
-* 使用 AnomalyDetection 运算符的非分区查询产生结果时，计算延迟平均约为 25 毫秒。
-* 随着计算量的增加，分区查询中出现的延迟将与分区数略有不同。 但是，延迟与所有分区中可比较的事件总数的非分区事例大致相同。
-* 在读取非实时数据时，快速引入了大量数据。 目前，处理此数据的速度会减慢。 此类情况中的延迟会随窗口中数据点数目变化呈线性增加，而不受窗口大小或事件间隔本身的影响。 要降低非实时事例中的延迟，请考虑使用较小的窗口大小。 或者，考虑从当前时间开始作业。 以下是关于非分区查询中延迟的几个示例： 
-    - 检测窗口中如果有 60 个数据点，就能造成时长 10 秒的延迟，吞吐量为 3 MBps。 
-    - 当数据点为 600 个时，延迟可高达 80 秒，吞吐量将至 0.4 MBps。
+时序事件流中的永久性异常是指事件流中的值分布变化，例如级别变化和趋势。 在流分析中，将使用基于机器学习的 [AnomalyDetection_ChangePoint](https://docs.microsoft.com/stream-analytics-query/anomalydetection-changepoint-azure-stream-analytics) 运算符检测此类异常。
 
-## <a name="limitations-of-the-anomalydetection-operator"></a>AnomalyDetection 运算符的限制 
+永久性变化的持续时间比高峰和低谷要长得多，可能表示发生了灾难性事件。 通常肉眼很难观察到永久性变化，但可以使用“AnomalyDetection_ChangePoint”运算符来检测  。
 
-* 目前，此运算符不支持峰值和下降检测。 峰值和下降是时序的自发性或短时间更改。 
+下图是级别变化的示例：
 
-* 当前，此运算符无法处理季节性模式。 季节性模式是数据重复模式，例如，周末出现的不同 Web 流量行为，或旺季出现的不同购物趁势，这都不属于异常，而是预期的行为模式。 
+![级别变化异常的示例](./media/stream-analytics-machine-learning-anomaly-detection/anomaly-detection-level-change.png)
 
-* 此运算符期望输入时列是一致的。 通过聚合翻转或跳跃窗口可以使事件流一致。 当事件间的间隙总是小于聚合窗口时，一个翻转窗口就足以使时序一致。 当间隙较大时，可使用跳跃窗口重复最后一个值来填充间隙。 
+下图是趋势变化的示例：
 
-## <a name="references"></a>参考
+![趋势变化异常的示例](./media/stream-analytics-machine-learning-anomaly-detection/anomaly-detection-trend-change.png)
 
-* [异常检测 - 使用机器学习在时序数据中检测异常](https://blogs.technet.microsoft.com/machinelearning/2014/11/05/anomaly-detection-using-machine-learning-to-detect-abnormalities-in-time-series-data/)
-* [机器学习异常检测 API](https://docs.microsoft.com/en-gb/azure/machine-learning/machine-learning-apps-anomaly-detection-api)
-* [时序异常检测](https://msdn.microsoft.com/library/azure/mt775197.aspx)
+以下示例查询假设在 20 分钟的滑动窗口中，以每秒 1 个事件的统一速率输入事件，历史记录大小为 1200 个事件。 最终的 SELECT 语句将提取事件，并输出评分和置信度级别为 80% 的异常状态。
+
+```SQL
+WITH AnomalyDetectionStep AS
+(
+    SELECT
+        EVENTENQUEUEDUTCTIME AS time,
+        CAST(temperature AS float) AS temp,
+        AnomalyDetection_ChangePoint(CAST(temperature AS float), 80, 1200) 
+        OVER(LIMIT DURATION(minute, 20)) AS ChangePointScores
+    FROM input
+)
+SELECT
+    time,
+    temp,
+    CAST(GetRecordPropertyValue(ChangePointScores, 'Score') AS float) AS
+    ChangePointScore,
+    CAST(GetRecordPropertyValue(ChangePointScores, 'IsAnomaly') AS bigint) AS
+    IsChangePointAnomaly
+INTO output
+FROM AnomalyDetectionStep
+
+```
+
+## <a name="performance-characteristics"></a>性能特征
+
+这些模型的性能取决于历史记录的大小、 窗口持续时间、 事件负载，以及是否使用分区函数级别。 本部分讨论这些配置，并提供如何维持 1k、 5 K 和每秒 10 个事件的引入速率的样本。
+
+* **历史记录的大小**-这些模型使用执行线性**历史记录大小**。 时间越长历史记录大小、 较长的模型采用要评分的新事件。 这是因为模型比较为过去的事件历史记录缓冲区中的每个新的事件。
+* **窗口持续时间**-**时段持续时间**应反映它所需的时间接收指定的历史记录大小的多个事件。 而无需在窗口中的许多事件，Azure Stream Analytics 会输入缺失值。 因此，CPU 占用率是历史记录大小的函数。
+* **事件负载**-越大**事件负载**，将更多工作的执行模型，这将影响 CPU 占用率。 作业可以通过使其易并行，假设适合业务逻辑以使用更多输入的分区向外扩展。
+* **函数级分区** - **函数级别分区**可通过使用```PARTITION BY```异常情况检测函数调用中。 这种类型的分区将添加一项开销，因为状态需要在同一时间维护多个模型。 设备级别分区这类情况下使用函数级别分区。
+
+### <a name="relationship"></a>关系
+按以下方式相关的历史记录的大小、 窗口持续时间和总事件负载：
+
+windowDuration （以毫秒为单位） = 1000年 * historySize / (总事件每秒输入 / 输入分区计数)
+
+按 deviceId 分区函数，将添加"按分区 deviceId"到异常情况检测函数调用。
+
+### <a name="observations"></a>观测值
+下表包含单个节点 (6 SU) 为非分区事例的吞吐量观测值：
+
+| 历史记录的大小 （事件） | 窗口持续时间 （毫秒） | 每秒的输入的事件总数 |
+| --------------------- | -------------------- | -------------------------- |
+| 60 | 55 | 2,200 |
+| 600 | 728 | 1,650 |
+| 6,000 | 10,910 | 1,100 |
+
+下表包含单个节点 (6 SU) 为分区的情况下的吞吐量观测值：
+
+| 历史记录的大小 （事件） | 窗口持续时间 （毫秒） | 每秒的输入的事件总数 | 设备计数 |
+| --------------------- | -------------------- | -------------------------- | ------------ |
+| 60 | 1,091 | 1,100 | 10 |
+| 600 | 10,910 | 1,100 | 10 |
+| 6,000 | 218,182 | <550 | 10 |
+| 60 | 21,819 | 550 | 100 |
+| 600 | 218,182 | 550 | 100 |
+| 6,000 | 2,181,819 | <550 | 100 |
+
+若要运行上面的非分区配置的示例代码位于[流式处理在规模存储库](https://github.com/Azure-Samples/streaming-at-scale/blob/f3e66fa9d8c344df77a222812f89a99b7c27ef22/eventhubs-streamanalytics-eventhubs/anomalydetection/create-solution.sh)的 Azure 示例。 该代码创建流分析作业没有函数级别进行分区，它使用事件中心作为输入和输出。 输入的负载是使用测试客户端生成的。 每个输入的事件是一个为 1 KB json 文档。 事件模拟 IoT 设备发送 JSON 数据 （适用于最大为 1 万台设备）。 历史记录的大小、 窗口持续时间和总事件负载随通过 2 个输入分区而变化。
+
+> [!Note]
+> 一个更准确的估计，自定义以适合你方案的示例。
+
+### <a name="identifying-bottlenecks"></a>找出瓶颈问题
+使用 Azure Stream Analytics 作业中度量值窗格来确定在管道中的瓶颈。 审阅**输入/输出事件**吞吐量和["水印延迟"](https://azure.microsoft.com/blog/new-metric-in-azure-stream-analytics-tracks-latency-of-your-streaming-pipeline/)或**囤积的事件**以确定是否作业使用输入速率保持。 对于事件中心指标，寻找**中止请求**并相应地调整阈值单位。 有关 Cosmos DB 指标，查看**每个分区键范围的最大使用 RU/s**统一使用吞吐量，从而确保您的分区键范围下。 对于 Azure SQL DB，监视**日志 IO**并**CPU**。
+
+## <a name="anomaly-detection-using-machine-learning-in-azure-stream-analytics"></a>使用 Azure Stream Analytics 中的机器学习异常情况检测
+
+以下视频演示如何使用 Azure Stream Analytics 中的机器学习函数的实时检测异常情况。 
+
+> [!VIDEO https://channel9.msdn.com/Shows/Azure-Friday/Anomaly-detection-using-machine-learning-in-Azure-Stream-Analytics/player]
 
 ## <a name="next-steps"></a>后续步骤
 
 * [Azure 流分析简介](stream-analytics-introduction.md)
 * [Azure 流分析入门](stream-analytics-real-time-fraud-detection.md)
 * [缩放 Azure 流分析作业](stream-analytics-scale-jobs.md)
-* [Azure 流分析查询语言参考](https://msdn.microsoft.com/library/azure/dn834998.aspx)
+* [Azure 流分析查询语言参考](https://docs.microsoft.com/stream-analytics-query/stream-analytics-query-language-reference)
 * [Azure 流分析管理 REST API 参考](https://msdn.microsoft.com/library/azure/dn835031.aspx)
 

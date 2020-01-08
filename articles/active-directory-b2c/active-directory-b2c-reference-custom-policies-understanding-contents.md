@@ -1,21 +1,21 @@
 ---
-title: Azure Active Directory B2C：了解初学者包的自定义策略 | Microsoft Docs
-description: 有关 Azure Active Directory B2C 自定义策略的主题
+title: 了解 Azure Active Directory B2C 中的初学者包的自定义策略 | Microsoft Docs
+description: 有关 Azure Active Directory B2C 自定义策略的主题。
 services: active-directory-b2c
-documentationcenter: ''
-author: davidmu1
-manager: mtillman
-editor: ''
-ms.service: active-directory-b2c
+author: mmacy
+manager: celestedg
+ms.service: active-directory
 ms.workload: identity
-ms.topic: article
+ms.topic: conceptual
 ms.date: 04/25/2017
-ms.author: davidmu
-ms.openlocfilehash: 12f63bc42f8450f086ed9f0e8d598c9c91a0c3d4
-ms.sourcegitcommit: 6fcd9e220b9cd4cb2d4365de0299bf48fbb18c17
-ms.translationtype: HT
+ms.author: marsma
+ms.subservice: B2C
+ms.openlocfilehash: b52f1a4cb6837dd779dcf4edac140bb13e06eacb
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/05/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66509564"
 ---
 # <a name="understanding-the-custom-policies-of-the-azure-ad-b2c-custom-policy-starter-pack"></a>了解 Azure AD B2C 自定义策略初学者包的自定义策略
 
@@ -47,7 +47,7 @@ ms.lasthandoff: 04/05/2018
 
 用户旅程需有以下声明才能正常工作：
 
-| 声明类型 | 说明 |
+| 声明类型 | 描述 |
 |-------------|-------------|
 | *UserId* | 用户名 |
 | *signInName* | 登录名 |
@@ -78,7 +78,7 @@ ms.lasthandoff: 04/05/2018
 
 需要使用以下声明将特殊参数（包括某些查询字符串参数）传递给其他声明提供程序：
 
-| 声明类型 | 说明 |
+| 声明类型 | 描述 |
 |-------------|-------------|
 | *nux* | 为了在 login.microsoftonline.com 中进行本地帐户身份验证而传递的特殊参数 |
 | *nca* | 为了在 login.microsoftonline.com 中进行本地帐户身份验证而传递的特殊参数 |
@@ -95,7 +95,7 @@ ms.lasthandoff: 04/05/2018
 
 以下声明是可从用户收集的、在目录中存储的、在令牌中发送的其他声明。 如前所述，可将其他声明添加到此列表中。
 
-| 声明类型 | 说明 |
+| 声明类型 | 描述 |
 |-------------|-------------|
 | *givenName* | 用户的名（也称为名字） |
 | *surname* | 用户的姓（也称为家族名或姓氏） |
@@ -105,7 +105,7 @@ ms.lasthandoff: 04/05/2018
 
 下面列出了可用的声明转换。
 
-| 声明转换 | 说明 |
+| 声明转换 | 描述 |
 |----------------------|-------------|
 | *CreateOtherMailsFromEmail* | |
 | *CreateRandomUPNUserName* | |
@@ -118,7 +118,7 @@ ms.lasthandoff: 04/05/2018
 
 本部分介绍已在 *B2C_1A_base* 策略中声明的内容定义。 可以根据需要在自己的策略以及 *B2C_1A_base_extensions* 策略中方便地引用、重写和/或扩展这些内容定义。
 
-| 声明提供程序 | 说明 |
+| 声明提供程序 | 描述 |
 |-----------------|-------------|
 | *Facebook* | |
 | *本地帐户登录* | |
@@ -137,19 +137,19 @@ ms.lasthandoff: 04/05/2018
 
 ### <a name="technical-profiles-for-facebook"></a>Facebook 的技术配置文件
 
-| 技术配置文件 | 说明 |
+| 技术配置文件 | 描述 |
 |-------------------|-------------|
 | *Facebook-OAUTH* | |
 
 ### <a name="technical-profiles-for-local-account-signin"></a>用于本地帐户登录的技术配置文件
 
-| 技术配置文件 | 说明 |
+| 技术配置文件 | 描述 |
 |-------------------|-------------|
 | *Login-NonInteractive* | |
 
 ### <a name="technical-profiles-for-phone-factor"></a>Phone Factor 的技术配置文件
 
-| 技术配置文件 | 说明 |
+| 技术配置文件 | 描述 |
 |-------------------|-------------|
 | *PhoneFactor-Input* | |
 | *PhoneFactor-InputOrVerify* | |
@@ -157,7 +157,7 @@ ms.lasthandoff: 04/05/2018
 
 ### <a name="technical-profiles-for-azure-active-directory"></a>Azure Active Directory 的技术配置文件
 
-| 技术配置文件 | 说明 |
+| 技术配置文件 | 描述 |
 |-------------------|-------------|
 | *AAD-Common* | 其他 AAD-xxx 技术配置文件包含的技术配置文件 |
 | *AAD-UserWriteUsingAlternativeSecurityId* | 用于社交登录的技术配置文件 |
@@ -172,20 +172,20 @@ ms.lasthandoff: 04/05/2018
 
 ### <a name="technical-profiles-for-self-asserted"></a>自我断言的技术配置文件
 
-| 技术配置文件 | 说明 |
+| 技术配置文件 | 描述 |
 |-------------------|-------------|
 | *SelfAsserted-Social* | |
 | *SelfAsserted-ProfileUpdate* | |
 
 ### <a name="technical-profiles-for-local-account"></a>本地帐户的技术配置文件
 
-| 技术配置文件 | 说明 |
+| 技术配置文件 | 描述 |
 |-------------------|-------------|
 | *LocalAccountSignUpWithLogonEmail* | |
 
 ### <a name="technical-profiles-for-session-management"></a>用于会话管理的技术配置文件
 
-| 技术配置文件 | 说明 |
+| 技术配置文件 | 描述 |
 |-------------------|-------------|
 | *SM-Noop* | |
 | *SM-AAD* | |
@@ -193,13 +193,13 @@ ms.lasthandoff: 04/05/2018
 | *SM-SocialLogin* | |
 | *SM-MFA* | |
 
-### <a name="technical-profiles-for-trustframework-policy-engine-technicalprofiles"></a>信任框架策略引擎技术配置文件的技术配置文件
+### <a name="technical-profiles-for-the-trust-framework-policy-engine"></a>信任框架策略引擎技术配置文件
 
 目前，没有为**信任框架策略引擎技术配置文件**声明提供程序定义技术配置文件。
 
 ### <a name="technical-profiles-for-token-issuer"></a>令牌颁发者的技术配置文件
 
-| 技术配置文件 | 说明 |
+| 技术配置文件 | 描述 |
 |-------------------|-------------|
 | *JwtIssuer* | |
 
@@ -207,7 +207,7 @@ ms.lasthandoff: 04/05/2018
 
 本部分描述已在 *B2C_1A_base* 策略中声明的用户旅程。 可以根据需要在自己的策略以及 *B2C_1A_base_extensions* 策略中方便地进一步引用、重写和/或扩展这些用户旅程。
 
-| 用户旅程 | 说明 |
+| 用户旅程 | 描述 |
 |--------------|-------------|
 | *SignUp* | |
 | *SignIn* | |

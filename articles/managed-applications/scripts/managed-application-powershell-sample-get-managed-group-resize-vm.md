@@ -1,22 +1,23 @@
 ---
-title: "Azure PowerShell 脚本示例 - 获取托管资源组和重设 VM 大小 | Microsoft Docs"
-description: "Azure PowerShell 脚本示例 - 获取托管资源组和重设 VM 大小"
+title: Azure PowerShell 脚本示例 - 获取托管资源组和重设 VM 大小 | Microsoft Docs
+description: Azure PowerShell 脚本示例 - 获取托管资源组和重设 VM 大小
 services: managed-applications
 documentationcenter: na
 author: tfitzmac
 manager: timlt
 ms.service: managed-applications
-ms.devlang: poweshell
+ms.devlang: powershell
 ms.topic: sample
 ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 10/27/2017
 ms.author: tomfitz
-ms.openlocfilehash: f549f26cb3f9fdb2d805d2efb2c0e1706abe3edb
-ms.sourcegitcommit: 804db51744e24dca10f06a89fe950ddad8b6a22d
+ms.openlocfilehash: 9e8930c95495673c0082a82757ed6d8137900b6f
+ms.sourcegitcommit: 3102f886aa962842303c8753fe8fa5324a52834a
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/30/2017
+ms.lasthandoff: 04/23/2019
+ms.locfileid: "66171495"
 ---
 # <a name="get-resources-in-a-managed-resource-group-and-resize-vms-with-powershell"></a>使用 PowerShell 获取托管资源组中的资源并重设 VM 大小
 
@@ -26,18 +27,20 @@ ms.lasthandoff: 10/30/2017
 
 ## <a name="sample-script"></a>示例脚本
 
+[!INCLUDE [updated-for-az](../../../includes/updated-for-az.md)]
+
 [!code-powershell[main](../../../powershell_scripts/managed-applications/get-application/get-application.ps1 "Get application")]
 
 
 ## <a name="script-explanation"></a>脚本说明
 
-此脚本使用以下命令部署托管应用程序。 表中的每条命令链接到特定于命令的文档。
+此脚本使用以下命令部署托管应用程序。 表中的每条命令均链接到特定于命令的文档。
 
 | 命令 | 说明 |
 |---|---|
-| [Get-AzureRmManagedApplication](https://docs.microsoft.com/powershell/module/azurerm.resources/get-azurermmanagedapplication) | 列出托管应用程序。 提供要重点关注结果的资源组名称。 |
-| [Get-AzureRmResource](https://docs.microsoft.com/powershell/module/azurerm.resources/get-azurermresource) | 列出资源。 提供要重点关注结果的资源组和资源类型。 |
-| [Update-AzureRmVM](https://docs.microsoft.com/powershell/module/azurerm.compute/update-azurermvm) | 更新虚拟机的大小。 |
+| [Get-AzManagedApplication](https://docs.microsoft.com/powershell/module/az.resources/get-azmanagedapplication) | 列出托管应用程序。 提供要重点关注结果的资源组名称。 |
+| [Get-AzResource](https://docs.microsoft.com/powershell/module/az.resources/get-azresource) | 列出资源。 提供要重点关注结果的资源组和资源类型。 |
+| [Update-AzVM](https://docs.microsoft.com/powershell/module/az.compute/update-azvm) | 更新虚拟机的大小。 |
 
 
 ## <a name="next-steps"></a>后续步骤

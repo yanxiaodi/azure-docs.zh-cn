@@ -1,22 +1,23 @@
 ---
-title: "使用 Azure Site Recovery 将 VMware VM 或物理服务器复制到辅助 VMware 站点时的支持矩阵 | Microsoft Docs"
-description: "汇总了对通过 Azure Site Recovery 将 VMware/物理服务器复制到辅助站点的支持"
-services: site-recovery
+title: 使用 Azure Site Recovery 将 VMware VM 或物理服务器灾难恢复到辅助 VMware 站点时的支持矩阵 | Microsoft Docs
+description: 总结了对使用 Azure Site Recovery 将 VMware VM 或物理服务器灾难恢复到辅助站点的支持。
 author: rayne-wiselman
 manager: carmonm
 ms.service: site-recovery
+services: site-recovery
 ms.topic: article
-ms.date: 03/05/2018
+ms.date: 08/22/2019
 ms.author: raynew
-ms.openlocfilehash: b51a4573ad7a8461b7261f08d94639d2030492d9
-ms.sourcegitcommit: 8c3267c34fc46c681ea476fee87f5fb0bf858f9e
-ms.translationtype: HT
+ms.openlocfilehash: c330afb2c5d315b3d386d1477669f1aab2f6e6f9
+ms.sourcegitcommit: 47b00a15ef112c8b513046c668a33e20fd3b3119
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/09/2018
+ms.lasthandoff: 08/22/2019
+ms.locfileid: "69972080"
 ---
-# <a name="support-matrix-for-replication-of-vmware-vms-and-physical-servers-to-a-secondary-site"></a>将 VMware VM 或物理服务器复制到辅助站点时的支持矩阵
+# <a name="support-matrix-for-disaster-recovery-of-vmware-vms-and-physical-servers-to-a-secondary-site"></a>将 VMware VM 和物理服务器灾难恢复到辅助站点时的支持矩阵
 
-本文汇总了使用 [Azure Site Recovery](site-recovery-overview.md) 服务将 VMware VM 或 Windows/Linux 物理服务器复制到辅助 VMware 站点时所支持的内容。
+本文汇总了使用 [Azure Site Recovery](site-recovery-overview.md) 服务将 VMware VM 或 Windows/Linux 物理服务器灾难恢复到辅助 VMware 站点时所支持的内容。
 
 - 如果要将 VMware VM 或物理服务器复制到 Azure，请查看[此支持矩阵](vmware-physical-azure-support-matrix.md)。
 - 如果要将 Hyper-V VM 复制到辅助站点，请查看[此支持矩阵](hyper-v-azure-support-matrix.md)。
@@ -29,7 +30,7 @@ ms.lasthandoff: 03/09/2018
 
 **操作系统** | **详细信息**
 --- | ---
-vCenter 服务器 | vCenter 5.5、6.0 和 6.5<br/><br/> 如果运行 6.0 或 6.5，请注意，仅支持 5.5 功能。
+vCenter Server | vCenter 5.5、6.0 和 6.5<br/><br/> 如果运行 6.0 或 6.5，请注意，仅支持 5.5 功能。
 
 
 ## <a name="replicated-vm-support"></a>复制的 VM 支持
@@ -74,7 +75,7 @@ Linux | Red Hat Enterprise Linux 6.7、6.8、6.9、7.1、7.2 <br/><br/> Centos 6
 **存储（主机）** | **支持** 
 --- | --- 
 NFS | 是 
-SMB 3.0 | 不适用 
+SMB 3.0 | 不可用 
 SAN (ISCSI) | 是 
 多路径 (MPIO) | 是 
 
@@ -83,8 +84,8 @@ SAN (ISCSI) | 是
 **配置** | **支持** 
 --- | --- 
 VMDK | 是 
-VHD/VHDX | 不适用 
-第 2 代 VM | 不适用 
+VHD/VHDX | 不可用 
+第 2 代 VM | 不可用 
 共享群集磁盘 | 是 
 加密磁盘 | 否 
 UEFI| 是 
@@ -96,7 +97,7 @@ RDM | 是
 存储空间 | 否 
 热添加/移除磁盘 | 是 
 排除磁盘 | 是 
-多路径 (MPIO) | 不适用 
+多路径 (MPIO) | 不可用 
 
 ## <a name="vaults"></a>保管库
 
@@ -109,10 +110,10 @@ RDM | 是
 
 移动服务可协调本地 VMware 服务器/物理服务器和辅助站点之间的复制。 如果设置了复制，应确保安装了最新版本的移动服务和其他组件。
 
-**更新** | **详细信息** 
---- | --- 
-Scout 更新 | [了解和下载](/vmware-physical-secondary-disaster-recovery.md#updates)最新的 Scout 更新 | Scout 更新是累积更新。
-组件更新 | Scout 更新包括所有组件的更新，包括 RX 服务器、配置服务器、进程和主目标服务器，vContinuum 服务器和要保护的源服务器。<br/><br/> [了解详细信息](vmware-physical-secondary-disaster-recovery.md#download-and-install-component-updates)。
+| **更新** | **详细信息** |
+| --- | --- |
+|Scout 更新 | Scout 更新是累积更新。 <br/><br/> [了解和下载](vmware-physical-secondary-disaster-recovery.md#updates)最新的 Scout 更新 |
+|组件更新 | Scout 更新包括所有组件的更新，包括 RX 服务器、配置服务器、进程和主目标服务器，vContinuum 服务器和要保护的源服务器。<br/><br/> [了解详细信息](vmware-physical-secondary-disaster-recovery.md#download-and-install-component-updates)。|
 
 
 ## <a name="next-steps"></a>后续步骤

@@ -4,7 +4,7 @@ description: 了解如何在 Azure 中创建包含多个子网的虚拟网络（
 services: virtual-network
 documentationcenter: ''
 author: genlin
-manager: cshepard
+manager: dcscontentpm
 editor: ''
 tags: azure-service-management
 ms.assetid: ''
@@ -13,19 +13,20 @@ ms.devlang: NA
 ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
-ms.date: 07/31/2017
+ms.date: 10/31/2018
 ms.author: genli
 ms.custom: ''
-ms.openlocfilehash: a2e2075a735b63588352f3bcdc97e2d6410660fe
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.openlocfilehash: d934386a47c339cd3abdf72578736b44d40e7952
+ms.sourcegitcommit: ca359c0c2dd7a0229f73ba11a690e3384d198f40
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71059011"
 ---
 # <a name="create-a-virtual-network-classic-with-multiple-subnets"></a>创建包含多个子网的虚拟网络（经典）
 
 > [!IMPORTANT]
-> Azure 有两个用于创建和处理资源的[不同部署模型](../azure-resource-manager/resource-manager-deployment-model.md?toc=%2fazure%2fvirtual-network%2ftoc.json)：资源管理器和经典模型。 本文介绍使用经典部署模型。 Microsoft 建议通过[资源管理器](quick-create-portal.md)部署模型新建大多数虚拟网络。
+> Azure 具有用于创建和处理资源的两个[不同的部署模型](../azure-resource-manager/resource-manager-deployment-model.md?toc=%2fazure%2fvirtual-network%2ftoc.json)：资源管理器部署模型和经典部署模型。 本文介绍使用经典部署模型。 Microsoft 建议通过[资源管理器](quick-create-portal.md)部署模型新建大多数虚拟网络。
 
 本教程介绍如何创建包含独立公共子网和专用子网的基本 Azure 虚拟网络（经典）。 可以在子网中创建虚拟机和云服务等 Azure 资源。 在虚拟网络（经典）中创建的资源可以彼此通信，并可以与连接到虚拟网络的其他网络中的资源通信。
 
@@ -40,15 +41,15 @@ ms.lasthandoff: 05/20/2018
 
 1. 在 Internet 浏览器中，转到 [Azure 门户](https://portal.azure.com)。 使用 [Azure 帐户](../azure-glossary-cloud-terminology.md?toc=%2fazure%2fvirtual-network%2ftoc.json#account)登录。 如果没有 Azure 帐户，可以注册[免费试用版](https://azure.microsoft.com/offers/ms-azr-0044p)。
 2. 在门户中，单击“创建资源”。
-3. 在显示的“新建”窗格顶部的“搜索 Marketplace”中输入“虚拟网络”。 单击搜索结果中出现的“虚拟网络”。
+3. 在显示的“新建”窗格顶部的“在市场中搜索”中输入“虚拟网络”。 单击搜索结果中出现的“虚拟网络”。
 4. 在显示的“虚拟网络”窗格的“选择部署模型”框中选择“经典”，然后单击“创建”。 
 5. 在“创建虚拟网络(经典)”窗格中输入以下值，然后单击“创建”：
 
     |设置|值|
     |---|---|
-    |名称|myVnet|
+    |姓名|myVnet|
     |地址空间|10.0.0.0/16|
-    |子网名称|公共|
+    |子网名称|公开|
     |子网地址范围|10.0.0.0/24|
     |资源组|保留选中“新建”，输入 **myResourceGroup**。|
     |订阅和位置|选择订阅和位置。
@@ -57,9 +58,9 @@ ms.lasthandoff: 05/20/2018
 4. 在创建虚拟网络时，只能在门户中创建一个子网。 在本教程中，将在创建虚拟网络之后创建第二个子网。 随后可在“公共”子网中创建可通过 Internet 访问的资源。 还可以在“专用”子网中创建无法通过 Internet 访问的资源。 若要创建第二个子网，请在页面顶部的“搜索资源”框中输入 **myVnet**。 单击显示在搜索结果中的“myVnet”。
 5. 在显示的“创建虚拟网络(经典)”窗格中单击“子网”（在“设置”部分中）。
 6. 在显示的“myVnet - 子网”窗格中单击“+添加”。
-7. 在“添加子网”窗格中，为“名称”输入“专用”。 为“地址范围”输入 **10.0.1.0/24**。  单击“确定”。
+7. 在“添加子网”窗格中，为“名称”输入“专用”。 为“地址范围”输入 **10.0.1.0/24**。  单击 **“确定”** 。
 8. 在“myVnet - 子网”窗格中，可以看到已创建的“公共”和“专用”子网。
-9. **可选**：完成本教程后，可以删除创建的资源，以免产生使用费：
+9. **可选**：完成本教程后，可能想要删除创建的资源，以免产生使用费：
     - 在“myVnet”窗格中单击“概述”。
     - 在“myVnet”窗格中单击“删除”图标。
     - 若要确认删除，请单击“删除虚拟网络”框中的“是”。
@@ -97,7 +98,7 @@ ms.lasthandoff: 05/20/2018
     azure network vnet show --vnet myVnet
     ```
 
-7. **可选**：完成本教程后，可以删除创建的资源，以免产生使用费：
+7. **可选**：完成本教程后，可能想要删除创建的资源，以免产生使用费：
 
     ```azurecli-interactive
     azure network vnet delete --vnet myVnet --quiet
@@ -152,7 +153,7 @@ ms.lasthandoff: 05/20/2018
     Get-AzureVNetSite -VNetName "myVnet"
     ```
 
-8. **可选**：完成本教程后，可以删除创建的资源，以免产生使用费。 若要删除虚拟网络，请再次完成步骤 4-6，但这一次请删除步骤 5 中添加的 **VirtualNetworkSite** 元素。
+8. **可选**：完成本教程后，可能想要删除创建的资源，以免产生使用费。 若要删除虚拟网络，请再次完成步骤 4-6，但这一次请删除步骤 5 中添加的 **VirtualNetworkSite** 元素。
  
 > [!NOTE]
 > 尽管无法使用 PowerShell 指定要在其中创建虚拟网络（经典）的资源组，但 Azure 会在名为 *Default-Networking* 的资源组中创建虚拟网络。

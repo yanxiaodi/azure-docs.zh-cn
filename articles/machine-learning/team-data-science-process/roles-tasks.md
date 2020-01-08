@@ -1,140 +1,135 @@
 ---
-title: Team Data Science Process 角色和任务 - Azure | Microsoft Docs
-description: 概述数据科学团队项目的关键组成、个人角色和关联的任务。
-documentationcenter: ''
-author: deguhath
+title: Team Data Science Process 角色和任务
+description: 用于数据科学组的关键组件、人员角色和相关任务的概述。
+author: marktab
 manager: cgronlun
 editor: cgronlun
-ms.assetid: ''
+services: machine-learning
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
-ms.date: 09/04/2017
-ms.author: deguhath
-ms.openlocfilehash: 00d8761a7afe4b727c04626c0ba7c032b2277f48
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.date: 09/12/2019
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: bbc066f4b01a01a589849ad524b58a9b5d9dfae1
+ms.sourcegitcommit: 55f7fc8fe5f6d874d5e886cb014e2070f49f3b94
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 09/25/2019
+ms.locfileid: "71260653"
 ---
 # <a name="team-data-science-process-roles-and-tasks"></a>Team Data Science Process 角色和任务
 
-Team Data Science Process 是由 Microsoft 开发的一个框架，其提供的结构化方法可以有效地生成预测分析解决方案和智能应用程序。 本文概述了关键的人员角色及其关联的任务，这些任务由致力于标准化此流程的数据科学团队处理。 
+团队数据科学过程（TDSP）是 Microsoft 开发的一个框架，它提供了一种高效构建预测分析解决方案和智能应用程序的结构化方法。 本文概述了在此过程中实现数据科学团队标准化的主要人员角色和相关任务。
 
-此简介链接到的教程说明了如何为整个数据科学组、数据科学团队和项目设置 TDSP 环境。 我们详细介绍了如何将教程中的 Visual Studio Team Services (VSTS) 用作代码托管平台，以及如何使用敏捷的规划工具来管理团队任务、控制访问权限和管理存储库。 
+本文介绍了有关如何为整个数据科学组、数据科学团队和 TDSP 项目设置 TDSP 环境的教程的链接。 教程提供了有关使用 Azure DevOps Projects、Azure Repos 存储库和 Azure Boards agile 计划工具来控制访问、托管和共享代码以及管理团队任务的详细指导。
 
-你也可以根据此信息，在自己的代码托管平台和敏捷的规划工具中实现 TDSP。 
+教程使用 Azure DevOps，因为这是如何实现 Microsoft 的 TDSP 的。 Azure DevOps 通过集成基于角色的安全性、工作项管理和跟踪以及代码托管、共享和源代码管理，简化了协作。 本教程还使用 Azure [Data Science Virtual Machine](https://aka.ms/dsvm) （DSVM）作为分析桌面，该桌面已预先配置了多个常用的数据科学工具，并与 Microsoft 软件和 Azure 服务集成。 
 
-## <a name="structures-of-data-science-groups-and-teams"></a>数据科学组和团队的结构
-在企业中，数据科学职能通常可以采用以下层次结构进行组织：
+您可以使用教程通过其他代码托管、敏捷规划、开发工具和环境实现 TDSP，但某些功能可能不可用。
 
-1. 数据科学组
+## <a name="structure-of-data-science-groups-and-teams"></a>数据科学组和团队的结构
 
-2. 组中的数据科学团队
+企业中的数据科学函数通常按以下层次结构进行组织：
 
-此类结构中存在组主管和团队主管。 通常情况下，数据科学项目由数据科学团队完成，该团队可能包括项目主管（管理项目和任务）和数据科学家或工程师（个人参与者/技术人员，负责执行项目的数据科学和数据工程部分的任务）。 在执行之前，设置和管理事项由组、团队或项目的主管负责。
+- 数据科学组
+  - 组中的数据科学团队
 
-## <a name="definition-of-four-tdsp-roles"></a>四个 TDSP 角色的定义
-通过上面的假设，我们为团队人员指定了四个不同的角色：
+在这种结构中，有一个组领导和团队主管。 通常，数据科学项目由数据科学团队完成。 数据科学团队具有项目管理和管理任务的项目主管，以及各个数据科学家和工程师，可执行项目的数据科学和数据工程部分。 初始项目设置和调控由组、团队或项目主管完成。
 
-1. 组管理员。 组管理员是企业中整个数据科学部门的经理。 数据科学部门可能有多个团队，每个团队都在不同的业务垂直领域开展多个数据科学项目。 组管理员可以将任务委托给代理，但与角色相关的任务不变。
+## <a name="definition-and-tasks-for-the-four-tdsp-roles"></a>四个 TDSP 角色的定义和任务
+假设数据科学单元由组中的团队组成，TDSP 人员有四种不同的角色：
 
-2. 团队主管。 团队主管管理企业数据科学部门的团队。 团队由多个数据科学家组成。 如果数据科学部门的数据科学家较少，组管理员和团队主管可能是同一人。
+1. **组管理员**：管理企业中整个数据科学单元。 数据科学部门可能有多个团队，每个团队都在不同的业务垂直领域开展多个数据科学项目。 组管理员可以将任务委托给代理，但与角色相关的任务不变。
+   
+2. **团队主管**：管理企业数据科学单位的团队。 团队由多个数据科学家组成。 对于小型数据科学单位，组经理和团队主管可能是同一个人。
+   
+3. **项目主管**：管理特定数据科学项目上各个数据科学家的日常活动。
+   
+4. **项目各个参与者**：数据科学家、业务分析师、数据工程师、架构师和执行数据科学项目的其他人。
 
-3. 项目主管。 项目主管管理特定数据科学项目各个数据科学家的日常活动。
+> [!NOTE]
+> 根据企业的结构和规模，单个人员可能会扮演多个角色，或多人可能会填充角色。
 
-4. 项目单独参与者。 数据科学家、业务分析师、数据工程师、架构师等。项目单独参与者执行数据科学项目。 
+### <a name="tasks-to-be-completed-by-the-four-roles"></a>由四个角色完成的任务
 
-
-**[AZURE.NOTE]**：根据企业结构，可能会出现一个人兼职多个角色，或者多个人共同担任一个角色的情况。 在小企业中，或者在数据科学部门人员较少的企业中，常常会出现这种情况。
-
-## <a name="tasks-to-be-completed-by-four-personnel"></a>由四人完成的任务
-
-下图描绘了各人员在采用和实施由 Microsoft 概念化的 Team Data Science Process 时，按角色应完成的顶级任务。 
+下图显示了每个团队数据科学流程角色的顶级任务。 此架构和下面更详细地概述了每个 TDSP 角色的任务，可帮助你根据自己的责任选择所需教程。
 
 ![角色和任务概述](./media/roles-tasks/overview-tdsp-top-level.png)
 
-在了解此架构以及下面针对 TDSP 中每个角色所分配的任务提供的更详尽概述以后，你应该就可以根据自己在部门中的职责选择合适的教程。
-
->[AZURE.NOTE] 在以下说明中，我们通过相关步骤介绍了如何在 Visual Studio Team Services (VSTS) 中设置 TDSP 环境并完成其他数据科学任务。 我们详述了如何使用 VSTS 完成这些任务，因为这是我们在 Microsoft 中用来实现 TDSP 的方法。 VSTS 可以集成工作项（用于跟踪任务）的管理与代码托管服务（用于共享实用程序、组织版本以及提供基于角色的安全性），从而促进协作。 可以随意选择其他平台来实施 TDSP 所概述的任务。 但是，你可能无法使用我们在 VSTS 中使用的某些功能，具体取决于你的平台。 
->
->我们还使用 Azure 云中的[数据科学虚拟机 (DSVM)](http://aka.ms/dsvm) 作为分析桌面，该桌面已预先配置了多个常用的数据科学工具，并集成了各种 Microsoft 软件和 Azure 服务。 可以通过 DSVM 或任何其他的开发环境来实现 TDSP。 
-
-
 ## <a name="group-manager-tasks"></a>组管理员任务
 
-组管理员（或指定的 TDSP 系统管理员）需完成以下任务才能采用 TDSP：
+组管理器或指定的 TDSP 系统管理员完成以下任务以采用 TDSP：
 
-- 在代码托管平台（例如 Github、Git、VSTS 等）上创建组帐户
-- 在组帐户上创建项目模板存储库，然后通过 Microsoft TDSP 团队开发的项目模板存储库将其设定为种子。 Microsoft 推出的 TDSP 项目模板存储库提供标准化目录结构，其中包括数据、代码和文档的目录；同时还提供一组标准化文档模板，用于引导有效的数据科学过程。 
-- 创建实用程序存储库，通过 Microsoft TDSP 团队开发的实用程序存储库将其设定为种子。 Microsoft 推出的 TDSP 实用程序存储库提供一组有用的实用程序来提高数据科学家的工作效率，其中包括用于交互式数据浏览、分析和报告的实用程序，以及用于基线建模和报告的实用程序。
-- 在组帐户上设置这两个存储库的安全控制策略。  
+- 在组织中创建 Azure DevOps**组织**和组项目。 
+- 在 Azure DevOps 组项目中创建一个**项目模板存储库**，并通过 Microsoft TDSP 团队开发的项目模板存储库将其设定为种子。 Microsoft TDSP 项目模板存储库提供：
+  - **标准化的目录结构**，其中包括数据、代码和文档的目录。
+  - 一组**标准化文档模板**，用于指导高效的数据科学过程。
+- 创建**实用程序存储库**，并通过 Microsoft TDSP 团队开发的实用程序存储库将其设定为种子。 Microsoft 提供的 TDSP 实用程序存储库提供了一套有用的实用程序，使数据科学家工作更有效率。 Microsoft 实用程序存储库包含用于交互式数据浏览、分析、报告和基线建模和报告的实用程序。
+- 为组织帐户设置**安全控制策略**。
 
-有关详细的分步说明，请参阅[数据科学团队的组管理员任务](group-manager-tasks.md)。 
-
+有关详细说明，请参阅[数据科学团队的组管理员任务](group-manager-tasks.md)。
 
 ## <a name="team-lead-tasks"></a>团队主管任务
 
-团队主管（或指定的团队项目管理员）需完成以下任务才能采用 TDSP：
+团队主管或指定的项目管理员完成以下任务以采用 TDSP：
 
-- 如果选择 VSTS 作为代码托管平台来实施版本控制和协作，请在组的 VSTS 服务器上创建团队项目。 否则可以跳过此任务。
-- 在团队项目下创建团队项目模板存储库，通过组管理员或管理员委托人设置的组项目模板存储库将其设定为种子。 
-- 创建团队实用程序存储库，然后向该存储库添加特定于团队的实用程序。 
-- （可选）创建 [Azure 文件存储](https://azure.microsoft.com/services/storage/files/)，用其存储适用于整个团队的数据资产。 其他团队成员可以在其分析桌面上装载这个共享的云文件存储。
-- （可选）将 Azure 文件存储装载到团队主管的 数据科学虚拟机 (DSVM) 并在其上添加数据资产。
-- 设置安全控制，方法是添加团队成员并配置其权限。 
+- 在组的 Azure DevOps 组织中创建团队**项目**。
+- 在项目中创建**项目模板存储库**，并通过组管理器或委托设置的组项目模板存储库将其设定为种子。
+- 创建**团队实用工具存储库**，将其从组实用工具存储库中植入，并将特定于团队的实用程序添加到存储库。
+- （可选）创建[Azure 文件存储](https://azure.microsoft.com/services/storage/files/)来存储团队有用的数据资产。 其他团队成员可以在其分析桌面上装载这个共享的云文件存储。
+- 可以选择在团队**DSVM**上装载 Azure 文件存储，并向其中添加团队数据资产。
+- 设置**安全控制**，方法是添加团队成员并配置其权限。
 
-有关详细的分步说明，请参阅[数据科学团队的团队主管任务](team-lead-tasks.md)。  
+有关详细说明，请参阅[数据科学团队的团队主管任务](team-lead-tasks.md)。
 
 
 ## <a name="project-lead-tasks"></a>项目主管任务
 
-项目主管需完成以下任务才能采用 TDSP：
+项目主管完成以下任务以采用 TDSP：
 
-- 在团队项目下创建项目存储库，通过团队项目模板存储库将其设定为种子。 
-- （可选）创建 Azure 文件存储，用其存储项目的数据资产。 
-- （可选）将 Azure 文件存储装载到项目主管的 数据科学虚拟机 (DSVM) 并在其上添加项目数据资产。
-- 设置安全控制，方法是添加项目成员并配置其权限。 
+- 在团队项目中创建一个**项目存储库**，并从项目模板存储库中将其设定为种子。
+- （可选）创建**Azure 文件存储**来存储项目的数据资产。
+- 可以选择将 Azure 文件存储装载到**DSVM** ，并向其添加项目数据资产。
+- 通过添加项目成员并配置其权限来设置**安全控制**。
 
-有关详细的分步说明，请参阅[数据科学团队的项目主管任务](project-lead-tasks.md)。 
+有关详细说明，请参阅[数据科学团队的项目主管任务](project-lead-tasks.md)。
 
 ## <a name="project-individual-contributor-tasks"></a>项目单独参与者任务
 
-项目单独参与者（通常为数据科学家）需完成以下任务，然后才能使用 TDSP 开展数据科学项目：
+项目个体撰稿人（通常是数据科学家）使用 TDSP 执行以下任务：
 
-- 克隆项目主管设置的项目存储库。 
-- （可选）在团队和项目的数据科学虚拟机 (DSVM) 上装载共享的 Azure 文件存储。
-- 执行项目。 
+- 克隆项目主管设置的**项目存储库**。
+- 可以选择在其**Data Science Virtual Machine**上装载共享团队和项目**Azure 文件存储**（DSVM）。
+- 执行项目。
 
- 
-若要通过详细的分步说明来了解如何载入项目，请参阅[数据科学团队的项目单独参与者](project-ic-tasks.md)。 
+有关加入项目的详细说明，请参阅为[数据科学团队投影各个参与者任务](project-ic-tasks.md)。
 
+## <a name="data-science-project-execution-workflow"></a>数据科学项目执行工作流
 
-## <a name="data-science-project-execution"></a>执行数据科学项目
- 
-数据科学家、项目主管和团队主管可以根据相关的一组说明来创建工作项，以便跟踪项目从头至尾需要完成的所有任务以及需要经历的阶段。 使用 Git 也可促进数据科学家之间的协作，确保在项目 (project) 执行过程中生成的项目 (artifact) 能够进行版本控制并可供所有项目 (project) 成员共享。
+按照相关教程，数据科学家、项目主管和团队主管可以创建工作项来跟踪项目的所有任务和阶段。 使用 Azure Repos 促进数据科学家间的协作，并确保在项目执行期间生成的项目受版本控制并由所有项目成员共享。 使用 Azure DevOps，你可以将 Azure Boards 工作项与 Azure Repos 存储库分支链接，并轻松跟踪为工作项执行的操作。
 
-为了方便项目执行而提供的说明在制定时基于一个假设，即工作项和项目 Git 存储库均位于 VSTS 上。 对二者使用 VSTS 即可将 工作项与项目存储库的 Git 分支相关联。 可以通过这种方式轻松地跟踪对某个工作项执行的操作。 
+下图概述了用于项目执行的 TDSP 工作流：
 
-下图概述了适合使用 TDSP 执行项目的这个工作流。
+![典型的数据科学项目工作流](./media/roles-tasks/overview-project-execute.png)
 
-![典型的数据科学项目执行流程](./media/roles-tasks/overview-project-execute.png)
+工作流步骤可分为三个活动：
 
-工作流包括的步骤可分成三个活动：
+- 项目主管执行冲刺（sprint）规划
+- 数据科学家在分支上`git`开发项目以对工作项进行寻址
+- 项目主管或其他团队成员执行代码评审并将工作分支合并到主分支
 
-- 冲刺规划（项目主管）
-- 根据工作项的情况在 Git 分支上开发项目 (artifact)（数据科学家）
-- 代码审核以及将分支与主支合并（项目主管或其他团队成员）
+有关项目执行工作流的详细说明，请参阅[数据科学项目的敏捷开发](agile-development.md)。
 
-有关项目执行工作流的详细分步说明，请参阅[执行数据科学项目](project-execution.md)。
+## <a name="tdsp-project-template-repository"></a>TDSP 项目模板存储库
+
+使用 Microsoft TDSP 团队的[项目模板存储库](https://github.com/Azure/Azure-TDSP-ProjectTemplate)来支持高效的项目执行和协作。 存储库提供了可用于自己的 TDSP 项目的标准化目录结构和文档模板。
 
 ## <a name="next-steps"></a>后续步骤
 
-下面是 Team Data Science Process 定义的角色和任务的详细说明链接：
+浏览 Team Data Science Process 定义的角色和任务的更详细说明：
 
 - [数据科学团队的组管理员任务](group-manager-tasks.md)
 - [数据科学团队的团队主管任务](team-lead-tasks.md)
 - [数据科学团队的项目主管任务](project-lead-tasks.md)
-- [数据科学团队的项目单独参与者](project-ic-tasks.md)
+- [为数据科学团队项目单独的参与者任务](project-ic-tasks.md)

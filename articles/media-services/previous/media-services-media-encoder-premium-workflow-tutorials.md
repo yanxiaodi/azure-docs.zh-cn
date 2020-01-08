@@ -4,7 +4,7 @@ description: 本文档包含的演练说明如何使用媒体编码器高级工�
 services: media-services
 documentationcenter: ''
 author: xstof
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: 1ba52865-b4a8-4ca0-ac96-920d55b9d15b
 ms.service: media-services
@@ -12,13 +12,15 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 07/19/2017
-ms.author: christoc;xpouyat;juliako
-ms.openlocfilehash: 3cba7a6a8bf6fbe199664b738b68ceca3a7746f8
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.date: 03/18/2019
+ms.author: christoc
+ms.reviewer: xpouyat; juliako
+ms.openlocfilehash: 1ab70d56bd3def58d0e814035070cf027a88cd3d
+ms.sourcegitcommit: 6a42dd4b746f3e6de69f7ad0107cc7ad654e39ae
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/07/2019
+ms.locfileid: "69016716"
 ---
 # <a name="advanced-media-encoder-premium-workflow-tutorials"></a>高级媒体编码器高级工作流教程
 ## <a name="overview"></a>概述
@@ -43,12 +45,12 @@ ms.lasthandoff: 05/07/2018
   * [添加单独的音轨](media-services-media-encoder-premium-workflow-tutorials.md#MXF_to_MP4_with_dyn_packaging_audio_tracks)
   * [添加“ISM”SMIL 文件](media-services-media-encoder-premium-workflow-tutorials.md#MXF_to_MP4_with_dyn_packaging_ism_file)
 * [将 MXF 编码为多比特率 MP4 - 增强的蓝图](media-services-media-encoder-premium-workflow-tutorials.md#MXF_to__multibitrate_MP4)
-  * [要增强的工作流概述](#workflow-overview-to-enhance)
+  * 要增强的工作流概述
   * [文件命名约定](media-services-media-encoder-premium-workflow-tutorials.md#MXF_to__multibitrate_MP4_file_naming)
   * [将组件属性发布到工作流根目录](media-services-media-encoder-premium-workflow-tutorials.md#MXF_to__multibitrate_MP4_publishing)
   * [使生成的输出文件名依赖于发布的属性值](media-services-media-encoder-premium-workflow-tutorials.md#MXF_to__multibitrate_MP4_output_files)
 * [将缩略图添加到多比特率 MP4 输出](media-services-media-encoder-premium-workflow-tutorials.md#thumbnails_to__multibitrate_MP4)
-  * [要将缩略图添加到的工作流概述](#workflow-overview-to-add-thumbnails-to)
+  * 要将缩略图添加到的工作流概述
   * [添加 JPG 编码](media-services-media-encoder-premium-workflow-tutorials.md#thumbnails_to__multibitrate_MP4__with_jpg)
   * [处理颜色空间转换](media-services-media-encoder-premium-workflow-tutorials.md#thumbnails_to__multibitrate_MP4_color_space)
   * [写入缩略图](media-services-media-encoder-premium-workflow-tutorials.md#thumbnails_to__multibitrate_MP4_writing_thumbnails)
@@ -83,13 +85,13 @@ ms.lasthandoff: 05/07/2018
 新编码工作流
 
 ### <a id="MXF_to_MP4_with_file_input"></a>使用媒体文件输入
-为了接受输入媒体文件，请从添加媒体文件输入组件开始。 要将组件添加到工作流，请在“存储库”搜索框中查找它，然后将所需的项拖放到设计器窗格。 对“媒体文件输入”重复此操作，并将“主源文件”组件从“媒体文件输入”连接到“文件名”输入插针。
+为了接受输入媒体文件，请从添加媒体文件输入组件开始。 要将组件添加到工作流，请在“存储库”搜索框中查找它，然后将所需的项拖放到设计器窗格。 对“媒体文件输入”重复此操作，并将“主源文件”组件连接到“媒体文件输入”中的“文件名”输入插针。
 
 ![连接的媒体文件输入](./media/media-services-media-encoder-premium-workflow-tutorials/media-services-file-input.png)
 
 连接的媒体文件输入
 
-首先，确定在设计自定义工作流时要使用的合适示例文件。 为此，请单击设计器窗格背景，并在右侧属性窗格中找到“主源文件”属性。 单击文件夹图标，并选择用于测试工作流的所需文件。 媒体文件输入组件会检查文件，并填充其输出插针，以反映它检查的示例文件的详细信息。
+首先，确定在设计自定义工作流时要使用的合适示例文件。 为此，请单击设计器窗格背景，并在右侧属性窗格中找到“主源文件”属性。 单击文件夹图标，并选择测试工作流所需的文件。 媒体文件输入组件会检查文件，并填充其输出插针，以反映它检查的示例文件的详细信息。
 
 ![填充的媒体文件输入](./media/media-services-media-encoder-premium-workflow-tutorials/media-services-populated-media-file-input.png)
 
@@ -102,7 +104,7 @@ ms.lasthandoff: 05/07/2018
 配置的输入和输出属性
 
 ### <a id="MXF_to_MP4_streams"></a>检查媒体流
-通常，我们想要知道流在经过工作流之后的外观。 若要在工作流中的任一时间点检查流，只需单击任何组件上的输出或输入插针。 在此情况下，请尝试从“媒体文件输入”单击“未压缩的视频”输出插针。 将打开一个对话框，让你检查输出视频。
+通常，我们想要知道流在经过工作流之后的外观。 若要在工作流中的任一时间点检查流，只需单击任何组件上的输出或输入插针。 在此情况下，请尝试单击“媒体文件输入”中的“未压缩的视频”输出插针。 此时将打开一个用于检查输出视频的对话框。
 
 ![检查未压缩的视频输出插针](./media/media-services-media-encoder-premium-workflow-tutorials/media-services-inspecting-uncompressed-video-output.png)
 
@@ -111,7 +113,7 @@ ms.lasthandoff: 05/07/2018
 在本例中，它表明视频包含针对一段接近 2 分钟的视频以 4:2:2 采样率、每秒 24 帧的速率处理的 1920x1080 输入。
 
 ### <a id="MXF_to_MP4_file_generation"></a>添加视频编码器用于生成 .MP4 文件
-现在，“未压缩的视频”和多个“未压缩的音频”输出插针可供用于媒体文件输入。 若要为输入视频编码，需要向工作流添加一个编码组件 - 在本例中用于生成 .MP4 文件。
+现在，“媒体文件输入”上有一个“未压缩的视频”和多个“未压缩的音频”输出插针可以使用。 若要为输入视频编码，需要向工作流添加一个编码组件 - 在本例中用于生成 .MP4 文件。
 
 要将视频流编码成 H.264，请将 AVC 视频编码器组件添加到设计器图面。 此组件将未压缩的视频流作为输入，并在其输出插针上提供 AVC 压缩视频流。
 
@@ -123,14 +125,14 @@ ms.lasthandoff: 05/07/2018
 
 * 输出宽度和输出高度：决定了编码视频的分辨率。 在本例中，640x360 是合适的设置。
 * 帧速率：设置为通过时，它只采用源帧速率，不过可以覆盖。 这种帧速率转换并未经过运动补偿。
-* 配置文件和级别：决定了 AVC 配置文件和级别。 要方利地获取不同级别和配置文件的详细信息，请单击“AVC 视频编码器”组件中的问号图标，帮助页面会显示有关每个级别的详细信息。 对于此示例，请使用级别为 3.2 的主配置文件（默认设置）。
+* 档次和级别：决定了 AVC 档次和级别。 要方利地获取不同级别和档次的详细信息，请单击“AVC 视频编码器”组件中的问号图标，帮助页面会显示有关每个级别的详细信息。 对于此示例，请使用级别为 3.2 的主档次（默认设置）。
 * 速率控制模式和比特率 (kbps)：在本例中，选择使用 1200 kbps 恒定比特率 (CBR) 输出
 * 视频格式：提供关于写入到 H.264 流的 VUI（视频可用性信息）的信息（编解码器可能用于增强显示、但对正确编解码并非必需的辅助信息）：
 * NTSC（一般用于美国或日本，使用 30 fps）
 * PAL（一般用于欧洲地区，使用 25 fps）
-* GOP 大小模式：根据我们的目的，设置固定的 GOP 大小，主要间隔为 2 秒，并关闭 GOP。 设置为 2 秒可确保与 Azure 媒体服务提供的动态打包兼容。
+* GOP 大小模式：根据我们的目的，设置固定的 GOP 大小，主要间隔为 2 秒，使用封闭式 GOP。 设置为 2 秒可确保与 Azure 媒体服务提供的动态打包兼容。
 
-要馈送 AVC 编码器，请将“未压缩的视频”输出插针从“媒体文件输入”组件连接到“AVC 编码器”的“未压缩的视频”输入插针。
+要馈送 AVC 编码器，请将“媒体文件输入”组件中的“未压缩的视频”输出插针连接到“AVC 编码器”中的“未压缩的视频”输入插针。
 
 ![连接的 AVC 编码器](./media/media-services-media-encoder-premium-workflow-tutorials/media-services-connected-avc-encoder.png)
 
@@ -177,7 +179,7 @@ ms.lasthandoff: 05/07/2018
 
 使用的文件名是由“文件”属性确定的。 尽管可以将该属性硬编码为给定值，但用户很可能希望改用表达式来设置它。
 
-若要让工作流通过表达式自动判断输出“文件名”属性，请单击“文件名”旁边的按钮（文件夹图标旁）。 从下拉菜单中选择“表达式”。 这会显示表达式编辑器。 先清除编辑器的内容。
+若要让工作流通过表达式自动判断输出“文件名”属性，请单击“文件名”旁边的按钮（文件夹图标旁）。 从下拉菜单中选择“表达式”。 此时会显示表达式编辑器。 先清除编辑器的内容。
 
 ![空白的表达式编辑器](./media/media-services-media-encoder-premium-workflow-tutorials/media-services-empty-expression-editor.png)
 
@@ -296,7 +298,7 @@ ms.lasthandoff: 05/07/2018
 
 ```xml
     <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-    <smil xmlns="http://www.w3.org/2001/SMIL20/Language">
+    <smil xmlns="https://www.w3.org/2001/SMIL20/Language">
       <head>
         <meta name="formats" content="mp4" />
       </head>
@@ -640,7 +642,7 @@ Hello world 日志输出
 
 已将媒体文件输入替换为剪辑列表源
 
-剪辑列表源组件将它视为输入“剪辑列表 XML”。 选择要在本地测试的源文件，自动填充此剪辑列表 XML。
+剪辑列表源组件接收“剪辑列表 XML”作为输入。 选择要在本地测试的源文件，自动填充此剪辑列表 XML。
 
 ![自动填充的剪辑列表 XML 属性](./media/media-services-media-encoder-premium-workflow-tutorials/media-services-auto-populated-clip-list-xml-property.png)
 
@@ -691,8 +693,8 @@ Hello world 日志输出
 
 首先，我们需要确定想要修剪视频的哪一个点到哪一个点。 为了让它方便工作流较不具技术性的用户，请将两个属性发布到图形的根目录。 为此，请右键单击设计器图面并选择“添加属性”：
 
-* 第一个属性：类型为“TIMECODE”的“ClippingTimeStart”
-* 第二个属性：类型为“TIMECODE”的“ClippingTimeEnd”
+* 第一个属性：“ClippingTimeStart”的类型："TIMECODE"
+* 第二个属性：“ClippingTimeEnd”的类型："TIMECODE"
 
 ![添加属性对话框中的剪辑开始时间](./media/media-services-media-encoder-premium-workflow-tutorials/media-services-clip-start-time.png)
 
@@ -759,7 +761,7 @@ Hello world 日志输出
 
 记录生成的剪辑列表
 
-执行测试回合以查看视频和音频流剪辑的情况。 但是，随着你使用不同的值针对修剪点执行多个测试回合，会发现并未考虑到这些因素！ 这是因为设计器不同于 Azure 运行时，不会在每次执行时重写剪辑列表 XML。 这意味着，只有在第一次设置输入和输出点时导致 xml 转换，其他任何时候临界子句 (if(clipListXML.indexOf("<trim>") == -1)) 都会在已经存在一个元素时防止工作流添加另一个修剪元素。
+执行测试回合以查看视频和音频流剪辑的情况。 但是，随着你使用不同的值针对修剪点执行多个测试回合，会发现并未考虑到这些因素！ 这是因为设计器不同于 Azure 运行时，不会在每次执行时重写剪辑列表 XML。 这意味着, 只有首次设置了 in 和 out 点时, 才会导致 xml 转换, 而在其他所有情况下, 我们的 guard 子句 (if (`clipListXML.indexOf("<trim>") == -1`)) 将阻止工作流添加另一个修整元素 (如果已存在)。
 
 为了让工作流方便在本地测试，我们最好添加一些监护代码，用于检查是否已经存在修剪元素。 如果是的话，我们可以在继续之前，将 XML 修改为新的值来将它删除。 不要使用纯文本字符串操作，通过实际的 XML 对象模型分析执行此操作可能更安全。
 
@@ -938,17 +940,17 @@ Hello world 日志输出
 ```
 
 ## <a name="also-see"></a>另请参阅
-[在 Azure 媒体服务中引入高级编码](http://azure.microsoft.com/blog/2015/03/05/introducing-premium-encoding-in-azure-media-services)
+[在 Azure 媒体服务中引入高级编码](https://azure.microsoft.com/blog/2015/03/05/introducing-premium-encoding-in-azure-media-services)
 
-[如何在 Azure 媒体服务中使用高级编码](http://azure.microsoft.com/blog/2015/03/06/how-to-use-premium-encoding-in-azure-media-services)
+[如何在 Azure 媒体服务中使用高级编码](https://azure.microsoft.com/blog/2015/03/06/how-to-use-premium-encoding-in-azure-media-services)
 
 [使用 Azure 媒体服务对请求内容进行编码](media-services-encode-asset.md#media-encoder-premium-workflow)
 
 [媒体编码器高级工作流格式和编解码器](media-services-premium-workflow-encoder-formats.md)
 
-[示例工作流文件](http://github.com/Azure/azure-media-services-samples/tree/master/Encoding%20Presets/VoD/MediaEncoderPremiumWorkfows)
+[示例工作流文件](https://github.com/Azure/azure-media-services-samples/tree/master/Encoding%20Presets/VoD/MediaEncoderPremiumWorkfows)
 
-[Azure 媒体服务资源管理器工具](http://aka.ms/amse)
+[Azure 媒体服务资源管理器工具](https://aka.ms/amse)
 
 ## <a name="media-services-learning-paths"></a>媒体服务学习路径
 [!INCLUDE [media-services-learning-paths-include](../../../includes/media-services-learning-paths-include.md)]

@@ -3,8 +3,8 @@ title: 教程：安装 Service Fabric 独立客户端 - Azure Service Fabric | M
 description: 本教程介绍如何在上一教程文章中创建的群集上安装 Service Fabric 独立客户端。
 services: service-fabric
 documentationcenter: .net
-author: david-stanford
-manager: timlt
+author: dkkapur
+manager: chackdan
 editor: ''
 ms.assetid: ''
 ms.service: service-fabric
@@ -12,19 +12,19 @@ ms.devlang: dotNet
 ms.topic: tutorial
 ms.tgt_pltfrm: NA
 ms.workload: NA
-ms.date: 05/11/2018
-ms.author: dastanfo
+ms.date: 07/22/2019
+ms.author: dekapur
 ms.custom: mvc
-ms.openlocfilehash: b9b9e08676228ddbdea8be91253b41dac8ef8fb8
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
+ms.openlocfilehash: 82358f4d5548464f1304d77a846d71863ed9efa1
+ms.sourcegitcommit: 04ec7b5fa7a92a4eb72fca6c6cb617be35d30d0c
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
-ms.locfileid: "34211729"
+ms.lasthandoff: 07/22/2019
+ms.locfileid: "68385000"
 ---
 # <a name="tutorial-install-and-create-service-fabric-cluster"></a>教程：安装并创建 Service Fabric 群集
 
-Service Fabric 独立群集为你提供选择自己的环境的选项，并创建群集作为 Service Fabric 所采用的“任何 OS、任何云”方法的一部分。 在本教程系列中，将创建一个在 AWS 上托管的独立群集并将应用程序安装到其中。
+Service Fabric 独立群集为你提供选择自己的环境的选项，并创建群集作为 Service Fabric 所采用的“任何 OS、任何云”方法的一部分。 在本系列教程中，将创建一个托管在 AWS 或 Azure 上的独立群集，并将应用程序安装到其中。
 
 本教程是一个系列中的第二部分。 本教程将逐步指导完成创建 Service Fabric 独立群集的步骤。
 
@@ -37,9 +37,9 @@ Service Fabric 独立群集为你提供选择自己的环境的选项，并创�
 
 ## <a name="download-the-service-fabric-for-windows-server-package"></a>下载用于 Windows Server 的 Service Fabric 包
 
-Service Fabric 提供了一个安装程序包，用于创建独立的 Service Fabric 群集。  在本地计算机上[下载安装程序包](http://go.microsoft.com/fwlink/?LinkId=730690)。  成功下载后，将其通过 RDP 连接复制到 EC2 实例，并将其粘贴到桌面上。
+Service Fabric 提供了一个安装程序包，用于创建独立的 Service Fabric 群集。  在本地计算机上[下载安装程序包](https://go.microsoft.com/fwlink/?LinkId=730690)。  成功下载后，将其通过 RDP 连接复制到 VM，并将其粘贴到桌面上。
 
-选择 zip 文件并打开上下文菜单，然后选择“全部提取” > “提取”。  提取文件时，将在桌面上生成一个与 zip 文件名相同的文件夹。
+选择 zip 文件并打开上下文菜单，然后选择“全部提取”   > “提取”  。  提取文件时，将在桌面上生成一个与 zip 文件名相同的文件夹。
 
 如果想要获取更多详细信息，请参阅[安装程序包的内容](service-fabric-cluster-standalone-package-contents.md)。
 
@@ -61,15 +61,9 @@ Service Fabric 提供了一个安装程序包，用于创建独立的 Service Fa
         }
 ```
 
-然后，需要更新几个属性。  在第 34 行上，需要修改诊断存储的连接字符串，修改后应如下所示，并在 `"connectionstring": "\\\\172.31.27.1\\c$\\DiagnosticsStore"` 中替换为你的 IP 地址
+然后，需要更新几个属性。  在 34 行中，需要修改诊断存储的连接字符串，它应如下所示：`"connectionstring": "C:\\ProgramData\\SF\\DiagnosticsStore"`
 
-更新连接字符串后，请务必创建文件夹。  以下命令将创建它，请确保将下面的 IP 地址替换为你插入到连接字符串中的 IP 地址：
-
-```powershell
-mkdir \\172.31.27.1\c$\DiagnosticsStore
-```
-
-最后，请在 `nodeTypes` 节添加的配置中添加一个新节来映射 windows 将使用的临时端口。  该配置文件应该如下所示：
+最后，请在配置的 `nodeTypes` 节中添加一个新节来映射 windows 将使用的临时端口。  该配置文件应该如下所示：
 
 ```json
 "applicationPorts": {
@@ -135,7 +129,7 @@ Your cluster is successfully created! You can connect and manage your cluster us
 
 ### <a name="bring-up-service-fabric-explorer"></a>打开 Service Fabric Explorer
 
-现在可以通过 Service Fabric Explorer 连接到群集，既可以直接从装有 http://localhost:19080/Explorer/index.html 的某台计算机进行连接，也可以通过 http://<*IPAddressofaMachine*>:19080/Explorer/index.html 进行远程连接。
+现在可以通过 Service Fabric Explorer 连接到群集，既可以直接使用 http:\//localhost:19080/Explorer/index.html 从某台计算机进行连接，也可以使用 http:\//<*IPAddressofaMachine*>:19080/Explorer/index.html 进行远程连接。
 
 ## <a name="add-and-remove-nodes"></a>添加和删除节点
 

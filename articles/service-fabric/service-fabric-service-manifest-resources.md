@@ -4,7 +4,7 @@ description: 如何在服务清单中描述终结点资源，包括如何设置 
 services: service-fabric
 documentationcenter: .net
 author: mani-ramaswamy
-manager: timlt
+manager: chackdan
 editor: ''
 ms.assetid: da36cbdb-6531-4dae-88e8-a311ab71520d
 ms.service: service-fabric
@@ -14,11 +14,12 @@ ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 2/23/2018
 ms.author: subramar
-ms.openlocfilehash: ce2bc8cc8d9b149b16aee9c5e601d9872621e277
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: 82b6e701a5f76aa4c2cea78417ca9bcbeeb10308
+ms.sourcegitcommit: 13a289ba57cfae728831e6d38b7f82dae165e59d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 08/09/2019
+ms.locfileid: "68927694"
 ---
 # <a name="specify-resources-in-a-service-manifest"></a>在服务清单中指定资源
 ## <a name="overview"></a>概述
@@ -26,6 +27,10 @@ ms.lasthandoff: 05/16/2018
 
 ## <a name="endpoints"></a>终结点
 在服务清单中定义了终结点资源时，如果未显式指定端口，则 Service Fabric 从保留的应用程序端口范围中分配端口。 例如，可以查看本段落后面提供的清单代码段中指定的终结点 *ServiceEndpoint1*。 此外，服务还可以请求在资源中使用特定端口。 在不同群集节点上运行的服务副本可以分配不同的端口号，而运行在同一节点上的服务副本共享同一个端口。 之后服务副本可根据需要将这些端口用于复制和侦听客户端请求。
+
+> [!WARNING] 
+> 设计静态端口不应与 Clustermanifest.xml 中指定的应用程序端口范围重叠。 如果指定静态端口, 请将其分配到应用程序端口范围外, 否则将导致端口冲突。 使用 release 6.5 CU2, 我们将在检测到此类冲突时发出**运行状况警告**, 但允许部署与发货6.5 行为保持同步。 但是, 我们可能会阻止应用程序在下一个主要版本中进行部署。
+>
 
 ```xml
 <Resources>
@@ -60,8 +65,8 @@ HTTP 终结点由 Service Fabric 自动建立 ACL。
 <ServiceManifest Name="Stateful1Pkg"
                  Version="1.0.0"
                  xmlns="http://schemas.microsoft.com/2011/01/fabric"
-                 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                 xmlns:xsd="https://www.w3.org/2001/XMLSchema"
+                 xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance">
   <ServiceTypes>
     <!-- This is the name of your ServiceType.
          This name must match the string used in the RegisterServiceType call in Program.cs. -->
@@ -77,7 +82,7 @@ HTTP 终结点由 Service Fabric 自动建立 ACL。
     </EntryPoint>
   </CodePackage>
 
-  <!-- Config package is the contents of the Config directoy under PackageRoot that contains an
+  <!-- Config package is the contents of the Config directory under PackageRoot that contains an
        independently updateable and versioned set of custom configuration settings for your service. -->
   <ConfigPackage Name="Config" Version="1.0.0" />
 
@@ -105,7 +110,10 @@ HTTPS 协议提供服务器身份验证，用于对客户端-服务器通信进�
 > [!NOTE]
 > 在应用程序升级期间不能更改服务的协议。 如果在升级期间进行了更改，那将是一项重大的更改。
 > 
-> 
+
+> [!WARNING] 
+> 使用 HTTPS 时，请勿将同一端口和证书用于已部署到同一节点的不同服务实例（独立于应用程序）。 在不同的应用程序实例中使用相同的端口升级两个不同的服务将导致升级失败。 有关详细信息，请参阅[使用 HTTPS 终结点升级多个应用程序](service-fabric-application-upgrade.md#upgrading-multiple-applications-with-https-endpoints)。
+>
 
 下面是需要为 HTTPS 设置的一个示例 ApplicationManifest。 必须提供证书的指纹。 EndpointRef 是对 ServiceManifest 中 EndpointResource 的引用，为其设置 HTTPS 协议。 可以添加多个 EndpointCertificate。  
 
@@ -114,8 +122,8 @@ HTTPS 协议提供服务器身份验证，用于对客户端-服务器通信进�
 <ApplicationManifest ApplicationTypeName="Application1Type"
                      ApplicationTypeVersion="1.0.0"
                      xmlns="http://schemas.microsoft.com/2011/01/fabric"
-                     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                     xmlns:xsd="https://www.w3.org/2001/XMLSchema"
+                     xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance">
   <Parameters>
     <Parameter Name="Stateful1_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="Stateful1_PartitionCount" DefaultValue="1" />
@@ -158,7 +166,7 @@ HTTPS 协议提供服务器身份验证，用于对客户端-服务器通信进�
 
 若要使用 ApplicationParameter 重写 ServiceManifest 中的终结点，请更改 ApplicationManifest，如下所示：
 
-在 ServiceManifestImport 部分添加一个新部分“ResourceOverrides”
+在 ServiceManifestImport 部分添加一个新部分“ResourceOverrides”。
 
 ```xml
 <ServiceManifestImport>
@@ -188,13 +196,13 @@ HTTPS 协议提供服务器身份验证，用于对客户端-服务器通信进�
   </Parameters>
 ```
 
-部署应用程序时，现可传入这些值作为 ApplicationParameter，例如：
+部署应用程序时，可以传入这些值作为 ApplicationParameter。  例如：
 
 ```powershell
 PS C:\> New-ServiceFabricApplication -ApplicationName fabric:/myapp -ApplicationTypeName "AppType" -ApplicationTypeVersion "1.0.0" -ApplicationParameter @{Port='1001'; Protocol='https'; Type='Input'; Port1='2001'; Protocol='http'}
 ```
 
-注意：如果针对 ApplicationParameter 提供的值为空，将返回到 ServiceManifest 中为对应的 EndPointName 提供的默认值。
+注意:如果针对 ApplicationParameters 提供的值为空，将返回到 ServiceManifest 中为对应的 EndPointName 提供的默认值。
 
 例如：
 
@@ -210,4 +218,4 @@ PS C:\> New-ServiceFabricApplication -ApplicationName fabric:/myapp -Application
 
 并且应用程序参数的 Port1 和 Protocol1 值为 null 或为空。 仍由 ServiceFabric 决定端口。 而协议将 TCP。
 
-假设指定了错误值。 例如，对于“端口”，你指定了字符串值“Foo”而不是 int。新的 ServiceFabricApplication 命令将失败并出现错误：“ResourceOverrides”部分中的名称“ServiceEndpoint1”属性“Port1”的替代参数无效。 指定的值为“Foo”，而要求的值为“int”。
+假设指定了错误值。 例如，对于“端口”，你指定了字符串值“Foo”而不是 int。New-ServiceFabricApplication 命令将失败并显示错误：“ResourceOverrides”节中名为“ServiceEndpoint1”、属性为“Port1”的替代参数无效。 指定的值为“Foo”，而要求的值为“int”。

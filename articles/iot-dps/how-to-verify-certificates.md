@@ -1,22 +1,19 @@
 ---
 title: 如何使用 Azure IoT 中心设备预配服务执行 X.509 CA 证书的所有权证明 | Microsoft Docs
-description: 如何使用 DPS 服务验证 X.509 CA 证书
-services: iot-dps
-keywords: ''
-author: bryanla
-ms.author: v-jamebr
+description: 如何使用设备预配服务验证 X.509 CA 证书
+author: wesmc7777
+ms.author: wesmc
 ms.date: 02/26/2018
-ms.topic: article
+ms.topic: conceptual
 ms.service: iot-dps
-documentationcenter: ''
+services: iot-dps
 manager: timlt
-ms.devlang: na
-ms.custom: mvc
-ms.openlocfilehash: eb37ce7e61796494be0a9282afdc620b0ca5886a
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.openlocfilehash: afa4b3861e9fb7f91fd9f5d540353c5fad23efe0
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "54913608"
 ---
 # <a name="how-to-do-proof-of-possession-for-x509-ca-certificates-with-your-device-provisioning-service"></a>如何使用设备预配服务执行 X.509 CA 证书的所有权证明
 
@@ -33,18 +30,18 @@ ms.lasthandoff: 04/28/2018
 
 若要将 CA 证书注册到预配服务并获取可在所有权证明期间使用的验证码，请遵循以下步骤。 
 
-1. 在 Azure 门户中导航到预配服务，从左侧菜单打开“证书”。 
-2. 单击“添加”以添加新证书。
-3. 输入证书的友好显示名称。 浏览到表示 X.509 证书公共部分的 .cer 或 .pem 文件。 单击“上传” 。
-4. 收到已成功上传证书的通知后，单击“保存”。
+1. 在 Azure 门户中导航到预配服务，从左侧菜单打开“证书”。  
+2. 单击“添加”以添加新证书。 
+3. 输入证书的友好显示名称。 浏览到表示 X.509 证书公共部分的 .cer 或 .pem 文件。 单击“上传” 。 
+4. 收到已成功上传证书的通知后，单击“保存”。 
 
     ![上传证书](./media/how-to-verify-certificates/add-new-cert.png)  
 
-   该证书将显示在“证书资源管理器”列表中。 请注意，此证书的“状态”为“未验证”。
+   该证书将显示在“证书资源管理器”列表中。  请注意，此证书的“状态”为“未验证”。  
 
 5. 单击在上一步骤中添加的证书。
 
-6. 在“证书详细信息”中，单击“生成验证码”。
+6. 在“证书详细信息”中，单击“生成验证码”。  
 
 7. 预配服务会创建一个可用于验证证书所有权的**验证码**。 将此代码复制到剪贴板。 
 
@@ -57,8 +54,7 @@ ms.lasthandoff: 04/28/2018
 Microsoft 提供了工具和示例来帮助你创建签名的验证证书： 
 
 - **Azure IoT 中心 C SDK** 提供了 PowerShell (Windows) 和 (Linux) Bash 脚本来帮助你创建用于开发的 CA 证书和叶证书，以及使用验证码执行所有权证明。 可将系统相关的[文件](https://github.com/Azure/azure-iot-sdk-c/tree/master/tools/CACertificates)下载到工作文件夹，并遵照[管理 CA 证书自述文件](https://github.com/Azure/azure-iot-sdk-c/blob/master/tools/CACertificates/CACertificateOverview.md)中的说明执行 CA 证书的所有权证明。 
-- **Azure IoT 中心 C# SDK** 包含[组证书验证示例](https://github.com/Azure/azure-iot-sdk-csharp/tree/master/provisioning/service/samples/GroupCertificateVerificationSample)，可用于执行所有权证明。
-- 可以遵循 IoT 中心文档中[用于管理 CA 签名的 X.509 证书的 PowerShell 脚本](https://docs.microsoft.com/azure/iot-hub/iot-hub-security-x509-create-certificates)中的步骤，具体而言，请运行标题为 [X.509 CA 证书的所有权证明](https://docs.microsoft.com/azure/iot-hub/iot-hub-security-x509-create-certificates#signverificationcode)的部分中所述的脚本。
+- **Azure IoT 中心 C# SDK** 包含[组证书验证示例](https://github.com/Azure-Samples/azure-iot-samples-csharp/tree/master/provisioning/Samples/service/GroupCertificateVerificationSample)，可用于执行所有权证明。
  
 > [!IMPORTANT]
 > 除了执行所有权证明以外，使用上述 PowerShell 和 Bash 脚本还可创建根证书、中间证书和叶证书用于验证和预配设备。 只能在开发中使用这些证书。 切勿将它们用于生产环境。 
@@ -68,9 +64,9 @@ Microsoft 提供了工具和示例来帮助你创建签名的验证证书：
 
 ## <a name="upload-the-signed-verification-certificate"></a>上传已签名的验证证书
 
-1. 在门户中将生成的签名作为验证证书上传到预配服务。 在 Azure 门户上的“证书详细信息”中，使用“验证证书 .pem 或 .cer 文件”字段旁边的“文件资源管理器”图标从系统上传已签名的验证证书。
+1. 在门户中将生成的签名作为验证证书上传到预配服务。 在 Azure 门户上的“证书详细信息”中，使用“验证证书 .pem 或 .cer 文件”字段旁边的“文件资源管理器”图标从系统上传已签名的验证证书。   
 
-2. 成功上传证书后，单击“验证”。 在“证书资源管理器”列表中，证书的“状态”会更改为“已验证”。 如果状态未自动更新，请单击“刷新”。
+2. 成功上传证书后，单击“验证”。  在“证书资源管理器”列表中，证书的“状态”会更改为“已验证”。     如果状态未自动更新，请单击“刷新”。 
 
    ![上传证书验证](./media/how-to-verify-certificates/upload-cert-verification.png)  
 

@@ -1,22 +1,23 @@
 ---
 title: 连接到 Azure AD 时对 MVC 项目所做的更改
 description: 描述一下，使用 Visual Studio 连接服务连接到 Azure AD 时，MVC 项目会发生什么情况
-services: active-directory
 author: ghogen
-manager: douge
+manager: jillfra
 ms.assetid: 8b24adde-547e-4ffe-824a-2029ba210216
-ms.prod: visual-studio-dev15
+ms.prod: visual-studio-windows
 ms.technology: vs-azure
-ms.workload: azure
+ms.workload: azure-vs
 ms.topic: conceptual
 ms.date: 03/12/2018
 ms.author: ghogen
-ms.custom: aaddev
-ms.openlocfilehash: bd4a32575067b3de94935322ead9a7f0966d2969
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.custom: aaddev, vs-azure
+ms.collection: M365-identity-device-management
+ms.openlocfilehash: 4c4328ea6145d32616f1784d94976dab29216fbc
+ms.sourcegitcommit: 670c38d85ef97bf236b45850fd4750e3b98c8899
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 08/08/2019
+ms.locfileid: "68852012"
 ---
 # <a name="what-happened-to-my-mvc-project-visual-studio-azure-active-directory-connected-service"></a>我的 MVC 项目（Visual Studio Azure Active Directory 连接服务）发生了什么情况？
 
@@ -32,7 +33,7 @@ ms.lasthandoff: 04/23/2018
 
 影响项目文件 *.NET 引用和 `packages.config`（NuGet 引用）。
 
-| Type | 引用 |
+| 类型 | 参考 |
 | --- | --- |
 | .NET; NuGet | Microsoft.IdentityModel.Protocol.Extensions |
 | .NET; NuGet | Microsoft.Owin |
@@ -47,7 +48,7 @@ ms.lasthandoff: 04/23/2018
 
 选择了“读取目录数据”选项时的其他引用：
 
-| Type | 引用 |
+| 类型 | 参考 |
 | --- | --- |
 | .NET; NuGet | EntityFramework |
 | .NET        | EntityFramework.SqlServer（仅限 Visual Studio 2015） |
@@ -61,7 +62,7 @@ ms.lasthandoff: 04/23/2018
 
 删除了以下引用（仅限 ASP.NET 4 项目，如 Visual Studio 2015 中所示）：
 
-| Type | 引用 |
+| type | 参考 |
 | --- | --- |
 | .NET; NuGet | Microsoft.AspNet.Identity.Core |
 | .NET; NuGet | Microsoft.AspNet.Identity.EntityFramework |
@@ -101,7 +102,7 @@ ms.lasthandoff: 04/23/2018
 
     ```xml
     <configSections>
-      <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+      <!-- For more information on Entity Framework configuration, visit https://go.microsoft.com/fwlink/?LinkID=237468 -->
       <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
     </configSections>
 
@@ -143,7 +144,7 @@ ms.lasthandoff: 04/23/2018
 
 ### <a name="file-backup-visual-studio-2015"></a>文件备份 (Visual Studio 2015)
 
-添加连接服务时，Visual Studio 2015 备份已更改并已删除文件。 所有受影响的文件均保存在文件夹 `Backup/AzureAD` 中。 Visual Studio 2017 不会创建备份。
+添加连接服务时，Visual Studio 2015 备份已更改并已删除文件。 所有受影响的文件均保存在文件夹 `Backup/AzureAD` 中。 Visual Studio 2017 及更高版本不会创建备份。
 
 - `Startup.cs`
 - `App_Start\IdentityConfig.cs`
@@ -163,5 +164,5 @@ ms.lasthandoff: 04/23/2018
 
 ## <a name="next-steps"></a>后续步骤
 
-- [Azure Active Directory 的身份验证方案](active-directory-authentication-scenarios.md)
-- [向 ASP.NET Web 应用添加 Microsoft 登录功能](guidedsetups/active-directory-aspnetwebapp-v1.md)
+- [Azure Active Directory 的身份验证方案](authentication-scenarios.md)
+- [向 ASP.NET Web 应用添加 Microsoft 登录功能](quickstart-v1-aspnet-webapp.md)

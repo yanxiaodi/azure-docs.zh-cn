@@ -1,30 +1,27 @@
 ---
-title: "创建用于连接到 Azure 存储的 Azure Function | Microsoft Docs"
-description: "Azure CLI 脚本示例 - 创建用于连接到 Azure 存储的 Azure Function"
+title: 创建用于连接到 Azure 存储的 Azure Function | Microsoft Docs
+description: Azure CLI 脚本示例 - 创建用于连接到 Azure 存储的 Azure Function
 services: functions
 documentationcenter: functions
 author: ggailey777
-manager: cfowler
-editor: 
-tags: functions
-ms.assetid: 
-ms.service: functions
+manager: jeconnoc
+ms.assetid: ''
+ms.service: azure-functions
 ms.devlang: azurecli
 ms.topic: sample
-ms.tgt_pltfrm: na
-ms.workload: 
 ms.date: 04/20/2017
 ms.author: glenga
 ms.custom: mvc
-ms.openlocfilehash: cbe7bf95574ca7a77d666981691da05357ce9a0d
-ms.sourcegitcommit: 8c3267c34fc46c681ea476fee87f5fb0bf858f9e
+ms.openlocfilehash: 48f6124373d80d22766d319ec58ed4ad7adaf6f5
+ms.sourcegitcommit: 5d837a7557363424e0183d5f04dcb23a8ff966bb
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/09/2018
+ms.lasthandoff: 12/06/2018
+ms.locfileid: "52963362"
 ---
 # <a name="create-a-function-app-that-connects-to-an-azure-storage-account"></a>创建一个可连接到 Azure 存储帐户的函数应用
 
-此 Azure Functions 示例脚本先创建一个函数应用，然后将该函数连接到 Azure 存储帐户。 创建的应用设置（包含连接）可以与[[存储触发器或绑定](..\functions-bindings-storage-blob.md)配合使用。 
+此 Azure Functions 示例脚本先创建一个函数应用，然后将该函数连接到 Azure 存储帐户。 创建的应用设置（包含连接）可以与[存储触发器或绑定](../functions-bindings-storage-blob.md)配合使用。 
 
 [!INCLUDE [upgrade runtime](../../../includes/functions-cli-version-note.md)]
 
@@ -32,7 +29,7 @@ ms.lasthandoff: 03/09/2018
 
 [!INCLUDE [cloud-shell-try-it.md](../../../includes/cloud-shell-try-it.md)]
 
-如果在本地使用 CLI，请确保运行 Azure CLI 2.0 或更高版本。 若要查找版本，请运行 `az --version`。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0](/cli/azure/install-azure-cli)。 
+如果在本地使用 CLI，请确保运行 Azure CLI 2.0 或更高版本。 要查找版本，请运行 `az --version`。 如需进行安装或升级，请参阅[安装 Azure CLI](/cli/azure/install-azure-cli)。 
 
 ## <a name="sample-script"></a>示例脚本
 
@@ -53,11 +50,9 @@ ms.lasthandoff: 03/09/2018
 
 | 命令 | 说明 |
 |---|---|
-| [az login](https://docs.microsoft.com/cli/azure/reference-index#az_login) | 登录 Azure。 |
-| [az group create](https://docs.microsoft.com/cli/azure/group#az_group_create) | 使用相关位置创建资源组 |
-| [az storage account create](https://docs.microsoft.com/cli/azure/storage/account) | 创建存储帐户 |
-| [az functionapp create](https://docs.microsoft.com/cli/azure/functionapp#az_functionapp_create) | 创建一个新的 Function App |
-| [az group delete](https://docs.microsoft.com/cli/azure/group#az_group_delete) | 清理 |
+| [az group create](https://docs.microsoft.com/cli/azure/group#az-group-create) | 使用相关位置创建资源组。 |
+| [az storage account create](https://docs.microsoft.com/cli/azure/storage/account#az-storage-account-create) | 创建存储帐户。 |
+| [az functionapp create](https://docs.microsoft.com/cli/azure/functionapp#az-functionapp-create) | 在无服务器[消耗计划](../functions-scale.md#consumption-plan)中创建函数应用。 |
 
 ## <a name="next-steps"></a>后续步骤
 

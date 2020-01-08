@@ -1,32 +1,34 @@
 ---
 title: Azure 快速入门 - 在浏览器中使用 JavaScript 和 HTML 在对象存储中创建 blob
 description: 了解如何通过 BlobService 实例在 HTML 页面中使用 JavaScript 上传、列出和删除 Blob。
-services: storage
 keywords: 存储, javascript, html
-author: craigshoemaker
-manager: jeconnoc
-ms.custom: mvc
+author: mhopkins-msft
+ms.author: mhopkins
+ms.date: 08/29/2019
 ms.service: storage
-ms.author: cshoe
-ms.date: 04/06/2018
+ms.subservice: blobs
 ms.topic: quickstart
-ms.openlocfilehash: 3d01788050779ea5d6e67b345f048775f8e98e9e
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
+ms.openlocfilehash: 3dbd78f9c233515c675cd511924b3d4600b72fbd
+ms.sourcegitcommit: ee61ec9b09c8c87e7dfc72ef47175d934e6019cc
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 08/30/2019
+ms.locfileid: "70173089"
 ---
 <!-- Customer intent: As a web application developer I want to interface with Azure Blob storage entirely on the client so that I can build a SPA application that is able to upload and delete files on blob storage. -->
 
 # <a name="quickstart-upload-list-and-delete-blobs-using-javascripthtml-in-the-browser"></a>快速入门：在浏览器中使用 JavaScript/HTML 上传、列出和删除 Blob
+
 本快速入门演示如何通过完全在浏览器中运行的代码管理 blob。 此处使用的方法演示如何使用所需的安全措施确保对 blob 存储帐户的受保护访问。 若要完成本快速入门，需要一个 [Azure 订阅](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
 
-[!INCLUDE [storage-quickstart-tutorial-create-account-portal](../../../includes/storage-quickstart-tutorial-create-account-portal.md)]
+## <a name="prerequisites"></a>先决条件
+
+[!INCLUDE [storage-quickstart-prereq-include](../../../includes/storage-quickstart-prereq-include.md)]
 
 ## <a name="setting-up-storage-account-cors-rules"></a>设置存储帐户 CORS 规则 
 必须先将帐户配置为启用[跨域资源共享](https://docs.microsoft.com/rest/api/storageservices/cross-origin-resource-sharing--cors--support-for-the-azure-storage-services)（简称 CORS），然后 Web 应用程序才能从客户端访问 Blob 存储。 
 
-返回到 Azure 门户，然后选择存储帐户。 若要定义新的 CORS 规则，请返回到“设置”部分，然后单击“CORS”链接。 接下来，请单击“添加”按钮，打开“添加 CORS 规则”窗口。 对于本快速入门，请创建开放的 CORS 规则：
+返回到 Azure 门户，然后选择存储帐户。 若要定义新的 CORS 规则，请返回到“设置”部分，然后单击“CORS”链接。   接下来，请单击“添加”按钮，打开“添加 CORS 规则”窗口。   对于本快速入门，请创建开放的 CORS 规则：
 
 ![Azure Blob 存储帐户 CORS 设置](media/storage-quickstart-blobs-javascript-client-libraries/azure-blob-storage-cors-settings.png)
 
@@ -48,7 +50,7 @@ ms.lasthandoff: 04/16/2018
 [!INCLUDE [Open the Azure cloud shell](../../../includes/cloud-shell-try-it.md)]
 
 ## <a name="create-a-shared-access-signature"></a>创建共享访问签名
-在浏览器中运行的代码可以使用共享访问签名 (SAS) 对发往 Blob 存储的请求进行身份验证。 使用 SAS 时，客户端可以在没有帐户访问密钥或连接字符串的情况下进行身份验证。 有关 SAS 的详细信息，请参阅[使用共享访问签名 (SAS)](../common/storage-dotnet-shared-access-signature-part-1.md)。
+在浏览器中运行的代码可以使用共享访问签名 (SAS) 对发往 Blob 存储的请求进行授权。 使用 SAS 时，客户端可以在没有帐户访问密钥或连接字符串的情况下授权访问存储资源。 有关 SAS 的详细信息，请参阅[使用共享访问签名 (SAS)](../common/storage-sas-overview.md)。
 
 可以通过 Azure Cloud Shell 或 Azure 存储资源管理器使用 Azure CLI 创建 SAS。 下表对使用 CLI 生成 SAS 时需要提供值的参数进行了说明。
 
@@ -61,7 +63,7 @@ ms.lasthandoff: 04/16/2018
 以下脚本使用了 Azure CLI 来创建可以传递给 JavaScript Blob 服务的 SAS。
 
 > [!NOTE]
-> 为了获得最佳结果，请在将命令粘贴到 Azure Cloud Shell 中之前删除参数之间的额外空格。
+> 为了获得最佳结果，请在将命令粘贴到 Azure Cloud Shell 中之前删除参数之间的多余空格。
 
 ```bash
 az storage account generate-sas
@@ -76,7 +78,7 @@ az storage account generate-sas
 
 | 参数        | 值   | 说明  |
 |------------------|---------|---------|
-| *permissions*    | racwdl  | 此 SAS 允许 *read*（读取）、*append*（追加）、*create*（创建）、*write*（编写）、*delete*（删除）和 *list*（列出）功能。 |
+| *权限*    | racwdl  | 此 SAS 允许 *read*（读取）、*append*（追加）、*create*（创建）、*write*（编写）、*delete*（删除）和 *list*（列出）功能。 |
 | *resource-types* | sco     | 受 SAS 影响的资源为 *service*（服务）、*container*（容器）和 *object*（对象）。 |
 | *services*       | b       | 受 SAS 影响的服务为 *blob* 服务。 |
 
@@ -135,7 +137,7 @@ npm start
         
         <button id="delete-button">Delete</button>
     </body>
-    <script src="scripts/azure-storage.blob.min.js"></script>
+    <script src="scripts/azure-storage.blob.min.js" charset="utf-8"></script>
     <script>
         // Blob-related code goes here
     </script>
@@ -247,7 +249,7 @@ document.getElementById('delete-button').addEventListener('click', () => {
 > 若要使用此代码示例，需为 *blobName* 提供字符串值。
 
 ## <a name="clean-up-resources"></a>清理资源
-若要清理在本快速入门过程中创建的资源，请返回到 [Azure 门户](https://portal.azure.com)，然后选择存储帐户。 选中以后，即可转到“概览”>“删除存储帐户”来删除该存储帐户。
+若要清理在本快速入门过程中创建的资源，请返回到 [Azure 门户](https://portal.azure.com)，然后选择存储帐户。 选中以后，即可转到“概览”>“删除存储帐户”来删除该存储帐户。 
 
 ## <a name="next-steps"></a>后续步骤
 浏览示例，了解如何下载 Blob 以及如何在文件上传过程中报告进度。

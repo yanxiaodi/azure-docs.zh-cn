@@ -1,10 +1,10 @@
 ---
-title: 尝试登录 Azure 门户或 Azure 帐户中心时出现“找不到任何订阅”错误 | Microsoft Docs
+title: “找不到任何订阅”错误 – Azure 门户注册 | Microsoft Docs
 description: 提供针对登录 Azure 门户或 Azure 帐户中心时出现“找不到任何订阅”错误这一问题的解决方案。
 services: ''
 documentationcenter: ''
 author: genlin
-manager: jlian
+manager: dcscontentpm
 editor: ''
 tags: billing
 ms.assetid: d1545298-99db-4941-8e97-f24a06bb7cb6
@@ -14,14 +14,16 @@ ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: troubleshooting
 ms.date: 05/11/2018
-ms.author: genli
-ms.openlocfilehash: 475a4ad72a1c2fc2ebf99387e193713797cc2586
-ms.sourcegitcommit: c52123364e2ba086722bc860f2972642115316ef
+ms.author: banders
+ms.custom: seodec18
+ms.openlocfilehash: 19a30a99b9df23358aafd88c55bde08c73a3be72
+ms.sourcegitcommit: fad368d47a83dadc85523d86126941c1250b14e2
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/11/2018
+ms.lasthandoff: 09/19/2019
+ms.locfileid: "71121543"
 ---
-# <a name="no-subscriptions-found-error-in-azure-portal-or-azure-account-center"></a>Azure 门户或 Azure 帐户中心的“找不到任何订阅”错误
+# <a name="no-subscriptions-found-sign-in-error-for-azure-portal-or-azure-account-center"></a>在 Azure 门户或 Azure 帐户中心注册时出现“找不到任何订阅”错误
 
 尝试登录 [Azure 门户](https://portal.azure.com/)或 [Azure 帐户中心](https://account.windowsazure.com/Subscriptions)时，可能会出现“找不到任何订阅”错误消息。 本文提供针对此问题的解决方案。
 
@@ -35,23 +37,23 @@ ms.lasthandoff: 05/11/2018
 
 ## <a name="solution"></a>解决方案
 
-### <a name="scenario-1-error-message-is-received-in-the-azure-portalhttpsportalazurecom"></a>场景 1：[Azure 门户](https://portal.azure.com)收到错误消息
+### <a name="scenario-1-error-message-is-received-in-the-azure-portalhttpsportalazurecom"></a>方案 1：[Azure 门户](https://portal.azure.com)收到错误消息
 
 解决此问题：
 
 * 通过单击右上角的帐户确保已选择正确的 Azure 目录。
 
   ![选择 Azure 门户右上角的目录](./media/billing-no-subscriptions-found/directory-switch.png)
-* 如果已选择正确的 Azure 目录，但仍收到错误消息，[请将帐户添加为所有者](billing-add-change-azure-subscription-administrator.md)。
+* 如果已选择正确的 Azure 目录，但仍收到错误消息，[请将所有者角色分配给帐户](../role-based-access-control/role-assignments-portal.md)。
 
-### <a name="scenario-2-error-message-is-received-in-the-azure-account-centerhttpsaccountwindowsazurecomsubscriptions"></a>场景 2：[Azure 帐户中心](https://account.windowsazure.com/Subscriptions)收到错误消息
+### <a name="scenario-2-error-message-is-received-in-the-azure-account-centerhttpsaccountwindowsazurecomsubscriptions"></a>方案 2：[Azure 帐户中心](https://account.windowsazure.com/Subscriptions)收到错误消息
 
 请检查使用的帐户是否是帐户管理员。 要验证谁是帐户管理员，请执行下列步骤：
 
 1. 登录到 [Azure 门户中的订阅视图](https://portal.azure.com/#blade/Microsoft_Azure_Billing/SubscriptionsBlade)。
-1. 选择要检查的订阅，并关注“设置”下的信息。
-1. 选择“属性”。 订阅的帐户管理员会显示在“帐户管理员”框中。  
+1. 选择要检查的订阅，并关注“设置”  下的信息。
+1. 选择“属性”。  订阅的帐户管理员会显示在“帐户管理员”框中。   
 
-## <a name="need-help-contact-support"></a>需要帮助？ 联系支持人员。
+## <a name="need-help-contact-us"></a>需要帮助？ 请联系我们。
 
-如果仍需帮助，请[联系支持人员](http://go.microsoft.com/fwlink/?linkid=544831&clcid=0x409)以快速解决问题。 
+如有任何疑问或需要帮助，请[创建支持请求](https://go.microsoft.com/fwlink/?linkid=2083458)。

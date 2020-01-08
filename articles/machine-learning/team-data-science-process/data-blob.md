@@ -1,24 +1,22 @@
 ---
-title: 使用高级分析处理 Azure Blob 数据 | Microsoft Docs
-description: 处理 Azure blob 存储中的数据。
-services: machine-learning,storage
-documentationcenter: ''
-author: deguhath
+title: 使用高级分析处理 Azure Blob 数据 - Team Data Science Process
+description: 使用高级分析探索数据并从 Azure Blob 存储中存储的数据生成功能。
+services: machine-learning
+author: marktab
 manager: cgronlun
 editor: cgronlun
-ms.assetid: d8a59078-91d3-4440-b85c-430363c3f4d1
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/13/2017
-ms.author: deguhath
-ms.openlocfilehash: 7abb547692bf7cc8e78caabe7c4c0f47edc1a0d2
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: a91c4d9f5dcdcee436f2dbf012eb5485b7a92192
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60398531"
 ---
 # <a name="heading"></a>使用高级分析处理 Azure Blob 数据
 本文档介绍了如何浏览数据，以及如何从 Azure Blob 存储中存储的数据生成功能。 
@@ -77,11 +75,12 @@ ms.lasthandoff: 05/03/2018
         print miss_num
 7. 如果数据中有特定列存在缺少的值，可按如下方法进行替代：
    
-     dataframe_blobdata_noNA = dataframe_blobdata.dropna()   dataframe_blobdata_noNA.shape
+        dataframe_blobdata_noNA = dataframe_blobdata.dropna()
+        dataframe_blobdata_noNA.shape
    
    另一种替代缺失值的方法是使用模式函数：
    
-     dataframe_blobdata_mode = dataframe_blobdata.fillna({'<column_name>':dataframe_blobdata['<column_name>'].mode()[0]})        
+        dataframe_blobdata_mode = dataframe_blobdata.fillna({'<column_name>':dataframe_blobdata['<column_name>'].mode()[0]})        
 8. 使用数量不定的量化创建直方图，以绘制变量的分布情况    
    
         dataframe_blobdata['<column_name>'].value_counts().plot(kind='bar')
@@ -132,7 +131,7 @@ ms.lasthandoff: 05/03/2018
         dataframe_blobdata_with_bin_bool = dataframe_blobdata.join(dataframe_blobdata_bin_bool)    
 
 ## <a name="sql-featuregen"></a>将数据写回 Azure blob 并在 Azure 机器学习中使用
-浏览过数据并创建必要功能后，可将数据（示例或定义数据）上传至 Azure blob 并在 Azure 机器学习中使用数据，操作步骤如下：请注意，也可在 Azure 机器学习工作室中创建其他功能。 
+探索过数据并创建必要功能后，可将数据（已采样或已特征化）上传至 Azure blob 并在 Azure 机器学习中使用数据，操作步骤如下：请注意，也可在 Azure 机器学习工作室中创建其他功能。 
 
 1. 将数据帧写入本地文件
    

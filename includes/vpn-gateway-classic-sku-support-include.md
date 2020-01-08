@@ -8,11 +8,12 @@ ms.topic: include
 ms.date: 03/21/2018
 ms.author: cherylmc
 ms.custom: include file
-ms.openlocfilehash: f135665b6fa7eb640526be513d2757c8e17ab8df
-ms.sourcegitcommit: 59914a06e1f337399e4db3c6f3bc15c573079832
-ms.translationtype: HT
+ms.openlocfilehash: 979a09da805abfd6558fac90e6adedb66de438f1
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/20/2018
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67172834"
 ---
 > [!NOTE]
 > 仅 Resource Manager 部署模型支持新的 VPN 网关 SKU（VpnGw1、VpnGw2 和 VpnGw3）。 经典虚拟网络应继续使用老版（旧版）SKU。

@@ -1,99 +1,105 @@
 ---
-title: 在 Azure 云存储中搜索半结构化数据
-description: 使用 Azure 搜索来搜索半结构化 Blob 数据。
-author: roygara
-manager: cgronlun
+title: REST 教程：为 JSON Blob 中的半结构化数据编制索引 - Azure 搜索
+description: 了解如何使用 Azure 搜索 REST API 和 Postman 为半结构化 Azure JSON Blob 编制索引以及搜索此类数据。
+author: HeidiSteen
+manager: nitinme
 services: search
 ms.service: search
 ms.topic: tutorial
-ms.date: 10/12/2017
-ms.author: v-rogara
-ms.openlocfilehash: 7579862e132724d101e4267023afd9e3336bc3b1
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
+ms.date: 05/02/2019
+ms.author: heidist
+ms.custom: seodec2018
+ms.openlocfilehash: cb9c97efd62a56ad0eac49956f11fb422a448194
+ms.sourcegitcommit: bb8e9f22db4b6f848c7db0ebdfc10e547779cccc
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 08/20/2019
+ms.locfileid: "69647857"
 ---
-# <a name="part-2-search-semi-structured-data-in-cloud-storage"></a>第 2 部分：在云存储中搜索半结构化数据
+# <a name="rest-tutorial-index-and-search-semi-structured-data-json-blobs-in-azure-search"></a>REST 教程：在 Azure 搜索中为半结构化数据 (JSON Blob) 编制索引以及搜索此类数据
 
-在由两个部分组成的教程系列中，介绍如何使用 Azure 搜索来搜索半结构化和非结构化数据。 [第 1 部分](../storage/blobs/storage-unstructured-search.md)指导你完成搜索非结构化数据，但还包括本教程的重要先决条件，例如创建存储帐户。 
+Azure 搜索可使用一个知晓如何读取半结构化数据的[索引器](search-indexer-overview.md)来编制 Azure blob 存储中 JSON 文档和数组的索引。 半结构化数据包含用于分隔数据中的内容的标记或标签。 它的本质是提供必须全面索引的非结构化数据和符合数据模型的正式结构化数据之间的一个折中，例如可以按字段编制索引的关系数据库架构。
 
-在第 2 部分中，将重点切换到 Azure blob 中存储的半结构化数据，例如 JSON。 半结构化数据包含用于分隔数据中的内容的标记或标签。 它的本质是提供必须全面索引的非结构化数据和符合数据模型的正式结构化数据之间的一个折中，例如可以按字段搜索的关系数据库架构。
-
-在第 2 部分中，了解如何：
+在本教程中，使用 [Azure 搜索 REST API](https://docs.microsoft.com/rest/api/searchservice/) 和 REST 客户端执行以下任务：
 
 > [!div class="checklist"]
 > * 为 Azure blob 容器配置 Azure 搜索数据源
-> * 创建并填充 Azure 搜索索引和索引器，以便抓取容器和提取可搜索内容
+> * 创建 Azure 搜索索引以包含可搜索的内容
+> * 配置和运行索引器以读取容器和从 Azure blob 存储中提取可搜索内容
 > * 搜索刚刚创建的索引
-
-> [!NOTE]
-> 本教程依赖于 JSON 数组支持，该项当前是 Azure 搜索中的预览功能。 该功能在门户中不可用。 为此，我们会使用可提供此功能的预览版 REST API，并使用某个 REST 客户端工具来调用该 API。
 
 ## <a name="prerequisites"></a>先决条件
 
-* 完成[前一教程](../storage/blobs/storage-unstructured-search.md)后，会获得前一教程中创建的存储帐户和搜索服务。
+本快速入门使用以下服务、工具和数据。 
 
-* 安装 REST 客户端，并了解如何构造 HTTP 请求。 本教程使用 [Postman](https://www.getpostman.com/)。 可以任意使用你所熟悉的其他 REST 客户端。
+[创建 Azure 搜索服务](search-create-service-portal.md)或在当前订阅下[查找现有服务](https://ms.portal.azure.com/#blade/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.Search%2FsearchServices)。 可在本教程中使用免费服务。 
 
-## <a name="set-up-postman"></a>设置 Postman
+[创建一个 Azure 存储帐户](https://docs.microsoft.com/azure/storage/common/storage-quickstart-create-account)，用于存储示例数据。
 
-启动 Postman 并设置 HTTP 请求。 如果不熟悉此工具，请参阅[使用 Fiddler 或 Postman 探索 Azure 搜索 REST API](search-fiddler.md)了解详细信息。
+使用 [Postman 桌面应用](https://www.getpostman.com/)，将请求发送到 Azure 搜索。
 
-本教程中每个调用的请求方法是“POST”。 标头键为“Content-type”和“api-key”。 上述标头键的值分别为“application/json”和你的“admin key”（“admin key”是搜索主密钥的占位符）。 正文是调用的实际内容的放置位置。 根据所用的客户端，在如何构造查询方面可能存在一些差异，但基本思路相同。
+[Clinical-trials-json.zip](https://github.com/Azure-Samples/storage-blob-integration-with-cdn-search-hdi/raw/master/clinical-trials-json.zip) 包含本教程使用的数据。 请下载此文件并将其解压缩到其自身的文件夹。 数据源自 [clinicaltrials.gov](https://clinicaltrials.gov/ct2/results)，已为本教程转换为 JSON。
 
-  ![半结构化搜索](media/search-semi-structured-data/postmanoverview.png)
+## <a name="get-a-key-and-url"></a>获取密钥和 URL
 
-对于本教程中所述的 REST 调用，必须使用搜索 api-key。 可在搜索服务中的“密钥”下面找到自己的 api-key。 必须将此 api-key 放置在本教程引导发出的每个 API 调用的标头中（请将上面屏幕截图中的“admin key”替换为此密钥）。 请保留该密钥，因为发出每个调用都需要用到它。
+REST 调用需要在每个请求中使用服务 URL 和访问密钥。 搜索服务是使用这二者创建的，因此，如果向订阅添加了 Azure 搜索，则请按以下步骤获取必需信息：
 
-  ![半结构化搜索](media/search-semi-structured-data/keys.png)
+1. [登录到 Azure 门户](https://portal.azure.com/)，在搜索服务的“概述”页中获取 URL。  示例终结点可能类似于 `https://mydemo.search.windows.net`。
 
-## <a name="download-the-sample-data"></a>下载示例数据
+1. 在“设置” > “密钥”中，获取有关该服务的完全权限的管理员密钥   。 有两个可交换的管理员密钥，为保证业务连续性而提供，以防需要滚动一个密钥。 可以在请求中使用主要或辅助密钥来添加、修改和删除对象。
 
-我们已准备好示例数据集。 **下载 [clinical-trials-json.zip](https://github.com/Azure-Samples/storage-blob-integration-with-cdn-search-hdi/raw/master/clinical-trials-json.zip)** 并将其解压缩到其自身所在的文件夹中。
+![获取 HTTP 终结点和访问密钥](media/search-get-started-postman/get-url-key.png "Get an HTTP endpoint and access key")
 
-该示例中包含示例 JSON 文件，这些文件是从 [clinicaltrials.gov](https://clinicaltrials.gov/ct2/results) 获取的原始文本文件。 为方便起见，我们已将其转换为 JSON。
+所有请求对发送到服务的每个请求都需要 API 密钥。 具有有效的密钥可以在发送请求的应用程序与处理请求的服务之间建立信任关系，这种信任关系以每个请求为基础。
 
-## <a name="log-in-to-azure"></a>登录 Azure
+## <a name="prepare-sample-data"></a>准备示例数据
 
-登录到 [Azure 门户](http://portal.azure.com)。
+1. [登录到 Azure 门户](https://portal.azure.com)，导航到你的 Azure 存储帐户，单击“Blob”，然后单击“+ 容器”   。
 
-## <a name="upload-the-sample-data"></a>上传示例数据
+1. [创建一个 Blob 容器](https://docs.microsoft.com/azure/storage/blobs/storage-quickstart-blobs-portal)用于包含示例数据。 可以将“公共访问级别”设为任何有效值。
 
-在 Azure 门户中，导航回到在[前一篇教程](../storage/blobs/storage-unstructured-search.md)中创建的存储帐户。 然后打开“数据”容器，单击“上传”。
+1. 创建容器后，将其打开，然后在命令栏中选择“上传”  。
 
-单击“高级”，输入“clinical-trials-json”，上传所下载的全部 JSON 文件。
+   ![在命令栏中上传](media/search-semi-structured-data/upload-command-bar.png "在命令栏中上传")
 
-  ![半结构化搜索](media/search-semi-structured-data/clinicalupload.png)
+1. 导航到包含示例文件的文件夹。 选择所有这些文件，然后单击“上传”  。
+
+   ![上传文件](media/search-semi-structured-data/clinicalupload.png "上传文件")
 
 上传完成后，这些文件应会显示在数据容器内其自身的子文件夹中。
 
-## <a name="connect-your-search-service-to-your-container"></a>将搜索服务连接到容器
+## <a name="set-up-postman"></a>设置 Postman
+
+启动 Postman 并设置 HTTP 请求。 如果不熟悉此工具，请参阅[使用 Postman 探索 Azure 搜索 REST API](search-get-started-postman.md) 了解详细信息。
+
+本教程中每个调用的请求方法是 **POST**。 标头键为“Content-type”和“api-key”。 上述标头键的值分别为“application/json”和你的“admin key”（“admin key”是搜索主密钥的占位符）。 正文是调用的实际内容的放置位置。 根据所用的客户端，在如何构造查询方面可能存在一些差异，但基本思路相同。
+
+  ![半结构化搜索](media/search-semi-structured-data/postmanoverview.png)
 
 我们将使用 Postman 向搜索服务发出三个 API 调用，以创建数据源、索引和索引器。 数据源包含指向存储帐户的指针以及 JSON 数据。 加载数据时，搜索服务会建立连接。
 
-查询字符串必须包含 **api-version=2016-09-01-Preview**，每个调用应返回 **201 Created**。 正式版 api-version 尚未提供将 json 作为 jsonArray 进行处理的功能，目前只有预览版 api-version 提供此功能。
+查询字符串必须指定 api-version，并且每个调用都应返回“201 已创建”  。 用于使用 JSON 数组的正式版 api-version 为 `2019-05-06`。
 
 从 REST 客户端执行以下三个 API 调用。
 
-### <a name="create-a-datasource"></a>创建数据源
+## <a name="create-a-data-source"></a>创建数据源
 
-数据源指定要编制索引的数据。
+[创建数据源 API](https://docs.microsoft.com/rest/api/searchservice/create-data-source) 可创建一个 Azure 搜索对象，用于指定要编制索引的数据。
 
-此调用的终结点为 `https://[service name].search.windows.net/datasources?api-version=2016-09-01-Preview`。 请将 `[service name]` 替换为搜索服务的名称。
+此调用的终结点为 `https://[service name].search.windows.net/datasources?api-version=2019-05-06`。 请将 `[service name]` 替换为搜索服务的名称。 
 
-对于此调用，需要存储帐户名称和存储帐户密钥。 可在 Azure 门户上存储帐户的“访问密钥”中找到存储帐户密钥。 下图显示了该位置：
+对于此调用，请求正文必须包含存储帐户名称、存储帐户密钥和 Blob 容器名称。 可在 Azure 门户上存储帐户的“访问密钥”中找到存储帐户密钥。  下图显示了该位置：
 
   ![半结构化搜索](media/search-semi-structured-data/storagekeys.png)
 
-在执行该调用之前，请务必替换调用正文中的 `[storage account name]` 和 `[storage account key]`。
+在执行该调用之前，请务必替换调用正文中的 `[storage account name]`、`[storage account key]` 和 `[blob container name]`。
 
 ```json
 {
     "name" : "clinical-trials-json",
     "type" : "azureblob",
     "credentials" : { "connectionString" : "DefaultEndpointsProtocol=https;AccountName=[storage account name];AccountKey=[storage account key];" },
-    "container" : { "name" : "data", "query" : "clinical-trials-json" }
+    "container" : { "name" : "[blob container name]"}
 }
 ```
 
@@ -111,19 +117,19 @@ ms.lasthandoff: 04/23/2018
         "connectionString": "DefaultEndpointsProtocol=https;AccountName=[mystorageaccounthere];AccountKey=[[myaccountkeyhere]]];"
     },
     "container": {
-        "name": "data",
-        "query": "clinical-trials-json"
+        "name": "[mycontainernamehere]",
+        "query": null
     },
     "dataChangeDetectionPolicy": null,
     "dataDeletionDetectionPolicy": null
 }
 ```
 
-### <a name="create-an-index"></a>创建索引
+## <a name="create-an-index"></a>创建索引
     
-第二个 API 调用创建索引。 索引指定所有参数及其属性。
+第二次调用的是[创建索引 API](https://docs.microsoft.com/rest/api/searchservice/create-indexer)，用于创建可存储所有可搜索数据的 Azure 搜索索引。 索引指定所有参数及其属性。
 
-此调用的 URL 为 `https://[service name].search.windows.net/indexes?api-version=2016-09-01-Preview`。 请将 `[service name]` 替换为搜索服务的名称。
+此调用的 URL 为 `https://[service name].search.windows.net/indexes?api-version=2019-05-06`。 请将 `[service name]` 替换为搜索服务的名称。
 
 首先替换 URL。 然后，将以下代码复制并粘贴到正文，并运行查询。
 
@@ -209,13 +215,13 @@ ms.lasthandoff: 04/23/2018
 }
 ```
 
-### <a name="create-an-indexer"></a>创建索引器
+## <a name="create-and-run-an-indexer"></a>创建并运行索引器
 
-索引器将数据源连接到目标搜索索引，并选择性地提供一个计划来自动执行数据刷新。
+索引器连接数据源，将数据导入目标搜索索引，并选择性地提供一个计划来自动执行数据刷新。 REST API 为[创建索引器](https://docs.microsoft.com/rest/api/searchservice/create-indexer)。
 
-此调用的 URL 为 `https://[service name].search.windows.net/indexers?api-version=2016-09-01-Preview`。 请将 `[service name]` 替换为搜索服务的名称。
+此调用的 URL 为 `https://[service name].search.windows.net/indexers?api-version=2019-05-06`。 请将 `[service name]` 替换为搜索服务的名称。
 
-首先替换 URL。 然后，将以下代码复制并粘贴到正文，并运行查询。
+首先替换 URL。 然后，将以下代码复制并粘贴到正文，并发送请求。 系统会立即处理该请求。 当响应返回时，便拥有了可进行全文搜索的索引。
 
 ```json
 {
@@ -254,9 +260,11 @@ ms.lasthandoff: 04/23/2018
 
 ## <a name="search-your-json-files"></a>搜索 JSON 文件
 
-将搜索服务连接到数据容器后，可以开始搜索文件。
+加载第一个文档后，可立即开始搜索。 为完成此任务，在门户中使用[搜索浏览器](search-explorer.md)  。
 
-打开 Azure 门户并导航回到搜索服务， 如前一篇教程中所述进行操作。
+在 Azure 门户中，打开搜索服务的“概述”页，在“索引”列表中找到创建的索引   。
+
+请务必选择刚刚创建的索引。 
 
   ![非结构化搜索](media/search-semi-structured-data/indexespane.png)
 
@@ -276,15 +284,13 @@ ms.lasthandoff: 04/23/2018
 
 `$filter` 参数只适用于在创建索引时标记为可筛选的元数据。
 
+## <a name="clean-up-resources"></a>清理资源
+
+完成本教程后，最快的清理方式是删除包含 Azure 搜索服务的资源组。 现在，可以删除资源组以永久删除其中的所有内容。 在门户中，资源组名称显示在 Azure 搜索服务的“概述”页上。
+
 ## <a name="next-steps"></a>后续步骤
 
-本教程已介绍如何使用 Azure 搜索来搜索半结构化数据，例如，如何执行以下操作：
-
-> [!div class="checklist"]
-> * 使用 REST API 创建 Azure 搜索服务
-> * 使用 Azure 搜索服务来搜索容器
-
-请单击以下链接了解有关搜索的详细信息。
+要编制 JSON Blob 的索引，有多种方法和多个选项。 下一步，查看并测试各种选项，找到最适合自己的方案。
 
 > [!div class="nextstepaction"]
-> [为 Azure Blob 存储中的文档编制索引](search-howto-indexing-azure-blob-storage.md)
+> [如何使用 Azure 搜索 Blob 索引器为 JSON blob 编制索引](search-howto-index-json-blobs.md)

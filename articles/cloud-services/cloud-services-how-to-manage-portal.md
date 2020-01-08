@@ -1,24 +1,19 @@
 ---
-title: "常见的云服务管理任务 | Microsoft Docs"
-description: "了解如何在 Azure 门户中管理云服务。 这些示例使用 Azure 门户。"
+title: 常见的云服务管理任务 | Microsoft Docs
+description: 了解如何在 Azure 门户中管理云服务。 这些示例使用 Azure 门户。
 services: cloud-services
-documentationcenter: 
-author: Thraka
-manager: timlt
-editor: 
-ms.assetid: cb218ad9-77d4-4149-83db-71159c00767e
+documentationcenter: ''
+author: georgewallace
 ms.service: cloud-services
-ms.workload: tbd
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 07/05/2017
-ms.author: adegeo
-ms.openlocfilehash: e60bf5c82e68d49abaa44d80ac9fafba2d8265da
-ms.sourcegitcommit: 059dae3d8a0e716adc95ad2296843a45745a415d
-ms.translationtype: HT
+ms.author: gwallace
+ms.openlocfilehash: 8ec7784fb51d0fa4de2563f76444b0b5e5f34902
+ms.sourcegitcommit: 4b647be06d677151eb9db7dccc2bd7a8379e5871
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/09/2018
+ms.lasthandoff: 07/19/2019
+ms.locfileid: "68359598"
 ---
 # <a name="manage-cloud-services-in-the-azure-portal"></a>在 Azure 门户中管理云服务
 在 Azure 门户的“云服务”区域中，可以：
@@ -56,7 +51,7 @@ ms.lasthandoff: 02/09/2018
 ## <a name="swap-deployments-to-promote-a-staged-deployment-to-production"></a>交换部署以将预留部署升级到生产环境
 如果决定部署云服务的新版本，可以在云服务过渡环境中暂存和测试新版本。 使用“交换”将用于寻址这两个部署的 URL 地址互换，将新版本提升为生产。
 
-可以通过“云服务”页或仪表板来交换部署。
+可以通过“云服务”  页面或仪表板交换部署。
 
 1. 在 [Azure 门户][Azure portal]中，选择要更新的云服务。 此步骤将打开云服务实例边栏选项卡。
 
@@ -82,7 +77,7 @@ ms.lasthandoff: 02/09/2018
 
 - 如果想要将静态 IP 地址用于生产槽，还必须为过渡槽保留一个静态 IP 地址。 否则，交换失败。
 
-- 执行交换前，角色的所有实例必须都在运行。 可在 Azure 门户的“概述”边栏选项卡中检查实例的状态。 或者，可以使用 Windows PowerShell 中的 [Get-azurerole](/powershell/module/azure/get-azurerole?view=azuresmps-3.7.0) 命令。
+- 执行交换前，角色的所有实例必须都在运行。 可在 Azure 门户的“概述”边栏选项卡中检查实例的状态。 或者，可以使用 Windows PowerShell 中的 [Get-azurerole](/powershell/module/servicemanagement/azure/get-azurerole?view=azuresmps-3.7.0) 命令。
 
 请注意，来宾 OS 更新和服务修复操作也会导致部署交换失败。 有关详细信息，请参阅[排查云服务部署问题](cloud-services-troubleshoot-deployment-problems.md)。
 

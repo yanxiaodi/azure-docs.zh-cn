@@ -3,16 +3,20 @@
 - name: 快速入门
   expanded: true
   items:
-    - name: Marketplace 模板
+    - name: 市场模板
       href: 'https://azuremarketplace.microsoft.com/marketplace/apps/pivotal.pivotal-cloud-foundry'
 - name: 教程
   items:
+    - name: 在 Azure 上创建 CF
+      href: /azure/cloudfoundry/create-cloud-foundry-on-azure
     - name: 将 CF 应用部署到 Azure
       href: /azure/virtual-machines/linux/cloudfoundry-deploy-your-first-app
     - name: Azure 上的 CloudFoundry
       href: /azure/virtual-machines/linux/cloudfoundry-get-started
     - name: 部署 CF OMS Nozzle
       href: /azure/cloudfoundry/cloudfoundry-oms-nozzle
+    - name: 将 Cloud Foundry 与 Azure 集成
+      href: /azure/cloudfoundry/how-cloud-foundry-integrates-with-azure
 - name: 资源
   items:
     - name: Azure 路线图
@@ -23,5 +27,5 @@
       href: 'https://docs.pivotal.io/pivotalcf/1-11/customizing/pcf_azure.html'
     - name: Pivotal 和 Azure
       href: 'https://pivotal.io/partners/microsoft'
-    - name: 用于 CF 的 VSTS 插件
+    - name: 用于 CF 的 Azure DevOps 插件
       href: 'https://github.com/Microsoft/vsts-cloudfoundry'

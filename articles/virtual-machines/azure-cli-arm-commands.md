@@ -3,8 +3,8 @@ title: Resource Manager 模式下的 Azure CLI 命令 | Microsoft Docs
 description: 用于在 Resource Manager 部署模型中管理资源的 Azure 命令行界面 (CLI) 命令
 services: virtual-machines-linux,virtual-machines-windows,virtual-network,mobile-services,cloud-services
 documentationcenter: ''
-author: dlepow
-manager: jeconnoc
+author: cynthn
+manager: gwallace
 editor: ''
 tags: azure-resource-manager
 ms.assetid: be37da5b-72fe-41a1-9fa0-8937b69464ec
@@ -14,24 +14,25 @@ ms.tgt_pltfrm: command-line-interface
 ms.devlang: na
 ms.topic: article
 ms.date: 04/18/2017
-ms.author: danlep
-ms.openlocfilehash: 8a2bae12fae6a1bf8f5ecbdb2ae01dea5260f3cb
-ms.sourcegitcommit: 6fcd9e220b9cd4cb2d4365de0299bf48fbb18c17
-ms.translationtype: HT
+ms.author: cynthn
+ms.openlocfilehash: 1ec1856508588d07e55e60e251a1369ecc3fa985
+ms.sourcegitcommit: f2771ec28b7d2d937eef81223980da8ea1a6a531
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/05/2018
+ms.lasthandoff: 09/20/2019
+ms.locfileid: "71174064"
 ---
 # <a name="azure-cli-commands-in-resource-manager-mode"></a>Resource Manager 模式下的 Azure CLI 命令
 本文提供常用于在 Azure 资源管理器部署模型中创建和管理 Azure 资源的 Azure 命令行接口 (CLI) 命令的语法和选项。 通过在 Resource Manager (arm) 模式下运行 CLI 可以访问这些命令。 本参考内容并不完整，CLI 版本可能会显示略微不同的命令或参数。 有关 Azure 资源和资源组的一般概述，请参阅 [Azure 资源管理器概述](../azure-resource-manager/resource-group-overview.md)。  
 
 > [!NOTE]
-> 本文介绍了 Azure CLI（有时被称为 Azure CLI 1.0）中的 Resource Manager 模式命令。 若要在 Resource Manager 模型中工作，还可试用下一代多平台 CLI - [Azure CLI 2.0](/cli/azure/install-az-cli2)。
+> 本文介绍了 Azure CLI（有时亦称为“Azure 经典 CLI”）中的资源管理器模式命令。 若要使用 Resource Manager 模型，还可试用下一代多平台 CLI，即 [Azure CLI](/cli/azure/install-az-cli2)。
 >查找有关[新旧 Azure CLI](/cli/azure/old-and-new-clis)的详细信息。
 >
 
 若要开始，请先[安装 Azure CLI](../cli-install-nodejs.md) 并[连接到 Azure 订阅](/cli/azure/authenticate-azure-cli)。
 
-要在 Resource Manager 模式下在命令行中查看当前的命令语法和选项，请键入 `azure help`；要显示某个命令的帮助，请键入 `azure help [command]`。 还可以在创建和管理具体 Azure 服务的说明文档中找到 CLI 示例。
+要在 Resource Manager 模式下在命令行中查看当前的命令语法和选项，请键入 `azure help`；要显示某个命令的帮助，请键入 `azure help [command]`。 还可以在创建和管理特定 Azure 服务的说明文档中找到 CLI 示例。
 
 可选参数显示在方括号中（例如，`[parameter]`）。 其他所有参数都是必需的。
 
@@ -47,7 +48,7 @@ ms.lasthandoff: 04/05/2018
 > 
 > 
 
-## <a name="azure-account-manage-your-account-information"></a>azure account：管理帐户信息
+## <a name="azure-account-manage-your-account-information"></a>azure 帐户：管理帐户信息
 该工具使用 Azure 订阅信息连接到帐户。
 
 **列出导入的订阅**
@@ -149,7 +150,7 @@ ms.lasthandoff: 04/05/2018
 
     feature register [options] <providerName> <featureName>
 
-## <a name="azure-group-commands-to-manage-your-resource-groups"></a>azure group：用于管理资源组的命令
+## <a name="azure-group-commands-to-manage-your-resource-groups"></a>azure 组：用于管理资源组的命令
 **创建资源组**
 
     group create [options] <name> <location>
@@ -195,7 +196,7 @@ ms.lasthandoff: 04/05/2018
     hdinsight config add-config-values [options] <configFilePath>
     hdinsight config add-script-action [options] <configFilePath>
 
-示例：创建一个配置文件，其中包含创建群集时要运行的脚本操作。
+例如：创建一个配置文件，其中包含创建群集时要运行的脚本操作。
 
     hdinsight config create "C:\myFiles\configFile.config"
     hdinsight config add-script-action --configFilePath "C:\myFiles\configFile.config" --nodeType HeadNode --uri <scriptActionURI> --name myScriptAction --parameters "-param value"
@@ -204,7 +205,7 @@ ms.lasthandoff: 04/05/2018
 
     hdinsight cluster create [options] <clusterName>
 
-示例：在 Linux 群集上创建 Storm
+例如：在 Linux 群集上创建风暴
 
     azure hdinsight cluster create -g myarmgroup -l westus -y Linux --clusterType Storm --version 3.2 --defaultStorageAccountName mystorageaccount --defaultStorageAccountKey <defaultStorageAccountKey> --defaultStorageContainer mycontainer --userName admin --password <clusterPassword> --sshUserName sshuser --sshPassword <sshPassword> --workerNodeCount 1 myNewCluster01
 
@@ -212,7 +213,7 @@ ms.lasthandoff: 04/05/2018
     + Submitting the request to create cluster...
     info:    hdinsight cluster create command OK
 
-示例：使用脚本操作创建群集
+例如：使用脚本操作创建群集
 
     azure hdinsight cluster create -g myarmgroup -l westus -y Linux --clusterType Hadoop --version 3.2 --defaultStorageAccountName mystorageaccount --defaultStorageAccountKey <defaultStorageAccountKey> --defaultStorageContainer mycontainer --userName admin --password <clusterPassword> --sshUserName sshuser --sshPassword <sshPassword> --workerNodeCount 1 –configurationPath "C:\myFiles\configFile.config" myNewCluster01
 
@@ -306,17 +307,17 @@ ms.lasthandoff: 04/05/2018
 
     hdinsight cluster disable-rdp-access [options] <clusterName>
 
-## <a name="azure-insights-commands-related-to-monitoring-insights-events-alert-rules-autoscale-settings-metrics"></a>azure insights：与监视 Insights（事件、警报规则、自动缩放设置、度量值）相关的命令
+## <a name="azure-insights-commands-related-to-monitoring-insights-events-alert-rules-autoscale-settings-metrics"></a>azure insights：与监视 Insights （事件、警报规则、自动缩放设置、度量值）相关的命令
 **检索订阅、correlationId、资源组、资源或资源提供程序的操作日志**
 
     insights logs list [options]
 
-## <a name="azure-location-commands-to-get-the-available-locations-for-all-resource-types"></a>azure location：用于获取所有资源类型的可用位置的命令
+## <a name="azure-location-commands-to-get-the-available-locations-for-all-resource-types"></a>azure 位置：用于获取所有资源类型的可用位置的命令
 **列出可用位置**
 
     location list [options]
 
-## <a name="azure-network-commands-to-manage-network-resources"></a>azure network：用于管理网络资源的命令
+## <a name="azure-network-commands-to-manage-network-resources"></a>azure 网络：用于管理网络资源的命令
 **用于管理虚拟网络的命令**
 
     network vnet create [options] <resource-group> <name> <location>
@@ -968,6 +969,7 @@ ms.lasthandoff: 04/05/2018
      -s, --subscription <subscription>      the subscription identifier
 
 <BR>
+
     network lb address-pool delete [options] <resource-group> <lb-name> <name>
 
 从负载均衡器中删除后端 IP 池范围资源。
@@ -1332,7 +1334,9 @@ ms.lasthandoff: 04/05/2018
     -s, --subscription <subscription>            the subscription identifier
 
 <br>
-    network public-ip list [options] <resource-group> 列出资源组中的所有公共 IP 资源。
+
+    network public-ip list [options] <resource-group>
+列出资源组中的所有公共 IP 资源。
 
     azure network public-ip list -g myresourcegroup
 
@@ -1352,7 +1356,9 @@ ms.lasthandoff: 04/05/2018
     --json                                 use json output
     -g, --resource-group <resource-group>  the name of the resource group
     -s, --subscription <subscription>      the subscription identifier
+
 <BR>
+
     network public-ip show [options] <resource-group> <name>
 
 显示资源组中公共 IP 资源的公共 IP 属性。
@@ -1452,7 +1458,7 @@ ms.lasthandoff: 04/05/2018
     e.g. /subscriptions/<subscription-id>/resourceGroups/<resource-group-name>/providers/Microsoft.Network/virtualNetworks/<vnet-name>/subnets/<subnet-name>
     --subnet-name <subnet-name>                                  the subnet name
     -m, --subnet-vnet-name <subnet-vnet-name>                        the vnet name under which subnet-name exists
-    -t, --tags <tags>                                                the comma seperated list of tags.
+    -t, --tags <tags>                                                the comma separated list of tags.
     Can be multiple. In the format of "name=value".
     Name is required and value is optional.
     For example, -t tag1=value1;tag2
@@ -1503,7 +1509,7 @@ ms.lasthandoff: 04/05/2018
 
     network gateway list [options] <resource-group>
 
-## <a name="azure-provider-commands-to-manage-resource-provider-registrations"></a>azure provider：用于管理资源提供程序注册的命令
+## <a name="azure-provider-commands-to-manage-resource-provider-registrations"></a>azure 提供商：用于管理资源提供程序注册的命令
 **列出 Resource Manager 中当前已注册的提供程序**
 
     provider list [options]
@@ -1520,7 +1526,7 @@ ms.lasthandoff: 04/05/2018
 
     provider unregister [options] <namespace>
 
-## <a name="azure-resource-commands-to-manage-your-resources"></a>azure resource：用于管理资源的命令
+## <a name="azure-resource-commands-to-manage-your-resources"></a>azure 资源：用于管理资源的命令
 **在资源组中创建资源**
 
     resource create [options] <resource-group> <name> <resource-type> <location> <api-version>
@@ -1541,7 +1547,7 @@ ms.lasthandoff: 04/05/2018
 
     resource delete [options] <resource-group> <name> <resource-type> <api-version>
 
-## <a name="azure-role-commands-to-manage-your-azure-roles"></a>azure role：用于管理 Azure 角色的命令
+## <a name="azure-role-commands-to-manage-your-azure-roles"></a>Azure 角色:用于管理 Azure 角色的命令
 **获取所有可用的角色定义**
 
     role list [options]
@@ -1556,7 +1562,7 @@ ms.lasthandoff: 04/05/2018
     role assignment list [options] [objectId] [upn] [mail] [spn] [role] [scope] [resource-group] [resource-type] [resource-name]
     role assignment delete [options] [objectId] [upn] [mail] [spn] [role] [scope] [resource-group] [resource-type] [resource-name]
 
-## <a name="azure-storage-commands-to-manage-your-storage-objects"></a>azure storage：用于管理存储对象的命令
+## <a name="azure-storage-commands-to-manage-your-storage-objects"></a>azure 存储：用于管理存储对象的命令
 **用于管理存储帐户的命令**
 
     storage account list [options]
@@ -1679,7 +1685,7 @@ ms.lasthandoff: 04/05/2018
     storage table policy set [options] [table] [name]
     storage table policy delete [options] [table] [name]
 
-## <a name="azure-tag-commands-to-manage-your-resource-manager-tag"></a>azure tag：用于管理 Resource Manager 标记的命令
+## <a name="azure-tag-commands-to-manage-your-resource-manager-tag"></a>azure 标记：用于管理 resource manager 标记的命令
 **添加标记**
 
     tag create [options] <name> <value>
@@ -1706,7 +1712,7 @@ ms.lasthandoff: 04/05/2018
     vm quick-create [options] <resource-group> <name> <location> <os-type> <image-urn> <admin-username> <admin-password
 
 > [!TIP]
-> 从 CLI 0.10 版开始，可以为某些热门 Marketplace 映像提供“UbuntuLTS”或“Win2012R2Datacenter”之类的简短别名作为 `image-urn`。 针对选项运行 `azure help vm quick-create`。 另外，从 0.10 版开始，`azure vm quick-create` 默认使用高级存储，前提是所选区域提供该存储。
+> 从 CLI 0.10 版开始，可以为某些热门市场映像提供“UbuntuLTS”或“Win2012R2Datacenter”之类的简短别名作为 `image-urn`。 针对选项运行 `azure help vm quick-create`。 另外，从 0.10 版开始，`azure vm quick-create` 默认使用高级存储，前提是所选区域提供该存储。
 > 
 > 
 

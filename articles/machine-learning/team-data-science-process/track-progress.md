@@ -1,35 +1,33 @@
 ---
-title: 数据科学项目的执行 - Azure 机器学习 | Microsoft Docs
-description: 数据科学家如何跟踪数据科学项目的进度。
-documentationcenter: ''
-author: deguhath
+title: 跟踪数据科学项目的进度 - Team Data Science Process
+description: 数据科学组管理员、团队主管和项目主管如何跟踪数据科学项目的进度。
+author: marktab
 manager: cgronlun
 editor: cgronlun
-ms.assetid: ''
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/28/2017
-ms.author: deguhath
-ms.openlocfilehash: ae0a32e15d86e8c2a9f8359a8caf1d205bd019f3
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: 7745a53084f4477f7b736ea9d130ffd3eed771f4
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60252572"
 ---
-# <a name="track-progress-of-data-science-projects"></a>跟踪数据科学项目的进度
+# <a name="tracking-the-progress-of-data-science-projects"></a>跟踪数据科学项目的进度
 
-数据科学组管理员、团队主管和项目主管需要跟踪其团队项目的进度、已完成了哪些工作及是由谁完成的、待办事项列表上还剩下哪些工作。 
+数据科学组管理员、团队主管和项目主管需要跟踪项目的进度、已完成了哪些工作及是由谁完成的、待办事项列表上还剩下哪些工作。 
 
-## <a name="vsts-dashboards"></a>VSTS 仪表板
-如果使用的是 Visual Studio Team Services (VSTS)，则可以生成仪表板来跟踪与给定敏捷项目关联的活动和工作项。 
+## <a name="azure-devops-dashboards"></a>Azure DevOps 仪表板
+如果使用的是 Azure DevOps，则可以生成仪表板来跟踪与给定敏捷项目关联的活动和工作项。 
 
-有关如何在 Visual Studio Team Services 中创建和自定义仪表板与小组件的详细信息，请参阅以下说明：
+有关如何在 Azure DevOps 中创建和自定义仪表板与小组件的详细信息，请参阅以下几组说明：
 
-- [添加和管理仪表板](https://docs.microsoft.com/vsts/report/dashboards/dashboards)
-- [将小组件添加到仪表板](https://docs.microsoft.com/vsts/report/dashboards/add-widget-to-dashboard)。
+- [添加和管理仪表板](https://docs.microsoft.com/azure/devops/report/dashboards/dashboards)
+- [将小组件添加到仪表板](https://docs.microsoft.com/azure/devops/report/dashboards/add-widget-to-dashboard)。
 
 ## <a name="example-dashboard"></a>示例仪表板
 
@@ -41,13 +39,13 @@ ms.lasthandoff: 05/03/2018
 
 剩余面板显示项目的累积流图 (CFD)、燃尽和燃起图：
 
-- **左下角**：CFD 中某一给定状态的工作的数量显示为灰色，蓝色提交并在完成为绿色批准。
+- **左下角**：处于给定状态的工作的数量 CFD，灰色表示“已批准”，蓝色表示“已提交”，绿色表示“已完成”。
 - **右上角**：燃尽图有待与剩余时间完成的工作。
 - **右下角**：燃起图的工作已完成工作的总量。
 
 ![仪表板](./media/track-progress/dashboard.png)
 
-有关如何生成这些图表的说明，请参阅[仪表板](https://docs.microsoft.com/vsts/report/dashboards/)中的快速入门和教程。
+有关如何生成这些图表的说明，请参阅[仪表板](https://docs.microsoft.com/azure/devops/report/dashboards/)中的快速入门和教程。
  
 ## <a name="next-steps"></a>后续步骤
 

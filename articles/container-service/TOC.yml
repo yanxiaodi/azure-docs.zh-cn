@@ -4,6 +4,8 @@
   href: dcos-swarm/container-service-dcos-quickstart.md
 - name: 资源
   items:
+    - name: 利用 Microsoft Learn 掌握技能
+      href: /learn/browse/?products=azure-container-instances&azure-container-registry
     - name: Azure 路线图
       href: 'https://azure.microsoft.com/roadmap/?category=containers'
     - name: 定价计算器

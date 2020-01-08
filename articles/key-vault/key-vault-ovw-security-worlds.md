@@ -1,16 +1,17 @@
 ---
-ms.assetid: 
-title: "Azure Key Vault 安全体系 | Microsoft Docs"
+title: Azure Key Vault 安全体系 | Microsoft Docs
 ms.service: key-vault
-author: lleonard-msft
-ms.author: alleonar
-manager: mbaldwin
+ms.topic: conceptual
+author: msmbaldwin
+ms.author: mbaldwin
+manager: rkarlin
 ms.date: 07/03/2017
-ms.openlocfilehash: aeab36153d3a4e004d12206bab92cea9b30400ad
-ms.sourcegitcommit: 2a70752d0987585d480f374c3e2dba0cd5097880
-ms.translationtype: HT
+ms.openlocfilehash: 1e18befe05e5a1d33aa4e5445b80c6d6fd7239af
+ms.sourcegitcommit: 7c5a2a3068e5330b77f3c6738d6de1e03d3c3b7d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/19/2018
+ms.lasthandoff: 09/11/2019
+ms.locfileid: "70883189"
 ---
 # <a name="azure-key-vault-security-worlds-and-geographic-boundaries"></a>Azure Key Vault 安全体系和地理边界
 

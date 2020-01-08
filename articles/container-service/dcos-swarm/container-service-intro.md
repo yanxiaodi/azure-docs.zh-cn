@@ -1,5 +1,5 @@
 ---
-title: 托管在 Azure 云中的 Docker 容器
+title: （已弃用）托管在 Azure 云中的 Docker 容器
 description: Azure 容器服务提供了一种简化创建、配置和管理预配置来运行容器化应用程序的虚拟机群集的方法。
 services: container-service
 author: rgardler
@@ -9,13 +9,16 @@ ms.topic: overview
 ms.date: 03/01/2017
 ms.author: rogardle
 ms.custom: H1Hack27Feb2017, mvc
-ms.openlocfilehash: d89e9b4dcfe44648f1e3ddd95fb01b62a36295df
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.openlocfilehash: 957725d40c66ffe9d8d7ce1362279c2bb4d4fded
+ms.sourcegitcommit: 36c50860e75d86f0d0e2be9e3213ffa9a06f4150
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 05/16/2019
+ms.locfileid: "65788743"
 ---
-# <a name="introduction-to-docker-container-hosting-solutions-with-azure-container-service"></a>Azure 容器服务的 Docker 容器托管解决方案简介 
+# <a name="deprecated-introduction-to-docker-container-hosting-solutions-with-azure-container-service"></a>（已弃用）Azure 容器服务的托管解决方案的 Docker 容器简介 
+
+[!INCLUDE [ACS deprecation](../../../includes/container-service-deprecation.md)]
 
 Azure 容器服务让创建、配置和管理预配置来运行容器化应用程序的虚拟机群集变得更简单。 它使用热门开源计划和业务流程工具的优化配置。 通过此服务，用户可使用现有技能或利用不断增加的大量社区专业知识，在 Microsoft Azure 上部署和管理基于容器的应用程序。
 
@@ -29,20 +32,20 @@ Azure 容器服务利用 Docker 容器格式，确保应用程序容器完全可
 Azure 容器服务旨在通过使用当今客户中热门的开源工具和技术提供容器托管环境。 为此，我们所选的业务流程（DC/OS、Docker Swarm 或 Kubernetes）公开了标准 API 终结点。 通过使用这些终结点，可利用能够与这些终结点通信的任何软件。 例如，对于 Docker Swarm 终结点，可选择使用Docker 命令行接口 (CLI)。 对于 DC/OS，可以选择 DCOS CLI。 对于 Kubernetes，可以选择 `kubectl`。
 
 ## <a name="creating-a-docker-cluster-by-using-azure-container-service"></a>通过 Azure 容器服务创建 Docker 群集
-若要开始使用 Azure 容器服务，可通过门户（在“Marketplace”中搜索“Azure 容器服务”）使用 Azure 资源管理器模板（[Docker Swarm](https://github.com/Azure/azure-quickstart-templates/tree/master/101-acs-swarm)、[DC/OS](https://github.com/Azure/azure-quickstart-templates/tree/master/101-acs-dcos) 或 [Kubernetes](https://github.com/Azure/azure-quickstart-templates/tree/master/101-acs-kubernetes)）或使用 [Azure CLI 2.0](container-service-create-acs-cluster-cli.md) 部署 Azure 容器服务群集。 可修改提供的快速入门模板，包含其他或高级 Azure 配置。 有关详细信息，请参阅[部署 Azure 容器服务群集](container-service-deployment.md)。
+若要开始使用 Azure 容器服务，可通过门户（在“市场”中搜索“Azure 容器服务”）使用 Azure 资源管理器模板（[Docker Swarm](https://github.com/Azure/azure-quickstart-templates/tree/master/101-acs-swarm)、[DC/OS](https://github.com/Azure/azure-quickstart-templates/tree/master/101-acs-dcos) 或 [Kubernetes](https://github.com/Azure/azure-quickstart-templates/tree/master/101-acs-kubernetes)）或使用 [Azure CLI](container-service-create-acs-cluster-cli.md) 部署 Azure 容器服务群集  。 可修改提供的快速入门模板，包含其他或高级 Azure 配置。 有关详细信息，请参阅[部署 Azure 容器服务群集](container-service-deployment.md)。
 
 ## <a name="deploying-an-application"></a>部署应用程序
 Azure 容器服务针对业务流程提供了 Docker Swarm、DC/OS 或 Kubernetes 选项。 部署应用程序的方式取决于所选的业务流程。
 
 ### <a name="using-dcos"></a>使用 DC/OS
-DC/OS 是基于 Apache Mesos 分布式系统内核的分布式操作系统。 Apache Mesos 存放于 Apache Software Foundation，并将一些 [IT 业界知名人士](http://mesos.apache.org/documentation/latest/powered-by-mesos/) 列为用户和参与者。
+DC/OS 是基于 Apache Mesos 分布式系统内核的分布式操作系统。 Apache Mesos 存放于 Apache Software Foundation，并将一些 [IT 业界知名人士](https://mesos.apache.org/documentation/latest/powered-by-mesos/) 列为用户和参与者。
 
 ![为显示代理和主机的 DC/OS 配置的 Azure 容器服务。](media/acs-intro/dcos.png)
 
 DC/OS 和 Apache Mesos 包含一个引人注目的功能集：
 
 * 成熟的可伸缩性
-* 使用 Apache ZooKeeper 的容错复制主机和从属服务器
+* 使用 Apache ZooKeeper 的容错复制主要和辅助数据库
 * 支持 Docker 格式的容器
 * 任务与 Linux 容器间的本机隔离
 * 多资源计划（内存、CPU、磁盘和端口）
@@ -54,7 +57,8 @@ DC/OS 和 Apache Mesos 包含一个引人注目的功能集：
 ![Azure 容器服务中的 DC/OS Universe](media/dcos/universe.png)
 
 #### <a name="using-marathon"></a>使用 Marathon
-Marathon 是 cgroups 中针对服务的群集范围初始化和控制系统，或者对于 Azure 容器服务而言，是 Docker 格式的容器。 Marathon 提供可从中部署应用程序的 Web UI。 可通过类似于 `http://DNS_PREFIX.REGION.cloudapp.azure.com` 的 URL 访问它，其中 DNS\_PREFIX 和 REGION 均在部署时定义。 当然，还可以提供自己的 DNS 名称。 有关使用 Marathon Web UI 运行容器的详细信息，请参阅[通过 Marathon Web UI 管理 DC/OS 容器](container-service-mesos-marathon-ui.md)。
+Marathon 是 cgroups 中针对服务的群集范围初始化和控制系统，或者对于 Azure 容器服务而言，是 Docker 格式的容器。 Marathon 提供可从中部署应用程序的 Web UI。 可通过类似于 `http://DNS_PREFIX.REGION.cloudapp.azure.com` 的 URL 访问它，
+其中 DNS\_PREFIX 和 REGION 均在部署时定义。 当然，还可以提供自己的 DNS 名称。 有关使用 Marathon Web UI 运行容器的详细信息，请参阅[通过 Marathon Web UI 管理 DC/OS 容器](container-service-mesos-marathon-ui.md)。
 
 ![Marathon 应用程序列表](media/dcos/marathon-applications-list.png)
 
@@ -101,4 +105,4 @@ Azure 容器服务入门 (101)：
 
 ## <a name="next-steps"></a>后续步骤
 
-使用[门户](container-service-deployment.md)或 [Azure CLI 2.0](container-service-create-acs-cluster-cli.md) 部署容器服务群集。
+使用[门户](container-service-deployment.md)或 [Azure CLI](container-service-create-acs-cluster-cli.md) 部署容器服务群集。

@@ -3,19 +3,21 @@ title: 开始使用队列存储和 Visual Studio 连接服务 (ASP.NET Core) | M
 description: 如何开始在 Visual Studio 中的 ASP.NET Core 项目中使用 Azure 队列存储
 services: storage
 author: ghogen
-manager: douge
+manager: jillfra
 ms.assetid: 04977069-5b2d-4cba-84ae-9fb2f5eb1006
 ms.prod: visual-studio-dev15
 ms.technology: vs-azure
-ms.workload: azure
+ms.custom: vs-azure
+ms.workload: azure-vs
 ms.topic: article
 ms.date: 11/14/2017
 ms.author: ghogen
-ms.openlocfilehash: e56f79334aa85d9a0c81bed4f00664fee5789676
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.openlocfilehash: d8e370c6f7c59da8522bb4fb1403b6107a9c9c41
+ms.sourcegitcommit: 0e59368513a495af0a93a5b8855fd65ef1c44aac
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 08/15/2019
+ms.locfileid: "69510984"
 ---
 # <a name="get-started-with-queue-storage-and-visual-studio-connected-services-aspnet-core"></a>开始使用队列存储和 Visual Studio 连接服务 (ASP.NET Core)
 
@@ -25,7 +27,7 @@ ms.lasthandoff: 04/23/2018
 
 Azure 队列存储是一项可存储大量消息的服务，用户可以通过经验证的呼叫，使用 HTTP 或 HTTPS 从世界任何地方访问这些消息。 一条队列消息的大小最多可为 64 千字节 (KB)，一个队列中可以包含数百万条消息，直至达到存储帐户的总容量限值。 有关以编程方式操作队列的详细信息，另请参阅[通过 .NET 开始使用 Azure 队列存储](../storage/queues/storage-dotnet-how-to-use-queues.md)。
 
-若要开始，首先在存储帐户中创建 Azure 队列。 本文随后会演示如何运用 C# 创建队列，以及如何执行基本的队列操作，如添加、修改、读取和删除队列消息。  代码使用适用于 .NET 的 Azure 存储客户端库。 有关 ASP.NET 的详细信息，请参阅 [ASP.NET](http://www.asp.net)。
+若要开始，首先在存储帐户中创建 Azure 队列。 本文随后会演示如何运用 C# 创建队列，以及如何执行基本的队列操作，如添加、修改、读取和删除队列消息。  代码使用适用于 .NET 的 Azure 存储客户端库。 有关 ASP.NET 的详细信息，请参阅 [ASP.NET](https://www.asp.net)。
 
 某些 Azure 存储 API 为异步，而本文中的代码假定正在使用异步方法。 有关详细信息，请参阅[异步编程](https://docs.microsoft.com/dotnet/csharp/async)。
 
@@ -64,7 +66,7 @@ Azure 队列存储是一项可存储大量消息的服务，用户可以通过�
 
 ### <a name="create-a-queue-in-code"></a>使用代码创建队列
 
-若要在代码中创建 Azure 队列，请调用 ``CreateIfNotExistsAsync`：
+若要在代码中创建 Azure 队列, `CreateIfNotExistsAsync`请调用:
 
 ```cs
 // Create the CloudQueue if it does not exist.

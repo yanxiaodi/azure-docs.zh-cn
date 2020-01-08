@@ -1,31 +1,33 @@
 ---
-title: "在 Azure API 管理中修改开发人员门户中的页面内容 | Microsoft Docs"
-description: "了解如何在 Azure API 管理中编辑开发人员门户上的页面内容。"
+title: 在 Azure API 管理中修改开发人员门户中的页面内容 | Microsoft Docs
+description: 了解如何在 Azure API 管理中编辑开发人员门户上的页面内容。
 services: api-management
-documentationcenter: 
-author: antonba
+documentationcenter: ''
+author: vlvinogr
 manager: vlvinogr
-editor: 
+editor: ''
 ms.assetid: 186128fe-41c0-4efb-9efe-2478ad4d103f
 ms.service: api-management
 ms.workload: mobile
 ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: get-started-article
+ms.topic: conceptual
 ms.date: 02/09/2017
-ms.author: antonba
-ms.openlocfilehash: bcf48ab8dd3b57ace70fa713074b13a992940002
-ms.sourcegitcommit: d87b039e13a5f8df1ee9d82a727e6bc04715c341
-ms.translationtype: HT
+ms.author: vlvinogr
+ms.openlocfilehash: 0a333b1fac78889b61829b869c23efea5e312adf
+ms.sourcegitcommit: 82499878a3d2a33a02a751d6e6e3800adbfa8c13
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/21/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70072253"
 ---
 # <a name="modify-the-content-and-layout-of-pages-on-the-developer-portal-in-azure-api-management"></a>在 Azure API 管理中修改开发人员门户上的页面内容和页面布局
 在 Azure API 管理中自定义开发人员门户有三种基本方法：
 
-* [编辑静态页面内容和页面布局元素][modify-content-layout]（本指南中所述）
+* [编辑静态页和页面布局元素的内容][modify-content-layout](本指南中所述)
 * [跨开发人员门户更新页面元素所用的样式][customize-styles]
-* [修改门户生成的页面所用的模板][portal-templates]（例如 API 文档、产品、用户身份验证等）
+* [修改门户生成的页面所用的模板][portal-templates](例如, API 文档、产品、用户身份验证等)
+
+[!INCLUDE [premium-dev-standard-basic.md](../../includes/api-management-availability-premium-dev-standard-basic.md)]
 
 ## <a name="page-structure"> </a>开发人员门户页面结构
 
@@ -33,7 +35,7 @@ ms.lasthandoff: 02/21/2018
 
 ![开发人员门户页面结构][api-management-customization-widget-structure]
 
-所有小组件均可编辑。 
+所有小组件均可编辑。
 * 特定于每个单独页面的核心内容驻留在“内容”小组件中。 编辑页面意味着编辑此小组件的内容。
 * 所有页面布局元素都包含在剩余的小组件中。 对这些小组件所做的更改应用于所有页面。 它们称为“布局小组件”。
 
@@ -41,12 +43,12 @@ ms.lasthandoff: 02/21/2018
 
 ## <a name="modify-layout-widget"> </a>修改布局小组件的内容
 
-开发人员门户可从 Azure 门户进行访问。 
+开发人员门户可从 Azure 门户进行访问。
 
 1. 单击 API 管理实例的工具栏中的“开发人员门户”。
-2. 若要编辑小组件的内容，请单击左侧“开发人员门户”菜单中由两个画刷组成的图标。 
+2. 若要编辑小组件的内容，请单击左侧“开发人员门户”菜单中由两个画刷组成的图标。
 3. 若要修改标头的内容，请滚动到左侧列表中的“标头”部分。
-    
+
     可以在字段中对小组件进行编辑。
 4. 做好发布更改的准备以后，请单击页面底部的“发布”。
 
@@ -54,7 +56,7 @@ ms.lasthandoff: 02/21/2018
 
 ## <a name="next-steps"></a>后续步骤
 * [跨开发人员门户更新页面元素所用的样式][customize-styles]
-* [修改门户生成的页面所用的模板][portal-templates]（例如 API 文档、产品、用户身份验证等）
+* [修改门户生成的页面所用的模板][portal-templates](例如, API 文档、产品、用户身份验证等)
 
 [Structure of developer portal pages]: #page-structure
 [Modifying the contents of a layout widget]: #modify-layout-widget

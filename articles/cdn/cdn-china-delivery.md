@@ -3,24 +3,24 @@ title: 使用 Azure CDN 进行中国内容分发 | Microsoft Docs
 description: 了解如何使用 Azure 内容分发网络 (CDN) 将内容分发给中国用户。
 services: cdn
 documentationcenter: ''
-author: dksimpson
-manager: cfowler
+author: mdgattuso
+manager: danielgi
 editor: ''
 ms.assetid: ''
-ms.service: cdn
+ms.service: azure-cdn
 ms.workload: tbd
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: conceptual
 ms.date: 05/16/2018
-ms.author: v-deasim
+ms.author: magattus
 ms.custom: mvc
-ms.openlocfilehash: 59788f301bb501103babd55a2ac37102932f4dcf
-ms.sourcegitcommit: 96089449d17548263691d40e4f1e8f9557561197
-ms.translationtype: HT
+ms.openlocfilehash: a63914116f5ef9922ac05745764e0ad505dc3c91
+ms.sourcegitcommit: ccb9a7b7da48473362266f20950af190ae88c09b
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/17/2018
-ms.locfileid: "34259570"
+ms.lasthandoff: 07/05/2019
+ms.locfileid: "67593955"
 ---
 # <a name="china-content-delivery-with-azure-cdn"></a>使用 Azure CDN 进行中国内容分发
 
@@ -34,21 +34,21 @@ Azure CDN 全球和 Azure CDN 中国具有以下功能：
 
 - Azure CDN 全球：
 
-     - 门户：https://portal.azure.com  
+     - 门户： https://portal.azure.com  
 
      - 在中国之外执行内容分发
 
-     - 四个定价层：Microsoft 标准、Verizon 标准、Verizon 高级和 Akamai 标准
+     - 四个定价层：Microsoft 标准、 Verizon 标准版、 Verizon 高级版和 Akamai 标准
 
-     - [文档](https://docs.microsoft.com/en-us/azure/cdn/)
+     - [文档](https://docs.microsoft.com/azure/cdn/)
 
 - Azure CDN 中国：
 
-     - 门户：https://portal.azure.cn
+     - 门户： https://portal.azure.cn
 
      - 在中国境内执行内容分发
 
-     - 两个定价层：标准和高级
+     - 两个定价层：标准和高级版
 
      - [文档](https://docs.azure.cn/en-us/cdn/)
  
@@ -63,7 +63,7 @@ Azure CDN 全球和 Azure CDN 中国具有以下功能：
 
 - [使用 Azure 内容分发网络](https://docs.azure.cn/en-us/cdn/cdn-how-to-use)
 
-- [在中国可用的 Azure 服务](https://docs.microsoft.com/en-us/azure/china/china-get-started-service-availability)
+- [在中国可用的 Azure 服务](https://docs.microsoft.com/azure/china/concepts-service-availability)
 
 
 

@@ -1,22 +1,32 @@
-**标准托管虚拟机磁盘**
+---
+title: include 文件
+description: include 文件
+services: virtual-machines
+author: roygara
+ms.service: virtual-machines
+ms.topic: include
+ms.date: 12/12/2018
+ms.author: rogarana
+ms.custom: include file
+ms.openlocfilehash: dd5c0782e1132f8592d9c6381b541c6f1a7d84cd
+ms.sourcegitcommit: cd70273f0845cd39b435bd5978ca0df4ac4d7b2c
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 09/18/2019
+ms.locfileid: "67172941"
+---
+**标准 HDD 托管磁盘**
+[!INCLUDE [disk-storage-standard-hdd-sizes](disk-storage-standard-hdd-sizes.md)]
 
-| 标准磁盘类型  | S4               | S6               | S10              | S20              | S30              | S40              | S50              | 
-|---------------------|---------------------|---------------------|------------------|------------------|------------------|------------------|------------------| 
-| 磁盘大小           | 32 GB            | 64 GB            | 128 GB           | 512 GB           | 1024 GB (1 TB)   | 2048 GB (2 TB)    | 4095 GB (4 TB)   | 
-| 每个磁盘的 IOPS       | 500              | 500              | 500              | 500              | 500              | 500             | 500              | 
-| 每个磁盘的吞吐量 | 60 MB/秒 | 60 MB/秒 | 60 MB/秒 | 60 MB/秒 | 60 MB/秒 | 60 MB/秒 | 60 MB/秒 | 
+**标准 SSD 托管磁盘**
+[!INCLUDE [disk-storage-standard-ssd-sizes](disk-storage-standard-ssd-sizes.md)]
 
-**高级托管虚拟机磁盘：每个磁盘的限制**
+**高级 SSD 托管磁盘：每磁盘限制**
+[!INCLUDE [disk-storage-premium-ssd-sizes](disk-storage-premium-ssd-sizes.md)]
 
-| 高级磁盘类型  | P4    | P6    | P10   | P20   | P30   | P40   | P50   | 
-|---------------------|-------|-------|-------|-------|-------|-------|-------|
-| 磁盘大小           | 32 GB | 64 GB | 128 GB| 512 GB            | 1024 GB (1 TB)    | 2048 GB (2 TB)    | 4095 GB (4 TB)    | 
-| 每个磁盘的 IOPS       | 120   | 240   | 500   | 2300              | 5000              | 7500              | 7500              | 
-| 每个磁盘的吞吐量 | 25 MB/秒 | 50 MB/秒  | 100 MB/秒 | 150 MB/秒 | 200 MB/秒 | 250 MB/秒 | 250 MB/秒 |
+**高级 SSD 托管磁盘：每个 VM 的限制**
 
-**高级托管虚拟机磁盘：每台 VM 的限制**
-
-| 资源 | 默认限制 |
+| Resource | 默认限制 |
 | --- | --- |
 | 每个 VM 的最大 IOPS |GS5 VM 为 80,000 IOPS |
 | 每个 VM 的最大吞吐量 |GS5 VM 为 2,000 MB/秒 |

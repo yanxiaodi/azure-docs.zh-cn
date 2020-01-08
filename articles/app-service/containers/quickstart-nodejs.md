@@ -1,191 +1,195 @@
 ---
-title: 在 Linux 上的 Azure 应用服务中创建 Node.js | Microsoft Docs
-description: 数分钟内在 Linux 上的 Azure 应用服务中部署第一个 Node.js Hello World。
-services: app-service\web
-documentationcenter: ''
-author: cephalin
-manager: syntaxc4
-editor: ''
-ms.assetid: 582bb3c2-164b-42f5-b081-95bfcb7a502a
-ms.service: app-service-web
-ms.workload: web
-ms.tgt_pltfrm: na
-ms.devlang: na
+title: 创建 Node.js Web 应用 - Azure 应用服务
+description: 如何将 Node.js 应用部署到 Azure 应用服务
+author: msangapu
+ms.author: msangapu
+ms.date: 08/12/2019
 ms.topic: quickstart
-ms.date: 05/05/2017
-ms.author: cephalin
-ms.custom: mvc
-ms.openlocfilehash: a2643e65b74f44ee05001d5df26c7c77a430fbb2
-ms.sourcegitcommit: 8aab1aab0135fad24987a311b42a1c25a839e9f3
+ms.service: app-service
+ms.devlang: javascript
+ms.openlocfilehash: b28e8e4dccf75d36b318e838e35de23d176c5c23
+ms.sourcegitcommit: 83df2aed7cafb493b36d93b1699d24f36c1daa45
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/16/2018
+ms.lasthandoff: 09/22/2019
+ms.locfileid: "71176729"
 ---
-# <a name="create-a-nodejs-web-app-in-azure-app-service-on-linux"></a>在 Linux 上的 Azure 应用服务中创建 Node.js Web 应用
+# <a name="create-a-nodejs-app-in-azure"></a>在 Azure 中创建 Node.js 应用
 
-> [!NOTE]
-> 本文将应用部署到基于 Linux 的应用服务。 若要部署到基于 _Windows_ 的应用服务，请参阅[在 Azure 中创建 Node.js Web 应用](../app-service-web-get-started-nodejs.md)。
->
-
-[Linux 应用服务](app-service-linux-intro.md)使用 Linux 操作系统，提供高度可缩放的自修补 Web 托管服务。 本快速入门演示如何使用内置映像将 Node.js 应用部署到 Linux 上的应用服务。 使用 [Azure CLI](https://docs.microsoft.com/cli/azure/get-started-with-azure-cli) 创建包含内置映像的 Web 应用，并使用 Git 将 Node.js 代码部署到 Web 应用。
-
-![在 Azure 中运行应用的示例](media/quickstart-nodejs/hello-world-in-browser.png)
-
-可以使用 Mac、Windows 或 Linux 计算机执行本教程中的步骤。 也可按照介绍本文内容的[此视频](#video)进行操作。
-
-[!INCLUDE [quickstarts-free-trial-note](../../../includes/quickstarts-free-trial-note.md)]
+Azure 应用服务提供高度可缩放、自修补的 Web 托管服务。 本快速入门演示如何将 Node.js 应用部署到 Azure 应用服务中。
 
 ## <a name="prerequisites"></a>先决条件
 
-完成本快速入门教程：
+如果你没有 Azure 帐户，请[立即注册](https://azure.microsoft.com/free/?utm_source=campaign&utm_campaign=vscode-tutorial-app-service-extension&mktingSource=vscode-tutorial-app-service-extension)一个免费帐户来试用任何服务组合，并获得 200 美元的 Azure 信用额度。
 
-* <a href="https://git-scm.com/" target="_blank">安装 Git</a>
-* <a href="https://nodejs.org/" target="_blank">安装 Node.js 和 NPM</a>
+需要连同 [Node.js 和 npm](https://nodejs.org/en/download)（Node.js 包管理器）一起安装 [Visual Studio Code](https://code.visualstudio.com/)。
 
-## <a name="download-the-sample"></a>下载示例
+还需要安装 [Azure 应用服务扩展](vscode:extension/ms-azuretools.vscode-azureappservice)，使用该扩展可在 Azure 平台即服务 (PaaS) 上创建、管理和部署 Linux Web 应用。
 
-在计算机的终端窗口中，运行以下命令，将示例应用存储库克隆到本地计算机。
+### <a name="sign-in"></a>登录
 
-```bash
-git clone https://github.com/Azure-Samples/nodejs-docs-hello-world
+安装该扩展后，登录到你的 Azure 帐户。 在活动栏中，单击 Azure 徽标显示“AZURE 应用服务”资源管理器。  单击“登录到 Azure...”并遵照说明操作。 
+
+![登录到 Azure](./media/quickstart-nodejs/sign-in.png)
+
+### <a name="troubleshooting"></a>故障排除
+
+如果出现错误“找不到名为 [订阅 ID] 的订阅”，原因可能是你使用了代理，因此无法访问 Azure API。  在终端中使用 `export` 以代理信息配置 `HTTP_PROXY` 和 `HTTPS_PROXY` 环境变量。
+
+```sh
+export HTTPS_PROXY=https://username:password@proxy:8080
+export HTTP_PROXY=http://username:password@proxy:8080
 ```
 
-使用此终端窗口运行本快速入门中的所有命令。
+如果设置环境变量不能解决该问题，请单击下面的“我遇到了问题”按钮联系我们。 
 
-切换到包含示例代码的目录。
+### <a name="prerequisite-check"></a>先决条件检查
+
+在继续之前，请确保已安装并配置了所有必备组件。
+
+在 VS Code 的状态栏中应会显示你的 Azure 电子邮件地址，“AZURE 应用服务”资源管理器中应会显示你的订阅。 
+
+> [!div class="nextstepaction"]
+> [我遇到了问题](https://www.research.net/r/PWZWZ52?tutorial=node-deployment-azure-app-service&step=getting-started)
+
+## <a name="create-your-nodejs-application"></a>创建 Node.js 应用程序
+
+接下来，创建可部署到云的 Node.js 应用程序。 本快速入门使用一个应用程序生成器从终端快速搭建应用程序。
+
+> [!TIP]
+> 如果你已完成 [Node.js 教程](https://code.visualstudio.com/docs/nodejs/nodejs-tutorial)，可直接跳转到[部署网站](#deploy-the-website)。
+
+### <a name="install-the-express-generator"></a>安装 Express 生成器
+
+[Express](https://www.expressjs.com) 是用于生成和运行 Node.js 应用程序的流行框架。 可以使用 [Express 生成器](https://expressjs.com/en/starter/generator.html)工具搭建（创建）新的 Express 应用程序。 Express 生成器以 npm 模块的形式提供，可使用 npm 命令行工具 `npm` 安装它。
 
 ```bash
-cd nodejs-docs-hello-world
+npm install -g express-generator
 ```
 
-## <a name="run-the-app-locally"></a>在本地运行应用
+使用 `-g` 开关可在计算机上全局安装 Express 生成器，以便可从任意位置运行它。
 
-打开一个终端窗口并使用 `npm start` 脚本启动内置的 Node.js HTTP 服务器，以在本地运行应用程序。
+### <a name="scaffold-a-new-application"></a>搭建新应用程序
+
+接下来，运行以下命令搭建名为 `myExpressApp` 的新 Express 应用程序：
+
+```bash
+express myExpressApp --view pug --git
+```
+
+`--view pug --git` 参数告知生成器使用 [pug](https://pugjs.org/api/getting-started.html) 模板引擎（以前称为 `jade`）并创建 `.gitignore` 文件。
+
+若要安装应用程序的所有依赖项，请转到新文件夹并运行 `npm install`。
+
+```bash
+cd myExpressApp
+npm install
+```
+
+### <a name="run-the-application"></a>运行应用程序
+
+接下来，确保运行应用程序。 在终端中，使用 `npm start` 命令启动该应用程序以启动服务器。
 
 ```bash
 npm start
 ```
 
-打开 Web 浏览器并导航到 `http://localhost:1337` 处的示例应用。
+现在，打开浏览器并导航到 [http://localhost:3000](http://localhost:3000)，其中应会显示如下所示的内容：
 
-页面中会显示该示例应用发出的 Hello World 消息。
+![运行 Express 应用程序](./media/quickstart-nodejs/express.png)
 
-![本地运行应用的示例](media/quickstart-nodejs/localhost-hello-world-in-browser.png)
+> [!div class="nextstepaction"]
+> [我遇到了问题](https://www.research.net/r/PWZWZ52?tutorial=node-deployment-azure-app-service&step=create-app)
 
-在终端窗口中，按 **Ctrl+C** 退出 Web 服务器。
+## <a name="deploy-the-website"></a>部署网站
 
-[!INCLUDE [cloud-shell-try-it.md](../../../includes/cloud-shell-try-it.md)]
+在本部分，你将使用 VS Code 和 Azure 应用服务扩展部署 Node.js 网站。 本快速入门使用最基本的部署模型，其中，应用程序将被压缩并部署到 Linux 上的 Azure Web 应用。
 
-[!INCLUDE [Configure deployment user](../../../includes/configure-deployment-user.md)]
+### <a name="deploy-using-azure-app-service"></a>使用 Azure 应用服务进行部署
 
-[!INCLUDE [Create resource group](../../../includes/app-service-web-create-resource-group-linux.md)]
-
-[!INCLUDE [Create app service plan](../../../includes/app-service-web-create-app-service-plan-linux.md)]
-
-## <a name="create-a-web-app"></a>创建 Web 应用
-
-[!INCLUDE [Create web app](../../../includes/app-service-web-create-web-app-nodejs-linux-no-h.md)]
-
-浏览到新建的 Web 应用。 将 _&lt;应用名称>_ 替换为 Web 应用名称。
+首先，在 VS Code 中打开应用程序文件夹。
 
 ```bash
-http://<app name>.azurewebsites.net
+code .
 ```
 
-新 Web 应用应该如下所示：
+在“AZURE 应用服务”资源管理器中，单击蓝色的向上箭头图标，将应用部署到 Azure。 
 
-![空 Web 应用页面](media/quickstart-nodejs/app-service-web-service-created.png)
+![部署到 Web 应用](./media/quickstart-nodejs/deploy.png)
 
-[!INCLUDE [Push to Azure](../../../includes/app-service-web-git-push-to-azure.md)]
+> [!TIP]
+> 也可以从**命令面板** (CTRL + SHIFT + P) 进行部署，方法是键入“deploy to web app”并运行“Azure App Service:  Deploy to Web App”命令。
 
-```bash
-Counting objects: 23, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (21/21), done.
-Writing objects: 100% (23/23), 3.71 KiB | 0 bytes/s, done.
-Total 23 (delta 8), reused 7 (delta 1)
-remote: Updating branch 'master'.
-remote: Updating submodules.
-remote: Preparing deployment for commit id 'bf114df591'.
-remote: Generating deployment script.
-remote: Generating deployment script for node.js Web Site
-remote: Generated deployment script files
-remote: Running deployment command...
-remote: Handling node.js deployment.
-remote: Kudu sync from: '/home/site/repository' to: '/home/site/wwwroot'
-remote: Copying file: '.gitignore'
-remote: Copying file: 'LICENSE'
-remote: Copying file: 'README.md'
-remote: Copying file: 'index.js'
-remote: Copying file: 'package.json'
-remote: Copying file: 'process.json'
-remote: Deleting file: 'hostingstart.html'
-remote: Ignoring: .git
-remote: Using start-up script index.js from package.json.
-remote: Node.js versions available on the platform are: 4.4.7, 4.5.0, 6.2.2, 6.6.0, 6.9.1.
-remote: Selected node.js version 6.9.1. Use package.json file to choose a different version.
-remote: Selected npm version 3.10.8
-remote: Finished successfully.
-remote: Running post deployment command(s)...
-remote: Deployment successful.
-To https://<app_name>.scm.azurewebsites.net:443/<app_name>.git
- * [new branch]      master -> master
-```
+1. 选择当前已打开的目录 `myExpressApp`。
 
-## <a name="browse-to-the-app"></a>浏览到应用
+2. 选择“创建新 Web 应用”  。
 
-使用 Web 浏览器浏览到已部署的应用程序。
+3. 键入 Web 应用的全局唯一名称，然后按 ENTER。 应用名称的有效字符为“a-z”、“0-9”和“-”。
 
-```bash
-http://<app_name>.azurewebsites.net
-```
+4. 选择 **Node.js 版本**，建议使用“LTS”。
 
-Node.js 示例代码在包含内置映像的 Web 应用中运行。
+    通知通道将显示正在为应用创建 Azure 资源。
 
-![在 Azure 中运行应用的示例](media/quickstart-nodejs/hello-world-in-browser.png)
+当系统提示是否更新配置以在目标服务器上运行 `npm install` 时，请单击“是”。  随后将部署应用。
 
-**祝贺你！** 现已将第一个 Node.js 应用部署到 Linux 应用服务。
+![配置的部署](./media/quickstart-nodejs/server-build.png)
 
-## <a name="update-and-redeploy-the-code"></a>更新并重新部署代码
+部署开始后，系统会提示更新工作区，使以后的部署自动针对相同的应用服务 Web 应用。 选择“是”，以确保将更改部署到正确的应用。 
 
-在本地目录中，打开 Node.js 应用中的 `index.js` 文件，然后对 `response.end` 调用中的文本略加更改：
+![配置的部署](./media/quickstart-nodejs/save-configuration.png)
 
-```nodejs
-response.end("Hello Azure!");
-```
+> [!TIP]
+> 确保应用程序正在侦听 PORT 环境变量 `process.env.PORT` 提供的端口。
 
-提交在 Git 中所做的更改，然后将代码更改推送到 Azure。
+### <a name="browse-the-website"></a>浏览网站
 
-```bash
-git commit -am "updated output"
-git push azure master
-```
+部署完成后，单击提示中的“浏览网站”以查看全新部署的网站。 
 
-完成部署后，切换回在“浏览到应用”步骤中打开的浏览器窗口，并点击“刷新”。
+### <a name="troubleshooting"></a>故障排除
 
-![已更新的在 Azure 中运行应用的示例](media/quickstart-nodejs/hello-azure-in-browser.png)
+如果看到错误“你无权查看此目录或页面”，则表示应用程序可能无法正常启动。  请转到下一部分，查看日志输出以找到并修复错误。 如果无法解决此问题，请单击下面的“我遇到了问题”按钮联系我们。  我们很乐意为你提供帮助。
 
-## <a name="manage-your-new-azure-web-app"></a>管理新 Azure Web 应用
+> [!div class="nextstepaction"]
+> [我遇到了问题](https://www.research.net/r/PWZWZ52?tutorial=node-deployment-azure-app-service&step=deploy-app)
 
-转到 <a href="https://portal.azure.com" target="_blank">Azure 门户</a>管理创建的 Web 应用。
+### <a name="updating-the-website"></a>更新网站
 
-在左侧菜单中单击“应用服务”，然后单击 Azure Web 应用的名称。
+可以使用相同的过程来部署对此应用所做的更改，并选择现有应用而不是创建新应用。
 
-![在门户中导航到 Azure Web 应用](./media/quickstart-nodejs/nodejs-docs-hello-world-app-service-list.png)
+## <a name="viewing-logs"></a>查看日志
 
-将看到 Web 应用的概述页。 在此处可以执行基本的管理任务，例如浏览、停止、启动、重新启动和删除。 
+本部分介绍如何查看（或“跟踪”）正在运行的网站发出的日志。 对站点中的 `console.log` 发出的任何调用将显示在 Visual Studio Code 的输出窗口中。
 
-![Azure 门户中的应用服务页](media/quickstart-nodejs/nodejs-docs-hello-world-app-service-detail.png)
+在“AZURE 应用服务”资源管理器中找到该应用，右键单击该应用，然后选择“查看流日志”。  
 
-左侧菜单提供用于配置应用的不同页面。 
+出现提示时，请选择启用日志记录并重启应用程序。 重启应用后，VS Code 输出窗口将会打开，其中包含与日志流建立的连接。
 
-[!INCLUDE [cli-samples-clean-up](../../../includes/cli-samples-clean-up.md)]
+![查看流日志](./media/quickstart-nodejs/view-logs.png)
 
-## <a name="video"></a>视频
+![启用日志记录并重启](./media/quickstart-nodejs/enable-restart.png)
 
->[!VIDEO https://www.youtube.com/embed/S9eqK7xPKqU]
+几秒钟后，你将看到一条消息，指出已连接到日志流服务。 请多次刷新页面以查看更多活动。
+
+    ```bash
+    2019-09-20 20:37:39.574 INFO  - Initiating warmup request to container msdocs-vscode-node_2_00ac292a for site msdocs-vscode-node
+    2019-09-20 20:37:55.011 INFO  - Waiting for response to warmup request for container msdocs-vscode-node_2_00ac292a. Elapsed time = 15.4373071 sec
+    2019-09-20 20:38:08.233 INFO  - Container msdocs-vscode-node_2_00ac292a for site msdocs-vscode-node initialized successfully and is ready to serve requests.
+    2019-09-20T20:38:21  Startup Request, url: /Default.cshtml, method: GET, type: request, pid: 61,1,7, SCM_SKIP_SSL_VALIDATION: 0, SCM_BIN_PATH: /opt/Kudu/bin, ScmType: None
+    ```
+
+> [!div class="nextstepaction"]
+> [我遇到了问题](https://www.research.net/r/PWZWZ52?tutorial=node-deployment-azure-app-service&step=tailing-logs)
 
 ## <a name="next-steps"></a>后续步骤
 
-> [!div class="nextstepaction"]
-> [将 Node.js 与 MongoDB 配合使用](tutorial-nodejs-mongodb-app.md)
+祝贺你，你现已成功完成本快速入门！
+
+接下来请查看其他 Azure 扩展。
+
+* [Cosmos DB](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-cosmosdb)
+* [Azure Functions](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions)
+* [Docker 工具](https://marketplace.visualstudio.com/items?itemName=PeterJausovec.vscode-docker)
+* [Azure CLI 工具](https://marketplace.visualstudio.com/items?itemName=ms-vscode.azurecli)
+* [Azure 资源管理器工具](https://marketplace.visualstudio.com/items?itemName=msazurermtools.azurerm-vscode-tools)
+
+或安装 [Node Pack for Azure](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack) 扩展包获取所有这些工具。

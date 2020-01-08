@@ -3,7 +3,7 @@ title: Azure 中继 API 概述 | Microsoft Docs
 description: 可用的 Azure 中继 API 概述
 services: event-hubs
 documentationcenter: na
-author: sethmanheim
+author: spelluru
 manager: timlt
 editor: ''
 ms.assetid: fdaa1d2b-bd80-4e75-abb9-0c3d0773af2d
@@ -13,13 +13,13 @@ ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 05/02/2018
-ms.author: sethm
-ms.openlocfilehash: 00496ca6c0138a840322c053d7d20944df228e9f
-ms.sourcegitcommit: 870d372785ffa8ca46346f4dfe215f245931dae1
-ms.translationtype: HT
+ms.author: spelluru
+ms.openlocfilehash: 05d7ac56d6c1c48125eb458d0eee852ba396b300
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/08/2018
-ms.locfileid: "33893436"
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60593343"
 ---
 # <a name="available-relay-apis"></a>可用的中继 API
 
@@ -39,7 +39,7 @@ ms.locfileid: "33893436"
 
 #### <a name="net"></a>.NET
 
-.NET 生态系统具有多个运行时，因此中继有多个 .NET 库。 可以使用 .NET Core 或 .NET Framework 运行 .NET Standard 库，但 .NET Framework 库只能在 .NET Framework 环境中运行。 有关 .NET Frameworks 的详细信息，请参阅 [framework 版本](/dotnet/articles/standard/frameworks#framework-versions)。
+.NET 生态系统具有多个运行时，因此中继有多个 .NET 库。 可以使用 .NET Core 或 .NET Framework 运行 .NET Standard 库，但 .NET Framework 库只能在 .NET Framework 环境中运行。 有关 .NET Frameworks 的详细信息，请参阅 [framework 版本](/dotnet/articles/standard/frameworks)。
 
 .NET Framework 库仅支持 WCF 编程模型并依赖于基于 WCF `net.tcp` 传输的专有二进制协议。 保留此协议和库是为了实现与现有应用程序的后向兼容性。
 

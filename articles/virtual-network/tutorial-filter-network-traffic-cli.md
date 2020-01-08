@@ -3,8 +3,8 @@ title: 筛选网络流量 - Azure CLI | Microsoft Docs
 description: 本文介绍如何在 Azure CLI 中使用网络安全组筛选发往子网的网络流量。
 services: virtual-network
 documentationcenter: virtual-network
-author: jimdial
-manager: jeconnoc
+author: KumudD
+manager: twooley
 editor: ''
 tags: azure-resource-manager
 Customer intent: I want to filter network traffic to virtual machines that perform similar functions, such as web servers.
@@ -15,13 +15,14 @@ ms.topic: article
 ms.tgt_pltfrm: virtual-network
 ms.workload: infrastructure
 ms.date: 03/30/2018
-ms.author: jdial
+ms.author: kumud
 ms.custom: ''
-ms.openlocfilehash: 11dc0e5f6ee398b2a745ed60cbc166e2a1697c3e
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: a1ade6e823201419c3a742a36c66a50a9dc09976
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64728805"
 ---
 # <a name="filter-network-traffic-with-a-network-security-group-using-the-azure-cli"></a>在 Azure CLI 中使用网络安全组筛选网络流量
 
@@ -32,11 +33,11 @@ ms.lasthandoff: 04/16/2018
 * 将虚拟机 (VM) 部署到子网中
 * 测试流量筛选器
 
-如果你还没有 Azure 订阅，可以在开始前创建一个 [免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
+如果没有 Azure 订阅，请在开始之前创建一个[免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
 
 [!INCLUDE [cloud-shell-try-it.md](../../includes/cloud-shell-try-it.md)]
 
-如果选择在本地安装并使用 CLI，本文要求运行 Azure CLI 2.0.28 或更高版本。 若要查找版本，请运行 `az --version`。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0](/cli/azure/install-azure-cli)。 
+如果选择在本地安装并使用 CLI，本文要求运行 Azure CLI 2.0.28 或更高版本。 要查找版本，请运行 `az --version`。 如果需要进行安装或升级，请参阅[安装 Azure CLI](/cli/azure/install-azure-cli)。 
 
 
 ## <a name="create-a-network-security-group"></a>创建网络安全组
@@ -45,7 +46,7 @@ ms.lasthandoff: 04/16/2018
 
 ### <a name="create-application-security-groups"></a>创建应用程序安全组
 
-首先使用 [az group create](/cli/azure/group#az_group_create) 针对本文中创建的所有资源创建一个资源组。 以下示例在 *eastus* 位置创建一个资源组： 
+首先使用 [az group create](/cli/azure/group) 针对本文中创建的所有资源创建一个资源组。 以下示例在 *eastus* 位置创建一个资源组： 
 
 ```azurecli-interactive
 az group create \
@@ -53,7 +54,7 @@ az group create \
   --location eastus
 ```
 
-使用 [az network asg create](/cli/azure/network/asg#az_network_asg_create) 创建应用程序安全组。 使用应用程序安全组可以分组具有类似端口筛选要求的服务器。 以下示例创建两个应用程序安全组。
+使用 [az network asg create](/cli/azure/network/asg) 创建应用程序安全组。 使用应用程序安全组可以分组具有类似端口筛选要求的服务器。 以下示例创建两个应用程序安全组。
 
 ```azurecli-interactive
 az network asg create \
@@ -69,7 +70,7 @@ az network asg create \
 
 ### <a name="create-a-network-security-group"></a>创建网络安全组
 
-使用 [az network nsg create](/cli/azure/network/nsg#az_network_nsg_create) 创建网络安全组。 以下示例创建名为 *myNsg* 的网络安全组： 
+使用 [az network nsg create](/cli/azure/network/nsg) 创建网络安全组。 以下示例创建名为 *myNsg* 的网络安全组： 
 
 ```azurecli-interactive 
 # Create a network security group
@@ -80,7 +81,7 @@ az network nsg create \
 
 ### <a name="create-security-rules"></a>创建安全规则
 
-使用 [az network nsg rule create](/cli/azure/network/nsg/rule#az_network_nsg_rule_create) 创建安全规则。 以下示例创建一个规则，该规则允许通过端口 80 和 443 将来自 Internet 的入站流量发往 *myWebServers* 应用程序安全组：
+使用 [az network nsg rule create](/cli/azure/network/nsg/rule) 创建安全规则。 以下示例创建一个规则，该规则允许通过端口 80 和 443 将来自 Internet 的入站流量发往 *myWebServers* 应用程序安全组：
 
 ```azurecli-interactive
 az network nsg rule create \
@@ -118,7 +119,7 @@ az network nsg rule create \
 
 ## <a name="create-a-virtual-network"></a>创建虚拟网络
 
-使用 [az network vnet create](/cli/azure/network/vnet#az_network_vnet_create) 创建虚拟网络。 以下示例创建名为 *myVirtualNetwork* 的虚拟网络：
+使用 [az network vnet create](/cli/azure/network/vnet) 创建虚拟网络。 以下示例创建名为 *myVirtualNetwork* 的虚拟网络：
 
 ```azurecli-interactive 
 az network vnet create \
@@ -127,7 +128,7 @@ az network vnet create \
   --address-prefixes 10.0.0.0/16
 ```
 
-使用 [az network vnet subnet create](/cli/azure/network/vnet/subnet#az_network_vnet_subnet_create) 将子网添加到虚拟网络。 以下示例将名为 *mySubnet* 的子网添加到虚拟网络，并将 *myNsg* 网络安全组关联到该虚拟网络：
+使用 [az network vnet subnet create](/cli/azure/network/vnet/subnet) 将子网添加到虚拟网络。 以下示例将名为 *mySubnet* 的子网添加到虚拟网络，并将 *myNsg* 网络安全组关联到该虚拟网络：
 
 ```azurecli-interactive
 az network vnet subnet create \
@@ -142,7 +143,7 @@ az network vnet subnet create \
 
 在虚拟网络中创建两个 VM，以便在后续步骤中可以验证流量筛选。 
 
-使用 [az vm create](/cli/azure/vm#az_vm_create) 创建 VM。 以下示例创建充当 Web 服务器的 VM。 `--asgs myAsgWebServers` 选项导致 Azure 将它为 VM 创建的网络接口设置为 *myAsgWebServers* 应用程序安全组的成员。
+使用 [az vm create](/cli/azure/vm) 创建 VM。 以下示例创建充当 Web 服务器的 VM。 `--asgs myAsgWebServers` 选项导致 Azure 将它为 VM 创建的网络接口设置为 *myAsgWebServers* 应用程序安全组的成员。
 
 指定 `--nsg ""` 选项可防止 Azure 为创建 VM 时创建的网络接口创建默认的网络安全组。 为了简化本文的内容，此处使用了密码。 在生产部署中通常使用密钥。 如果使用密钥，还必须配置 SSH 代理转发才能完成剩余步骤。 有关详细信息，请参阅 SSH 客户端的文档。 将以下命令中的 `<replace-with-your-password>` 替换为所选的密码。
 
@@ -195,7 +196,7 @@ az vm create \
 
 ## <a name="test-traffic-filters"></a>测试流量筛选器
 
-使用以下命令来与 *myVmMgmt* VM 建立 SSH 会话。 将 *<publicIpAddress>* 替换为 VM 的公共 IP 地址。 在上面的示例中，IP 地址为 *13.90.242.231*。
+使用以下命令来与 *myVmMgmt* VM 建立 SSH 会话。 将 \<publicIpAddress> 替换为 VM 的公共 IP 地址。 在上面的示例中，IP 地址为 *13.90.242.231*。
 
 ```bash 
 ssh azureuser@<publicIpAddress>
@@ -233,7 +234,7 @@ curl myVmWeb
 
 ## <a name="clean-up-resources"></a>清理资源
 
-如果不再需要资源组及其包含的所有资源，可以使用 [az group delete](/cli/azure/group#az_group_delete) 将其删除。
+如果不再需要资源组及其包含的所有资源，可以使用 [az group delete](/cli/azure/group) 将其删除。
 
 ```azurecli-interactive 
 az group delete --name myResourceGroup --yes

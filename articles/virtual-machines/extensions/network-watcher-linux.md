@@ -9,18 +9,17 @@ editor: ''
 tags: azure-resource-manager
 ms.assetid: 5c81e94c-e127-4dd2-ae83-a236c4512345
 ms.service: virtual-machines-linux
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-linux
 ms.workload: infrastructure-services
 ms.date: 02/14/2017
 ms.author: dennisg
-ms.openlocfilehash: db508e2311602a66a2c252ffaa842f8bfb4f670b
-ms.sourcegitcommit: fc64acba9d9b9784e3662327414e5fe7bd3e972e
-ms.translationtype: HT
+ms.openlocfilehash: b59e4c570032bdd3341dc7d519f23f4cd86984c7
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/12/2018
-ms.locfileid: "34076065"
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70084445"
 ---
 # <a name="network-watcher-agent-virtual-machine-extension-for-linux"></a>适用于 Linux 的网络观察程序代理虚拟机扩展
 
@@ -28,7 +27,7 @@ ms.locfileid: "34076065"
 
 [Azure 网络观察程序](/azure/network-watcher/)是一项网络性能监视、诊断和分析服务，适用于对 Azure 网络进行监视。 网络观察程序代理虚拟机 (VM) 扩展是 Azure VM 上的某些网络观察程序功能（例如按需捕获网络流量）和其他高级功能所必需的。
 
-本文详细介绍适用于 Linux 的网络观察程序代理 VM 扩展支持的平台和部署选项。 安装代理时不会中断，也不会需要重新启动 VM。
+本文详细介绍适用于 Linux 的网络观察程序代理 VM 扩展支持的平台和部署选项。 安装代理时不会中断，也不会需要重新启动 VM。 可以将扩展部署到所部署的虚拟机。 如果 Azure 服务部署了虚拟机，请查看该服务的文档以确定它是否允许在虚拟机中安装扩展。
 
 ## <a name="prerequisites"></a>先决条件
 
@@ -36,18 +35,17 @@ ms.locfileid: "34076065"
 
 可以针对下列 Linux 分发配置网络观察程序代理扩展：
 
-| 分发 | 版本 |
+| 分发组 | Version |
 |---|---|
-| Ubuntu | 16.04 LTS、14.04 LTS 和 12.04 LTS |
+| Ubuntu | 12+ |
 | Debian | 7 和 8 |
-| RedHat | 6 和 7 |
+| Red Hat | 6 和 7 |
 | Oracle Linux | 6.8+ 和 7 |
 | SUSE Linux Enterprise Server | 11 和 12 |
 | OpenSUSE Leap | 42.3+ |
 | CentOS | 6.5+ 和 7 |
 | CoreOS | 899.17.0+ |
 
-CoreOS 不受支持。
 
 ### <a name="internet-connectivity"></a>Internet 连接
 
@@ -80,7 +78,7 @@ CoreOS 不受支持。
 | 名称 | 值/示例 |
 | ---- | ---- |
 | apiVersion | 2015-06-15 |
-| 发布者 | Microsoft.Azure.NetworkWatcher |
+| publisher | Microsoft.Azure.NetworkWatcher |
 | type | NetworkWatcherAgentLinux |
 | typeHandlerVersion | 1.4 |
 
@@ -88,7 +86,7 @@ CoreOS 不受支持。
 
 可使用 Azure 资源管理器模板部署 Azure VM 扩展。 若要部署网络观察程序代理扩展，请在模板中使用以前的 json 架构。
 
-## <a name="azure-cli-10-deployment"></a>Azure CLI 1.0 部署
+## <a name="azure-classic-cli-deployment"></a>Azure 经典 CLI 部署
 
 下面的示例将网络观察程序代理 VM 扩展部署到通过经典部署模型部署的现有 VM：
 
@@ -97,7 +95,7 @@ azure config mode asm
 azure vm extension set myVM1 NetworkWatcherAgentLinux Microsoft.Azure.NetworkWatcher 1.4
 ```
 
-## <a name="azure-cli-20-deployment"></a>Azure CLI 2.0 部署
+## <a name="azure-cli-deployment"></a>Azure CLI 部署
 
 下面的示例将网络观察程序代理 VM 扩展部署到通过资源管理器部署的现有 VM：
 
@@ -105,13 +103,13 @@ azure vm extension set myVM1 NetworkWatcherAgentLinux Microsoft.Azure.NetworkWat
 az vm extension set --resource-group myResourceGroup1 --vm-name myVM1 --name NetworkWatcherAgentLinux --publisher Microsoft.Azure.NetworkWatcher --version 1.4
 ```
 
-## <a name="troubleshooting-and-support"></a>故障排除和支持
+## <a name="troubleshooting-and-support"></a>疑难解答和支持
 
-### <a name="troubleshooting"></a>故障排除
+### <a name="troubleshooting"></a>疑难解答
 
 可以从 Azure 门户或 Azure CLI 检索有关扩展部署状态的数据。
 
-下面的示例演示使用 Azure CLI 1.0 通过经典部署模型部署的 VM 扩展的部署状态：
+下面的示例演示使用 Azure 经典 CLI 通过经典部署模型部署的 VM 扩展的部署状态：
 
 ```azurecli
 azure config mode asm
@@ -119,11 +117,11 @@ azure vm extension get myVM1
 ```
 扩展执行输出将记录到在以下目录中发现的文件：
 
-`
+```
 /var/log/azure/Microsoft.Azure.NetworkWatcher.NetworkWatcherAgentLinux/
-`
+```
 
-下面的示例演示使用 Azure CLI 2.0 通过资源管理器部署的 VM 的 NetworkWatcherAgentLinux 扩展的部署状态：
+下面的示例演示使用 Azure CLI 通过资源管理器部署的 VM 的 NetworkWatcherAgentLinux 扩展的部署状态：
 
 ```azurecli
 az vm extension show --name NetworkWatcherAgentLinux --resource-group myResourceGroup1 --vm-name myVM1

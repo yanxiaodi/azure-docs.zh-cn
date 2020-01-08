@@ -1,34 +1,30 @@
 ---
 title: Azure 快速入门 - 使用 PHP 在对象存储中创建 blob | Microsoft Docs
 description: 快速了解如何使用 PHP 将对象转移到 Azure Blob 存储或从 Azure Blob 存储转移对象
-services: storage
-author: roygara
-manager: jeconnoc
+author: mhopkins-msft
+ms.author: mhopkins
+ms.date: 11/14/2018
 ms.service: storage
-ms.tgt_pltfrm: na
-ms.devlang: php
+ms.subservice: blobs
 ms.topic: quickstart
-ms.date: 04/09/2018
-ms.author: rogarana
-ms.openlocfilehash: 463b6051009ab79013f9bef958fcadec2ef3cd16
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.openlocfilehash: 0453d7465479fb1410d1436cc3fa53914633ece5
+ms.sourcegitcommit: 85b3973b104111f536dc5eccf8026749084d8789
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 08/01/2019
+ms.locfileid: "68726392"
 ---
 #  <a name="transfer-objects-tofrom-azure-blob-storage-using-php"></a>使用 PHP 将对象转移到 Azure Blob 存储或从 Azure Blob 存储转移对象
 本快速入门介绍如何使用 PHP 上传、下载和列出 Azure Blob 存储的容器中的块 Blob。 
 
 ## <a name="prerequisites"></a>先决条件
 
-完成本快速入门教程： 
-* 安装 [PHP](http://php.net/downloads.php)
-* 安装[用于 PHP 的 Azure 存储 SDK](https://github.com/Azure/azure-storage-php)
+[!INCLUDE [storage-quickstart-prereq-include](../../../includes/storage-quickstart-prereq-include.md)]
 
+请确保已安装下述额外的必备组件：
 
-如果你还没有 Azure 订阅，可以在开始前创建一个 [免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
-
-[!INCLUDE [storage-quickstart-tutorial-create-account-portal](../../../includes/storage-quickstart-tutorial-create-account-portal.md)]
+* [PHP](https://php.net/downloads.php)
+* [用于 PHP 的 Azure 存储 SDK](https://github.com/Azure/azure-storage-php)
 
 ## <a name="download-the-sample-application"></a>下载示例应用程序
 本快速入门中使用的[示例应用程序](https://github.com/Azure-Samples/storage-blobs-php-quickstart.git)是基本的 PHP 应用程序。  
@@ -44,16 +40,16 @@ git clone https://github.com/Azure-Samples/storage-blobs-php-quickstart.git
 [!INCLUDE [storage-copy-account-key-portal](../../../includes/storage-copy-account-key-portal.md)]
 
 ## <a name="configure-your-storage-connection-string"></a>配置存储连接字符串
-在应用程序中，必须提供存储帐户名称和帐户密钥，以创建应用程序的 **BlobRestProxy** 实例。 建议将这些标识符存储在运行应用程序的本地计算机的环境变量中。 根据操作系统按照下面的一个示例创建环境变量。 将 youraccountname 和 youraccountkey 值分别替换为帐户名称和密钥。
+在应用程序中，必须提供存储帐户名称和帐户密钥，以创建应用程序的 **BlobRestProxy** 实例。 建议将这些标识符存储在运行应用程序的本地计算机的环境变量中。 根据操作系统按照下面的一个示例创建环境变量。 将 youraccountname  和 youraccountkey  值分别替换为帐户名称和密钥。
 
-# <a name="linux-tablinux"></a>[Linux] (#tab/linux)
+# <a name="linuxtablinux"></a>[Linux](#tab/linux)
 
 ```bash
 export ACCOUNT_NAME=<youraccountname>
 export ACCOUNT_KEY=<youraccountkey>
 ```
 
-# <a name="windows-tabwindows"></a>[Windows] (#tab/windows)
+# <a name="windowstabwindows"></a>[Windows](#tab/windows)
 
 ```cmd
 setx ACCOUNT_NAME=<youraccountname>
@@ -77,7 +73,7 @@ This is the content of the blob uploaded: Hello Azure!
 ```
 按显示的键时，示例程序会删除存储容器和文件。 继续前，请在服务器的文件夹中查看这两个文件。 可以打开它们，并看到它们完全相同。
 
-还可以使用工具（如 [Azure 存储资源管理器](http://storageexplorer.com)）查看 Blob 存储中的文件。 Azure 存储资源管理器是免费的跨平台工具，可用于访问存储帐户信息。 
+还可以使用工具（如 [Azure 存储资源管理器](https://storageexplorer.com)）查看 Blob 存储中的文件。 Azure 存储资源管理器是免费的跨平台工具，可用于访问存储帐户信息。 
 
 验证文件后，按任意键可完成演示并删除测试文件。 了解此示例的用途以后，即可打开 example.rb 文件来查看代码。 
 
@@ -97,7 +93,7 @@ This is the content of the blob uploaded: Hello Azure!
 > [!IMPORTANT]
 > 容器名称必须为小写。 有关容器名称和 blob 名称的详细信息，请参阅[命名和引用容器、Blob 和元数据](https://docs.microsoft.com/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata)。
 
-此部分设置 Azure 存储客户端的实例，实例化 Blob 服务对象，创建新的容器，然后设置容器的权限，使 Blob 公开。 容器名称为 quickstartblobs。 
+此部分设置 Azure 存储客户端的实例，实例化 Blob 服务对象，创建新的容器，然后设置容器的权限，使 Blob 公开。 容器名称为 quickstartblobs  。 
 
 ```PHP
     # Setup a specific instance of an Azure::Storage::Client
@@ -128,7 +124,7 @@ Blob 存储支持块 blob、追加 blob 和页 blob。 块 blob 是最常用的 
 
 若要将文件上传到 blob，请通过将本地驱动器上的目录名称和文件名称联接在一起来获取文件的完整路径。 然后可以使用 **createBlockBlob()** 方法将文件上传到指定的路径。 
 
-示例代码使用一个本地文件并将其上传到 Azure。 在代码中，该文件存储为 **myfile**，Blob 的名称存储为 **fileToUpload**。 以下示例将文件上传到名为“quickstartblobs”的容器。
+示例代码使用一个本地文件并将其上传到 Azure。 在代码中，该文件存储为 **myfile**，Blob 的名称存储为 **fileToUpload**。 以下示例将文件上传到名为“quickstartblobs”的容器  。
 
 ```PHP
     $myfile = fopen("HelloWorld.txt", "w") or die("Unable to open file!");

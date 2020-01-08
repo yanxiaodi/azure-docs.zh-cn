@@ -1,314 +1,317 @@
 ---
-title: Azure 备份：准备备份虚拟机 | Microsoft 文档
-description: 确保对环境进行准备，以便在 Azure 中备份虚拟机。
-services: backup
-documentationcenter: ''
-author: markgalioto
+title: 使用 Azure 备份将 Azure VM 备份到恢复服务保管库中
+description: 介绍如何使用 Azure 备份将 Azure VM 备份到恢复服务保管库中
+service: backup
+author: dcurwin
 manager: carmonm
-editor: ''
-keywords: 备份; 正在备份;
-ms.assetid: e87e8db2-b4d9-40e1-a481-1aa560c03395
 ms.service: backup
-ms.workload: storage-backup-recovery
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
-ms.date: 3/1/2018
-ms.author: markgal;trinadhk;sogup;
-ms.openlocfilehash: 489875e595c9f28a1e30cbb29cde078f1b716f7f
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 04/03/2019
+ms.author: dacurwin
+ms.openlocfilehash: 1f8086580d60d13251052636d4d771855e9605a5
+ms.sourcegitcommit: 0f54f1b067f588d50f787fbfac50854a3a64fff7
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
-ms.locfileid: "33940564"
+ms.lasthandoff: 08/12/2019
+ms.locfileid: "68954954"
 ---
-# <a name="prepare-your-environment-to-back-up-resource-manager-deployed-virtual-machines"></a>准备环境以备份 Resource Manager 部署的虚拟机
+# <a name="back-up-azure-vms-in-a-recovery-services-vault"></a>将 Azure VM 备份到恢复服务保管库中
 
-本文提供有关准备环境以备份 Azure 资源管理器部署的虚拟机 (VM) 的步骤。 过程中显示的步骤将使用 Azure 门户。 备份虚拟机时，备份数据或恢复点存储在恢复服务保管库。 恢复服务保管库可保存经典部署虚拟机和资源管理器部署虚拟机的备份数据。
+本文介绍如何使用 [Azure 备份](backup-overview.md)服务将 Azure VM 备份到恢复服务保管库中。
+
+在本文中，学习如何：
+
+> [!div class="checklist"]
+> * 准备 Azure VM。
+> * 创建保管库。
+> * 发现 VM 并配置备份策略。
+> * 为 Azure VM 启用备份。
+> * 运行初始备份。
+
 
 > [!NOTE]
-> Azure 有两种用于创建和使用资源的部署模型：[Resource Manager 部署模型和经典部署模型](../azure-resource-manager/resource-manager-deployment-model.md)。
+> 本文将会介绍如何设置保管库以及选择要备份的 VM。 若要备份多个 VM，则本文的内容会有所帮助。 或者，可以直接从 VM 设置[备份单个 Azure VM](backup-azure-vms-first-look-arm.md)。
 
-在保护（或备份）资源管理器部署虚拟机之前，请确保符合以下先决条件：
+## <a name="before-you-start"></a>开始之前
 
-* 在虚拟机所在区域创建或标识恢复服务保管库。
-* 选择方案、定义备份策略并定义要保护的项。
-* 检查虚拟机上的 VM 代理（扩展）的安装情况。
-* 检查网络连接。
-* 对于 Linux VM，如果要自定义备份环境以进行应用程序一致的备份，请按照[配置快照前和快照后脚本的步骤](https://docs.microsoft.com/azure/backup/backup-azure-linux-app-consistent)进行操作。
 
-如果环境已满足这些条件，请转到[备份 VM](backup-azure-arm-vms.md) 一文。 如果需要设置或检查上述任何先决条件，本文将逐步引导你完成各个步骤。
+- [查看](backup-architecture.md#architecture-direct-backup-of-azure-vms) Azure VM 备份体系结构。
+- [了解](backup-azure-vms-introduction.md) Azure VM 备份和备份扩展。
+- 在配置备份之前, 请[查看支持矩阵](backup-support-matrix-iaas.md)。
 
-## <a name="supported-operating-systems-for-backup"></a>支持用于备份的操作系统
- * **Linux**：Azure 备份支持 [Azure 认可的分发版列表](../virtual-machines/linux/endorsed-distros.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)，但 CoreOS Linux 除外。 
- 
-    > [!NOTE] 
-    > 只要虚拟机上装有 VM 代理且支持 Python，其他自带 Linux 发行版应该也能正常运行。 但是，不支持这些发行版。
- * **Windows Server**：不支持低于 Windows Server 2008 R2 的版本。
+此外，在某些情况下，还需要完成几项操作：
 
-## <a name="limitations-when-backing-up-and-restoring-a-vm"></a>备份和还原 VM 时的限制
-准备环境之前，请务必了解限制：
+- **在 VM 上安装 VM 代理**：Azure 备份通过为在计算机上运行的 Azure VM 代理安装一个扩展来备份 Azure VM。 如果 VM 是从 Azure 市场映像创建的，则代理已安装并正在运行。 如果创建了自定义 VM 或者迁移了本地计算机，则可能需要[手动安装代理](#install-the-vm-agent)。
+- **显式允许出站访问**：一般情况下，无需显式允许 Azure VM 的出站网络访问即可让它与 Azure 备份进行通信。 但是，某些 VM 在尝试进行连接时可能会遇到连接问题并显示 **ExtensionSnapshotFailedNoNetwork** 错误。 如果发生这种情况，应该[显式允许出站访问](#explicitly-allow-outbound-access)，使 Azure 备份扩展能够与备份流量的 Azure 公共 IP 地址通信。
 
-* 不支持备份超过 16 个数据磁盘的虚拟机。
-* 不支持备份使用保留 IP 地址且未定义终结点的虚拟机。
-* 不支持备份通过 Linux 统一密钥设置 (LUKS) 加密法加密的 Linux VM。
-* 不建议备份包含群集共享卷 (CSV) 或横向扩展文件服务器配置的 VM。 如果已备份，会造成 CSV 编写器故障。 这些操作涉及到在执行快照任务执行期间包含在群集配置中的所有 VM。 Azure 备份不支持多 VM 一致性。 
-* 备份数据不包括连接到 VM 的网络挂载驱动器。
-* 不支持在恢复过程中替换现有虚拟机。 如果在 VM 存在时尝试还原 VM，还原操作会失败。
-* 不支持跨区域备份和还原。
-* 配置备份时，请确保“防火墙和虚拟网络”存储帐户设置允许从“所有网络”进行访问。
-* 对于所选的网络，为你的存储帐户配置防火墙和虚拟网络设置后，请选择“允许受信任的 Microsoft 服务访问此存储帐户”作为例外，以允许 Azure 备份服务访问网络受限的存储帐户。 网络受限的存储帐户不支持项级别的恢复。
-* 可以在 Azure 的所有公共区域中备份虚拟机。 （请参阅支持区域的[清单](https://azure.microsoft.com/regions/#services)。）在创建保管库期间，如果要寻找的区域目前不受支持，则不会在下拉列表中显示它。
-* 仅支持通过 PowerShell 还原属于多 DC 配置的域控制器 (DC) VM。 有关详细信息，请参阅[还原多 DC 域控制器](backup-azure-arm-restore-vms.md#restore-domain-controller-vms)。
-* 仅支持通过 PowerShell 还原采用以下特殊网络配置的虚拟机。 还原操作完成后，在 UI 中通过还原工作流创建的 VM 将不采用这些网络配置。 若要了解详细信息，请参阅[还原采用特殊网络配置的 VM](backup-azure-arm-restore-vms.md#restore-vms-with-special-network-configurations)。
-  * 采用负载均衡器配置的虚拟机（内部和外部）
-  * 使用多个保留 IP 地址的虚拟机
-  * 使用多个网络适配器的虚拟机
 
-## <a name="create-a-recovery-services-vault-for-a-vm"></a>为 VM 创建恢复服务保管库
-恢复服务保管库是用于存储在不同时间创建的备份和恢复点的实体。 恢复服务保管库还包含与受保护虚拟机关联的备份策略。
+## <a name="create-a-vault"></a>创建保管库
 
-若要创建恢复服务保管库，请执行以下操作：
+ 保管库可以存储备份以及在不同时间创建的恢复点，并可以存储与备份的计算机相关联的备份策略。 按如下所述创建保管库：
 
 1. 登录到 [Azure 门户](https://portal.azure.com/)。
-2. 在“中心”菜单中选择“浏览”，并键入“恢复服务”。 开始键入时，会根据输入筛选资源列表。 选择“恢复服务保管库”。
+2. 在搜索框中键入“恢复服务”。 在“服务”下，单击“恢复服务保管库”。
 
-    ![在框中键入内容，并在结果中选择“恢复服务保管库”](./media/backup-azure-arm-vms-prepare/browse-to-rs-vaults-updated.png) <br/>
+     ![搜索恢复服务保管库](./media/backup-azure-arm-vms-prepare/browse-to-rs-vaults-updated.png) <br/>
 
-    此时会显示恢复服务保管库列表。
-3. 在“恢复服务保管库”菜单中，选择“添加”。
+3. 在“恢复服务保管库”菜单中，单击“+添加”。
 
-    ![创建恢复服务保管库步骤 2](./media/backup-azure-arm-vms-prepare/rs-vault-menu.png)
+     ![创建恢复服务保管库步骤 2](./media/backup-azure-arm-vms-prepare/rs-vault-menu.png)
 
-    此时会打开“恢复服务保管库”窗格。 此窗格中会提示输入“名称”、“订阅”、“资源组”和“位置”的信息。
+4. 在“恢复服务保管库”中，键入一个易记名称用于标识保管库。
+    - 名称对于 Azure 订阅需要是唯一的。
+    - 该名称可以包含 2 到 50 个字符。
+    - 名称必须以字母开头，只能包含字母、数字和连字符。
+5. 选择要在其中创建保管库的 Azure 订阅、资源组和地理区域。 然后单击“创建”。
+    - 创建保管库可能需要一段时间。
+    - 可以在门户的右上区域中监视状态通知。
 
-    ![“恢复服务保管库”窗格](./media/backup-azure-arm-vms-prepare/rs-vault-attributes.png)
-4. 对于“名称”，请输入一个友好名称以标识保管库 。 名称对于 Azure 订阅需要是唯一的。 键入包含 2 到 50 个字符的名称。 名称必须以字母开头，只能包含字母、数字和连字符。
-5. 选择“订阅”查看可用订阅列表。 如果不确定要使用哪个订阅，请使用默认的（或建议的）订阅。 仅当工作或学校帐户与多个 Azure 订阅关联时，才会显示多个选项。
-6. 选择“资源组”查看可用资源组列表，或选择“新建”创建新的资源组。 有关资源组的完整信息，请参阅 [Azure 资源管理器概述](../azure-resource-manager/resource-group-overview.md)。
-7. 选择“位置”，为保管库选择地理区域。 *必须* 与要保护的虚拟机位于同一区域中。
 
-   > [!IMPORTANT]
-   > 如果不确定 VM 的所在位置，请关闭保管库创建对话框，并转到门户中的虚拟机列表。 如果在多个区域中具有虚拟机，则需要在每个区域中创建恢复服务保管库。 请先在第一个位置创建保管库，然后转到下一个位置。 无需指定存储帐户即可存储备份数据。 恢复服务保管库和 Azure 备份服务会自动处理这种情况。
-   >
-   >
+ 创建保管库后，它会显示在恢复服务保管库列表中。 如果未看到创建的保管库，请选择“刷新”。
 
-8. 选择**创建**。 创建恢复服务保管库可能需要一段时间。 可以在门户的右上区域中监视状态通知。 创建保管库后，它会显示在“恢复服务保管库”的列表中。 如果未看到创建的保管库，请选择“刷新”。
+![备份保管库列表](./media/backup-azure-arm-vms-prepare/rs-list-of-vaults.png)
 
-    ![备份保管库列表](./media/backup-azure-arm-vms-prepare/rs-list-of-vaults.png)
+> [!NOTE]
+> Azure 备份服务会创建一个单独的资源组（而非 VM 资源组）来存储快照，采用的命名格式为 **AzureBackupRG_geography_number**（例如：AzureBackupRG_northeurope_1）。 此资源组中的数据将按 Azure 虚拟机备份策略的“保留即时恢复快照”部分中指定的天数保留。  对此资源组应用锁定可能会导致备份失败。<br>
+此资源组还应排除在任何名称/标记限制之外，因为限制策略会阻止在其中再次创建“资源点”集合，从而导致备份失败。
 
-现已创建保管库，接下来请了解如何设置存储复制。
 
-## <a name="set-storage-replication"></a>设置存储复制
-使用存储复制选项可在异地冗余存储与本地冗余存储之间进行选择。 默认情况下，保管库具有异地冗余存储。 对于主要备份，请将选项保持设置为异地冗余存储。 如果想要一个更便宜、但持久性不高的选项，请选择“本地冗余存储”。
+### <a name="modify-storage-replication"></a>修复存储复制
 
-若要编辑存储复制设置，请执行以下操作：
+默认情况下，保管库使用[异地冗余存储 (GRS)](https://docs.microsoft.com/azure/storage/common/storage-redundancy-grs)。
 
-1. 在“恢复服务保管库”窗格中，选择自己的保管库。
-    选择该保管库时，“设置”窗格（顶部显示了保管库的名称）和保管库详细信息窗格会打开。
+- 如果保管库是主要备份机制，我们建议使用 GRS。
+- [本地冗余存储 (LRS)](https://docs.microsoft.com/azure/storage/common/storage-redundancy-lrs?toc=%2fazure%2fstorage%2fblobs%2ftoc.json) 的费用更低。
 
-   ![从备份保管库列表中选择保管库](./media/backup-azure-arm-vms-prepare/new-vault-settings-blade.png)
+按如下所述修改存储复制类型：
 
-2. 在“设置”窗格中，使用垂直滚动条向下滚动到“管理”部分，并选择“备份基础结构”。 在“常规”部分中，选择“备份配置”。 在“备份配置”窗格中，选择保管库的存储复制选项。 默认情况下，保管库具有异地冗余存储。
+1. 在新保管库的“设置”部分单击“属性”。
+2. 在“属性”中的“备份配置”下，单击“更新”。
+3. 选择存储复制类型，然后单击“保存”。
 
-   ![备份保管库列表](./media/backup-azure-arm-vms-prepare/full-blade.png)
+      ![设置新保管库的存储配置](./media/backup-try-azure-backup-in-10-mins/full-blade.png)
+> [!NOTE]
+   > 在保管库经过设置并且包含备份项之后，无法修改存储复制类型。 若要修改，需要重新创建保管库。
 
-   如果使用 Azure 作为主要备份存储终结点，请继续使用异地冗余存储。 如果使用 Azure 作为非主要备份存储终结点，请选择本地冗余存储。 请参阅 [Azure 存储复制概述](../storage/common/storage-redundancy.md)详细了解存储选项。
+## <a name="apply-a-backup-policy"></a>应用备份策略
 
-3. 如果更改了存储复制类型，请选择“保存”。
-    
-选择保管库的存储选项后，可以开始将 VM 与保管库相关联。 若要开始关联，请发现及注册 Azure 虚拟机。
+配置保管库的备份策略。
 
-## <a name="select-a-backup-goal-set-policy-and-define-items-to-protect"></a>选择备份目标、设置策略并定义要保护的项
-向恢复服务保管库注册虚拟机之前，请运行发现过程以确定是否有任何新的虚拟机已添加到订阅。 发现过程将在 Azure 中查询订阅中的虚拟机列表。 如果找到新的虚拟机，门户将显示云服务名称和关联的区域。 在 Azure 门户中，*方案*是你在恢复服务保管库中输入的内容。 策略是有关恢复点创建频率和时间的计划。 策略还包含恢复点的保留范围。
-
-1. 如果已打开恢复服务保管库，请转到步骤 2。 如果尚未打开恢复服务保管库，请打开 [Azure 门户](https://portal.azure.com/)。 在“中心”菜单中，选择“更多服务”。
-
-   a. 在资源列表中，键入“恢复服务”。 开始键入时，会根据输入筛选列表。 出现“**恢复服务保管库**”时，请选择它。
-
-      ![在框中键入内容，并在结果中选择“恢复服务保管库”](./media/backup-azure-arm-vms-prepare/browse-to-rs-vaults-updated.png) <br/>
-
-      此时会显示恢复服务保管库列表。 如果订阅中没有任何保管库，则此列表为空。
-
-      ![恢复服务保管库列表的视图](./media/backup-azure-arm-vms-prepare/rs-list-of-vaults.png)
-
-   b. 在恢复服务保管库列表中选择一个保管库。
-
-      此时会打开所选保管库的“设置”窗格和保管库仪表板。
-
-      ![“设置”窗格和保管库仪表板](./media/backup-azure-arm-vms-prepare/new-vault-settings-blade.png)
-2. 在保管库仪表板菜单中，选择“备份”。
+1. 在保管库的“概述”部分，单击“+备份”。
 
    ![“备份”按钮](./media/backup-azure-arm-vms-prepare/backup-button.png)
 
-   此时会打开“备份”和“备份目标”窗格。
 
-3. 在“备份目标”窗格中，将“工作负荷的运行位置”设置为“Azure”，并将“要备份的项”设置为“虚拟机”。 然后选择“确定”。
+2. 在“备份目标” > “工作负荷在哪里运行?”中，选择“Azure”。 在“要备份哪些内容?”中，选择“虚拟机” >  “确定”。 这会在保管库中注册 VM 扩展。
 
    ![“备份”和“备份目标”窗格](./media/backup-azure-arm-vms-prepare/select-backup-goal-1.png)
 
-   此步骤向保管库注册 VM 扩展。 随后将会关闭“备份目标”窗格，并打开“备份策略”窗格。
+3. 在“备份策略”中，选择要与保管库关联的策略。
+    - 默认策略每天备份 VM 一次。 每日备份将保留 30 天。 即时恢复快照将保留两天。
+    - 如果不想要使用默认策略，请选择“新建”，然后按下一过程中所述创建自定义策略。
 
-   ![“备份”和“备份策略”窗格](./media/backup-azure-arm-vms-prepare/select-backup-goal-2.png)
-4. 在“备份策略”窗格中，选择要应用到保管库的备份策略。
+      ![默认备份策略](./media/backup-azure-arm-vms-prepare/default-policy.png)
 
-   ![选择备份策略](./media/backup-azure-arm-vms-prepare/setting-rs-backup-policy-new.png)
+4. 在“选择虚拟机”中，选择要使用该策略备份的 VM。 然后单击“确定”。
 
-   默认策略的详细信息会在下拉菜单下列出。 如果要创建新策略，请从下拉菜单中选择“新建”。 有关定义备份策略的说明，请参阅[定义备份策略](backup-azure-vms-first-look-arm.md#defining-a-backup-policy)。
-    选择“确定”，将备份策略与保管库相关联。
+   - 随后将验证选定的 VM。
+   - 只能选择与保管库位于同一区域中的 VM。
+   - 只能在单个保管库中备份 VM。
 
-   随后将会关闭“备份策略”窗格，并打开“选择虚拟机”窗格。
-5. 在“选择虚拟机”窗格中，选择要与指定的策略关联的虚拟机，并选择“确定”。
+     ![“选择虚拟机”窗格](./media/backup-azure-arm-vms-prepare/select-vms-to-backup.png)
 
-   ![“选择虚拟机”窗格](./media/backup-azure-arm-vms-prepare/select-vms-to-backup.png)
+5. 在“备份”中，单击“启用备份”。 这会将策略部署到保管库和 VM，并在 Azure VM 上运行的 VM 代理中安装备份扩展。
 
-   所选虚拟机已验证。 如果未看到所需的虚拟机，请检查这些虚拟机是否位于恢复服务保管库所在的同一个 Azure 区域。 如果仍看不到虚拟机，请检查它们是否尚未受其他保管库保护。 保管库仪表板将显示恢复服务保管库所在的区域。
+     ![“启用备份”按钮](./media/backup-azure-arm-vms-prepare/vm-validated-click-enable.png)
 
-6. 定义保管库的所有设置后，请在“备份”窗格中选择“启用备份”。 此步骤将策略部署到保管库和 VM。 此步骤不会创建虚拟机的初始恢复点。
+启用备份后：
 
-   ![“启用备份”按钮](./media/backup-azure-arm-vms-prepare/vm-validated-click-enable.png)
+- 无论 VM 是否在运行，备份服务都会安装备份扩展。
+- 初始备份将根据备份计划运行。
+- 运行备份时，请注意：
+    - 正在运行的 VM 最有可能捕获应用程序一致的恢复点。
+    - 但是，即使 VM 已关闭，也仍会将其备份。 此类 VM 称为脱机 VM。 在这种情况下，恢复点是崩溃一致的。
 
-成功启用备份后，备份策略将按计划运行。 如果现在想要生成按需备份来备份虚拟机，请参阅[触发备份作业](./backup-azure-vms-first-look-arm.md#initial-backup)。
 
-如果注册虚拟机出现问题，请参阅以下信息，了解安装 VM 代理的方法和网络连接的相关信息。 如果要保护在 Azure 中创建的虚拟机，则可能不需要以下信息。 但是，如果已将虚拟机迁移到 Azure，请确保已正确安装 VM 代理，并且虚拟机可与虚拟网络通信。
+### <a name="create-a-custom-policy"></a>创建自定义策略
 
-## <a name="install-the-vm-agent-on-the-virtual-machine"></a>在虚拟机上安装 VM 代理
-要正常运行备份扩展，必须在 Azure 虚拟机上安装 Azure [VM 代理](../virtual-machines/extensions/agent-windows.md)。 如果 VM 是从 Azure Marketplace 创建的，则虚拟机上已安装 VM 代理。 
+如果已选择创建新的备份策略，请填写策略设置。
 
-以下信息适用于不是使用从 Azure Marketplace 创建的 VM 的情况。 例如，你从本地数据中心迁移了某个 VM。 在这种情况下，需要安装 VM 代理才能保护该虚拟机。
+1. 在“策略名称”中指定有意义的名称。
+2. 在 "**备份计划**" 中, 指定何时进行备份。 可为 Azure VM 创建每日或每周备份。
+2. 在“即时还原”中，指定要在本地将用于即时还原的快照保留多长时间。
+    - 还原时，已备份的 VM 磁盘将通过网络从存储复制到恢复存储位置。 使用即时还原时，可以利用在执行备份作业期间创建的存储于本地的快照，而无需等待将备份数据传输到保管库。
+    - 可将用于即时还原的快照保留一到五天。 默认设置为两天。
+3. 在“保留期”中，指定要将每日或每周备份点保留多长时间。
+4. 在“保留每月备份点”中，指定是否要保留每日或每周备份的每月备份。
+5. 单击“确定”保存策略。
 
-如果在备份 Azure VM 时遇到问题，请使用下表检查是否已在虚拟机上正确安装 Azure VM 代理。 该表提供了适用于 Windows 和 Linux VM 的 VM 代理的其他信息。
+    ![新建备份策略](./media/backup-azure-arm-vms-prepare/new-policy.png)
 
-| **操作** | **Windows** | **Linux** |
-| --- | --- | --- |
-| 安装 VM 代理 |下载并安装 [代理 MSI](http://go.microsoft.com/fwlink/?LinkID=394789&clcid=0x409)。 需要有管理员权限才能完成安装。 |<li> 安装最新的 [Linux 代理](../virtual-machines/extensions/agent-linux.md)。 需要有管理员权限才能完成安装。 我们建议从分发存储库安装代理。 我们**不建议**直接从 github 安装 Linux VM 代理。  |
-| 更新 VM 代理 |更新 VM 代理与重新安装 [VM 代理二进制文件](http://go.microsoft.com/fwlink/?LinkID=394789&clcid=0x409)一样简单。 <br>确保在更新 VM 代理时，没有任何正在运行的备份操作。 |按照[更新 Linux VM 代理](../virtual-machines/linux/update-agent.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)中的说明进行操作。 我们建议从分发存储库更新代理。 我们**不建议**直接从 github 更新 Linux VM 代理。<br>确保在更新 VM 代理时，没有任何正在运行的备份操作。 |
-| 验证 VM 代理安装 |<li>导航到 Azure VM 中的 *C:\WindowsAzure\Packages* 文件夹。 <li>应会发现 WaAppAgent.exe 文件已存在。<li> 右键单击该文件，转到“**属性**”，并选择“**详细信息**”选项卡。“产品版本”字段应为 2.6.1198.718 或更高。 |不适用 |
+> [!NOTE]
+   > Azure 备份不支持根据 Azure VM 备份的夏令时时差自动调整时钟。 发生时间变化时，可根据需要手动修改备份策略。
 
-### <a name="backup-extension"></a>备份扩展
-在虚拟机上安装 VM 代理后，Azure 备份服务会将备份扩展安装到 VM 代理上。 备份服务会无缝升级和修补备份扩展。
+## <a name="trigger-the-initial-backup"></a>触发初始备份
 
-无论 VM 是否在运行，备份服务都会安装备份扩展。 VM 运行时，很有可能会获得应用程序一致的恢复点。 但是，即使 VM 已关闭且无法安装扩展，备份服务也会继续备份 VM。 此类 VM 称为“脱机 VM”。 在这种情况下，恢复点将是 *崩溃一致性*恢复点。
+初始备份将根据计划运行，但你可以按如下所述手动运行：
 
-## <a name="establish-network-connectivity"></a>建立网络连接
-为了管理 VM 快照，备份扩展需要连接 Azure 公共 IP 地址。 如果未建立适当的 Internet 连接，虚拟机的 HTTP 请求会超时，并且备份操作会失败。 如果部署中配置了访问限制（例如，通过网络安全组 (NSG)），请选择其中一个选项来提供备份流量的明确路径：
+1. 在保管库菜单中，单击“备份项”。
+2. 在“备份项”中，单击“Azure 虚拟机”。
+3. 在“备份项”列表中，单击省略号 (...)。
+4. 单击“立即备份”。
+5. 在“立即备份”中，使用日历控件选择恢复点的最后保留日期。 然后单击“确定”。
+6. 监视门户通知。 可以在保管库仪表板 >“备份作业” > “进行中”监视作业进度。 创建初始备份可能需要一些时间，具体取决于 VM 的大小。
 
-* [将 Azure 数据中心 IP 范围加入允许列表](http://www.microsoft.com/en-us/download/details.aspx?id=41653)。
-* 部署 HTTP 代理服务器来路由流量。
+## <a name="verify-backup-job-status"></a>验证备份作业状态
 
-在确定使用哪个选项时，要取舍的不外乎是易管理性、控制粒度和成本等要素。
+每个 VM 备份的备份作业详细信息包括两个阶段:**快照**阶段, 后跟 "将**数据传输到保管库**" 阶段。<br/>
+快照阶段保证与磁盘一起存储的恢复点的可用性, 以便进行**即时还原**, 并且最多可使用5天, 具体取决于用户配置的快照保持期。 将数据传输到保管库会在保管库中创建恢复点, 以实现长期保留。 仅当“快照”阶段完成后，“将数据传输到保管库”阶段才启动。
 
-| 选项 | 优点 | 缺点 |
-| --- | --- | --- |
-| 将 IP 范围加入允许列表 |无额外成本。<br><br>若要在 NSG 中打开访问权限，请使用 **Set-AzureNetworkSecurityRule** cmdlet。 |管理起来很复杂，因为受影响的 IP 范围会不断变化。<br><br>允许访问整个 Azure，而不只是存储。 |
-| 使用 HTTP 代理 |允许在代理中对存储 URL 进行精细控制。<br><br>在单个位置通过 Internet 访问 VM。<br><br>不受 Azure IP 地址变化的影响。 |通过代理软件运行 VM 带来的额外成本。 |
+  ![备份作业状态](./media/backup-azure-arm-vms-prepare/backup-job-status.png)
 
-### <a name="whitelist-the-azure-datacenter-ip-ranges"></a>将 Azure 数据中心 IP 范围加入允许列表
-要将 Azure 数据中心 IP 范围加入允许列表，请参阅 [Azure 网站](http://www.microsoft.com/en-us/download/details.aspx?id=41653)获取有关 IP 范围的详细信息和说明。
+后端上运行了两**个子任务**, 一个用于前端备份作业, 可以按如下所示从 "**备份作业**详细信息" 边栏选项卡中进行检查:
 
-可以允许使用[服务标记](../virtual-network/security-overview.md#service-tags)与特定区域的存储建立连接。 请确保允许访问存储帐户的规则的优先级高于阻止 Internet 访问的规则。 
+  ![备份作业状态](./media/backup-azure-arm-vms-prepare/backup-job-phase.png)
 
-![具有区域存储标记的 NSG](./media/backup-azure-arm-vms-prepare/storage-tags-with-nsg.png)
+“将数据传输到保管库”阶段可能需要数日才能完成，具体取决于磁盘大小、每个磁盘的改动情况以及其他若干因素。
 
-以下视频逐步讲解了配置服务标记的过程： 
+作业状态可能因以下情况而异：
+
+**快照** | **将数据传输到保管库** | **作业状态**
+--- | --- | ---
+已完成 | 进行中 | 进行中
+已完成 | 已跳过 | 已完成
+已完成 | 已完成 | 已完成
+已完成 | 已失败 | 已完成，但出现警告
+已失败 | 已失败 | 已失败
+
+
+现在，借助此功能，对于相同的 VM，两个备份可以并行运行，但是，无论处于哪个阶段（“快照”、“将数据传输到保管库”），都只能有一个子任务处于运行状态。 因此，对于进行中的备份作业导致了第二天备份失败的情况，就会通过此分离功能加以避免。 如果以前某天的备份作业处于正在进行的状态，那么当“将数据传输到保管库”阶段已跳过时，次日的备份快照可以被完成。
+在保管库中创建的增量恢复点将从在该保管库中创建的最后一个恢复点捕获所有的改动。 不会对用户产生任何成本影响。
+
+
+## <a name="optional-steps-install-agentallow-outbound"></a>可选步骤（安装代理/允许出站访问）
+### <a name="install-the-vm-agent"></a>安装 VM 代理
+
+Azure 备份通过为在计算机上运行的 Azure VM 代理安装一个扩展来备份 Azure VM。 如果 VM 是从 Azure 市场映像创建的，则代理已安装并正在运行。 如果创建了自定义 VM 或者迁移了本地计算机，则可能需要根据下表中的摘要手动安装代理。
+
+**VM** | **详细信息**
+--- | ---
+**Windows** | 1.[下载并安装](https://go.microsoft.com/fwlink/?LinkID=394789&clcid=0x409)代理 MSI 文件。<br/><br/> 2.使用管理员权限在计算机上进行安装。<br/><br/> 3.验证安装。 在 VM 上的“C:\WindowsAzure\Packages”中，右键单击“WaAppAgent.exe” >  选择“属性”。 在“详细信息”选项卡上，“产品版本”应为 2.6.1198.718 或更高。<br/><br/> 若要更新代理，请确保没有备份操作正在运行，并[重新安装代理](https://go.microsoft.com/fwlink/?LinkID=394789&clcid=0x409)。
+**Linux** | 使用分发版包存储库中的 RPM 或 DEB 包安装代理。 这是安装和升级 Azure Linux 代理的首选方法。 所有[认可的分发版提供商](https://docs.microsoft.com/azure/virtual-machines/linux/endorsed-distros)会将 Azure Linux 代理包集成到其映像和存储库。 [GitHub](https://github.com/Azure/WALinuxAgent) 上提供了该代理，但我们不建议从此处安装。<br/><br/> 若要更新代理，请确保没有备份操作正在运行，并更新二进制文件。
+
+### <a name="explicitly-allow-outbound-access"></a>显式允许出站访问
+
+VM 上运行的备份扩展需要对 Azure 公共 IP 地址进行出站访问。
+
+- 一般情况下，无需显式允许 Azure VM 的出站网络访问即可让它与 Azure 备份进行通信。
+- 如果 VM 连接遇到问题，或者在尝试连接时出现 **ExtensionSnapshotFailedNoNetwork** 错误，应显式允许访问，使备份扩展能够与备份流量的 Azure 公共 IP 地址通信。 下表汇总了访问方法。
+
+
+**选项** | **Action** | **详细信息**
+--- | --- | ---
+**设置 NSG 规则** | 允许 [Azure 数据中心 IP 范围](https://www.microsoft.com/download/details.aspx?id=41653)。<br/><br/> 可以添加一个允许使用[服务标记](backup-azure-arm-vms-prepare.md#set-up-an-nsg-rule-to-allow-outbound-access-to-azure)访问 Azure 备份服务的规则，而无需允许并管理每个地址范围。 | [详细了解](../virtual-network/security-overview.md#service-tags)服务标记。<br/><br/> 服务标记可以简化访问管理，且不会产生额外的费用。
+**部署代理** | 部署 HTTP 代理服务器来路由流量。 | 允许访问整个 Azure，而不只是存储。<br/><br/> 允许对存储 URL 进行精细控制。<br/><br/> 对 VM 进行单点 Internet 访问。<br/><br/> 代理不产生额外的成本。
+**设置 Azure 防火墙** | 使用 Azure 备份服务的 FQDN 标记允许流量通过 VM 上的 Azure 防火墙 | 如果在 VNet 子网中设置了 Azure 防火墙，则 FQDN 标记很容易使用。<br/><br/> 无法创建自己的 FQDN 标记，无法修改标记中的 FQDN。<br/><br/> 如果 Azure VM 包含托管磁盘，则你可能需要在防火墙上额外打开一个端口 (8443)。
+
+#### <a name="establish-network-connectivity"></a>建立网络连接
+
+通过代理或防火墙与 NSG 建立连接
+
+##### <a name="set-up-an-nsg-rule-to-allow-outbound-access-to-azure"></a>设置一个 NSG 规则以允许对 Azure 进行出站访问
+
+如果对 VM 的访问由 NSG 管理，请允许通过所需的范围和端口对备份存储进行出站访问。
+
+1. 在 VM 属性 >“网络”中，选择“添加出站端口规则”。
+2. 在“添加出站安全规则”中，选择“高级”。
+3. 在“源”中，选择“VirtualNetwork”。
+4. 在“源端口范围”中输入一个星号 (*)，以允许从任何端口进行出站访问。
+5. 在“目标”中，选择“服务标记”。 从列表中选择“Storage.region”。 区域是保管库和要备份的 VM 所在的位置。
+6. 在“目标端口范围”中选择端口。
+    - 使用未加密存储帐户的非托管磁盘的 VM:80
+    - 使用带有加密存储帐户的非托管磁盘的 VM:443（默认设置）
+    - 使用托管磁盘的 VM:8443。
+7. 在“协议”中，选择“TCP”。
+8. 在“优先级”中，为此规则指定一个优先级值，该值必须小于任何具有更高优先级的拒绝规则。
+
+   如果某个规则拒绝访问，则新的允许规则的优先级必须更高。 例如，如果为 **Deny_All** 规则设置的优先级为 1000，则必须将新规则的优先级设置为 1000 以下。
+9. 提供规则的名称和说明，然后选择“确定”。
+
+可以将 NSG 规则应用于多个 VM 来允许出站访问。 此视频可引导你完成该过程。
 
 >[!VIDEO https://www.youtube.com/embed/1EjLQtbKm1M]
 
-> [!WARNING]
-> 存储服务标记仅在特定区域中可用，并且处于预览状态。 有关区域列表，请参阅[存储的服务标记](../virtual-network/security-overview.md#service-tags)。
 
-### <a name="use-an-http-proxy-for-vm-backups"></a>使用 HTTP 代理进行 VM 备份
-备份 VM 时，VM 上的备份扩展会使用 HTTPS API 将快照管理命令发送到 Azure 存储。 将通过 HTTP 代理路由备份扩展流量，因为它是为了访问公共 Internet 而配置的唯一组件。
+##### <a name="route-backup-traffic-through-a-proxy"></a>通过代理路由备份流量
 
-> [!NOTE]
-> 至于应该使用何种代理软件，我们不提供任何建议。 请确保能够对选择的代理执行下述配置步骤。
->
->
+可以通过代理路由备份流量，然后允许代理访问所需的 Azure 区域。 将代理 VM 配置为允许以下操作：
 
-以下示例图像显示了使用 HTTP 代理所要执行的三个配置步骤：
+- Azure VM 应该通过代理路由所有发往公共 Internet 的 HTTP 流量。
+- 代理应该允许适用虚拟网络中的 VM 传入的流量。
+- NSG **NSF-lockdown** 需要使用一个规则允许来自代理 VM 的出站 Internet 流量。
 
-* 应用 VM 通过代理 VM 路由所有发往公共 Internet 的 HTTP 流量。
-* 代理 VM 允许来自虚拟网络中 VM 的传入流量。
-* 名为 NSF-lockdown 的网络安全组需要使用一个安全规则允许来自代理 VM 的出站 Internet 流量。
+###### <a name="set-up-the-proxy"></a>设置代理
 
-若要使用 HTTP 代理来与公共 Internet 通信，请完成以下步骤。
-
-> [!NOTE]
-> 这些步骤使用本示例中的特定名称和值。 将详细信息输入（或粘贴）到代码中时，请使用部署的名称和值。
-
-#### <a name="step-1-configure-outgoing-network-connections"></a>步骤 1：配置传出网络连接
-###### <a name="for-windows-machines"></a>对于 Windows 计算机
-此过程将设置本地系统帐户的代理服务器配置。
+如果你没有系统帐户代理，请按如下所述设置一个：
 
 1. 下载 [PsExec](https://technet.microsoft.com/sysinternals/bb897553)。
-2. 在权限提升的提示符下运行以下命令，打开 Internet Explorer：
+2. 运行 **PsExec.exe -i -s cmd.exe**，以便在系统帐户下运行命令提示符。
+3. 在系统上下文中运行浏览器。 例如：对于 Internet Explorer，请使用 **%PROGRAMFILES%\Internet Explorer\iexplore.exe**。  
+4. 定义代理设置。
+   - 在 Linux 计算机上：
+     - 将以下代码行添加到 **/etc/environment** 文件：
+       - **http_proxy=http:\//代理 IP 地址:代理端口**
+     - 将以下代码行添加到 **/etc/waagent.conf** 文件：
+         - **HttpProxy.Host=proxy IP address**
+         - **HttpProxy.Port=proxy port**
+   - 在 Windows 计算机上的浏览器设置中，指定要使用代理。 如果当前在用户帐户中使用代理，则可以使用此脚本在系统帐户级别应用该设置。
+       ```powershell
+      $obj = Get-ItemProperty -Path Registry::"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Connections"
+      Set-ItemProperty -Path Registry::"HKEY_USERS\S-1-5-18\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Connections" -Name DefaultConnectionSettings -Value $obj.DefaultConnectionSettings
+      Set-ItemProperty -Path Registry::"HKEY_USERS\S-1-5-18\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Connections" -Name SavedLegacySettings -Value $obj.SavedLegacySettings
+      $obj = Get-ItemProperty -Path Registry::"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
+      Set-ItemProperty -Path Registry::"HKEY_USERS\S-1-5-18\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name ProxyEnable -Value $obj.ProxyEnable
+      Set-ItemProperty -Path Registry::"HKEY_USERS\S-1-5-18\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name Proxyserver -Value $obj.Proxyserver
 
-    ```
-    psexec -i -s "c:\Program Files\Internet Explorer\iexplore.exe"
-    ```
+       ```
 
-3. 在 Internet Explorer 中，转到“工具” > “Internet 选项” > “连接” > “局域网设置”。
-4. 验证系统帐户的代理设置。 设置代理 IP 和端口。
-5. 关闭 Internet Explorer。
+###### <a name="allow-incoming-connections-on-the-proxy"></a>在代理上允许传入连接
 
-以下脚本设置计算机范围的代理配置，可将该配置用于任何传出的 HTTP 或 HTTPS 流量。 如果已在当前用户帐户（非本地系统帐户）中设置代理服务器，请使用此脚本将设置应用到 SYSTEMACCOUNT。
+在代理设置中允许传入连接。
 
-```
-   $obj = Get-ItemProperty -Path Registry::”HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Connections"
-   Set-ItemProperty -Path Registry::”HKEY_USERS\S-1-5-18\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Connections" -Name DefaultConnectionSettings -Value $obj.DefaultConnectionSettings
-   Set-ItemProperty -Path Registry::”HKEY_USERS\S-1-5-18\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Connections" -Name SavedLegacySettings -Value $obj.SavedLegacySettings
-   $obj = Get-ItemProperty -Path Registry::”HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
-   Set-ItemProperty -Path Registry::”HKEY_USERS\S-1-5-18\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name ProxyEnable -Value $obj.ProxyEnable
-   Set-ItemProperty -Path Registry::”HKEY_USERS\S-1-5-18\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name Proxyserver -Value $obj.Proxyserver
-```
+1. 在 Windows 防火墙中，打开“高级安全 Windows 防火墙”。
+2. 右键单击“入站规则” > “新建规则”。
+3. 在“规则类型”中，选择“自定义” > “下一步”。
+4. 在“程序”中，选择“所有程序” > “下一步”。
+5. 在“协议和端口”中：
+   - 将类型设置为“TCP”。
+   - 将“本地端口”设置为“特定端口”。
+   - 将“远程端口”设置为“所有端口”。
 
-> [!NOTE]
-> 如果在代理服务器日志中发现“(407)需要代理身份验证”，请检查身份验证设置是否正确。
->
->
+6. 完成向导并指定规则名称。
 
-###### <a name="for-linux-machines"></a>对于 Linux 计算机
-将以下代码行添加到 ```/etc/environment``` 文件：
+###### <a name="add-an-exception-rule-to-the-nsg-for-the-proxy"></a>为代理的 NSG 添加例外规则
 
-```
-http_proxy=http://<proxy IP>:<proxy port>
-```
+在 NSG **NSF-lockdown** 中，允许从 10.0.0.5 上的任何端口流向端口 80 (HTTP) 或 443 (HTTPS) 上的任何 Internet 地址的流量。
 
-将以下代码行添加到 ```/etc/waagent.conf``` 文件：
+下面是一个允许流量的 PowerShell 脚本示例。
+如果不想要允许对所有公共 Internet 地址进行出站访问，可以指定 IP 地址范围 (`-DestinationPortRange`)，或使用 storage.region 服务标记。   
 
-```
-HttpProxy.Host=<proxy IP>
-HttpProxy.Port=<proxy port>
-```
-
-#### <a name="step-2-allow-incoming-connections-on-the-proxy-server"></a>步骤 2：在代理服务器上允许传入连接
-1. 在代理服务器上打开 Windows 防火墙。 访问防火墙的最简单方法是搜索“高级安全 Windows 防火墙”。
-2. 在“高级安全 Windows 防火墙”对话框中，右键单击“入站规则”并选择“新建规则”。
-3. 在“新建入站规则向导”中的“规则类型”页上，选择“自定义”选项，然后选择“下一步”。
-4. 在“程序”页上，依次选择“所有程序”、“下一步”。
-5. 在“协议和端口”页上输入以下信息，选择“下一步”：
-   * 对于“协议类型”，请选择“TCP”。
-   * 对于“本地端口”，请选择“特定端口”。 在随后显示的框中，指定已配置的代理端口号。
-   * 对于“远程端口”，请选择“所有端口”。
-
-在向导的余下部分中，请一路接受默认设置。 然后为此规则命名。 
-
-#### <a name="step-3-add-an-exception-rule-to-the-nsg"></a>步骤 3：向 NSG 添加例外规则
-以下命令会在 NSG 中添加一个例外。 此例外允许从 10.0.0.5 上的任何端口流向端口 80 (HTTP) 或 443 (HTTPS) 上的任何 Internet 地址的 TCP 流量。 如果需要访问公共 Internet 中的特定端口，请务必将该端口添加到 ```-DestinationPortRange```。
-
-在 Azure PowerShell 命令提示符下输入以下命令：
-
-```
+```powershell
 Get-AzureNetworkSecurityGroup -Name "NSG-lockdown" |
 Set-AzureNetworkSecurityRule -Name "allow-proxy " -Action Allow -Protocol TCP -Type Outbound -Priority 200 -SourceAddressPrefix "10.0.0.5/32" -SourcePortRange "*" -DestinationAddressPrefix Internet -DestinationPortRange "80-443"
 ```
 
-## <a name="questions"></a>有疑问？
-如有疑问或希望包含某种功能，请[向我们发送反馈](http://aka.ms/azurebackup_feedback)。
+##### <a name="allow-firewall-access-with-an-fqdn-tag"></a>使用 FQDN 标记允许通过防火墙访问
+
+可以设置 Azure 防火墙，以允许网络流量对 Azure 备份进行出站访问。
+
+- [了解](https://docs.microsoft.com/azure/firewall/tutorial-firewall-deploy-portal)如何部署 Azure 防火墙。
+- [了解](https://docs.microsoft.com/azure/firewall/fqdn-tags) FQDN 标记。
+
+
 
 ## <a name="next-steps"></a>后续步骤
-现在已准备好环境来备份 VM，下一个逻辑步骤是创建备份。 规划文章提供了有关备份 VM 的更详细信息。
 
-* [备份虚拟机](backup-azure-arm-vms.md)
-* [规划 VM 备份基础结构](backup-azure-vms-introduction.md)
-* [管理虚拟机备份](backup-azure-manage-vms.md)
+- 排查 [Azure VM 代理](backup-azure-troubleshoot-vm-backup-fails-snapshot-timeout.md)或 [Azure VM 备份](backup-azure-vms-troubleshoot.md)出现的任何问题。
+- [还原](backup-azure-arm-restore-vms.md) Azure VM。

@@ -3,8 +3,8 @@ title: 监视 Azure 中的 Windows VM | Microsoft Docs
 description: 了解适用于 Azure 中 Windows 虚拟机的监视选项。
 services: virtual-machines-windows
 documentationcenter: ''
-author: iainfoulds
-manager: jeconnoc
+author: cynthn
+manager: gwallace
 editor: ''
 tags: azure-resource-manager
 ms.assetid: ''
@@ -12,12 +12,14 @@ ms.service: virtual-machines-windows
 ms.workload: infrastructure-services
 ms.tgt_pltfrm: vm-windows
 ms.date: 08/14/2017
-ms.author: iainfou
-ms.openlocfilehash: ec5d310c91adce1c26e292b5110af3c33fe30e19
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.author: cynthn
+ms.topic: conceptual
+ms.openlocfilehash: 6cc7a48bb11057f0cd6785d9d26e001ade896512
+ms.sourcegitcommit: dad277fbcfe0ed532b555298c9d6bc01fcaa94e2
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 07/10/2019
+ms.locfileid: "67720184"
 ---
 # <a name="how-to-monitor-virtual-machines-in-azure"></a>如何监视 Azure 中的虚拟机
 

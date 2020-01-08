@@ -2,18 +2,19 @@
 title: Azure 容器实例和容器业务流程
 description: 了解 Azure 容器实例如何与容器业务流程协调程序交互。
 services: container-instances
-author: seanmck
-manager: jeconnoc
+author: dlepow
+manager: gwallace
 ms.service: container-instances
 ms.topic: article
-ms.date: 03/23/2018
-ms.author: seanmck
+ms.date: 04/15/2019
+ms.author: danlep
 ms.custom: mvc
-ms.openlocfilehash: e1455cba004facfa03dca21544eec754f5dc60be
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.openlocfilehash: 044b74e1a8683c6beb0220c1cf9fb97403286a95
+ms.sourcegitcommit: 47b00a15ef112c8b513046c668a33e20fd3b3119
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 08/22/2019
+ms.locfileid: "69972250"
 ---
 # <a name="azure-container-instances-and-container-orchestrators"></a>Azure 容器实例和容器协调器
 
@@ -40,7 +41,7 @@ Azure 容器实例支持分层的协调方法，提供全部所需的调度和�
 
 由于容器实例的底层基础结构由 Azure 管理，因此容器协调器平台不需要考虑如何查找用于运行单个容器的适当主机。 云的弹性确保始终有一台可用的主机。 协调器可将重心放在简化多容器体系结构的开发的任务上，包括缩放和协调的升级。
 
-## <a name="potential-scenarios"></a>可能的方案
+## <a name="scenarios"></a>方案
 
 尽管协调器与 Azure 容器实例的集成仍处于初步阶段，但我们可以预见到将来会出现一些不同的环境：
 
@@ -54,16 +55,15 @@ Azure 容器实例支持分层的协调方法，提供全部所需的调度和�
 
 业务流程协调程序不必先增加群集中的虚拟机数目，然后将更多的容器部署到这些计算机，而可以直接在 Azure 容器实例中调度更多的容器，并删除不再需要的容器。
 
-## <a name="sample-implementation-azure-container-instances-connector-for-kubernetes"></a>示例实现：适用于 Kubernetes 的 Azure 容器实例连接器
+## <a name="sample-implementation-virtual-nodes-for-azure-kubernetes-service-aks"></a>示例实现：Azure Kubernetes 服务 (AKS) 的虚拟节点
 
-为了演示容器协调平台如何与 Azure 容器实例集成，我们已开始构建一个[适用于 Kubernetes 的示例连接器][aci-connector-k8s]。
+可以使用在 Azure 容器实例中动态创建的虚拟节点，来快速缩放 [Azure Kubernetes 服务](../aks/intro-kubernetes.md) (AKS) 群集中的应用程序工作负载。 ACI 和 AKS 群集中运行的 Pod 可以借助虚拟节点进行网络通信。 
 
-适用于 Kubernetes 的连接器通过注册为具有无限容器的节点，并在 Azure 容器实例中以容器组的形式调度 [pod][pod-doc] 创建，来模拟 [kubelet][kubelet-doc]。
+目前虚拟节点支持 Linux 容器实例。 可通过 [Azure CLI](https://go.microsoft.com/fwlink/?linkid=2047538) 或 [Azure门户](https://go.microsoft.com/fwlink/?linkid=2047545)开始使用虚拟节点。
 
-可为其他协调器生成能以类似方式与平台基元集成的连接器，以融合协调器 API 的能力以及在 Azure 容器实例中管理容器的速度优势和简便性。
+虚拟节点使用开源[虚拟 Kubelet][aci-connector-k8s] ，通过将其注册为具有无限容量的节点来模拟 Kubernetes [Kubelet][kubelet-doc] 。 Virtual Kubelet 调度在 Azure 容器实例中将 pod[创建为容器][pod-doc]组。
 
-> [!WARNING]
-> 适用于 Kubernetes 的 ACI 连接器是试验性的，不应在生产环境中使用。
+请参阅[虚拟 Kubelet](https://github.com/virtual-kubelet/virtual-kubelet) 项目，以获取更多将 Kubernetes API 扩展到无服务器容器平台的示例。
 
 ## <a name="next-steps"></a>后续步骤
 
@@ -72,6 +72,6 @@ Azure 容器实例支持分层的协调方法，提供全部所需的调度和�
 <!-- IMAGES -->
 
 <!-- LINKS -->
-[aci-connector-k8s]: https://github.com/virtual-kubelet/virtual-kubelet/tree/master/providers/azure
+[aci-connector-k8s]: https://github.com/virtual-kubelet/azure-aci
 [kubelet-doc]: https://kubernetes.io/docs/admin/kubelet/
 [pod-doc]: https://kubernetes.io/docs/concepts/workloads/pods/pod/

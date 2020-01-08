@@ -1,47 +1,43 @@
 ---
-title: Azure Active Directory B2C：Amazon 配置 | Microsoft Docs
-description: 在 Azure Active Directory B2C 保护的应用程序中向用户提供使用 Amazon 帐户的注册和登录功能。
+title: 设置使用 Amazon 帐户的注册和登录-Azure Active Directory B2C
+description: 使用 Azure Active Directory B2C 提供在应用程序中通过 Amazon 帐户注册与登录到客户的设置。
 services: active-directory-b2c
-documentationcenter: ''
-author: davidmu1
-manager: mtillman
-editor: ''
-ms.service: active-directory-b2c
+author: mmacy
+manager: celestedg
+ms.service: active-directory
 ms.workload: identity
-ms.topic: article
-ms.date: 12/06/2016
-ms.author: davidmu
-ms.openlocfilehash: a2989baa61e7b69534fe5703b2501d62a4f8aa94
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 08/08/2019
+ms.author: marsma
+ms.subservice: B2C
+ms.openlocfilehash: bddbd9b588d8ffc2ace3a937fa2c72876eb5e4e9
+ms.sourcegitcommit: f209d0dd13f533aadab8e15ac66389de802c581b
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71065209"
 ---
-# <a name="azure-active-directory-b2c-provide-sign-up-and-sign-in-to-consumers-with-amazon-accounts"></a>Azure Active Directory B2C：向用户提供使用 Amazon 帐户的注册和登录功能
+# <a name="set-up-sign-up-and-sign-in-with-an-amazon-account-using-azure-active-directory-b2c"></a>使用 Azure Active Directory B2C 设置通过 Amazon 帐户注册与登录
+
 ## <a name="create-an-amazon-application"></a>创建 Amazon 应用程序
-要将 Amazon 用作 Azure Active Directory (Azure AD) B2C 中的标识提供者，需要创建 Amazon 应用程序并向其提供合适的参数。 需要一个 Amazon 帐户来完成此操作。 如果没有账户，可在 [http://www.amazon.com/](http://www.amazon.com/) 处获取。
 
-1. 转到 [Amazon 开发人员中心](https://login.amazon.com/)，使用 Amazon 帐户凭据登录。
-2. 如果未曾登录过，请单击“注册”，按照开发人员注册步骤，并接受策略。
-3. 单击“注册新应用程序”。
-   
-    ![在 Amazon 网站注册新应用程序](./media/active-directory-b2c-setup-amzn-app/amzn-new-app.png)
-4. 提供应用程序信息（“名称”、“说明”和“隐私通知 URL”），并单击“保存”。
-   
-    ![提供用于在 Amazon 注册新的应用程序的应用程序信息](./media/active-directory-b2c-setup-amzn-app/amzn-register-app.png)
-5. 在“Web 设置”部分，复制“客户端 ID”和“客户端密码”的值。 （需要单击“显示密码”按钮才能看到此信息。）将 Amazon 配置为租户中的标识提供者时需要这两个值。 在此部分底部单击“编辑”。 “客户端密钥”是一个重要的安全凭据。
-   
-    ![在 Amazon 中为新应用程序提供客户端 ID 和客户端密码](./media/active-directory-b2c-setup-amzn-app/amzn-client-secret.png)
-6. 在“允许的 JavaScript 来源”字段中输入 `https://login.microsoftonline.com`，在“允许的返回 URL”字段中输入 `https://login.microsoftonline.com/te/{tenant}/oauth2/authresp`。 将 **{tenant}** 替换为租户名称（例如 contoso.onmicrosoft.com）。 单击“ **保存**”。 **{tenant}** 值区分大小写。
-   
-    ![在 Amazon 为新应用程序提供 JavaScript 来源和返回 URL](./media/active-directory-b2c-setup-amzn-app/amzn-urls.png)
+若要使用 Amazon 帐户作为 Azure Active Directory B2C （Azure AD B2C）中的[标识提供者](active-directory-b2c-reference-oauth-code.md)，需要在租户中创建表示它的应用程序。 如果还没有 Amazon 帐户，可以在[https://www.amazon.com/](https://www.amazon.com/)注册。
 
-## <a name="configure-amazon-as-an-identity-provider-in-your-tenant"></a>将 Amazon 配置为租户中的标识提供者
-1. 请按照以下步骤在 Azure 门户上[导航到 B2C 功能边栏选项卡](active-directory-b2c-app-registration.md#navigate-to-b2c-settings)。
-2. 在 B2C 功能边栏选项卡上，单击“标识提供者”。
-3. 单击边栏选项卡顶部的“ **+添加** ”。
-4. 提供标识提供者配置的友好“名称”。 例如，输入“Amzn”。
-5. 单击“标识提供者类型”，选择“Amazon”，并单击“确定”。
-6. 单击“设置此标识提供者”，并输入之前创建的 Amazon 应用程序的客户端 ID 和客户端密码。
-7. 单击“确定”，并单击“创建”以保存 Amazon 配置。
+1. 使用 Amazon 帐户凭据登录 [Amazon 开发人员中心](https://login.amazon.com/)。
+1. 如果未曾登录过，请单击“注册”，按照开发人员注册步骤，并接受策略。
+1. 选择“注册新应用程序”。
+1. 输入“名称”、“说明”、和“隐私声明 URL”，然后单击“保存”。 隐私声明是你管理的页面，用于向用户提供隐私信息。
+1. 在“Web 设置”部分中，复制“客户端 ID”的值。 选择“显示机密”来获取客户端机密，然后复制它。 将 Amazon 帐户配置为租户中的标识提供者时需要这两个值。 “客户端密钥”是一个重要的安全凭据。
+1. 在“Web 设置”部分中，选择“编辑”，然后在“允许的 JavaScript 来源”中输入 `https://your-tenant-name.b2clogin.com`并在“允许的返回 URL”中输入 `https://your-tenant-name.b2clogin.com/your-tenant-name.onmicrosoft.com/oauth2/authresp`。 将 `your-tenant-name` 替换为租户的名称。 输入租户名称时，必须全部使用小写字母，即使租户是使用大写字母在 Azure AD B2C 中定义的，也是如此。
+1. 单击“保存”。
 
+## <a name="configure-an-amazon-account-as-an-identity-provider"></a>将 Amazon 帐户配置为标识提供者
+
+1. 以 Azure AD B2C 租户的全局管理员身份登录 [Azure 门户](https://portal.azure.com/)。
+1. 请确保使用包含 Azure AD B2C 租户的目录，方法是选择顶部菜单中的“目录 + 订阅”筛选器，然后选择包含租户的目录。
+1. 选择 Azure 门户左上角的“所有服务”，搜索并选择 **Azure AD B2C**。
+1. 选择 "**标识提供者**"，然后选择**Amazon**。
+1. 输入“名称”。 例如， *Amazon*。
+1. 对于 "**客户端 id**"，请输入之前创建的 Amazon 应用程序的客户端 id。
+1. 对于“客户端机密”，请输入记下的客户端机密。
+1. 选择**保存**。

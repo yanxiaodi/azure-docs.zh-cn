@@ -1,32 +1,31 @@
 ---
 title: 数据工厂（数据集成服务）简介 | Microsoft 文档
-description: 了解 Azure 数据工厂的定义：一种云数据集成服务，可对数据的移动和转换进行协调和自动化。
+description: 了解什么是 Azure 数据工厂：协调和自动执行数据移动和转换的云数据集成服务。
 services: data-factory
 documentationcenter: ''
-author: sharonlo101
-manager: craigg
+author: djpmsft
+ms.author: daperlov
+manager: jroth
+ms.reviewer: maghan
 ms.assetid: cec68cb5-ca0d-473b-8ae8-35de949a009e
 ms.service: data-factory
 ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: get-started-article
+ms.topic: overview
 ms.date: 01/22/2018
-ms.author: shlo
-robots: noindex
-ms.openlocfilehash: 6747dc6ef482fecba7e9fb4fae5748de377051eb
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
+ms.openlocfilehash: 2e508839cd343820a36cc715ebde0f47c2ac4ab1
+ms.sourcegitcommit: d200cd7f4de113291fbd57e573ada042a393e545
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70139510"
 ---
 # <a name="introduction-to-azure-data-factory"></a>Azure 数据工厂简介 
-> [!div class="op_single_selector" title1="Select the version of Data Factory service you are using:"]
-> * [版本 1 - 正式版](data-factory-introduction.md)
-> * [版本 2 - 预览版](../introduction.md)
+> [!div class="op_single_selector" title1="选择所使用的数据工厂服务版本："]
+> * [版本 1](data-factory-introduction.md)
+> * [版本 2（当前版本）](../introduction.md)
 
 > [!NOTE]
-> 本文适用于 Azure 数据工厂版本 1（即正式版 (GA)）。 如果使用数据工厂服务版本 2（预览版），请参阅[数据工厂 V2 简介](../introduction.md)。
+> 本文适用于 Azure 数据工厂版本 1。 如果你使用的是数据工厂服务的当前版本，请参阅[数据工厂 V2 简介](../introduction.md)。
 
 
 ## <a name="what-is-azure-data-factory"></a>什么是 Azure 数据工厂？
@@ -42,7 +41,7 @@ ms.lasthandoff: 03/23/2018
 
 ![数据工厂概述](media/data-factory-introduction/what-is-azure-data-factory.png) 
 
-Azure 数据工厂是适合这些类型的方案的平台。 它是基于云的数据集成服务，用于在云中创建数据驱动型工作流，以便协调和自动完成数据移动和数据转换。 使用 Azure 数据工厂可执行以下任务： 
+Azure 数据工厂是适合这些类型的方案的平台。 它是  基于云的数据集成服务，用于在云中创建数据驱动型工作流，以便协调和自动完成数据移动和数据转换。 使用 Azure 数据工厂可执行以下任务： 
 
 - 创建和计划数据驱动型工作流（称为管道），以便从不同的数据存储引入数据。
 
@@ -52,7 +51,7 @@ Azure 数据工厂是适合这些类型的方案的平台。 它是基于云的�
 
 它更多是一种提取和加载 (EL) 以及转换和加载 (TL) 型平台，而不是一种传统的提取、转换和加载 (ETL) 型平台。 此类转换在处理数据时使用计算服务，而不是添加派生的列、对行计数、对数据排序，等等。 
 
-目前在 Azure 数据工厂中，工作流所使用和生成的数据为时间切片数据（每小时、每天、每周等）。 例如，管道可能会每天一次地读取输入数据、处理数据以及生成输出数据。 也可一次性运行某个工作流。  
+目前在 Azure 数据工厂中，工作流所使用和生成的数据为  时间切片数据（每小时、每天、每周等）。 例如，管道可能会每天一次地读取输入数据、处理数据以及生成输出数据。 也可一次性运行某个工作流。  
   
 
 ## <a name="how-does-it-work"></a>工作原理 
@@ -113,13 +112,13 @@ Azure 数据工厂中的管道（数据驱动型工作流）通常执行以下�
 
 在数据工厂中使用链接服务有两个原因：
 
-* 代表数据存储。此类存储包括但不限于本地 SQL Server 数据库、Oracle 数据库、文件共享或 Azure Blob 存储帐户。 有关支持的数据存储列表，请参阅[数据移动活动](#data-movement-activities)部分。
+* 代表  数据存储。此类存储包括但不限于本地 SQL Server 数据库、Oracle 数据库、文件共享或 Azure Blob 存储帐户。 有关支持的数据存储列表，请参阅[数据移动活动](#data-movement-activities)部分。
 
 * 代表可托管活动执行的*计算资源*。 例如，HDInsightHive 活动在 HDInsight Hadoop 群集上运行。 有关支持的计算环境的列表，请参阅[数据转换活动](#data-transformation-activities)部分。
 
 ### <a name="relationship-between-data-factory-entities"></a>数据工厂实体之间的关系
 
-![示意图：数据工厂（云数据集成服务）- 重要概念](./media/data-factory-introduction/data-integration-service-key-concepts.png)
+![示意图：数据工厂（一种云数据集成服务）- 重要概念](./media/data-factory-introduction/data-integration-service-key-concepts.png)
 
 ## <a name="supported-regions"></a>支持的区域
 目前可在美国西部、美国东部和北欧区域创建数据工厂。 但是，数据工厂可以访问其他 Azure 区域的数据存储和计算数据，在数据存储之间移动数据或使用计算服务处理数据。
@@ -133,7 +132,6 @@ Azure 数据工厂本身不存储任何数据。 它可以用于创建数据驱�
 ## <a name="get-started-with-creating-a-pipeline"></a>创建管道入门
 可以使用以下工具或 API 之一，在 Azure 数据工厂中创建数据管道： 
 
-- Azure 门户
 - Visual Studio
 - PowerShell
 - .NET API

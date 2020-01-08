@@ -4,7 +4,7 @@ description: 了解如何排查站点到站点 VPN 连接突然停止工作，�
 services: vpn-gateway
 documentationcenter: na
 author: chadmath
-manager: cshepard
+manager: dcscontentpm
 editor: ''
 tags: ''
 ms.service: vpn-gateway
@@ -12,13 +12,14 @@ ms.devlang: na
 ms.topic: troubleshooting
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
-ms.date: 05/11/2018
+ms.date: 09/16/2019
 ms.author: genli
-ms.openlocfilehash: dfd29e0956793cf776b9c0ea5ddbd4689ebcb015
-ms.sourcegitcommit: c52123364e2ba086722bc860f2972642115316ef
-ms.translationtype: HT
+ms.openlocfilehash: e196c4b512de3fac97347e4c252b697ed6818227
+ms.sourcegitcommit: ca359c0c2dd7a0229f73ba11a690e3384d198f40
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/11/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71058879"
 ---
 # <a name="troubleshooting-an-azure-site-to-site-vpn-connection-cannot-connect-and-stops-working"></a>故障排除：Azure 站点到站点 VPN 连接无法建立连接并停止工作
 
@@ -38,7 +39,7 @@ ms.lasthandoff: 05/11/2018
 
 2. 有关类型信息，请查看 VPN 网关的“概述”页。
     
-    ![网关概述](media\vpn-gateway-troubleshoot-site-to-site-cannot-connect\gatewayoverview.png)
+    ![网关概述](media/vpn-gateway-troubleshoot-site-to-site-cannot-connect/gatewayoverview.png)
 
 ### <a name="step-1-check-whether-the-on-premises-vpn-device-is-validated"></a>步骤 1。 检查是否已验证本地 VPN 设备
 
@@ -62,9 +63,11 @@ ms.lasthandoff: 05/11/2018
 
 **Azure PowerShell**
 
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
+
 对于 Azure 资源管理器部署模型：
 
-    Get-AzureRmVirtualNetworkGatewayConnectionSharedKey -Name <Connection name> -ResourceGroupName <Resource group name>
+    Get-AzVirtualNetworkGatewayConnectionSharedKey -Name <Connection name> -ResourceGroupName <Resource group name>
 
 对于经典部署模型：
 
@@ -85,7 +88,7 @@ ms.lasthandoff: 05/11/2018
 - 设备的外部接口必须直接在 Internet 上。 在 Internet 和设备之间应该没有网络地址转换或防火墙。
 - 若要将防火墙群集配置为具有虚拟 IP，必须中断群集并直接向可以与网关连接的公共接口公开 VPN 设备。
 
-### <a name="step-6-verify-that-the-subnets-match-exactly-azure-policy-based-gateways"></a>步骤 6. 验证子网是否完全匹配（基于 Azure 策略的网关）
+### <a name="step-6-verify-that-the-subnets-match-exactly-azure-policy-based-gateways"></a>步骤 6. 验证子网是否完全匹配（基于 Azure Policy 的网关）
 
 -   验证虚拟网络地址空间与 Azure 虚拟网络和本地定义之间的子网是否完全匹配。
 -   验证“本地网络网关”与本地网络本地定义之间的子网是否完全匹配。
@@ -99,7 +102,10 @@ ms.lasthandoff: 05/11/2018
 2. 单击证书警告。
 3. 如果收到响应，则可认为 VPN 网关正常。 如果未收到响应，则可能表示网关不正常，或者网关子网上的某个 NSG 导致出现问题。 以下文本是示例响应：
 
-    &lt;?xml version="1.0"?>  <string xmlns="http://schemas.microsoft.com/2003/10/Serialization/">Primary Instance: GatewayTenantWorker_IN_1 GatewayTenantVersion: 14.7.24.6</string&gt;
+    ```xml
+    <?xml version="1.0"?>
+    <string xmlns="http://schemas.microsoft.com/2003/10/Serialization/">Primary Instance: GatewayTenantWorker_IN_1 GatewayTenantVersion: 14.7.24.6</string>
+    ```
 
 ### <a name="step-8-check-whether-the-on-premises-vpn-device-has-the-perfect-forward-secrecy-feature-enabled"></a>步骤 8。 检查本地 VPN 设备是否已启用完全向前保密功能
 

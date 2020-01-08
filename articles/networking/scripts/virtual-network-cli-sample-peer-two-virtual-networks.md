@@ -1,25 +1,26 @@
 ---
-title: "Azure CLI 脚本示例 - 对等互连两个虚拟网络 | Microsoft Docs"
-description: "Azure CLI 脚本示例 - 对等互连两个虚拟网络"
+title: Azure CLI 脚本示例 - 对等互连两个虚拟网络 | Microsoft Docs
+description: Azure CLI 脚本示例 - 对等互连两个虚拟网络
 services: virtual-network
 documentationcenter: virtual-network
 author: KumudD
 manager: timlt
 editor: tysonn
-tags: 
-ms.assetid: 
+tags: ''
+ms.assetid: ''
 ms.service: virtual-network
 ms.devlang: azurecli
 ms.topic: article
-ms.tgt_pltfrm: 
+ms.tgt_pltfrm: ''
 ms.workload: infrastructure
 ms.date: 07/07/2017
 ms.author: kumud
-ms.openlocfilehash: 8ad1e7de85f851b5db6764175bc1136dd19d418d
-ms.sourcegitcommit: 8c3267c34fc46c681ea476fee87f5fb0bf858f9e
-ms.translationtype: HT
+ms.openlocfilehash: 072d62f925d4f4024aa17d648a56dc6f37de00f1
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/09/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60848395"
 ---
 # <a name="peer-two-virtual-networks"></a>对等互连两个虚拟网络
 
@@ -48,10 +49,10 @@ az group delete --name myResourceGroup --yes
 
 | 命令 | 说明 |
 |---|---|
-| [az group create](https://docs.microsoft.com/cli/azure/group#az_group_create) | 创建用于存储所有资源的资源组。 |
-| [az network vnet create](https://docs.microsoft.com/cli/azure/network/vnet#az_network_vnet_create) | 创建 Azure 虚拟网络和子网。 |
-| [az network vnet peering create](https://docs.microsoft.com/cli/azure/network/vnet/peering#az_network_vnet_peering_create) | 创建两个虚拟网络之间的对等互连。  |
-| [az group delete](https://docs.microsoft.com/cli/azure/vm/extension#az_vm_extension_set) | 删除资源组，包括所有嵌套的资源。 |
+| [az group create](https://docs.microsoft.com/cli/azure/group) | 创建用于存储所有资源的资源组。 |
+| [az network vnet create](https://docs.microsoft.com/cli/azure/network/vnet) | 创建 Azure 虚拟网络和子网。 |
+| [az network vnet peering create](https://docs.microsoft.com/cli/azure/network/vnet/peering) | 创建两个虚拟网络之间的对等互连。  |
+| [az group delete](https://docs.microsoft.com/cli/azure/vm/extension) | 删除资源组，包括所有嵌套的资源。 |
 
 ## <a name="next-steps"></a>后续步骤
 

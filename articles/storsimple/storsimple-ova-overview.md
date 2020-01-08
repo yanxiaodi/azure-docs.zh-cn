@@ -12,15 +12,18 @@ ms.devlang: NA
 ms.topic: article
 ms.tgt_pltfrm: NA
 ms.workload: TBD
-ms.date: 03/28/2018
+ms.date: 07/25/2019
 ms.author: alkohli
-ms.openlocfilehash: db06614ebd7dee4b0a320737ea8f575b3a3be70f
-ms.sourcegitcommit: c3d53d8901622f93efcd13a31863161019325216
-ms.translationtype: HT
+ms.openlocfilehash: cbfc69c7d8d9354ae4e727b9eb0180583165abab
+ms.sourcegitcommit: f5cc71cbb9969c681a991aa4a39f1120571a6c2e
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/29/2018
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68516709"
 ---
 # <a name="introduction-to-the-storsimple-virtual-array"></a>StorSimple 虚拟阵列简介
+
+[!INCLUDE [storsimple-virtual-array-eol-banner](../../includes/storsimple-virtual-array-eol-banner.md)]
 
 ## <a name="overview"></a>概述
 
@@ -51,7 +54,7 @@ Microsoft Azure StorSimple 虚拟阵列是一个集成式存储解决方案，�
 | 数据移动性 |可还原到相同设备或执行项目级恢复（文件服务器） |
 | 存储层 |本地虚拟机监控程序存储和云 |
 | 共享大小 |分层：最多 20 TB；本地固定：最多 2 TB |
-| 卷大小 |分层：500 GB 到 5 TB；本地固定：50 GB 到 200 GB <br> 分层卷的本地保留空间不超过 200 GB。 |
+| 卷大小 |分层：500 GB 到 5 TB；本地固定：50 GB 到 200 GB <br> 分层卷的本地预留空间不超过 200 GB。 |
 | 快照 |崩溃一致 |
 | 项目级恢复 |是；用户可从共享还原 |
 
@@ -73,9 +76,9 @@ StorSimple 在几分钟内将用户和服务器连接到 Azure 存储，无需�
 
 下面以表格形式列出了受支持的 StorSimple 工作负荷的摘要。
 
-|场景     |工作负载     |支持      |限制               |
-|-------------|-------------|---------------|---------------------------|
-|ROBO  |文件共享     |是      |请参阅[文件服务器的最大限制](storsimple-ova-limits.md)。<br></br>请参阅[受支持的 SMB 版本的系统要求](storsimple-ova-system-requirements.md)。| 所有版本     |
+|应用场景     |工作负荷     |支持      |限制               | 适用版本|
+|-------------|-------------|---------------|---------------------------|--------------------|
+|远程办公室/分支机构 (ROBO)  |文件共享     |是      |请参阅[文件服务器的最大限制](storsimple-ova-limits.md)。<br></br>请参阅[受支持的 SMB 版本的系统要求](storsimple-ova-system-requirements.md)。| 所有版本     |
 |云存档  |存档文件共享     |是      |请参阅[文件服务器的最大限制](storsimple-ova-limits.md)。<br></br>请参阅[受支持的 SMB 版本的系统要求](storsimple-ova-system-requirements.md)。| 所有版本     |
 
 StorSimple Virtual Array 最适用于不常访问的数据。 虽然 Virtual Array 拥有可提高性能的本地缓存，但用户应假定设备服务文件位于最低存储层（云）。 每个 Virtual Array 可以大约 100 Mbps 的速度写入和读取 Azure 存储。 该链接在发送到设备的所有请求之间共享，可能会限制性能（如下图所示）。
@@ -86,7 +89,7 @@ StorSimple Virtual Array 最适用于不常访问的数据。 虽然 Virtual Arr
 
 StorSimple Virtual Array 不适用于需要高可用性的工作负载。 Virtual Array 是单节点设备，会在安装软件更新时出现停机。 管理员应每年计划 3 到 4 次 30 分钟的维护时段。
 
-## <a name="workflows"></a>工作流
+## <a name="workflows"></a>Workflows
 
 StorSimple 虚拟阵列尤其适合以下工作流：
 
@@ -100,7 +103,7 @@ StorSimple 虚拟阵列尤其适合以下工作流：
 ![基于云的存储管理](./media/storsimple-ova-overview/cloud-based-storage-management.png)
 
 ### <a name="location-independent-backup"></a>与位置无关的备份
-借助虚拟阵列，云快照提供卷或共享的与位置无关的时间点副本。 云快照默认处于启用状态，并且无法禁用。 所有卷和共享通过单个每日备份策略同时备份，并且可在必要时创建其他临时备份。
+借助虚拟阵列，云快照提供卷或共享的与位置无关的时间点副本。 云快照默认处于启用状态，并且无法禁用。 所有卷和共享通过单个每日备份策略同时备份, 你可以在必要时执行其他即席备份。
 
 ### <a name="data-protection-and-disaster-recovery"></a>数据保护和灾难恢复
 虚拟阵列支持以下数据保护和灾难恢复方案：
@@ -136,7 +139,7 @@ StorSimple 虚拟阵列尤其适合以下工作流：
 > [!NOTE]
 > 虚拟阵列无法扩展。 因此，在创建虚拟阵列时必须预配足够的存储。
 
-### <a name="storsimple-device-manager-service"></a>StorSimple Device Manager 服务
+### <a name="storsimple-device-manager-service"></a>StorSimple 设备管理器服务
 
 Microsoft Azure StorSimple 提供一个基于 Web 的用户界面（StorSimple Device Manager 服务），可用于集中管理 StorSimple 存储。 可以使用 StorSimple Device Manager 服务执行以下任务：
 
@@ -168,7 +171,7 @@ Microsoft Azure StorSimple 提供一个基于 Web 的用户界面（StorSimple D
 
 * [自动存储分层](#automatic-storage-tiering) 
 * [本地固定的共享和卷](#locally-pinned-shares-and-volumes)
-* [分层或备份到云的数据的重复数据删除和压缩](#deduplication-and-compression-for-data-tiered/backed-up-to-the-cloud) 
+* 分层或备份到云的数据的重复数据删除和压缩 
 * [计划和按需备份](#scheduled-and-on-demand-backups)
 
 ### <a name="automatic-storage-tiering"></a>自动存储分层
@@ -176,7 +179,7 @@ Microsoft Azure StorSimple 提供一个基于 Web 的用户界面（StorSimple D
 
 特定分层共享或卷的数据保证拥有自己的本地层空间（大约为该共享或卷的总预配空间的 10%）。 尽管这降低了该共享或卷所在的虚拟阵列上的可用存储，但它确保了单个共享或卷的分层不会受到其他共享或卷的分层需求的影响。 因此一个共享或卷上的非常繁忙的工作负荷无法将所有其他工作负荷强制施加到云。
 
-为 iSCSI 创建的分层卷拥有 200 GB 的最大本地保留空间（无论卷大小如何）。
+为 iSCSI 创建的分层卷拥有 200 GB 的最大本地预留空间（无论卷大小如何）。
 
 ![自动存储分层](./media/storsimple-ova-overview/automatic-storage-tiering.png)
 
@@ -206,10 +209,9 @@ StorSimple 使用删除重复和数据压缩功能进一步减少云中的存储
 
 StorSimple 数据保护功能支持创建按需备份。 此外，默认备份计划确保每天备份数据。 备份采用增量快照的形式创建，这些快照存储在云中。 快照仅记录最后一次备份以来的更改，可快速创建和还原。 在灾难恢复方案中，这些快照可能非常重要，因为它们替换辅助存储系统（如磁带备份），并且允许将数据还原到数据中心或其他站点上（如有必要）。
 
-## <a name="gdpr-compliance"></a>GDPR 符合性
-[一般数据保护条例 (GDPR)](http://ec.europa.eu/justice/data-protection/reform/index_en.htm) 是欧盟 (EU) 的一项数据保护和隐私法律。 GDPR 包含许多有关如何收集、存储和使用个人信息的要求。 GDPR 规则针对在欧盟运营的公司、政府机构和其他组织实施，并收集和分析与欧盟居民有关的数据。
+## <a name="managing-personal-information"></a>管理个人信息
 
-适用于虚拟系列的 StorSimple 设备管理器符合 GDPR。 有两个关于在服务中收集并显示个人信息的关键示例：
+虚拟系列的 StorSimple 设备管理器收集两个密钥实例中的个人信息：
  - 提醒用户设置，可在其中配置用户电子邮件地址。 此信息可以由管理员清除。 
  - 可访问驻留在共享上的数据的用户。 会显示可访问共享数据的用户列表，并可供导出。 删除共享时也会删除此列表。
 

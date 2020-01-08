@@ -3,19 +3,20 @@ title: Azure 数据工厂中的“复制数据”工具 | Microsoft Docs
 description: 提供有关 Azure 数据工厂 UI 中“复制数据”工具的信息
 services: data-factory
 documentationcenter: ''
-author: linda33wj
+author: dearandyxu
 manager: craigg
 ms.reviewer: douglasl
 ms.service: data-factory
 ms.workload: data-services
-ms.topic: article
-ms.date: 01/10/2018
-ms.author: jingwang
-ms.openlocfilehash: b82ee060ff3f25e7a92c85114d457ecb349159b3
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 06/18/2018
+ms.author: yexu
+ms.openlocfilehash: 144a991eb911fa6a337b6711515bd5760456fc10
+ms.sourcegitcommit: 4b8a69b920ade815d095236c16175124a6a34996
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 08/23/2019
+ms.locfileid: "69996388"
 ---
 # <a name="copy-data-tool-in-azure-data-factory"></a>Azure 数据工厂中的“复制数据”工具
 Azure 数据工厂“复制数据”工具可简化并优化将数据引入 Data Lake 的过程，这通常是端到端数据集成方案的第一步。  这可节省时间，尤其是首次使用 Azure 数据工厂引入数据源中的数据时。 下面是使用此工具的一些优势：
@@ -47,7 +48,7 @@ Azure 数据工厂“复制数据”工具可简化并优化将数据引入 Data
 5. 查看要创建的数据工厂实体的摘要。 
 6. 编辑管道，根据需要更新复制活动的设置。 
 
- 该工具从设计之初就考虑到了大数据，支持多种数据和对象类型。 可利用该工具移动数百个文件夹、文件或表。 该工具支持自动数据预览、构架捕获和自动映射，以及筛选数据。
+   该工具从设计之初就考虑到了大数据，支持多种数据和对象类型。 可利用该工具移动数百个文件夹、文件或表。 该工具支持自动数据预览、构架捕获和自动映射，以及筛选数据。
 
 ![复制数据工具](./media/copy-data-tool/copy-data-tool.png)
 
@@ -94,7 +95,7 @@ Azure 数据工厂“复制数据”工具可简化并优化将数据引入 Data
 
 ![筛选文件或文件夹](./media/copy-data-tool/filter-file-or-folder.png)
 
-创建管道时，“复制数据”工具生成包含表达式、函数和系统变量的参数，用于表示 {year}、{month}、{day}、{hour} 和 {minute}。 有关详细信息，请参阅[如何读取或写入分区的数据](how-to-read-write-partitioned-data.md)一文。
+创建管道时，“复制数据”工具生成包含表达式、函数和系统变量的参数，用于表示 {year}、{month}、{day}、{hour} 和 {minute}。
 
 ## <a name="scheduling-options"></a>计划选项
 可以一次性运行复制操作，也可按计划运行（每小时、每天等）。 这些选项可用于跨不同环境（包括本地、云和本地桌面）的连接器。 

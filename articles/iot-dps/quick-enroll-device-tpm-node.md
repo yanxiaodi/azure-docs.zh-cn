@@ -1,22 +1,21 @@
 ---
 title: 使用 Node.js 将 TPM 设备注册到 Azure 设备预配服务 | Microsoft Docs
-description: Azure 快速入门 - 使用 Node.js 服务 SDK 将 TPM 设备注册到 Azure IoT 中心设备预配服务
-services: iot-dps
-keywords: ''
-author: bryanla
-ms.author: v-jamebr
+description: Azure 快速入门 - 使用 Node.js 服务 SDK 将 TPM 设备注册到 Azure IoT 中心设备预配服务。 本快速入门使用单独注册。
+author: wesmc7777
+ms.author: wesmc
 ms.date: 12/21/2017
-ms.topic: hero-article
+ms.topic: quickstart
 ms.service: iot-dps
-documentationcenter: ''
+services: iot-dps
 manager: timlt
-ms.devlang: na
+ms.devlang: nodejs
 ms.custom: mvc
-ms.openlocfilehash: 143aaca5671b1c9e2ae9c2d187aed64af15528ca
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
+ms.openlocfilehash: 202b308c3add7facdbb28dc634f70e5090dd2a9c
+ms.sourcegitcommit: eecd816953c55df1671ffcf716cf975ba1b12e6b
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 01/28/2019
+ms.locfileid: "55092061"
 ---
 # <a name="enroll-tpm-device-to-iot-hub-device-provisioning-service-using-nodejs-service-sdk"></a>使用 Node.js 服务 SDK 将 TPM 设备注册到 IoT 中心设备预配服务
 
@@ -67,7 +66,7 @@ ms.lasthandoff: 04/16/2018
         console.log("enrollment record returned: " + JSON.stringify(enrollmentResponse, null, 2));
       }
     });
-    ````
+    ```
 
 ## <a name="run-the-individual-enrollment-sample"></a>运行单个注册示例
   
@@ -75,7 +74,7 @@ ms.lasthandoff: 04/16/2018
     1. 登录到 Azure 门户，单击左侧菜单上的“所有资源”按钮，打开设备预配服务。 
     2. 单击“共享访问策略”，然后单击需要用来打开其属性的访问策略。 在“访问策略”窗口中，复制并记下主密钥连接字符串。 
 
-    ![从门户获取预配服务连接字符串](./media/quick-enroll-device-tpm-node/get-service-connection-string.png) 
+       ![从门户获取预配服务连接字符串](./media/quick-enroll-device-tpm-node/get-service-connection-string.png) 
 
 
 2. 此外还需适用于设备的许可密钥。 如果已按照[创建和预配模拟的设备](quick-create-simulated-device.md)快速入门教程创建模拟的 TPM 设备，请使用为该设备创建的密钥。 否则，若要创建示例性的单个注册，可以使用 SDK 随附的以下许可密钥：

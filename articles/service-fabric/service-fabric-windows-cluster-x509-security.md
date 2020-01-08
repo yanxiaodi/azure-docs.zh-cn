@@ -4,7 +4,7 @@ description: 保护 Azure Service Fabric 独立群集或本地群集内部的通
 services: service-fabric
 documentationcenter: .net
 author: dkkapur
-manager: timlt
+manager: chackdan
 editor: ''
 ms.assetid: fe0ed74c-9af5-44e9-8d62-faf1849af68c
 ms.service: service-fabric
@@ -14,11 +14,12 @@ ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 10/15/2017
 ms.author: dekapur
-ms.openlocfilehash: 62d821894521c5dea8e7577b75d9590adc829263
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: ee2ce03fccc3e6556f9d261687edb050c8cfa1cc
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60628143"
 ---
 # <a name="secure-a-standalone-cluster-on-windows-by-using-x509-certificates"></a>使用 X.509 证书在 Windows 上保护独立群集
 本文介绍如何保护独立 Windows 群集的不同节点之间的通信。 此外，还介绍如何使用 X.509 证书针对连接到此群集的客户端进行身份验证。 身份验证可确保只有经过授权的用户才能访问该群集和部署的应用程序，以及执行管理任务。 创建群集时，应在该群集上启用证书安全性。  
@@ -87,7 +88,7 @@ ms.lasthandoff: 05/16/2018
         "ClientCertificateCommonNames": [
             {
                 "CertificateCommonName": "[CertificateCommonName]",
-                "CertificateIssuerThumbprint": "[Thumbprint]",
+                "CertificateIssuerThumbprint": "[Thumbprint1,Thumbprint2,Thumbprint3,...]",
                 "IsAdmin": true
             }
         ],
@@ -174,7 +175,7 @@ ms.lasthandoff: 05/16/2018
         "storeType": "FileShare",
         "IsEncrypted": "false",
         "connectionstring": "c:\\ProgramData\\SF\\DiagnosticsStore"
-        }
+        },
         "security": {
             "metadata": "The Credential type X509 indicates this cluster is secured by using X509 certificates. The thumbprint format is d5 ec 42 3b 79 cb e5 07 fd 83 59 3c 56 b9 d5 31 24 25 42 64.",
             "ClusterCredentialType": "X509",
@@ -256,7 +257,7 @@ ms.lasthandoff: 05/16/2018
 ## <a name="acquire-the-x509-certificates"></a>获取 X.509 证书
 若要保护群集内部的通信，首先需要获取群集节点的 X.509 证书。 此外，如果只想允许经过授权的计算机/用户连接到此群集，需要获得并安装客户端计算机的证书。
 
-对于运行生产工作负荷的群集，请使用[证书颁发机构 (CA)](https://en.wikipedia.org/wiki/Certificate_authority) 签名的 X.509 证书来保护群集。 有关如何获取这些证书的详细信息，请参阅[如何获取证书](http://msdn.microsoft.com/library/aa702761.aspx)。
+对于运行生产工作负荷的群集，请使用[证书颁发机构 (CA)](https://en.wikipedia.org/wiki/Certificate_authority) 签名的 X.509 证书来保护群集。 有关如何获取这些证书的详细信息，请参阅[如何获取证书](https://msdn.microsoft.com/library/aa702761.aspx)。
 
 对于用于测试的群集，可以选择使用自签名证书。
 
@@ -264,11 +265,11 @@ ms.lasthandoff: 05/16/2018
 创建能够得到适当保护的自签名证书的一种方法是，使用位于 C:\Program Files\Microsoft SDKs\Service Fabric\ClusterSetup\Secure 目录的 Service Fabric SDK 文件夹中的 CertSetup.ps1 脚本。 编辑此文件以更改证书的默认名称。 （查找值 CN=ServiceFabricDevClusterCert。）以 `.\CertSetup.ps1 -Install` 的方式运行此脚本。
 
 现在，请将证书导出到使用受保护密码的 .pfx 文件。 首先获取证书的指纹。 
-1. 从“开始”菜单，运行“管理计算机证书”。 
+1. 从“开始”  菜单，运行“管理计算机证书”  。 
 
 2. 转到 **Local Computer\Personal** 文件夹，找到创建的证书。 
 
-3. 双击证书将其打开，选择“详细信息”选项卡，然后向下滚动到“指纹”字段。 
+3. 双击证书将其打开，选择“详细信息”选项卡，然后向下滚动到“指纹”字段   。 
 
 4. 删除空格，将指纹值复制到以下 PowerShell 命令中。 
 
@@ -300,7 +301,7 @@ ms.lasthandoff: 05/16/2018
     $PfxFilePath ="C:\mypfx.pfx"
     Import-PfxCertificate -Exportable -CertStoreLocation Cert:\LocalMachine\My -FilePath $PfxFilePath -Password (ConvertTo-SecureString -String $pswd -AsPlainText -Force)
     ```
-3. 接下来，通过运行以下脚本设置对此证书的访问控制，以便在网络服务帐户下运行的 Service Fabric 进程可以使用它。 为服务帐户提供证书指纹以及**网络服务**。 可检查证书上的 ACL 是否正确，方法是在“开始” > “管理计算机证书”中打开证书，并查看“所有任务” > “管理私钥”。
+3. 接下来，通过运行以下脚本设置对此证书的访问控制，以便在网络服务帐户下运行的 Service Fabric 进程可以使用它。 为服务帐户提供证书指纹以及**网络服务**。 可检查证书上的 ACL 是否正确，方法是在“开始”   > “管理计算机证书”  中打开证书，并查看“所有任务”   > “管理私钥”  。
    
     ```powershell
     param
@@ -353,7 +354,7 @@ $ConnectArgs = @{  ConnectionEndpoint = '10.7.0.5:19000';  X509Credential = $Tru
 Connect-ServiceFabricCluster $ConnectArgs
 ```
 
-然后可运行其他 PowerShell 命令处理此群集。 例如，可以运行 [Get-ServiceFabricNode](/powershell/module/servicefabric/get-servicefabricnode.md?view=azureservicefabricps) 显示此安全群集上的节点列表。
+然后可运行其他 PowerShell 命令处理此群集。 例如，可以运行 [Get-ServiceFabricNode](https://docs.microsoft.com/powershell/module/servicefabric/get-servicefabricnode?view=azureservicefabricps) 显示此安全群集上的节点列表。
 
 
 若要删除群集，请连接到已下载 Service Fabric 包的群集上的节点、打开命令行，并转到包文件夹。 现在，运行以下命令：

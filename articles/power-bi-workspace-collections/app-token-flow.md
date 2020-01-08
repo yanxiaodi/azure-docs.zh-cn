@@ -1,26 +1,19 @@
 ---
 title: 通过 Power BI 工作区集合进行身份验证和授权 | Microsoft Docs
 description: 通过 Power BI 工作区集合进行身份验证和授权。
-services: power-bi-embedded
-documentationcenter: ''
-author: markingmyname
-manager: kfile
-editor: ''
-tags: ''
-ROBOTS: NOINDEX
-ms.assetid: 1c1369ea-7dfd-4b6e-978b-8f78908fd6f6
+services: power-bi-workspace-collections
+author: rkarlin
+ms.author: rkarlin
 ms.service: power-bi-embedded
-ms.devlang: NA
 ms.topic: article
-ms.tgt_pltfrm: NA
 ms.workload: powerbi
 ms.date: 09/20/2017
-ms.author: maghan
-ms.openlocfilehash: 74d34e708fb74daa295642d50643b78af8f6cb7a
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: 713c56904769c133272db4fb65f8b596ab66804b
+ms.sourcegitcommit: 2e4b99023ecaf2ea3d6d3604da068d04682a8c2d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 07/09/2019
+ms.locfileid: "67672510"
 ---
 # <a name="authenticating-and-authorizing-with-power-bi-workspace-collections"></a>通过 Power BI 工作区集合进行身份验证和授权
 
@@ -31,7 +24,7 @@ Power BI 工作区集合使用**密钥**和**应用令牌**进行身份验证和
 
 ## <a name="two-ways-to-authenticate"></a>进行身份验证的两种方式
 
-**密钥** - 对于所有 Power BI 工作区集合 REST API 调用，可以使用密钥。 在 **Microsoft Azure 门户**中，可以通过依次选择“所有设置”和“访问密钥”来找到密钥。 请始终像对待密码一样对待密钥。 这些密钥有权在特定的工作区集合上执行任何 REST API 调用。
+**密钥** - 对于所有 Power BI 工作区集合 REST API 调用，可以使用密钥。 在 **Microsoft Azure 门户**中，可以通过依次选择“所有设置”和“访问密钥”来找到密钥。   请始终像对待密码一样对待密钥。 这些密钥有权在特定的工作区集合上执行任何 REST API 调用。
 
 若要在 REST 调用中使用密钥，请添加以下授权标头：
 
@@ -43,12 +36,12 @@ Power BI 工作区集合使用**密钥**和**应用令牌**进行身份验证和
 
 应用令牌可以包含下列声明：
 
-| 声明 | 说明 |
+| 声明 | 描述 |    
 | --- | --- |
 | **ver** |应用令牌的版本。 当前版本为 0.2.0。 |
-| **aud** |令牌的目标接收方。 对于 Power BI 工作区集合，使用：“https://analysis.windows.net/powerbi/api”。 |
+| **aud** |令牌的目标接收方。 对于 Power BI 工作区集合，请使用：https:\//analysis.windows.net/powerbi/api  。 |
 | **iss** |一个字符串，指示颁发了令牌的应用程序。 |
-| **类型** |要创建的应用令牌的类型。 当前唯一支持的类型是 **embed**。 |
+| **type** |要创建的应用令牌的类型。 当前唯一支持的类型是 **embed**。 |
 | **wcn** |要为其颁发令牌的工作区集合名称。 |
 | **wid** |要为其颁发令牌的工作区 ID。 |
 | **rid** |要为其颁发令牌的报表 ID。 |
@@ -89,7 +82,7 @@ Body
 
 ```
 
-SDK 中提供了可以更轻松地创建应用令牌的方法。 例如，对于 .NET，可以查看 [Microsoft.PowerBI.Security.PowerBIToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken) 类和 [CreateReportEmbedToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken?redirectedfrom=MSDN#methods_) 方法。
+SDK 中提供了可以更轻松地创建应用令牌的方法。 例如，对于 .NET，可以查看 [Microsoft.PowerBI.Security.PowerBIToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken) 类和 [CreateReportEmbedToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken?redirectedfrom=MSDN) 方法。
 
 对于 .NET SDK，可以参考 [Scopes](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.scopes)。
 
@@ -99,7 +92,7 @@ SDK 中提供了可以更轻松地创建应用令牌的方法。 例如，对于
 
 下面是针对 Power BI 工作区集合的可用作用域。
 
-|范围|说明|
+|范围|描述|
 |---|---|
 |Dataset.Read|提供对指定数据集进行读取的权限。|
 |Dataset.Write|提供向指定数据集进行写入的权限。|
@@ -111,7 +104,7 @@ SDK 中提供了可以更轻松地创建应用令牌的方法。 例如，对于
 
 可以通过在作用域之间使用空格来提供多个作用域，如下所示。
 
-```
+```csharp
 string scopes = "Dataset.Read Workspace.Report.Create";
 ```
 
@@ -147,7 +140,7 @@ Body
 
 ### <a name="operations-and-scopes"></a>操作和作用域
 
-|Operation|目标资源|令牌权限|
+|操作|目标资源|令牌权限|
 |---|---|---|
 |基于数据集创建（在内存中）新报表。|数据集|Dataset.Read|
 |基于数据集创建（在内存中）新报表并保存该报表。|数据集|* Dataset.Read<br>* Workspace.Report.Create|
@@ -175,16 +168,16 @@ Body
    
    ![应用令牌流 - 服务将报表发送给用户](media/get-started-sample/token-6.png)
 
-在 **Power BI 工作区集合**将报表发送给用户后，用户可以在自定义应用中查看报表。 例如，如果导入了[分析销售数据 PBIX 示例](http://download.microsoft.com/download/1/4/E/14EDED28-6C58-4055-A65C-23B4DA81C4DE/Analyzing_Sales_Data.pbix)，该示例 Web 应用将如下所示：
+在 **Power BI 工作区集合**将报表发送给用户后，用户可以在自定义应用中查看报表。 例如，如果导入了[分析销售数据 PBIX 示例](https://download.microsoft.com/download/1/4/E/14EDED28-6C58-4055-A65C-23B4DA81C4DE/Analyzing_Sales_Data.pbix)，该示例 Web 应用将如下所示：
 
 ![应用中嵌入的报表的示例](media/get-started-sample/sample-web-app.png)
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 
-[CreateReportEmbedToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken?redirectedfrom=MSDN#methods_)  
+[CreateReportEmbedToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken?redirectedfrom=MSDN)  
 [Microsoft Power BI 工作区集合示例入门](get-started-sample.md)  
 [常见 Microsoft Power BI 工作区集合方案](scenarios.md)  
 [Microsoft Power BI 工作区集合入门](get-started.md)  
 [PowerBI-CSharp Git 存储库](https://github.com/Microsoft/PowerBI-CSharp)
 
-有更多问题？ [尝试 Power BI 社区](http://community.powerbi.com/)
+更多问题？ [尝试 Power BI 社区](https://community.powerbi.com/)

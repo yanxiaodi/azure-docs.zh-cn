@@ -1,22 +1,20 @@
 ---
-title: "Azure 计划程序文档 - 教程和 API 参考 | Microsoft 文档"
-description: "了解如何使用计划程序来计划及调用重复性应用程序操作和例行维护等作业。 教程、API 参考和其他资源。"
+title: Azure 计划程序文档 - 教程和 API 参考 | Microsoft 文档
+description: 了解如何使用计划程序来计划及调用重复性应用程序操作和例行维护等作业。 教程、API 参考和其他资源。
 services: scheduler
-author: carolz
-manager: carolz
+author: carmonmills
+manager: carmonm
 layout: LandingPage
-ms.assetid: 
 ms.service: scheduler
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: landing-page
 ms.date: 01/23/2017
-ms.author: carolz
-ms.openlocfilehash: 4883e5689a639259ec1c0bcd31e1016f85af5d66
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
+ms.author: carmonm
+ms.openlocfilehash: ddf335d0c2b165ae98feab0b42e60527f87de59c
+ms.sourcegitcommit: 6cff17b02b65388ac90ef3757bf04c6d8ed3db03
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 07/29/2019
+ms.locfileid: "68610333"
 ---
 # <a name="scheduler-documentation"></a>计划程序文档
 
@@ -89,7 +87,7 @@ ms.lasthandoff: 10/11/2017
                 <div class="card">
                     <div class="cardText">
                         <h3>命令行</h3>
-                        <p><a href="/powershell/resourcemanager/azurerm.scheduler/v0.11.1/azurerm.scheduler">PowerShell</a></p>
+                        <p><a href="/powershell/module/azurerm.scheduler">PowerShell</a></p>
                     </div>
                 </div>
             </div>

@@ -1,25 +1,18 @@
 ---
-title: "将 Cisco ASA 设备连接到 Azure VPN 网关的示例配置 | Microsoft Docs"
-description: "本文提供将 Cisco ASA 设备连接到 Azure VPN 网关的示例配置。"
+title: 将 Cisco ASA 设备连接到 Azure VPN 网关的示例配置 | Microsoft Docs
+description: 本文提供将 Cisco ASA 设备连接到 Azure VPN 网关的示例配置。
 services: vpn-gateway
-documentationcenter: na
 author: yushwang
-manager: rossort
-editor: 
-tags: 
-ms.assetid: a8bfc955-de49-4172-95ac-5257e262d7ea
 ms.service: vpn-gateway
-ms.devlang: na
 ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: infrastructure-services
-ms.date: 06/20/2017
+ms.date: 10/19/2018
 ms.author: yushwang
-ms.openlocfilehash: fbe22b70b4fe3463ffc7b0e9a7ebd683f681117d
-ms.sourcegitcommit: 2a70752d0987585d480f374c3e2dba0cd5097880
-ms.translationtype: HT
+ms.openlocfilehash: e575fac61a1c5d9351391d39d200b87e34ff26cd
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/19/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60648733"
 ---
 # <a name="sample-configuration-cisco-asa-device-ikev2no-bgp"></a>示例配置：Cisco ASA 设备（IKEv2/无 BGP）
 本文提供将 Cisco 自适应安全 (ASA) 设备连接到 Azure VPN 网关的示例配置。 该示例适用于运行 IKEv2 而不使用边界网关协议 (BGP) 的 Cisco ASA 设备。 
@@ -39,9 +32,9 @@ ms.lasthandoff: 01/19/2018
 |                        |                                   |
 
 > [!NOTE]
-> 示例配置将 Cisco ASA 设备连接到 Azure 基于路由的 VPN 网关。 连接使用自定义 IPsec/IKE 策略并启用“UsePolicyBasedTrafficSelectors”选项，如[这篇文章](vpn-gateway-connect-multiple-policybased-rm-ps.md)中所述。
+> 示例配置将 Cisco ASA 设备连接到 Azure 基于路由的 VPN 网关。  连接使用自定义 IPsec/IKE 策略并启用“UsePolicyBasedTrafficSelectors”选项，如[这篇文章](vpn-gateway-connect-multiple-policybased-rm-ps.md)中所述。 
 >
-> 示例要求 ASA 设备中的“IKEv2”策略使用基于访问列表的配置，而不是基于 VTI 的配置。 请查阅 VPN 设备供应商规范，验证本地 VPN 设备是否支持 IKEv2 策略。
+> 示例要求 ASA 设备中的“IKEv2”策略使用基于访问列表的配置，而不是基于 VTI 的配置。  请查阅 VPN 设备供应商规范，验证本地 VPN 设备是否支持 IKEv2 策略。
 
 
 ## <a name="vpn-device-requirements"></a>VPN 设备要求
@@ -51,7 +44,7 @@ Azure VPN 网关使用标准 IPsec/IKE 协议套件建立站点到站点 (S2S) V
 > （可选）可以根据[关于加密要求](vpn-gateway-about-compliance-crypto.md)中所述，为特定的连接准确指定加密算法与密钥长度的组合。 如果准确指定了算法与密钥强度的组合，请确保在 VPN 设备上使用相应的规范。
 
 ## <a name="single-vpn-tunnel"></a>单一 VPN 隧道
-此配置由 Azure VPN 网关与本地 VPN 设备之间的单个 S2S VPN 隧道构成。 （可选）可以配置 [跨 VPN 隧道的 BGP](#bgp)。
+此配置由 Azure VPN 网关与本地 VPN 设备之间的单个 S2S VPN 隧道构成。 （可选）可以跨 VPN 隧道配置 BGP。
 
 ![单一 S2S VPN 隧道](./media/vpn-gateway-3rdparty-device-config-cisco-asa/singletunnel.png)
 
@@ -60,7 +53,7 @@ Azure VPN 网关使用标准 IPsec/IKE 协议套件建立站点到站点 (S2S) V
 ### <a name="virtual-network-and-vpn-gateway-information"></a>虚拟网络和 VPN 网关信息
 本部分列出示例的参数。
 
-| **Parameter**                | **值**                    |
+| **Parameter**                | **ReplTest1**                    |
 | ---                          | ---                          |
 | 虚拟网络地址前缀        | 10.11.0.0/16<br>10.12.0.0/16 |
 | Azure VPN 网关 IP         | Azure_Gateway_Public_IP      |
@@ -77,7 +70,7 @@ Azure VPN 网关使用标准 IPsec/IKE 协议套件建立站点到站点 (S2S) V
 ### <a name="ipsecike-policy-and-parameters"></a>IPsec/IKE 策略和参数
 下表列出本示例中使用的 IPsec/IKE 算法和参数。 请查阅 VPN 设备规范，验证 VPN 设备型号和固件版本支持的算法。
 
-| IPsec/IKEv2  | **值**                            |
+|  IPsec/IKEv2  | **ReplTest1**                            |
 | ---              | ---                                  |
 | IKEv2 加密 | AES256                               |
 | IKEv2 完整性  | SHA384                               |
@@ -117,14 +110,14 @@ Azure VPN 网关使用标准 IPsec/IKE 协议套件建立站点到站点 (S2S) V
 * 标识内部/专用和外部/公共网络的路由。
 * 确保所有名称和策略编号在设备上唯一。
 * 确保设备支持加密算法。
-* 将以下“占位符值”替换为你配置的实际值：
-  - 外部接口名称："outside"
-  - Azure_Gateway_Public_IP
-  - OnPrem_Device_Public_IP
-  - IKE：IKE Pre_Shared_Key
-  - 虚拟网络和本地网络网关名称："VNetName" 和 "LNGName"
-  - 虚拟网络和本地网络地址前缀
-  - 正确的网络掩码
+* 将以下“占位符值”替换为你配置的实际值： 
+  - 外部接口名称："outside" 
+  - Azure_Gateway_Public_IP 
+  - OnPrem_Device_Public_IP 
+  - IKE：**Pre_Shared_Key**
+  - 虚拟网络和本地网关名称：**VNetName** 和 **LNGName**
+  - 虚拟网络和本地网络地址前缀 
+  - 正确的网络掩码 
 
 #### <a name="sample-script"></a>示例脚本
 
@@ -255,7 +248,7 @@ crypto ipsec ikev2 ipsec-proposal AES-256
  protocol esp integrity  sha-1
 exit
 !
-!     > Set access list & traffic selectors, PFS, IPsec protposal, SA lifetime
+!     > Set access list & traffic selectors, PFS, IPsec proposal, SA lifetime
 !       - This sample uses "Azure-<VNetName>-map" as the crypto map name
 !       - ASA supports only one crypto map per interface, if you already have
 !         an existing crypto map assigned to your outside interface, you must use

@@ -1,36 +1,31 @@
 ---
-title: 对 Azure Blob 存储中的数据采样 | Microsoft Docs
-description: 对 Azure Blob 存储中的数据采样
-services: machine-learning,storage
-documentationcenter: ''
-author: deguhath
+title: 对 Azure blob 存储中的数据采样 - Team Data Science Process
+description: 在 Azure blob 存储中数据进行采样的方法：通过以编程方式下载数据，并使用以 Python 编写的过程对其进行采样。
+services: machine-learning
+author: marktab
 manager: cgronlun
 editor: cgronlun
-ms.assetid: e8d9ad2c-86c5-43d6-80b8-d355b5c0dccf
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/13/2017
-ms.author: deguhath
-ms.openlocfilehash: 48cc74a8fdef0103f79033ac2484f658303f405c
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: 1c455106e5faa4aa20ec56f37788e0b8c324fee1
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61042898"
 ---
 # <a name="heading"></a>对 Azure blob 存储中的数据采样
-本文档介绍对在 Azure blob 存储中数据进行取样的方法：通过以编程方式下载，并使用以 Python 编写的过程对其进行采样。
 
-以下**菜单**所链接到的主题将描述如何从不同的存储环境采样数据。 
-
-[!INCLUDE [cap-sample-data-selector](../../../includes/cap-sample-data-selector.md)]
+本文介绍对在 Azure blob 存储中数据进行采样的方法：通过以编程方式下载数据，并使用以 Python 编写的过程对其进行采样。
 
 **为什么对数据进行采样？**
 如果计划要分析的数据集很大，通常最好是对数据进行向下采样，以将数据减至较小但具备代表性且更易于管理的规模。 这有利于数据了解、探索和功能设计。 它在 Cortana Analytics 进程中的作用是能够快速建立数据处理函数和机器学习模型的快速原型。
 
-此采样任务是[团队数据科学流程 (TDSP)](https://azure.microsoft.com/documentation/learning-paths/cortana-analytics-process/) 中的一个步骤。
+此采样任务是[团队数据科学流程 (TDSP)](https://docs.microsoft.com/azure/machine-learning/team-data-science-process/) 中的一个步骤。
 
 ## <a name="download-and-down-sample-data"></a>下载和向下采样数据
 1. 从下列 Python 代码示例中，通过 blob 服务，从 Azure blob 存储下载数据： 

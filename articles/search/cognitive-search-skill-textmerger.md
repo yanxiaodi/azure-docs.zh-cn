@@ -1,34 +1,36 @@
 ---
-title: 文本合并认知搜索技能（Azure 搜索）| Microsoft Docs
+title: 文本合并认知搜索技能 - Azure 搜索
 description: 将字段集合中的文本合并到合并字段中。 在 Azure 搜索扩充管道中使用此认知技能。
 services: search
-manager: pablocas
+manager: nitinme
 author: luiscabrer
 ms.service: search
-ms.devlang: NA
 ms.workload: search
 ms.topic: conceptual
-ms.date: 05/01/2018
+ms.date: 05/02/2019
 ms.author: luisca
-ms.openlocfilehash: f349158873acca9d50d4d6e5fdfa3539f26207fe
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.openlocfilehash: 1e88fcc13d97d92cf9b35616ecb7d71c2d24db1f
+ms.sourcegitcommit: 3f22ae300425fb30be47992c7e46f0abc2e68478
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
-ms.locfileid: "34362561"
+ms.lasthandoff: 09/25/2019
+ms.locfileid: "71265259"
 ---
 #    <a name="text-merge-cognitive-skill"></a>文本合并认知技能
 
 文本合并技能会将字段集合中的文本合并到单个字段中。 
 
+> [!NOTE]
+> 此技能未绑定到认知服务 API，你使用它无需付费。 但是，你仍然应该[附加认知服务资源](cognitive-search-attach-cognitive-services.md)，以覆盖**免费**资源选项，该选项限制你每天进行少量的每日扩充。
+
 ## <a name="odatatype"></a>@odata.type  
-Microsoft.Skills.Util.TextMerger
+Microsoft.Skills.Text.MergeSkill
 
 ## <a name="skill-parameters"></a>技能参数
 
 参数区分大小写。
 
-| 参数名称     | 说明 |
+| 参数名称     | 描述 |
 |--------------------|-------------|
 | insertPreTag  | 每次插入之前要包含的字符串。 默认值为 `" "`。 要忽略空格，请将值设置为 `""`。  |
 | insertPostTag | 每次插入后要包含的字符串。 默认值为 `" "`。 要忽略空格，请将值设置为 `""`。  |
@@ -39,17 +41,17 @@ Microsoft.Skills.Util.TextMerger
 
 ```json
 {
-    "values": [
+  "values": [
+    {
+      "recordId": "1",
+      "data":
       {
-        "recordId": "1",
-        "data":
-           {
-             "text": "The brown fox jumps over the dog" ,
-             "itemsToInsert": ["quick", "lazy"],
-             "offsets": [3, 28],
-           }
+        "text": "The brown fox jumps over the dog",
+        "itemsToInsert": ["quick", "lazy"],
+        "offsets": [3, 28],
       }
-    ]
+    }
+  ]
 }
 ```
 
@@ -58,15 +60,15 @@ Microsoft.Skills.Util.TextMerger
 
 ```json
 {
-    "values": [
+  "values": [
+    {
+      "recordId": "1",
+      "data":
       {
-        "recordId": "1",
-        "data":
-           {
-             "mergedText": "The quick brown fox jumps over the lazy dog" 
-           }
+        "mergedText": "The quick brown fox jumps over the lazy dog"
       }
-    ]
+    }
+  ]
 }
 ```
 
@@ -74,7 +76,7 @@ Microsoft.Skills.Util.TextMerger
 
 使用文本合并的一个常见场景是将图像的文本表示形式（OCR 技能中的文本或图像的描述文字）合并到文档的内容字段中。 
 
-以下示例技能使用 OCR 技能从文档中嵌入的图像中提取文本。 接下来，它会创建 merged_text 字段以包含每个图像的原始和 OCRed 文本。 
+以下示例技能使用 OCR 技能从文档中嵌入的图像中提取文本。 接下来，它会创建 merged_text 字段以包含每个图像的原始和 OCRed 文本。 可在[此处](https://docs.microsoft.com/azure/search/cognitive-search-skill-ocr)了解有关 OCR 技能的详细信息。
 
 ```json
 {
@@ -82,30 +84,29 @@ Microsoft.Skills.Util.TextMerger
   "skills":
   [
     {
-        "name": "OCR skill",
-        "description": "Extract text (plain and structured) from image.",
-        "@odata.type": "#Microsoft.Skills.Vision.OcrSkill",
-        "context": "/document/normalized_images/*",
-        "defaultLanguageCode": "en",
-        "detectOrientation": true,
-        "inputs": [
-          {
-            "name": "image",
-            "source": "/document/normalized_images/*"
-          }
-        ],
-        "outputs": [
-          {
-            "name": "text"
-          }
-        ]
+      "description": "Extract text (plain and structured) from image.",
+      "@odata.type": "#Microsoft.Skills.Vision.OcrSkill",
+      "context": "/document/normalized_images/*",
+      "defaultLanguageCode": "en",
+      "detectOrientation": true,
+      "inputs": [
+        {
+          "name": "image",
+          "source": "/document/normalized_images/*"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text"
+        }
+      ]
     },
     {
-      "@odata.type": "#Microsoft.Skills.Util.TextMerger",
+      "@odata.type": "#Microsoft.Skills.Text.MergeSkill",
       "description": "Create merged_text, which includes all the textual representation of each image inserted at the right location in the content field.",
       "context": "/document",
       "insertPreTag": " ",
-      "insertPostTag": " "
+      "insertPostTag": " ",
       "inputs": [
         {
           "name":"text", "source": "/document/content"
@@ -119,7 +120,7 @@ Microsoft.Skills.Util.TextMerger
       ],
       "outputs": [
         {
-          "name": "mergedText", "targetname" : "merged_text"
+          "name": "mergedText", "targetName" : "merged_text"
         }
       ]
     }
@@ -129,19 +130,19 @@ Microsoft.Skills.Util.TextMerger
 以上示例假设存在规范化的图像字段。 要获取规范化的图像字段，请将索引器定义中的 imageAction 配置设置为 generateNormalizedImages，如下所示：
 
 ```json
-{  
-   //...rest of your indexer definition goes here ... 
-  "parameters":{  
-      "configuration":{  
-         "dataToExtract":"contentAndMetadata",
-         "imageAction":"generateNormalizedImages"
-      }
-   }
+{
+  //...rest of your indexer definition goes here ...
+  "parameters":{
+    "configuration":{
+        "dataToExtract":"contentAndMetadata",
+        "imageAction":"generateNormalizedImages"
+    }
+  }
 }
 ```
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 
 + [预定义技能](cognitive-search-predefined-skills.md)
-+ [如何定义技术集](cognitive-search-defining-skillset.md)
-+ [创建索引器 (REST)](ref-create-indexer.md)
++ [如何定义技能集](cognitive-search-defining-skillset.md)
++ [创建索引器 (REST)](https://docs.microsoft.com/rest/api/searchservice/create-indexer)

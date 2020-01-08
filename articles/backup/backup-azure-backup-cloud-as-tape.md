@@ -1,25 +1,18 @@
 ---
-title: "使用 Azure 备份来替换磁带基础结构 | Microsoft Docs"
-description: "了解 Azure 备份如何提供类似于磁带的语义，让你在 Azure 中备份和还原数据"
-services: backup
-documentationcenter: 
-author: trinadhk
-manager: vijayts
-editor: 
-ms.assetid: 2e1bb67d-986c-4437-8056-3a63169b4214
+title: 使用 Azure 备份来取代磁带基础结构
+description: 了解 Azure 备份如何提供类似于磁带的语义, 使你能够在 Azure 中备份和还原数据
+author: dcurwin
+manager: carmonm
 ms.service: backup
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: storage-backup-recovery
-ms.date: 1/10/2017
-ms.author: saurse;trinadhk;markgal
-ms.custom: H1Hack27Feb2017
-ms.openlocfilehash: f0f3152daf5f91f7c9e540797bf09b21969d2d33
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 04/30/2017
+ms.author: dacurwin
+ms.openlocfilehash: 3be3a2e3355793a8d0b4fcaf0e7f62668f78f0c8
+ms.sourcegitcommit: 0f54f1b067f588d50f787fbfac50854a3a64fff7
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 08/12/2019
+ms.locfileid: "68954879"
 ---
 # <a name="move-your-long-term-storage-from-tape-to-the-azure-cloud"></a>将长期存储从磁带移动到 Azure 云
 Azure 备份和 System Center Data Protection Manager 客户可以：
@@ -28,7 +21,7 @@ Azure 备份和 System Center Data Protection Manager 客户可以：
 * 长期保留备份数据
 * 使用 Azure（而不是磁带）解决其长期数据保留需求。
 
-本文介绍客户如何启用备份和保留策略。 使用磁带解决长期数据保留需求的客户现在可以使用一种强大而可行并且同样提供此功能的替代解决方案。 最新版本的 Azure 备份（可从[此处](http://aka.ms/azurebackup_agent)获取）中已启用该功能。 System Center DPM 客户必须在使用具有 Azure 备份服务的 DPM 之前至少更新到 DPM 2012 R2 UR5。
+本文介绍客户如何启用备份和保留策略。 使用磁带解决长期数据保留需求的客户现在可以使用一种强大而可行并且同样提供此功能的替代解决方案。 最新版本的 Azure 备份（可从[此处](https://aka.ms/azurebackup_agent)获取）中已启用该功能。 System Center DPM 客户必须在使用具有 Azure 备份服务的 DPM 之前至少更新到 DPM 2012 R2 UR5。
 
 ## <a name="what-is-the-backup-schedule"></a>什么是备份计划？
 备份计划指示备份操作的频率。 例如，以下屏幕中的设置表示要在每天下午 6 点和午夜执行备份。
@@ -49,8 +42,8 @@ Azure 备份和 System Center Data Protection Manager 客户可以：
 ## <a name="example--putting-both-together"></a>示例 - 组合策略
 ![示例屏幕](./media/backup-azure-backup-cloud-as-tape/samplescreen.png)
 
-1. **每天保留策略**：每天创建的备份存储 7 天。
-2. **每周保留策略**：每个星期六午夜和下午 6 点创建的备份保留 4 周
+1. **每日保留策略**：每日创建的备份存储 7 天。
+2. **每周保留策略**：每天午夜和星期六下午 6 点创建的备份保留 4 周
 3. **每月保留策略**：每个月最后一个星期六午夜和下午 6 点创建的备份保留 12 个月
 4. **每年保留策略**：每年三月最后一个星期六午夜执行的备份保留 10 年
 
@@ -64,8 +57,7 @@ Azure 备份和 System Center Data Protection Manager 客户可以：
 恢复点总数为 56。
 
 > [!NOTE]
-> Azure 备份对恢复点的数量没有限制。
->
+> 使用 Azure 备份，最多可为每个受保护的实例创建 9999 个恢复点。 受保护的实例包括计算机、服务器（物理或虚拟）或备份到 Azure 的工作负载。
 >
 
 ## <a name="advanced-configuration"></a>高级配置

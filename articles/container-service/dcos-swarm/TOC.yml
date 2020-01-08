@@ -61,23 +61,23 @@
           href: container-service-swarm-mode-walkthrough.md
         - name: Docker 和 Docker Compose
           href: container-service-docker-swarm.md
-        - name: 将 CI/CD 与 Docker Swarm 和 VSTS 配合使用
+        - name: 将 CI/CD 与 Docker Swarm 和 Azure DevOps 配合使用
           href: container-service-docker-swarm-setup-ci-cd.md
-        - name: 将 CI/CD 与 Docker Swarm（ACS 引擎）和 VSTS 配合使用
+        - name: 将 CI/CD 与 Docker Swarm（ACS 引擎）和 Azure DevOps 配合使用
           href: container-service-docker-swarm-mode-setup-ci-cd-acs-engine.md
 - name: 引用
   items:
     - name: Azure CLI
       href: /cli/azure/acs
     - name: PowerShell
-      href: /powershell/module/azurerm.compute
+      href: /powershell/module/az.compute
     - name: REST
       href: /rest/api/container-service
 - name: 资源
   items:
     - name: Azure 路线图
       href: 'https://azure.microsoft.com/roadmap/'
-    - name: 常见问题
+    - name: 常见问题解答
       href: container-service-faq.md
     - name: 模板 - ACS 引擎
       href: 'https://github.com/Azure/acs-engine'
@@ -86,6 +86,6 @@
     - name: 上市区域
       href: 'https://azure.microsoft.com/regions/services/'
     - name: 堆栈溢出
-      href: 'http://stackoverflow.com/questions/tagged/azure-container-service'
+      href: 'https://stackoverflow.com/questions/tagged/azure-container-service'
     - name: 视频
       href: 'https://azure.microsoft.com/resources/videos/index/?services=container-service&sort=newest'

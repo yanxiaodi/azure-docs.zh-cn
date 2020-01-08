@@ -1,44 +1,27 @@
 ---
 title: Azure 资源管理器 vCPU 配额增加请求 | Microsoft Docs
 description: Azure 资源管理器 vCPU 配额增加请求
-author: ganganarayanan
-ms.author: gangan
-ms.date: 1/18/2017
+author: sowmyavenkat86
+ms.author: svenkat
+ms.date: 06/07/2019
 ms.topic: article
-ms.service: microsoft-docs
+ms.service: azure
 ms.assetid: ce37c848-ddd9-46ab-978e-6a1445728a3b
-ms.openlocfilehash: c22a6dde0067385a1bf8d889cc76178bb44dd0ac
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: 9a997af984b92ea59cc02d99fbd66d8967ca31bd
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "67076816"
 ---
-# <a name="resource-manager-vcpu-quota-increase-requests"></a>资源管理器 vCPU 配额增加请求
+# <a name="quota-increase-requests"></a>配额增加请求
 
-在区域级别和 SKU 系列级别，需要强制实施资源管理器 vCPU 配额。
-有关配额的强制实施方法的详细信息，请参阅 [Azure 订阅和服务限制](http://aka.ms/quotalimits)页面。
-若要了解 SKU 系列的详细信息，可在[虚拟机定价](http://aka.ms/pricingcompute)页面比较成本和性能。
+为虚拟机和虚拟机规模集资源管理器 vCPU 配额是在为每个订阅，每个区域中的两个层强制实施。 
 
-若要请求增加，请在 Azure 门户 ([https://portal.azure.com](https://portal.azure.com)) 中创建 vCPU 的配额支持案例。
+第一层的总区域的 Vcpu 限制 （跨所有 VM 系列中），第二层是每个 VM 系列的 Vcpu 限制 （例如 D 系列 Vcpu)。 每当新的 VM 时要部署的 VM 系列的新的和现有 Vcpu 使用率总和不能超过批准该特定的 VM 系列的 vCPU 配额。 此外，在所有 VM 系列中部署的总的新的和现有 vCPU 计数不应超过订阅的已批准的总区域的 Vcpu 配额。 如果超过了上述任一配额，将不允许部署 VM。
+你可以从 Azure 门户来请求增加的 VM 系列的 Vcpu 配额限制。 中的 VM 系列配额增加自动增加总区域的 Vcpu 限制相同的量。 
 
-> [!NOTE]
-> 了解如何在 Azure 门户中[创建支持请求](https://docs.microsoft.com/azure/azure-supportability/how-to-create-azure-support-request)
+创建新订阅时，默认区域 Vcpu 总数可能不是等于默认对所有单个 VM 系列的 vCPU 配额的总和。 这可能导致具有足够的配额为你想要部署，每个单个 VM 系列，但没有足够的配额的区域 Vcpu 总数的所有部署的订阅。 在这种情况下，需要提交请求以显式增大总区域的 Vcpu 数限制。 区域的 Vcpu 总数限制不能超过已批准的配额的和区域的所有 VM 系列上。
 
-1. 在“新建支持请求”页上，将问题类型选择为“配额”，将配额类型选择为“核心”。
+了解有关配额的详细信息[虚拟机 vCPU 配额页](https://docs.microsoft.com/azure/virtual-machines/windows/quotas)并[Azure 订阅和服务限制](https://aka.ms/quotalimits)页。 
 
-    ![“配额基本信息”边栏选项卡](./media/resource-manager-core-quotas-request/Basics-blade.png)
-
-2. 将部署模型选择为“资源管理器”并选择一个位置。
-
-    ![“配额问题”边栏选项卡](./media/resource-manager-core-quotas-request/Problem-step.png)
-
-3. 选择需要增加的 SKU 系列。
-
-    ![选择的 SKU 系列](./media/resource-manager-core-quotas-request/SKU-selected.png)
-
-4. 输入想对订阅设定的新限制。
-
-    ![SKU 新配额请求](./media/resource-manager-core-quotas-request/SKU-new-quota.png)
-
-- 若要删除某行，请从 SKU 系列下拉列表中取消选中 SKU，或单击“x”丢弃图标。
-为每个 SKU 系列输入所需的配额后，在“问题步骤”页面上单击“下一步”，继续创建支持请求。

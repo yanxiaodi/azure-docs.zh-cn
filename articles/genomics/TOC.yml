@@ -9,6 +9,8 @@
   items:
     - name: 运行示例基因组学工作流
       href: quickstart-run-genomics-workflow-portal.md
+- name: 操作指南
+  items:
     - name: 使用各种输入文件格式
       items:
         - name: 成对的 FASTQ 文件
@@ -25,6 +27,8 @@
       href: frequently-asked-questions-genomics.md
     - name: 故障排除指南
       href: troubleshooting-guide-genomics.md
+    - name: 提出支持请求
+      href: file-support-ticket-genomics.md
     - name: 版本发行历史记录
       href: version-release-history-genomics.md
     - name: 业务连续性

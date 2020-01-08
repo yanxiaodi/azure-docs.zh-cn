@@ -1,6 +1,6 @@
 ---
-title: "Azure Database for MySQL 概述 | Microsoft Docs"
-description: "Azure 门户中 Azure Database for MySQL 概述的帮助内容"
+title: Azure Database for MySQL 概述 | Microsoft Docs
+description: Azure 门户中 Azure Database for MySQL 概述的帮助内容
 services: mysql
 author: sewatson
 manager: lwelicki
@@ -8,11 +8,12 @@ ms.service: mysql
 ms.topic: article
 ms.date: 05/10/2017
 ms.author: sewatson
-ms.openlocfilehash: a1d5458a2b815591fc7126d429bd16a718910b30
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
+ms.openlocfilehash: 2ff389f52da0db4e394e8f6a6c37955a5f0c3861
+ms.sourcegitcommit: 509e1583c3a3dde34c8090d2149d255cb92fe991
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 05/27/2019
+ms.locfileid: "64691363"
 ---
 # <a name="azure-database-for-mysql-documentation"></a>用于 MySQL 的 Azure 数据库文档
 
@@ -22,7 +23,7 @@ ms.lasthandoff: 10/11/2017
 
 了解如何通过以下方式创建 MySQL Database on Azure：
 
-- [在 Azure 应用服务中创建 Java Web 应用](/azure/mysql/quickstart-create-mysql-server-database-using-azure-portal)
+- [Azure 门户](/azure/mysql/quickstart-create-mysql-server-database-using-azure-portal)
 - [Azure CLI](/azure/mysql/quickstart-create-mysql-server-database-using-azure-cli)
 
 ## <a name="step-by-step-tutorials"></a>分步教程

@@ -4,21 +4,22 @@ description: 概述 Service Fabric 服务的其他放置策略和规则
 services: service-fabric
 documentationcenter: .net
 author: masnider
-manager: timlt
+manager: chackdan
 editor: ''
 ms.assetid: 5c2d19c6-dd40-4c4b-abd3-5c5ec0abed38
-ms.service: Service-Fabric
+ms.service: service-fabric
 ms.devlang: dotnet
 ms.topic: conceptual
 ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 08/18/2017
 ms.author: masnider
-ms.openlocfilehash: bdf10f1d9199500d4f5bda3c5a05a3d67ff65541
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: d5aea441f15cbf7a2a444439c06cd5f74a559d3f
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60386414"
 ---
 # <a name="placement-policies-for-service-fabric-services"></a>Service Fabric 服务的放置策略
 放置策略是可用于在某些不常见的特定情况下控制服务位置的附加规则。 这些情况的一些示例包括：
@@ -40,9 +41,10 @@ ms.lasthandoff: 05/16/2018
 以下大多数控件都能通过节点属性和放置约束来配置，但有一些控件比较复杂。 为了使操作更简单，Service Fabric 群集 Resource Manager 提供了这些附加放置策略。 每个命名服务实例配置了放置策略。 还可以进行动态更新。
 
 ## <a name="specifying-invalid-domains"></a>指定无效域
-凭借 InvalidDomain 放置策略，可以指定某个特定容错域对特定服务是无效的。 此策略可确保特定的服务绝对不会在特定的区域中运行（例如，出于地缘政治或公司政策的原因）。 可以通过单独的策略指定多个无效域。
+凭借 InvalidDomain 放置策略，可以指定某个特定容错域对特定服务是无效的  。 此策略可确保特定的服务绝对不会在特定的区域中运行（例如，出于地缘政治或公司政策的原因）。 可以通过单独的策略指定多个无效域。
 
 <center>
+
 ![无效域示例][Image1]
 </center>
 
@@ -63,6 +65,7 @@ New-ServiceFabricService -ApplicationName $applicationName -ServiceName $service
 所需的域放置策略要求服务仅存在于指定域中。 可以通过独立的策略指定多个所需域。
 
 <center>
+
 ![所需域示例][Image2]
 </center>
 
@@ -84,13 +87,14 @@ New-ServiceFabricService -ApplicationName $applicationName -ServiceName $service
 首选主域指定放置主要副本的容错域。 如果一切运行正常，主副本最终会在此域中。 如果域或主要副本出现故障或关闭，则主要副本会移到其他位置，理想情况下为同一域中的其他位置。 如果这个新位置不在首选域中，群集 Resource Manager 将尽可能快地将它移回到首选域。 当然，此设置仅适用于有状态服务。 对于跨越 Azure 区域或多个数据中心的群集，如果该群集的服务希望放置在某个位置，此策略最有用。 使主要副本接近其用户或其他服务有助于降低延迟，尤其是对于默认由主要副本处理的读取操作。
 
 <center>
+
 ![首选主域和故障转移][Image3]
 </center>
 
 ```csharp
 ServicePlacementPreferPrimaryDomainPolicyDescription primaryDomain = new ServicePlacementPreferPrimaryDomainPolicyDescription();
 primaryDomain.DomainName = "fd:/EastUS/";
-serviceDescription.PlacementPolicies.Add(invalidDomain);
+serviceDescription.PlacementPolicies.Add(primaryDomain);
 ```
 
 Powershell：
@@ -100,7 +104,7 @@ New-ServiceFabricService -ApplicationName $applicationName -ServiceName $service
 ```
 
 ## <a name="requiring-replica-distribution-and-disallowing-packing"></a>需要副本分发并禁止封装
-群集正常运行时，副本通常分布在容错域和升级域中。 但是，存在给定分区的多个副本最终可能会暂时打包到单个域中的情况。 例如，假设群集有九个节点在三个容错域（fd:/0、fd:/1 和 fd:/2）中。 再假设服务具有三个副本。 假设 fd:/1 和 fd:/2 中用于这些副本的节点发生故障。 群集资源管理器通常会首选这些相同容错域中的其他节点。 在此例中，假设由于容量问题这些域中的其他节点都无效。 如果群集 Resource Manager 生成这些副本的替换位置，它只能选择 fd:/0 中的节点。 但是，执行该操作就造成了违反容错域约束的情况。 打包副本会增加整个副本集发生故障或丢失的可能性。 
+群集正常运行时，副本通常分布在容错域和升级域中  。 但是，存在给定分区的多个副本最终可能会暂时打包到单个域中的情况。 例如，假设群集有九个节点在三个容错域（fd:/0、fd:/1 和 fd:/2）中。 再假设服务具有三个副本。 假设 fd:/1 和 fd:/2 中用于这些副本的节点发生故障。 群集资源管理器通常会首选这些相同容错域中的其他节点。 在此例中，假设由于容量问题这些域中的其他节点都无效。 如果群集 Resource Manager 生成这些副本的替换位置，它只能选择 fd:/0 中的节点。 但是，执行该操作就造成了违反容错域约束的情况  。 打包副本会增加整个副本集发生故障或丢失的可能性。 
 
 > [!NOTE]
 > 有关约束和约束优先级的其他一般信息，请参阅[此主题](service-fabric-cluster-resource-manager-management-integration.md#constraint-priorities)。

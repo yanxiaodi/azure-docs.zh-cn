@@ -1,25 +1,20 @@
 ---
-title: "配置可以并存的 ExpressRoute 连接和站点到站点 VPN 连接：经典：Azure | Microsoft Docs"
-description: "本文指导配置可在经典部署模型中并存的 ExpressRoute 连接和站点到站点 VPN 连接。"
+title: 配置 ExpressRoute 和站点到站点 VPN 连接 - 并存：经典：Azure | Microsoft Docs
+description: 本文指导配置可在经典部署模型中并存的 ExpressRoute 连接和站点到站点 VPN 连接。
 documentationcenter: na
 services: expressroute
 author: charwen
-manager: carmonm
-editor: 
-tags: azure-service-management
-ms.assetid: dcf1a5af-a289-466a-b812-0bfedbd2bda0
 ms.service: expressroute
-ms.devlang: na
-ms.topic: get-started-article
-ms.tgt_pltfrm: na
-ms.workload: infrastructure-services
-ms.date: 03/21/2017
+ms.topic: conceptual
+ms.date: 12/06/2018
 ms.author: charwen
-ms.openlocfilehash: 09d1649f0ca0cf4ca464d95b29461cad3fe51788
-ms.sourcegitcommit: 68aec76e471d677fd9a6333dc60ed098d1072cfc
-ms.translationtype: HT
+ms.custom: seodec18
+ms.openlocfilehash: 70e7c689acac094890545ac1e65374e9377a0be0
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/18/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60370387"
 ---
 # <a name="configure-expressroute-and-site-to-site-coexisting-connections-classic"></a>配置 ExpressRoute 和站点到站点并存连接（经典）
 > [!div class="op_single_selector"]
@@ -28,13 +23,13 @@ ms.lasthandoff: 12/18/2017
 > 
 > 
 
-能够配置站点到站点 VPN 和 ExpressRoute 具有多项优势。 可以将站点到站点 VPN 配置为 ExressRoute 的安全故障转移路径，或者使用站点到站点 VPN 连接到不是通过 ExpressRoute 进行连接的站点。 我们会在本文中介绍这两种方案的配置步骤。 本文适用于经典部署模型。 此配置在门户中不可用。
+本文有助于配置可共存的 ExpressRoute 和站点到站点 VPN 连接。 能够配置站点到站点 VPN 和 ExpressRoute 具有多项优势。 可以将站点到站点 VPN 配置为 ExpressRoute 的安全故障转移路径，或者使用站点到站点 VPN 连接到不是通过 ExpressRoute 进行连接的站点。 我们会在本文中介绍这两种方案的配置步骤。 本文适用于经典部署模型。 此配置在门户中不可用。
 
 [!INCLUDE [expressroute-classic-end-include](../../includes/expressroute-classic-end-include.md)]
 
 **关于 Azure 部署模型**
 
-[!INCLUDE [vpn-gateway-clasic-rm](../../includes/vpn-gateway-classic-rm-include.md)]
+[!INCLUDE [vpn-gateway-classic-rm](../../includes/vpn-gateway-classic-rm-include.md)]
 
 > [!IMPORTANT]
 > 按以下说明进行操作之前，必须预先配置ExpressRoute 线路。 在按以下步骤操作之前，请务必遵循相关指南来[创建 ExpressRoute 线路](expressroute-howto-circuit-classic.md)和[配置路由](expressroute-howto-routing-classic.md)。
@@ -79,7 +74,7 @@ ms.lasthandoff: 12/18/2017
     如果还没有虚拟网络，此过程指导使用经典部署模型创建新的虚拟网络，然后创建新的 ExpressRoute 和站点到站点 VPN 连接。 若要配置，请遵循本文中 [创建新的虚拟网络和并存连接](#new)部分中的步骤。
 * 我已有一个经典部署模型 VNet。
   
-    可能已在具有现有站点到站点 VPN 连接或 ExpressRoute 连接的位置拥有虚拟网络。 [为现有的 VNet 配置并存连接](#add) 部分指导删除网关，然后创建新的 ExpressRoute 连接和站点到站点 VPN 连接。 请注意，在创建新连接时，必须按照非常特定的顺序完成步骤。 不要按照其他文章中的说明来创建网关和连接。
+    可能已在具有现有站点到站点 VPN 连接或 ExpressRoute 连接的位置拥有虚拟网络。 [为现有的 VNet 配置并存连接](#add)部分介绍如何删除网关，然后如何创建新的 ExpressRoute 连接和站点到站点 VPN 连接。 请注意，在创建新连接时，必须按照非常特定的顺序完成步骤。 不要按照其他文章中的说明来创建网关和连接。
   
     在此过程中，创建可以共存的连接将需要你删除网关，然后配置新网关。 这意味着，在删除并重新创建网关和连接时，跨界连接会停止工作，但你无需将任何 VM 或服务迁移到新的虚拟网络。 在配置网关时，如果进行了相应配置，VM 和服务仍可以通过负载均衡器与外界通信。
 
@@ -216,7 +211,7 @@ ms.lasthandoff: 12/18/2017
           <Subnet name="GatewaySubnet">
             <AddressPrefix>10.17.159.224/27</AddressPrefix>
           </Subnet>
-5. 如果以前的网关是站点到站点 VPN，则还必须将连接类型更改为 **“专用”**。
+5. 如果以前的网关是站点到站点 VPN，则还必须将连接类型更改为 “专用”  。
    
                  <Gateway>
                   <ConnectionsToLocalNetwork>

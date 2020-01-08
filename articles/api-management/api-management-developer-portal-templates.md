@@ -1,36 +1,39 @@
 ---
-title: "使用模板自定义 API 管理开发人员门户 - Azure | Microsoft 文档"
-description: "如何使用模板自定义 Azure API 管理开发人员门户。"
+title: 使用模板自定义 API 管理开发人员门户 - Azure | Microsoft 文档
+description: 如何使用模板自定义 Azure API 管理开发人员门户。
 services: api-management
-documentationcenter: 
+documentationcenter: ''
 author: vladvino
 manager: erikre
-editor: 
+editor: ''
 ms.assetid: a195675b-f7d0-4fc9-90bf-860e6f17ccf7
 ms.service: api-management
 ms.workload: mobile
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 01/09/2017
 ms.author: apimpm
-ms.openlocfilehash: 2bdb8c30ffa630f85d666f3a16ce2b9dcdab6492
-ms.sourcegitcommit: 059dae3d8a0e716adc95ad2296843a45745a415d
-ms.translationtype: HT
+ms.openlocfilehash: a8b250c45716146c505a803046b18bf5d05cf116
+ms.sourcegitcommit: 82499878a3d2a33a02a751d6e6e3800adbfa8c13
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/09/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70073773"
 ---
-# <a name="how-to-customize-the-azure-api-management-developer-portal-using-templates"></a>如何使用模板自定义 Azure API Management 开发人员门户
+# <a name="how-to-customize-the-azure-api-management-developer-portal-using-templates"></a>如何使用模板自定义 Azure API 管理开发人员门户
 
 在 Azure API 管理中自定义开发人员门户有三种基本方法：
 
 * [编辑静态页面内容和页面布局元素][modify-content-layout]
 * [跨开发人员门户更新页面元素所用的样式][customize-styles]
-* [修改门户生成的页面所用的模板][portal-templates]（在本指南中说明）
+* [修改门户生成的页面所用的模板][portal-templates](本指南中所述)
 
 模板用于自定义系统生成的开发人员门户页的内容（例如，API 文档、产品、用户身份验证等）。 使用 [DotLiquid](http://dotliquidmarkup.org/) 语法和一组提供的本地化字符串资源、图标和页面控件，可根据需要非常灵活地配置页面内容。
 
+[!INCLUDE [premium-dev-standard-basic.md](../../includes/api-management-availability-premium-dev-standard-basic.md)]
+
 ## <a name="developer-portal-templates-overview"></a>开发人员门户模板概述
+
 在以管理员身份登录时，可从“开发人员门户”编辑模板。 若要访问它，请先打开 Azure 门户，再单击 API 管理实例的服务工具栏中的“开发人员门户”。
 
 要访问开发人员门户模板，请单击左侧的自定义图标显示自定义菜单，并单击“模板”。
@@ -41,15 +44,15 @@ ms.lasthandoff: 02/09/2018
 
 ![开发人员门户模板][api-management-templates-menu]
 
-单击模板转到由该模板自定义的开发人员门户页面。 在此示例中，显示“产品列表”模板。 “产品列表”模板控制红色矩形所示的屏幕区域。 
+单击模板转到由该模板自定义的开发人员门户页面。 在此示例中，显示“产品列表”模板。 “产品列表”模板控制红色矩形所示的屏幕区域。
 
 ![产品列表模板][api-management-developer-portal-templates-overview]
 
-某些模板（如“用户配置文件”模板）自定义同一页面的不同部分。 
+某些模板（如“用户配置文件”模板）自定义同一页面的不同部分。
 
 ![用户配置文件模板][api-management-user-profile-templates]
 
-每个开发人员门户模板的编辑器都具有两个在页面底部显示的部分。 左侧显示模板的编辑窗格，右侧显示模板的数据模型。 
+每个开发人员门户模板的编辑器都具有两个在页面底部显示的部分。 左侧显示模板的编辑窗格，右侧显示模板的数据模型。
 
 模板编辑窗格包含标记，用于控制开发人员门户中的对应页面的外观和行为。 模板中的标记使用 [DotLiquid](http://dotliquidmarkup.org/) 语法。 DotLiquid 的一个流行编辑器是 [DotLiquid for Designers](https://github.com/dotliquid/dotliquid/wiki/DotLiquid-for-Designers)。 在编辑期间对模板所作的任何更改都实时显示在浏览器中，但在[保存](#to-save-a-template)并[发布](#to-publish-a-template)该模板之前对客户不可见。
 
@@ -114,7 +117,7 @@ ms.lasthandoff: 02/09/2018
         <li>
             <h3><a href="/products/{{product.id}}">{{product.title}}</a></h3>
             {{product.description}}
-        </li>    
+        </li>
     {% endfor %}
     </ul>
     <paging-control></paging-control>
@@ -163,9 +166,9 @@ ms.lasthandoff: 02/09/2018
 还原操作完成后，模板的以前发布的版本在开发人员门户中生效。
 
 ## <a name="to-restore-a-template-to-the-default-version"></a>将模板还原到默认版本
-将模板还原到其默认版本的过程分为两步。 首先必须还原模板，然后必须发布已还原的版本。
+将模板还原到其默认版本的过程分为两步。 首先，必须还原模板，然后必须发布还原后的版本。
 
-要将单个模板还原到默认版本，请在模板编辑器中单击“还原”。
+若要将单个模板还原到默认版本，请在模板编辑器中单击“还原”。
 
 ![还原模板][api-management-reset-template]
 
@@ -173,7 +176,7 @@ ms.lasthandoff: 02/09/2018
 
 ![确认][api-management-reset-template-confirm]
 
-要将所有模板还原到其默认版本，请单击模板列表中的“还原默认模板”。
+若要将所有模板还原到其默认版本，请单击模板列表中的“还原默认模板”。
 
 ![还原模板][api-management-restore-templates]
 
@@ -205,10 +208,3 @@ ms.lasthandoff: 02/09/2018
 [api-management-reset-template]: ./media/api-management-developer-portal-templates/api-management-reset-template.png
 [api-management-reset-template-confirm]: ./media/api-management-developer-portal-templates/api-management-reset-template-confirm.png
 [api-management-restore-templates]: ./media/api-management-developer-portal-templates/api-management-restore-templates.png
-
-
-
-
-
-
-

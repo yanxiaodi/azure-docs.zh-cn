@@ -1,5 +1,5 @@
 ---
-title: 使用 DataDog 监视 Azure Kubernetes 群集
+title: （已弃用）使用 DataDog 监视 Azure Kubernetes 群集
 description: 使用 DataDog 在 Azure 容器服务中监视 Kubernetes 群集
 services: container-service
 author: bburns
@@ -9,17 +9,18 @@ ms.topic: article
 ms.date: 12/09/2016
 ms.author: bburns
 ms.custom: mvc
-ms.openlocfilehash: 0a3f0baa4998dbc594023935575d659f7d45bbb9
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.openlocfilehash: 6a682c199b40035bfd44fc5611a7d44b49f7b3ab
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60712332"
 ---
-# <a name="monitor-an-azure-container-service-cluster-with-datadog"></a>通过 DataDog 监视 Azure 容器服务群集
+# <a name="deprecated-monitor-an-azure-container-service-cluster-with-datadog"></a>（已弃用）通过 DataDog 监视 Azure 容器服务群集
 
-[!INCLUDE [aks-preview-redirect.md](../../../includes/aks-preview-redirect.md)]
+[!INCLUDE [ACS deprecation](../../../includes/container-service-kubernetes-deprecation.md)]
 
-## <a name="prerequisites"></a>先决条件
+## <a name="prerequisites"></a>必备组件
 本演练假定用户已[使用 Azure 容器服务创建 Kubernetes 群集](container-service-kubernetes-walkthrough.md)，
 
 并假设已安装 `az` Azure CLI 和 `kubectl` 工具。

@@ -8,20 +8,20 @@ ms.assetid: 14762e82-76d9-41c4-ba9f-14a54da29c36
 ms.service: data-factory
 ms.workload: data-services
 ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/10/2018
 ms.author: abnarain
 robots: noindex
-ms.openlocfilehash: 7db5795132f5ca61c65a3cbd2caec1bccbf9a080
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: 865bfdae199bca7ebee888be527db239d34511d1
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60486458"
 ---
 # <a name="release-notes-for-data-management-gateway"></a>数据管理网关的发行说明
 > [!NOTE]
-> 本文适用于数据工厂版本 1（正式版 (GA)）。 如果使用数据工厂服务版本 2（即预览版），请参阅 [V2 中的自托管集成运行时](../create-self-hosted-integration-runtime.md)。
+> 本文适用于数据工厂版本 1。 如果使用当前版本数据工厂服务，请参阅 [V2 中的自承载集成运行时](../create-self-hosted-integration-runtime.md)。
 
 现代数据集成的一大挑战是将数据在本地和云之间进行移动。 数据工厂借助数据管理网关实现此集成，后者是一个可安装在本地以实现混合数据移动的代理。
 
@@ -47,7 +47,7 @@ ms.lasthandoff: 03/23/2018
 
 ## <a name="2963132"></a>2.9.6313.2
 ### <a name="enhancements-"></a>增强功能
--   可将 DNS 条目添加到白名单服务总线，而不是将防火墙中的所有 Azure IP 地址列入允许列表（如果需要）。 在此处了解更多详情。
+-   可将 DNS 条目添加到允许列表服务总线，而不是将防火墙中的所有 Azure IP 地址列入允许列表（如果需要）。 在此处了解更多详情。
 -   现在可以向/从最大 4.75 TB（这是块 Blob 支持的最大大小）的单块 Blob 复制数据。 （早期的限制为 195 GB）。
 -   已修复：在复制活动期间解压缩多个小文件时出现的内存不足问题。
 -   已修复：使用幂等性功能从 Document DB 复制到本地 SQL Server 时发生的索引超出范围问题。
@@ -103,7 +103,7 @@ ms.lasthandoff: 03/23/2018
 *  支持使用网关配置管理器设置网管的 HTTP 代理。 配置后，可通过 HTTP 代理访问 Azure Blob、Azure 表、Azure Data Lake 和 Document DB。
 *  在从/向 Azure Blob、Azure Data Lake Store、本地文件系统和本地 HDFS 复制数据时，支持对 TextFormat 进行标头处理。
 *  支持从追加 Blob、页 Blob 以及现已支持的块 Blob 复制数据。
-*  引入了一种新的网关状态“在线(受限)”，其指示网关主要功能正常工作，但对复制向导的交互操作支持例外。
+*  引入了一种新的网关状态“在线(受限)”  ，其指示网关主要功能正常工作，但对复制向导的交互操作支持例外。
 *  增强了使用注册密钥注册网关的可靠性。
 
 ## <a name="216040"></a>2.1.6040.
@@ -126,12 +126,12 @@ ms.lasthandoff: 03/23/2018
 
     *  已重新组织和简化控件。
 
-    *  可使用[无代码复制预览工具](data-factory-copy-data-wizard-tutorial.md)从存储中复制数据。 有关此功能的大体详细信息，请参阅[暂存复制](data-factory-copy-activity-performance.md#staged-copy)。
+    *  可使用[无代码复制工具](data-factory-copy-data-wizard-tutorial.md)从存储中复制数据。 有关此功能的大体详细信息，请参阅[暂存复制](data-factory-copy-activity-performance.md#staged-copy)。
 *  可使用数据管理网关将数据从本地 SQL Server 数据库直接传入 Azure 机器学习。
 
 *  性能提升
 
-    * 针对无代码复制预览工具中的 SQL Server 提升查看架构/预览的性能。
+    * 针对无代码复制工具中的 SQL Server 提升查看架构/预览的性能。
 
 ## <a name="11259531"></a>1.12.5953.1
 

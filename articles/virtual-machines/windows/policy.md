@@ -4,27 +4,27 @@ description: 如何将策略应用到 Azure 资源管理器 Windows 虚拟机
 services: virtual-machines-windows
 documentationcenter: ''
 author: singhkays
-manager: jeconnoc
+manager: gwallace
 editor: ''
 tags: azure-resource-manager
 ms.assetid: 0b71ba54-01db-43ad-9bca-8ab358ae141b
 ms.service: virtual-machines-windows
 ms.workload: infrastructure-services
 ms.tgt_pltfrm: vm-windows
-ms.devlang: na
 ms.topic: article
 ms.date: 08/02/2017
 ms.author: kasing
-ms.openlocfilehash: 7ec348bbd75bfce268d1e3d7a46b79397ee39f98
-ms.sourcegitcommit: 5b2ac9e6d8539c11ab0891b686b8afa12441a8f3
-ms.translationtype: HT
+ms.openlocfilehash: 172906c3b03b7c001763e8c374487a3ff33c8f07
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70088948"
 ---
 # <a name="apply-policies-to-windows-vms-with-azure-resource-manager"></a>使用 Azure 资源管理器向 Windows VM 应用策略
 通过使用策略，组织可以在整个企业中强制实施各种约定和规则。 强制实施所需行为有助于消除风险，同时为组织的成功做出贡献。 本文将介绍如何使用 Azure 资源管理器策略，为组织中的虚拟机定义相应行为。
 
-有关策略的简介，请参阅[什么是 Azure 策略？](../../azure-policy/azure-policy-introduction.md)。
+有关策略的简介，请参阅[什么是 Azure Policy？](../../governance/policy/overview.md)。
 
 ## <a name="permitted-virtual-machines"></a>允许的虚拟机
 若要确保组织的虚拟机与应用程序兼容，可以限制获准操作系统。 在以下策略示例中，只允许创建 Windows Server 2012 R2 数据中心虚拟机：
@@ -105,7 +105,7 @@ ms.lasthandoff: 04/06/2018
 }
 ```
 
-若要了解策略字段，请参阅[策略别名](../../azure-policy/policy-definition.md#aliases)。
+若要了解策略字段，请参阅[策略别名](../../governance/policy/concepts/definition-structure.md#aliases)。
 
 ## <a name="managed-disks"></a>托管磁盘
 
@@ -227,7 +227,7 @@ ms.lasthandoff: 04/06/2018
 
 ## <a name="azure-hybrid-use-benefit"></a>Azure 混合使用权益
 
-如果具有本地许可证，可在虚拟机上保存许可证费用。 如果没有许可证，应禁用此选项。 以下策略禁止使用 Azure 混合使用权益 (AHUB)：
+如果有本地许可证，可在虚拟机上保存许可证费用。 如果没有许可证，应禁用此选项。 以下策略禁止使用 Azure 混合使用权益 (AHUB)：
 
 ```json
 {
@@ -250,6 +250,6 @@ ms.lasthandoff: 04/06/2018
 ```
 
 ## <a name="next-steps"></a>后续步骤
-* 定义策略规则后（如上述示例所示），需要创建策略定义并将其分配给作用域。 作用域可以是订阅、资源组或资源。 若要分配策略，请参阅[使用 Azure 门户分配和管理资源策略](../../azure-policy/assign-policy-definition.md)、[使用 PowerShell 分配策略](../../azure-policy/assign-policy-definition-ps.md)或[使用 Azure CLI 分配策略](../../azure-policy/assign-policy-definition-cli.md)。
-* 有关资源策略的简介，请参阅[什么是 Azure 策略？](../../azure-policy/azure-policy-introduction.md)。
-* 有关企业可如何使用 Resource Manager 有效管理订阅的指南，请参阅 [Azure 企业基架 - 出于合规目的监管订阅](../../azure-resource-manager/resource-manager-subscription-governance.md)。
+* 定义策略规则后（如上述示例所示），需要创建策略定义并将其分配给作用域。 作用域可以是订阅、资源组或资源。 若要分配策略，请参阅[使用 Azure 门户分配和管理资源策略](../../governance/policy/assign-policy-portal.md)、[使用 PowerShell 分配策略](../../governance/policy/assign-policy-powershell.md)或[使用 Azure CLI 分配策略](../../governance/policy/assign-policy-azurecli.md)。
+* 有关资源策略的简介，请参阅[什么是 Azure Policy？](../../governance/policy/overview.md)。
+* 有关企业可如何使用 Resource Manager 有效管理订阅的指南，请参阅 [Azure 企业基架 - 出于合规目的监管订阅](/azure/architecture/cloud-adoption-guide/subscription-governance)。

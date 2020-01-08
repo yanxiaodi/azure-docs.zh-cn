@@ -1,27 +1,24 @@
 ---
-title: 操作 Spark 构建的机器学习模型 | Microsoft 文档
+title: 操作 Spark 构建的机器学习模型 - Team Data Science Process
 description: 如何使用 Python 加载 Azure Blob 存储 (WASB) 中存储的学习模型并为其评分。
 services: machine-learning
-documentationcenter: ''
-author: deguhath
-manager: jhubbard
+author: marktab
+manager: cgronlun
 editor: cgronlun
-ms.assetid: 626305a2-0abf-4642-afb0-dad0f6bd24e9
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 03/15/2017
-ms.author: deguhath
-ms.openlocfilehash: 928d29da4388372ccc3721c4bcccba5d2bbf5c48
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: dd0467479960df30b1d44aeaef7ed0ed0d6c2a87
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60253174"
 ---
 # <a name="operationalize-spark-built-machine-learning-models"></a>操作 Spark 构建的机器学习模型
-[!INCLUDE [machine-learning-spark-modeling](../../../includes/machine-learning-spark-modeling.md)]
 
 本主题演示如何在 HDInsight Spark 群集上使用 Python 操作已保存的机器学习模型 (ML)。 它介绍如何加载使用 Spark MLlib 生成并存储在 Azure Blob 存储 (WASB) 中的机器学习模型，以及如何使用同样存储在 WASB 中的数据集为它们评分。 它介绍如何预处理输入数据、使用 MLlib 工具包中的索引和编码函数转换特征，以及如何创建可用作 ML 模型评分的输入的标签点数据对象。 用于评分的模型包括线性回归、逻辑回归、随机林模型和梯度提升树模型。
 
@@ -35,7 +32,7 @@ ms.lasthandoff: 05/03/2018
 要修改适用于 Spark 1.6 的 Jupyter 笔记本以用于 HDInsight Spark 2.0 群集，请将 Python 代码文件替换为[此文件](https://github.com/Azure/Azure-MachineLearning-DataScience/blob/master/Misc/Spark/Python/Spark2.0_ConsumeRFCV_NYCReg.py)。 此代码演示如何使用在 Spark 2.0 中创建的模型。
 
 
-## <a name="prerequisites"></a>先决条件
+## <a name="prerequisites"></a>必备组件
 
 1. 需要一个 Azure 帐户和一个 Spark 1.6（或 Spark 2.0）HDInsight 群集来完成本演练。 有关如何满足这些要求的说明，请参阅[在 Azure HDInsight 上使用 Spark 的数据科学的概述](spark-overview.md)。 该主题还包含此处使用的 NYC 2013 出租车数据的说明以及有关如何在 Spark 群集上执行来自 Jupyter 笔记本的代码的说明。 
 2. 还必须在此处通过演练针对 Spark 1.6 群集或 Spark 2.0 笔记本的[使用 Spark 进行数据探索和建模](spark-data-exploration-modeling.md)主题，来创建要评分的机器学习模型。 
@@ -46,7 +43,7 @@ ms.lasthandoff: 05/03/2018
 ## <a name="setup-storage-locations-libraries-and-the-preset-spark-context"></a>设置：存储位置、库和预设 Spark 上下文
 Spark 能够读取和写入 Azure 存储 Blob (WASB)。 因此，存储在该处的任何现有数据都可以使用 Spark 处理，并将结果再次存储在 WASB 中。
 
-若要在 WASB 中保存模型或文件，需要正确指定路径。 可使用开头为“wasb///”的路径，引用附加到 Spark 群集的默认容器。 以下代码示例指定要读取的数据的位置和模型输出要保存到的模型存储目录的路径。 
+若要在 WASB 中保存模型或文件，需要正确指定路径。 可使用开头为“wasb///”  的路径，引用附加到 Spark 群集的默认容器。 以下代码示例指定要读取的数据的位置和模型输出要保存到的模型存储目录的路径。 
 
 ### <a name="set-directory-paths-for-storage-locations-in-wasb"></a>在 WASB 中为存储位置设置目录路径
 模型保存在：“wasb:///user/remoteuser/NYCTaxi/Models”。 如果未正确设置此路径，则不加载模型用于评分。
@@ -115,7 +112,7 @@ datetime.datetime(2016, 4, 25, 23, 56, 19, 229403)
 PySpark 内核提供一些预定义的“magic”，这是可以结合 %% 调用的特殊命令。 在这些代码示例中使用的此类命令有两个。
 
 * **%%local** 已指定后续行中的代码在本地执行。 代码必须是有效的 Python 代码。
-* **%%sql -o <variable name>** 
+* **%%sql -o \<variable name>** 
 * 针对 sqlContext 执行 Hive 查询。 如果传递了 -o 参数，则查询的结果以 Pandas 数据帧的形式保存在 %%local Python 上下文中。
 
 有关 Jupyter 笔记本内核和它们提供的预定义“magic”的详细信息，请参阅[适用于装有 HDInsight 上的 HDInsight Spark Linux 群集的 Jupyter 笔记本的内核](../../hdinsight/spark/apache-spark-jupyter-notebook-kernels.md)。
@@ -123,7 +120,7 @@ PySpark 内核提供一些预定义的“magic”，这是可以结合 %% 调用
 ## <a name="ingest-data-and-create-a-cleaned-data-frame"></a>引入数据并创建已清理的数据帧
 本部分包含引入要评分的数据所需的一系列任务的代码。 读入出租车行程和车费文件（存储为 .tsv 文件）的已加入的 0.1% 样本，并创建干净的数据帧。
 
-基于以下主题中提供的过程加入了出租车行程和车费文件：[运行中的 Team Data Science Process：使用 HDInsight Hadoop 群集](hive-walkthrough.md)主题。
+根据以下主题中提供的过程联接了出租车行程和车费文件：[运行中的 Team Data Science Process：使用 HDInsight Hadoop 群集](hive-walkthrough.md)。
 
     # INGEST DATA AND CREATE A CLEANED DATA FRAME
 
@@ -193,9 +190,9 @@ PySpark 内核提供一些预定义的“magic”，这是可以结合 %% 调用
 ### <a name="feature-transformation-index-and-encode-categorical-features-for-input-into-models-for-scoring"></a>特征转换：为分类特征编制索引并编码以输入到模型中进行评分
 本部分介绍如何使用 `StringIndexer` 为分类数据编制索引，并使用 `OneHotEncoder` 为特征编码以输入到模型中。
 
-[StringIndexer](http://spark.apache.org/docs/latest/ml-features.html#stringindexer) 将标签的字符串列编码为标签索引列。 索引按标签频率排序。 
+[StringIndexer](https://spark.apache.org/docs/latest/ml-features.html#stringindexer) 将标签的字符串列编码为标签索引列。 索引按标签频率排序。 
 
-[OneHotEncoder](http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder) 将标签索引列映射到二元向量列，该列最多只有单个值。 此编码允许将预期连续值特征的算法（如逻辑回归）应用到分类特征。
+[OneHotEncoder](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder) 将标签索引列映射到二元向量列，该列最多只有单个值。 此编码允许将预期连续值特征的算法（如逻辑回归）应用到分类特征。
 
     #INDEX AND ONE-HOT ENCODE CATEGORICAL FEATURES
 
@@ -260,7 +257,7 @@ PySpark 内核提供一些预定义的“magic”，这是可以结合 %% 调用
 执行以上单元格所花的时间：5.37 秒
 
 ### <a name="create-rdd-objects-with-feature-arrays-for-input-into-models"></a>使用特征数组创建 RDD 对象以输入到模型中
-本部分包含的代码显示如何将分类文本数据编制索引为标签点数据类型，并对其进行独热编码，以便它可用于训练和测试 MLlib 逻辑回归和基于树的模型。 索引数据存储在[弹性分布式数据集 (RDD)](http://spark.apache.org/docs/latest/api/java/org/apache/spark/rdd/RDD.html) 对象中。 这些是 Spark 中的基本抽象。 RDD 对象表示可与 Spark 并行处理的不可变、已分区的元素集合。
+本部分包含的代码显示如何将分类文本数据编制索引为标签点数据类型，并对其进行独热编码，以便它可用于训练和测试 MLlib 逻辑回归和基于树的模型。 索引数据存储在[弹性分布式数据集 (RDD)](https://spark.apache.org/docs/latest/api/java/org/apache/spark/rdd/RDD.html) 对象中。 这些是 Spark 中的基本抽象。 RDD 对象表示可与 Spark 并行处理的不可变、已分区的元素集合。
 
 它还包含显示如何使用 MLlib 提供的 `StandardScalar` 缩放数据的代码，用于使用随机梯度下降 (SGD) 的线性回归，随机梯度下降是一种用于训练范围广泛的机器学习模型的流行算法。 [StandardScaler](https://spark.apache.org/docs/latest/api/python/pyspark.mllib.html#pyspark.mllib.feature.StandardScaler) 用于将特征缩放到单位方差。 特征缩放（也称为数据规范化）确保具有广泛分散的值的特征不在目标函数中得到过多权重。 
 
@@ -282,7 +279,7 @@ PySpark 内核提供一些预定义的“magic”，这是可以结合 %% 调用
                              line.trip_distance, line.fare_amount])
         return  features
 
-    # ONE-HOT ENCODING OF CATEGORICAL TEXT FEATURES FOR INPUT INTO LOGISTIC RERESSION MODELS
+    # ONE-HOT ENCODING OF CATEGORICAL TEXT FEATURES FOR INPUT INTO LOGISTIC REGRESSION MODELS
     def parseRowOneHotBinary(line):
         features = np.concatenate((np.array([line.pickup_hour, line.weekday, line.passenger_count,
                                             line.trip_time_in_secs, line.trip_distance, line.fare_amount]), 
@@ -400,9 +397,9 @@ PySpark 内核提供一些预定义的“magic”，这是可以结合 %% 调用
 ## <a name="score-classification-and-regression-random-forest-models"></a>为分类和回归随机林模型评分
 本部分中的代码显示如何加载已保存在 Azure Blob 存储中的分类和回归随机林模型、使用标准分类器和回归测量为其性能评分，然后将结果保存回 Blob 存储。
 
-[随机林](http://spark.apache.org/docs/latest/mllib-ensembles.html#Random-Forests)是决策树的整体。  它们组合了许多决策树以降低过度拟合的风险。 随机林可处理分类特征、扩展到多类分类设置、不需要功能缩放，并且能够捕获非线性和特征交互。 随机林是用于分类和回归的最成功的机器学习模型之一。
+[随机林](https://spark.apache.org/docs/latest/mllib-ensembles.html#Random-Forests)是决策树的整体。  它们组合了许多决策树以降低过度拟合的风险。 随机林可处理分类特征、扩展到多类分类设置、不需要功能缩放，并且能够捕获非线性和特征交互。 随机林是用于分类和回归的最成功的机器学习模型之一。
 
-[spark.mllib](http://spark.apache.org/mllib/) 支持将随机林用于使用连续和分类特征的二元和多类分类以及回归。 
+[spark.mllib](https://spark.apache.org/mllib/) 支持将随机林用于使用连续和分类特征的二元和多类分类以及回归。 
 
     # SCORE RANDOM FOREST MODELS FOR CLASSIFICATION AND REGRESSION
 
@@ -448,7 +445,7 @@ PySpark 内核提供一些预定义的“magic”，这是可以结合 %% 调用
 
 **spark.mllib** 支持将 GBT 用于使用连续和分类特征的二元分类和回归。 
 
-[梯度提升树](http://spark.apache.org/docs/latest/ml-classification-regression.html#gradient-boosted-trees-gbts) (GBT) 是决策树的整体。 GBT 以迭代方式训练决策树以最大程度减少损失函数。 GBT 可处理分类特征、不需要特征缩放，并且能够捕获非线性和特征交互。 它们还可以在多类分类设置中使用。
+[梯度提升树](https://spark.apache.org/docs/latest/ml-classification-regression.html#gradient-boosted-trees-gbts) (GBT) 是决策树的整体。 GBT 以迭代方式训练决策树以最大程度减少损失函数。 GBT 可处理分类特征、不需要特征缩放，并且能够捕获非线性和特征交互。 它们还可以在多类分类设置中使用。
 
     # SCORE GRADIENT BOOSTING TREE MODELS FOR CLASSIFICATION AND REGRESSION
 
@@ -514,17 +511,17 @@ PySpark 内核提供一些预定义的“magic”，这是可以结合 %% 调用
 
 **输出：**
 
-logisticRegFileLoc：LogisticRegressionWithLBFGS_2016-05-0317_22_38.953814.txt
+logisticRegFileLoc:LogisticRegressionWithLBFGS_2016-05-0317_22_38.953814.txt
 
-linearRegFileLoc：LinearRegressionWithSGD_2016-05-0317_22_58.878949
+linearRegFileLoc:LinearRegressionWithSGD_2016-05-0317_22_58.878949
 
-randomForestClassificationFileLoc：RandomForestClassification_2016-05-0317_23_15.939247.txt
+randomForestClassificationFileLoc:RandomForestClassification_2016-05-0317_23_15.939247.txt
 
-randomForestRegFileLoc：RandomForestRegression_2016-05-0317_23_31.459140.txt
+randomForestRegFileLoc:RandomForestRegression_2016-05-0317_23_31.459140.txt
 
-BoostedTreeClassificationFileLoc：GradientBoostingTreeClassification_2016-05-0317_23_49.648334.txt
+BoostedTreeClassificationFileLoc:GradientBoostingTreeClassification_2016-05-0317_23_49.648334.txt
 
-BoostedTreeRegressionFileLoc：GradientBoostingTreeRegression_2016-05-0317_23_56.860740.txt
+BoostedTreeRegressionFileLoc:GradientBoostingTreeRegression_2016-05-0317_23_56.860740.txt
 
 ## <a name="consume-spark-models-through-a-web-interface"></a>通过 Web 界面使用 Spark 模型
 Spark 提供使用名为 Livy 的组件通过 REST 界面远程提交批处理作业或交互式查询的机制。 Livy 在 HDInsight Spark 群集上默认处于启用状态。 有关 Livy 的详细信息，请参阅：[使用 Livy 远程提交 Spark 作业](../../hdinsight/spark/apache-spark-livy-rest-interface.md)。 
@@ -558,7 +555,7 @@ Spark 提供使用名为 Livy 的组件通过 REST 界面远程提交批处理�
 
     import os
 
-    # OLDER HTTP LIBRARIES USED HERE INSTEAD OF THE REQUEST LIBRARY AS THEY ARE AVAILBLE BY DEFAULT
+    # OLDER HTTP LIBRARIES USED HERE INSTEAD OF THE REQUEST LIBRARY AS THEY ARE AVAILABLE BY DEFAULT
     import httplib, urllib, base64
 
     # REPLACE VALUE WITH ONES FOR YOUR SPARK CLUSTER
@@ -583,12 +580,12 @@ Spark 提供使用名为 Livy 的组件通过 REST 界面远程提交批处理�
 
 如果首选无代码客户端体验，请使用 [Azure 逻辑应用](https://azure.microsoft.com/documentation/services/app-service/logic/)通过在**逻辑应用设计器**上定义一个 HTTP 操作并设置其参数来调用 Spark 批处理评分。 
 
-* 从 Azure 门户，通过依次选择“+新建” -> “Web + 移动” -> “逻辑应用”创建新的逻辑应用。 
+* 从 Azure 门户，通过依次选择“+新建”   -> “Web + 移动”   -> “逻辑应用”  创建新的逻辑应用。 
 * 若要显示**逻辑应用设计器**，请输入逻辑应用和应用服务计划的名称。
 * 选择某个 HTTP 操作并输入下图中显示的参数：
 
 ![逻辑应用设计器](./media/spark-model-consumption/spark-logica-app-client.png)
 
 ## <a name="whats-next"></a>后续步骤
-**交叉验证和超参数扫描**：请参阅[使用 Spark 进行高级数据探索和建模](spark-advanced-data-exploration-modeling.md)了解如何使用交叉验证和超参数扫描训练模型。
+**交叉验证和超参数扫描**：参阅[使用 Spark 进行高级数据探索和建模](spark-advanced-data-exploration-modeling.md)，了解如何使用交叉验证和超参数扫描训练模型。
 

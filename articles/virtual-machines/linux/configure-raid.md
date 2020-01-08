@@ -4,22 +4,23 @@ description: 了解如何使用 mdadm 在 Azure 中的 Linux 上配置 RAID。
 services: virtual-machines-linux
 documentationcenter: na
 author: rickstercdn
-manager: jeconnoc
+manager: gwallace
 editor: tysonn
 tag: azure-service-management,azure-resource-manager
 ms.assetid: f3cb2786-bda6-4d2c-9aaf-2db80f490feb
 ms.service: virtual-machines-linux
 ms.workload: infrastructure-services
 ms.tgt_pltfrm: vm-linux
-ms.devlang: na
 ms.topic: article
 ms.date: 02/02/2017
 ms.author: rclaus
-ms.openlocfilehash: d6e831692da37645e264c6674f1ba54bb16d25d4
-ms.sourcegitcommit: 5b2ac9e6d8539c11ab0891b686b8afa12441a8f3
-ms.translationtype: HT
+ms.subservice: disks
+ms.openlocfilehash: d0658af090d9a3f39bee69f5103a78a329fe189c
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70083795"
 ---
 # <a name="configure-software-raid-on-linux"></a>在 Linux 上配置软件 RAID
 在 Azure 中的 Linux 虚拟机上使用软件 RAID 将多个附加的数据磁盘呈现为一个单一的 RAID 设备，是一种常见的情形。 通常，使用这种方法可以改进性能，而且与只使用单独一块磁盘相比，吞吐量也会有所改进。
@@ -29,23 +30,23 @@ ms.lasthandoff: 04/06/2018
 
 ## <a name="install-the-mdadm-utility"></a>安装 mdadm 实用程序
 * **Ubuntu**
-```bash
-sudo apt-get update
-sudo apt-get install mdadm
-```
+  ```bash
+  sudo apt-get update
+  sudo apt-get install mdadm
+  ```
 
 * **CentOS 和 Oracle Linux**
-```bash
-sudo yum install mdadm
-```
+  ```bash
+  sudo yum install mdadm
+  ```
 
 * **SLES 和 openSUSE**
-```bash  
-zypper install mdadm
-```
+  ```bash  
+  zypper install mdadm
+  ```
 
 ## <a name="create-the-disk-partitions"></a>创建磁盘分区
-本示例会在 /dev/sdc 上创建一个单一的磁盘分区。 该新磁盘分区将命名为 /dev/sdc1。
+在此示例中，我们在 /dev/sdc 上创建单个磁盘分区。 该新磁盘分区将命名为 /dev/sdc1。
 
 1. 启动 `fdisk`，以开始创建分区
 
@@ -61,13 +62,13 @@ zypper install mdadm
                     sectors (command 'u').
     ```
 
-2. 在提示符下按 n 键，创建**新**分区：
+1. 在提示符下按 n 键，创建**新**分区：
 
     ```bash
     Command (m for help): n
     ```
 
-3. 接下来，按 p 键，创建**主**分区：
+1. 接下来，按 p 键，创建**主**分区：
 
     ```bash 
     Command action
@@ -75,27 +76,27 @@ zypper install mdadm
             p   primary partition (1-4)
     ```
 
-4. 按 1 键，以选择分区号 1：
+1. 按 1 键，以选择分区号 1：
 
     ```bash
     Partition number (1-4): 1
     ```
 
-5. 选择新分区的起始点，或者按 `<enter>` 键接受默认值，将该分区置于驱动器可用空间的开始处：
+1. 选择新分区的起始点，或者按 `<enter>` 键接受默认值，将该分区置于驱动器可用空间的开始处：
 
     ```bash   
     First cylinder (1-1305, default 1):
     Using default value 1
     ```
 
-6. 选择分区大小，例如，键入“+10G”以创建一个 10 GB 的分区。 或者，按 `<enter>` 键创建一个跨整个驱动器的单一分区：
+1. 选择分区大小，例如，键入“+10G”以创建一个 10 GB 的分区。 或者，按 `<enter>` 键创建一个跨整个驱动器的单一分区：
 
     ```bash   
     Last cylinder, +cylinders or +size{K,M,G} (1-1305, default 1305): 
     Using default value 1305
     ```
 
-7. 接下来，将该分区的 ID 和**类型**从默认的 ID“83”(Linux) 更改为 ID“fd”(Linux raid auto)：
+1. 接下来，将该分区的 ID 和**类型**从默认的 ID“83”(Linux) 更改为 ID“fd”(Linux raid auto)：
 
     ```bash  
     Command (m for help): t
@@ -103,7 +104,7 @@ zypper install mdadm
     Hex code (type L to list codes): fd
     ```
 
-8. 最后，将分区表写入驱动器并退出 fdisk：
+1. 最后，将分区表写入驱动器并退出 fdisk：
 
     ```bash   
     Command (m for help): w
@@ -111,28 +112,28 @@ zypper install mdadm
     ```
 
 ## <a name="create-the-raid-array"></a>创建 RAID 阵列
-1. 以下示例将给位于三个单独的数据磁盘（sdc1、sdd1、sde1）上的三个分区设置带区（RAID 级别 0）。  运行此命令之后，会创建一个名为 **/dev/md127** 的新 RAID 设备。 另请注意，如果这些数据磁盘以前属于另一失效的 RAID 阵列，则可能有必要将 `--force` 参数添加到 `mdadm` 命令：
+1. 以下示例将给位于三个不同数据磁盘（sdc1、sdd1、sde1）上的三个分区设置带区（RAID 级别 0）。  运行此命令之后，会创建一个名为 **/dev/md127** 的新 RAID 设备。 另请注意，如果这些数据磁盘以前属于另一失效的 RAID 阵列，则可能有必要将 `--force` 参数添加到 `mdadm` 命令：
 
     ```bash  
     sudo mdadm --create /dev/md127 --level 0 --raid-devices 3 \
         /dev/sdc1 /dev/sdd1 /dev/sde1
     ```
 
-2. 在新 RAID 设备上创建文件系统
+1. 在新 RAID 设备上创建文件系统
    
-    a. **CentOS、Oracle Linux、SLES 12、openSUSE 和 Ubuntu**
+    **CentOS、Oracle Linux、SLES 12、openSUSE 和 Ubuntu**
 
     ```bash   
     sudo mkfs -t ext4 /dev/md127
     ```
    
-    b. **SLES 11**
+    **SLES 11**
 
     ```bash
     sudo mkfs -t ext3 /dev/md127
     ```
    
-    c. **SLES 11** - 启用 boot.md 并创建 mdadm.conf
+    **SLES 11** - 启用 boot.md 并创建 mdadm.conf
 
     ```bash
     sudo -i chkconfig --add boot.md
@@ -142,18 +143,18 @@ zypper install mdadm
    > [!NOTE]
    > 在 SUSE 系统中完成这些更改之后，可能需要重新引导。 在 SLES 12 中，此步骤*不*是必需的。
    > 
-   > 
+   
 
 ## <a name="add-the-new-file-system-to-etcfstab"></a>将新文件系统添加到 /etc/fstab
 > [!IMPORTANT]
 > 错误地编辑 /etc/fstab 文件可能会导致系统无法引导。 如果没有把握，请参考分发的文档来获取有关如何正确编辑该文件的信息。 另外，建议在编辑之前创建 /etc/fstab 文件的备份。
 
-1. 为新文件系统创建需要的装入点，例如：
+1. 为新文件系统创建所需的安装点，例如：
 
     ```bash
     sudo mkdir /data
     ```
-2. 在编辑 /etc/fstab 时，**UUID** 应该用于引用文件系统而不是设备名称。  使用 `blkid` 实用程序来确定新文件系统的 UUID：
+1. 在编辑 /etc/fstab 时，**UUID** 应该用于引用文件系统而不是设备名称。  使用 `blkid` 实用程序来确定新文件系统的 UUID：
 
     ```bash   
     sudo /sbin/blkid
@@ -161,7 +162,7 @@ zypper install mdadm
     /dev/md127: UUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" TYPE="ext4"
     ```
 
-3. 在文本编辑器中打开 /etc/fstab 并为新文件系统添加新条目，例如：
+1. 在文本编辑器中打开 /etc/fstab，并为新文件系统添加条目，例如：
 
     ```bash   
     UUID=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee  /data  ext4  defaults  0  2
@@ -175,7 +176,7 @@ zypper install mdadm
    
     然后，保存并关闭 /etc/fstab。
 
-4. 测试该 /etc/fstab 条目是否正确：
+1. 测试该 /etc/fstab 条目是否正确：
 
     ```bash  
     sudo mount -a
@@ -191,11 +192,11 @@ zypper install mdadm
     /dev/md127 on /data type ext4 (rw)
     ```
 
-5. （可选）故障安全引导参数
+1. （可选）故障安全引导参数
    
     **fstab 配置**
    
-    许多分发版包括 `nobootwait` 或 `nofail` 装入参数，这些参数可以添加到 /etc/fstab 文件中。 这些参数允许装入某特定文件系统时失败，并且允许 Linux 系统继续引导，即使它无法正确装入 RAID 文件系统也无妨。 请参阅分发版文档，了解有关这些参数的详细信息。
+    许多分发版包括 `nobootwait` 或 `nofail` 装载参数，这些参数可以添加到 /etc/fstab 文件中。 这些参数允许装入某特定文件系统时失败，并且允许 Linux 系统继续引导，即使它无法正确装入 RAID 文件系统也无妨。 请参阅分发版文档，了解有关这些参数的详细信息。
    
     示例 (Ubuntu)：
 
@@ -207,14 +208,14 @@ zypper install mdadm
    
     除了以上参数，还可以使用内核参数“`bootdegraded=true`”来启用系统引导功能，即使发现 RAID 已损坏或降级（例如，由于无意中从虚拟机中移除了数据驱动器而发现这种情况）也无妨。 默认情况下，这样也可能会导致系统无法引导。
    
-    请参阅分发的文档，了解如何正确编辑内核参数。 例如，在许多分发（CentOS、Oracle Linux、SLES 11）中，可以手动将这些参数添加到“`/boot/grub/menu.lst`”文件。  在 Ubuntu 上，此参数可添加到“/etc/default/grub”上的 `GRUB_CMDLINE_LINUX_DEFAULT` 变量中。
+    请参阅发行版文档，了解如何正确编辑内核参数。 例如，在许多分发（CentOS、Oracle Linux、SLES 11）中，可以手动将这些参数添加到“`/boot/grub/menu.lst`”文件。  在 Ubuntu 上，此参数可添加到“/etc/default/grub”上的 `GRUB_CMDLINE_LINUX_DEFAULT` 变量中。
 
 
 ## <a name="trimunmap-support"></a>TRIM/UNMAP 支持
 某些 Linux 内核支持 TRIM/UNMAP 操作以放弃磁盘上未使用的块。 这些操作主要适用于标准存储，以通知 Azure 已删除的页不再有效可以丢弃。 如果创建了较大的文件，然后将其删除，则放弃页可以节省成本。
 
 > [!NOTE]
-> 如果将数组的块区大小设置为小于默认值 (512 KB)，则 RAID 可能不会发出丢弃命令。 这是因为“主机”上的 unmap 粒度也是 512KB。 如果通过 mdadm 的 `--chunk=` 参数修改数组的块区大小，则 TRIM/unmap 请求可能被内核忽略。
+> 如果将阵列的区块大小设置为小于默认值 (512 KB)，则 RAID 可能不会发出丢弃命令。 这是因为“主机”上的 unmap 粒度也是 512KB。 如果通过 mdadm 的 `--chunk=` 参数修改数组的块区大小，则 TRIM/unmap 请求可能被内核忽略。
 
 在 Linux VM 中有两种方法可以启用 TRIM 支持。 与往常一样，有关建议的方法，请参阅分发：
 

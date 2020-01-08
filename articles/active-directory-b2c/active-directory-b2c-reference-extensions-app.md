@@ -1,25 +1,25 @@
 ---
-title: 扩展应用 - Azure AD B2C | Microsoft 文档
-description: 还原 b2c-extensions-app
+title: Azure Active Directory B2C 中的扩展应用程序 | Microsoft Docs
+description: 还原 b2c-extensions-app。
 services: active-directory-b2c
-documentationcenter: ''
-author: davidmu1
-manager: mtillman
-editor: ''
-ms.service: active-directory-b2c
+author: mmacy
+manager: celestedg
+ms.service: active-directory
 ms.workload: identity
-ms.topic: article
-ms.date: 9/06/2017
-ms.author: davidmu
-ms.openlocfilehash: c07aba797118af2cc8283509944eda8b41d499b3
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 09/06/2017
+ms.author: marsma
+ms.subservice: B2C
+ms.openlocfilehash: e5d38d8d791c6b932d8a28a898f2e2b80caff7ac
+ms.sourcegitcommit: cf438e4b4e351b64fd0320bf17cc02489e61406a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 07/08/2019
+ms.locfileid: "67654070"
 ---
 # <a name="azure-ad-b2c-extensions-app"></a>Azure AD B2C：扩展应用
 
-创建 Azure AD B2C 目录后，将在新目录内部自动创建一个名为 `b2c-extensions-app. Do not modify. Used by AADB2C for storing user data.` 的应用。 此应用称为 b2c-extensions-app，可在“应用注册”中显示。 Azure AD B2C 服务使用它来存储用户和自定义属性的相关信息。 如果删除了此应用，Azure AD B2C 将无法正常工作，你的生产环境也会受到影响。
+创建 Azure AD B2C 目录后，将在新目录内部自动创建一个名为 `b2c-extensions-app. Do not modify. Used by AADB2C for storing user data.` 的应用。 此应用称为 b2c-extensions-app  ，可在“应用注册”  中显示。 Azure AD B2C 服务使用它来存储用户和自定义属性的相关信息。 如果删除了此应用，Azure AD B2C 将无法正常工作，你的生产环境也会受到影响。
 
 > [!IMPORTANT]
 > 请勿删除 b2c-extensions-app，除非你计划立刻删除你的租户。 如果此应用被删除 30 天以上，用户信息将永久性丢失。
@@ -28,9 +28,9 @@ ms.lasthandoff: 03/23/2018
 
 要验证此 b2c-extensions-app 是否存在：
 
-1. 在 Azure AD B2C 租户内，单击左侧导航菜单中的“所有服务”。
-1. 搜索并打开“应用注册”。
-1. 查找以“b2c-extensions-app”开头的应用
+1. 在 Azure AD B2C 租户内，单击左侧导航菜单中的“所有服务”  。
+1. 搜索并打开“应用注册”  。
+1. 查找以“b2c-extensions-app”  开头的应用
 
 ## <a name="recover-the-extensions-app"></a>恢复此扩展应用
 
@@ -40,7 +40,7 @@ ms.lasthandoff: 03/23/2018
 1. 以要还原的已删除应用所在的 Azure AD B2C 目录的全局管理员身份登录到此网站。 此全局管理员必须具有类似于以下形式的电子邮件地址：`username@{yourTenant}.onmicrosoft.com`。
 1. 对 URL `https://graph.windows.net/myorganization/deletedApplications` 发出 HTTP GET，其中 api-version=1.6。 此操作将列出过去 30 天内删除的所有应用程序。
 1. 在列表中找到名称以“b2c-extensions-app”开头的应用程序，并复制其 `objectid` 属性值。
-1. 对 URL `https://graph.windows.net/myorganization/deletedApplications/{OBJECTID}/restore` 发出 HTTP POST。 将此 URL 的 `{OBJECTID}` 部分替换为之前步骤中的 `objectid`。 
+1. 对 URL `https://graph.windows.net/myorganization/deletedApplications/{OBJECTID}/restore` 发出 HTTP POST。 将此 URL 的 `{OBJECTID}` 部分替换为之前步骤中的 `objectid`。
 
 现在应该可以在 Azure 门户中[查看还原的应用](#verifying-that-the-extensions-app-is-present)。
 

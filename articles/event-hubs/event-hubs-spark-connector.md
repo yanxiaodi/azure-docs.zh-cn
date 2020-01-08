@@ -1,5 +1,5 @@
 ---
-title: 将 Apache Spark 与 Azure 事件中心集成 | Microsoft Docs
+title: 与 Apache Spark 集成 - Azure 事件中心 | Microsoft Docs
 description: 与 Apache Spark 集成可对事件中心启用结构化流
 services: event-hubs
 documentationcenter: na
@@ -11,29 +11,30 @@ ms.devlang: java
 ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: na
-ms.date: 03/05/2018
+ms.custom: seodec18
+ms.date: 12/06/2018
 ms.author: shvija
-ms.openlocfilehash: 09790852d28f2f68e854b37256ca1c8edba992e6
-ms.sourcegitcommit: 6e43006c88d5e1b9461e65a73b8888340077e8a2
-ms.translationtype: HT
+ms.openlocfilehash: 605669a740663040ab7a167bf266fe1940123afc
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/01/2018
-ms.locfileid: "32311288"
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60343386"
 ---
 # <a name="integrating-apache-spark-with-azure-event-hubs"></a>将 Apache Spark 与 Azure 事件中心集成
 
-Azure 事件中心与 [Apache Spark](https://spark.apache.org/) 无缝集成，可构建分布式流式处理应用程序。 此集成支持 [Spark Core](http://spark.apache.org/docs/latest/rdd-programming-guide.html)、[Spark 流式处理](http://spark.apache.org/docs/latest/streaming-programming-guide.html)、[结构化流](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html)。 Apache Spark 事件中心连接器可在 [GitHub](https://github.com/Azure/azure-event-hubs-spark) 上使用。 此库还可用于 [Maven 中央存储库](http://search.maven.org/#artifactdetails%7Ccom.microsoft.azure%7Cazure-eventhubs-spark_2.11%7C2.1.6%7C)中的 Marven 项目。
+Azure 事件中心与 [Apache Spark](https://spark.apache.org/) 无缝集成，可构建分布式流式处理应用程序。 此集成支持 [Spark Core](https://spark.apache.org/docs/latest/rdd-programming-guide.html)、[Spark 流式处理](https://spark.apache.org/docs/latest/streaming-programming-guide.html)和[结构化流](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html)。 Apache Spark 事件中心连接器可在 [GitHub](https://github.com/Azure/azure-event-hubs-spark) 上使用。 此库还可用于 [Maven 中央存储库](https://search.maven.org/#artifactdetails%7Ccom.microsoft.azure%7Cazure-eventhubs-spark_2.11%7C2.1.6%7C)中的 Marven 项目。
 
-本文演示如何在 [Azure Databrick](https://azure.microsoft.com/services/databricks/) 中创建持续应用程序。 虽然本文使用 [Azure Databricks](https://azure.microsoft.com/services/databricks/)，但 [HDInsight](../hdinsight/spark/apache-spark-overview.md) 还提供了 Spark 群集。
+本文介绍如何在 [Azure Databricks](https://azure.microsoft.com/services/databricks/) 中创建持续应用程序。 虽然本文使用 Azure Databricks，但 [HDInsight](../hdinsight/spark/apache-spark-overview.md) 还提供了 Spark 群集。
 
-以下示例使用两个 Scala notebook：一个用于流式处理来自事件中心的事件，另一个用于将事件发送回事件中心。
+本文中的示例使用两个 Scala notebook：一个用于流式处理来自事件中心的事件，另一个用于将事件发送回事件中心。
 
-## <a name="prerequisites"></a>先决条件
+## <a name="prerequisites"></a>必备组件
 
-* Azure 订阅。 如果没有，请[创建一个免费帐户](https://azure.microsoft.com/free/?ref=microsoft.com&utm_source=microsoft.com&utm_medium=docs&utm_campaign=visualstudio)
-* 事件中心实例。 如果没有，请[创建一个](event-hubs-create.md)
-* [Azure Databricks](https://azure.microsoft.com/services/databricks/) 实例。 如果没有，请[创建一个](../azure-databricks/quickstart-create-databricks-workspace-portal.md)
-* [使用 maven 坐标创建库](https://docs.databricks.com/user-guide/libraries.html#upload-a-maven-package-or-spark-package)：`com.microsoft.azure:azure‐eventhubs‐spark_2.11:2.3.1`
+* Azure 订阅。 如果没有，请[创建一个免费帐户](https://azure.microsoft.com/free/?ref=microsoft.com&utm_source=microsoft.com&utm_medium=docs&utm_campaign=visualstudio)。
+* 事件中心实例。 如果没有，请[创建一个](event-hubs-create.md)。
+* [Azure Databricks](https://azure.microsoft.com/services/databricks/) 实例。 如果没有，请[创建一个](../azure-databricks/quickstart-create-databricks-workspace-portal.md)。
+* [使用 maven 坐标创建库](https://docs.databricks.com/user-guide/libraries.html#upload-a-maven-package-or-spark-package)：`com.microsoft.azure:azure‐eventhubs‐spark_2.11:2.3.1`。
 
 使用以下代码流式处理来自事件中心的事件：
 
@@ -61,7 +62,7 @@ eventhubs.writeStream
   .start()
   .awaitTermination()
 ```
-以下示例代码使用 Spark 批处理 API 将事件发送到事件中心。 还可以编写流查询将事件发送到事件中心。
+以下代码使用 Spark 批处理 API 将事件发送到事件中心。 还可以编写流式处理查询将事件发送到事件中心：
 
 ```scala
 import org.apache.spark.eventhubs._
@@ -81,7 +82,7 @@ val bodyColumn = concat(lit("random nunmber: "), rand()).as("body")
 val df = spark.range(200).select(bodyColumn)
 df.write
   .format("eventhubs")
-  .options(eventHubsConf.toMap)
+  .options(ehConf.toMap)
   .save() 
 ```
 

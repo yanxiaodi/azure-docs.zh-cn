@@ -4,7 +4,7 @@ description: Service Fabric 备份和还原的概念文档
 services: service-fabric
 documentationcenter: .net
 author: mcoskun
-manager: timlt
+manager: chackdan
 editor: subramar,zhol
 ms.assetid: 91ea6ca4-cc2a-4155-9823-dcbd0b996349
 ms.service: service-fabric
@@ -12,21 +12,26 @@ ms.devlang: dotnet
 ms.topic: conceptual
 ms.tgt_pltfrm: na
 ms.workload: na
-ms.date: 11/6/2017
+ms.date: 10/29/2018
 ms.author: mcoskun
-ms.openlocfilehash: c90231d58ca8eb562aadb916c8667e2bee700b3a
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: cd40f59cfa7846911c68206c3bc1e85a770b0fcc
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60723832"
 ---
-# <a name="back-up-and-restore-reliable-services-and-reliable-actors"></a>备份和还原 Reliable Services 及 Reliable Actors
+# <a name="backup-and-restore-reliable-services-and-reliable-actors"></a>备份和还原 Reliable Services 及 Reliable Actors
 Azure Service Fabric 是一个高可用性平台，用于复制多个节点中的状态以维护此高可用性。  因此，即使群集中的一个节点出现故障，服务也将继续可用。 尽管此平台提供的此内置冗余对某些情况来说可能已足够用了，但在特定情况下，仍需要服务备份数据（到外部存储）。
 
 > [!NOTE]
 > 请务必备份和还原数据（并测试它是否正常运行），以便从数据丢失情形中恢复。
 > 
+
+> [!NOTE]
+> Microsoft 建议使用[定期备份和还原](service-fabric-backuprestoreservice-quickstart-azurecluster.md)来配置可靠有状态服务和 Reliable Actors 的数据备份。 
 > 
+
 
 例如，服务可能要备份数据，以防止出现以下情况：
 
@@ -81,7 +86,7 @@ await this.BackupAsync(myBackupDescription);
 - 副本传递了 `MaxAccumulatedBackupLogSizeInMB` 限制。
 
 用户可以通过配置 `MinLogSizeInMB` 或 `TruncationThresholdFactor` 增加能够执行增量备份的可能性。
-请注意，增加这些值会增加每个副本磁盘的使用。
+增加这些值会增加每个副本磁盘的使用。
 有关详细信息，请参阅 [Reliable Services 配置](service-fabric-reliable-services-configuration.md)。
 
 `BackupInfo` 提供有关备份的信息，包括运行时保存备份的文件夹位置 (`BackupInfo.Directory`)。 此回调函数可以将 `BackupInfo.Directory` 移到外部存储或其他位置。  此函数也返回一个布尔值，此值表示是否已成功将备份文件夹移动到其目标位置。
@@ -153,7 +158,7 @@ protected override async Task<bool> OnDataLossAsync(RestoreContext restoreCtx, C
 > 
 
 ## <a name="deleted-or-lost-service"></a>删除或丢失服务
-如果删除了一个服务，则在还原数据之前必须首先重新创建此服务。  请务必创建具有相同配置的服务，例如，相同的分区方案，以便可以无缝地还原数据。  一旦启动服务，就必须在此服务的每个分区上调用用于还原数据的 API（上面的 `OnDataLossAsync`）。 实现此操作的一种方法是在每个分区上使用 `[FabricClient.TestManagementClient.StartPartitionDataLossAsync](https://msdn.microsoft.com/library/mt693569.aspx)`。  
+如果删除了一个服务，则在还原数据之前必须首先重新创建此服务。  请务必创建具有相同配置的服务，例如，相同的分区方案，以便可以无缝地还原数据。  一旦启动服务，就必须在此服务的每个分区上调用用于还原数据的 API（上面的 `OnDataLossAsync`）。 实现此操作的一种方法是在每个分区上使用 [FabricClient.TestManagementClient.StartPartitionDataLossAsync](https://msdn.microsoft.com/library/mt693569.aspx)。  
 
 从这个角度来看，实现操作与上述情况相同。 每个分区需要从外部存储中还原最新的相关备份。 值得注意的一点是，分区 ID 现在可能已更改，因为运行时是动态创建分区 ID。 因此，此服务需要还原相应的分区信息和服务名称来标识每个分区要还原的正确的最新备份。
 
@@ -166,7 +171,7 @@ protected override async Task<bool> OnDataLossAsync(RestoreContext restoreCtx, C
 
 在检测到这样一个导致数据损坏的严重 bug 之后首先要做的是在应用程序级别冻结服务，并且如果可以，请升级到没有此 bug 的应用程序代码版本。  但是，即使修复了服务代码，数据仍可能是损坏的，因此可能需要还原数据。  在此情况下，还原最新备份可能不足以解决问题，因为此最新备份可能已损坏。  因此，需要查找在数据被损坏之前创建的最新备份。
 
-如果不确定哪些备份已损坏，那么可以部署一个新的 Service Fabric 群集，并还原受影响分区的备份，正如上面的“删除或丢失服务”情况一样。  针对每个分区，从最新备份到最旧备份开始还原。 找到一个未被损坏的备份时，移动或删除此分区的比此备份更新的所有备份。 对每个分区重复此过程。 此时，如果在生产群集中的分区上调用 `OnDataLossAsync`，在外部存储中找到的最新备份将是通过上述过程选取的备份。
+如果不确定哪些备份已损坏，那么可以部署一个新的 Service Fabric 群集，并还原受影响分区的备份，正如上面的“删除或丢失服务”情况一样。  针对每个分区，从最新备份到最旧备份开始还原。 找到一个未被损坏的备份时，移动或删除此分区的较新（比此备份更新）的所有备份。 对每个分区重复此过程。 此时，如果在生产群集中的分区上调用 `OnDataLossAsync`，在外部存储中找到的最新备份将是通过上述过程选取的备份。
 
 现在，可使用“删除或丢失服务”部分中的步骤来将服务的状态还原到错误代码损坏此状态之前的状态。
 
@@ -175,7 +180,7 @@ protected override async Task<bool> OnDataLossAsync(RestoreContext restoreCtx, C
   - 还原时，要还原的备份状态可能早于数据丢失前分区的状态。 因此，只能将还原作为最后的办法来恢复尽可能多的数据。
   - 表示备份文件夹路径和备份文件夹内的文件路径的字符串可以大于 255 个字符，具体取决于 FabricDataRoot 路径和应用程序类型名称的长度。 这会导致某些 .NET 方法（如 `Directory.Move`）引发 `PathTooLongException` 异常。 一种解决方法是直接调用 kernel32 API，如 `CopyFile`。
 
-## <a name="backup-and-restore-reliable-actors"></a>备份和还原 Reliable Actors
+## <a name="back-up-and-restore-reliable-actors"></a>备份和还原 Reliable Actors
 
 
 Reliable Actors 框架在 Reliable Services 的基础之上构建。 承载着执行组件的 ActorService 是有状态的可靠服务。 因此，Reliable Services 中提供的所有备份和还原功能也可用于 Reliable Actors（状态提供程序特定的行为除外）。 由于会基于每个分区执行备份，因此该分区中所有执行组件的状态都会进行备份（还原也类似，会基于每个分区进行）。 要执行备份/还原，服务所有者应创建一个派生自 ActorService 类的自定义执行组件服务类，并像之前部分所述的 Reliable Services 一样进行备份/还原。
@@ -183,13 +188,13 @@ Reliable Actors 框架在 Reliable Services 的基础之上构建。 承载着�
 ```csharp
 class MyCustomActorService : ActorService
 {
-     public MyCustomActorService(StatefulServiceContext context, ActorTypeInformation actorTypeInfo)
-            : base(context, actorTypeInfo)
-     {                  
-     }
+    public MyCustomActorService(StatefulServiceContext context, ActorTypeInformation actorTypeInfo)
+          : base(context, actorTypeInfo)
+    {
+    }
     
     //
-   // Method overrides and other code.
+    // Method overrides and other code.
     //
 }
 ```
@@ -198,7 +203,7 @@ class MyCustomActorService : ActorService
 
 ```csharp
 ActorRuntime.RegisterActorAsync<MyActor>(
-   (context, typeInfo) => new MyCustomActorService(context, typeInfo)).GetAwaiter().GetResult();
+    (context, typeInfo) => new MyCustomActorService(context, typeInfo)).GetAwaiter().GetResult();
 ```
 
 Reliable Actors 的默认状态提供程序是 `KvsActorStateProvider`。 默认情况下，未为 `KvsActorStateProvider` 启用增量备份。 可以通过在其构造函数中使用相应设置创建 `KvsActorStateProvider`，然后将其传递给 ActorService 构造函数来启用增量备份，如下面的代码片段中所示：
@@ -206,13 +211,13 @@ Reliable Actors 的默认状态提供程序是 `KvsActorStateProvider`。 默认
 ```csharp
 class MyCustomActorService : ActorService
 {
-     public MyCustomActorService(StatefulServiceContext context, ActorTypeInformation actorTypeInfo)
-            : base(context, actorTypeInfo, null, null, new KvsActorStateProvider(true)) // Enable incremental backup
-     {                  
-     }
+    public MyCustomActorService(StatefulServiceContext context, ActorTypeInformation actorTypeInfo)
+          : base(context, actorTypeInfo, null, null, new KvsActorStateProvider(true)) // Enable incremental backup
+    {
+    }
     
     //
-   // Method overrides and other code.
+    // Method overrides and other code.
     //
 }
 ```
@@ -222,7 +227,7 @@ class MyCustomActorService : ActorService
   - 副本在变为主副本后从未执行过完整备份。
   - 自上次执行备份后，一些日志记录被截断。
 
-启用增量备份后，`KvsActorStateProvider` 未使用循环缓冲区管理其日志记录和定期截取它。 如果在 45 分钟的时间内用户未执行备份，则系统会自动截断日志记录。 可以通过在 `KvsActorStateProvider` 构造函数中指定 `logTrunctationIntervalInMinutes` 来配置此间隔（与启用增量备份时类似）。 如果主副本需要通过发送其所有数据来生成另一个副本，日志记录也可能会被截断。
+启用增量备份后，`KvsActorStateProvider` 未使用循环缓冲区管理其日志记录和定期截取它。 如果在 45 分钟的时间内用户未执行备份，则系统会自动截断日志记录。 可以通过在 `KvsActorStateProvider` 构造函数中指定 `logTruncationIntervalInMinutes` 来配置此间隔（与启用增量备份时类似）。 如果主副本需要通过发送其所有数据来生成另一个副本，日志记录也可能会被截断。
 
 从备份链进行还原时，与 Reliable Services 类似，BackupFolderPath 应包含子目录（其中一个子目录包含完整备份，其他子目录包含增量备份）。 如果备份链验证失败，还原 API 将引发 FabricException 并显示相应的错误消息。 
 
@@ -230,7 +235,7 @@ class MyCustomActorService : ActorService
 > `KvsActorStateProvider` 目前会忽略 RestorePolicy.Safe 选项。 计划在将来的版本中支持此功能。
 > 
 
-## <a name="testing-backup-and-restore"></a>测试备份和还原
+## <a name="testing-back-up-and-restore"></a>测试备份和还原
 请务必确保关键数据正在进行备份，并可进行还原。 为此，可在 PowerShell 中调用会导致特定分区丢失数据的 `Start-ServiceFabricPartitionDataLoss` cmdlet，以测试服务的数据备份和还原功能是否按预期运行。  此外，也可以通过编程方式调用数据丢失，并从该事件中还原。
 
 > [!NOTE]

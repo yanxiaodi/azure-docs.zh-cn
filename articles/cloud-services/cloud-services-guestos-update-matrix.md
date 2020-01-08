@@ -4,25 +4,23 @@ description: 有关 Azure 云服务来宾 OS 的最新发行新闻以及 SDK 兼
 services: cloud-services
 documentationcenter: na
 author: raiye
-manager: timlt
 editor: ''
 ms.assetid: 6306cafe-1153-44c7-8554-623b03d59a34
 ms.service: cloud-services
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: tbd
-ms.date: 5/4/2018
+ms.date: 9/4/2019
 ms.author: raiye
-ms.openlocfilehash: e97b5535ac635fb5982b4dc6fb384414e3a2cfc7
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 9e93cb6cf57a42463e631332fb4714457b9b675f
+ms.sourcegitcommit: 32242bf7144c98a7d357712e75b1aefcf93a40cc
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
-ms.locfileid: "33765767"
+ms.lasthandoff: 09/04/2019
+ms.locfileid: "70275493"
 ---
 # <a name="azure-guest-os-releases-and-sdk-compatibility-matrix"></a>Azure 来宾 OS 版本和 SDK 兼容性对照表
-提供适用于云服务的最新 Azure 来宾 OS 版本的最新信息。 此信息可帮助在禁用来宾 OS 之前规划升级路径。 如果根据 [Azure 来宾 OS 更新设置][Azure Guest OS Update Settings]中所述将角色配置为使用自动进行来宾 OS 更新，则不一定要阅读本页面。
+提供适用于云服务的最新 Azure 来宾 OS 版本的最新信息。 此信息可帮助在禁用来宾 OS 之前规划升级路径。 如果根据 [Azure 来宾 OS 更新设置][Azure Guest OS Update Settings]中所述将角色配置为使用*自动*进行来宾 OS 更新，则不一定要阅读本页面。
 
 > [!IMPORTANT]
 > 本页面适用于在来宾 OS 顶层运行的云服务 Web 角色和辅助角色， 而**不适用于** IaaS 虚拟机。
@@ -36,164 +34,180 @@ ms.locfileid: "33765767"
 >
 
 > [!IMPORTANT]
-> 从 11 月的推出开始，仅来宾 OS 的最新 2 个版本受到支持，并在 Azure 门户中提供。
+> 仅来宾 OS 的最新 2 个版本受到支持，并在 Azure 门户中提供。
 >
 >
 
-不太确定什么是来宾 OS 或者来宾 OS 的工作原理？ 请阅读[此部分](#how-it-works)。
+不确定如何更新来宾 OS？ 请查阅[此文][cloud updates]。
 
 ## <a name="news-updates"></a>新闻更新
-###### <a name="may-4-2018"></a>**2018 年 5 月 4 日**
+
+###### <a name="september-4-2019"></a>**2019年9月4日**
+8 月版来宾 OS 已发布。
+
+###### <a name="july-26-2019"></a>**2019年7月26日**
+7 月版来宾 OS 已发布。
+
+###### <a name="july-8-2019"></a>**2019 年 7 月 8 日**
+6 月版来宾 OS 已发布。
+
+###### <a name="june-6-2019"></a>**2019 年 6 月 6 日**
+5 月版来宾 OS 已发布。
+
+###### <a name="may-7-2019"></a>**2019 年 5 月 7 日**
 4 月版来宾 OS 已发布。
 
-###### <a name="april-6-2018"></a>**2018 年 4 月 6 日**
+###### <a name="march-26-2019"></a>**2019 年 3 月 26 日**
 3 月版来宾 OS 已发布。
 
-###### <a name="march-19-2018"></a>**2018 年 3 月 19 日**
+###### <a name="march-12-2019"></a>**2019 年 3 月 12 日**
 1 月版来宾 OS 已发布。
 
-###### <a name="january-29-2018"></a>**2018 年 1 月 29 日**
-1 月来宾 OS 已针对 OS 系列 2 (WA-GUEST-OS-2.70_201801-01) 和 3 (WA-GUEST-OS-3.57_201801-01) 发布
+###### <a name="february-5-2019"></a>**2019 年 2 月 5 日**
+1 月版来宾 OS 已发布。
 
-###### <a name="january-4-2018"></a>**2018 年 1 月 4 日**
-1 月来宾 OS 已针对 OS 系列 4 (WA-GUEST-OS-4.50_201801-01) 和 5 (WA-GUEST-OS-5.15_201801-01) 发布，包含重要的安全修补程序。  
+###### <a name="january-24-2019"></a>**2019 年 1 月 24 日**
+系列 6 来宾 OS (Windows Server 2019) 已发布。
 
-###### <a name="january-4-2018"></a>**2018 年 1 月 4 日**
+###### <a name="january-7-2019"></a>**2019 年 1 月 7 日**
 12 月版来宾 OS 已发布。
 
-###### <a name="december-14-2017"></a>**2017 年 12 月 14 日**
+###### <a name="december-14-2018"></a>**2018 年 12 月 14 日**
 11 月版来宾 OS 已发布。
 
-###### <a name="november-8-2017"></a>2017 年 11 月 8 日
+###### <a name="november-8-2018"></a>**2018 年 11 月 8 日**
 10 月版来宾 OS 已发布。
 
-###### <a name="october-6-2017"></a>**2017 年 10 月 6日**
-9 月版来宾 OS 已发布。 对于 2016 年 9 月版本的 Windows Server，默认启用 netfx3。 在以下情况下，客户应在其 OnStart 中添加“dism /online /disable-feature /featurename:netfx3”：客户工作流要求客户使用 4.x 运行时运行 .NET 2.x 应用，或者客户运行了 .NET 2.x 应用，处理了错误，然后运行了 .NET 4.x 应用。
+###### <a name="october-12-2018"></a>**2018 年 10 月12 日**
+9 月版来宾 OS 已发布。
 
-###### <a name="september-14-2017"></a>2017 年 9 月 14 日
-9 月版来宾 OS 在 9 月 14 日开始推出，预计于 10 月 9 日正式发行。
+## <a name="releases"></a>发布
+
+## <a name="family-6-releases"></a>系列 6 发行版
+**Windows Server 2019**
+
+已安装的 .NET Framework：3.5、4.7.2
+
+> [!NOTE]
+> Windows Azure SDK for .NET 3.0 可在[此处][Windows Azure SDK]下载。
+>
+>安装步骤：
+>1. 请卸载任何旧版本的 MicrosoftAzureAuthoringTools*.msi
+>2. 安装[用于 .NET 的 Azure SDK - 3.0][Windows Azure SDK]
+>3. 重启计算机
+>4. 创建新的云服务项目并添加单个辅助角色
+>5. 将 OS 系列更改为 6 并生成一个包
+>6. 使用 Azure 门户或 Visual Studio 将该包部署到 Azure
+>
 
 
+| 配置字符串 | 发布日期 | 停用日期 |
+| --- | --- | --- |
+| WA-_201908- |  2019年8月4日  |  Post 6.12  |  
+| WA-_201907-6.9-01 |2019年7月26日 |Post 6.11 |
+|~~WA-_201906-6.8-01~~|2019 年 7 月 8 日 |2019年8月4日 |
+|~~WA-OS-6.7 _201905-01~~ |2019 年 6 月 6日 |2019年7月26日 |
+|~~WA-GUEST-OS-6.6_201904-01~~ |2019 年 5 月 7 日 |2019 年 7 月 8 日 |
+|~~WA-GUEST-OS-6.5_201903-01~~ |2019 年 3 月 26 日 |2019 年 6 月 6日 |
+|~~WA-GUEST-OS-6.4_201902-01~~ |2019 年 3 月 12 日 |2019 年 5 月 7 日 |
+|~~WA-GUEST-OS-6.3_201901-01~~ |2019 年 2 月 5日 |2019 年 3 月 26 日 |
+|~~WA-GUEST-OS-6.2_201812-01~~ |2019 年 1 月 24 日 |2019 年 3 月 12 日 |
+|~~WA-GUEST-OS-6.1_201811-01~~ |2019 年 1 月 24 日 |2019 年 2 月 5日 |
 
-## <a name="releases"></a>发行版本
 ## <a name="family-5-releases"></a>系列 5 发行版本
 **Windows Server 2016**
 
-安装的 .NET Framework：4.0、4.5、4.5.1、4.5.2、4.6、4.6.1、4.6.2
+已安装的 .NET Framework：3.5、4。6
 
 > [!NOTE]
-> 标有 * 的日期可随时更改。
->
 > OS 系列 5 的 RDP 密码至少必须有 10 个字符。
 >
 
-| 配置字符串 | 发行日期 | 停用日期 | 失效日期 |
-| --- | --- | --- | --- |
-| WA-GUEST-OS-5.18_201804-01 |2018 年 5 月 4 日 |发布 5.20 |TBD |
-| WA-GUEST-OS-5.17_201803-01 |2018 年 4 月 6 日 |5.19 发行后 |TBD |
-|~~WA-GUEST-OS-5.16_201802-01~~ |2018 年 3 月 12 日 |2018 年 5 月 4 日 |TBD |
-|~~WA-GUEST-OS-5.15_201801-01~~ |2018 年 1 月 4 日 |2018 年 4 月 6 日 |TBD |
-|~~WA-GUEST-OS-5.14_201712-01~~ |2018 年 1 月 4 日 |2018 年 3 月 12 日 |TBD |
-|~~WA-GUEST-OS-5.13_201711-01~~ |2017 年 12 月 14 日 |2018 年 1 月 4 日|TBD |
-|~~WA-GUEST-OS-5.12_201710-02~~ |2017 年 11 月 8 日 |2018 年 1 月 4 日 |TBD |
-|~~WA-GUEST-OS-5.11_201709-01~~ |2017 年 10 月 6日 |2017 年 12 月 14 日 |TBD |
-|~~WA-GUEST-OS-5.10_201708-01~~ |2017 年 8 月 24 日 |2017 年 12 月 14 日 |TBD |
-|~~~~WA-GUEST-OS-5.9_201707-01 |2017 年 8 月 3 日 |2017 年 11 月 8 日 |TBD |
-|~~WA-GUEST-OS-5.8_201706-01~~ |2017 年 7 月 7日 |2017 年 10 月 6日 |TBD |
-|~~WA-GUEST-OS-5.7_201705-01~~ |2017 年 6 月 5日 |2017 年 8 月 24 日 |TBD |
-|~~WA-GUEST-OS-5.6_201704-01~~ |2017 年 5 月 9 日 |2017 年 8 月 3 日 |TBD |
 
+| 配置字符串 | 发布日期 | 停用日期 |
+| --- | --- | --- |
+| WA-5.34 _201908-01  |  2019年8月4日  |  Post 5.36  |  
+| WA-5.33 _201907-01 |2019年7月26日 |Post 5.35 |  
+|~~WA-5.32 _201906-01~~|2019 年 7 月 8 日 |2019年8月4日 |
+|~~WA-5.31 _201905-01~~ |2019 年 6 月 6日 |2019年7月26日 |
+|~~WA-GUEST-OS-5.30_201904-01~~ |2019 年 5 月 7 日 |2019 年 7 月 8 日 |
+|~~WA-GUEST-OS-5.29_201903-01~~ |2019 年 3 月 26 日 |2019 年 6 月 6日 |
+|~~WA-GUEST-OS-5.28_201902-01~~ |2019 年 3 月 12 日 |2019 年 5 月 7 日 |
+|~~WA-GUEST-OS-5.27_201901-01~~ |2019 年 2 月 5日 |2019 年 3 月 26 日 |
+|~~WA-GUEST-OS-5.26_201812-01~~ |2019 年 1 月 7 日 |2019 年 3 月 12 日 |
+|~~WA-GUEST-OS-5.25_201811-01~~ |2018 年 12 月 14 日 |2019 年 2 月 5日 |
+|~~WA-GUEST-OS-5.24_201810-01~~ |2018 年 11 月 8 日 |2019 年 1 月 7 日 |
+|~~WA-GUEST-OS-5.23_201809-01~~ |2018 年 10 月 12 日 |2018 年 12 月 14 日 |
 
 ## <a name="family-4-releases"></a>系列 4 发行版本
 **Windows Server 2012 R2**
 
-已安装的 .NET Framework：4.0、4.5、4.5.1、4.5.2
+已安装的 .NET Framework：3.5、4.5.1、4.5.2
 
-> [!NOTE]
-> 标有 * 的日期可随时更改
->
->
-
-| 配置字符串 | 发行日期 | 停用日期 | 失效日期 |
-| --- | --- | --- | --- |
-| WA-GUEST-OS-4.53_201804-01 |2018 年 5 月 4 日 |发布 4.55 |TBD |
-| WA-GUEST-OS-4.52_201803-01 |2018 年 4 月 6 日 |4.54 发行后 |TBD |
-|~~WA-GUEST-OS-4.51_201802-01~~ |2018 年 3 月 12 日 |2018 年 5 月 4 日 |TBD |
-|~~WA-GUEST-OS-4.50_201801-01~~ |2018 年 1 月 4 日 |2018 年 4 月 6 日 |TBD |
-|~~WA-GUEST-OS-4.49_201712-01~~ |2018 年 1 月 4 日 |2018 年 3 月 12 日 |TBD |
-|~~WA-GUEST-OS-4.48_201711-01~~ |2017 年 12 月 14 日 |2018 年 1 月 4 日 |TBD |
-|~~WA-GUEST-OS-4.47_201710-02~~ |2017 年 11 月 8 日 |2018 年 1 月 4 日 |TBD |
-|~~WA-GUEST-OS-4.46_201709-01~~ |2017 年 10 月 6日 |2017 年 12 月 14 日 |TBD |
-|~~WA-GUEST-OS-4.45_201708-01~~ |2017 年 8 月 24 日 |2017 年 12 月 14 日 |TBD |
-|~~~~WA-GUEST-OS-4.44_201707-01 |2017 年 8 月 3 日 |2017 年 11 月 8 日 |TBD |
-|~~WA-GUEST-OS-4.43_201706-01~~ |2017 年 7 月 7日 |2017 年 10 月 6日 |TBD |
-|~~WA-GUEST-OS-4.42_201705-01~~ |2017 年 6 月 5日 |2017 年 8 月 24 日 |TBD |
-|~~WA-GUEST-OS-4.41_201704-01~~ |2017 年 5 月 9 日 |2017 年 8 月 3 日 |TBD |
-
+| 配置字符串 | 发布日期 | 停用日期 |
+| --- | --- | --- |
+| WA-4.69 _201908-01 |  2019年8月4日  |  Post 4.71  |  
+| WA-4.68 _201907-01 | 2019年7月26日  |Post 4.70 |
+|~~WA-4.67 _201906-01~~|2019 年 7 月 8 日 |2019年8月4日 |
+|~~WA-4.66 _201905-01~~ |2019 年 6 月 6日 |2019年7月26日 |
+|~~WA-GUEST-OS-4.65_201904-01~~ |2019 年 5 月 7 日 |2019 年 7 月 8 日 |
+|~~WA-GUEST-OS-4.64_201903-01~~ |2019 年 3 月 26 日 |2019 年 6 月 6日 |
+|~~WA-GUEST-OS-4.63_201902-01~~ |2019 年 3 月 12 日 |2019 年 5 月 7 日 |
+|~~WA-GUEST-OS-4.62_201901-01~~ |2019 年 2 月 5日 |2019 年 3 月 26 日 |
+|~~WA-GUEST-OS-4.61_201812-01~~ |2019 年 1 月 7 日 |2019 年 3 月 12 日 |
+|~~WA-GUEST-OS-4.60_201811-01~~ |2018 年 12 月 14 日 |2019 年 2 月 5日 |
+|~~WA-GUEST-OS-4.59_201810-01~~ |2018 年 11 月 8 日 |2019 年 1 月 7 日 |
+|~~WA-GUEST-OS-4.58_201809-01~~ |2018 年 10 月 12 日 |2018 年 12 月 14 日 |
 
 ## <a name="family-3-releases"></a>系列 3 发行版本
 **Windows Server 2012**
 
-已安装的 .NET Framework：4.0、4.5、4.5.1、4.5.2
+已安装的 .NET Framework：3.5、4.5
 
-> [!NOTE]
-> 标有 * 的日期可随时更改
->
->
-
-| 配置字符串 | 发行日期 | 停用日期 | 失效日期 |
-| --- | --- | --- | --- |
-| WA-GUEST-OS-3.60_201804-01 |2018 年 5 月 4 日 |发布 3.62 |TBD |
-| WA-GUEST-OS-3.59_201803-01 |2018 年 4 月 6 日 |3.61 发行后 |TBD |
-|~~WA-GUEST-OS-3.58_201802-01~~ |2018 年 3 月 19 日 |2018 年 5 月 4 日 |TBD |
-|~~WA-GUEST-OS-3.57_201801-01~~ |2018 年 1 月 29 日 |2018 年 4 月 6 日 |TBD |
-|~~WA-GUEST-OS-3.56_201712-01~~ |2018 年 1 月 4 日 |2018 年 3 月 19 日 |TBD |
-|~~WA-GUEST-OS-3.55_201711-01~~ |2017 年 12 月 14 日 |2018 年 1 月 29 日 |TBD |
-|~~WA-GUEST-OS-3.54_201710-02~~ |2017 年 11 月 8 日 |2018 年 1 月 4 日 |TBD |
-|~~WA-GUEST-OS-3.53_201709-01~~ |2017 年 10 月 6日 |2017 年 12 月 14 日 |TBD |
-|~~WA-GUEST-OS-3.52_201708-01~~ |2017 年 8 月 24 日 |2017 年 12 月 14 日 |TBD |
-|~~~~WA-GUEST-OS-3.51_201707-01 |2017 年 8 月 3 日 |2017 年 11 月 8 日 |TBD |
-|~~WA-GUEST-OS-3.50_201706-01~~ |2017 年 7 月 7日 |2017 年 10 月 6日 |TBD |
-|~~WA-GUEST-OS-3.49_201705-01~~ |2017 年 6 月 5日 |2017 年 8 月 24 日 |TBD |
-|~~WA-GUEST-OS-3.48_201704-01~~ |2017 年 5 月 9 日 |2017 年 8 月 3 日 |TBD |
-
+| 配置字符串 | 发布日期 | 停用日期 |
+| --- | --- | --- |
+| WA-3.76 _201908-01 |  2019年8月4日  |  Post 3.78  |  
+| WA-OS-3.75 _201907-01 | 2019年7月26日 |Post 3.77 |
+|~~WA-3.74 _201906-01~~|2019 年 7 月 8 日 |2019年8月4日 |
+|~~WA-3.73 _201905-01~~ |2019 年 6 月 6日 |2019年7月26日 |
+|~~WA-GUEST-OS-3.72_201904-01~~ |2019 年 5 月 7 日 |2019 年 7 月 8 日 |
+|~~WA-GUEST-OS-3.71_201903-01~~ |2019 年 3 月 26 日 |2019 年 6 月 6日 |
+|~~WA-GUEST-OS-3.70_201902-01~~ |2019 年 3 月 12 日 |2019 年 5 月 7 日 |
+|~~WA-GUEST-OS-3.69_201901-01~~ |2019 年 2 月 5日 |2019 年 3 月 26 日 |
+|~~WA-GUEST-OS-3.68_201812-01~~ |2019 年 1 月 7 日 |2019 年 3 月 12 日 |
+|~~WA-GUEST-OS-3.67_201811-01~~ |2018 年 12 月 14 日 |2019 年 2 月 5日 |
+|~~WA-GUEST-OS-3.66_201810-01~~ |2018 年 11 月 8 日 |2019 年 1 月 7 日 |
+|~~WA-GUEST-OS-3.65_201809-01~~ |2018 年 10 月 12 日 |2018 年 12 月 14 日 |
 
 ## <a name="family-2-releases"></a>系列 2 发行版本
 **Windows Server 2008 R2 SP1**
 
-已安装的 .NET Framework：3.5、4.0、4.5、4.5.1、4.5.2
+已安装的 .NET Framework：3.5（包括 2.0 和 3.0）、4.5
 
-> [!NOTE]
-> 标有 * 的日期可随时更改
->
->
-
-| 配置字符串 | 发行日期 | 停用日期 | 失效日期 |
-| --- | --- | --- | --- |
-| WA-GUEST-OS-2.73_201804-01 |2018 年 5 月 4 日 |发布 2.75 |TBD |
-| WA-GUEST-OS-2.72_201803-01 |2018 年 4 月 6 日 |2.74 发行后 |TBD |
-|~~WA-GUEST-OS-2.71_201802-01~~ |2018 年 3 月 12 日 |2018 年 5 月 4 日 |TBD |
-|~~WA-GUEST-OS-2.70_201801-01~~ |2018 年 1 月 29 日 |2018 年 4 月 6 日 |TBD |
-|~~WA-GUEST-OS-2.69_201712-01~~ |2018 年 1 月 4 日 |2018 年 3 月 12 日 |TBD |
-|~~WA-GUEST-OS-2.68_201711-01~~ |2017 年 12 月 14 日 |2018 年 1 月 29 日 |TBD |
-|~~WA-GUEST-OS-2.67_201710-02~~ |2017 年 11 月 8 日 |2018 年 1 月 4 日 |TBD |
-|~~WA-GUEST-OS-2.66_201709-01~~ |2017 年 10 月 6日 |2017 年 12 月 14 日 |TBD |
-|~~WA-GUEST-OS-2.65_201708-01~~ |2017 年 8 月 24 日 |2017 年 12 月 14 日 |TBD |
-|~~~~WA-GUEST-OS-2.64_201707-01 |2017 年 8 月 3 日 |2017 年 11 月 8 日 |TBD |
-|~~WA-GUEST-OS-2.63_201706-01~~ |2017 年 7 月 7日 |2017 年 10 月 6日 |TBD |
-|~~WA-GUEST-OS-2.62_201705-01~~ |2017 年 6 月 5日 |2017 年 8 月 24 日 |TBD |
-|~~WA-GUEST-OS-2.61_201704-01~~ |2017 年 5 月 9 日 |2017 年 8 月 3 日 |TBD |
-|~~WA-GUEST-OS-2.60_201703-01~~ |2017 年 4 月 10 日 |2017 年 7 月 7日 |TBD |
-
+| 配置字符串 | 发布日期 | 停用日期 |
+| --- | --- | --- |
+| WA-2.89 _201908-01 |  2019年8月4日  |  Post 2.91  |  
+| WA-2.88 _201907-01 | 2019年7月26日 |Post 2.90 |
+|~~WA-2.87 _201906-01~~|2019 年 7 月 8 日 |2019年8月4日 |
+|~~WA-2.86 _201905-01~~ |2019 年 6 月 6日 |2019年7月26日 |
+|~~WA-GUEST-OS-2.85_201904-01~~ |2019 年 5 月 7 日 |2019 年 7 月 8 日 |
+|~~WA-GUEST-OS-2.84_201903-01~~ |2019 年 3 月 26 日 |2019 年 6 月 6日 |
+|~~WA-GUEST-OS-2.83_201902-01~~ |2019 年 3 月 12 日 |2019 年 5 月 7 日 |
+|~~WA-GUEST-OS-2.82_201901-01~~ |2019 年 2 月 5日 |2019 年 3 月 26 日 |
+|~~WA-GUEST-OS-2.81_201812-01~~ |2019 年 1 月 7 日 |2019 年 3 月 12 日 |
+|~~WA-GUEST-OS-2.80_201811-01~~ |2018 年 12 月 14 日 |2019 年 2 月 5日 |
+|~~WA-GUEST-OS-2.79_201810-01~~ |2018 年 11 月 8 日 |2019 年 1 月 7 日 |
+|~~WA-GUEST-OS-2.78_201809-01~~ |2018 年 10 月 12 日 |2018 年 12 月 14 日 |
 
 ## <a name="msrc-patch-updates"></a>MSRC 修补程序更新
 [此处][patches]提供了每月来宾 OS 版本随附的修补程序列表。
 
 ## <a name="sdk-support"></a>SDK 支持
-尽管 [Azure SDK 停用策略][retire policy sdk]指出仅支持 2.2 以上的版本，但特定的来宾 OS 允许使用早期版本。 应该始终使用最新的受支持 SDK。
+尽管 [Azure SDK 停用策略][retire policy sdk]指出仅支持 2.2 以上的版本，但特定的来宾 OS 系列允许使用早期版本。 应该始终使用最新的受支持 SDK。
 
 | 来宾 OS 系列 | 兼容的 SDK 版本 |
 | --- | --- |
+| 6 |版本 2.9.6+ |
 | 5 |版本 2.9.5.1+ |
 | 4 |版本 2.1+ |
 | 3 |版本 1.8+ |
@@ -205,7 +219,7 @@ ms.locfileid: "33765767"
 
 在停用日期与失效日期之间有一个缓冲期，可让你轻松地从一个来宾 OS 版本转换到新的版本。 如果正在使用*自动更新版*的来宾 OS，则始终可以获得最新版本，而无需担心失效的问题。
 
-**到期**日期过后，仍旧使用该来宾 OS 的所有云服务将被停止、删除或强行升级。 可在[此处][retirepolicy]了解有关停用策略的详细信息。
+**到期**日期过后，仍旧使用该来宾 OS 的所有云服务将被停止、删除或强行升级。 可以在[此处][retirepolicy]了解有关停用策略的详细信息。
 
 ## <a name="guest-os-family-version-explanation"></a>来宾 OS 系列版本解释
 来宾 OS 系列基于发布的 Microsoft Windows Server 版本。 来宾 OS 是运行 Azure 云服务的基本操作系统。 每个来宾 OS 都具有系列、版本和版本号。
@@ -213,7 +227,7 @@ ms.locfileid: "33765767"
 * **来宾 OS 系列**  
   来宾 OS 所基于的 Windows Server 操作系统版本。 例如，*系列 3* 基于 Windows Server 2012。
 * **来宾 OS 版本**  
-  来宾 OS 系列映像和在生成新的来宾 OS 版本时提供的相关 [Microsoft 安全响应中心 (MSRC)][msrc] 修补程序。 并非提供了所有修补程序。
+  特定于来宾 OS 系列映像以及在生成新的来宾 OS 版本之日可用的相关 [Microsoft 安全响应中心 (MSRC)][msrc] 修补程序。 并非提供了所有修补程序。
 
     版本号从 0 开始，并在每次添加新的一组更新时增加 1。 仅在比较重要时，才会显示尾随零。 即，2.10 版是与 2.1 版不同的版本，并且比它晚得多。
 * **来宾 OS 发行版**  
@@ -228,36 +242,38 @@ ms.locfileid: "33765767"
 来宾 OS 的配置字符串嵌入了该相同信息，以及显示考虑为该发行版本包括哪些 MSRC 修补程序的日期。 在此示例中，考虑包括 2012 年 8 月之前（含该日期）为 Windows Server 2008 R2 开发的 MSRC 修补程序。 仅包括专门应用于该版本的 Windows Server 的修补程序。 例如，如果某个 MSRC 修补程序应用于 Microsoft Office，则它将不包括在内，因为该产品不属于 Windows Server 基本映像。
 
 ## <a name="guest-os-system-update-process"></a>来宾 OS 系统更新过程
-本页包含有关即将发布的来宾 OS 版本的信息。 客户已表明想知道什么时候发行版本，因为如果未设为“自动”更新，他们的云服务角色将重新启动。 来宾 OS 发行版通常会在每月第二个星期二发布 MSRC 更新之后的至少五 (5) 天发布。 新版本包含针对每个来宾 OS 系列的所有相关 MSRC 修补程序。
+本页包含有关即将发布的来宾 OS 版本的信息。 客户已表明想知道什么时候发行版本，因为如果未设为“自动”更新，他们的云服务角色将重新启动。 来宾 OS 发行版本通常会在每月第二个星期二发布 MSRC 更新之后的 2-3 周发布。 新版本包含针对每个来宾 OS 系列的所有相关 MSRC 修补程序。
 
 Microsoft Azure 不断地发布更新。 来宾 OS 只不过是此类更新的其中一种。 一个发行版本会受到许多因素影响，不胜列举。 此外，Azure 实际上在成千上万的计算机上运行。 这意味着无法提供重新启动你角色的准确日期和时间。 我们正在制定限制或定时重新启动的计划。
 
 在发布新的来宾 OS 发行版本时，可能需要一段时间才能在 Azure 中完全传播。 在将服务更新为新的来宾 OS 时，将重新启动这些服务以满足更新域限制。 设置为使用“自动”更新的服务将先获取发行版本。 更新后将在 Azure 门户中显示为所选服务列出的新来宾 OS 版本。 在此期间，可能会发布再发行版本。 某些版本可能需要较长的部署时间，可能不会在正式发行日期后的几个星期内执行自动升级重新启动。 在来宾 OS 可用后，可以从门户或配置文件中显式选择该版本。
 
-有关重启和指针的大量宝贵信息以及有关来宾和主机操作系统更新的更多技术详情，请阅读 MSDN 博客文章[角色实例因操作系统升级而重新启动][restarts]。
+有关重启的大量有价值的信息，以及指向来宾 OS 和主机 OS 更新的更多信息技术详情的链接，请阅读 MSDN 博客文章[角色实例因 OS 升级而重启][restarts]。
 
-如果手动更新来宾 OS，请参阅[来宾 OS 停用策略][retirepolicy]获取其他信息。
+若要手动更新来宾 OS，请参阅[来宾 OS 停用策略][retirepolicy]了解更多信息。
 
 ## <a name="guest-os-supportability-and-retirement-policy"></a>来宾 OS 可支持性和停用策略
 [此处][retirepolicy]解释了来宾 OS 可支持性和停用策略。
 
+[cloud updates]: https://docs.microsoft.com/azure/cloud-services/cloud-services-update-azure-service
 [来宾 OS 更新 RSS 源]: https://raw.githubusercontent.com/MicrosoftDocs/azure-cloud-services-files/master/GuestOS/GuestOSFeed.xml
 [Install .NET on a Cloud Service Role]: https://azure.microsoft.com/documentation/articles/cloud-services-dotnet-install-dotnet/?WT.mc_id=azurebg_email_Trans_963_RevisedNET_Update
 [Azure Guest OS Update Settings]: cloud-services-how-to-configure-portal.md
-[ssl3 announcement]: http://azure.microsoft.com/blog/2014/12/09/azure-security-ssl-3-0-update/
+[ssl3 announcement]: https://azure.microsoft.com/blog/2014/12/09/azure-security-ssl-3-0-update/
 [Microsoft Security Advisory 3009008]: https://technet.microsoft.com/library/security/3009008.aspx
-[ssl3-fixit]: http://go.microsoft.com/?linkid=9863266
+[ssl3-fixit]: https://go.microsoft.com/?linkid=9863266
 [MS14-066]: https://technet.microsoft.com/library/security/ms14-066.aspx
 [MS14-046]: https://technet.microsoft.com/library/security/ms14-046.aspx
 [retire policy sdk]: https://msdn.microsoft.com/library/dn479282.aspx
 [server and gos]: https://msdn.microsoft.com/library/dn775043.aspx
-[azuresupport]: http://azure.microsoft.com/support/options/
-[net install pkg]: http://www.microsoft.com/download/details.aspx?id=42643
-[msrc]: http://www.microsoft.com/security/msrc/default.aspx
+[azuresupport]: https://azure.microsoft.com/support/options/
+[net install pkg]: https://www.microsoft.com/download/details.aspx?id=42643
+[msrc]: https://technet.microsoft.com/security/dn440717.aspx
 [update guest os portal]: https://msdn.microsoft.com/library/gg433101.aspx
 [update guest os svc]: https://msdn.microsoft.com/library/gg456324.aspx
-[restarts]: http://blogs.msdn.com/b/kwill/archive/2012/09/19/role-instance-restarts-due-to-os-upgrades.aspx
+[restarts]: https://blogs.msdn.com/b/kwill/archive/2012/09/19/role-instance-restarts-due-to-os-upgrades.aspx
 [patches]: cloud-services-guestos-msrc-releases.md
 [retirepolicy]: cloud-services-guestos-retirement-policy.md
 [fam1retire]: cloud-services-guestos-family1-retirement.md
 [fix]: https://technet.microsoft.com/library/security/ms17-010.aspx
+[Windows Azure SDK]: https://www.microsoft.com/en-us/download/details.aspx?id=54917

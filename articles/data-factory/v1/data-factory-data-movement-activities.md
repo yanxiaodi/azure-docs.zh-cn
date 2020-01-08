@@ -9,24 +9,24 @@ ms.assetid: 67543a20-b7d5-4d19-8b5e-af4c1fd7bc75
 ms.service: data-factory
 ms.workload: data-services
 ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 12/05/2017
 ms.author: jingwang
 robots: noindex
-ms.openlocfilehash: 09b35483b5ace1523c88576cfe37dfc313b93036
-ms.sourcegitcommit: 59914a06e1f337399e4db3c6f3bc15c573079832
-ms.translationtype: HT
+ms.openlocfilehash: bfb15e717e3cb726aba782d9a9506330d7ea39fe
+ms.sourcegitcommit: 64798b4f722623ea2bb53b374fb95e8d2b679318
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/20/2018
+ms.lasthandoff: 07/11/2019
+ms.locfileid: "67839320"
 ---
 # <a name="move-data-by-using-copy-activity"></a>使用复制活动移动数据
-> [!div class="op_single_selector" title1="Select the version of Data Factory service you are using:"]
-> * [版本 1 - 正式版](data-factory-data-movement-activities.md)
-> * [版本 2 - 预览版](../copy-activity-overview.md)
+> [!div class="op_single_selector" title1="选择所使用的数据工厂服务版本："]
+> * [版本 1](data-factory-data-movement-activities.md)
+> * [版本 2（当前版本）](../copy-activity-overview.md)
 
 > [!NOTE]
-> 本文适用于数据工厂版本 1（正式版 (GA)）。 如果使用数据工厂服务版本 2（预览版），请参阅 [V2 中的复制活动](../copy-activity-overview.md)。
+> 本文适用于数据工厂版本 1。 如果使用的是数据工厂服务的当前版本，请参阅 [V2 中的复制活动](../copy-activity-overview.md)。
 
 ## <a name="overview"></a>概述
 在 Azure 数据工厂中，可使用“复制活动”在本地和云数据存储区之间复制数据。 复制数据后，可对其进一步执行转换和分析操作。 还可使用复制活动发布有关商业智能 (BI) 和应用程序消耗的转换和分析结果。
@@ -76,9 +76,9 @@ ms.lasthandoff: 04/20/2018
 > 带 * 的数据存储既可位于本地，也可位于 Azure IaaS 上，需要用户在本地/Azure IaaS 计算机上安装[数据管理网关](data-factory-data-management-gateway.md)。
 
 ### <a name="supported-file-formats"></a>支持的文件格式
-可使用“复制活动”在两个基于文件的数据存储之间“按原样复制文件”，可以同时在输入和输出数据集定义中跳过[格式部分](data-factory-create-datasets.md)。 无需任何序列化/反序列化操作即可有效复制数据。
+可使用“复制活动”在两个基于文件的数据存储之间“按原样复制文件”  ，可以同时在输入和输出数据集定义中跳过[格式部分](data-factory-create-datasets.md)。 无需任何序列化/反序列化操作即可有效复制数据。
 
-“复制活动”还以指定格式从文件中读取并写入到文件：**Text、JSON、Avro、ORC 和 Parquet**，并且压缩编解码器**GZip、Deflate、BZip2 和 ZipDeflate** 也受支持。 有关详细信息，请参阅[支持的文件和压缩格式](data-factory-supported-file-and-compression-formats.md)。
+复制活动还可读取和写入特定格式的文件：支持文本、JSON、Avro、ORC 和 Parquet，以及压缩编解码器 GZip、Deflate、BZip2 和 ZipDeflate   。 有关详细信息，请参阅[支持的文件和压缩格式](data-factory-supported-file-and-compression-formats.md)。
 
 例如，可执行以下复制活动：
 
@@ -95,7 +95,7 @@ Azure 数据工厂仅在美国西部、美国东部和北欧区域内可用。 �
 
 | 目标数据存储的地域 | 目标数据存储的区域 | 用于数据移动的区域 |
 |:--- |:--- |:--- |
-| 美国 | 美国东部 | 美国东部 |
+| 美国 | East US | East US |
 | &nbsp; | 美国东部 2 | 美国东部 2 |
 | &nbsp; | 美国中部 | 美国中部 |
 | &nbsp; | 美国中北部 | 美国中北部 |
@@ -107,7 +107,7 @@ Azure 数据工厂仅在美国西部、美国东部和北欧区域内可用。 �
 | &nbsp; | 加拿大中部 | 加拿大中部 |
 | 巴西 | 巴西南部 | 巴西南部 |
 | 欧洲 | 北欧 | 北欧 |
-| &nbsp; | 欧洲西部 | 欧洲西部 |
+| &nbsp; | 西欧 | 西欧 |
 | 英国 | 英国西部 | 英国南部 |
 | &nbsp; | 英国南部 | 英国南部 |
 | 亚太区 | 东南亚 | 东南亚 |
@@ -135,10 +135,10 @@ Azure 数据工厂仅在美国西部、美国东部和北欧区域内可用。 �
 可通过以下几种方法创建包含复制活动的管道：
 
 ### <a name="by-using-the-copy-wizard"></a>使用复制向导
-数据工厂复制向导有助于创建包含复制活动的管道。 使用此管道，无需对链接服务、数据集和管道编写 JSON 定义，即可将数据从支持的源复制到目标源。 有关此向导的详细信息，请参阅[数据工厂复制向导](data-factory-copy-wizard.md)。  
+数据工厂复制向导有助于创建包含复制活动的管道。 使用此管道，无需对链接服务、数据集和管道编写 JSON 定义  ，即可将数据从支持的源复制到目标源。 有关此向导的详细信息，请参阅[数据工厂复制向导](data-factory-copy-wizard.md)。  
 
 ### <a name="by-using-json-scripts"></a>使用 JSON 脚本
-可在 Azure 门户、Visual Studio 或 Azure PowerShell 中使用数据工厂编辑器（通过使用复制活动）为管道创建 JSON 定义。 然后，可对其进行部署以在数据工厂中创建管道。 有关包含分步说明的教程，请参阅[教程：在 Azure 数据工厂管道中使用复制活动](data-factory-copy-data-from-azure-blob-storage-to-sql-database.md)。    
+可以使用 Visual Studio 或 Azure PowerShell 中的数据工厂编辑器创建管道的 JSON 定义 （通过使用复制活动）。 然后，可对其进行部署以在数据工厂中创建管道。 有关分步说明，请参阅[教程：在 Azure 数据工厂管道中使用复制活动](data-factory-copy-data-from-azure-blob-storage-to-sql-database.md)。    
 
 JSON 属性（例如名称、说明、输入和输出表，以及策略）可用于所有类型的活动。 可用于此活动的 `typeProperties` 节的属性因每个活动类型而异。
 
@@ -209,7 +209,7 @@ JSON 属性（例如名称、说明、输入和输出表，以及策略）可用
 1. 从本机源类型转换为 .NET 类型。
 2. 从 .NET 类型转换为本机接收器类型。
 
-各数据存储文章中介绍了从本机类型系统到 .NET 类型的数据存储映射。 （单击[支持的数据存储](#supported-data-stores)表中的特定链接）。 可在创建表时使用这些映射确定适当的类型，以便复制活动执行正确转换。
+各数据存储文章中介绍了从本机类型系统到 .NET 类型的数据存储映射。 （单击“支持的数据存储”表中的特定链接）。 可在创建表时使用这些映射确定适当的类型，以便复制活动执行正确转换。
 
 ## <a name="next-steps"></a>后续步骤
 * 要详细了解复制活动，请参阅[将数据从 Azure Blob 存储复制到 Azure SQL 数据库](data-factory-copy-data-from-azure-blob-storage-to-sql-database.md)。

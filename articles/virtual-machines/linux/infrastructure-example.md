@@ -1,29 +1,29 @@
 ---
-title: "Azure 示例基础结构演练 | Microsoft Docs"
-description: "了解用于在 Azure 中部署示例基础结构的关键设计和实施准则。"
-documentationcenter: 
+title: Azure 示例基础结构演练 | Microsoft Docs
+description: 了解用于在 Azure 中部署示例基础结构的关键设计和实施准则。
+documentationcenter: ''
 services: virtual-machines-linux
-author: iainfoulds
-manager: jeconnoc
-editor: 
+author: cynthn
+manager: gwallace
+editor: ''
 tags: azure-resource-manager
 ms.assetid: 281fc2c0-b533-45fa-81a3-728c0049c73d
 ms.service: virtual-machines-linux
 ms.workload: infrastructure-services
 ms.tgt_pltfrm: vm-linux
-ms.devlang: na
 ms.topic: article
 ms.date: 12/15/2017
-ms.author: iainfou
+ms.author: cynthn
 ms.custom: H1Hack27Feb2017
-ms.openlocfilehash: ae7df08e7502fbfd500944f89a3fa6ee4806522a
-ms.sourcegitcommit: 821b6306aab244d2feacbd722f60d99881e9d2a4
-ms.translationtype: HT
+ms.openlocfilehash: 71b0dd15d183f3209c7424c537dde1e3df29d097
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/16/2017
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70083139"
 ---
 # <a name="example-azure-infrastructure-walkthrough-for-linux-vms"></a>适用于 Linux VM 的 Azure 示例基础结构演练
-本文将逐步讲述如何构建示例应用程序基础结构。 我们将详细介绍如何设计简单在线商店的基础结构，此在线商店可将关于命名约定、可用性集、虚拟网络及负载均衡器的所有准则和决策聚集在一起；以及如何实际部署虚拟机 (VM)。
+本文将逐步讲述如何构建示例应用程序基础结构。 我们详细介绍如何设计简单在线商店的基础结构，此在线商店可将关于命名约定、可用性集、虚拟网络及负载均衡器的所有准则和决策聚集在一起；以及如何实际部署你的虚拟机 (VM)。
 
 ## <a name="example-workload"></a>示例工作负荷
 Adventure Works Cycles 想要在 Azure 中生成一个在线商店应用程序，该应用程序将包含：
@@ -53,9 +53,9 @@ Adventure Works Cycles 想要在 Azure 中生成一个在线商店应用程序�
 
 * Adventure Works Cycles 使用 **[IT 工作负荷]-[位置]-[Azure 资源]** 作为前缀
   * 在本示例中，IT 工作负荷名为 **azos** (Azure On-line Store)，位置为 **use**（美国东部 2）
-* 虚拟网络使用 AZOS-USE-VN**[数字]**
-* 可用性集使用 use azos-use-as-**[角色]**
-* 虚拟机名称使用 azos-use-vm-**[VM 名称]**
+* 虚拟网络使用 AZOS-USE-VN<strong>[数字]</strong>
+* 可用性集使用 use azos-use-as- **[角色]**
+* 虚拟机名称使用 azos-use-vm- **[VM 名称]**
 
 ## <a name="azure-subscriptions-and-accounts"></a>Azure 订阅和帐户
 Adventure Works Cycles 使用名为 Adventure Works 企业订阅的企业订阅为此 IT 工作负荷提供计费。
@@ -71,14 +71,14 @@ Adventure Works Cycles 确定其应使用 Azure 托管磁盘。 创建 VM 时，
 
 他们通过 Azure 门户使用以下设置创建了仅限云的虚拟网络：
 
-* 名称：AZOS-USE-VN01
+* 姓名：AZOS-USE-VN01
 * 位置：美国东部 2
 * 虚拟网络地址空间：10.0.0.0/8
 * 第一个子网：
-  * 名称：FrontEnd
+  * 姓名：前端
   * 地址空间：10.0.1.0/24
 * 第二个子网：
-  * 名称：BackEnd
+  * 姓名：BackEnd
   * 地址空间：10.0.2.0/24
 
 ## <a name="availability-sets"></a>可用性集

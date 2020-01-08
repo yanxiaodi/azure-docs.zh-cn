@@ -1,30 +1,25 @@
 ---
-title: "Azure 备份服务器可保护系统状态并还原为裸机 | Microsoft Docs"
-description: "使用 Azure 备份服务器可备份系统状态并提供裸机恢复 (BMR) 保护。"
-services: backup
-documentationcenter: 
-author: markgalioto
+title: Azure 备份服务器可保护系统状态并还原为裸机
+description: 使用 Azure 备份服务器可备份系统状态并提供裸机恢复 (BMR) 保护。
+author: dcurwin
 manager: carmonm
-keywords: 
-ms.assetid: 
+keywords: ''
 ms.service: backup
-ms.workload: storage-backup-recovery
-ms.targetplatform: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 05/15/2017
-ms.author: markgal,masaran
-ms.openlocfilehash: 30f70a702d7d9a3e1196c04096708c035e406607
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.author: dacurwin
+ms.openlocfilehash: 12412122ba116eedc592fadc57949f707e52c355
+ms.sourcegitcommit: 3877b77e7daae26a5b367a5097b19934eb136350
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 07/30/2019
+ms.locfileid: "68639664"
 ---
 # <a name="back-up-system-state-and-restore-to-bare-metal-with-azure-backup-server"></a>使用 Azure 备份服务器备份系统状态并还原为裸机
 
 Azure 备份服务器可备份系统状态并提供裸机恢复 (BMR) 保护。
 
-*   **系统状态备份**：备份操作系统文件，以便可以在计算机启动，但是系统文件和注册表丢失时进行恢复。 系统状态备份包括：
+*   **系统状态备份**：备份操作系统文件，以便可以在计算机启动时进行恢复，但是系统文件和注册表会丢失。 系统状态备份包括：
     * 域成员：启动文件、COM+ 类注册数据库、注册表
     * 域控制器：Windows Server Active Directory (NTDS)、启动文件、COM+ 类注册数据库、注册表、系统卷 (SYSVOL)
     * 运行群集服务的计算机：群集服务器元数据
@@ -41,9 +36,9 @@ Azure 备份服务器可备份系统状态并提供裸机恢复 (BMR) 保护。
 |**文件数据**<br /><br />文件数据的 Azure 备份服务器备份<br /><br />BMR/系统状态备份|服务器丢失（数据卷丢失）|Y|否|是（BMR，接下来是备份文件数据的常规恢复）|
 |**SharePoint 数据**：<br /><br />场数据的 Azure 备份服务器备份<br /><br />BMR/系统状态备份|站点、列表、列表项、文档丢失|Y|N|N|
 |**SharePoint 数据**：<br /><br />场数据的 Azure 备份服务器备份<br /><br />BMR/系统状态备份|操作系统丢失或损坏|N|Y|Y|
-|**SharePoint 数据**：<br /><br />场数据的 Azure 备份服务器备份<br /><br />BMR/系统状态备份|灾难恢复|N|N|N|
-|Windows Server 2012 R2 Hyper-V<br /><br />Hyper-V 主机或来宾的 Azure 备份服务器备份<br /><br />主机的 BMR/系统状态备份|VM 丢失|Y|N|N|
-|Hyper-V<br /><br />Hyper-V 主机或来宾的 Azure 备份服务器备份<br /><br />主机的 BMR/系统状态备份|操作系统丢失或损坏|N|Y|Y|
+|SharePoint 数据：<br /><br />场数据的 Azure 备份服务器备份<br /><br />BMR/系统状态备份|灾难恢复|N|N|N|
+|Windows Server 2012 R2 Hyper-V<br /><br />对 Hyper-V 主机或来宾进行 Azure 备份服务器备份<br /><br />主机的 BMR/系统状态备份|VM 丢失|Y|N|N|
+|Hyper-V<br /><br />Hyper-V 主机或来宾的 Azure 备份服务器备份<br /><br />主机的 BMR/系统状态备份|丢失或损坏操作系统|N|Y|Y|
 |Hyper-V<br /><br />Hyper-V 主机或来宾的 Azure 备份服务器备份<br /><br />主机的 BMR/系统状态备份|Hyper-V 主机丢失（VM 完整）|N|N|Y|
 |Hyper-V<br /><br />Hyper-V 主机或来宾的 Azure 备份服务器备份<br /><br />主机的 BMR/系统状态备份|Hyper-V 主机丢失（VM 丢失）|N|N|Y<br /><br />BMR，接下来是常规 Azure 备份服务器恢复|
 |SQL Server/Exchange<br /><br />Azure 备份服务器应用备份<br /><br />BMR/系统状态备份|应用数据丢失|Y|N|N|
@@ -101,15 +96,15 @@ Azure 备份服务器可备份系统状态并提供裸机恢复 (BMR) 保护。
 ## <a name="before-you-begin"></a>开始之前
 
 1.  **部分 Azure 备份服务器**。 验证是否正确部署了备份服务器。 有关详细信息，请参阅：
-    * [Azure 备份服务器的系统要求](http://docs.microsoft.com/system-center/dpm/install-dpm#setup-prerequisites)
+    * [Azure 备份服务器的系统要求](https://docs.microsoft.com/system-center/dpm/install-dpm#setup-prerequisites)
     * [备份服务器保护矩阵](backup-mabs-protection-matrix.md)
 
 2.  **设置存储**。 可以将备份数据存储在磁盘上、磁带上和使用 Azure 的云中。 有关详细信息，请参阅[准备数据存储](https://docs.microsoft.com/system-center/dpm/plan-long-and-short-term-data-storage)。
 
-3.  **设置保护代理**。 在要备份的计算机上安装保护代理。 有关详细信息，请参阅[部署 DPM 保护代理](http://docs.microsoft.com/system-center/dpm/deploy-dpm-protection-agent)。
+3.  **设置保护代理**。 在要备份的计算机上安装保护代理。 有关详细信息，请参阅[部署 DPM 保护代理](https://docs.microsoft.com/system-center/dpm/deploy-dpm-protection-agent)。
 
 ## <a name="back-up-system-state-and-bare-metal"></a>备份系统状态和裸机
-按[部署保护组](http://docs.microsoft.com/system-center/dpm/create-dpm-protection-groups)中所述设置保护组。 请注意，无法在不同组中为相同计算机保护 BMR 和系统状态。 此外在选择 BMR 时，系统状态会自动启用。
+按[部署保护组](https://docs.microsoft.com/system-center/dpm/create-dpm-protection-groups)中所述设置保护组。 请注意，无法在不同组中为相同计算机保护 BMR 和系统状态。 此外在选择 BMR 时，系统状态会自动启用。
 
 
 1.  若要在备份服务器管理员控制台中打开“创建新保护组”向导，请选择“保护” > “操作” > “创建保护组”。
@@ -118,7 +113,7 @@ Azure 备份服务器可备份系统状态并提供裸机恢复 (BMR) 保护。
 
 3.  在“选择组成员”页上，展开计算机，然后选择“BMR”或“系统状态”。
 
-    请记住，无法在不同组中为相同计算机保护 BMR 和系统状态。 此外在选择 BMR 时，系统状态会自动启用。 有关详细信息，请参阅[部署保护组](http://docs.microsoft.com/system-center/dpm/create-dpm-protection-groups)。
+    请记住，无法在不同组中为相同计算机保护 BMR 和系统状态。 此外在选择 BMR 时，系统状态会自动启用。 有关详细信息，请参阅[部署保护组](https://docs.microsoft.com/system-center/dpm/create-dpm-protection-groups)。
 
 4.  在“选择数据保护方法”页上，选择要用于处理短期和长期备份的方式。 短期备份始终是磁盘优先，可以选择使用 Azure 备份从磁盘备份到 Azure 云（短期或长期）。 长期备份到云的替代方法是设置为长期备份到与备份服务器连接的独立磁带设备或磁带库。
 
@@ -127,7 +122,7 @@ Azure 备份服务器可备份系统状态并提供裸机恢复 (BMR) 保护。
     2. 对于“同步频率”，选择要对磁盘运行增量备份的频率。 如果不想设置备份间隔，则可以选中“恰好在恢复点之前”选项。 备份服务器会恰好在计划每个恢复点之前运行快速完整备份。
 
 6.  如果要将数据存储在磁带上以进行长期存储，则在“指定长期目标”页上，选择要保留磁带数据的时间长度（1-99 年）。 
-    1. 对于“备份频率”，选择应运行备份到磁带的频率。 频率取决于选择的保持期：
+    1. 有关**称繵瞯**，应运行选择何种频率备份到磁带。 频率取决于选择的保持期：
         * 保持期是 1-99 年时，可以选择每天、每周、每两周、每月、每季度、每半年或每年进行备份。
         * 保持期是 1-11 个月时，可以选择每天、每周、每两周或每月进行备份。
         * 保持期是 1-4 周时，可以选择每天或每周进行备份。

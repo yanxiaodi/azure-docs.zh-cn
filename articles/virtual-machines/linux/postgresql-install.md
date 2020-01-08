@@ -3,40 +3,40 @@ title: 在 Linux VM 上设置 PostgreSQL | Microsoft Docs
 description: 了解如何在 Azure 中的 Linux 虚拟机上安装和配置 PostgreSQL
 services: virtual-machines-linux
 documentationcenter: ''
-author: iainfoulds
-manager: jeconnoc
+author: cynthn
+manager: gwallace
 editor: ''
 tags: azure-resource-manager,azure-service-management
 ms.assetid: 1a747363-0cc5-4ba3-9be7-084dfeb04651
 ms.service: virtual-machines-linux
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-linux
 ms.workload: infrastructure-services
 ms.date: 02/01/2016
-ms.author: iainfou
-ms.openlocfilehash: 7741f861c5697da1e453c0d613b4b762511cf555
-ms.sourcegitcommit: d74657d1926467210454f58970c45b2fd3ca088d
-ms.translationtype: HT
+ms.author: cynthn
+ms.openlocfilehash: 7fc8cb7c07dd27cd42dc4c6a7e0a576f0efe04e0
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/28/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70091722"
 ---
 # <a name="install-and-configure-postgresql-on-azure"></a>在 Azure 上安装和配置 PostgreSQL
 PostgreSQL 是一种类似于 Oracle 和 DB2 的高级开放源代码数据库。 它包含许多企业级功能，比如完整的 ACID 合规性、可靠的事务处理和多版本并发控制。 它还支持 ANSI SQL 和 SQL/MED（包括 Oracle、MySQL、MongoDB 等等的外来数据包装器）等标准。 它具有高度的可扩展性，支持超过 12 种程序语言，并支持 GIN 和 GiST 索引、空间数据，以及面向 JSON 或基于键值的应用程序的多款类似于 NoSQL 的功能。
 
-在本文中，将了解如何在运行 Linux 的 Azure 虚拟机上安装和配置 PostgreSQL。
+在本文中，你将了解如何在运行 Linux 的 Azure 虚拟机上安装和配置 PostgreSQL。
 
 [!INCLUDE [learn-about-deployment-models](../../../includes/learn-about-deployment-models-both-include.md)]
 
 ## <a name="install-postgresql"></a>安装 PostgreSQL
 > [!NOTE]
-> 必须已经有一个运行 Linux 的 Azure 虚拟机，才能完成本教程。 在继续操作前，若要创建并设置 Linux VM，请参阅 [Azure Linux VM 教程](quick-create-cli.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)。
+> 你必须已经有一个运行 Linux 的 Azure 虚拟机，才能完成本教程。 在继续操作前，若要创建并设置 Linux VM，请参阅 [Azure Linux VM 教程](quick-create-cli.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)。
 > 
 > 
 
 在此示例中，使用端口 1999 作为 PostgreSQL 端口。  
 
-通过 PuTTY 连接到创建的 Linux VM。 如果这是你首次使用 Azure Linux VM，请参阅[如何在 Azure 上将 SSH 用于 Linux](mac-create-ssh-keys.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)，了解如何使用 PuTTY 连接到 Linux VM。
+通过 PuTTY 连接到你创建的 Linux VM。 如果这是你首次使用 Azure Linux VM，请参阅[如何在 Azure 上将 SSH 用于 Linux](mac-create-ssh-keys.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)，了解如何使用 PuTTY 连接到 Linux VM。
 
 1. 运行以下命令切换成根用户（管理员）：
    
@@ -68,14 +68,14 @@ PostgreSQL 是一种类似于 Oracle 和 DB2 的高级开放源代码数据库�
    
         # gmake install-world
    
-    应该会收到以下确认消息：
+    你应该会收到以下确认消息：
    
         PostgreSQL, contrib, and documentation successfully made. Ready to install.
 
 ## <a name="configure-postgresql"></a>配置 PostgreSQL
 1. （可选）创建一个符号链接以便将 PostgreSQL 引用缩短为不包含版本号：
    
-        # ln -s /opt/pgsql9.3.5 /opt/pgsql
+        # ln -s /opt/postgresql-9.3.5 /opt/pgsql
 2. 为数据库创建一个目录：
    
         # mkdir -p /opt/pgsql_data
@@ -112,19 +112,20 @@ PostgreSQL 是一种类似于 Oracle 和 DB2 的高级开放源代码数据库�
    
         $ which psql
    
-    如果安装成功，会看到以下响应：
+    如果安装成功，你将看到以下响应：
    
         /opt/pgsql/bin/psql
 7. 还可以检查 PostgreSQL 版本：
    
         $ psql -V
+
 8. 初始化数据库：
    
         $ initdb -D $PGDATA -E UTF8 --locale=C -U postgres -W
    
-    应该会收到以下输出：
+    你应该会收到以下输出：
 
-![图像](./media/postgresql-install/no1.png)
+![image](./media/postgresql-install/no1.png)
 
 ## <a name="set-up-postgresql"></a>设置 PostgreSQL
 <!--    [postgres@ test ~]$ exit -->
@@ -135,13 +136,13 @@ PostgreSQL 是一种类似于 Oracle 和 DB2 的高级开放源代码数据库�
 
     # cp linux /etc/init.d/postgresql
 
-修改 /etc/init.d/postgresql 文件中的两个变量。 前缀设置为 PostgreSQL 的安装路径：**/opt/pgsql**。 PGDATA 设置为 PostgreSQL 的数据存储路径：**/opt/pgsql_data**。
+修改 /etc/init.d/postgresql 文件中的两个变量。 前缀设置为 PostgreSQL 的安装路径： **/opt/pgsql**。 PGDATA 设置为 PostgreSQL 的数据存储路径： **/opt/pgsql_data**。
 
     # sed -i '32s#usr/local#opt#' /etc/init.d/postgresql
 
     # sed -i '35s#usr/local/pgsql/data#opt/pgsql_data#' /etc/init.d/postgresql
 
-![图像](./media/postgresql-install/no2.png)
+![image](./media/postgresql-install/no2.png)
 
 更改文件以使其成为可执行文件：
 
@@ -155,9 +156,9 @@ PostgreSQL 是一种类似于 Oracle 和 DB2 的高级开放源代码数据库�
 
     # netstat -tunlp|grep 1999
 
-应该会看到以下输出：
+你应该会看到以下输出：
 
-![图像](./media/postgresql-install/no3.png)
+![image](./media/postgresql-install/no3.png)
 
 ## <a name="connect-to-the-postgres-database"></a>连接到 Postgres 数据库
 再次切换成 postgres 用户：
@@ -188,11 +189,11 @@ PostgreSQL 是一种类似于 Oracle 和 DB2 的高级开放源代码数据库�
 
 如果成功创建了表，应该会看到以下内容：
 
-![图像](./media/postgresql-install/no4.png)
+![image](./media/postgresql-install/no4.png)
 
-还可以使用以下命令检查表结构：
+你还可以使用以下命令检查表结构：
 
-![图像](./media/postgresql-install/no5.png)
+![image](./media/postgresql-install/no5.png)
 
 ### <a name="add-data-to-a-table"></a>向表中添加数据
 首先，将信息插入某一行：
@@ -203,7 +204,7 @@ PostgreSQL 是一种类似于 Oracle 和 DB2 的高级开放源代码数据库�
 
 ![图像](./media/postgresql-install/no6.png)
 
-也可以向表中多添加几个人。 下面是几个选项，也可以自行创建：
+也可以向表中多添加几个人。 下面是几个选项，你也可以自行创建：
 
     INSERT INTO potluck (name, food, confirmed, signup_date) VALUES('Sandy', 'Key Lime Tarts', 'N', '2012-04-14');
 
@@ -218,23 +219,23 @@ PostgreSQL 是一种类似于 Oracle 和 DB2 的高级开放源代码数据库�
 
 输出为：
 
-![图像](./media/postgresql-install/no7.png)
+![image](./media/postgresql-install/no7.png)
 
 ### <a name="delete-data-in-a-table"></a>删除表中的数据
 使用以下命令来删除表中的数据：
 
     delete from potluck where name=’John’;
 
-这会删除“John”行中的所有信息。 输出为：
+这将删除“John”行中的所有信息。 输出为：
 
-![图像](./media/postgresql-install/no8.png)
+![image](./media/postgresql-install/no8.png)
 
 ### <a name="update-data-in-a-table"></a>更新表中的数据
-使用以下命令来更新表中的数据。 在此示例中，Sandy 已确认将出席活动，因此我们将她的 RSVP 从“N”更改为“Y”：
+使用以下命令来更新表中的数据。 在此示例中，Sandy 已经确认将参加该活动，因此我们将 RSVP 从“N”更改为“Y”：
 
      UPDATE potluck set confirmed = 'Y' WHERE name = 'Sandy';
 
 
 ## <a name="get-more-information-about-postgresql"></a>获取有关 PostgreSQL 的详细信息
-现在，已完成在 Azure Linux VM 中安装 PostgreSQL，可以在 Azure 中享受使用它的过程。 若要了解有关 PostgreSQL 的详细信息，请访问 [PostgreSQL 网站](http://www.postgresql.org/)。
+现在，你已完成在 Azure Linux VM 中安装 PostgreSQL，你可以在 Azure 中享受使用它的过程。 若要了解有关 PostgreSQL 的详细信息，请访问 [PostgreSQL 网站](https://www.postgresql.org/)。
 

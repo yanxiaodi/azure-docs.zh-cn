@@ -3,28 +3,29 @@ title: 如何创建 Azure SQL 数据仓库的支持票证 | Microsoft Docs
 description: 如何在 SQL 数据仓库中创建支持票证。
 services: sql-data-warehouse
 author: kevinvngo
-manager: craigg-msft
+manager: craigg
 ms.service: sql-data-warehouse
 ms.topic: conceptual
-ms.component: manage
+ms.subservice: manage
 ms.date: 04/17/2018
 ms.author: kevin
 ms.reviewer: igorstan
-ms.openlocfilehash: 406281fb3d52cc327166693740cdbaec446e8667
-ms.sourcegitcommit: 1362e3d6961bdeaebed7fb342c7b0b34f6f6417a
-ms.translationtype: HT
+ms.openlocfilehash: b3ffc9794967f44708d8330d4dc5d5de11b794d6
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/18/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61474459"
 ---
 # <a name="how-to-create-a-support-ticket-for-sql-data-warehouse"></a>如何创建 SQL 数据仓库的支持票证
 如果在 SQL 数据仓库方面遇到任何问题，请创建支持票证，让我们的工程支持团队帮助你。
 
 ## <a name="create-a-support-ticket"></a>创建支持票证
 1. 打开 [Azure 门户][Azure portal]。
-2. 在“主页”屏幕上，单击“帮助 + 支持”选项卡。
+2. 在“主页”屏幕上，单击“帮助 + 支持”  选项卡。
    
     ![帮助 + 支持](./media/sql-data-warehouse-get-started-create-support-ticket/MainPage.PNG)
-3. 在“帮助 + 支持”边栏选项卡上单击“新建支持请求”，然后填充“基本信息”边栏选项卡。
+3. 在“帮助 + 支持”  边栏选项卡上单击“新建支持请求”  ，然后填充“基本信息”边栏选项卡。
 
    选择 [Azure 支持计划][Azure support plan]。
    
@@ -34,9 +35,9 @@ ms.lasthandoff: 04/18/2018
      
      如果购买了顶级支持计划，还可以在 [Microsoft Premier 在线门户][Microsoft Premier online portal]中报告 SQL 数据仓库的相关问题。  若要深入了解各种支持计划（包括范围、响应时间、定价等），请参阅 [Azure 支持计划][Azure support plan]。有关 Azure 支持的常见问题，请参阅 [Azure 支持常见问题][Azure support FAQs]。  
         
-    ![“基本信息”边栏选项卡](./media/sql-data-warehouse-get-started-create-support-ticket/Create_ticket_1.PNG)
-    ![“基本信息”边栏选项卡 1](./media/sql-data-warehouse-get-started-create-support-ticket/Create_ticket_2.PNG)
-4. 填写“问题”边栏选项卡。
+     ![“基本信息”边栏选项卡](./media/sql-data-warehouse-get-started-create-support-ticket/Create_ticket_1.PNG)
+     ![“基本信息”边栏选项卡 1](./media/sql-data-warehouse-get-started-create-support-ticket/Create_ticket_2.PNG)
+4. 填写“问题”  边栏选项卡。
     ![Problem_blade](./media/sql-data-warehouse-get-started-create-support-ticket/Create_ticket_3.PNG)
    
    > [!NOTE]
@@ -45,13 +46,13 @@ ms.lasthandoff: 04/18/2018
    > 
    
 5. 填写**联系信息**。
-![Contact_information](./media/sql-data-warehouse-get-started-create-support-ticket/Create_ticket_4.PNG)
+   ![Contact_information](./media/sql-data-warehouse-get-started-create-support-ticket/Create_ticket_4.PNG)
 
     
-6. 单击“创建”提交支持请求。
+6. 单击“创建  ”提交支持请求。
 
 ## <a name="monitor-a-support-ticket"></a>监视支持票证
-在提交支持请求后，Azure 支持团队将与你取得联系。 若要查看请求状态和详细信息，请单击仪表板上的“所有支持请求”。
+在提交支持请求后，Azure 支持团队将与你取得联系。 若要查看请求状态和详细信息，请单击仪表板上的“所有支持请求”  。
 
 ![查看状态](./media/sql-data-warehouse-get-started-create-support-ticket/Monitor_ticket.PNG)
 

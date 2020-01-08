@@ -1,24 +1,19 @@
 ---
-title: "在 Azure 云服务中收集性能计数器 | Microsoft Docs"
-description: "了解如何使用 Azure 诊断和 Application Insights 在云服务中发现、使用和创建性能计数器。"
+title: 在 Azure 云服务中收集性能计数器 | Microsoft Docs
+description: 了解如何使用 Azure 诊断和 Application Insights 在云服务中发现、使用和创建性能计数器。
 services: cloud-services
 documentationcenter: .net
-author: thraka
-manager: timlt
-editor: 
-ms.assetid: 
+author: georgewallace
 ms.service: cloud-services
-ms.devlang: na
 ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: na
-ms.date: 02/02/18
-ms.author: adegeo
-ms.openlocfilehash: 3e0af48c172fa912f0ac9e05b7b761dd7eaad795
-ms.sourcegitcommit: 059dae3d8a0e716adc95ad2296843a45745a415d
-ms.translationtype: HT
+ms.date: 02/02/2018
+ms.author: gwallace
+ms.openlocfilehash: d6b16b859b29ef835bca75c5fca0ea1a9d35a306
+ms.sourcegitcommit: 0f54f1b067f588d50f787fbfac50854a3a64fff7
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/09/2018
+ms.lasthandoff: 08/12/2019
+ms.locfileid: "68358932"
 ---
 # <a name="collect-performance-counters-for-your-azure-cloud-service"></a>收集 Azure 云服务的性能计数器
 
@@ -28,7 +23,7 @@ ms.lasthandoff: 02/09/2018
 
 性能计数器由两个部分组成：集名称（也称为类别），以及一个或多个计数器。 可以使用 PowerShell 获取可用性能计数器的列表：
 
-```PowerShell
+```powershell
 Get-Counter -ListSet * | Select-Object CounterSetName, Paths | Sort-Object CounterSetName
 
 CounterSetName                                  Paths
@@ -55,7 +50,7 @@ Authorization Manager Applications              {\Authorization Manager Appl...
 
 若要获取某个集的所有计数器，请使用 `CounterSetName` 值并扩展 `Paths` 集合。 每个路径项是可以查询的计数器。 例如，若要获取 `Processor` 集相关的可用计数器，请扩展 `Paths` 集合：
 
-```PowerShell
+```powershell
 Get-Counter -ListSet * | Where-Object CounterSetName -eq "Processor" | Select -ExpandProperty Paths
 
 \Processor(*)\% Processor Time
@@ -83,7 +78,7 @@ Get-Counter -ListSet * | Where-Object CounterSetName -eq "Processor" | Select -E
 
 ### <a name="application-insights"></a>Application Insights
 
-使用适用于云服务的 Azure Application Insights 可以指定要收集的性能计数器。 将 [Application Insights 添加到项目](../application-insights/app-insights-cloudservices.md#sdk)之后，名为 **ApplicationInsights.config** 的配置文件将添加到 Visual Studio 项目。 此配置文件定义 Application Insights 要收集并发送到 Azure 的信息类型。
+使用适用于云服务的 Azure Application Insights 可以指定要收集的性能计数器。 将 [Application Insights 添加到项目](../azure-monitor/app/cloudservices.md#sdk)之后，名为 **ApplicationInsights.config** 的配置文件将添加到 Visual Studio 项目。 此配置文件定义 Application Insights 要收集并发送到 Azure 的信息类型。
 
 打开 **ApplicationInsights.config** 文件并找到 **ApplicationInsights** > **TelemetryModules** 元素。 每个 `<Add>` 子元素定义要收集的一种遥测类型及其配置。 性能计数器遥测模块类型为 `Microsoft.ApplicationInsights.Extensibility.PerfCounterCollector.PerformanceCollectorModule, Microsoft.AI.PerfCounterCollector`。 如果已定义此元素，请不要再次添加它。 要收集的每个性能计数器在名为 `<Counters>` 的节点下定义。 下面是收集驱动器性能计数器的示例：
 
@@ -115,7 +110,7 @@ Application Insights 会自动收集以下性能计数器：
 * \Process(??APP_WIN32_PROC??)\IO Data Bytes/sec
 * \Processor(_Total)\% 处理器时间
 
-有关详细信息，请参阅 [Application Insights 中的系统性能计数器](../application-insights/app-insights-performance-counters.md)和[适用于 Azure 云服务的 Application Insights](../application-insights/app-insights-cloudservices.md#performance-counters)。
+有关详细信息，请参阅 [Application Insights 中的系统性能计数器](../azure-monitor/app/performance-counters.md)和[适用于 Azure 云服务的 Application Insights](../azure-monitor/app/cloudservices.md#performance-counters)。
 
 ### <a name="azure-diagnostics"></a>Azure 诊断
 
@@ -126,7 +121,7 @@ Application Insights 会自动收集以下性能计数器：
 
 要收集的性能计数器在 **diagnostics.wadcfgx** 文件中定义。 请在 Visual Studio 中打开此文件（为每个角色定义了此文件），并找到 **DiagnosticsConfiguration** > **PublicConfig** > **WadCfg** > **DiagnosticMonitorConfiguration** > **PerformanceCounters** 元素。 将新的 **PerformanceCounterConfiguration** 元素添加为子级。 此元素有两个属性：`counterSpecifier` 和 `sampleRate`。 `counterSpecifier` 属性定义要收集的系统性能计数器集（请参阅上一部分）。 `sampleRate` 值指示轮询值的频率。 将会根据父 `PerformanceCounters` 元素的 `scheduledTransferPeriod` 属性值，将所有性能计数器作为一个整体传输到 Azure。
 
-有关 `PerformanceCounters` 架构元素的详细信息，请参阅 [Azure 诊断架构](../monitoring-and-diagnostics/azure-diagnostics-schema-1dot3-and-later.md#performancecounters-element)。
+有关 `PerformanceCounters` 架构元素的详细信息，请参阅 [Azure 诊断架构](../azure-monitor/platform/diagnostics-extension-schema-1dot3.md#performancecounters-element)。
 
 `sampleRate` 属性定义的时间段使用 XML 持续时间数据类型来指示轮询性能计数器的频率。 在以下示例中，频率设置为 `PT3M`，表示 `[P]eriod[T]ime[3][M]inutes`：每隔 3 分钟。
 
@@ -204,7 +199,7 @@ namespace WorkerRoleWithSBQueue1
         {
             // ... Other startup code here ...
 
-            // Define the cateogry and counter names.
+            // Define the category and counter names.
             string perfCounterCatName = "MyService";
             string perfCounterName = "Times Used";
 
@@ -293,7 +288,7 @@ counterServiceUsed.Increment();
 
 ## <a name="more-information"></a>详细信息
 
-- [适用于 Azure 云服务的 Application Insights](../application-insights/app-insights-cloudservices.md#performance-counters)
-- [Application Insights 中的系统性能计数器](../application-insights/app-insights-performance-counters.md)
+- [适用于 Azure 云服务的 Application Insights](../azure-monitor/app/cloudservices.md#performance-counters)
+- [Application Insights 中的系统性能计数器](../azure-monitor/app/performance-counters.md)
 - [指定计数器路径](https://msdn.microsoft.com/library/windows/desktop/aa373193(v=vs.85))
-- [Azure 诊断架构 - 性能计数器](../monitoring-and-diagnostics/azure-diagnostics-schema-1dot3-and-later.md#performancecounters-element)
+- [Azure 诊断架构 - 性能计数器](../azure-monitor/platform/diagnostics-extension-schema-1dot3.md#performancecounters-element)

@@ -1,29 +1,26 @@
 ---
-title: 从 Azure Databricks 连接到不同数据源 | Microsoft Docs
+title: '从 Azure Databricks 连接到不同数据源 '
 description: 了解如何从 Azure Databricks 连接到不同数据源。
 services: azure-databricks
-documentationcenter: ''
-author: nitinme
-manager: cgronlun
-editor: cgronlun
+author: mamccrea
+ms.reviewer: jasonh
 ms.service: azure-databricks
 ms.workload: big-data
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 03/21/2018
-ms.author: nitinme
-ms.openlocfilehash: 865313a7c6eabd847529b88ff5fff0b7db438fa5
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.author: mamccrea
+ms.openlocfilehash: f2b7136ec21416e31c2af658974577023a4494de
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60240346"
 ---
 # <a name="connect-to-data-sources-from-azure-databricks"></a>从 Azure Databricks 连接到数据源
 
 本文提供了指向 Azure 中可以连接到 Azure Databricks 的所有不同数据源的链接。 请按照这些链接中的示例操作，将 Azure 数据源（例如，Azure Blob 存储、Azure 事件中心等）中的数据提取到 Azure Databricks 群集中，并对这些数据运行分析作业。 
 
-## <a name="prerequisites"></a>先决条件
+## <a name="prerequisites"></a>必备组件
 
 * 必须具备 Azure Databricks 工作区和 Spark 群集。 请按照 [Azure Databricks 入门](quickstart-create-databricks-workspace-portal.md)中的说明操作。
 
@@ -34,7 +31,7 @@ ms.lasthandoff: 03/23/2018
 - [Azure SQL 数据库](https://docs.azuredatabricks.net/spark/latest/data-sources/sql-databases.html)
 
     此链接提供了用于使用 JDBC 连接到 SQL 数据库的数据帧 API，并介绍了如何控制通过 JDBC 接口进行的读取操作的并行度。 本主题提供了使用 Scala API 的详细示例，并在末尾提供了 Python 和 Spark SQL 的简略示例。
-- [Azure Data Lake Store](https://docs.azuredatabricks.net/spark/latest/data-sources/azure/azure-datalake.html)
+- [Azure Data Lake Store](https://docs.azuredatabricks.net/spark/latest/data-sources/azure/azure-datalake-gen2.html)
 
     此链接举例说明了如何使用 Azure Active Directory 服务主体向 Data Lake Store 进行身份验证。 它还说明了如何从 Azure Databricks 访问 Data Lake Store 中的数据。
 

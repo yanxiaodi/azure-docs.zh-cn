@@ -3,31 +3,30 @@ title: 使用所需状态配置将凭据传递给 Azure
 description: 了解如何使用 PowerShell 所需状态配置 (DSC) 安全地将凭据传递给 Azure 虚拟机。
 services: virtual-machines-windows
 documentationcenter: ''
-author: DCtheGeek
+author: bobbytreed
 manager: carmonm
 editor: ''
 tags: azure-resource-manager
-keywords: dsc
+keywords: DSC
 ms.assetid: ea76b7e8-b576-445a-8107-88ea2f3876b9
 ms.service: virtual-machines-windows
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-windows
 ms.workload: na
 ms.date: 05/02/2018
-ms.author: dacoulte
-ms.openlocfilehash: 666253d16ac51dcc21174211f71794f8b0ede07d
-ms.sourcegitcommit: 909469bf17211be40ea24a981c3e0331ea182996
-ms.translationtype: HT
+ms.author: robreed
+ms.openlocfilehash: 38a302545f2dd46a8123816a41c97ae26ee4c260
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
-ms.locfileid: "34012540"
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70092512"
 ---
 # <a name="pass-credentials-to-the-azure-dscextension-handler"></a>将凭据传递给 Azure DSC 扩展处理程序
 
-[!INCLUDE [learn-about-deployment-models](../../../includes/learn-about-deployment-models-both-include.md)]
-
 本文介绍了 Azure 的所需状态配置 (DSC) 扩展。 有关 DSC 扩展处理程序的概述，请参阅 [Azure 所需状态配置扩展处理程序](dsc-overview.md)。
+
+[!INCLUDE [updated-for-az.md](../../../includes/updated-for-az.md)]
 
 ## <a name="pass-in-credentials"></a>传入凭据
 
@@ -61,11 +60,11 @@ configuration Main
 }
 ```
 
-必须将 **node localhost** 包含为配置的一部分。 扩展处理程序会特意查找 **node localhost** 语句。 如果缺少此语句，则以下步骤不起作用。 还必须包含类型强制转换 **[PsCredential]**。 此特定类型触发扩展对凭据进行加密。
+必须将 **node localhost** 包含为配置的一部分。 扩展处理程序会特意查找 **node localhost** 语句。 如果缺少此语句，则以下步骤不起作用。 还必须包含类型强制转换 **[PsCredential]** 。 此特定类型触发扩展对凭据进行加密。
 
 将此脚本发布到 Azure Blob 存储：
 
-`Publish-AzureRmVMDscConfiguration -ConfigurationPath .\user_configuration.ps1`
+`Publish-AzVMDscConfiguration -ConfigurationPath .\user_configuration.ps1`
 
 设置 Azure DSC 扩展并提供凭据：
 
@@ -73,18 +72,18 @@ configuration Main
 $configurationName = 'Main'
 $configurationArguments = @{ Credential = Get-Credential }
 $configurationArchive = 'user_configuration.ps1.zip'
-$vm = Get-AzureRmVM -Name 'example-1'
+$vm = Get-AzVM -Name 'example-1'
 
-$vm = Set-AzureRmVMDscExtension -VMName $vm -ConfigurationArchive $configurationArchive -ConfigurationName $configurationName -ConfigurationArgument @configurationArguments
+$vm = Set-AzVMDscExtension -VMName $vm -ConfigurationArchive $configurationArchive -ConfigurationName $configurationName -ConfigurationArgument @configurationArguments
 
-$vm | Update-AzureRmVM
+$vm | Update-AzVM
 ```
 
 ## <a name="how-a-credential-is-secured"></a>如何保护凭据
 
-运行此代码时会出现输入凭据的提示。 提供凭据后，它短暂地存储在内存中。 使用 **Set-AzureRmVMDscExtension** cmdlet 发布凭据时，会通过 HTTPS 将凭据传输到 VM。 在 VM 中，Azure 使用本地 VM 证书将加密的凭据存储在磁盘上。 若要将凭据传递给 DSC，将在内存中短暂地将其解密，然后将其重新加密。
+运行此代码时会出现输入凭据的提示。 提供凭据后，它短暂地存储在内存中。 使用 **Set-AzVMDscExtension** cmdlet 发布凭据时，会通过 HTTPS 将凭据传输到 VM。 在 VM 中，Azure 使用本地 VM 证书将加密的凭据存储在磁盘上。 若要将凭据传递给 DSC，将在内存中短暂地将其解密，然后将其重新加密。
 
-此过程不同于[使用不带扩展处理程序的安全配置](/powershell/dsc/securemof)。 Azure 环境提供了通过证书安全地传输配置数据的方法。 使用 DSC 扩展处理程序时，无需在 **ConfigurationData** 中提供 **$CertificatePath** 或 **$CertificateID**/ **$Thumbprint** 条目。
+此过程不同于[使用不带扩展处理程序的安全配置](/powershell/dsc/securemof)。 Azure 环境提供了通过证书安全地传输配置数据的方法。 使用 DSC 扩展处理程序时，无需在 **ConfigurationData** 中提供 **$CertificatePath** 或 **$CertificateID**/  **$Thumbprint** 条目。
 
 ## <a name="next-steps"></a>后续步骤
 

@@ -2,24 +2,18 @@
 title: 下载用于 S2S VPN 连接的 VPN 设备配置脚本：Azure 资源管理器 | Microsoft Docs
 description: 本文逐步讲解如何使用 Azure 资源管理器下载采用 Azure VPN 网关的 S2S VPN 连接的 VPN 设备配置脚本。
 services: vpn-gateway
-documentationcenter: na
 author: yushwang
 manager: rossort
-editor: ''
-tags: azure-resource-manager
-ms.assetid: 238cd9b3-f1ce-4341-b18e-7390935604fa
 ms.service: vpn-gateway
-ms.devlang: na
 ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: infrastructure-services
-ms.date: 03/29/2018
+ms.date: 01/09/2019
 ms.author: yushwang
-ms.openlocfilehash: 254f5012bfbf827aebc20d90405636dcb204193c
-ms.sourcegitcommit: 20d103fb8658b29b48115782fe01f76239b240aa
-ms.translationtype: HT
+ms.openlocfilehash: f7ee53c10c6597dbf98f8f85fc31fe789137471e
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66157578"
 ---
 # <a name="download-vpn-device-configuration-scripts-for-s2s-vpn-connections"></a>下载用于 S2S VPN 连接的 VPN 设备配置脚本
 
@@ -59,7 +53,7 @@ ms.lasthandoff: 04/03/2018
 
 创建连接资源后，遵照以下说明下载 VPN 设备配置脚本：
 
-1. 在浏览器中导航到 [Azure 门户](http://portal.azure.com)，并根据需要使用 Azure 帐户登录。
+1. 在浏览器中导航到 [Azure 门户](https://portal.azure.com)，并根据需要使用 Azure 帐户登录。
 2. 转到创建的连接资源。 依次单击“所有服务”、“网络”和“连接”可以找到所有连接资源的列表。
 
     ![connection-list](./media/vpn-gateway-download-vpndevicescript/connectionlist.png)
@@ -83,6 +77,8 @@ ms.lasthandoff: 04/03/2018
 
 ## <a name="download-the-configuration-script-using-azure-powershell"></a>使用 Azure PowerShell 下载配置脚本
 
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
+
 也可以使用 Azure PowerShell 下载配置脚本，如以下示例中所示：
 
 ```azurepowershell-interactive
@@ -91,10 +87,10 @@ $GWName      = "VNet1GW"
 $Connection  = "VNet1toSite1"
 
 # List the available VPN device models and versions
-Get-AzureRmVirtualNetworkGatewaySupportedVpnDevice -Name $GWName -ResourceGroupName $RG
+Get-AzVirtualNetworkGatewaySupportedVpnDevice -Name $GWName -ResourceGroupName $RG
 
 # Download the configuration script for the connection
-Get-AzureRmVirtualNetworkGatewayConnectionVpnDeviceConfigScript -Name $Connection -ResourceGroupName $RG -DeviceVendor Juniper -DeviceFamily Juniper_SRX_GA -FirmwareVersion Juniper_SRX_12.x_GA
+Get-AzVirtualNetworkGatewayConnectionVpnDeviceConfigScript -Name $Connection -ResourceGroupName $RG -DeviceVendor Juniper -DeviceFamily Juniper_SRX_GA -FirmwareVersion Juniper_SRX_12.x_GA
 ```
 
 ## <a name="apply-the-configuration-script-to-your-vpn-device"></a>将配置脚本应用到 VPN 设备

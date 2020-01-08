@@ -5,19 +5,17 @@ services: ''
 author: KumudD
 ms.service: ''
 ms.topic: include
-ms.date: 03/28/2018
+ms.date: 05/09/2019
 ms.author: ''
 ms.custom: include file
-ms.openlocfilehash: f9005a5f0d327fd59a1b665cb8e714716908ea81
-ms.sourcegitcommit: 6fcd9e220b9cd4cb2d4365de0299bf48fbb18c17
-ms.translationtype: HT
+ms.openlocfilehash: 37748258b1e9b7f922934edd715202cacbb793e0
+ms.sourcegitcommit: cd70273f0845cd39b435bd5978ca0df4ac4d7b2c
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/05/2018
+ms.lasthandoff: 09/18/2019
+ms.locfileid: "67173322"
 ---
-| 资源 | 默认限制 |
+| Resource | 默认/最大限制 |
 | --- | --- |
-| 每个订阅的配置文件数 |200 <sup>1</sup> |
+| 每个订阅的配置文件数 |200 |
 | 每个配置文件的终结点数 |200 |
-
-<sup>1</sup>如果需要增加这些限制，请与支持人员联系。
-

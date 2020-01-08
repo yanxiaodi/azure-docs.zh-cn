@@ -34,7 +34,7 @@
           href: 'https://docs.chef.io/chef_automate.html'
         - name: Chef Automate 安装指南
           href: 'https://docs.chef.io/install_chef_automate.html'
-        - name: Azure Marketplace 上的 Chef Automate
+        - name: Azure 市场上的 Chef Automate
           href: 'https://azuremarketplace.microsoft.com/en-us/marketplace/apps/chef-software.chef-automate'
     - name: Chef Software 新闻
       items:
@@ -42,7 +42,7 @@
           href: 'https://blog.chef.io/'
 - name: 工具
   items:
-    - name: Chef Visual Studio Team Services 扩展
+    - name: Chef Azure DevOps Services 扩展
       href: 'https://marketplace.visualstudio.com/items?itemName=chef-software.vsts-chef-tasks'
-    - name: Habitat Visual Studio Team Services 扩展
+    - name: Habitat Azure DevOps Services 扩展
       href: 'https://marketplace.visualstudio.com/items?itemName=chef-software.vsts-habitat-tasks'

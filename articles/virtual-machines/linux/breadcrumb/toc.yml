@@ -1,0 +1,11 @@
+- name: Azure
+  tocHref: /
+  topicHref: /index
+  items:
+    - name: 虚拟机
+      tocHref: /active-directory/managed-identities-azure-resources/
+      topicHref: /virtual-machines/index
+      items:
+        - name: Linux
+          tocHref: /active-directory/managed-identities-azure-resources/
+          topicHref: /virtual-machines/linux/index

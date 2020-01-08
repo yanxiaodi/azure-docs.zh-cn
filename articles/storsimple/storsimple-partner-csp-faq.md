@@ -1,12 +1,12 @@
 ---
-title: "有关 Microsoft Azure StorSimple 和云解决方案提供商计划的常见问题解答（针对合作伙伴）| Microsoft Docs"
-description: "针对合作伙伴的有关 StorSimple 和 CSP 的常见问题解答。"
+title: 有关 Microsoft Azure StorSimple 和云解决方案提供商计划的常见问题解答（针对合作伙伴）| Microsoft Docs
+description: 针对合作伙伴的有关 StorSimple 和 CSP 的常见问题解答。
 services: storsimple
 documentationcenter: NA
 author: alkohli
 manager: timlt
-editor: 
-ms.assetid: 
+editor: ''
+ms.assetid: ''
 ms.service: storsimple
 ms.devlang: NA
 ms.topic: article
@@ -14,13 +14,14 @@ ms.tgt_pltfrm: NA
 ms.workload: TBD
 ms.date: 02/08/2017
 ms.author: alkohli
-ms.openlocfilehash: 4dc5ae7d3feae769a8366f68f412f3b79fa8eb00
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.openlocfilehash: 4750ba55c08ebac244e7515cae4e998155a79599
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60628863"
 ---
-# <a name="storsimple-for-cloud-solutions-provider-program-frequently-asked-questions"></a>适用于云解决方案提供商计划的 StorSimple：常见问题解答
+# <a name="storsimple-for-cloud-solutions-provider-program-frequently-asked-questions"></a>适用于云解决方案提供商计划的 StorSimple：常见问题
 
 
 ## <a name="overview"></a>概述
@@ -30,7 +31,7 @@ ms.lasthandoff: 10/11/2017
 
  - [StorSimple 和云解决方案提供商计划 (CSP) 模型](#storsimple-and-csp-model)
  - [作为合作伙伴部署和管理 virtual array](#deploy-and-manage-storsimple-as-a-partner)
- - [对于 CSP，支持 StorSimple 合作伙伴](#support-for-storsimple-partners)
+ - 对于 CSP，支持 StorSimple 合作伙伴
 
 ## <a name="storsimple-and-csp-model"></a>StorSimple 和 CSP 模型
 
@@ -39,7 +40,7 @@ ms.lasthandoff: 10/11/2017
 
 有关详细信息，请转到 [CSP 计划中的 StorSimple](https://www.microsoft.com/en-us/server-cloud/products/storsimple/)。 
 
-### <a name="is-storsimple-a-usage-based-or-based-on-seat-licenses-like-office-365-and-enterprise-mobility-suite-ems"></a>StorSimple 是基于使用情况还是基于座位许可证（类似于 Office 365 和企业移动性套件 (EMS)）？
+### <a name="is-storsimple-a-usage-based-or-based-on-seat-licenses-like-office-365-and-enterprise-mobility-suite-ems"></a>StorSimple 是基于使用情况还是基于席位许可证（类似于 Office 365 和企业移动性套件 (EMS)）？
 StorSimple 是基于使用情况的服务。 通过 CSP 渠道采购 StorSimple Virtual Array 的客户支付 virtual array 和 Azure 的使用费用（作为 CSP 帐单中的单独品种名计费）。 
 
 ### <a name="is-the-storsimple-business-model-similar-to-that-of-other-services-such-as-the-office-365-and-the-enterprise-mobility-suite"></a>StorSimple 业务模型是否类似于其他服务（如 Office 365 和企业移动套件）的业务模型？ 
@@ -49,7 +50,7 @@ StorSimple 是基于使用情况的服务。 通过 CSP 渠道采购 StorSimple 
 与独立 StorSimple 服务提供的 SKU 相同。 
 
 ### <a name="is-there-any-difference-between-the-storsimple-directly-purchased-from-microsoft-under-ea-and-storsimple-as-a-part-of-csp"></a>直接从 Microsoft 的 EA 下购买的 StorSimple 和作为 CSP 的一部分购买的 StorSimple 是否有区别？
-否。 在 CSP 中，客户还可以在同一发票下，与 StorSimple Virtual Array (SVA) 一起购买 CSP 合作伙伴提供的其他服务。 请注意，若要采购 StorSimple 8000 系列物理设备，客户仍需通过 EA 渠道。 
+不。 在 CSP 中，客户还可以在同一发票下，与 StorSimple Virtual Array (SVA) 一起购买 CSP 合作伙伴提供的其他服务。 请注意，若要采购 StorSimple 8000 系列物理设备，客户仍需通过 EA 渠道。 
 
 ### <a name="in-which-markets-is-storsimple-available-for-csp-at-launch"></a>发布时，哪些市场提供用于 CSP 的 StorSimple？
 现在，所有提供 StorSimple 的市场均提供用于 CSP 的 StorSimple Virtual Array。 有关详细信息，请转到[提供 StorSimple 的区域列表](https://azure.microsoft.com/regions/services/)。
@@ -62,7 +63,7 @@ StorSimple 是基于使用情况的服务。 通过 CSP 渠道采购 StorSimple 
 - 他们还可以通过提供托管服务发现新的业务模式。
 
 ### <a name="what-are-the-incentives-available-for-storsimple-csp-partners-do-i-qualify-for-any-csp-program-incentives"></a>为 StorSimple CSP 合作伙伴提供的奖励有哪些？ 我有资格获得 CSP 计划奖励吗？
-有关奖励的信息，请转到 [CSP 计划奖励](https://partner.microsoft.com/en-US/cloud-solution-provider/program-details)。
+有关奖励的信息，请转到[CSP 计划奖励](https://partner.microsoft.com/en-US/cloud-solution-provider/program-details)。
 
 
 ## <a name="deploy-and-manage-storsimple-as-a-partner"></a>以合作伙伴身份部署和管理 StorSimple
@@ -71,10 +72,10 @@ StorSimple 是基于使用情况的服务。 通过 CSP 渠道采购 StorSimple 
 可以通过合作伙伴中心将 StorSimple Virtual Array 订阅添加到客户的帐户。 此外，还可以使用 Azure 门户向订阅添加用户。
 
 ### <a name="is-the-azure-portal-approach-the-same-as-other-services-for-csp"></a>Azure 门户方法是否与 CSP 的其他服务相同？ 
-是的。 借助用于 CSP 的 StorSimple Virtual Array，合作伙伴访问 Azure 门户的最佳方式应该是通过[合作伙伴中心](http://partnercenter.microsoft.com/)进行访问，他们可在合作伙伴中心中管理客户和订阅。 若要管理 StorSimple 订阅，合作伙伴或客户（具体取决于授予的权限），应登录到 Azure 门户。 
+是的。 借助用于 CSP 的 StorSimple Virtual Array，合作伙伴访问 Azure 门户的最佳方式应该是通过[合作伙伴中心](https://partnercenter.microsoft.com/)进行访问，他们可在合作伙伴中心中管理客户和订阅。 若要管理 StorSimple 订阅，合作伙伴或客户（具体取决于授予的权限），应登录到 Azure 门户。 
 
 ### <a name="is-microsoft-shipping-a-new-portal-for-storsimple-for-csp"></a>Microsoft 是否为 StorSimple for CSP 提供了新的门户？ 
-否。 将能够通过 Azure 门户在 CSP 中管理 StorSimple Virtual Array。
+不。 将能够通过 Azure 门户在 CSP 中管理 StorSimple Virtual Array。
 
 ### <a name="i-have-provisioned-a-standalone-storsimple-subscription-for-my-customer-do-i-have-to-use-the-azure-portal-to-administer-my-device"></a>我已为我的客户配置了独立的 StorSimple 订阅。 我必须使用 Azure 门户来管理我的设备吗？ 
 是的。 
@@ -93,7 +94,7 @@ CSP 中 StorSimple 的支持模型与 CSP 中其他 Azure 服务的支持模型�
 有关 StorSimple for CSP 的详细信息，请转到：
 
 - [Microsoft 云解决方案提供商计划](https://partner.microsoft.com/Membership)
-- [合作伙伴中心](http://partnercenter.microsoft.com/) 
+- [合作伙伴中心](https://partnercenter.microsoft.com/) 
 
 
 ## <a name="next-steps"></a>后续步骤

@@ -1,3 +1,16 @@
+---
+author: cynthn
+ms.service: azure
+ms.topic: include
+ms.date: 11/09/2018
+ms.author: cynthn
+ms.openlocfilehash: eef2c762c87a13c62eeb9b017ed43f54835ab16e
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67173289"
+---
 Azure Cloud Shell 是一种基于浏览器的 shell 体验，用于管理和开发 Azure 资源。
 
 Cloud Shell 提供可通过浏览器访问的预配置 shell 体验，用于管理 Azure 资源，而无需花费自己安装计算机、对其进行版本控制和维护的开销。

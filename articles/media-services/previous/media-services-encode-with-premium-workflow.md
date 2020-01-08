@@ -4,20 +4,21 @@ description: 了解如何使用媒体编码器高级工作流进行编码。 代
 services: media-services
 documentationcenter: ''
 author: juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.service: media-services
 ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 12/09/2017
+ms.date: 03/18/2019
 ms.author: juliako
-ms.openlocfilehash: 9b341b244d53993699dfc9096a86305def82cad7
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: d20fc0cee6bce1389649e6287170b1963e799ccf
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61463885"
 ---
 # <a name="advanced-encoding-with-media-encoder-premium-workflow"></a>使用媒体编码器高级工作流进行高级编码
 > [!NOTE]
@@ -33,9 +34,9 @@ Microsoft Azure 媒体服务即将推出**媒体编码器高级工作流**媒体
 以下主题概述了与**媒体编码器高级工作流**相关的详细信息：
 
 * [媒体编码器高级工作流支持的格式](media-services-premium-workflow-encoder-formats.md) - 介绍**媒体编码器高级工作流**支持的文件格式和编解码器。
-* [Azure 点播媒体编码器的概述和比较](media-services-encode-asset.md)比较了 Media Encoder Premium Workflow 和 Media Encoder Standard 的编码功能。
+* [Azure 点播媒体编码器的概述和比较](media-services-encode-asset.md)比较了 Media Encoder Premium Workflow 和 Media Encoder Standard 的编码功能   。
 
-本文演示如何在 Media Encoder Premium Workflow 中使用 .NET 进行编码。
+本文演示如何在 Media Encoder Premium Workflow 中使用 .NET 进行编码  。
 
 **媒体编码器高级工作流**的编码任务需要一个名为“Workflow”文件的单独配置文件。 这些文件的扩展名为 .workflow，由[工作流设计器](media-services-workflow-designer.md)工具创建。
 
@@ -51,7 +52,7 @@ Microsoft Azure 媒体服务即将推出**媒体编码器高级工作流**媒体
 
 以下示例演示了如何使用**媒体编码器高级工作流**进行编码。
 
-将执行以下步骤：
+执行以下步骤：
 
 1. 创建资产并上传工作流文件。
 2. 创建资产并上传源媒体文件。
@@ -61,12 +62,12 @@ Microsoft Azure 媒体服务即将推出**媒体编码器高级工作流**媒体
     在大多数情况下，该任务的配置字符串为空（如以下示例中所示）。 在某些高级方案中（要求动态设置运行时属性），需要为编码任务提供 XML 字符串。 此类方案的示例包括：创建一个覆盖层、并行或依序媒体拼接、字幕。
 5. 向该任务添加输入资产。
 
-    1. 第 1 个 - 工作流资产。
-    2. 第二个 - 视频资产。
+   1. 第 1 个 - 工作流资产。
+   2. 第二个 - 视频资产。
 
-    >[!NOTE]
-    >必须将工作流资产添加到媒体资产前面的任务。
-   此任务的配置字符串应为空。
+      >[!NOTE]
+      >必须将工作流资产添加到媒体资产前面的任务。
+      此任务的配置字符串应为空。
    
 6. 提交编码作业。
 

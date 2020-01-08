@@ -1,8 +1,21 @@
+---
+author: linda33wj
+ms.service: data-factory
+ms.topic: include
+ms.date: 11/19/2018
+ms.author: jingwang
+ms.openlocfilehash: 0c381cc6e2e2957c946207491c666667821184ad
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: HT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67173416"
+---
 | 类别 | 数据存储 | 支持用作源 | 支持用作接收器 |
 |:--- |:--- |:--- |:--- |
 | **Azure** |[Azure Blob 存储](../articles/data-factory/v1/data-factory-azure-blob-connector.md) |✓ |✓ |
 | &nbsp; |[Azure Cosmos DB (SQL API)](../articles/data-factory/v1/data-factory-azure-documentdb-connector.md) |✓ |✓ |
-| &nbsp; |[Azure Data Lake Store](../articles/data-factory/v1/data-factory-azure-datalake-connector.md) |✓ |✓ |
+| &nbsp; |[Azure Data Lake Storage Gen1](../articles/data-factory/v1/data-factory-azure-datalake-connector.md) |✓ |✓ |
 | &nbsp; |[Azure SQL 数据库](../articles/data-factory/v1/data-factory-azure-sql-connector.md) |✓ |✓ |
 | &nbsp; |[Azure SQL 数据仓库](../articles/data-factory/v1/data-factory-azure-sql-data-warehouse-connector.md) |✓ |✓ |
 | &nbsp; |[Azure 搜索索引](../articles/data-factory/v1/data-factory-azure-search-connector.md) | |✓ |
@@ -29,6 +42,4 @@
 | &nbsp; |[泛型 ODBC](../articles/data-factory/v1/data-factory-odbc-connector.md)* |✓ | |
 | &nbsp; |[Salesforce](../articles/data-factory/v1/data-factory-salesforce-connector.md) |✓ | |
 | &nbsp; |[Web 表（HTML 中的表）](../articles/data-factory/v1/data-factory-web-table-connector.md) |✓ | |
-| &nbsp; |[GE Historian](../articles/data-factory/v1/data-factory-odbc-connector.md#ge-historian-store)* |✓ | | |
-
 

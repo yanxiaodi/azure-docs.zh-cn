@@ -1,30 +1,25 @@
 ---
-title: HDInsight 中的 Apache Phoenix - Azure HDInsight | Microsoft Docs
-description: ''
-services: hdinsight
-documentationcenter: ''
+title: HDInsight 中的 Apache Phoenix - Azure HDInsight
+description: Apache Phoenix 概述
 author: ashishthaps
-manager: jhubbard
-editor: cgronlun
-tags: azure-portal
-ms.assetid: ''
+ms.author: ashishth
+ms.reviewer: jasonh
 ms.service: hdinsight
 ms.custom: hdinsightactive
-ms.devlang: na
-ms.topic: article
-ms.date: 01/19/2018
-ms.author: ashishth
-ms.openlocfilehash: 5d96b5656881815a82c89e0d159ba2bf556946b9
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 09/05/2019
+ms.openlocfilehash: becb4e4787c21e18455144108274f585ba25cb72
+ms.sourcegitcommit: 1c9858eef5557a864a769c0a386d3c36ffc93ce4
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 09/18/2019
+ms.locfileid: "71105383"
 ---
-# <a name="apache-phoenix-in-hdinsight"></a>HDInsight 中的 Apache Phoenix
+# <a name="apache-phoenix-in-azure-hdinsight"></a>Azure HDInsight 中的 Apache Phoenix
 
-[Apache Phoenix](http://phoenix.apache.org/) 是构建在 [HBase](hbase/apache-hbase-overview.md) 基础之上的开源大规模并行关系数据库层。 Phoenix 允许通过 HBase 使用类似于 SQL 的查询。 Phoenix 在幕后使用 JDBC 驱动程序，可让用户创建、删除和更改 SQL 表、索引、视图与序列，以及单独或批量更新插入行。 Phoenix 使用 noSQL 本机编译而不是 MapReduce 来编译查询，可让用户在 HBase 的顶层创建低延迟的应用程序。 Phoenix 添加了协处理器，支持在服务器的地址空间中运行客户端提供的代码，执行与数据共置的代码。 此方法可将客户端/服务器数据传输延迟降到最低。
+[Apache Phoenix](https://phoenix.apache.org/) 是构建在 [Apache HBase](hbase/apache-hbase-overview.md) 基础之上的开源大规模并行关系数据库层。 Phoenix 允许通过 HBase 使用类似于 SQL 的查询。 Phoenix 在幕后使用 JDBC 驱动程序，可让用户创建、删除和更改 SQL 表、索引、视图与序列，以及单独或批量更新插入行。 Phoenix 使用 noSQL 本机编译而不是 MapReduce 来编译查询，可让用户在 HBase 的顶层创建低延迟的应用程序。 Phoenix 添加了协处理器，支持在服务器的地址空间中运行客户端提供的代码，执行与数据共置的代码。 此方法可将客户端/服务器数据传输延迟降到最低。
 
-非开发人员可以借助 Apache Phoenix 创建大数据查询，并在其中使用类似于 SQL 的语法，而无需编程。 与 [Hive](hadoop/hdinsight-use-hive.md) 和 Spark SQL 等其他工具不同，Phoenix 已针对 HBase 高度优化。 开发人员可以利用它来编写高性能的查询，同时大大减少代码量。
+非开发人员可以借助 Apache Phoenix 创建大数据查询，并在其中使用类似于 SQL 的语法，而无需编程。 与 [Apache Hive](hadoop/hdinsight-use-hive.md) 和 Apache Spark SQL 等其他工具不同，Phoenix 已针对 HBase 高度优化。 开发人员可以利用它来编写高性能的查询，同时大大减少代码量。
 <!-- [Spark SQL](spark/apache-spark-sql-with-hdinsight.md)  -->
 
 提交 SQL 查询时，Phoenix 会将该查询编译到 HBase 本机调用，然后并行运行扫描（或计划）以进行优化。 此抽象层使得开发人员无需编写 MapReduce 作业，让他们专注于围绕 Phoenix 的大数据存储构建应用程序的业务逻辑和工作流。
@@ -45,7 +40,7 @@ CREATE INDEX ix_purchasetype on SALTEDWEBLOGS (purchasetype, transactiondate) IN
 
 与执行单一索引查询相比，此方法可以大幅提升性能。 这种类型的辅助索引是**涵盖索引**，包含查询中包括的所有列。 因此，不需要执行表查找，索引能够满足整个查询的需求。
 
-### <a name="views"></a>视图
+### <a name="views"></a>Views
 
 Phoenix 视图可以克服一项 HBase 限制：创建 100 个以上的物理表时，性能开始下降。 Phoenix 视图可让多个虚拟表共享一个 HBase 基础物理表。
 
@@ -74,17 +69,17 @@ WHERE metric_type = 'm';
 
 ### <a name="skip-scan"></a>跳过扫描
 
-跳过扫描使用组合索引的一个或多个列来查找非重复值。 与范围扫描不同，跳过扫描实施行内扫描，因此可以[提高性能](http://phoenix.apache.org/performance.html#Skip-Scan)。 扫描时，将会连同索引一起跳过第一个匹配值，直到找到下一个值。
+跳过扫描使用组合索引的一个或多个列来查找非重复值。 与范围扫描不同，跳过扫描实施行内扫描，因此可以[提高性能](https://phoenix.apache.org/performance.html#Skip-Scan)。 扫描时，将会连同索引一起跳过第一个匹配值，直到找到下一个值。
 
 跳过扫描使用 HBase 筛选器的 `SEEK_NEXT_USING_HINT` 枚举。 跳过扫描使用 `SEEK_NEXT_USING_HINT` 来跟踪在每个列中搜索的键集或键范围。 然后，跳过扫描在评估筛选器期间使用传递给它的键，并确定该键是否为组合之一。 如果不是，则跳过扫描会评估要跳转到的下一个最高键。
 
 ### <a name="transactions"></a>事务
 
-尽管 HBase 提供行级事务，但 Phoenix 与 [Tephra](http://tephra.io/) 集成，添加了跨行和跨表事务支持，并具有完整的 [ACID](https://en.wikipedia.org/wiki/ACID) 语义。
+尽管 HBase 提供行级事务，但 Phoenix 与 [Tephra](https://tephra.io/) 集成，添加了跨行和跨表事务支持，并具有完整的 [ACID](https://en.wikipedia.org/wiki/ACID) 语义。
 
 与传统的 SQL 事务一样，通过 Phoenix 事务管理器提供的事务可以确保成功更新插入数据原子单位；如果任何已启用事务的表中的更新插入操作失败，还可以回滚事务。
 
-若要启用 Phoenix 事务，请参阅[Apache Phoenix 事务文档](http://phoenix.apache.org/transactions.html)。
+若要启用 Phoenix 事务，请参阅[Apache Phoenix 事务文档](https://phoenix.apache.org/transactions.html)。
 
 若要创建启用事务的新表，请在 `CREATE` 语句中将 `TRANSACTIONAL` 属性设置为 `true`：
 
@@ -98,7 +93,7 @@ CREATE TABLE my_table (k BIGINT PRIMARY KEY, v VARCHAR) TRANSACTIONAL=true;
 ALTER TABLE my_other_table SET TRANSACTIONAL=true;
 ```
 
-> [!NOTE]
+> [!NOTE]  
 > 无法将事务表切换回到非事务表。
 
 ### <a name="salted-tables"></a>加盐表
@@ -126,7 +121,7 @@ CREATE TABLE Saltedweblogs (
     shippingamount DOUBLE NULL) SALT_BUCKETS=4;
 ```
 
-## <a name="enable-and-tune-phoenix-with-ambari"></a>使用 Ambari 启用和优化 Phoenix
+## <a name="enable-and-tune-phoenix-with-apache-ambari"></a>使用 Apache Ambari 启用和优化 Phoenix
 
 HDInsight HBase 群集提供 [Ambari UI](hdinsight-hadoop-manage-ambari.md) 用于进行配置更改。
 
@@ -134,12 +129,12 @@ HDInsight HBase 群集提供 [Ambari UI](hdinsight-hadoop-manage-ambari.md) 用�
 
 2. 在左侧菜单中的服务列表内选择“HBase”，然后选择“配置”选项卡。
 
-    ![Ambari HBase 配置](./media/hdinsight-phoenix-in-hdinsight/ambari-hbase-config.png)
+    ![Apache Ambari HBase 配置](./media/hdinsight-phoenix-in-hdinsight/ambari-hbase-config1.png)
 
 3. 找到“Phoenix SQL”配置部分，启用或禁用 Phoenix，并设置查询超时。
 
-    ![Ambari“Phoenix SQL”配置部分](./media/hdinsight-phoenix-in-hdinsight/ambari-phoenix.png)
+    ![Ambari“Phoenix SQL”配置部分](./media/hdinsight-phoenix-in-hdinsight/apache-ambari-phoenix.png)
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 
 * [将 Apache Phoenix 与 HDInsight 中基于 Linux 的 HBase 群集配合使用](hbase/apache-hbase-phoenix-squirrel-linux.md)

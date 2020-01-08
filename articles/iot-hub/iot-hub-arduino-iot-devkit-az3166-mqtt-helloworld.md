@@ -1,30 +1,26 @@
 ---
-title: 使用 Azure MQTT 客户端库向 MQTT 服务器发送消息 | Microsoft Docs.
-description: 使用 DevKit 作为客户端向 MQTT 服务器发送消息。
-services: iot-hub
-documentationcenter: ''
+title: 使用 Azure MQTT 客户端库向 MQTT 服务器发送消息 | Microsoft Docs
+description: 使用 DevKit 作为客户端向 MQTT 服务器发送消息
 author: liydu
-manager: timlt
-tags: ''
-keywords: ''
+manager: jeffya
 ms.service: iot-hub
-ms.devlang: arduino
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: na
+services: iot-hub
+ms.topic: conceptual
+ms.tgt_pltfrm: arduino
 ms.date: 04/02/2018
 ms.author: liydu
-ms.openlocfilehash: 62fdd3dae9513973d0284eda5250d9eb29bfde91
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.openlocfilehash: 60520f5a72fd7e27d4ea64ac76511a00a727426e
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61369266"
 ---
 # <a name="send-messages-to-an-mqtt-server"></a>向 MQTT 服务器发送消息
 
 物联网 (IoT) 系统经常要处理断断续续的、质量不佳的或低速的 Internet 连接。 MQTT 是一种机器到机器 (M2M) 连接协议，它是为了应对此类难题而开发的。 
 
-此处使用的 MQTT 客户端库是 [Eclipse Paho](http://www.eclipse.org/paho/) 项目的一部分，该项目提供了用于通过多种传输方式使用 MQTT 的 API。
+此处使用的 MQTT 客户端库是 [Eclipse Paho](https://www.eclipse.org/paho/) 项目的一部分，该项目提供了用于通过多种传输方式使用 MQTT 的 API。
 
 ## <a name="what-you-learn"></a>学习内容
 
@@ -41,7 +37,7 @@ ms.lasthandoff: 05/10/2018
 
 ## <a name="open-the-project-folder"></a>打开项目文件夹
 
-1. 如果 DevKit 已连接，将其从计算机断开连接。
+1. 如果 DevKit 已连接到计算机，请断开连接。
 
 2. 启动 VS Code。
 
@@ -49,10 +45,10 @@ ms.lasthandoff: 05/10/2018
 
 ## <a name="open-the-mqttclient-sample"></a>打开 MQTTClient 示例
 
-展开左侧的“ARDUINO 示例”部分，浏览到“MXCHIP AZ3166 的示例 > MQTT”，然后选择“MQTTClient”。 此时会打开一个新的 VS Code 窗口，其中包含一个项目文件夹。
+展开左侧的“ARDUINO 示例”  部分，浏览到  “MXCHIP AZ3166 的示例 > MQTT”，然后选择“MQTTClient”  。 此时会打开一个新的 VS Code 窗口，其中包含一个项目文件夹。
 
 > [!NOTE]
-> 也可以从命令面板打开示例。 使用 `Ctrl+Shift+P` (macOS: `Cmd+Shift+P`) 打开命令面板，键入“Arduino”，然后找到并选择“Arduino: Examples”。
+> 也可以从命令面板打开示例。 使用 `Ctrl+Shift+P`（macOS: `Cmd+Shift+P`）打开命令面板，键入“Arduino”，然后找到并选择“Arduino:   Examples”。
 
 ## <a name="build-and-upload-the-arduino-sketch-to-the-devkit"></a>生成 Arduino 草图并将其上传到 DevKit
 
@@ -61,7 +57,7 @@ ms.lasthandoff: 05/10/2018
 ![设备上传](media/iot-hub-arduino-iot-devkit-az3166-mqtt-helloworld/device-upload.jpg)
 
 > [!NOTE]
-> 可能会出现“错误: AZ3166: 未知程序包”错误消息。 如果未正确刷新板包索引，则会出现此错误。 若要解决此错误，请参阅此 [FAQ](https://microsoft.github.io/azure-iot-developer-kit/docs/faq/#development)（常见问题解答）。
+> 可能会收到“错误:AZ3166:未知程序包”错误消息。 如果未正确刷新板包索引，则会出现此错误。 若要解决此错误，请参阅 [IoT DevKit 常见问题解答的开发部分](https://microsoft.github.io/azure-iot-developer-kit/docs/faq/#development)。
 
 ## <a name="test-the-project"></a>测试项目
 
@@ -79,15 +75,15 @@ ms.lasthandoff: 05/10/2018
 
 ## <a name="problems-and-feedback"></a>问题和反馈
 
-如果遇到问题，请参阅 [FAQ](https://microsoft.github.io/azure-iot-developer-kit/docs/faq/)（常见问题解答）或通过以下渠道进行联系：
+如果遇到问题，请参阅 [IoT DevKit 常见问题解答](https://microsoft.github.io/azure-iot-developer-kit/docs/faq/)或通过以下渠道进行联系：
 
-* [Gitter.im](http://gitter.im/Microsoft/azure-iot-developer-kit)
-* [堆栈溢出](https://stackoverflow.com/questions/tagged/iot-devkit)
+* [Gitter.im](https://gitter.im/Microsoft/azure-iot-developer-kit)
+* [Stack Overflow](https://stackoverflow.com/questions/tagged/iot-devkit)
 
 ## <a name="see-also"></a>另请参阅
 
-* [将 IoT DevKit AZ3166 连接到云中的 Azure IoT 中心]({{"/docs/getting-started/" | absolute_url }})
-* [摇一摇，摇一摇搜推文]({{"/docs/projects/shake-shake/" | absolute_url }})
+* [将 IoT DevKit AZ3166 连接到云中的 Azure IoT 中心](iot-hub-arduino-iot-devkit-az3166-get-started.md)
+* [摇一摇，摇一摇搜推文](iot-hub-arduino-iot-devkit-az3166-retrieve-twitter-message.md)
 
 ## <a name="next-steps"></a>后续步骤
 

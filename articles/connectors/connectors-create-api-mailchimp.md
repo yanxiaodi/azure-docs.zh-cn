@@ -1,25 +1,22 @@
 ---
-title: 在 Azure 逻辑应用中使用 MailChimp 连接器 | Microsoft Docs
-description: 使用 Azure 应用服务创建逻辑应用。 MailChimp 是 SaaS 服务，允许企业管理和自动化电子邮件市场营销活动，包括发送市场营销电子邮件、自动化消息和有针对性的市场活动。
-services: logic-apps
-documentationcenter: .net,nodejs,java
+title: 连接到 MailChimp - Azure 逻辑应用 | Microsoft Docs
+description: 使用 MailChimp REST API 和 Azure 逻辑应用创建和管理市场营销电子邮件
 author: ecfan
-manager: anneta
-editor: ''
-tags: connectors
-ms.assetid: 36559de2-94f0-4355-b492-2926dfc56486
-ms.service: logic-apps
-ms.devlang: multiple
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: integration
+manager: jeconnoc
+ms.author: estfan
 ms.date: 08/18/2016
-ms.author: estfan; ladocs
-ms.openlocfilehash: 041212771db5b5971ccd220e68d71d59d8220531
-ms.sourcegitcommit: 8aab1aab0135fad24987a311b42a1c25a839e9f3
-ms.translationtype: HT
+ms.topic: article
+ms.service: logic-apps
+services: logic-apps
+ms.reviewer: klam, LADocs
+ms.suite: integration
+tags: connectors
+ms.openlocfilehash: ffe2760c004db24d503ee381b8752c875c286fca
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "62105830"
 ---
 # <a name="get-started-with-the-mailchimp-connector"></a>MailChimp 连接器入门
 MailChimp 是 SaaS 服务，允许企业管理和自动执行电子邮件市场营销活动，包括发送市场营销电子邮件、自动化消息和有针对性的市场活动。
@@ -29,7 +26,7 @@ MailChimp 是 SaaS 服务，允许企业管理和自动执行电子邮件市场�
 ## <a name="create-a-connection-to-mailchimp"></a>创建到 MailChimp 的连接
 要使用 MailChimp 创建逻辑应用，必须先创建**连接**，然后提供以下属性的详细信息：
 
-| 属性 | 必选 | 说明 |
+| 属性 | 需要 | 描述 |
 | --- | --- | --- |
 | 令牌 |是 |提供 MailChimp 凭据 |
 

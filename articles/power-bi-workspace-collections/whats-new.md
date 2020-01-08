@@ -1,26 +1,19 @@
 ---
 title: Power BI 工作区集合中的新增功能
 description: 获取有关 Power BI 工作区集合中的新增功能的最新信息
-services: power-bi-embedded
-documentationcenter: ''
-author: markingmyname
-manager: kfile
-editor: ''
-tags: ''
-ROBOTS: NOINDEX
-ms.assetid: 2794ae98-b9a7-45df-b6e1-962a395b91fa
+services: power-bi-workspace-collections
 ms.service: power-bi-embedded
-ms.devlang: NA
+author: rkarlin
+ms.author: rkarlin
 ms.topic: article
-ms.tgt_pltfrm: NA
 ms.workload: powerbi
 ms.date: 09/20/2017
-ms.author: maghan
-ms.openlocfilehash: 647b571fc05dca12ab9d4db45236962e4794ef4b
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: 448c0997068fae0637c7015eed96fafbaf5b3442
+ms.sourcegitcommit: 2e4b99023ecaf2ea3d6d3604da068d04682a8c2d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 07/09/2019
+ms.locfileid: "67672351"
 ---
 # <a name="whats-new-in-power-bi-workspace-collections"></a>Power BI 工作区集合中的新增功能
 
@@ -77,5 +70,5 @@ ms.lasthandoff: 04/16/2018
 * 为所有 **v1.0** API 调用更新了示例应用程序。
 * 提供了对 Azure SDK、PowerShell 和 CLI 的 Power BI 工作区集合支持。
 * 用户可以将可视化数据导出到 **.csv** 文件。
-* 现在，与 Microsoft Azure 相同的所有语言/区域设置都支持 Power BI 工作区集合。 若要了解详细信息，请参阅 [Azure - 语言](http://social.technet.microsoft.com/wiki/contents/articles/4234.windows-azure-extent-of-localization.aspx)。
+* 现在，与 Microsoft Azure 相同的所有语言/区域设置都支持 Power BI 工作区集合。 若要了解详细信息，请参阅 [Azure - 语言](https://social.technet.microsoft.com/wiki/contents/articles/4234.windows-azure-extent-of-localization.aspx)。
 

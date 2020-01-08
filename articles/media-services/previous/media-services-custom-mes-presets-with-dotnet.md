@@ -4,7 +4,7 @@ description: 本主题说明如何通过自定义 Media Encoder Standard 任务�
 services: media-services
 documentationcenter: ''
 author: juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: ec95392f-d34a-4c22-a6df-5274eaac445b
 ms.service: media-services
@@ -12,21 +12,25 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 12/09/2017
+ms.date: 03/26/2019
 ms.author: juliako
-ms.openlocfilehash: 4bdfdb5bd5362d5a8039ca31d498d122843df2a7
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 39a1dd5c3d26eeb6545a96aa35f9457bd9859c21
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61247237"
 ---
-# <a name="customizing-media-encoder-standard-presets"></a>自定义 Media Encoder Standard 预设
+# <a name="customizing-media-encoder-standard-presets"></a>自定义 Media Encoder Standard 预设  
 
 ## <a name="overview"></a>概述
 
 本文演示如何通过使用自定义预设的 Media Encoder Standard (MES) 执行高级编码。 本文使用 .NET 创建编码任务和执行此任务的作业。  
 
 本文介绍如何使用 [H264 多比特率 720p](media-services-mes-preset-H264-Multiple-Bitrate-720p.md) 预设并减少层数，从而自定义预设。 [自定义 Media Encoder Standard 预设](media-services-advanced-encoding-with-mes.md)这篇文章演示了可用于执行高级编码任务的自定义预设。
+
+> [!NOTE]
+> 不能用于在本文中所述的自定义预设[媒体服务 V3](https://docs.microsoft.com/azure/media-services/latest/)转换或 CLI 命令。 请参阅[从 v2 到 v3 迁移指南](../latest/migrate-from-v2-to-v3.md)的更多详细信息。
 
 ## <a id="customizing_presets"></a>自定义 MES 预设
 
@@ -260,12 +264,13 @@ namespace CustomizeMESPresests
 }
 ```
 
+## <a name="see-also"></a>另请参阅
+
+- [如何使用 CLI 编码自定义转换](../latest/custom-preset-cli-howto.md)
+- [使用媒体服务 v3 进行编码](../latest/encoding-concept.md)
+
 ## <a name="media-services-learning-paths"></a>媒体服务学习路径
 [!INCLUDE [media-services-learning-paths-include](../../../includes/media-services-learning-paths-include.md)]
 
 ## <a name="provide-feedback"></a>提供反馈
 [!INCLUDE [media-services-user-voice-include](../../../includes/media-services-user-voice-include.md)]
-
-## <a name="see-also"></a>另请参阅
-[媒体服务编码概述](media-services-encode-asset.md)
-

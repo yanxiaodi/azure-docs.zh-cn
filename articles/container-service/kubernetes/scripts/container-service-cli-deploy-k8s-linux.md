@@ -3,7 +3,7 @@ title: Azure CLI 脚本示例 - 创建 ACS Linux Kubernetes 群集 | Microsoft �
 description: Azure CLI 脚本示例 - 创建 ACS Linux Kubernetes 群集
 services: container-service
 documentationcenter: ''
-author: neilpeterson
+author: iainfoulds
 manager: jeconnoc
 editor: ''
 tags: acs, azure-container-service
@@ -15,14 +15,17 @@ ms.topic: sample
 ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 05/30/2017
-ms.author: nepeters
-ms.openlocfilehash: 0ae5c7c371f48eb4d9dd2d48efe7d26b44fbcdbe
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.author: iainfou
+ms.openlocfilehash: 11549e730e38c72e09ed2e94a72113c6e7e5bbb9
+ms.sourcegitcommit: 2469b30e00cbb25efd98e696b7dbf51253767a05
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 12/06/2018
+ms.locfileid: "52996270"
 ---
-# <a name="create-an-azure-container-service-kubernetes-linux-cluster"></a>创建 Azure 容器服务 Kubernetes Linux 群集
+# <a name="deprecated-create-an-azure-container-service-kubernetes-linux-cluster"></a>（已弃用）创建 Azure 容器服务 Kubernetes Linux 群集
+
+[!INCLUDE [ACS deprecation](../../../../includes/container-service-kubernetes-deprecation.md)]
 
 此示例将创建运行基于 Linux 容器的 Kubernetes 的 Azure 容器服务群集。
 
@@ -56,8 +59,8 @@ az group delete --name myResourceGroup
 
 | 命令 | 说明 |
 |---|---|
-| [az group create](https://docs.microsoft.com/cli/azure/group#az_group_create) | 创建用于存储所有资源的资源组。 |
-| [az acs create](https://docs.microsoft.com/cli/azure/acs#az_acs_create) | 创建 ACS 群集。 |
+| [az group create](https://docs.microsoft.com/cli/azure/group#az-group-create) | 创建用于存储所有资源的资源组。 |
+| [az acs create](https://docs.microsoft.com/cli/azure/acs#az-acs-create) | 创建 ACS 群集。 |
 
 ## <a name="next-steps"></a>后续步骤
 

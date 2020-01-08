@@ -1,5 +1,5 @@
 ---
-title: 在 Azure 应用服务中生成 .NET Core 和 SQL 数据库 Web 应用 | Microsoft Docs
+title: ASP.NET Core 和 SQL 数据库 - Azure 应用服务 |Microsoft Docs
 description: 了解如何在 Azure 应用服务中运行 .NET Core 应用，同时使其连接到 SQL 数据库。
 services: app-service\web
 documentationcenter: dotnet
@@ -11,26 +11,27 @@ ms.workload: web
 ms.tgt_pltfrm: na
 ms.devlang: dotnet
 ms.topic: tutorial
-ms.date: 04/11/2018
+ms.date: 08/06/2019
 ms.author: cephalin
-ms.custom: mvc
-ms.openlocfilehash: 98f20e8a185e1c36f4114d3a196db61a9dccc3c9
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
+ms.custom: seodec18
+ms.openlocfilehash: 9a4d4f84626eafdfbc5cc21eef1968a9ed64fcad
+ms.sourcegitcommit: 2aefdf92db8950ff02c94d8b0535bf4096021b11
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 09/03/2019
+ms.locfileid: "71055615"
 ---
-# <a name="tutorial-build-a-net-core-and-sql-database-web-app-in-azure-app-service"></a>教程：在 Azure 应用服务中生成 .NET Core 和 SQL 数据库 Web 应用
+# <a name="tutorial-build-an-aspnet-core-and-sql-database-app-in-azure-app-service"></a>教程：在 Azure 应用服务中生成 ASP.NET Core 和 SQL 数据库应用
 
 > [!NOTE]
-> 本文将应用部署到 Windows 上的应用服务。 若要部署到 _Linux_ 上的应用服务，请参阅[在 Linux 上的 Azure 应用服务中生成 .NET Core 和 SQL 数据库 Web 应用](./containers/tutorial-dotnetcore-sqldb-app.md)。
+> 本文将应用部署到 Windows 上的应用服务。 若要部署到 _Linux_ 上的应用服务，请参阅[在 Linux 上的 Azure 应用服务中生成 .NET Core 和 SQL 数据库应用](./containers/tutorial-dotnetcore-sqldb-app.md)。
 >
 
-[应用服务](app-service-web-overview.md)在 Azure 中提供高度可缩放、自修补的 Web 托管服务。 本教程演示如何创建 .NET Core Web 应用，并将其连接至 SQL 数据库。 完成操作后，将拥有一个在应用服务中运行的 .NET Core MVC 应用。
+[应用服务](overview.md)在 Azure 中提供高度可缩放、自修补的 Web 托管服务。 本教程演示如何创建 .NET Core 应用，并将其连接至 SQL 数据库。 完成操作后，将拥有一个在应用服务中运行的 .NET Core MVC 应用。
 
 ![在应用服务中运行的应用](./media/app-service-web-tutorial-dotnetcore-sqldb/azure-app-in-browser.png)
 
-学习如何：
+你将学习如何：
 
 > [!div class="checklist"]
 > * 在 Azure 中创建 SQL 数据库。
@@ -51,7 +52,7 @@ ms.lasthandoff: 04/23/2018
 
 ## <a name="create-local-net-core-app"></a>创建本地 .NET Core 应用
 
-在此步骤中，将设置本地 .NET Core 项目。
+在此步骤中，你将设置本地 .NET Core 项目。
 
 ### <a name="clone-the-sample-application"></a>克隆示例应用程序
 
@@ -64,7 +65,7 @@ git clone https://github.com/azure-samples/dotnetcore-sqldb-tutorial
 cd dotnetcore-sqldb-tutorial
 ```
 
-此示例项目包含使用[实体框架核心](https://docs.microsoft.com/ef/core/)的基本 CRUD（创建-读取-更新-删除）应用。
+此示例项目包含使用[Entity Framework Core](https://docs.microsoft.com/ef/core/)的基本 CRUD（创建-读取-更新-删除）应用。
 
 ### <a name="run-the-application"></a>运行应用程序
 
@@ -76,7 +77,7 @@ dotnet ef database update
 dotnet run
 ```
 
-在浏览器中导航至 `http://localhost:5000`。 选择“新建”链接，创建一对待办事项。
+在浏览器中导航至 `http://localhost:5000` 。 选择“新建”  链接，创建几个待办事项  。
 
 ![已成功连接到 SQL 数据库](./media/app-service-web-tutorial-dotnetcore-sqldb/local-app-in-browser.png)
 
@@ -84,7 +85,7 @@ dotnet run
 
 [!INCLUDE [cloud-shell-try-it.md](../../includes/cloud-shell-try-it.md)]
 
-## <a name="create-production-sql-database"></a>创建生产 SQL 数据库
+## <a name="create-production-sql-database"></a>创建生产环境 SQL 数据库
 
 此步骤在 Azure 中创建一个 SQL 数据库。 应用部署到 Azure 后，它将使用该云数据库。
 
@@ -96,9 +97,9 @@ dotnet run
 
 ### <a name="create-a-sql-database-logical-server"></a>创建 SQL 数据库逻辑服务器
 
-在 Cloud Shell 中，使用 [`az sql server create`](/cli/azure/sql/server?view=azure-cli-latest#az_sql_server_create) 命令创建 SQL 数据库逻辑服务器。
+在 Cloud Shell 中，使用 [`az sql server create`](/cli/azure/sql/server?view=azure-cli-latest#az-sql-server-create) 命令创建 SQL 数据库逻辑服务器。
 
-将 \<server_name> 占位符替换为唯一的 SQL 数据库名称。 此名称用作 SQL 数据库终结点 `<server_name>.database.windows.net` 的一部分，因此必须在 Azure 的所有逻辑服务器中具有唯一性。 它只能包含小写字母、数字及连字符(-)，长度必须为 3 到 50 个字符。 此外，将 \<db_username> 和 \<db_password> 分别替换为所选用户名和密码。 
+将 \<server_name> 占位符替换为唯一的 SQL 数据库名称  。 此名称用作 SQL 数据库终结点 `<server_name>.database.windows.net` 的一部分，因此必须在 Azure 的所有逻辑服务器中具有唯一性。 它只能包含小写字母、数字及连字符(-)，长度必须为 3 到 50 个字符。 此外，将 \<db_username> 和 \<db_password> 分别替换为所选用户名和密码   。 
 
 
 ```azurecli-interactive
@@ -127,19 +128,19 @@ az sql server create --name <server_name> --resource-group myResourceGroup --loc
 
 ### <a name="configure-a-server-firewall-rule"></a>配置服务器防火墙规则
 
-使用 [`az sql server firewall create`](/cli/azure/sql/server/firewall-rule?view=azure-cli-latest#az_sql_server_firewall_rule_create) 命令创建 [Azure SQL 数据库服务器级防火墙规则](../sql-database/sql-database-firewall-configure.md)。 若同时将起始 IP 和结束 IP 设置为 0.0.0.0，防火墙将仅对其他 Azure 资源开启。 
+使用 [`az sql server firewall create`](/cli/azure/sql/server/firewall-rule?view=azure-cli-latest#az-sql-server-firewall-rule-create) 命令创建 [Azure SQL 数据库服务器级防火墙规则](../sql-database/sql-database-firewall-configure.md)。 若同时将起始 IP 和结束 IP 设置为 0.0.0.0，防火墙将仅对其他 Azure 资源开启。 
 
 ```azurecli-interactive
-az sql server firewall-rule create --resource-group myResourceGroup --server <server_name> --name AllowYourIp --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
+az sql server firewall-rule create --resource-group myResourceGroup --server <server_name> --name AllowAllIps --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
 ```
 
 > [!TIP] 
-> 甚至可以让防火墙规则更严格，即[只使用应用所使用的出站 IP 地址](app-service-ip-addresses.md#find-outbound-ips)。
+> 你甚至可以让防火墙规则更严格，即[只使用应用所使用的出站 IP 地址](overview-inbound-outbound-ips.md#find-outbound-ips)。
 >
 
 ### <a name="create-a-database"></a>创建数据库
 
-使用 [`az sql db create`](/cli/azure/sql/db?view=azure-cli-latest#az_sql_db_create) 命令在服务器中创建 [S0 性能级别](../sql-database/sql-database-service-tiers.md)的数据库。
+使用 [`az sql db create`](/cli/azure/sql/db?view=azure-cli-latest#az-sql-db-create) 命令在服务器中创建 [S0 性能级别](../sql-database/sql-database-service-tiers-dtu.md)的数据库。
 
 ```azurecli-interactive
 az sql db create --resource-group myResourceGroup --server <server_name> --name coreDB --service-objective S0
@@ -147,7 +148,7 @@ az sql db create --resource-group myResourceGroup --server <server_name> --name 
 
 ### <a name="create-connection-string"></a>创建连接字符串
 
-将下列字符串替换为先前所使用的 \<server_name>、\<db_username> 和 \<db_password>。
+将下列字符串替换为先前所使用的 \<server_name>、\<db_username> 和 \<db_password>    。
 
 ```
 Server=tcp:<server_name>.database.windows.net,1433;Database=coreDB;User ID=<db_username>;Password=<db_password>;Encrypt=true;Connection Timeout=30;
@@ -171,23 +172,31 @@ Server=tcp:<server_name>.database.windows.net,1433;Database=coreDB;User ID=<db_u
 
 [!INCLUDE [Create web app](../../includes/app-service-web-create-web-app-dotnetcore-win-no-h.md)] 
 
-### <a name="configure-an-environment-variable"></a>配置环境变量
+### <a name="configure-connection-string"></a>配置连接字符串
 
-若要为 Azure 应用设置连接字符串，请使用 Cloud Shell 中的 [`az webapp config appsettings set`](/cli/azure/webapp/config/appsettings?view=azure-cli-latest#az_webapp_config_appsettings_set) 命令。 在下列命令中，将 \<app name> 和 \<connection_string> 参数替换为先前创建的连接字符串。
+若要为 Azure 应用设置连接字符串，请使用 Cloud Shell 中的 [`az webapp config appsettings set`](/cli/azure/webapp/config/appsettings?view=azure-cli-latest#az-webapp-config-appsettings-set) 命令。 在下列命令中，将 \<app name> 和 \<connection_string> 参数替换为先前创建的连接字符串   。
 
 ```azurecli-interactive
-az webapp config connection-string set --resource-group myResourceGroup --name <app name> --settings MyDbConnection='<connection_string>' --connection-string-type SQLServer
+az webapp config connection-string set --resource-group myResourceGroup --name <app name> --settings MyDbConnection="<connection_string>" --connection-string-type SQLServer
 ```
 
-接下来，将 `ASPNETCORE_ENVIRONMENT` 应用设置设置为_生产_。 由于对本地开发环境使用 SQLite，并对 Azure 环境使用 SQL 数据库，因此通过此设置，可了解是否正在 Azure 中运行。
+在 ASP.NET Core 中，可以通过标准模式使用此命名连接字符串 (`MyDbConnection`)，就像在 appsettings.json  中指定的任何连接字符串一样。 在本例中，`MyDbConnection` 也在 appsettings.json  中定义。 在应用服务中运行时，应用服务中定义的连接字符串优先于 appsettings.json  中定义的连接字符串。 此代码在本地开发过程中使用 appsettings.json  值，相同的代码在部署时使用应用服务值。
 
-下面的示例在 Azure Web 应用中配置 `ASPNETCORE_ENVIRONMENT` 应用设置。 替换 \<app_name> 占位符。
+若要了解如何在代码中引用连接字符串，请参阅[在生产环境中连接到 SQL 数据库](#connect-to-sql-database-in-production)。
+
+### <a name="configure-environment-variable"></a>配置环境变量
+
+接下来，将 `ASPNETCORE_ENVIRONMENT` 应用设置设置为_生产_。 由于对本地开发环境使用 SQLite，并对 Azure 环境使用 SQL 数据库，因此通过此设置，你可以了解应用是否正在 Azure 中运行。
+
+以下示例在 Azure 应用中配置 `ASPNETCORE_ENVIRONMENT` 应用设置。 替换 \<app_name> 占位符  。
 
 ```azurecli-interactive
 az webapp config appsettings set --name <app_name> --resource-group myResourceGroup --settings ASPNETCORE_ENVIRONMENT="Production"
 ```
 
-### <a name="connect-to-sql-database-in-production"></a>在生产中连接到 SQL 数据库
+若要了解如何在代码中引用环境变量，请参阅[在生产环境中连接到 SQL 数据库](#connect-to-sql-database-in-production)。
+
+### <a name="connect-to-sql-database-in-production"></a>在生产环境中连接到 SQL 数据库
 
 在本地存储库中，打开 Startup.cs 并查找下列代码：
 
@@ -211,9 +220,13 @@ else
 services.BuildServiceProvider().GetService<MyDatabaseContext>().Database.Migrate();
 ```
 
-如果此代码检测到当前正在生产中运行（指 Azure 环境），则会使用先前配置的连接字符串连接到 SQL 数据库。
+如果此代码检测到当前正在生产环境中运行（指 Azure 环境），则会使用已配置的连接字符串连接到 SQL 数据库。
 
 在 Azure 中运行时可利用 `Database.Migrate()` 调用，因为它会根据迁移配置自动创建 .NET Core 应用所需的数据库。 
+
+> [!IMPORTANT]
+> 对于需要横向扩展的生产应用，请遵循[在生产中应用迁移](/aspnet/core/data/ef-rp/migrations#applying-migrations-in-production)中的最佳做法。
+> 
 
 保存所做的更改，然后将其提交到 Git 存储库。 
 
@@ -252,9 +265,9 @@ To https://<app_name>.scm.azurewebsites.net/<app_name>.git
  * [new branch]      master -> master
 ```
 
-### <a name="browse-to-the-azure-web-app"></a>浏览到 Azure Web 应用
+### <a name="browse-to-the-azure-app"></a>浏览到 Azure 应用
 
-使用 Web 浏览器浏览到已部署的 Web 应用。
+使用 Web 浏览器浏览到已部署的应用。
 
 ```bash
 http://<app_name>.azurewebsites.net
@@ -264,7 +277,7 @@ http://<app_name>.azurewebsites.net
 
 ![在应用服务中运行的应用](./media/app-service-web-tutorial-dotnetcore-sqldb/azure-app-in-browser.png)
 
-**祝贺你！** 正在应用服务中运行数据驱动的 .NET Core 应用。
+**祝贺你！** 数据驱动的 .NET Core 应用已经在你的应用服务中运行了。
 
 ## <a name="update-locally-and-redeploy"></a>在本地更新并重新部署
 
@@ -280,7 +293,7 @@ public bool Done { get; set; }
 
 ### <a name="run-code-first-migrations-locally"></a>本地运行 Code First 迁移
 
-运行几个命令更新本地数据库。
+运行以下命令更新本地数据库。
 
 ```bash
 dotnet ef migrations add AddProperty
@@ -294,11 +307,11 @@ dotnet ef database update
 
 ### <a name="use-the-new-property"></a>使用新属性
 
-为使用 `Done` 属性，需要对代码做更多更改。 简单起见，本教程中将仅更改 `Index` 和 `Create` 视图，以便在操作中查看属性。
+为使用 `Done` 属性，需要对代码做一些更改。 简单起见，本教程中将仅更改 `Index` 和 `Create` 视图，以便在操作过程中查看属性。
 
 打开 _Controllers\TodosController.cs_。
 
-找到 `Create([Bind("ID,Description,CreatedDate")] Todo todo)` 方法，并将 `Done` 添加到 `Bind` 属性中的属性列表。 完成后，`Create()` 方法签名应如下代码所示：
+找到 `Create([Bind("ID,Description,CreatedDate")] Todo todo)` 方法，并将 `Done` 添加到 `Bind` 属性中的属性列表。 完成后，`Create()` 方法签名应如以下代码所示：
 
 ```csharp
 public async Task<IActionResult> Create([Bind("ID,Description,CreatedDate,Done")] Todo todo)
@@ -346,7 +359,7 @@ public async Task<IActionResult> Create([Bind("ID,Description,CreatedDate,Done")
 dotnet run
 ```
 
-在浏览器中，导航到 `http://localhost:5000/`。 你现在可以添加一个待办事项，并检查“完成”。 然后，它应作为已完成项在主页中显示。 请牢记，由于未更改`Edit`视图，`Edit`视图不显示`Done`字段。
+在浏览器中，导航到 `http://localhost:5000/`。 你现在可以添加一个待办事项，并检查**Done**。 然后，它会在主页中显示为已完成的项。 请牢记，由于未更改`Edit`视图，`Edit`视图不显示`Done`字段。
 
 ### <a name="publish-changes-to-azure"></a>发布对 Azure 所做的更改
 
@@ -356,21 +369,52 @@ git commit -m "added done field"
 git push azure master
 ```
 
-一旦 `git push` 完成，请导航至 Azure Web 应用，试用新功能。
+`git push` 完成后，请导航至应用服务应用，尝试添加一个待办事项并选中“完成”  。
 
-![Code First 迁移后的 Azure Web 应用](./media/app-service-web-tutorial-dotnetcore-sqldb/this-one-is-done.png)
+![Code First 迁移后的 Azure 应用](./media/app-service-web-tutorial-dotnetcore-sqldb/this-one-is-done.png)
 
 所有现有待办事项仍将显示。 重新发布 .NET Core 应用时，SQL 数据库中的现有数据不会丢失。 此外，实体框架核心迁移仅更改数据架构，而使现有数据保持不变。
 
-## <a name="manage-your-azure-web-app"></a>管理 Azure Web 应用
+## <a name="stream-diagnostic-logs"></a>流式传输诊断日志
 
-转到 [Azure 门户](https://portal.azure.com)查看已创建的 Web 应用。
+当 ASP.NET Core 应用在 Azure 应用服务中运行时，可以将控制台日志传输到 Cloud Shell。 如此，可以获得相同的诊断消息，以便调试应用程序错误。
 
-从左侧菜单中单击“应用服务”，并单击 Azure Web 应用的名称。
+示例项目已遵循了 [Azure 中的 ASP.NET Core 日志记录](https://docs.microsoft.com/aspnet/core/fundamentals/logging#azure-app-service-provider)中的指南，并且进行了两个配置更改：
 
-![在门户中导航到 Azure Web 应用](./media/app-service-web-tutorial-dotnetcore-sqldb/access-portal.png)
+- 在 *DotNetCoreSqlDb.csproj* 中包括了对 `Microsoft.Extensions.Logging.AzureAppServices` 的引用。
+- 在 *Program.cs* 中调用 `loggerFactory.AddAzureWebAppDiagnostics()`。
 
-默认情况下，门户将显示 Web 应用“概述”页。 在此页中可以查看应用的运行状况。 在此处还可以执行基本的管理任务，例如浏览、停止、启动、重新启动和删除。 该页左侧的选项卡显示可以打开的不同配置页。
+若要将应用服务中的 ASP.NET Core [日志级别](https://docs.microsoft.com/aspnet/core/fundamentals/logging#log-level)从默认级别 `Error` 设置为 `Information`，请在 Cloud Shell 中使用 [`az webapp log config`](/cli/azure/webapp/log?view=azure-cli-latest#az-webapp-log-config) 命令。
+
+```azurecli-interactive
+az webapp log config --name <app_name> --resource-group myResourceGroup --application-logging true --level information
+```
+
+> [!NOTE]
+> 项目的日志级别在 *appsettings.json* 中已设置为 `Information`。
+> 
+
+若要启动日志流式处理，请在 Cloud Shell 中使用 [`az webapp log tail`](/cli/azure/webapp/log?view=azure-cli-latest#az-webapp-log-tail) 命令。
+
+```azurecli-interactive
+az webapp log tail --name <app_name> --resource-group myResourceGroup
+```
+
+启动日志流式处理后，请在浏览器中刷新 Azure 应用，以获取一些 Web 流量。 现在可以看到通过管道传送到终端的控制台日志。 如果没有立即看到控制台日志，请在 30 秒后重新查看。
+
+若要随时停止日志流式处理，请键入 `Ctrl`+`C`。
+
+有关自定义 ASP.NET Core 日志的详细信息，请参阅 [ASP.NET Core 中的日志记录](https://docs.microsoft.com/aspnet/core/fundamentals/logging)。
+
+## <a name="manage-your-azure-app"></a>管理 Azure 应用
+
+转到 [Azure 门户](https://portal.azure.com)查看创建的应用。
+
+在左侧菜单中单击“应用服务”，然后单击 Azure 应用的名称。 
+
+![在门户中导航到 Azure 应用](./media/app-service-web-tutorial-dotnetcore-sqldb/access-portal.png)
+
+默认情况下，门户将显示应用的  “概述”页。 在此页中可以查看应用的运行状况。 在此处还可以执行基本的管理任务，例如浏览、停止、启动、重新启动和删除。 该页左侧的选项卡显示可以打开的不同配置页。
 
 ![Azure 门户中的应用服务页](./media/app-service-web-tutorial-dotnetcore-sqldb/web-app-blade.png)
 
@@ -389,7 +433,7 @@ git push azure master
 > * 将日志从 Azure 流式传输到终端
 > * 在 Azure 门户中管理应用
 
-转到下一教程，了解如何向 Web 应用映射自定义 DNS 名称。
+继续学习下一篇教程，了解如何将自定义 DNS 名称映射到应用。
 
 > [!div class="nextstepaction"]
-> [将现有的自定义 DNS 名称映射到 Azure Web 应用](app-service-web-tutorial-custom-domain.md)
+> [将现有的自定义 DNS 名称映射到 Azure 应用服务](app-service-web-tutorial-custom-domain.md)

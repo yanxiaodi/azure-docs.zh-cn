@@ -4,7 +4,7 @@ description: 本教程逐步演示如何在 Azure 门户中使用 Media Encoder 
 services: media-services
 documentationcenter: ''
 author: Juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: 107d9e9a-71e9-43e5-b17c-6e00983aceab
 ms.service: media-services
@@ -12,13 +12,14 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 08/07/2017
+ms.date: 03/19/2019
 ms.author: juliako
-ms.openlocfilehash: 470eb8613416f441c1becee628acf3c898591c84
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 7c147d99eaabee70316521d1f2bdc41933162ab1
+ms.sourcegitcommit: 0c906f8624ff1434eb3d3a8c5e9e358fcbc1d13b
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 08/16/2019
+ms.locfileid: "69542604"
 ---
 # <a name="encode-an-asset-by-using-media-encoder-standard-in-the-azure-portal"></a>在 Azure 门户中使用 Media Encoder Standard 对资产进行编码
 
@@ -27,7 +28,7 @@ ms.lasthandoff: 05/07/2018
 > 
 > 
 
-使用 Azure 媒体服务时最常见的情况之一是将自适应比特率流传送至客户端。 媒体服务支持以下自适应比特率流式处理技术：Apple HTTP Live Streaming (HLS)、Microsoft 平滑流式处理，以及经 HTTP 的动态自适应流式处理（DASH，也称 MPEG-DASH）。 要准备视频以便进行自适应比特率流式处理，首先要将源视频编码成多比特率文件。 可使用 Azure Media Encoder Standard 对视频进行编码。  
+使用 Azure 媒体服务时最常见的情况之一是将自适应比特率流传送至客户端。 媒体服务支持以下自适应比特率流式处理技术：Apple HTTP Live Streaming (HLS)、Microsoft 平滑流式处理，以及经 HTTP 的动态自适应流式处理（DASH，也称 MPEG-DASH）。 要准备视频以便进行自适应比特率流式处理，首先要将源视频编码成多比特率文件。 你可以使用 Media Encoder Standard 对视频进行编码。  
 
 可以通过媒体服务进行动态打包。 通过动态打包，可以在 HLS、平滑流式处理和 MPEG-DASH 中提供多比特率 MP4，而无需重新打包这些流格式。 借助动态打包功能，可存储和播放使用单一存储格式的文件。 媒体服务会根据客户端的请求生成并提供适当的响应。
 
@@ -47,7 +48,7 @@ ms.lasthandoff: 05/07/2018
    可以编辑输出资产名称和作业名称，以便管理资源。
    
    ![对资产进行编码](./media/media-services-portal-vod-get-started/media-services-encode1.png)
-5. 选择**创建**。
+5. 选择“创建”。
 
 ## <a name="media-services-learning-paths"></a>媒体服务学习路径
 [!INCLUDE [media-services-learning-paths-include](../../../includes/media-services-learning-paths-include.md)]

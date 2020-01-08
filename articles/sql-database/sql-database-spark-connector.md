@@ -2,19 +2,21 @@
 title: 具有 Azure SQL 数据库和 SQL Server 的 Spark 连接器| Microsoft Docs
 description: 了解如何使用适用于 Azure SQL 数据库和 SQL Server 的 Spark 连接器
 services: sql-database
-author: allenwux
-manager: craigg
 ms.service: sql-database
+ms.subservice: development
 ms.custom: ''
-ms.topic: article
-ms.date: 04/23/2018
+ms.devlang: ''
+ms.topic: conceptual
+author: allenwux
 ms.author: xiwu
-ms.openlocfilehash: 393af463c4145e1d865c14f2ace7d5123ab12cfa
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.reviewer: carlrab
+ms.date: 09/25/2018
+ms.openlocfilehash: 49877994e7eef89f099e19d92e26de48bd9d41f4
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
-ms.locfileid: "32187379"
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68566465"
 ---
 # <a name="accelerate-real-time-big-data-analytics-with-spark-connector-for-azure-sql-database-and-sql-server"></a>通过适用于 Azure SQL 数据库和 SQL Server 的 Spark 连接器，加速实时大数据分析
 
@@ -25,7 +27,7 @@ ms.locfileid: "32187379"
 
 ## <a name="official-supported-versions"></a>官方支持的版本
 
-| 组件                            |版本                  |
+| 组件                            |Version                  |
 | :----------------------------------- | :---------------------- |
 | Apache Spark                         |2.0.2 或更高版本           |
 | Scala                                |2.10 或更高版本            |
@@ -158,7 +160,7 @@ collection.show()
 #### <a name="setup-requirement"></a>安装程序要求
 如果使用基于访问令牌的身份验证模式，则需要下载 [azure-activedirectory-library-for-java](https://github.com/AzureAD/azure-activedirectory-library-for-java) 及其依赖项，并将他它们包含在 Java 生成路径中。
 
-请参阅[通过 SQL 数据库使用 Azure Active Directory 身份验证进行身份验证](https://docs.microsoft.com/azure/sql-database/sql-database-aad-authentication)，了解如何获取到 Azure SQL 数据库的访问令牌。
+请参阅[通过 SQL 数据库使用 Azure Active Directory 身份验证进行身份验证](sql-database-aad-authentication.md)，了解如何获取到 Azure SQL 数据库的访问令牌。
 
 ```scala
 import com.microsoft.azure.sqldb.spark.config.Config
@@ -199,7 +201,6 @@ val bulkCopyConfig = Config(Map(
   "databaseName"      -> "MyDatabase",
   "user"              -> "username",
   "password"          -> "*********",
-  "databaseName"      -> "zeqisql",
   "dbTable"           -> "dbo.Clients",
   "bulkCopyBatchSize" -> "2500",
   "bulkCopyTableLock" -> "true",
@@ -216,5 +217,5 @@ df.bulkCopyToSqlDB(bulkCopyConfig, bulkCopyMetadata)
 -   [示例 Azure Databricks 笔记本](https://github.com/Azure/azure-sqldb-spark/tree/master/samples/notebooks)
 - [示例脚本 (Scala)](https://github.com/Azure/azure-sqldb-spark/tree/master/samples/scripts)
 
-此外，还可以查看 [Apache Spark SQL、数据框架和数据集指南](http://spark.apache.org/docs/latest/sql-programming-guide.html)以及 [Azure Databricks 文档](https://docs.microsoft.com/azure/azure-databricks/)。
+此外，还可以查看 [Apache Spark SQL、数据框架和数据集指南](https://spark.apache.org/docs/latest/sql-programming-guide.html)以及 [Azure Databricks 文档](https://docs.microsoft.com/azure/azure-databricks/)。
 

@@ -1,10 +1,10 @@
 ---
-title: 创建具有多个 NIC 的 VM（经典）- Azure CLI 1.0 | Microsoft 文档
-description: 了解如何使用 Azure 命令行接口 (CLI) 1.0 创建具有多个 NIC 的 VM（经典）。
+title: 创建具有多个 NIC 的 VM（经典）- Azure 经典 CLI | Microsoft Docs
+description: 了解如何使用 Azure 经典命令行接口 (CLI) 创建具有多个 NIC 的 VM（经典）。
 services: virtual-network
 documentationcenter: na
 author: genlin
-manager: cshepard
+manager: dcscontentpm
 editor: ''
 tags: azure-service-management
 ms.assetid: b436e41e-866c-439f-a7c7-7b4b041725ef
@@ -16,20 +16,21 @@ ms.workload: infrastructure-services
 ms.date: 02/02/2016
 ms.author: genli
 ms.custom: H1Hack27Feb2017
-ms.openlocfilehash: 0b56ab474ff23748487c50bd34487c80242c6429
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.openlocfilehash: 2dc437b15f73866f76361da529690eac7a10af1a
+ms.sourcegitcommit: ca359c0c2dd7a0229f73ba11a690e3384d198f40
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71058744"
 ---
-# <a name="create-a-vm-classic-with-multiple-nics-using-the-azure-cli-10"></a>使用 Azure CLI 1.0 创建具有多个 NIC 的 VM（经典）
+# <a name="create-a-vm-classic-with-multiple-nics-using-the-azure-classic-cli"></a>使用 Azure 经典 CLI 创建具有多个 NIC 的 VM（经典）
 
 [!INCLUDE [virtual-network-deploy-multinic-classic-selectors-include.md](../../includes/virtual-network-deploy-multinic-classic-selectors-include.md)]
 
 可以在 Azure 中创建虚拟机 (VM)，并将多个网络接口 (NIC) 附加到每个 VM。 通过多个 NIC 可分离跨 NIC 的流量类型。 例如，一个 NIC 可与 Internet 通信，而另一个 NIC 仅与未连接到 Internet 的内部资源通信。 许多网络虚拟设备（例如应用程序交付和 WAN 优化解决方案）都需要具备跨多个 NIC 分离网络流量的能力。
 
 > [!IMPORTANT]
-> Azure 具有用于创建和处理资源的两个不同的部署模型：[Resource Manager 和经典](../resource-manager-deployment-model.md)。 本文介绍使用经典部署模型。 Microsoft 建议大多数新部署使用资源管理器模型。 了解如何使用 [Resource Manager 部署模型](../virtual-machines/linux/multiple-nics.md)执行这些步骤。
+> Azure 具有用于创建和处理资源的两个不同的部署模型：[资源管理器部署模型和经典部署模型](../resource-manager-deployment-model.md)。 本文介绍使用经典部署模型。 Microsoft 建议大多数新部署使用资源管理器模型。 了解如何使用 [Resource Manager 部署模型](../virtual-machines/linux/multiple-nics.md)执行这些步骤。
 
 [!INCLUDE [virtual-network-deploy-multinic-scenario-include.md](../../includes/virtual-network-deploy-multinic-scenario-include.md)]
 
@@ -43,14 +44,14 @@ ms.lasthandoff: 04/23/2018
 ## <a name="deploy-the-back-end-vms"></a>部署后端 VM
 后端 VM 取决于以下资源的创建：
 
-* **数据磁盘的存储帐户**。 为了提高性能，数据库服务器上的数据磁盘将使用固态驱动器 (SSD) 技术，这需要高级存储帐户。 请确保部署到的 Azure 位置支持高级存储。
+* **数据磁盘的存储帐户**。 为了提高性能，数据库服务器上的数据磁盘使用固态驱动器 (SSD) 技术，这需要高级存储帐户。 请确保部署到的 Azure 位置支持高级存储。
 * **NIC**。 每个 VM 都将具有两个 NIC，一个用于数据库访问，另一个用于管理。
 * **可用性集**。 所有数据库服务器都将添加到单个可用性集，以确保在维护期间至少有一个 VM 已启动且正在运行。
 
 ### <a name="step-1---start-your-script"></a>步骤 1 - 启动脚本
-可以在[此处](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/IaaS-Story/11-MultiNIC/classic/virtual-network-deploy-multinic-classic-cli.sh)下载所用的完整 bash 脚本。 完成以下步骤，以更改要在环境中使用的脚本：
+可以在[此处](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/IaaS-Story/11-MultiNIC/classic/virtual-network-deploy-multinic-classic-cli.sh)下载所用的完整 bash 脚本。 完成以下步骤，更改脚本，以便用于具体环境：
 
-1. 基于在上面[先决条件](#Prerequisites)中部署的现有资源组更改以下变量的值。
+1. 基于在上面[先决条件](#prerequisites)中部署的现有资源组更改以下变量的值。
 
     ```azurecli
     location="useast2"
@@ -93,7 +94,7 @@ ms.lasthandoff: 04/23/2018
     ```
 
 ### <a name="step-3---create-vms-with-multiple-nics"></a>步骤 3 - 创建具有多个 NIC 的 VM
-1. 基于 `numberOfVMs` 变量启动一个循环来创建多个 VM。
+1. 启动循环，根据 `numberOfVMs` 变量创建多个 VM。
 
     ```azurecli
     for ((suffixNumber=1;suffixNumber<=numberOfVMs;suffixNumber++));

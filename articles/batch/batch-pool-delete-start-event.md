@@ -2,21 +2,21 @@
 title: Azure Batch 池删除开始事件 | Microsoft Docs
 description: 批处理池删除开始事件参考。
 services: batch
-author: dlepow
-manager: jeconnoc
+author: laurenhughes
+manager: gwallace
 ms.assetid: ''
 ms.service: batch
-ms.devlang: multiple
 ms.topic: article
 ms.tgt_pltfrm: ''
 ms.workload: big-compute
 ms.date: 04/20/2017
-ms.author: danlep
-ms.openlocfilehash: 8737b9ff6452730ff5a55fa7324e37f0fe715433
-ms.sourcegitcommit: 20d103fb8658b29b48115782fe01f76239b240aa
-ms.translationtype: HT
+ms.author: lahugh
+ms.openlocfilehash: 76f3a15d88166160f28461c34ee03ff7c8880a59
+ms.sourcegitcommit: 267a9f62af9795698e1958a038feb7ff79e77909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/03/2018
+ms.lasthandoff: 09/04/2019
+ms.locfileid: "70258419"
 ---
 # <a name="pool-delete-start-event"></a>池删除开始事件
 
@@ -32,4 +32,4 @@ ms.lasthandoff: 04/03/2018
 
 |元素|类型|说明|
 |-------------|----------|-----------|
-|id|String|池的 id。|
+|`id`|String|池的 ID。|

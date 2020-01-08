@@ -3,27 +3,23 @@ title: Azure 数据工厂中的等待活动 | Microsoft Docs
 description: 等待活动在一段指定的时间内暂停管道的执行。
 services: data-factory
 documentationcenter: ''
-author: sharonlo101
-manager: craigg
+author: djpmsft
+ms.author: daperlov
+manager: jroth
 ms.reviewer: douglasl
 ms.service: data-factory
 ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
-ms.date: 01/10/2018
-ms.author: shlo
-ms.openlocfilehash: 9887f735fab30c95241bd84f49f30140efc27873
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 01/12/2018
+ms.openlocfilehash: 48a722979e61209a855dd1fec22fcdcc756ae1ce
+ms.sourcegitcommit: d200cd7f4de113291fbd57e573ada042a393e545
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70142417"
 ---
-# <a name="wait-activity-in-azure-data-factory"></a>Azure 数据工厂中的等待活动
+# <a name="execute-wait-activity-in-azure-data-factory"></a>在 Azure 数据工厂中执行等待活动
 在管道中使用等待活动时，管道将等待一段指定的时间，然后继续执行后续活动。 
-
-> [!NOTE]
-> 本文适用于目前处于预览状态的数据工厂版本 2。 如果使用数据工厂服务版本 1（即正式版 (GA），请参阅[数据工厂 V1 文档](v1/data-factory-introduction.md)。
 
 ## <a name="syntax"></a>语法
 
@@ -40,11 +36,11 @@ ms.lasthandoff: 03/23/2018
 
 ## <a name="type-properties"></a>Type 属性
 
-属性 | 说明 | 允许的值 | 必选
+属性 | 说明 | 允许的值 | 必填
 -------- | ----------- | -------------- | --------
-名称 | `Wait` 活动的名称。 | String | 是
+name | `Wait` 活动的名称。 | String | 是
 type | 必须被设置为 **Wait**。 | String | 是
-waitTimeInSeconds | 管道在继续进行处理前所等待的秒数。 | Integer | 是
+waitTimeInSeconds | 管道在继续进行处理前所等待的秒数。 | 整数 | 是
 
 ## <a name="example"></a>示例
 
@@ -52,7 +48,7 @@ waitTimeInSeconds | 管道在继续进行处理前所等待的秒数。 | Intege
 > 本部分提供运行管道的 JSON 定义和示例 PowerShell 命令。 有关使用 Azure PowerShell 和 JSON 定义创建数据工厂管道的分步说明演练，请参阅[教程：使用 Azure PowerShell 创建数据工厂](quickstart-create-data-factory-powershell.md)。
 
 ### <a name="pipeline-with-wait-activity"></a>等待活动的管道
-在此示例中，管道具有两个活动：**Until** 和 **Wait**。 等待活动被配置为等待 1 秒。 管道循环运行 Web 活动，在每次运行之间等待 1 秒。 
+在此示例中，管道包含两个活动：**Until** 和 **Wait**。 等待活动被配置为等待 1 秒。 管道循环运行 Web 活动，在每次运行之间等待 1 秒。 
 
 ```json
 {

@@ -3,24 +3,23 @@ title: Azure 虚拟机代理概述 | Microsoft 文档
 description: Azure 虚拟机代理概述
 services: virtual-machines-windows
 documentationcenter: virtual-machines
-author: danielsollondon
-manager: jeconnoc
+author: axayjo
+manager: gwallace
 editor: tysonn
 tags: azure-resource-manager
 ms.assetid: 0a1f212e-053e-4a39-9910-8d622959f594
 ms.service: virtual-machines-windows
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-windows
 ms.workload: infrastructure-services
-ms.date: 03/30/2018
-ms.author: danis
-ms.openlocfilehash: fb29f0f931715b8a6ba5b4528294eb61ef5762c8
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.date: 07/20/2019
+ms.author: akjosh
+ms.openlocfilehash: 7c163dd48e53a3116d58cb94988f2822ddede5e5
+ms.sourcegitcommit: f2771ec28b7d2d937eef81223980da8ea1a6a531
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
-ms.locfileid: "33944739"
+ms.lasthandoff: 09/20/2019
+ms.locfileid: "71169121"
 ---
 # <a name="azure-virtual-machine-agent-overview"></a>Azure 虚拟机代理概述
 Microsoft Azure 虚拟机代理（VM 代理）是受保护的轻型进程，用于管理虚拟机 (VM) 与 Azure 结构控制器的交互。 VM 代理有一个主要角色，目的是启用和执行 Azure 虚拟机扩展。 VM 扩展可用于对 VM 进行部署后配置，例如安装和配置软件。 VM 扩展还可启用恢复功能，例如重置 VM 的管理密码。 没有 Azure VM 代理，VM 扩展将无法运行。
@@ -29,9 +28,9 @@ Microsoft Azure 虚拟机代理（VM 代理）是受保护的轻型进程，用�
 
 ## <a name="install-the-vm-agent"></a>安装 VM 代理
 
-### <a name="azure-marketplace-image"></a>Azure Marketplace 映像
+### <a name="azure-marketplace-image"></a>Azure 市场映像
 
-Azure VM 代理默认安装在任何通过 Azure Marketplace 映像部署的 Windows VM 上。 通过门户、PowerShell、命令行接口或 Azure 资源管理器模板部署 Azure Marketplace 映像时，也会安装 Azure VM 代理。
+Azure VM 代理默认安装在任何通过 Azure 市场映像部署的 Windows VM 上。 通过门户、PowerShell、命令行接口或 Azure 资源管理器模板部署 Azure 市场映像时，也会安装 Azure VM 代理。
 
 Windows 来宾代理包分为两个部分：
 
@@ -60,7 +59,7 @@ Windows 来宾代理包分为两个部分：
 如果没有安装代理，则无法使用某些 Azure 服务，例如 Azure 备份或 Azure 安全。 这些服务需要安装扩展。 如果已在没有 WinGA VM 的情况下部署 VM，稍后可以安装最新版本的代理。
 
 ### <a name="manual-installation"></a>手动安装
-可以使用 Windows 安装程序包手动安装 Windows VM 代理。 创建部署到 Azure 的自定义 VM 映像时，可能需要手动安装。 若要手动安装 Windows VM 代理，[下载 VM 代理安装程序](http://go.microsoft.com/fwlink/?LinkID=394789)。
+可以使用 Windows 安装程序包手动安装 Windows VM 代理。 创建部署到 Azure 的自定义 VM 映像时，可能需要手动安装。 若要手动安装 Windows VM 代理，[下载 VM 代理安装程序](https://go.microsoft.com/fwlink/?LinkID=394789)。 Windows Server 2008 R2 及更高版本支持 VM 代理。
 
 双击 Windows 安装程序文件即可安装 VM 代理。 若要以自动或无人参与方式安装 VM 代理，请运行以下命令：
 
@@ -68,18 +67,22 @@ Windows 来宾代理包分为两个部分：
 msiexec.exe /i WindowsAzureVmAgent.2.7.1198.778.rd_art_stable.160617-1120.fre /quiet
 ```
 
+### <a name="prerequisites"></a>先决条件
+在 .Net Framework 4.0 下，Windows VM 代理至少需要 Windows Server 2008 R2 （64位）才能运行。
+
 ## <a name="detect-the-vm-agent"></a>检测 VM 代理
 
 ### <a name="powershell"></a>PowerShell
 
-可以使用 Azure 资源管理器 PowerShell 模块检索有关 Azure VM 的信息。 若要查看有关 VM 的信息，如 Azure VM 代理的预配状态，请使用 [Get-AzureRmVM](/powershell/module/azurerm.compute/get-azurermvm)：
+可以使用 Azure 资源管理器 PowerShell 模块检索有关 Azure VM 的信息。 若要查看有关 VM 的信息，如 Azure VM 代理的预配状态，请使用 [Get-AzVM](https://docs.microsoft.com/powershell/module/az.compute/get-azvm)：
 
-```powershell` Get-AzureRmVM
+```powershell
+Get-AzVM
 ```
 
-The following condensed example output shows the the *ProvisionVMAgent* property nested inside *OSProfile*. This property can be used to determine if the VM agent has been deployed to the VM:
+以下精简示例输出展示了嵌套在 *OSProfile* 内的 *ProvisionVMAgent* 属性。 可以使用该属性来确定 VM 代理是否已部署到 VM：
 
-```PowerShell
+```powershell
 OSProfile                  :
   ComputerName             : myVM
   AdminUsername            : myUserName
@@ -90,8 +93,8 @@ OSProfile                  :
 
 可以使用以下脚本返回一个简明列表，其中包含 VM 名称以及 VM 代理的状态：
 
-```PowerShell
-$vms = Get-AzureRmVM
+```powershell
+$vms = Get-AzVM
 
 foreach ($vm in $vms) {
     $agent = $vm | Select -ExpandProperty OSProfile | Select -ExpandProperty Windowsconfiguration | Select ProvisionVMAgent
@@ -100,7 +103,8 @@ foreach ($vm in $vms) {
 ```
 
 ### <a name="manual-detection"></a>手动检测
-登录到 Microsoft Azure VM 后，可以使用任务管理器检查正在运行的进程。 要查看 Azure VM 代理，请打开任务管理器 > 单击“详细信息”选项卡，并查找名为 WindowsAzureGuestAgent.exe 的进程。 存在该进程表示 VM 代理已安装。
+
+登录到 Windows VM 后，可以使用任务管理器检查正在运行的进程。 要查看 Azure VM 代理，请打开任务管理器 > 单击“详细信息”选项卡，并查找名为 WindowsAzureGuestAgent.exe 的进程。 存在该进程表示 VM 代理已安装。
 
 
 ## <a name="upgrade-the-vm-agent"></a>升级 VM 代理

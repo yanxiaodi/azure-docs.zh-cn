@@ -1,32 +1,28 @@
 ---
-title: 使用虚拟网络连接到 Kafka - Azure HDInsight | Microsoft Docs
+title: 使用虚拟网络连接到 Kafka - Azure HDInsight
 description: 了解如何通过 Azure 虚拟网络直接连接到 Kafka on HDInsight。 了解如何使用 VPN 网关从开发客户端连接到 Kafka，或使用 VPN 网关设备从本地网络中的客户端连接到 Kafka。
-services: hdinsight
-documentationCenter: ''
-author: Blackmist
-manager: jhubbard
-editor: cgronlun
-tags: azure-portal
+author: hrasheed-msft
+ms.author: hrasheed
+ms.reviewer: jasonh
 ms.service: hdinsight
-ms.devlang: ''
 ms.custom: hdinsightactive
 ms.topic: conceptual
-ms.tgt_pltfrm: na
-ms.workload: big-data
-ms.date: 05/02/2018
-ms.author: larryfr
-ms.openlocfilehash: 2740b5cf483fe3fbc2644510461863b939ffaae3
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.date: 05/28/2019
+ms.openlocfilehash: 66bb054ab75c5a4e387995bc64dbc026c073413f
+ms.sourcegitcommit: fad368d47a83dadc85523d86126941c1250b14e2
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 09/19/2019
+ms.locfileid: "71122607"
 ---
-# <a name="connect-to-kafka-on-hdinsight-through-an-azure-virtual-network"></a>通过 Azure 虚拟网络连接到 Kafka on HDInsight
+# <a name="connect-to-apache-kafka-on-hdinsight-through-an-azure-virtual-network"></a>通过 Azure 虚拟网络连接到 Apache Kafka on HDInsight
 
-了解如何通过 Azure 虚拟网络直接连接到 Kafka on HDInsight。 本文档提供有关使用以下配置连接到 Kafka 的信息：
+了解如何通过 Azure 虚拟网络直接连接到 Apache Kafka on HDInsight。 本文档提供有关使用以下配置连接到 Kafka 的信息：
 
 * 从本地网络中的资源。 使用本地网络上的 VPN 设备（软件或硬件）建立此连接。
 * 使用 VPN 软件客户端从开发环境。
+
+[!INCLUDE [updated-for-az](../../../includes/updated-for-az.md)]
 
 ## <a name="architecture-and-planning"></a>架构与规划
 
@@ -36,37 +32,37 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
 
 * 将专用网络（例如本地网络）连接到虚拟网络。 此配置允许本地网络中的客户端直接使用 Kafka。 若要启用此配置，请执行以下任务：
 
-    1. 创建虚拟网络。
-    2. 创建使用站点到站点配置的 VPN 网关。 本文档中使用的配置连接到本地网络中的 VPN 网关设备。
-    3. 在虚拟网络中创建 DNS 服务器。
-    4. 在每个网络中的 DNS 服务器之间配置转发。
-    5. 在虚拟网络中安装 Kafka on HDInsight。
+  1. 创建虚拟网络。
+  2. 创建使用站点到站点配置的 VPN 网关。 本文档中使用的配置连接到本地网络中的 VPN 网关设备。
+  3. 在虚拟网络中创建 DNS 服务器。
+  4. 在每个网络中的 DNS 服务器之间配置转发。
+  5. 在虚拟网络中创建 Kafka on HDInsight 群集。
 
-    有关详细信息，请参阅[从本地网络连接到 Kafka](#on-premises) 部分。 
+     有关详细信息，请参阅[从本地网络连接到 Apache Kafka](#on-premises) 部分。 
 
 * 使用 VPN 网关和 VPN 客户端将单个计算机连接到虚拟网络。 若要启用此配置，请执行以下任务：
 
-    1. 创建虚拟网络。
-    2. 创建使用点到站点配置的 VPN 网关。 此配置可同时用于 Windows 和 MacOS 客户端。
-    3. 在虚拟网络中安装 Kafka on HDInsight。
-    4. 为 IP 播发配置 Kafka。 此配置允许客户端使用 IP 地址而不是域名建立连接。
-    5. 在开发系统上下载并使用 VPN 客户端。
+  1. 创建虚拟网络。
+  2. 创建使用点到站点配置的 VPN 网关。 此配置可同时用于 Windows 和 MacOS 客户端。
+  3. 在虚拟网络中创建 Kafka on HDInsight 群集。
+  4. 为 IP 播发配置 Kafka。 此配置允许客户端使用中转站 IP 地址而不是域名进行连接。
+  5. 在开发系统上下载并使用 VPN 客户端。
 
-    有关详细信息，请参阅[使用 VPN 客户端连接到 Kafka](#vpnclient) 部分。
+     有关详细信息，请参阅[使用 VPN 客户端连接到 Apache Kafka](#vpnclient) 部分。
 
-    > [!WARNING]
-    > 由于存在以下限制，只建议将此配置用于开发目的：
-    >
-    > * 每个客户端必须使用 VPN 软件客户端建立连接。
-    > * VPN 客户端不会向虚拟网络传递名称解析请求，因此，必须使用 IP 寻址来与 Kafka 通信。 IP 通信需要在 Kafka 群集上完成其他配置。
+     > [!WARNING]  
+     > 由于存在以下限制，只建议将此配置用于开发目的：
+     >
+     > * 每个客户端必须使用 VPN 软件客户端建立连接。
+     > * VPN 客户端不会向虚拟网络传递名称解析请求，因此，必须使用 IP 寻址来与 Kafka 通信。 IP 通信需要在 Kafka 群集上完成其他配置。
 
-有关在 Azure 虚拟网络中使用 HDInsight 的详细信息，请参阅[使用 Azure 虚拟网络扩展 HDInsight](../hdinsight-extend-hadoop-virtual-network.md)。
+有关在虚拟网络中使用 HDInsight 的详细信息，请参阅[为 Azure HDInsight 群集规划虚拟网络](../hdinsight-plan-virtual-network-deployment.md)。
 
-## <a id="on-premises"></a>从本地网络连接到 Kafka
+## <a id="on-premises"></a>从本地网络连接到 Apache Kafka
 
 若要创建可与本地网络通信的 Kafka 群集，请遵循[将 HDInsight 连接到本地网络](./../connect-on-premises-network.md)文档中所述的步骤。
 
-> [!IMPORTANT]
+> [!IMPORTANT]  
 > 创建 HDInsight 群集时，请选择“Kafka”群集类型。
 
 这些步骤创建以下配置：
@@ -78,7 +74,7 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
 
 若要验证 Kafka 客户端是否可从本地连接到群集，请使用[示例：Python 客户端](#python-client)部分中的步骤。
 
-## <a id="vpnclient"></a>使用 VPN 客户端连接到 Kafka
+## <a id="vpnclient"></a>使用 VPN 客户端连接到 Apache Kafka
 
 使用本部分中的步骤创建以下配置：
 
@@ -89,12 +85,12 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
 
 1. 遵循[为点到站点连接使用自签名证书](../../vpn-gateway/vpn-gateway-certificates-point-to-site.md)文档中所述的步骤。 本文档创建网关所需的证书。
 
-2. 打开 PowerShell 提示符，并使用下列代码登录 Azure 订阅：
+2. 打开 PowerShell 提示符，然后使用下列代码登录 Azure 订阅：
 
     ```powershell
-    Connect-AzureRmAccount
+    Connect-AzAccount
     # If you have multiple subscriptions, uncomment to set the subscription
-    #Select-AzureRmSubscription -SubscriptionName "name of your subscription"
+    #Select-AzSubscription -SubscriptionName "name of your subscription"
     ```
 
 3. 使用下列代码创建包含配置信息的变量：
@@ -138,35 +134,35 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
 
     ```powershell
     # Create the resource group that contains everything
-    New-AzureRmResourceGroup -Name $resourceGroupName -Location $location
+    New-AzResourceGroup -Name $resourceGroupName -Location $location
 
     # Create the subnet configuration
-    $defaultSubnetConfig = New-AzureRmVirtualNetworkSubnetConfig -Name $defaultSubnetName `
+    $defaultSubnetConfig = New-AzVirtualNetworkSubnetConfig -Name $defaultSubnetName `
         -AddressPrefix $defaultSubnetPrefix
-    $gatewaySubnetConfig = New-AzureRmVirtualNetworkSubnetConfig -Name $gatewaySubnetName `
+    $gatewaySubnetConfig = New-AzVirtualNetworkSubnetConfig -Name $gatewaySubnetName `
         -AddressPrefix $gatewaySubnetPrefix
 
     # Create the subnet
-    New-AzureRmVirtualNetwork -Name $networkName `
+    New-AzVirtualNetwork -Name $networkName `
         -ResourceGroupName $resourceGroupName `
         -Location $location `
         -AddressPrefix $networkAddressPrefix `
         -Subnet $defaultSubnetConfig, $gatewaySubnetConfig
 
     # Get the network & subnet that were created
-    $network = Get-AzureRmVirtualNetwork -Name $networkName `
+    $network = Get-AzVirtualNetwork -Name $networkName `
         -ResourceGroupName $resourceGroupName
-    $gatewaySubnet = Get-AzureRmVirtualNetworkSubnetConfig -Name $gatewaySubnetName `
+    $gatewaySubnet = Get-AzVirtualNetworkSubnetConfig -Name $gatewaySubnetName `
         -VirtualNetwork $network
-    $defaultSubnet = Get-AzureRmVirtualNetworkSubnetConfig -Name $defaultSubnetName `
+    $defaultSubnet = Get-AzVirtualNetworkSubnetConfig -Name $defaultSubnetName `
         -VirtualNetwork $network
 
     # Set a dynamic public IP address for the gateway subnet
-    $gatewayPublicIp = New-AzureRmPublicIpAddress -Name $gatewayPublicIpName `
+    $gatewayPublicIp = New-AzPublicIpAddress -Name $gatewayPublicIpName `
         -ResourceGroupName $resourceGroupName `
         -Location $location `
         -AllocationMethod Dynamic
-    $gatewayIpConfig = New-AzureRmVirtualNetworkGatewayIpConfig -Name $gatewayIpConfigName `
+    $gatewayIpConfig = New-AzVirtualNetworkGatewayIpConfig -Name $gatewayIpConfigName `
         -Subnet $gatewaySubnet `
         -PublicIpAddress $gatewayPublicIp
 
@@ -175,11 +171,11 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
     $rootCertFile = Get-ChildItem $rootCert
     $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($rootCertFile)
     $certBase64 = [System.Convert]::ToBase64String($cert.RawData)
-    $p2sRootCert = New-AzureRmVpnClientRootCertificate -Name $vpnRootCertName `
+    $p2sRootCert = New-AzVpnClientRootCertificate -Name $vpnRootCertName `
         -PublicCertData $certBase64
 
     # Create the VPN gateway
-    New-AzureRmVirtualNetworkGateway -Name $vpnName `
+    New-AzVirtualNetworkGateway -Name $vpnName `
         -ResourceGroupName $resourceGroupName `
         -Location $location `
         -IpConfigurations $gatewayIpConfig `
@@ -191,27 +187,29 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
         -VpnClientRootCertificates $p2sRootCert
     ```
 
-    > [!WARNING]
+    > [!WARNING]  
     > 这个过程可能需要几分钟才能完成。
 
 5. 使用下列代码创建 Azure 存储帐户和 BLob 容器：
 
     ```powershell
     # Create the storage account
-    New-AzureRmStorageAccount `
+    New-AzStorageAccount `
         -ResourceGroupName $resourceGroupName `
         -Name $storageName `
-        -Type Standard_GRS `
-        -Location $location
+        -SkuName Standard_GRS `
+        -Location $location `
+        -Kind StorageV2 `
+        -EnableHttpsTrafficOnly 1
 
     # Get the storage account keys and create a context
-    $defaultStorageKey = (Get-AzureRmStorageAccountKey -ResourceGroupName $resourceGroupName `
+    $defaultStorageKey = (Get-AzStorageAccountKey -ResourceGroupName $resourceGroupName `
         -Name $storageName)[0].Value
-    $storageContext = New-AzureStorageContext -StorageAccountName $storageName `
+    $storageContext = New-AzStorageContext -StorageAccountName $storageName `
         -StorageAccountKey $defaultStorageKey
 
     # Create the default storage container
-    New-AzureStorageContainer -Name $defaultContainerName `
+    New-AzStorageContainer -Name $defaultContainerName `
         -Context $storageContext
     ```
 
@@ -219,7 +217,7 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
 
     ```powershell
     # Create the HDInsight cluster
-    New-AzureRmHDInsightCluster `
+    New-AzHDInsightCluster `
         -ResourceGroupName $resourceGroupName `
         -ClusterName $clusterName `
         -Location $location `
@@ -237,14 +235,14 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
         -SubnetName $defaultSubnet.Id
     ```
 
-  > [!WARNING]
-  > 此过程完成时间大约为 15 分钟。
+   > [!WARNING]  
+   > 此过程完成时间大约为 15 分钟。
 
 ### <a name="configure-kafka-for-ip-advertising"></a>为 IP 播发配置 Kafka
 
-默认情况下，Zookeeper 向客户端返回 Kafka 中转站的域名。 此配置不使用 VPN 软件客户端，因为它无法对虚拟网络中的实体使用名称解析。 对于此配置，请使用以下步骤来配置 Kafka，以播发 IP 地址而不是域名：
+默认情况下，Apache Zookeeper 向客户端返回 Kafka 中转站的域名。 此配置不使用 VPN 软件客户端，因为它无法对虚拟网络中的实体使用名称解析。 对于此配置，请使用以下步骤来配置 Kafka，以播发 IP 地址而不是域名：
 
-1. 使用 Web 浏览器转到 https://CLUSTERNAME.azurehdinsight.net。 将 CLUSTERNAME 替换为 Kafka on HDInsight 群集的名称。
+1. 使用 Web 浏览器转到 `https://CLUSTERNAME.azurehdinsight.net` 。 将`CLUSTERNAME`替换为 Kafka on HDInsight 群集的名称。
 
     出现提示时，使用群集的 HTTPS 用户名称密码。 将显示群集的 Ambari Web UI。
 
@@ -254,7 +252,7 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
 
 3. 要查看 Kafka 配置，请在顶端的中间位置选择“配置”。
 
-    ![Kafka 的配置链接](./media/apache-kafka-connect-vpn-gateway/select-kafka-config.png)
+    ![Apache Ambari services 配置](./media/apache-kafka-connect-vpn-gateway/select-kafka-config1.png)
 
 4. 要查找“kafka-env” 配置，请在右上方的“筛选器”字段中输入 `kafka-env`。
 
@@ -276,15 +274,15 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
 
 8. 单击“保存”按钮保存配置。 输入描述更改的文本消息。 保存更改后，请选择“确定”。
 
-    ![保存配置按钮](./media/apache-kafka-connect-vpn-gateway/save-button.png)
+    ![Apache Ambari 保存配置](./media/apache-kafka-connect-vpn-gateway/save-configuration-button.png)
 
 9. 要防止在重启 Kafka 时出错，请使用“服务操作”按钮，并选择“打开维护模式”。 选择“确定”完成操作。
 
     ![服务操作，其中已突出显示“打开维护”](./media/apache-kafka-connect-vpn-gateway/turn-on-maintenance-mode.png)
 
-10. 要重启 Kafka，请使用“重启”按钮，并选择“重启所有受影响的项”。 确认重启，在操作完成后再使用“确定”按钮。
+10. 要重启 Kafka，请使用“重启”按钮，然后选择“重启所有受影响的项”。 确认重启，在操作完成后再使用“确定”按钮。
 
-    ![重启按钮，其中突出显示了所有受影响的重启项](./media/apache-kafka-connect-vpn-gateway/restart-button.png)
+    ![重启按钮，其中突出显示了所有受影响的重启项](./media/apache-kafka-connect-vpn-gateway/restart-required-button.png)
 
 11. 要禁用维护模式，请使用“服务操作”按钮，并选择“关闭维护模式”。 选择“确定”完成操作。
 
@@ -292,7 +290,7 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
 
 若要连接到 VPN 网关，请按[配置点到站点连接](../../vpn-gateway/vpn-gateway-howto-point-to-site-rm-ps.md#connect)文档中__连接到 Azure__ 部分进行操作。
 
-## <a id="python-client"></a>示例：Python 客户端
+## <a id="python-client"></a> 示例：Python 客户端
 
 若要验证与 Kafka 的连接，请使用以下步骤来创建并运行 Python 生成者和使用者：
 
@@ -301,7 +299,7 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
     ```powershell
     $resourceGroupName = "The resource group that contains the virtual network used with HDInsight"
 
-    $clusterNICs = Get-AzureRmNetworkInterface -ResourceGroupName $resourceGroupName | where-object {$_.Name -like "*node*"}
+    $clusterNICs = Get-AzNetworkInterface -ResourceGroupName $resourceGroupName | where-object {$_.Name -like "*node*"}
 
     $nodes = @()
     foreach($nic in $clusterNICs) {
@@ -322,29 +320,31 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
 
     保存返回的信息供后续步骤使用。
 
-2. 使用下列命令安装 [kafka-python](http://kafka-python.readthedocs.io/) 客户端：
+2. 使用下列命令安装 [kafka-python](https://kafka-python.readthedocs.io/) 客户端：
 
-        pip install kafka-python
+    ```bash
+    pip install kafka-python
+    ```
 
 3. 要将数据发送到 Kafka，请使用下列 Python 代码：
 
-  ```python
-  from kafka import KafkaProducer
-  # Replace the `ip_address` entries with the IP address of your worker nodes
-  # NOTE: you don't need the full list of worker nodes, just one or two.
-  producer = KafkaProducer(bootstrap_servers=['kafka_broker_1','kafka_broker_2'])
-  for _ in range(50):
+   ```python
+   from kafka import KafkaProducer
+   # Replace the `ip_address` entries with the IP address of your worker nodes
+   # NOTE: you don't need the full list of worker nodes, just one or two.
+   producer = KafkaProducer(bootstrap_servers=['kafka_broker_1','kafka_broker_2'])
+   for _ in range(50):
       producer.send('testtopic', b'test message')
-  ```
+   ```
 
     将 `'kafka_broker'` 条目替换为本部分中步骤 1 返回的地址：
 
-    * 如果使用__软件 VPN 客户端__，请将 `kafka_broker` 条目替换为工作节点的 IP 地址。
+   * 如果使用__软件 VPN 客户端__，请将 `kafka_broker` 条目替换为工作节点的 IP 地址。
 
-    * 如果__已启用通过自定义 DNS 服务器进行名称解析__，请将 `kafka_broker` 条目替换为工作节点的 FQDN。
+   * 如果__已启用通过自定义 DNS 服务器进行名称解析__，请将 `kafka_broker` 条目替换为工作节点的 FQDN。
 
-    > [!NOTE]
-    > 此代码将字符串 `test message` 发送给主题 `testtopic`。 Kafka on HDInsight 的默认配置是创建主题（如果它尚不存在）。
+     > [!NOTE]
+     > 此代码将字符串 `test message` 发送给主题 `testtopic`。 Kafka on HDInsight 的默认配置是创建主题（如果它尚不存在）。
 
 4. 要从 Kafka 检索消息，请使用下列 Python 代码：
 
@@ -368,7 +368,7 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
 
 ## <a name="next-steps"></a>后续步骤
 
-有关通过虚拟网络使用 HDInsight 的详细信息，请参阅[使用 Azure 虚拟网络扩展 Azure HDInsight](../hdinsight-extend-hadoop-virtual-network.md) 文档。
+有关在虚拟网络中使用 HDInsight 的详细信息，请参阅[为 Azure HDInsight 群集规划虚拟网络部署](../hdinsight-plan-virtual-network-deployment.md)文档。
 
 有关使用点到站点 VPN 网关创建 Azure 虚拟网络的详细信息，请参阅下列文档：
 
@@ -376,7 +376,7 @@ HDInsight 不允许通过公共 Internet 直接连接到 Kafka。 Kafka 客户�
 
 * [使用 Azure PowerShell 配置点到站点连接](../../vpn-gateway/vpn-gateway-howto-point-to-site-rm-ps.md)
 
-有关使用 Kafka on HDInsight 的详细信息，请参阅以下文档：
+有关使用 Apache Kafka on HDInsight 的详细信息，请参阅以下文档：
 
-* [Kafka on HDInsight 入门](apache-kafka-get-started.md)
-* [通过 Kafka on HDInsight 使用镜像](apache-kafka-mirroring.md)
+* [Apache Kafka on HDInsight 入门](apache-kafka-get-started.md)
+* [通过 Apache Kafka on HDInsight 使用镜像](apache-kafka-mirroring.md)

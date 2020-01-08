@@ -2,19 +2,20 @@
 title: SQL 数据仓库（门户）中的透明数据加密 | Microsoft 文档
 description: SQL 数据仓库中的透明数据加密 (TDE)
 services: sql-data-warehouse
-author: kavithaj
-manager: craigg-msft
+author: KavithaJonnakuti
+manager: craigg
 ms.service: sql-data-warehouse
 ms.topic: conceptual
-ms.component: implement
-ms.date: 04/17/2018
+ms.subservice: security
+ms.date: 04/30/2019
 ms.author: kavithaj
-ms.reviewer: igorstan
-ms.openlocfilehash: 9c4abb0416acc656a4cfae332377c398260191de
-ms.sourcegitcommit: 1362e3d6961bdeaebed7fb342c7b0b34f6f6417a
-ms.translationtype: HT
+ms.reviewer: rortloff
+ms.openlocfilehash: e756049110f7d4a81950abf6ebbe73edb3e3ca0a
+ms.sourcegitcommit: 0f54f1b067f588d50f787fbfac50854a3a64fff7
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/18/2018
+ms.lasthandoff: 08/12/2019
+ms.locfileid: "65143158"
 ---
 # <a name="get-started-with-transparent-data-encryption-tde-in-sql-data-warehouse"></a>SQL 数据仓库中的透明数据加密 (TDE) 入门
 > [!div class="op_single_selector"]
@@ -25,7 +26,7 @@ ms.lasthandoff: 04/18/2018
 > 
 > 
 
-## <a name="required-permssions"></a>所需权限
+## <a name="required-permissions"></a>所需权限
 若要启用透明数据加密 (TDE)，用户必须是管理员或 dbmanager 角色的成员。
 
 ## <a name="enabling-encryption"></a>启用加密
@@ -56,7 +57,7 @@ ms.lasthandoff: 04/18/2018
 
 <!--MSDN references-->
 [Transparent Data Encryption (TDE)]: https://msdn.microsoft.com/library/bb934049.aspx
-[sys.databases]: http://msdn.microsoft.com/library/ms178534.aspx
+[sys.databases]: https://msdn.microsoft.com/library/ms178534.aspx
 [sys.dm_pdw_nodes_database_encryption_keys]: https://msdn.microsoft.com/library/mt203922.aspx
 
 <!--Image references-->

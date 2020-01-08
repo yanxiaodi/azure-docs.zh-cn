@@ -1,26 +1,21 @@
 ---
-title: 使用 Azure REST API 创建 Hadoop 群集 — Azure | Microsoft Docs
+title: 使用 Azure REST API 创建 Apache Hadoop 群集 - Azure
 description: 了解如何通过将 Azure 资源管理器模板提交到 Azure REST API 来创建 HDInsight 群集。
-services: hdinsight
-documentationcenter: ''
-author: Blackmist
-manager: cgronlun
-editor: cgronlun
-tags: azure-portal
-ms.assetid: 98be5893-2c6f-4dfa-95ec-d4d8b5b7dcb5
+author: hrasheed-msft
+ms.reviewer: jasonh
 ms.service: hdinsight
 ms.custom: hdinsightactive
-ms.devlang: na
 ms.topic: conceptual
 ms.date: 05/02/2018
-ms.author: larryfr
-ms.openlocfilehash: 9c2779c692e944bed62d7ae9b76bb8929e62e5f3
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: hrasheed
+ms.openlocfilehash: d771d91feaba942b88a0ddb68f0d997fad4a981e
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "67059414"
 ---
-# <a name="create-hadoop-clusters-using-the-azure-rest-api"></a>使用 Azure REST API 创建 Hadoop 群集
+# <a name="create-apache-hadoop-clusters-using-the-azure-rest-api"></a>使用 Azure REST API 创建 Apache Hadoop 群集
 
 [!INCLUDE [selector](../../includes/hdinsight-create-linux-cluster-selector.md)]
 
@@ -28,15 +23,12 @@ ms.lasthandoff: 05/03/2018
 
 Azure REST API 允许对托管在 Azure 平台中的服务执行管理操作，包括创建新资源（例如 HDInsight 群集）。
 
-> [!IMPORTANT]
-> Linux 是 HDInsight 3.4 或更高版本上使用的唯一操作系统。 有关详细信息，请参阅 [HDInsight 在 Windows 上停用](hdinsight-component-versioning.md#hdinsight-windows-retirement)。
-
-> [!NOTE]
+> [!NOTE]  
 > 本文档中的步骤使用 [curl (https://curl.haxx.se/)](https://curl.haxx.se/) 实用工具与 Azure REST API 进行通信。
 
 ## <a name="create-a-template"></a>创建模板
 
-Azure 资源管理器模板是描述**资源组**及其包含的所有资源（例如 HDInsight）的 JSON 文档此基于模板的方法可以在一个模板中定义需要用于 HDInsight 的资源。
+Azure Resource Manager 模板是描述**资源组**及其包含的所有资源（例如 HDInsight）的 JSON 文档。此基于模板的方法可以在一个模板中定义需要用于 HDInsight 的资源。
 
 下面的 JSON 文档是来自 [https://github.com/Azure/azure-quickstart-templates/tree/master/101-hdinsight-linux-ssh-password](https://github.com/Azure/azure-quickstart-templates/tree/master/101-hdinsight-linux-ssh-password) 的模板与参数文件的组合形式，它将创建基于 Linux 的群集，并使用密码保护 SSH 用户帐户。
 
@@ -213,21 +205,21 @@ Azure 资源管理器模板是描述**资源组**及其包含的所有资源（�
    }
    ```
 
-本文档中的步骤会使用此示例。 将 Parameters 部分中的示例值替换为用于群集的值。
+本文档中的步骤会使用此示例。 将 Parameters  部分中的示例值  替换为用于群集的值。
 
-> [!IMPORTANT]
+> [!IMPORTANT]  
 > 此模板对 HDInsight 群集使用默认数目（4 个）的辅助角色节点。 如果计划使用 32 个以上的辅助角色节点，则必须选择至少具有 8 个核心和 14 GB ram 的头节点大小。
 >
 > 有关节点大小和相关费用的详细信息，请参阅 [HDInsight 定价](https://azure.microsoft.com/pricing/details/hdinsight/)。
 
-## <a name="log-in-to-your-azure-subscription"></a>登录到 Azure 订阅
+## <a name="sign-in-to-your-azure-subscription"></a>登录到 Azure 订阅
 
-请按照 [Azure CLI 2.0 入门](https://docs.microsoft.com/cli/azure/get-started-with-az-cli2)中所述的步骤操作，并使用 `az login` 命令连接到订阅。
+请按照 [Azure CLI 入门](https://docs.microsoft.com/cli/azure/get-started-with-az-cli2)中所述的步骤操作，并使用 `az login` 命令连接到订阅。
 
 ## <a name="create-a-service-principal"></a>创建服务主体
 
-> [!NOTE]
-> 这些步骤是[使用 Azure CLI 创建服务主体以访问资源](../azure-resource-manager/resource-group-authenticate-service-principal-cli.md)文档的“使用密码创建服务主体”部分的缩减版本。 这些步骤创建用于向 Azure REST API 进行身份验证的服务主体。
+> [!NOTE]  
+> 这些步骤是[使用 Azure CLI 创建服务主体以访问资源](../azure-resource-manager/resource-group-authenticate-service-principal-cli.md)文档的“使用密码创建服务主体”  部分的缩减版本。 这些步骤创建用于向 Azure REST API 进行身份验证的服务主体。
 
 1. 从命令行使用以下命令列出 Azure 订阅。
 
@@ -243,12 +235,12 @@ Azure 资源管理器模板是描述**资源组**及其包含的所有资源（�
    az ad app create --display-name "exampleapp" --homepage "https://www.contoso.org" --identifier-uris "https://www.contoso.org/example" --password <Your password> --query 'appId'
    ```
 
-    将 `--display-name`、`--homepage` 和 `--identifier-uris` 的值替换成自己的值。 为新的 Active Directory 条目提供密码。
+    将 `--display-name`、`--homepage` 和 `--identifier-uris` 的值替换为自己的值。 为新的 Active Directory 条目提供密码。
 
-   > [!NOTE]
+   > [!NOTE]  
    > `--home-page` 和 `--identifier-uris` 值无需引用在 Internet 上承载的实际网页。 它们必须是唯一的 URI。
 
-   此命令返回的值是新应用程序的__应用 ID__。 保存此值。
+   此命令返回的值是新应用程序的 __应用 ID__ 。 保存此值。
 
 3. 通过以下命令使用**应用 ID** 创建服务主体。
 
@@ -318,7 +310,7 @@ curl -X "PUT" "https://management.azure.com/subscriptions/$SUBSCRIPTIONID/resour
 
 使用以下命令将模板部署到资源组。
 
-* 将 `$DEPLOYMENTNAME` 设置为要为此部署使用的名称：
+* 将 `$DEPLOYMENTNAME` 设置为要用于此部署的名称。
 
 ```bash
 curl -X "PUT" "https://management.azure.com/subscriptions/$SUBSCRIPTIONID/resourcegroups/$RESOURCEGROUPNAME/providers/microsoft.resources/deployments/$DEPLOYMENTNAME?api-version=2015-01-01" \
@@ -327,14 +319,14 @@ curl -X "PUT" "https://management.azure.com/subscriptions/$SUBSCRIPTIONID/resour
 -d "{set your body string to the template and parameters}"
 ```
 
-> [!NOTE]
+> [!NOTE]  
 > 如果将模板保存到了文件中，则可以使用以下命令而不是 `-d "{ template and parameters}"`：
 >
 > `--data-binary "@/path/to/file.json"`
 
 如果此请求成功，会收到 200 系列响应，且响应正文包含一个 JSON 文档，其中包含有关部署操作的信息。
 
-> [!IMPORTANT]
+> [!IMPORTANT]  
 > 部署已提交，但尚未完成。 部署通常需要大约 15 分钟才能完成。
 
 ## <a name="check-the-status-of-a-deployment"></a>检查部署状态
@@ -351,25 +343,25 @@ curl -X "GET" "https://management.azure.com/subscriptions/$SUBSCRIPTIONID/resour
 
 ## <a name="troubleshoot"></a>故障排除
 
-如果在创建 HDInsight 群集时遇到问题，请参阅[访问控制要求](hdinsight-administer-use-portal-linux.md#create-clusters)。
+如果在创建 HDInsight 群集时遇到问题，请参阅[访问控制要求](hdinsight-hadoop-create-linux-clusters-portal.md)。
 
 ## <a name="next-steps"></a>后续步骤
 
 成功创建 HDInsight 群集后，请参考以下主题来了解如何使用群集。
 
-### <a name="hadoop-clusters"></a>Hadoop 群集
+### <a name="apache-hadoop-clusters"></a>Apache Hadoop 群集
 
-* [将 Hive 与 HDInsight 配合使用](hadoop/hdinsight-use-hive.md)
-* [将 Pig 与 HDInsight 配合使用](hadoop/hdinsight-use-pig.md)
+* [将 Apache Hive 和 HDInsight 配合使用](hadoop/hdinsight-use-hive.md)
+* [将 Apache Pig 和 HDInsight 配合使用](hadoop/hdinsight-use-pig.md)
 * [将 MapReduce 与 HDInsight 配合使用](hadoop/hdinsight-use-mapreduce.md)
 
-### <a name="hbase-clusters"></a>HBase 群集
+### <a name="apache-hbase-clusters"></a>Apache HBase 群集
 
-* [HBase on HDInsight 入门](hbase/apache-hbase-tutorial-get-started-linux.md)
-* [为 HBase on HDInsight 开发 Java 应用程序](hbase/apache-hbase-build-java-maven-linux.md)
+* [HDInsight 中的 Apache HBase 入门](hbase/apache-hbase-tutorial-get-started-linux.md)
+* [为 Apache HBase on HDInsight 开发 Java 应用程序](hbase/apache-hbase-build-java-maven-linux.md)
 
-### <a name="storm-clusters"></a>Storm 群集
+### <a name="apache-storm-clusters"></a>Apache Storm 群集
 
-* [为 Storm on HDInsight 开发 Java 拓扑](storm/apache-storm-develop-java-topology.md)
-* [在 Storm on HDInsight 中使用 Python 组件](storm/apache-storm-develop-python-topology.md)
-* [使用 Storm on HDInsight 部署和监视拓扑](storm/apache-storm-deploy-monitor-topology-linux.md)
+* [为 Apache Storm on HDInsight 开发 Java 拓扑](storm/apache-storm-develop-java-topology.md)
+* [在 Apache Storm on HDInsight 中使用 Python 组件](storm/apache-storm-develop-python-topology.md)
+* [使用 Apache Storm on HDInsight 部署和监视拓扑](storm/apache-storm-deploy-monitor-topology-linux.md)

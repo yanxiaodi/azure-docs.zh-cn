@@ -3,8 +3,8 @@ title: 使用 Azure 网络观察程序和开源工具执行网络入侵检测 | 
 description: 本文介绍如何使用 Azure 网络观察程序和开源工具执行网络入侵检测
 services: network-watcher
 documentationcenter: na
-author: jimdial
-manager: timlt
+author: KumudD
+manager: twooley
 editor: ''
 ms.assetid: 0f043f08-19e1-4125-98b0-3e335ba69681
 ms.service: network-watcher
@@ -13,18 +13,19 @@ ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 02/22/2017
-ms.author: jdial
-ms.openlocfilehash: aff1b5f9e8860d3b8dc09b37684bb8a4ac2bf134
-ms.sourcegitcommit: 6fcd9e220b9cd4cb2d4365de0299bf48fbb18c17
-ms.translationtype: HT
+ms.author: kumud
+ms.openlocfilehash: b5dc885611c6654c1dc1d236e41ed75ef2717cc1
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/05/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "65605702"
 ---
 # <a name="perform-network-intrusion-detection-with-network-watcher-and-open-source-tools"></a>使用网络观察程序和开源工具执行网络入侵检测
 
 数据包捕获是一个重要组件，可以实施网络入侵检测系统 (IDS) 并执行网络安全监视 (NSM)。 可以借助多种开源 IDS 工具来处理数据包捕获，并检查潜在网络入侵和恶意活动的签名。 使用网络观察程序提供的数据包捕获，可以分析网络中是否存在任何有害入侵或漏洞。
 
-Suricata 就是这样的一种开源工具，它是一个 IDS 引擎，可使用规则集来监视网络流量，每当出现可疑事件时，它会触发警报。 Suricata 提供多线程引擎，意味着它能够以更高的速度和效率执行网络流量分析。 有关 Suricata 及其功能的更多详细信息，请访问其网站 https://suricata-ids.org/。
+Suricata 就是这样的一种开源工具，它是一个 IDS 引擎，可使用规则集来监视网络流量，每当出现可疑事件时，它会触发警报。 Suricata 提供多线程引擎，意味着它能够以更高的速度和效率执行网络流量分析。 有关 Suricata 及其功能的更多详细信息，请访问其网站 https://suricata-ids.org/ 。
 
 ## <a name="scenario"></a>场景
 
@@ -34,11 +35,11 @@ Suricata 就是这样的一种开源工具，它是一个 IDS 引擎，可使用
 
 可在 Azure VM 上设置这两个开源工具，以便在自己的 Azure 网络环境内部执行此分析。
 
-## <a name="steps"></a>步骤
+## <a name="steps"></a>Steps
 
 ### <a name="install-suricata"></a>安装 Suricata
 
-有关所有其他安装方法，请访问 http://suricata.readthedocs.io/en/latest/install.html
+有关所有其他安装方法，请访问 https://suricata.readthedocs.io/en/latest/install.html
 
 1. 在 VM 的命令行终端中运行以下命令：
 
@@ -57,7 +58,7 @@ Suricata 就是这样的一种开源工具，它是一个 IDS 引擎，可使用
 下载该规则集，并将其复制到目录：
 
 ```
-wget http://rules.emergingthreats.net/open/suricata/emerging.rules.tar.gz
+wget https://rules.emergingthreats.net/open/suricata/emerging.rules.tar.gz
 tar zxf emerging.rules.tar.gz
 sudo cp -r rules /etc/suricata/
 ```
@@ -80,7 +81,8 @@ tail -f /var/log/suricata/fast.log
 
 #### <a name="install-elasticsearch"></a>安装 Elasticsearch
 
-1. Elastic Stack 5.0 及更高版本需要 Java 8。 运行命令 `java -version` 可以检查版本。 如果未安装 Java，请参阅 [Oracle 网站](http://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html)上的文档
+1. Elastic Stack 5.0 及更高版本需要 Java 8。 运行命令 `java -version` 可以检查版本。 如果尚未安装 java，请参阅 [Azure 支持的 JDK](https://aka.ms/azure-jdks) 上的文档。
+
 1. 下载适用于系统的正确二进制程序包：
 
     ```
@@ -243,7 +245,7 @@ tail -f /var/log/suricata/fast.log
 
 1. 在[此处](https://aka.ms/networkwatchersuricatadashboard)下载仪表板文件，在[此处](https://aka.ms/networkwatchersuricatavisualization)下载可视化效果文件，在[此处](https://aka.ms/networkwatchersuricatasavedsearch)下载已保存的搜索文件。
 
-1. 在 Kibana 的“Management”（管理）选项卡下，导航到“Saved Objects”（已保存的对象）并导入所有三个文件。 然后，可从“仪表板”选项卡打开并加载示例仪表板。
+1. 在 Kibana 的“Management”（管理）选项卡下，导航到“Saved Objects”（已保存的对象）并导入所有三个文件。   然后，可从“仪表板”  选项卡打开并加载示例仪表板。
 
 还可以创建自己的可视化效果，以及根据感兴趣的指标定制的仪表板。 阅读 Kibana 的[正式文档](https://www.elastic.co/guide/en/kibana/current/visualize.html)，详细了解如何创建 Kibana 可视化效果。
 
@@ -253,7 +255,7 @@ tail -f /var/log/suricata/fast.log
 
 示例仪表板提供了 Suricata 警报日志的多种可视化效果：
 
-1. 按 GeoIP 列出警报 – 基于地理位置，按来源国家/地区（由 IP 确定）显示警报分布的地图
+1. 按 GeoIP – 基于地理位置 （由 IP 确定） 其国家/地区显示警报分布的地图列出警报
 
     ![地理 IP][3]
 
@@ -283,7 +285,7 @@ tail -f /var/log/suricata/fast.log
 
 访问 [Use packet capture to do proactive network monitoring with Azure Functions](network-watcher-alert-triggered-packet-capture.md)（在 Azure Functions 中使用数据包捕获执行主动网络监视），了解如何根据警报触发数据包捕获
 
-访问[使用 Power BI 可视化 NSG 流日志](network-watcher-visualize-nsg-flow-logs-power-bi.md)，了解如何使用 Power BI 可视化 NSG 流日志
+访问 [Visualize NSG flows logs with Power BI](network-watcher-visualize-nsg-flow-logs-power-bi.md)（使用 Power BI 可视化 NSG 流日志），了解如何使用 Power BI 可视化 NSG 流日志
 
 
 

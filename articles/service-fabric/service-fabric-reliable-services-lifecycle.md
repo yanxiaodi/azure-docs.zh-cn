@@ -4,21 +4,22 @@ description: 了解 Service Fabric Reliable Services 中的不同生命周期事
 services: Service-Fabric
 documentationcenter: .net
 author: masnider
-manager: timlt
+manager: chackdan
 editor: vturecek;
 ms.assetid: ''
-ms.service: Service-Fabric
+ms.service: service-fabric
 ms.devlang: dotnet
 ms.topic: conceptual
 ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 08/18/2017
 ms.author: masnider
-ms.openlocfilehash: 42833323cbebf25ce2ca14e6ab7ec4fa5adbfd15
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: ebc7aec63b34630b606178aa17e2ae7fdd0fc87f
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60723540"
 ---
 # <a name="reliable-services-lifecycle-overview"></a>Reliable Services 生命周期概述
 > [!div class="op_single_selector"]
@@ -78,7 +79,10 @@ ms.lasthandoff: 05/16/2018
     - 如果该服务目前是主要服务，则调用该服务的 `StatefulServiceBase.RunAsync()` 方法。
 4. 所有副本侦听器的 `OpenAsync()` 调用完成并已调用 `RunAsync()` 后，将调用 `StatefulServiceBase.OnChangeRoleAsync()`。 此调用是服务中不常见的重写。
 
-类似于无状态服务，创建和打开侦听器的顺序以及调用 **RunAsync** 的时间不会经过协调。 如果需要协调，解决方法大致相同。 对于有状态服务，还存在一种情况。 假设抵达通信侦听器的调用需要在某个 [Reliable Collections](service-fabric-reliable-services-reliable-collections.md) 中保存信息。 由于通信侦听器可能在 Reliable Collections 可读或可写之前打开，因此，在 **RunAsync** 可以启动之前，必须经过一定的附加协调。 最简单且最常见的解决方法是让通信侦听器返回错误代码，告知客户端重试请求。
+类似于无状态服务，创建和打开侦听器的顺序以及调用 **RunAsync** 的时间不会经过协调。 如果需要协调，解决方法大致相同。 对于有状态服务，还存在一种情况。 假设抵达通信侦听器的调用需要在某个 [Reliable Collections](service-fabric-reliable-services-reliable-collections.md) 中保存信息。
+
+   > [!NOTE]  
+   > 由于通信侦听器可能在 Reliable Collections 可读或可写之前打开，因此，在 **RunAsync** 可以启动之前，必须经过一定的附加协调。 最简单且最常见的解决方法是让通信侦听器返回错误代码，告知客户端重试请求。
 
 ## <a name="stateful-service-shutdown"></a>有状态服务关闭
 与无状态服务一样，关闭期间的生命周期事件与启动期间是相同的，但顺序相反。 关闭有状态服务时，将发生以下事件：
@@ -95,7 +99,7 @@ ms.lasthandoff: 05/16/2018
 3. 完成 `StatefulServiceBase.OnCloseAsync()` 后，销毁服务对象。
 
 ## <a name="stateful-service-primary-swaps"></a>有状态服务主副本交换
-运行有状态服务时，只有该有状态服务的主副本打开其通信侦听器并调用其 **RunAsync** 方法。 会构造辅助副本，但不会对其执行进一步的调用。 在运行有状态服务时，当前用作主副本的副本可能会更改。 从副本看到的生命周期事件角度看，这意味着什么呢？ 有状态副本看到的行为取决于在交换期间该副本是已降级还是已升级。
+运行有状态服务时，只有该有状态服务的主副本打开其通信侦听器并调用其 **RunAsync** 方法。 会构造辅助副本，但不会对其执行进一步的调用。 在运行有状态服务时，当前用作主副本的副本可能会因故障或群集均衡优化而发生更改。 从副本看到的生命周期事件角度看，这意味着什么呢？ 有状态副本看到的行为取决于在交换期间该副本是已降级还是已升级。
 
 ### <a name="for-the-primary-thats-demoted"></a>对于已降级的主副本
 对于已降级的主副本，Service Fabric 需要使用此副本来停止处理消息，退出正在执行的任何后台工作。 因此，此步骤类似于关闭服务时的情况。 一个差别在于，在此情况下不会销毁或关闭服务，因为它保留为辅助副本。 将调用以下 API：

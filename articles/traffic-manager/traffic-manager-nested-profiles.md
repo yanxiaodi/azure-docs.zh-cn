@@ -1,24 +1,24 @@
 ---
-title: "嵌套式流量管理器配置文件 | Microsoft Docs"
-description: "本文介绍了 Azure 流量管理器的“嵌套式配置文件”功能"
+title: Azure 中的嵌套式流量管理器配置文件
+titlesuffix: Azure Traffic Manager
+description: 本文介绍了 Azure 流量管理器的“嵌套式配置文件”功能
 services: traffic-manager
-documentationcenter: 
-author: kumudd
-manager: timlt
-editor: 
-ms.assetid: f1b112c4-a3b1-496e-90eb-41e235a49609
+documentationcenter: ''
+author: asudbring
+manager: twooley
 ms.service: traffic-manager
 ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
-ms.date: 03/22/2017
-ms.author: kumud
-ms.openlocfilehash: 1ac4ec2775ca9f690f5adf4f939908f8cee3f715
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.date: 10/22/2018
+ms.author: allensu
+ms.openlocfilehash: 8815d852ad9f8a1823e1c21cc2d233409518da33
+ms.sourcegitcommit: e9c866e9dad4588f3a361ca6e2888aeef208fc35
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 07/19/2019
+ms.locfileid: "68333792"
 ---
 # <a name="nested-traffic-manager-profiles"></a>嵌套式流量管理器配置文件
 
@@ -28,13 +28,13 @@ ms.lasthandoff: 10/11/2017
 
 以下示例演示如何在不同的方案中使用嵌套式流量管理器配置文件。
 
-## <a name="example-1-combining-performance-and-weighted-traffic-routing"></a>示例 1：组合使用“性能”和“加权”流量路由
+## <a name="example-1-combining-performance-and-weighted-traffic-routing"></a>示例 1:组合使用“性能”和“加权”流量路由
 
 假设在以下 Azure 区域部署了一个应用程序：美国西部、西欧和东亚。 使用流量管理器的“性能”流量路由方法将流量分发到最靠近用户的区域。
 
 ![单个流量管理器配置文件][4]
 
-现在，假设要针对服务的某项更新进行测试，然后再推广该更新。 想要使用“加权”流量路由方法，以便将少部分流量定向到测试部署。 在西欧设置了测试部署以及现有的生产部署。
+现在，假设要针对服务的某项更新进行测试，再推广该更新。 想要使用“加权”流量路由方法，以便将少部分流量定向到测试部署。 在西欧设置了测试部署以及现有的生产部署。
 
 无法在单个配置文件中结合使用“加权”和“性能”流量路由方法。 若要支持此方案，可以使用位于西欧的两个终结点和“加权”流量路由方法创建流量管理器配置文件。 接下来，将此“子”配置文件作为终结点添加到“父”配置文件。 父配置文件仍使用“性能”流量路由方法，并且仍包含终结点形式的其他全局部署。
 
@@ -65,9 +65,7 @@ ms.lasthandoff: 10/11/2017
 
 ## <a name="example-3-prioritized-failover-regions-in-performance-traffic-routing"></a>示例 3：“性能”流量路由中的优先故障转移区域
 
-“性能”流量路由方法的默认行为旨在避免下一个最靠近的终结点发生过载并导致一系列的连锁故障。 当某个终结点发生故障时，定向到该终结点的所有流量将均匀分布到所有区域中的其他终结点。
-
-![默认故障转移的“性能”流量路由][5]
+“性能”流量路由方法的默认行为是，当终结点位于不同地理位置时，将依据最低网络延迟将最终用户路由到“最近”的终结点。
 
 但是，假设希望将西欧的流量故障转移到美国西部，仅当这两个终结点都不可用时才将流量定向到其他区域。 可以使用包含“优先级”流量路由方法的子配置文件创建此解决方案。
 
@@ -89,13 +87,27 @@ ms.lasthandoff: 10/11/2017
 
 ## <a name="example-5-per-endpoint-monitoring-settings"></a>示例 5：基于终结点的监视设置
 
-假设希望使用流量管理器来顺利地将流量从旧的本地网站迁移到基于云的新版网站（托管在 Azure 中）。 对于旧站点，想要使用主页 URI 监视站点运行状况。 但对于基于云的新版站点，要实现一个包含附加检查的自定义监视页面（路径为“/monitor.aspx”）。
+假设希望使用流量管理器来顺利地将流量从旧的本地网站迁移到基于云的新版网站（托管在 Azure 中）。 对于旧站点，想要使用主页 URI 监视站点运行状况。 但对于基于云的新版站点，你要实现一个包含附加检查的自定义监视页面（路径为“/monitor.aspx”）。
 
 ![流量管理器终结点监视（默认行为）][9]
 
 流量管理器配置文件中的监视设置将应用到单个配置文件中的所有终结点。 使用嵌套式配置文件时，可为每个站点使用一个不同的子配置文件来定义不同的监视设置。
 
 ![按终结点进行设置的流量管理器终结点监视][10]
+
+## <a name="faqs"></a>常见问题
+
+* [如何实现配置嵌套配置文件？](https://docs.microsoft.com/azure/traffic-manager/traffic-manager-faqs#traffic-manager-endpoint-monitoring)
+
+* [流量管理器支持多少层嵌套？](https://docs.microsoft.com/azure/traffic-manager/traffic-manager-faqs#how-many-layers-of-nesting-does-traffic-manger-support)
+
+* [能否在同一流量管理器配置文件中将其他终结点类型与嵌套子配置文件混合在一起？](https://docs.microsoft.com/azure/traffic-manager/traffic-manager-faqs#can-i-mix-other-endpoint-types-with-nested-child-profiles-in-the-same-traffic-manager-profile)
+
+* [如何将计费模型应用于嵌套式配置文件？](https://docs.microsoft.com/azure/traffic-manager/traffic-manager-faqs#how-does-the-billing-model-apply-for-nested-profiles)
+
+* [嵌套式配置文件是否会影响性能？](https://docs.microsoft.com/azure/traffic-manager/traffic-manager-faqs#is-there-a-performance-impact-for-nested-profiles)
+
+* [流量管理器如何在父配置文件中计算嵌套终结点的运行状况？](https://docs.microsoft.com/azure/traffic-manager/traffic-manager-faqs#how-does-traffic-manager-compute-the-health-of-a-nested-endpoint-in-a-parent-profile)
 
 ## <a name="next-steps"></a>后续步骤
 

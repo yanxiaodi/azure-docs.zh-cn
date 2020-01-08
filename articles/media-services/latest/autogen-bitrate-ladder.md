@@ -1,23 +1,25 @@
 ---
-title: 使用 Azure 媒体服务中的标准编码器，通过自动生成的比特率阶梯对视频进行编码 | Microsoft Docs
-description: 本主题介绍如何基于输入分辨率和比特率，使用媒体服务中的标准编码器并通过自动生成的比特率阶梯对输入视频进行编码。 不会超过输入分辨率和比特率。 例如，如果输入在 3Mbps 时为 720p，则输出最多会保持 720p，并且会以低于 3Mbps 的速率开始。
+title: 使用媒体服务中的标准编码器对视频进行编码 - Azure | Microsoft Docs
+description: 本主题介绍如何基于输入分辨率和比特率，使用媒体服务中的标准编码器并通过自动生成的比特率阶梯对输入视频进行编码。
 services: media-services
 documentationcenter: ''
 author: Juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.service: media-services
 ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 03/19/2018
+ms.date: 02/10/2019
 ms.author: juliako
-ms.openlocfilehash: 5d13c711d7d71df7469e6408ce78cf0df611632b
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.custom: seodec18
+ms.openlocfilehash: c25c32f35adc1c017f0f4c012c82bd7e0af8d452
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60733311"
 ---
 #  <a name="encode-with-an-auto-generated-bitrate-ladder"></a>使用自动生成的比特率阶梯进行编码
 
@@ -27,20 +29,20 @@ ms.lasthandoff: 05/07/2018
 
 ### <a name="encoding-for-streaming"></a>编码用于流式处理
 
-顾名思义，如果在创建编码转换时使用 AdaptiveStreaming 预设，将得到适用于通过流式处理协议（如 HLS、DASH、CMAF 等）传送的输出。使用此 AdaptiveStreaming 预设时，编码器可智能地确定要生成的视频层数，并确定比特率和分辨率。 输出资产包含 MP4 文件，其中无 AAC 编码的音频和 H.264 编码的视频交错。
+在“转换”中使用“AdaptiveStreaming”预设时，会获取适合通过流式处理协议（例如 HLS 和 DASH）传递的输出   。 使用此预设时，此服务可智能地确定要生成的视频层数，并确定比特率和分辨率。 输出内容包含 MP4 文件，其中无 AAC 编码的音频和 H.264 编码的视频交错。
 
 若要查看有关如何使用此预设的示例，请参阅[流式传输文件](stream-files-dotnet-quickstart.md)。
 
 ## <a name="output"></a>输出
 
-此部分显示媒体服务编码器生成的输出视频层的三个示例，是使用“AdaptiveStreaming”预设进行编码得来的。 在所有情况下，输出将包含仅音频 MP4 文件，其中立体声音频以 128 kbps 进行编码。
+此部分显示媒体服务编码器生成的输出视频层的三个示例，是使用“AdaptiveStreaming”预设进行编码得来的  。 在所有情况下，输出包含仅音频 MP4 文件，其中立体声音频以 128 kbps 进行编码。
 
 ### <a name="example-1"></a>示例 1
 高度为“1080”，帧速率为“29.970”的源生成 6 个视频层：
 
 |层|高度|宽度|比特率 (kbps)|
 |---|---|---|---|
-|1|1080|1920|6780|
+|第|1080|1920|6780|
 |2|720|1280|3520|
 |3|540|960|2210|
 |4|360|640|1150|
@@ -52,7 +54,7 @@ ms.lasthandoff: 05/07/2018
 
 |层|高度|宽度|比特率 (kbps)|
 |---|---|---|---|
-|1|720|1280|2940|
+|第|720|1280|2940|
 |2|540|960|1850|
 |3|360|640|960|
 |4|270|480|600|
@@ -63,7 +65,7 @@ ms.lasthandoff: 05/07/2018
 
 |层|高度|宽度|比特率 (kbps)|
 |---|---|---|---|
-|1|360|640|700|
+|第|360|640|700|
 |2|270|480|440|
 |3|180|320|230|
 

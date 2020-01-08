@@ -4,23 +4,24 @@ description: 本主题提供有关如何排查实时流式处理问题的建议�
 services: media-services
 documentationcenter: ''
 author: juliako
-manager: cfowler
+manager: femila
 editor: ''
-ms.assetid: 3a7f6c1d-ce57-4fa4-a7a6-edb526b3ffbf
 ms.service: media-services
 ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 07/20/2017
+ms.date: 03/20/2019
 ms.author: juliako
-ms.openlocfilehash: 84e3e9fc18671d7199eeaf638377a6681cf09fb4
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.openlocfilehash: f502e3228274840d23b9f52512280fc0d9f0553b
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60544688"
 ---
-# <a name="troubleshooting-guide-for-live-streaming"></a>实时流式处理故障排除指南
+# <a name="troubleshooting-guide-for-live-streaming"></a>实时流式处理故障排除指南  
+
 本文提供有关如何排查某些实时流式处理问题的建议。
 
 ## <a name="issues-related-to-on-premises-encoders"></a>与本地编码器相关的问题
@@ -30,8 +31,8 @@ ms.lasthandoff: 05/10/2018
 * **潜在问题**：找不到可帮助调试问题的编码器日志。
   
   * **Telestream Wirecast**：通常可以在 C:\Users\{username}\AppData\Roaming\Wirecast\ 下找到日志 
-  * **Elemental Live**：可以在管理门户上找到日志的链接。 单击“统计信息”，并单击“日志”。 在“日志文件”页上，可以看到所有 LiveEvent 项的日志列表；选择与当前会话匹配的日志。 
-  * **Flash Media Live Encoder**：可以通过导航到“编码日志”选项卡找到“日志目录...”。
+  * **Elemental Live**：可以在管理门户上找到日志的链接。 单击“统计信息”  ，并单击“日志”  。 在“日志文件”  页上，可以看到所有 LiveEvent 项的日志列表；选择与当前会话匹配的日志。 
+  * **Flash Media Live Encoder**：可以通过导航到“编码日志”  选项卡找到“日志目录...”  。
 
 ### <a name="problem-there-is-no-option-for-outputting-a-progressive-stream"></a>问题：没有输出渐进式流的选项
 * **潜在问题**：使用的编码器不自动取消隔行扫描。 
@@ -45,7 +46,7 @@ ms.lasthandoff: 05/10/2018
 * **潜在问题**：GOP 大小或关键帧设置不是最佳。 
   
     **故障排除步骤**：建议的 GOP 大小或关键帧间隔为 2 秒。 有些编码器以帧数计算此设置，而有些则以秒计算。 例如：输出 30 fps 时，GOP 大小是 60 帧，相当于 2 秒。  
-* **潜在问题**：关闭的端口阻止流。 
+* **潜在问题**：关闭的端口阻止了流。 
   
     **故障排除步骤**：通过 RTMP 流式处理时，检查防火墙和/或代理设置，确认出站端口 1935 和 1936 已打开。 
 
@@ -53,9 +54,6 @@ ms.lasthandoff: 05/10/2018
 > 如果按照故障排除步骤执行操作后，仍然无法成功进行流式处理，可使用 Azure 门户提交支持票证。
 > 
 > 
-
-## <a name="media-services-learning-paths"></a>媒体服务学习路径
-[!INCLUDE [media-services-learning-paths-include](../../../includes/media-services-learning-paths-include.md)]
 
 ## <a name="provide-feedback"></a>提供反馈
 [!INCLUDE [media-services-user-voice-include](../../../includes/media-services-user-voice-include.md)]

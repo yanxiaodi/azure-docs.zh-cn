@@ -1,0 +1,176 @@
+- name: 文本翻译文档
+  href: index.yml
+- name: 文本翻译 API
+  items:
+    - name: 概述
+      items:
+        - name: 什么是文本翻译 API？
+          href: translator-info-overview.md
+    - name: 快速入门
+      items:
+        - name: 翻译文本
+          href: quickstart-translate.md
+        - name: 直译文本
+          href: quickstart-transliterate.md
+        - name: 检测语言
+          href: quickstart-detect.md
+        - name: 查找字词翻译
+          href: quickstart-dictionary.md
+        - name: 获取支持的语言
+          href: quickstart-languages.md
+        - name: 确定句子长度
+          href: quickstart-sentences.md
+    - name: 教程
+      items:
+        - name: '使用 C# 创建 WPF 应用程序以用于文本翻译'
+          href: tutorial-wpf-translation-csharp.md
+        - name: 使用 Python 创建 Flask 翻译应用
+          href: tutorial-build-flask-app-translation-synthesis.md
+    - name: 概念
+      items:
+        - name: 自定义和改进文本翻译
+          href: customization.md
+        - name: API 如何对字符计数
+          href: character-counts.md
+    - name: 操作指南
+      items:
+        - name: 注册文本翻译 API
+          href: translator-text-how-to-signup.md
+        - name: 迁移到 V3 文本 API
+          href: migrate-to-v3.md
+        - name: 添加不雅内容筛选
+          href: profanity-filtering.md
+        - name: 接收字对齐信息
+          href: word-alignment.md
+        - name: 阻止翻译内容
+          href: prevent-translation.md
+        - name: 使用动态字典功能
+          href: dynamic-dictionary.md
+        - name: 在防火墙后面翻译
+          href: firewalls.md
+    - name: 示例
+      items:
+        - name: 'C#'
+          href: 'https://github.com/MicrosoftTranslator/Text-Translation-API-V3-C-Sharp'
+        - name: Java
+          href: 'https://github.com/MicrosoftTranslator/Text-Translation-API-V3-Java'
+        - name: Python
+          href: 'https://github.com/MicrosoftTranslator/Text-Translation-API-V3-Python'
+        - name: Node.js
+          href: 'https://github.com/MicrosoftTranslator/Text-Translation-API-V3-NodeJS'
+        - name: Go
+          href: 'https://github.com/MicrosoftTranslator/Text-Translation-API-V3-Go'
+        - name: PHP
+          href: 'https://github.com/MicrosoftTranslator/Text-Translation-API-V3-PHP'
+        - name: Ruby
+          href: 'https://github.com/MicrosoftTranslator/Text-Translation-API-V3-Ruby'
+    - name: 引用
+      items:
+        - name: v3 文本翻译 API 参考
+          href: reference/v3-0-reference.md
+          items:
+            - name: Languages
+              href: reference/v3-0-languages.md
+            - name: Translate
+              href: reference/v3-0-translate.md
+            - name: Transliterate
+              href: reference/v3-0-transliterate.md
+            - name: Detect
+              href: reference/v3-0-detect.md
+            - name: BreakSentence
+              href: reference/v3-0-break-sentence.md
+            - name: 字典查找
+              href: reference/v3-0-dictionary-lookup.md
+            - name: 字典示例
+              href: reference/v3-0-dictionary-examples.md
+        - name: v2 文本翻译 API 参考（已弃用）
+          href: reference/v2-0-reference.md
+          items:
+            - name: 转换文本
+              href: transform-text.md
+            - name: 如何使用协作性翻译框架 (CTF) 报告
+              href: ctf-reporting.md
+            - name: 返回 N 个最佳翻译
+              href: return-n-best-translations.md
+    - name: 资源
+      items:
+        - name: GitHub 上的代码示例
+          href: 'https://aka.ms/TranslatorGitHub'
+        - name: 常见问题解答
+          href: 'https://www.microsoft.com/translator/faq.aspx'
+        - name: 语言和区域支持
+          href: language-support.md
+        - name: 定价
+          href: 'https://azure.microsoft.com/pricing/details/cognitive-services/translator-text-api/'
+        - name: 区域可用性
+          href: 'https://azure.microsoft.com/global-infrastructure/services/?products=cognitive-services'
+        - name: 合规性
+          href: 'https://azure.microsoft.com/support/legal/cognitive-services-compliance-and-privacy/'
+        - name: 请求限制
+          href: request-limits.md
+        - name: 堆栈溢出
+          href: 'https://stackoverflow.com/questions/tagged/microsoft-translator'
+- name: 自定义翻译
+  items:
+    - name: 概述
+      items:
+        - name: 自定义翻译是什么？
+          href: custom-translator/overview.md
+    - name: 快速入门
+      items:
+        - name: 构建自定义模型
+          href: custom-translator/quickstart-build-deploy-custom-model.md
+    - name: 概念
+      items:
+        - name: 工作区和项目
+          href: custom-translator/workspace-and-project.md
+        - name: 并行文档
+          href: custom-translator/what-are-parallel-documents.md
+        - name: 字典
+          href: custom-translator/what-is-dictionary.md
+        - name: 文档格式
+          href: custom-translator/document-formats-naming-convention.md
+        - name: 句子对齐
+          href: custom-translator/sentence-alignment.md
+        - name: 数据筛选
+          href: custom-translator/data-filtering.md
+        - name: 训练和模型
+          href: custom-translator/training-and-model.md
+        - name: BLEU 分数
+          href: custom-translator/what-is-bleu-score.md
+    - name: 操作指南
+      items:
+        - name: 创建一个项目
+          href: custom-translator/how-to-create-project.md
+        - name: 管理项目
+          href: custom-translator/how-to-search-edit-delete-projects.md
+        - name: 上传文档
+          href: custom-translator/how-to-upload-document.md
+        - name: 查看文档详细信息
+          href: custom-translator/how-to-view-document-details.md
+        - name: 训练模型
+          href: custom-translator/how-to-train-model.md
+        - name: 查看模型详细信息
+          href: custom-translator/how-to-view-model-details.md
+        - name: 查看系统测试结果
+          href: custom-translator/how-to-view-system-test-results.md
+        - name: 管理设置
+          href: custom-translator/how-to-manage-settings.md
+        - name: 从中心迁移
+          href: custom-translator/how-to-migrate.md
+        - name: 不支持的语言部署
+          href: custom-translator/unsupported-language-deployments.md
+    - name: 资源
+      items:
+        - name: 语言支持
+          href: 'https://docs.microsoft.com/azure/cognitive-services/translator/language-support#customization'
+        - name: 术语表
+          href: custom-translator/glossary.md
+        - name: 常见问题解答
+          href: custom-translator/faq.md
+        - name: 定价
+          href: 'https://azure.microsoft.com/pricing/details/cognitive-services/translator-text-api/'
+        - name: 合规性
+          href: 'https://azure.microsoft.com/support/legal/cognitive-services-compliance-and-privacy/'
+        - name: 堆栈溢出
+          href: 'https://stackoverflow.com/questions/tagged/microsoft-translator'

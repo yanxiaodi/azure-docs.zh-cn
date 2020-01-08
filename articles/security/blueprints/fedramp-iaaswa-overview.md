@@ -1,10 +1,10 @@
 ---
-title: Azure 安全性和符合性蓝图 - 适用于 FedRAMP 的 Web 应用程序
-description: Azure 安全性和符合性蓝图 - 适用于 FedRAMP 的 Web 应用程序
+title: Azure 安全性和符合性蓝图 - 适用于 FedRAMP 的 IaaS Web 应用程序
+description: Azure 安全性和符合性蓝图 - 适用于 FedRAMP 的 IaaS Web 应用程序
 services: security
 documentationcenter: na
 author: jomolesk
-manager: mbaldwin
+manager: barbkess
 editor: tomsh
 ms.assetid: 8fe47cff-9c24-49e0-aa11-06ff9892a468
 ms.service: security
@@ -14,14 +14,14 @@ ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 05/08/2018
 ms.author: jomolesk
-ms.openlocfilehash: b7a81db6a1caf11ac4a85a5202c5ed943225e849
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.openlocfilehash: bcce4dcac35b783efefe81abc2090506502e9931
+ms.sourcegitcommit: 55f7fc8fe5f6d874d5e886cb014e2070f49f3b94
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
-ms.locfileid: "33941929"
+ms.lasthandoff: 09/25/2019
+ms.locfileid: "71257281"
 ---
-# <a name="azure-security-and-compliance-blueprint-web-application-for-fedramp"></a>Azure 安全性和符合性蓝图：适用于 FedRAMP 的 Web 应用程序
+# <a name="azure-security-and-compliance-blueprint-iaas-web-application-for-fedramp"></a>Azure 安全性与合规性蓝图：适用于 FedRAMP 的 laaS Web 应用
 
 ## <a name="overview"></a>概述
 
@@ -68,12 +68,11 @@ ms.locfileid: "33941929"
 - Azure 存储
     - (7) 异地冗余存储帐户
 - Azure 云见证
-- 恢复服务保管库
-- Azure 密钥保管库
+- 恢复服务保存库
+- Azure Key Vault
 - Azure Active Directory (Azure AD)
 - Azure 资源管理器
-- Operations Management Suite (OMS)
-- Azure Monitor
+- Azure Monitor （日志）
 
 ## <a name="deployment-architecture"></a>部署体系结构
 
@@ -86,7 +85,7 @@ ms.locfileid: "33941929"
 
 **网络安全组**：此解决方案在一个体系结构中部署资源，在虚拟网络中包含独立的 Web 子网、数据库子网、Active Directory 子网和管理子网。 子网从逻辑上是以应用于各个子网的网络安全组规则进行分隔，以限制子网之间只能有系统和管理功能所必需的流量。
 
-请参阅此解决方案中部署的[网络安全组](https://github.com/Azure/fedramp-iaas-webapp/blob/master/nestedtemplates/virtualNetworkNSG.json)的配置。 客户可以根据[此文档](https://docs.microsoft.com/azure/virtual-network/virtual-networks-nsg)中的说明编辑上面的文件，对网络安全组进行配置。
+请参阅此解决方案中部署的[网络安全组](https://github.com/Azure/fedramp-iaas-webapp/blob/master/nestedtemplates/virtualNetworkNSG.json)的配置。 客户可以根据[此文档](../../virtual-network/virtual-network-vnet-plan-design-arm.md)中的说明编辑上面的文件，对网络安全组进行配置。
 
 每个子网有一个专用的网络安全组 (NSG)：
 - 1 个 NSG 用于应用程序网关 (LBNSG)
@@ -95,7 +94,7 @@ ms.locfileid: "33941929"
 - 1 个 NSG 用于 SQL Server (SQLNSG)
 - 1 个 NSG 用于 Web 层 (WEBNSG)
 
-**子网**：每个子网都与其相应的 NSG 相关联。
+**子网**：每个子网与其相应的 NSG 关联。
 
 ### <a name="data-at-rest"></a>静态数据
 
@@ -103,70 +102,70 @@ ms.locfileid: "33941929"
 
 **Azure 存储**：为了满足静态数据加密要求，所有存储帐户都使用[存储服务加密](https://docs.microsoft.com/azure/storage/common/storage-service-encryption)。
 
-**SQL Server**：SQL Server 配置为使用[透明数据加密 (TDE)](https://docs.microsoft.com/sql/relational-databases/security/encryption/transparent-data-encryption)，实时加密和解密数据和日志文件，以保护静态信息。 TDE 可确保存储的数据免遭他人未经授权的访问。
+**SQL Server**：SQL Server 配置为使用[透明数据加密 (TDE)](https://docs.microsoft.com/sql/relational-databases/security/encryption/transparent-data-encryption)，可实时加密和解密数据和日志文件，从而保护静态信息。 TDE 可确保存储的数据免遭他人未经授权的访问。
 
 客户也可配置以下 SQL Server 安全措施：
--   使用 [AD 身份验证和授权](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-aad-authentication)可在一个中心位置集中管理数据库用户和其他 Microsoft 服务的标识。
--   [SQL 数据库审核](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-auditing-get-started)跟踪数据库事件，并将事件写入 Azure 存储帐户中的审核日志。
--   在授予适当的权限之前，[防火墙规则](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-firewall-configure)会阻止对数据库服务器的所有访问。 防火墙基于每个请求的起始 IP 地址授予数据库访问权限。
--   [SQL 威胁检测](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-threat-detection-get-started)可以通过为可疑数据库活动、潜在漏洞、SQL 注入攻击和异常数据库访问模式提供安全警报，在发生潜在威胁时进行检测和响应。
--   [Always Encrypted 列](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-always-encrypted-azure-key-vault)可以确保敏感数据永远不会在数据库系统中以明文形式显示。 启用数据加密后，只有具有密钥访问权限的客户端应用程序或应用服务器才能访问明文数据。
--   参考体系结构部署后可以完成 [SQL 数据库动态数据掩码](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-dynamic-data-masking-get-started)。 客户将需要调整动态数据掩码设置，使之遵循其数据库架构。
+-   使用 [AD 身份验证和授权](https://docs.microsoft.com/azure/sql-database/sql-database-aad-authentication)可在一个中心位置集中管理数据库用户和其他 Microsoft 服务的标识。
+-   [SQL 数据库审核](../../sql-database/sql-database-auditing.md)跟踪数据库事件，并将事件写入 Azure 存储帐户中的审核日志。
+-   在授予相应的权限前，[防火墙规则](https://docs.microsoft.com/azure/sql-database/sql-database-firewall-configure)会阻止对数据库服务器的所有访问。 防火墙基于每个请求的起始 IP 地址授予数据库访问权限。
+-   [SQL 威胁检测](../../sql-database/sql-database-threat-detection.md)在潜在威胁发生时启动对它们的检测和响应，方式为提供可疑数据库活动、潜在漏洞、SQL 注入攻击和异常数据库访问模式的安全性警报。
+-   [Always Encrypted 列](https://docs.microsoft.com/azure/sql-database/sql-database-always-encrypted-azure-key-vault)可以确保敏感数据永远不会在数据库系统中以明文形式显示。 启用数据加密后，只有具有密钥访问权限的客户端应用程序或应用服务器才能访问明文数据。
+-   [SQL 数据库动态数据掩码](https://docs.microsoft.com/azure/sql-database/sql-database-dynamic-data-masking-get-started)可以在参考体系结构部署完毕之后再完成。 客户将需要调整动态数据掩码设置，使之遵循其数据库架构。
 
-**Azure 磁盘加密**：Azure 磁盘加密用于加密 Windows IaaS 虚拟机磁盘。 [Azure 磁盘加密](https://docs.microsoft.com/azure/security/azure-security-disk-encryption)利用 Windows 的 BitLocker 功能，为 OS 和数据磁盘提供卷加密。 此解决方案与 Azure Key Vault 集成，用于控制和管理磁盘加密密钥。
+**Azure 磁盘加密**：Azure 磁盘加密用于加密 Windows IaaS 虚拟机磁盘。 [Azure 磁盘加密](../azure-security-disk-encryption-overview.md)利用 Windows 的 BitLocker 功能，为 OS 和数据磁盘提供卷加密。 此解决方案与 Azure Key Vault 集成，用于控制和管理磁盘加密密钥。
 
 ### <a name="identity-management"></a>身份管理
 
 以下技术在 Azure 环境中提供标识管理功能：
 - [Azure Active Directory (Azure AD)](https://azure.microsoft.com/services/active-directory/) 是 Microsoft 提供的多租户、基于云的目录和标识管理服务。
-- 可以使用 Azure AD 向客户部署的 Web 应用程序进行身份验证。 有关详细信息，请参阅[将应用程序与 Azure Active Directory 集成](https://docs.microsoft.com/azure/active-directory/develop/active-directory-integrating-applications)。  
+- 可以使用 Azure AD 向客户部署的 Web 应用程序进行身份验证。 有关详细信息，请参阅[将应用程序与 Azure Active Directory 集成](../../active-directory/develop/quickstart-v1-integrate-apps-with-azure-ad.md)。  
 - [Azure 基于角色的访问控制 (RBAC)](https://docs.microsoft.com/azure/role-based-access-control/role-assignments-portal) 可在 Azure 中实现极有针对性的访问管理。 仅限订阅管理员进行订阅访问，而资源访问则取决于用户角色。
 - 可以通过部署的 IaaS Active Directory 实例在 OS 级别对部署的 IaaS 虚拟机进行标识管理。
 
-### <a name="security"></a>安全
+### <a name="security"></a>安全性
 **机密管理**：此解决方案使用 [Azure Key Vault](https://azure.microsoft.com/services/key-vault/) 管理密钥和机密。 Azure 密钥保管库可帮助保护云应用程序和服务使用的加密密钥和机密。 Azure Key Vault 用于管理适用于此参考体系结构的 IaaS 虚拟机磁盘加密密钥和机密。
 
 **修补程序管理**：通过此 Azure 安全性和符合性蓝图自动化部署的 Windows 虚拟机默认配置为从 Windows 更新服务接收自动更新。 另外，此解决方案还部署 Azure 自动化解决方案，通过此方案可以创建更新部署，以便在需要时将修补程序部署到 Windows 服务器上。
 
-**恶意软件防护**：用于虚拟机的 [Microsoft 反恶意软件](https://docs.microsoft.com/azure/security/azure-security-antimalware)提供实时保护功能，当已知的恶意软件或不需要的软件试图在受保护的虚拟机上进行安装或运行时，它使用可配置的警报帮助识别和删除病毒、间谍软件和其他恶意软件。
+**恶意软件防护**：用于虚拟机的 [Microsoft 反恶意软件](https://docs.microsoft.com/azure/security/fundamentals/antimalware)提供实时保护功能，当已知的恶意软件或不需要的软件试图在受保护的虚拟机上进行安装或运行时，它使用可配置的警报帮助识别和删除病毒、间谍软件和其他恶意软件。
 
 **应用程序网关**：体系结构在启用 Web 应用程序防火墙 (WAF) 和 OWASP 规则集的情况下使用应用程序网关，可降低安全漏洞风险。 其他功能包括：
 
 - [端到端 SSL](https://docs.microsoft.com/azure/application-gateway/application-gateway-end-to-end-ssl-powershell)
-- 启用 [SSL 卸载](https://docs.microsoft.com/azure/application-gateway/application-gateway-ssl-portal)
+- 启用 [SSL 卸载](../../application-gateway/create-ssl-portal.md)
 - 禁用 [TLS v1.0 和 v1.1](https://docs.microsoft.com/azure/application-gateway/application-gateway-end-to-end-ssl-powershell)
-- [Web 应用程序防火墙](https://docs.microsoft.com/azure/application-gateway/application-gateway-web-application-firewall-overview)（WAF 模式）
+- [Web 应用程序防火墙](../../application-gateway/waf-overview.md)（WAF 模式）
 - 结合 OWASP 3.0 规则集的[保护模式](https://docs.microsoft.com/azure/application-gateway/application-gateway-web-application-firewall-portal)
 
 ### <a name="business-continuity"></a>业务连续性
 
 **高可用性**：计划内或计划外维护活动期间，至少有一台虚拟机可用，满足 99.95% Azure SLA。 解决方案在一个[可用性集](https://docs.microsoft.com/azure/virtual-machines/windows/tutorial-availability-sets)中部署所有 Web 层和数据层虚拟机。 可用性集可确保虚拟机能够跨多个隔离的硬件群集分布，从而改进可用性。 另外，此解决方案将可用性集中的 SQL Server 虚拟机部署为 [AlwaysOn 可用性组](https://docs.microsoft.com/azure/virtual-machines/windows/sql/virtual-machines-windows-portal-sql-availability-group-overview)。 AlwaysOn 可用性组功能有助于实现高可用性和灾难恢复功能。
 
-**恢复服务保管库**：[恢复服务保管库](https://docs.microsoft.com/azure/backup/backup-azure-recovery-services-vault-overview)存储备份数据并保护此体系结构中的所有 Azure 虚拟机配置。 通过恢复服务保管库，客户可以从 IaaS VM 还原文件和文件夹，而无需还原整个 VM，从而实现更快的还原时间。
+**恢复服务保管库**：[恢复服务保管库](https://docs.microsoft.com/azure/backup/backup-azure-recovery-services-vault-overview)存储备份数据并保护此体系结构中的所有 Azure 虚拟机配置。 通过恢复服务保管库，客户可以从 IaaS VM 还原文件和文件夹，而无需还原整个 VM，从而缩短还原时间。
 
-**云见证**：[云见证](https://docs.microsoft.com/en-us/windows-server/failover-clustering/whats-new-in-failover-clustering#BKMK_CloudWitness)是在 Windows Server 2016 中利用 Azure 作为仲裁点的一种故障转移群集仲裁见证。 与其他任何仲裁见证一样，云见证可获得投票并可参与仲裁计算，但它使用标准公开可用的 Azure Blob 存储。 这消除了在公有云中托管的 VM 的额外维护开销。
+**云见证**：[云见证](https://docs.microsoft.com/windows-server/failover-clustering/whats-new-in-failover-clustering#BKMK_CloudWitness)是在 Windows Server 2016 中利用 Azure 作为仲裁点的一种故障转移群集仲裁见证。 与其他任何仲裁见证一样，云见证可获得投票并可参与仲裁计算，但它使用标准公开可用的 Azure Blob 存储。 这消除了在公有云中托管的 VM 的额外维护开销。
 
 ### <a name="logging-and-auditing"></a>日志记录和审核
 
-OMS 可广泛记录系统和用户活动以及系统运行状况。 OMS [Log Analytics](https://docs.microsoft.com/azure/security/azure-security-disk-encryption) 解决方案收集和分析 Azure 和本地环境中的资源生成的数据。
+Azure Monitor 日志提供了大量日志记录：系统和用户活动以及系统运行状况。 [Azure Monitor 日志](../azure-security-disk-encryption-overview.md)解决方案收集并分析 Azure 和本地环境中资源生成的数据。
 
-- **活动日志**：[活动日志](https://docs.microsoft.com/azure/monitoring-and-diagnostics/monitoring-overview-activity-logs)提供针对订阅中资源执行的操作的深入信息。 活动日志可帮助确定操作的发起方、发生的时间和状态。
-- **诊断日志：**[诊断日志](https://docs.microsoft.com/azure/monitoring-and-diagnostics/monitoring-overview-of-diagnostic-logs)是每个资源发出的所有日志。 这些日志包括 Windows 事件系统日志、Azure 存储日志、Key Vault 审核日志，以及应用程序网关访问和防火墙日志。
-- **日志存档：** 所有诊断日志都将写入集中式加密 Azure 存储帐户进行存档。 保留期是允许用户配置的，最长为 730 天，具体取决于组织的保留期要求。 这些日志连接到 Azure Log Analytics 进行处理、存储和仪表板报告。
+- **活动日志：** [活动日志](../../azure-monitor/platform/activity-logs-overview.md)提供对订阅中资源执行的操作的深入信息。 活动日志可帮助确定操作的发起方、发生的时间和状态。
+- **诊断日志：** [诊断日志](../../azure-monitor/platform/resource-logs-overview.md)是每个资源发出的所有日志。 这些日志包括 Windows 事件系统日志、Azure 存储日志、Key Vault 审核日志以及应用程序网关访问和防火墙日志。
+- **日志存档：** 所有诊断日志都将写入到集中式加密 Azure 存储帐户以进行存档。 保留期是允许用户配置的，最长为 730 天，具体取决于组织的保留期要求。 这些日志连接到 Azure Monitor 日志以便进行处理、存储和仪表板报告。
 
-另外，以下 OMS 解决方案作为此体系结构的一部分进行安装。 请注意，客户负责配置这些解决方案，使之符合 FedRAMP 安全控制的要求：
--   [AD 评估](https://docs.microsoft.com/azure/log-analytics/log-analytics-ad-assessment)：Active Directory 运行状况检查解决方案定期评估服务器环境的风险和运行状况，并且提供特定于部署服务器基础结构的优先建议列表。
--   [反恶意软件评估](https://docs.microsoft.com/azure/log-analytics/log-analytics-malware)：反恶意软件解决方案报告恶意软件、威胁和防护状态。
--   [Azure 自动化](https://docs.microsoft.com/azure/automation/automation-hybrid-runbook-worker)：Azure 自动化解决方案存储、运行和管理 Runbook。
--   [安全和审核](https://docs.microsoft.com/azure/operations-management-suite/oms-security-getting-started)：“安全和审核”仪表板通过提供有关安全域、值得注意的问题、检测、威胁智能和常见安全性查询的指标，提供对资源安全状态的高级见解。
--   [SQL 评估](https://docs.microsoft.com/azure/log-analytics/log-analytics-sql-assessment)：SQL 运行状况检查解决方案定期评估服务器环境的风险和运行状况，并且为客户提供特定于已部署服务器基础结构的优先建议列表。
--   [更新管理](https://docs.microsoft.com/azure/operations-management-suite/oms-solution-update-management)：“更新管理”解决方案允许客户管理操作系统安全更新，包括可用更新的状态以及安装所需更新的过程。
--   [代理运行状况](https://docs.microsoft.com/azure/operations-management-suite/oms-solution-agenthealth)：“代理运行状况”解决方案报告已部署代理的数量及其地理分布，以及无响应的代理数量和提交操作数据的代理数量。
--   [Azure 活动日志](https://docs.microsoft.com/azure/log-analytics/log-analytics-activity)：Activity Log Analytics 解决方案可帮助分析客户的所有 Azure 订阅的 Azure 活动日志。
--   [更改跟踪](https://docs.microsoft.com/azure/log-analytics/log-analytics-activity)：“更改跟踪”解决方案使得客户能够轻松识别环境中的更改。
+此外，以下监视解决方案作为此体系结构的一部分进行安装。 请注意，客户负责配置这些解决方案，使之符合 FedRAMP 安全控制的要求：
+-   [AD 评估](../../azure-monitor/insights/ad-assessment.md)：Active Directory 运行状况检查解决方案按固定时间间隔评估服务器环境的风险和运行状况，并且提供特定于部署服务器基础结构的优先建议列表。
+-   [反恶意软件评估](../../security-center/security-center-install-endpoint-protection.md)：反恶意软件解决方案用于报告恶意软件、威胁和防护状态。
+-   [Azure 自动化](https://docs.microsoft.com/azure/automation/automation-hybrid-runbook-worker)：Azure 自动化解决方案用于存储、运行和管理 runbook。
+-   [安全和审核](../../security-center/security-center-intro.md)：“安全和审核”仪表板通过提供有关安全域、值得注意的问题、检测、威胁智能和常见安全性查询的指标，提供对资源安全状态的高级见解。
+-   [SQL 评估](../../azure-monitor/insights/sql-assessment.md)：SQL 运行状况检查解决方案按固定时间间隔评估服务器环境的风险和运行状况，并为客户提供特定于部署服务器基础结构的优先建议列表。
+-   [更新管理](../../automation/automation-update-management.md)：更新管理解决方案允许客户管理操作系统安全更新，包括可用更新的状态以及安装所需更新的过程。
+-   [代理运行状况](../../monitoring/monitoring-solution-agenthealth.md)：代理运行状况解决方案报告已部署代理的数量及其地理分布，以及无响应的代理数量和提交操作数据的代理数量。
+-   [Azure 活动日志](../../azure-monitor/platform/collect-activity-logs.md)：Activity Log Analytics 解决方案可帮助分析客户的所有 Azure 订阅的 Azure 活动日志。
+-   [更改跟踪](../../azure-monitor/platform/collect-activity-logs.md)：更改跟踪解决方案使得客户能够轻松识别环境中的更改。
 
 **Azure Monitor**
-[Azure Monitor](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/) 通过使组织能够审核、创建警报和存档数据（包括在客户的 Azure 资源中跟踪 API 调用），帮助用户跟踪性能、维护安全性和确定趋势。
+[Azure Monitor](https://docs.microsoft.com/azure/monitoring-and-diagnostics/) 通过使组织能够审核、创建警报和存档数据（包括在客户的 Azure 资源中跟踪 API 调用），帮助用户跟踪性能、维护安全性和确定趋势。
 
 ## <a name="threat-model"></a>威胁模型
 此参考体系结构的数据流图可供[下载](https://aka.ms/fedrampWAdfd)，也可以在下面找到。 此模型有助于客户在做出修改时了解系统基础结构中存在的潜在风险点。
@@ -192,17 +191,17 @@ OMS 可广泛记录系统和用户活动以及系统运行状况。 OMS [Log Ana
 
 3. 单击下面的按钮，登录到 Azure 门户，输入所需的 ARM 模板参数，然后单击“购买”。
 
-    [![部署到 Azure](http://azuredeploy.net/AzureGov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Ffedramp-iaas-webapp%2Fmaster%2Fazuredeploy.json)
+    [![部署到 Azure](https://azuredeploy.net/AzureGov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Ffedramp-iaas-webapp%2Fmaster%2Fazuredeploy.json)
 
 ## <a name="guidance-and-recommendations"></a>指导和建议
 ### <a name="vpn-and-expressroute"></a>VPN 和 ExpressRoute
 需要配置安全 VPN 隧道或 [ExpressRoute](https://docs.microsoft.com/azure/expressroute/expressroute-introduction)，以便安全地建立与特定资源的连接，这些资源是作为此 IaaS Web 应用程序参考体系结构的一部分部署的。 通过适当设置 VPN 或 ExpressRoute，客户可以为传输中的数据添加一层保护。
 
-在 Azure 中实施安全 VPN 隧道，可在本地网络与 Azure 虚拟网络之间创建虚拟专用连接。 此连接通过 Internet 进行，可让客户在其网络与 Azure 之间的加密链路内通过“隧道”安全地传输信息。 站点到站点 VPN 是安全且成熟的技术，各种规模的企业已部署该技术数十年。 此选项使用 [IPsec 隧道模式](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc786385(v=ws.10))作为加密机制。
+在 Azure 中实施安全 VPN 隧道，可在本地网络与 Azure 虚拟网络之间创建虚拟专用连接。 此连接通过 Internet 进行，可让客户在其网络与 Azure 之间的加密链路内通过“隧道”安全地传输信息。 站点到站点 VPN 是安全且成熟的技术，各种规模的企业已部署该技术数十年。 此选项使用 [IPsec 隧道模式](https://docs.microsoft.com/previous-versions/windows/it-pro/windows-server-2003/cc786385(v=ws.10))作为加密机制。
 
-由于 VPN 隧道中的流量会通过站点到站点 VPN 在 Internet 上遍历，Microsoft 提供了另一个更安全的连接选项。 Azure ExpressRoute 是 Azure 与本地位置或 Exchange 托管提供商之间专用的 WAN 链接。 由于 ExpressRoute 连接不通过 Internet，因此与通过 Internet 的典型连接相比，这些连接提供更高的可靠性、更快的速度、更低的延迟以及更高的安全性。 此外，由于使用的是客户电信提供商的直接连接，数据不会通过 Internet 遍历，因此不会在 Internet 上公开。
+由于 VPN 隧道中的流量会通过站点到站点 VPN 在 Internet 上遍历，Microsoft 提供了另一个更安全的连接选项。 Azure ExpressRoute 是 Azure 与本地位置或 Exchange 托管提供商之间专用的 WAN 链接。 ExpressRoute 连接并不绕过 Internet，并且与通过 Internet 的典型连接相比，这些连接可靠性更高、速度更快、延迟时间更短且安全性更高。 此外，由于使用的是客户电信提供商的直接连接，数据不会通过 Internet 遍历，因此不会在 Internet 上公开。
 
-我们编写了有关如何实施安全混合网络，以便将本地网络扩展到 Azure 的[最佳做法](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/dmz/secure-vnet-hybrid)。
+我们编写了有关如何实施安全混合网络，以便将本地网络扩展到 Azure 的[最佳做法](https://docs.microsoft.com/azure/architecture/reference-architectures/dmz/secure-vnet-hybrid)。
 
 ## <a name="disclaimer"></a>免责声明
 

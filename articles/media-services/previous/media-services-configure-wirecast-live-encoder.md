@@ -4,7 +4,7 @@ description: '本主题说明如何配置 Wirecast 实时编码器，以便将�
 services: media-services
 documentationcenter: ''
 author: Juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: 0d2f1e81-51a6-4ca9-894a-6dfa51ce4c70
 ms.service: media-services
@@ -12,24 +12,25 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: ne
 ms.topic: article
-ms.date: 01/05/2017
-ms.author: juliako;cenkdin;anilmur
-ms.openlocfilehash: 2de7c06f2e03432021eaf6d81d166aadd392a4bf
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.date: 03/14/2019
+ms.author: juliako
+ms.reviewer: cenkdin;anilmur
+ms.openlocfilehash: be3c75680599c07a3cebe3dcf0436884958e1706
+ms.sourcegitcommit: de47a27defce58b10ef998e8991a2294175d2098
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/15/2019
+ms.locfileid: "69016666"
 ---
-# <a name="use-the-wirecast-encoder-to-send-a-single-bitrate-live-stream"></a>使用 Wirecast 编码器发送单比特率实时流
+# <a name="use-the-wirecast-encoder-to-send-a-single-bitrate-live-stream"></a>使用 Wirecast 编码器发送单比特率实时流 
 > [!div class="op_single_selector"]
 > * [Wirecast](media-services-configure-wirecast-live-encoder.md)
-> * [Elemental Live](media-services-configure-elemental-live-encoder.md)
 > * [Tricaster](media-services-configure-tricaster-live-encoder.md)
 > * [FMLE](media-services-configure-fmle-live-encoder.md)
 >
 >
 
-本文说明如何配置 [Telestream Wirecast](http://www.telestream.net/wirecast/overview.htm) 实时编码器，以便将单比特率流发送到用于实时编码的 AMS 频道。  有关详细信息，请参阅 [使用能够通过 Azure 媒体服务执行实时编码的频道](media-services-manage-live-encoder-enabled-channels.md)。
+本文说明如何配置 [Telestream Wirecast](https://www.telestream.net/wirecast/overview.htm) 实时编码器，以便将单比特率流发送到用于实时编码的 AMS 频道。  有关详细信息，请参阅 [使用能够通过 Azure 媒体服务执行实时编码的频道](media-services-manage-live-encoder-enabled-channels.md)。
 
 本教程演示了如何通过 Azure 媒体服务浏览器 (AMSE) 工具管理 Azure 媒体服务 (AMS)。 此工具仅在 Windows 电脑上运行。 如果使用的是 Mac 或 Linux，则可使用 Azure 门户创建[频道](media-services-portal-creating-live-encoder-enabled-channel.md#create-a-channel)和[节目](media-services-portal-creating-live-encoder-enabled-channel.md)。
 
@@ -44,7 +45,7 @@ ms.lasthandoff: 05/07/2018
 * 在确定带宽要求时，可以认为它就是将流式处理比特率翻倍。 虽然此要求不是强制性要求，但它可以减轻网络拥塞的影响。
 * 使用基于软件的编码器时，请关闭任何不需要的程序。
 
-## <a name="create-a-channel"></a>创建通道
+## <a name="create-a-channel"></a>创建频道
 1. 在 AMSE 工具中，导航到“实时”选项卡，并右键单击频道区域。 从菜单中选择“创建频道…” 从菜单中。
 
     ![wirecast](./media/media-services-wirecast-live-encoder/media-services-wirecast1.png)
@@ -69,32 +70,32 @@ ms.lasthandoff: 05/07/2018
 >
 >
 
-## <a id=configure_wirecast_rtmp></a>配置 Telestream Wirecast 编码器
+## <a name="a-idconfigure_wirecast_rtmp-configure-the-telestream-wirecast-encoder"></a><a id="configure_wirecast_rtmp" />配置 Telestream Wirecast 编码器
 在本教程中，将使用以下输出设置。 本部分的其余内容介绍更详细的配置步骤。
 
 **视频**：
 
 * 编解码器：H.264
-* 配置文件：高（等级 4.0）
+* 配置文件：高（级别 4.0）
 * 比特率：5000 kbps
 * 关键帧：2 秒（60 秒）
 * 帧速率：30
 
 **音频**：
 
-* 编码解码器：AAC (LC)
+* 编解码器：AAC (LC)
 * 比特率：192 kbps
-* 采样速率：44.1 kHz
+* 采样率：44.1 kHz
 
 ### <a name="configuration-steps"></a>配置步骤
 1. 在所使用的计算机上打开 Telestream Wirecast 应用程序，并针对 RTMP 流式处理进行设置。
 2. 导航到“输出”选项卡并选择“输出设置…”，以配置输出。
 
     确保已将“输出目标”设置为“RTMP 服务器”。
-3. 单击“确定”。
+3. 单击 **“确定”** 。
 4. 在设置页上，将“目标”字段设置为“Azure 媒体服务”。
 
-    编码配置文件已预先选择为 **Azure H.264 720p 16:9 (1280x720)**。 要自定义这些设置，请选择下拉列表右侧的齿轮图标，并选择“新建预设”。
+    编码配置文件已预先选择为 **Azure H.264 720p 16:9 (1280x720)** 。 要自定义这些设置，请选择下拉列表右侧的齿轮图标，并选择“新建预设”。
 
     ![wirecast](./media/media-services-wirecast-live-encoder/media-services-wirecast3.png)
 5. 配置编码器预设。
@@ -105,14 +106,14 @@ ms.lasthandoff: 05/07/2018
 
    * 编码器：MainConcept H.264
    * 每秒帧数：30
-   * 平均比特率：5000 千位/秒（可根据网络限制进行调整）
-   * 配置文件：主
+   * 平均比特率：5000 Kbps/秒（可根据网络限制进行调整）
+   * 配置文件：主要
    * 关键帧间隔：60 帧
 
-    **音频**
+     **音频**
 
-   * 目标比特率：192 千位/秒
-   * 采样速率：44.100 kHz
+   * 目标比特率：192 kbits/秒
+   * 采样率：44.100 kHz
 
      ![wirecast](./media/media-services-wirecast-live-encoder/media-services-wirecast4.png)
 6. 按“保存”。
@@ -134,7 +135,7 @@ ms.lasthandoff: 05/07/2018
 1. 选择“确定”。
 2. 在“Wirecast”主屏幕上，确认视频和音频的输入源已就绪，并单击左上角的“流”。
 
-   ![wirecast](./media/media-services-wirecast-live-encoder/media-services-wirecast7.png)
+    ![wirecast](./media/media-services-wirecast-live-encoder/media-services-wirecast7.png)
 
 > [!IMPORTANT]
 > 在单击“流”之前，**必须**确保频道已就绪。
@@ -168,7 +169,7 @@ ms.lasthandoff: 05/07/2018
 
 现在可以将流嵌入到播放器中，也可将其分发给受众进行实时观看。  
 
-## <a name="troubleshooting"></a>故障排除
+## <a name="troubleshooting"></a>疑难解答
 有关指南，请参阅[故障排除](media-services-troubleshooting-live-streaming.md)一文。
 
 ## <a name="media-services-learning-paths"></a>媒体服务学习路径

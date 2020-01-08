@@ -4,21 +4,22 @@ description: 了解 Service Fabric 的 Reliable Service 编程模型，并开始
 services: Service-Fabric
 documentationcenter: .net
 author: masnider
-manager: timlt
+manager: chackdan
 editor: vturecek; mani-ramaswamy
 ms.assetid: 0c88a533-73f8-4ae1-a939-67d17456ac06
-ms.service: Service-Fabric
+ms.service: service-fabric
 ms.devlang: dotnet
 ms.topic: conceptual
 ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 3/9/2018
 ms.author: masnider
-ms.openlocfilehash: 474cc78a4ceb872742ca7eb10837eeb89dcc1bdb
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: 1789c7489e58df09dccfde3e7ab106ef54b5c1ae
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60727006"
 ---
 # <a name="reliable-services-overview"></a>Reliable Services 概述
 Azure Service Fabric 可简化无状态和有状态 Reliable Services 的编写与管理。 本主题的内容：
@@ -41,15 +42,9 @@ Reliable Services 提供简单且功能强大的顶级编程模型，以帮助�
   * 查找其他服务并与它们通信
   * （可选）使用 [Reliable Collections](service-fabric-reliable-services-reliable-collections.md)
   * ...以及访问其他许多功能，所有这些操作都可通过使用多种编程语言编写的一流编程模型执行。
-* 类似于习惯使用的编程模型的简单模型，用于运行自己的代码。 代码具有定义完善的入口点和易于管理的生命周期。
+* 类似于用户所习惯编程模型的简单模型，用于运行自己的代码。 代码具有定义完善的入口点和易于管理的生命周期。
 * 可插式通信模型。 使用选择的传输方式，如包含 [Web API](service-fabric-reliable-services-communication-webapi.md) 的 HTTP、WebSockets、自定义 TCP 协议，等等。 Reliable Services 提供一些极佳的自带选项供你使用，也可以提供自己的选项。
 * 对于有状态服务，Reliable Services 编程模型允许使用 [Reliable Collections](service-fabric-reliable-services-reliable-collections.md) 直接在服务内以一致、可靠的方式存储状态。 Reliable Collections 是一组简单的高度可用、可靠集合类，用过 C# 集合的用户都对它很熟悉。 一直以来，服务需借助外部系统来进行可靠的状态管理。 利用 Reliable Collections，可将状态存储在计算旁边，获得高可用性外部存储一样的高可用性和可靠性。 此模型还能改善延迟问题，因为可将运行此模型所需的计算资源与状态放置在一起。
-
-请观看这段 Microsoft 虚拟大学视频，大致了解 Reliable Services：<center>
-<a target="_blank" href="https://mva.microsoft.com/en-US/training-courses/building-microservices-applications-on-azure-service-fabric-16747?l=HhD9566yC_4106218965">
-<img src="./media/service-fabric-reliable-services-introduction/ReliableServicesVid.png" WIDTH="360" HEIGHT="244" />
-</a>
-</center>
 
 ## <a name="what-makes-reliable-services-different"></a>Reliable Services 有何不同之处？
 Service Fabric 中的 Reliable Services 与以前编写的服务不同。 Service Fabric 提供可靠性、可用性、一致性和可伸缩性。
@@ -65,7 +60,7 @@ Service Fabric 中的 Reliable Services 与以前编写的服务不同。 Servic
 * **CreateServiceReplicaListeners/CreateServiceInstanceListeners** - 服务在此方法中定义要使用的通信堆栈。 通信堆栈（如 [Web API](service-fabric-reliable-services-communication-webapi.md)）可定义服务的一个或多个侦听终结点（客户端将如何访问服务）。 它还定义所显示的消息如何与服务代码的其余部分交互。
 * **RunAsync** - 服务在此方法中运行其业务逻辑，对于在服务生存期内一直运行的所有后台任务，服务可在此方法中启动这些任务。 所提供的取消标记是指示该操作何时应停止的信号。 例如，如果服务需要从 Reliable Queue 中提取消息并进行处理，这就是这些工作的发生位置。
 
-如果这是首次学习可靠服务，请继续阅读！ 如果正在寻找 Reliable Services 生命周期的详细演练，请阅读[此文](service-fabric-reliable-services-lifecycle.md)。
+如果这是首次学习可靠服务，请继续阅读！ 如果正在寻找 Reliable Services 生命周期的详细演练，请阅读 [此文](service-fabric-reliable-services-lifecycle.md)。
 
 ## <a name="example-services"></a>示例服务
 了解这一编程模型后，让我们来快速看看两种不同的服务，了解这些部分如何搭配运作。
@@ -75,13 +70,13 @@ Service Fabric 中的 Reliable Services 与以前编写的服务不同。 Servic
 
 以没有内存的计算器为例，它会接收所有项并同时执行运算。
 
-在这种情况下，由于服务无需处理任何后台任务，因此，服务的 `RunAsync()` (C#) 或 `runAsync()` (Java) 可为空。 创建计算器服务后，该服务将返回 `ICommunicationListener` (C#) 或 `CommunicationListener`（例如 [Web API](service-fabric-reliable-services-communication-webapi.md)），用于在某个端口上打开侦听终结点。 此侦听终结点挂接到不同的计算方法（例如："Add(n1, n2)"），这些方法定义计算器的公共 API。
+在这种情况下，由于服务无需处理任何后台任务，因此，服务的 `RunAsync()` (C#) 或 `runAsync()` (Java) 可为空。 创建计算器服务后，该服务将返回 `ICommunicationListener` (C#) 或 `CommunicationListener`（例如 [Web API](service-fabric-reliable-services-communication-webapi.md)），用于在某个端口上打开侦听终结点。 此侦听终结点挂接到不同的计算方法（例如：“Add(n1, n2)”），这些方法定义计算器的公共 API。
 
 从客户端进行调用时，将调用相应的方法，并且计算器服务会对所提供的数据执行运算并返回结果。 它不存储任何状态。
 
 不存储任何内部状态让此示例计算器变得十分简单。 不过大多数服务并不是真正的无状态。 它们是将状态外部化到其他某个存储。 （例如，任何依赖在备份存储或缓存中保留会话状态的 Web 应用程序便不是无状态的。）
 
-Service Fabric 中常见的无状态服务使用示例是作为前端，它公开 Web 应用程序的面向公众的 API。 然后，前端服务指示有状态服务完成用户请求。 在这种情况下，来自客户端的调用将定向到无状态服务正在侦听的某个已知端口（如 80）。 此无状态服务将接收调用，并判断调用是否来自可信方以及其目标服务是哪一个。  然后，此无状态服务将调用转发到有状态服务的正确分区并等待响应。 无状态服务收到响应后，将回复原始客户端。 我们的示例 [C#](https://github.com/Azure-Samples/service-fabric-dotnet-getting-started) / [Java](https://github.com/Azure-Samples/service-fabric-java-getting-started/tree/master/Actors/VisualObjectActor/VisualObjectWebService) 中提供了此类服务的示例。 这只是此模式的示例之一，还有其他许多的示例。
+Service Fabric 中常见的无状态服务使用示例是作为前端，它公开 Web 应用程序的面向公众的 API。 然后，前端服务指示有状态服务完成用户请求。 在这种情况下，来自客户端的调用将定向到无状态服务正在侦听的某个已知端口（如 80）。 此无状态服务将接收调用，并判断调用是否来自可信方以及其目标服务是哪一个。  然后，此无状态服务将调用转发到有状态服务的正确分区并等待响应。 无状态服务收到响应后，将回复原始客户端。 我们的示例 [C#](https://github.com/Azure-Samples/service-fabric-dotnet-getting-started) / [Java](https://github.com/Azure-Samples/service-fabric-java-getting-started) 中提供了此类服务的示例。 这只是此模式的示例之一，还有其他许多的示例。
 
 ### <a name="stateful-reliable-services"></a>有状态的 Reliable Services
 有状态服务是指必须存在状态的某部分并且使该部分保持一致才能正常运行的服务。 假设有一个服务不断地根据某个值收到的更新，计算它的滚动平均值。 为此，它必须具有目前需要处理的传入请求集以及目前的平均值。 检索、处理并将信息存储在外部存储（比如现在的 Azure Blob 或表存储）的任何服务都是有状态的， 只不过它将其状态保存在外部状态存储中。
@@ -103,7 +98,7 @@ Service Fabric 中常见的无状态服务使用示例是作为前端，它公�
 * 应用程序代码或状态需要高度可用，读写延迟较低。
 * 应用程序需要跨一个或多个可靠集合控制事务处理操作的并发或粒度。
 * 想为服务管理通信或控制分区方案。
-* 代码需要一个自由线程运行时环境。
+* 代码需要自由线程的运行时环境。
 * 应用程序需要在运行时动态创建或销毁 Reliable Dictionaries、队列或整个服务。
 * 需要以编程方式为服务状态控制 Service Fabric 提供的备份和还原功能。
 * 应用程序需要维护其状态单元的更改历史记录。

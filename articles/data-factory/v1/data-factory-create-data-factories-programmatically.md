@@ -3,26 +3,25 @@ title: 使用 Azure .NET SDK 创建数据管道 | Microsoft Docs
 description: 了解如何使用数据工厂 SDK 以编程方式创建、监视和管理 Azure 数据工厂。
 services: data-factory
 documentationcenter: ''
-author: sharonlo101
-manager: craigg
-ms.assetid: b0a357be-3040-4789-831e-0d0a32a0bda5
+author: djpmsft
+ms.author: daperlov
+manager: jroth
+ms.reviewer: maghan
 ms.service: data-factory
 ms.workload: data-services
 ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/22/2018
-ms.author: shlo
-robots: noindex
-ms.openlocfilehash: 5de6c401ddbefbe66e23abb99f389e505d9b5120
-ms.sourcegitcommit: 59914a06e1f337399e4db3c6f3bc15c573079832
-ms.translationtype: HT
+ms.openlocfilehash: 11120a84f2796061d76d8d813ba906da073b57c6
+ms.sourcegitcommit: d200cd7f4de113291fbd57e573ada042a393e545
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/19/2018
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70140219"
 ---
 # <a name="create-monitor-and-manage-azure-data-factories-using-azure-data-factory-net-sdk"></a>使用 Azure 数据工厂 .NET SDK 创建、监视和管理 Azure 数据工厂
 > [!NOTE]
-> 本文适用于数据工厂版本 1（正式版 (GA)）。 如果使用数据工厂服务版本 2（即预览版），请参阅[版本 2 中的复制活动教程文档](../quickstart-create-data-factory-dot-net.md)。 
+> 本文适用于数据工厂版本 1。 如果使用的是数据工厂服务的当前版本，请参阅[复制活动教程](../quickstart-create-data-factory-dot-net.md)。 
 
 ## <a name="overview"></a>概述
 可使用数据工厂 .NET SDK 以编程方式创建、监视和管理 Azure 数据工厂。 可根据本文所含演练创建示例 .NET 控制台应用程序，从而创建和监视数据工厂。 
@@ -31,8 +30,11 @@ ms.lasthandoff: 04/19/2018
 > 本文不会介绍所有数据工厂 .NET API。 有关数据工厂 .NET API 的综合文档，请参阅 [Data Factory .NET API Reference](/dotnet/api/index?view=azuremgmtdatafactories-4.12.1)（数据工厂 .NET API 参考）。 
 
 ## <a name="prerequisites"></a>先决条件
+
+[!INCLUDE [updated-for-az](../../../includes/updated-for-az.md)]
+
 * Visual Studio 2012、2013 或 2015
-* 下载并安装 [Azure .NET SDK](http://azure.microsoft.com/downloads/)。
+* 下载并安装 [Azure .NET SDK](https://azure.microsoft.com/downloads/)。
 * Azure PowerShell。 遵循 [How to install and configure Azure PowerShell](/powershell/azure/overview) （如何安装和配置 Azure PowerShell）一文中的说明，在计算机上安装 Azure PowerShell。 使用 Azure PowerShell 创建 Azure Active Directory 应用程序。
 
 ### <a name="create-an-application-in-azure-active-directory"></a>在 Azure Active Directory 中创建应用程序
@@ -41,18 +43,18 @@ ms.lasthandoff: 04/19/2018
 1. 启动 **PowerShell**。
 2. 运行以下命令并输入用于登录 Azure 门户的用户名和密码。
 
-    ```PowerShell
-    Connect-AzureRmAccount
+    ```powershell
+    Connect-AzAccount
     ```
 3. 运行以下命令查看此帐户的所有订阅。
 
-    ```PowerShell
-    Get-AzureRmSubscription
+    ```powershell
+    Get-AzSubscription
     ```
 4. 运行以下命令选择要使用的订阅。 将 **&lt;NameOfAzureSubscription**&gt; 替换为 Azure 订阅的名称。
 
-    ```PowerShell
-    Get-AzureRmSubscription -SubscriptionName <NameOfAzureSubscription> | Set-AzureRmContext
+    ```powershell
+    Get-AzSubscription -SubscriptionName <NameOfAzureSubscription> | Set-AzContext
     ```
 
    > [!IMPORTANT]
@@ -60,8 +62,8 @@ ms.lasthandoff: 04/19/2018
 
 5. 在 PowerShell 中运行以下命令，创建名为 **ADFTutorialResourceGroup** 的 Azure 资源组。
 
-    ```PowerShell
-    New-AzureRmResourceGroup -Name ADFTutorialResourceGroup  -Location "West US"
+    ```powershell
+    New-AzResourceGroup -Name ADFTutorialResourceGroup  -Location "West US"
     ```
 
     如果资源组已存在，请指定是要更新它 (Y) 还是保留原样 (N)。
@@ -69,28 +71,28 @@ ms.lasthandoff: 04/19/2018
     如果使用不同的资源组，需使用该资源组的名称取代本教程中的 ADFTutorialResourceGroup。
 6. 创建 Azure Active Directory 应用程序。
 
-    ```PowerShell
-    $azureAdApplication = New-AzureRmADApplication -DisplayName "ADFDotNetWalkthroughApp" -HomePage "https://www.contoso.org" -IdentifierUris "https://www.adfdotnetwalkthroughapp.org/example" -Password "Pass@word1"
+    ```powershell
+    $azureAdApplication = New-AzADApplication -DisplayName "ADFDotNetWalkthroughApp" -HomePage "https://www.contoso.org" -IdentifierUris "https://www.adfdotnetwalkthroughapp.org/example" -Password "Pass@word1"
     ```
 
     如果看到以下错误，请指定不同的 URL，并再次运行该命令。
     
-    ```PowerShell
+    ```powershell
     Another object with the same value for property identifierUris already exists.
     ```
 7. 创建 AD 服务主体。
 
-    ```PowerShell
-    New-AzureRmADServicePrincipal -ApplicationId $azureAdApplication.ApplicationId
+    ```powershell
+    New-AzADServicePrincipal -ApplicationId $azureAdApplication.ApplicationId
     ```
 8. 将服务主体添加到 **数据工厂参与者** 角色。
 
-    ```PowerShell
-    New-AzureRmRoleAssignment -RoleDefinitionName "Data Factory Contributor" -ServicePrincipalName $azureAdApplication.ApplicationId.Guid
+    ```powershell
+    New-AzRoleAssignment -RoleDefinitionName "Data Factory Contributor" -ServicePrincipalName $azureAdApplication.ApplicationId.Guid
     ```
 9. 获取应用程序 ID。
 
-    ```PowerShell
+    ```powershell
     $azureAdApplication 
     ```
     记下输出中的应用程序 ID (applicationID)。
@@ -114,7 +116,7 @@ ms.lasthandoff: 04/19/2018
    4. 从右侧项目类型列表中选择“控制台应用程序”。
    5. 在“名称”中输入 **DataFactoryAPITestApp** 。
    6. 在“位置”中选择“C:\ADFGetStarted”。
-   7. 单击“确定”以创建该项目  。
+   7. 单击**确定**以创建项目。
 2. 单击“工具”，指向“NuGet 包管理器”，并单击“包管理器控制台”。
 3. 在“包管理器控制台”中执行以下步骤：
    1. 运行以下命令安装数据工厂包：`Install-Package Microsoft.Azure.Management.DataFactories`
@@ -136,7 +138,7 @@ ms.lasthandoff: 04/19/2018
         </appSettings>
     </configuration>
     ```
-5. 在 App.Config 文件中，使用自己的值更新 **&lt;Application ID&gt;**、**&lt;Password&gt;**、**&lt;Subscription ID&gt;** 和 **&lt;tenant ID&gt;** 的值。
+5. 在 App.Config 文件中，使用自己的值更新 **&lt;Application ID&gt;** 、 **&lt;Password&gt;** 、 **&lt;Subscription ID&gt;** 和 **&lt;tenant ID&gt;** 的值。
 6. 将以下 **using** 语句添加到项目中的 **Program.cs** 文件。
 
     ```csharp
@@ -175,7 +177,7 @@ ms.lasthandoff: 04/19/2018
     ```
 
    > [!IMPORTANT]
-   > 将 **resourceGroupName** 的值替换为 Azure 资源组的名称。 可使用 [New-AzureResourceGroup](/powershell/module/azurerm.resources/new-azurermresourcegroup) cmdlet 创建资源组。
+   > 将 **resourceGroupName** 的值替换为 Azure 资源组的名称。 可使用 [New-AzureResourceGroup](/powershell/module/az.resources/new-azresourcegroup) cmdlet 创建资源组。
    >
    > 将数据工厂的名称 (dataFactoryName) 更新为唯一名称。 数据工厂的名称必须全局唯一。 有关数据工厂项目命名规则，请参阅 [Data Factory - Naming Rules](data-factory-naming-rules.md) （数据工厂 - 命名规则）主题。
 7. 将以下用于创建**数据工厂**的代码添加到 **Main** 方法。
@@ -219,9 +221,9 @@ ms.lasthandoff: 04/19/2018
     ```
 9. 将以下用于创建**输入和输出数据集**的代码添加到 **Main** 方法。
 
-    输入 blob 的 **FolderPath** 设置为 **adftutorial/**，其中 **adftutorial** 是 Blob 存储中的容器名称。 如果 Azure Blob 存储中不包含此容器，请创建名为 **adftutorial** 的容器，并将文本文件上传到该容器。
+    输入 blob 的 **FolderPath** 设置为 **adftutorial/** ，其中 **adftutorial** 是 Blob 存储中的容器名称。 如果 Azure Blob 存储中不包含此容器，请创建名为 **adftutorial** 的容器，并将文本文件上传到该容器。
 
-    输出 blob 的 FolderPath 设置为 **adftutorial/apifactoryoutput/{Slice}**，在此位置基于 **SliceStart** 的值（每个切片的开始日期时间）动态评估**切片**。
+    输出 blob 的 FolderPath 设置为 **adftutorial/apifactoryoutput/{Slice}** ，在此位置基于 **SliceStart** 的值（每个切片的开始日期时间）动态评估**切片**。
 
     ```csharp
     // create input and output datasets
@@ -392,7 +394,7 @@ ms.lasthandoff: 04/19/2018
         }
     }
     ```
-13. **（可选）**将以下用于获取数据切片运行详细信息的代码添加到 **Main** 方法。
+13. **（可选）** 将以下用于获取数据切片运行详细信息的代码添加到 **Main** 方法。
 
     ```csharp
     Console.WriteLine("Getting run details of a data slice");
@@ -424,7 +426,7 @@ ms.lasthandoff: 04/19/2018
     Console.WriteLine("\nPress any key to exit.");
     Console.ReadKey();
     ```
-14. 将 **Main** 方法使用的以下帮助器方法添加到 **Program** 类。 此方法会弹出要求提供用于登录 Azure 门户的**用户名**和**密码**的对话框。
+14. 将 **Main** 方法使用的以下帮助器方法添加到 **Program** 类。 此方法会弹出要求提供用于登录 Azure 门户的用户名和密码的对话框。
 
     ```csharp
     public static async Task<string> GetAuthorizationHeader()
@@ -444,7 +446,7 @@ ms.lasthandoff: 04/19/2018
     }
     ```
 
-15. 在“解决方案资源管理器”中展开项目 **DataFactoryAPITestApp**，右键单击“引用”，并单击“添加引用”。 选择 `System.Configuration` 程序集的复选框，并单击“确定”。
+15. 在“解决方案资源管理器”中，展开项目：**DataFactoryAPITestApp**，右键单击“引用”，然后单击“添加引用”。 选择 `System.Configuration` 程序集的复选框，并单击“确定”。
 15. 生成控制台应用程序。 在菜单中单击“生成”，并单击“生成解决方案”。
 16. 确认 Azure Blob 存储中的 adftutorial 容器内至少有一个文件。 如果没有，请在记事本中创建包含以下内容的 Emp.txt 文件，并将其上传到 adftutorial 容器。
 
@@ -456,7 +458,7 @@ ms.lasthandoff: 04/19/2018
 18. 使用 Azure 门户验证是否创建了包含以下项目的数据工厂 **APITutorialFactory** ：
     * 链接服务：**AzureStorageLinkedService**
     * 数据集：**DatasetBlobSource** 和 **DatasetBlobDestination**。
-    * 管道： **PipelineBlobSample**
+    * 管道：**PipelineBlobSample**
 19. 验证 **adftutorial** 容器中的 **apifactoryoutput** 文件夹内是否创建了一个输出文件。
 
 ## <a name="get-a-list-of-failed-data-slices"></a>获取失败的数据切片的列表 

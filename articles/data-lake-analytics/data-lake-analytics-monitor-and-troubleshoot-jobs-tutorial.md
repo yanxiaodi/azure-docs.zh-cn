@@ -1,25 +1,19 @@
 ---
-title: 使用 Azure 门户监视 Azure Data Lake Analytics 中的作业 | Microsoft Docs
-description: '了解如何使用 Azure 门户对 Data Lake Analytics 作业进行疑难解答。 '
-services: data-lake-analytics
-documentationcenter: ''
-author: saveenr
-manager: saveenr
-editor: cgronlun
-ms.assetid: b7066d81-3142-474f-8a34-32b0b39656dc
+title: 监视 Azure Data Lake Analytics-Azure 门户
+description: 本文介绍如何使用 Azure 门户对 Azure Data Lake Analytics 作业进行故障排除。
 ms.service: data-lake-analytics
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: big-data
-ms.date: 12/05/2016
+author: saveenr
 ms.author: saveenr
-ms.openlocfilehash: 14b1f4ec9dff78e4b5d2480755a4b1f2579ec135
-ms.sourcegitcommit: 870d372785ffa8ca46346f4dfe215f245931dae1
-ms.translationtype: HT
+ms.reviewer: jasonwhowell
+ms.assetid: b7066d81-3142-474f-8a34-32b0b39656dc
+ms.topic: conceptual
+ms.date: 12/05/2016
+ms.openlocfilehash: 7fb85f179f1e1e1ac873fc7d6d937b34c1d48ada
+ms.sourcegitcommit: 9fba13cdfce9d03d202ada4a764e574a51691dcd
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/08/2018
-ms.locfileid: "33884773"
+ms.lasthandoff: 09/26/2019
+ms.locfileid: "71316590"
 ---
 # <a name="monitor-jobs-in-azure-data-lake-analytics-using-the-azure-portal"></a>使用 Azure 门户监视 Azure Data Lake Analytics 中的作业
 
@@ -50,7 +44,7 @@ ms.locfileid: "33884773"
     "/Samples/Data/SearchLog.tsv"
 8. 单击“提交”。
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 * [Azure Data Lake Analytics 概述](data-lake-analytics-overview.md)
 * [通过使用 Azure PowerShell 实现 Azure Data Lake Analytics 入门](data-lake-analytics-get-started-powershell.md)
 * [使用 Azure 门户管理 Azure Data Lake Analytics](data-lake-analytics-manage-use-portal.md)

@@ -1,109 +1,154 @@
 ---
-title: Azure IoT 解决方案加速器文档 - 教程和 API 参考 | Microsoft Docs
-description: Azure IoT 解决方案加速器的文档包括入门指南、操作方法文章、教程和 API 参考。
-author: dominicbetts
-manager: timlt
-ms.service: iot-accelerators
+title: Azure IoT 解决方案加速器文档 | Microsoft Docs
+description: 了解如何使用 IoT 解决方案加速器。 这些文章介绍如何使用解决方案加速器来开始实施远程监视、工业 IoT、预测性维护、设备模拟等常见 IoT 方案。
 services: iot-accelerators
+author: dominicbetts
+manager: philmea
+layout: LandingPage
+ms.assetid: ''
+ms.service: iot-accelerators
+ms.tgt_pltfrm: na
 ms.topic: landing-page
-ms.date: 11/27/2017
+ms.date: 12/17/2018
 ms.author: dobett
-ms.openlocfilehash: 3e9fe2b67980e83f57732c10da99738a15a5219e
-ms.sourcegitcommit: 266fe4c2216c0420e415d733cd3abbf94994533d
+ms.openlocfilehash: 449db5b062436261cec34bfab001a2ab0fc76fa0
+ms.sourcegitcommit: bba811bd615077dc0610c7435e4513b184fbed19
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 06/01/2018
-ms.locfileid: "34626966"
+ms.lasthandoff: 08/27/2019
+ms.locfileid: "70049282"
 ---
 # <a name="iot-solution-accelerators-documentation"></a>IoT 解决方案加速器文档
 
-通过 IoT 解决方案加速器快速入门，以便生成 IoT 解决方案。 使用适用于多个平台（包括 Linux、Windows 和实时操作系统）的设备 SDK 添加新设备并连接现有设备。 无论项目大小如何，均可从少数几个传感器轻松扩展至数百万台同步连接的设备，还可依赖 Azure 的全球可用性。
+了解如何使用 IoT 解决方案加速器。 这些文章介绍如何使用解决方案加速器来开始实施远程监视、工业 IoT、预测性维护、设备模拟等常见 IoT 方案。
 
-<h2>探究</h2>
-<ul class="panelContent cardsW">
+<ul class="panelContent cardsK">
     <li>
+        <a href="/azure/iot-accelerators/about-iot-accelerators">
         <div class="cardSize">
             <div class="cardPadding">
                 <div class="card">
+                    <div class="cardImageOuter">
+                        <div class="cardImage">
+                            <img src="media/index/accelerators.svg" alt="" />
+                        </div>
+                    </div>
                     <div class="cardText">
-                        <p>了解解决方案加速器、关键方案和入门方法</p>
-                        <ul>
-                            <li><a href="/azure/iot-accelerators/iot-accelerators-what-are-solution-accelerators">解决方案加速器概述</a></li>
-                            <li><a href="/azure/iot-accelerators/iot-accelerators-remote-monitoring-deploy">部署解决方案加速器</a></li>
-                            <li><a href="/azure/iot-accelerators/iot-accelerators-remote-monitoring-explore">现成的解决方案功能</a></li>
-                            <li><a href="/azure/iot-accelerators/iot-accelerators-remote-monitoring-monitor">监视功能</a></li>
-                            <li><a href="/azure/iot-accelerators/iot-accelerators-remote-monitoring-automate">规则管理功能</a></li>
-                            <li><a href="/azure/iot-accelerators/iot-accelerators-remote-monitoring-manage">设备管理功能</a></li>
-                        </ul>
+                        <h3>了解 Azure IoT 解决方案加速器</h3>
                     </div>
                 </div>
             </div>
         </div>
+        </a>
     </li>
-</ul> 
-
----
-
-<h2>连接</h2>
-<ul class="panelContent cardsW">
     <li>
+        <a href="/azure/iot-accelerators/iot-accelerators-remote-monitoring-sample-walkthrough">
         <div class="cardSize">
             <div class="cardPadding">
                 <div class="card">
+                    <div class="cardImageOuter">
+                        <div class="cardImage">
+                            <img src="media/index/remotemonitoring.jpg" alt="" />
+                        </div>
+                    </div>
                     <div class="cardText">
-                        <p>了解如何将设备连接到解决方案加速器</p>
-                        <ul>
-                            <li><a href="/azure/iot-accelerators/iot-accelerators-remote-monitoring-device-schema">设备模型概述</a></li>
-                            <li><a href="/azure/iot-accelerators/iot-accelerators-remote-monitoring-device-behavior">自定义模拟设备</a></li>
-                            <li><a href="/azure/iot-accelerators/iot-accelerators-connecting-devices-node">连接物理设备</a></li>
-                        </ul>
+                        <h3>远程监视解决方案加速器概述</h3>
                     </div>
                 </div>
             </div>
         </div>
+        </a>
     </li>
-</ul>
-
----
-
-<h2>自定义</h2>
-<ul class="panelContent cardsW">
     <li>
+        <a href="/azure/iot-accelerators/iot-accelerators-connected-factory-features">
         <div class="cardSize">
             <div class="cardPadding">
                 <div class="card">
+                    <div class="cardImageOuter">
+                        <div class="cardImage">
+                            <img src="media/index/connectedfactory.jpg" alt="" />
+                        </div>
+                    </div>
                     <div class="cardText">
-                        <p>了解如何自定义解决方案加速器</p>
-                        <ul>
-                            <li><a href="/azure/iot-accelerators/iot-accelerators-remote-monitoring-deploy-local">在本地运行解决方案</a></li>
-                            <li><a href="/azure/iot-accelerators/iot-accelerators-remote-monitoring-customize#presentation-and-visualization">自定义 UX</a></li>
-                        </ul>
+                        <h3>连接工厂解决方案加速器概述</h3>
                     </div>
                 </div>
             </div>
         </div>
+        </a>
     </li>
-</ul> 
-
----
-
-<h2>引用</h2>
-<ul class="panelContent cardsW">
     <li>
+        <a href="/azure/iot-accelerators/iot-accelerators-device-simulation-overview">
         <div class="cardSize">
             <div class="cardPadding">
                 <div class="card">
+                    <div class="cardImageOuter">
+                        <div class="cardImage">
+                            <img src="media/index/devicesimulation.png" alt="" />
+                        </div>
+                    </div>
                     <div class="cardText">
-                        <h3>资源</h3>
-                        <p><a href="/azure/iot-accelerators/iot-security-architecture">安全体系结构</a></p>
-                        <p><a href="/azure/iot-accelerators/iot-security-best-practices">安全最佳实践</a></p>
-                        <p><a href="/azure/iot-accelerators/iot-accelerators-security-deployment">保护 IoT 部署</a></p>
-                        <p><a href="/azure/iot-accelerators/securing-iot-ground-up">安全基础知识</a></p>
-                   </div>
+                        <h3>设备模拟解决方案加速器概述</h3>
+                    </div>
                 </div>
             </div>
         </div>
+        </a>
     </li>
-</ul>
+    <li>
+        <a href="/azure/iot-accelerators/iot-accelerators-predictive-walkthrough">
+        <div class="cardSize">
+            <div class="cardPadding">
+                <div class="card">
+                    <div class="cardImageOuter">
+                        <div class="cardImage">
+                            <img src="media/index/predictivemaintenance.jpg" alt="" />
+                        </div>
+                    </div>
+                    <div class="cardText">
+                        <h3>预测性维护解决方案加速器概述</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </a>
+    </li>
+    <li>
+        <a href="/azure/iot-accelerators/iot-accelerators-architecture-overview">
+        <div class="cardSize">
+            <div class="cardPadding">
+                <div class="card">
+                    <div class="cardImageOuter">
+                        <div class="cardImage">
+                            <img src="media/index/referencearchitecture.svg" alt="" />
+                        </div>
+                    </div>
+                    <div class="cardText">
+                        <h3>Azure IoT 参考体系结构简介</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </a>
+    </li></ul>
 
+---
 
+<h2>5 分钟快速入门</h2>
+
+<h3>开始使用 IoT 解决方案加速器：</h3>
+
+* [尝试基于云的远程监视解决方案](quickstart-remote-monitoring-deploy.md)
+* [尝试基于云的连接工厂解决方案](quickstart-connected-factory-deploy.md)
+* [尝试基于云的设备模拟解决方案](quickstart-device-simulation-deploy.md)
+* [尝试基于云的预测性维护解决方案](quickstart-predictive-maintenance-deploy.md)
+
+<h2>分步教程</h2>
+
+<h3>了解 IoT 解决方案加速器及其实现的主要方案：</h3>
+
+1. [监视 IoT 设备](iot-accelerators-remote-monitoring-monitor.md)
+1. [检测连接到监视解决方案的设备问题](iot-accelerators-remote-monitoring-automate.md)
+1. [配置并管理连接到监视解决方案的设备](iot-accelerators-remote-monitoring-manage.md)
+1. [对警报执行根本原因分析](iot-accelerators-remote-monitoring-root-cause-analysis.md)
+1. [使用警报并修复设备问题](iot-accelerators-remote-monitoring-maintain.md)

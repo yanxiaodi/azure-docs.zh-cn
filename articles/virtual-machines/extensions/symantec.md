@@ -3,31 +3,31 @@ title: 在 Azure 中的 Windows VM 上安装 Symantec Endpoint Protection | Micr
 description: 了解如何在使用经典部署模型创建的新的或现有的 Azure VM 上安装和配置 Symantec Endpoint Protection 安全扩展。
 services: virtual-machines-windows
 documentationcenter: ''
-author: iainfoulds
-manager: jeconnoc
+author: roiyz
+manager: gwallace
 editor: ''
 tags: azure-service-management
 ms.assetid: 19dcebc7-da6b-4510-907b-d64088e81fa2
 ms.service: virtual-machines-windows
 ms.workload: infrastructure-services
 ms.tgt_pltfrm: vm-multiple
-ms.devlang: na
 ms.topic: article
 ms.date: 03/31/2017
-ms.author: iainfou
-ms.openlocfilehash: 54ce769d9442a4c95ad59875097893dc0b89a004
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.author: akjosh
+ms.openlocfilehash: 315cb5f22a3667db93c2421b924ac0d988e56164
+ms.sourcegitcommit: f2771ec28b7d2d937eef81223980da8ea1a6a531
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 09/20/2019
+ms.locfileid: "71168850"
 ---
 # <a name="how-to-install-and-configure-symantec-endpoint-protection-on-a-windows-vm"></a>如何在 Windows VM 上安装和配置 Symantec Endpoint Protection
 > [!IMPORTANT] 
-> Azure 提供两个不同的部署模型用于创建和处理资源：[资源管理器和经典模型](../../azure-resource-manager/resource-manager-deployment-model.md)。 本文介绍如何使用经典部署模型。 Microsoft 建议大多数新部署使用资源管理器模型。
+> Azure 具有用于创建和处理资源的两个不同部署模型：[资源管理器部署模型和经典部署模型](../../azure-resource-manager/resource-manager-deployment-model.md)。 本文介绍如何使用经典部署模型。 Microsoft 建议大多数新部署使用资源管理器模型。
 
 本文介绍如何在运行 Windows Server 的现有虚拟机 (VM) 上安装和配置 Symantec Endpoint Protection 客户端。 这是完整的客户端，其中包括病毒和间谍软件防护、防火墙和入侵防御等服务。 该客户端通过 VM 代理作为安全扩展插件进行安装。
 
-如果已经有针对本地解决方案的 Symantec 现有订阅，则可用它来保护 Azure 虚拟机。 如果还不是客户，则可注册试用订阅。 有关此解决方案的详细信息，请参阅 [Microsoft Azure 平台上的 Symantec Endpoint Protection][Symantec]。 如果已经是一名 Symantec 客户，则此页还包含指向安装客户端的许可信息和说明的链接。
+如果已经有针对本地解决方案的 Symantec 现有订阅，则可用它来保护 Azure 虚拟机。 如果还不是客户，则可注册试用订阅。 有关此解决方案的详细信息，请参阅[Microsoft Azure 平台上的 Symantec Endpoint Protection][Symantec]。 如果已经是一名 Symantec 客户，则此页还包含指向安装客户端的许可信息和说明的链接。
 
 ## <a name="install-symantec-endpoint-protection-on-an-existing-vm"></a>在现有 VM 上安装 Symantec Endpoint Protection
 在开始之前，需具备以下先决条件：
@@ -47,7 +47,7 @@ $vm = Get-AzureVM -ServiceName $CSName -Name $VMName
 write-host $vm.VM.ProvisionGuestAgent
 ```
 
-如果 **write-host** 命令显示 **True**，则已安装 VM 代理。 如果该命令显示 **False**，请参阅 Azure 博客文章 [VM 代理和扩展 - 第 2 部分][Agent]中的说明和下载链接。
+如果 **write-host** 命令显示 **True**，则已安装 VM 代理。 如果显示**False**，请参阅 Azure 博客文章[VM 代理和扩展-第2部分][Agent]中的说明和下载链接。
 
 如果已安装 VM 代理，则运行以下命令安装 Symantec Endpoint Protection 代理。
 
@@ -70,14 +70,14 @@ Set-AzureVMExtension -Publisher Symantec –Version $Agent.Version -ExtensionNam
 [Azure VM 扩展和功能][Ext]
 
 <!--Link references-->
-[Symantec]: http://www.symantec.com/connect/blogs/symantec-endpoint-protection-now-microsoft-azure
+[Symantec]: https://www.symantec.com/connect/blogs/symantec-endpoint-protection-now-microsoft-azure
 
 [Create]:../windows/classic/tutorial.md
 
 [PS]: /powershell/azureps-cmdlets-docs
 
-[Agent]: http://go.microsoft.com/fwlink/p/?LinkId=403947
+[Agent]: https://go.microsoft.com/fwlink/p/?LinkId=403947
 
 [Logon]:../windows/classic/connect-logon.md
 
-[Ext]: http://go.microsoft.com/fwlink/p/?linkid=390493
+[Ext]: https://go.microsoft.com/fwlink/p/?linkid=390493

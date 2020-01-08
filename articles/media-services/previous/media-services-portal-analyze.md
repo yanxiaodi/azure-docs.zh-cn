@@ -4,7 +4,7 @@ description: 本主题讨论如何通过 Azure 门户使用媒体分析媒体处
 services: media-services
 documentationcenter: ''
 author: Juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: 18213fc1-74f5-4074-a32b-02846fe90601
 ms.service: media-services
@@ -12,17 +12,18 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 08/07/2017
+ms.date: 03/19/2019
 ms.author: juliako
-ms.openlocfilehash: 60da24b5b0bb7d83414539f07936c61a196e0b62
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: d3917f65d8be08d6355013393f6c6675ea6c7fc5
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61131725"
 ---
-# <a name="analyze-your-media-using-the-azure-portal"></a>使用 Azure 门户分析媒体
+# <a name="analyze-your-media-using-the-azure-portal"></a>使用 Azure 门户分析媒体 
 > [!NOTE]
-> 要完成本教程，需要一个 Azure 帐户。 有关详细信息，请参阅 [Azure 免费试用](https://azure.microsoft.com/pricing/free-trial/)。 
+> 要完成本教程，需要一个 Azure 帐户。 有关详细信息，请参阅[Azure 免费试用版](https://azure.microsoft.com/pricing/free-trial/)。 
 > 
 > 
 
@@ -33,18 +34,18 @@ Azure 媒体服务分析是一系列语音和影像组件（具企业规模、�
 
 ## <a name="choose-an-asset-that-you-want-to-analyze"></a>选择要分析的资产
 1. 在 [Azure 门户](https://portal.azure.com/)中，选择 Azure 媒体服务帐户。
-2. 在“设置”窗口中，选择“资产”。  
-   。
+2. 在“设置”  窗口中，选择“资产”  。  
+   
     ![分析视频](./media/media-services-portal-analyze/media-services-portal-analyze001.png)
-3. 选择要分析的资产，按“分析”按钮。
+3. 选择要分析的资产，按“分析”  按钮。
    
     ![分析视频](./media/media-services-portal-analyze/media-services-portal-analyze002.png)
-4. 在“使用媒体分析处理媒体资产”窗口中，选择处理器。 
+4. 在“使用媒体分析处理媒体资产”  窗口中，选择处理器。 
    
     本文的其余部分介绍每种处理器的功能和使用方式。 
-5. 按“创建”，开始作业。
+5. 按“创建”  ，开始作业。
 
-## <a name="azure-media-indexer"></a>Azure 媒体索引器
+## <a name="azure-media-indexer"></a>Azure Media Indexer
 通过 **Azure Media Indexer** 媒体处理器，可使媒体文件和内容具有可搜索性并可生成隐藏式字幕跟踪。 本部分提供有关可为此 MP 指定的选项的一些详细信息。
 
 ![分析视频](./media/media-services-portal-analyze/media-services-portal-analyze003.png)
@@ -73,11 +74,6 @@ Azure 媒体服务分析是一系列语音和影像组件（具企业规模、�
 ### <a name="output-file"></a>输出文件
 可以识别出输出内容的友好名称。 
 
-## <a name="azure-media-hyperlapse"></a>Azure Media Hyperlapse
-Azure Media Hyperlapse 是可以使用第一人称视角或运动相机内容创建流畅缩时视频的 MP。  有关详细信息，请参阅[此](media-services-hyperlapse-content.md)主题。 本部分提供有关可为此 MP 指定的选项的一些详细信息。
-
-![分析视频](./media/media-services-portal-analyze/media-services-portal-analyze004.png)
-
 ### <a name="speed"></a>Speed
 指定用于加速输入视频的速度。 输出是输入视频经过稳定和缩时转译的结果。
 
@@ -92,7 +88,7 @@ Azure Media Hyperlapse 是可以使用第一人称视角或运动相机内容创
 
 * **人脸检测**
   
-    人脸检测能够找出并跟踪视频中的人脸。 可以同时跟踪多个面部，随着对象移动持续进行跟踪，并将时间和位置的元数据以 JSON 文件的格式返回。 跟踪期间，该服务会在人员于屏幕上四处移动时，尝试为他们的面部赋予相同的 ID，即使他们被挡住或暂时离帧。
+    人脸检测能够找出并跟踪视频中的人脸。 可以检测多个面部，随后随着对象移动进行跟踪，并将时间和位置的元数据以 JSON 文件的形式返回。 跟踪期间，该服务会在人员于屏幕上四处移动时，尝试为他们的面部赋予相同的 ID，即使他们被挡住或暂时离帧。
   
   > [!NOTE]
   > 此服务并不执行面部识别。 面部离帧或被挡住太久的人员，会在回来时赋予新的 ID。
@@ -125,7 +121,7 @@ Azure Media Hyperlapse 是可以使用第一人称视角或运动相机内容创
 ![分析视频](./media/media-services-portal-analyze/media-services-portal-analyze006.png)
 
 ## <a name="azure-media-video-thumbnails"></a>Azure 媒体视频缩略图
-此处理器可通过自动选择来自源视频的有趣片段帮助用户创建长视频的摘要。 要提供有关长视频内容的快速概述时，这很有用。 有关详细信息和示例，请参阅[使用 Azure Media Video Thumbnails 创建视频摘要](media-services-video-summarization.md)
+此处理器可通过自动选择来自源视频的有趣片段帮助用户创建长视频的摘要。 要提供有关长视频内容的快速概述时，这很有用。 有关详细信息和示例，请参阅 [使用 Azure 媒体视频缩略图创建视频摘要](media-services-video-summarization.md)
 
 ![分析视频](./media/media-services-portal-analyze/media-services-portal-analyze008.png)
 
@@ -140,11 +136,11 @@ Azure Media Hyperlapse 是可以使用第一人称视角或运动相机内容创
 
 ![审查视频](./media/media-services-portal-analyze/media-services-portal-analyze-content-moderator.PNG)
 
-### <a name="version"></a>版本 
+### <a name="version"></a>Version 
 使用“2.0”。
 
-### <a name="mode"></a>Mode
-2.0 版忽略 `Mode` 设置。
+### <a name="mode"></a>模式
+2\.0 版忽略 `Mode` 设置。
 
 ## <a name="next-steps"></a>后续步骤
 查看媒体服务学习路径。

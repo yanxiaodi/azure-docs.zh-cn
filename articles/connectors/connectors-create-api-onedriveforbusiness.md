@@ -1,25 +1,22 @@
 ---
-title: OneDrive for Business | Microsoft Docs
-description: 使用 Azure 应用服务创建逻辑应用。 连接到 OneDrive for Business 管理文件。 可以执行各种操作，例如上传、更新、获取和删除文件。
-services: logic-apps
-documentationcenter: .net,nodejs,java
+title: 连接到 OneDrive for Business - Azure 逻辑应用 | Microsoft Docs
+description: 使用 OneDrive for Business REST API 和 Azure 逻辑应用上传和管理文件
 author: ecfan
-manager: anneta
-editor: ''
-tags: connectors
-ms.assetid: cf9484e9-7a20-4de0-93c8-0fa132221f2b
-ms.service: logic-apps
-ms.devlang: multiple
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: integration
+manager: jeconnoc
+ms.author: estfan
 ms.date: 08/18/2016
-ms.author: estfan; ladocs
-ms.openlocfilehash: a572d3d858bcaed817198420db7f2e09732b2366
-ms.sourcegitcommit: 8aab1aab0135fad24987a311b42a1c25a839e9f3
-ms.translationtype: HT
+ms.topic: article
+ms.service: logic-apps
+services: logic-apps
+ms.reviewer: klam, LADocs
+ms.suite: integration
+tags: connectors
+ms.openlocfilehash: 87a162338cc67a3f2d2fc425bbcbefe2976661e5
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "62104912"
 ---
 # <a name="get-started-with-the-onedrive-for-business-connector"></a>OneDrive for Business 连接器入门
 连接到 OneDrive for Business 管理文件。 可以执行各种操作，例如上传、更新、获取和删除文件。
@@ -29,7 +26,7 @@ ms.lasthandoff: 03/16/2018
 ## <a name="create-a-connection-to-onedrive-for-business"></a>创建到 OneDrive for Business 的连接
 要使用 OneDrive for Business 创建逻辑应用，必须先创建**连接**，然后提供以下属性的详细信息：
 
-| 属性 | 必选 | 说明 |
+| 属性 | 需要 | 描述 |
 | --- | --- | --- |
 | 令牌 |是 |提供 OneDrive for Business 凭据 |
 

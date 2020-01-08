@@ -1,20 +1,22 @@
 ---
-title: 了解 Azure AD B2B 协作中的用户令牌 | Microsoft Docs
+title: 了解 B2B 协作-Azure Active Directory 中的用户令牌 |Microsoft Docs
 description: Azure Active Directory B2B 协作的用户令牌参考
 services: active-directory
 ms.service: active-directory
-ms.component: B2B
-ms.topic: article
+ms.subservice: B2B
+ms.topic: conceptual
 ms.date: 02/28/2018
-ms.author: twooley
-author: twooley
-manager: mtillman
-ms.reviewer: sasubram
-ms.openlocfilehash: efbadf877a38f1ab553e1c376e3084d00f606a31
-ms.sourcegitcommit: 96089449d17548263691d40e4f1e8f9557561197
-ms.translationtype: HT
+ms.author: mimart
+author: msmimart
+manager: celestedg
+ms.reviewer: mal
+ms.collection: M365-identity-device-management
+ms.openlocfilehash: 7c2e872c108e19e21258610edd62899b1029fcd9
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/17/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "65767168"
 ---
 # <a name="understand-user-tokens-in-azure-ad-b2b-collaboration"></a>了解 Azure AD B2B 协作中的用户令牌
 

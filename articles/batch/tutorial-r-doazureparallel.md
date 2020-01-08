@@ -2,24 +2,25 @@
 title: 使用 Azure Batch 进行并行 R 模拟
 description: 教程 - 分步说明如何在 Azure Batch 中使用 R doAzureParallel 包运行 Monte Carlo 财务模拟
 services: batch
-author: dlepow
-manager: jeconnoc
+author: laurenhughes
+manager: gwallace
 ms.assetid: ''
 ms.service: batch
 ms.devlang: r
 ms.topic: tutorial
 ms.date: 01/23/2018
-ms.author: danlep
+ms.author: lahugh
 ms.custom: mvc
-ms.openlocfilehash: fb616dc95cc7dd7dbb25f2deb832b517d0747ae4
-ms.sourcegitcommit: 20d103fb8658b29b48115782fe01f76239b240aa
+ms.openlocfilehash: 7fad37af268d3dcd3d4d974d8e839ac47f171b50
+ms.sourcegitcommit: 4b431e86e47b6feb8ac6b61487f910c17a55d121
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/03/2018
+ms.lasthandoff: 07/18/2019
+ms.locfileid: "68321905"
 ---
 # <a name="tutorial-run-a-parallel-r-simulation-with-azure-batch"></a>教程：使用 Azure Batch 运行并行 R 模拟 
 
-使用 [doAzureParallel](http://www.github.com/Azure/doAzureParallel) 包大规模运行并行 R 工作负荷。该包是一种轻型 R 包，允许直接从 R 会话使用 Azure Batch。 doAzureParallel 包在常用 [foreach](http://cran.r-project.org/web/packages/foreach/index.html) R 包的基础上生成。 doAzureParallel 执行 foreach 循环的每个迭代，将其作为 Azure Batch 任务提交。
+使用 [doAzureParallel](https://www.github.com/Azure/doAzureParallel) 包大规模运行并行 R 工作负荷。该包是一种轻型 R 包，允许直接从 R 会话使用 Azure Batch。 doAzureParallel 包在常用 [foreach](https://cran.r-project.org/web/packages/foreach/index.html) R 包的基础上生成。 doAzureParallel 执行 foreach 循环的每个迭代，将其作为 Azure Batch 任务提交。
 
 本教程介绍如何部署 Batch 池，然后直接在 RStudio 中通过 Azure Batch 运行并行 R 作业。 学习如何：
  
@@ -44,7 +45,7 @@ ms.lasthandoff: 04/03/2018
 [!INCLUDE [batch-common-credentials](../../includes/batch-common-credentials.md)] 
 ## <a name="install-doazureparallel"></a>安装 doAzureParallel
 
-在 RStudio 控制台中安装 [doAzureParallel GitHub 包](http://www.github.com/Azure/doAzureParallel)。 以下命令在当前 R 会话中下载并安装该包及其依赖项： 
+在 RStudio 控制台中安装 [doAzureParallel GitHub 包](https://www.github.com/Azure/doAzureParallel)。 以下命令在当前 R 会话中下载并安装该包及其依赖项： 
 
 ```R
 # Install the devtools package  
@@ -115,7 +116,7 @@ generateClusterConfig("cluster.json")
 {
   "name": "myPoolName",
   "vmSize": "Standard_D2_v2",
-  "maxTasksPerNode": 4,
+  "maxTasksPerNode": 2,
   "poolSize": {
     "dedicatedNodes": {
       "min": 0,
@@ -225,7 +226,7 @@ closingPrices_p <- foreach(i = 1:100, .combine='c', .options.azure = opt) %dopar
 end_p <- Sys.time() 
 ```
 
-此模拟将任务分发到 Batch 池中的节点。 在 Azure 门户中，可以查看池的热度地图中的活动。 转到“Batch 帐户” > “myBatchAccount”。 单击“池” > “myPoolName”。 
+此模拟将任务分发到 Batch 池中的节点。 在 Azure 门户中，可以查看池的热度地图中的活动。 转到“Batch 帐户”   >   “myBatchAccount”。 单击“池”   >   “myPoolName”。 
 
 ![运行并行 R 任务的池的热度地图](media/tutorial-r-doazureparallel/pool.png)
 
@@ -259,7 +260,7 @@ stopCluster(cluster)
 本教程介绍了如何：
 
 > [!div class="checklist"]
-安装 doAzureParallel 并将其配置为访问 Batch 帐户和存储帐户
+> 安装 doAzureParallel 并将其配置为访问 Batch 帐户和存储帐户
 > * 创建一个 Batch 池，作为 R 会话的并行后端
 > * 在池中运行示例并行模拟
 

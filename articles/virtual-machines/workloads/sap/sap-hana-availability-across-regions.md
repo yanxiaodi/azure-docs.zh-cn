@@ -9,18 +9,18 @@ editor: ''
 tags: azure-resource-manager
 keywords: ''
 ms.service: virtual-machines-linux
-ms.devlang: NA
 ms.topic: article
 ms.tgt_pltfrm: vm-linux
 ms.workload: infrastructure
-ms.date: 02/26/2018
+ms.date: 09/12/2018
 ms.author: juergent
 ms.custom: H1Hack27Feb2017
-ms.openlocfilehash: edbd1885dd529e4ccd38f2012d56865a2147f64d
-ms.sourcegitcommit: 6fcd9e220b9cd4cb2d4365de0299bf48fbb18c17
-ms.translationtype: HT
+ms.openlocfilehash: 68a393865038722f2fd7fa5e42334f8d5e760951
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/05/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70078849"
 ---
 # <a name="sap-hana-availability-across-azure-regions"></a>跨 Azure 区域的 SAP HANA 可用性
 
@@ -38,10 +38,15 @@ Azure 虚拟网络使用不同的 IP 地址范围。 IP 地址部署在第二个
 
 ## <a name="simple-availability-between-two-azure-regions"></a>两个 Azure 区域之间的简单可用性
 
-可以选择不将任何可用性配置放在单个区域中，但如果发生灾难，仍需要为工作负荷提供服务。 这种系统的典型案例是非生产系统。 虽然可以保持系统关闭半日或整日，但不能允许系统在 48 小时或更长时间不可用。 为降低安装成本，可在重要性较低的 VM 中运行另一个系统。 另一个系统充当目标。 也可以将次要区域中的 VM 大小调小，并选择不预加载数据。 由于需要手动进行故障转移，并且还需要更多的步骤来完成整个应用程序堆栈的故障转移，因此可接受花费额外时间关闭 VM、重设其大小和重启 VM。
+可以选择不将任何可用性配置放在单个区域中，但如果发生灾难，仍需要为工作负荷提供服务。 这种情况的典型案例是非生产系统。 虽然可以保持系统关闭半日或整日，但不能允许系统在 48 小时或更长时间不可用。 为降低安装成本，可在重要性较低的 VM 中运行另一个系统。 另一个系统充当目标。 也可以将次要区域中的 VM 大小调小，并选择不预加载数据。 由于需要手动进行故障转移，并且还需要更多的步骤来完成整个应用程序堆栈的故障转移，因此可接受花费额外时间关闭 VM、重设其大小和重启 VM。
 
-> [!NOTE]
-> 即使不在 HANA 系统复制目标中使用数据预先加载，也至少需要 64 GB 内存。 除了 64 GB 内存以外，还需要足够的内存用于在目标实例的内存中保留行存储数据。
+如果使用将 DR 目标与一个 VM 中的 QA 系统共享的方案，则需要考虑以下这些注意事项：
+
+- 有两种[操作模式](https://help.sap.com/viewer/6b94445c94ae495c83a19646e7c3fd56/2.0.02/en-US/627bd11e86c84ec2b9fcdf585d24011c.html)（delta_datashipping 和 logreplay）可用于这类方案
+- 这两种操作模式在不预加载数据的情况下具有不同的内存要求
+- 在没有预加载选项的情况下，Delta_datashipping 可能需要的内存显著少于 logreplay。 请参阅 SAP 文档[如何为 SAP HANA 执行系统复制的](https://archive.sap.com/kmuuid2/9049e009-b717-3110-ccbd-e14c277d84a3/How%20to%20Perform%20System%20Replication%20for%20SAP%20HANA.pdf)的第 4.3 章
+- Logreplay 操作模式在不进行预加载情况下的内存要求不确定，取决于加载的列存储结构。 在极端情况下，可能需要主实例内存的 50%。 用于 logreplay 操作模式的内存与是否选择设置预加载数据无关。
+
 
 ![跨两个区域的两个 VM 示意图](./media/sap-hana-availability-two-region/two_vm_HSR_async_2regions_nopreload.PNG)
 
@@ -62,10 +67,20 @@ Azure 虚拟网络使用不同的 IP 地址范围。 IP 地址部署在第二个
 
 ![跨两个区域的三个 VM 示意图](./media/sap-hana-availability-two-region/three_vm_HSR_async_2regions_ha_and_dr.PNG)
 
-此配置在主要区域内提供低 RTO 的 RPO=0。 如果需要转移到第二个区域，此配置还能提供更低的 RPO。 第二个区域的 RTO 时间取决于是否预加载数据。 许多客户使用次要区域中的 VM 来运行测试系统。 在这种用例中，无法预加载数据。
+SAP 使用 HANA 2.0 SPS3 引入了[多目标系统复制](https://help.sap.com/viewer/42668af650f84f9384a3337bcd373692/2.0.03/en-US/0b2c70836865414a8c65463180d18fec.html)。 多目标系统复制在更新方案中带来一些优势。 例如，当辅助 HA 站点关闭以进行维护或更新时，DR 站点（区域 2）不会受到影响。 可以在[此处](https://help.sap.com/viewer/6b94445c94ae495c83a19646e7c3fd56/2.0.03/en-US/ba457510958241889a459e606bbcf3d3.html)找到有关 HANA 多目标系统复制的更多信息。
+使用多目标复制的可能体系结构如下所示：
 
-> [!NOTE]
-> 由于正在使用从第 1 层到第 2 层（主要区域中的同步复制）的 HANA 系统复制的 **logreplay** 操作模式，则第 2 层和第 3 层之间的复制（复制到次要站点）不能是 **delta_datashipping** 操作模式。 有关操作模式和某些限制的详细信息，请参阅 SAP 文章 [SAP HANA 系统复制的操作模式](https://help.sap.com/viewer/6b94445c94ae495c83a19646e7c3fd56/2.0.02/en-US/627bd11e86c84ec2b9fcdf585d24011c.html)。 
+![三个 VM 在两个区域上的多目标图](./media/sap-hana-availability-two-region/saphanaavailability_hana_system_2region_HA_and_DR_multitarget_3VMs.PNG)
+
+如果组织对第二个 (DR) Azure 区域的高可用性就绪性有要求，那么体系结构将如下所示：
+
+![三个 VM 在两个区域上的多目标图](./media/sap-hana-availability-two-region/saphanaavailability_hana_system_2region_HA_and_DR_multitarget_4VMs.PNG)
+
+
+使用 logreplay 作为操作模式时，此配置在主要区域内提供低 RTO 的 RPO=0。 如果需要转移到第二个区域，此配置还能提供更低的 RPO。 第二个区域的 RTO 时间取决于是否预加载数据。 许多客户使用次要区域中的 VM 来运行测试系统。 在这种用例中，无法预加载数据。
+
+> [!IMPORTANT]
+> 不同层之间的操作模式需要是同类的。 不能使用 logreply 作为第 1 层与第 2 层之间的操作模式，同时使用 delta_datashipping 提供第 3 层。 只能选择一种或另一种操作模式，需要对所有层保持一致。 由于 delta_datashipping 不适合提供 RPO=0，因此对于这类多层配置，唯一合理的操作模式仍是 logreplay。 有关操作模式和某些限制的详细信息，请参阅 SAP 文章 [SAP HANA 系统复制的操作模式](https://help.sap.com/viewer/6b94445c94ae495c83a19646e7c3fd56/2.0.02/en-US/627bd11e86c84ec2b9fcdf585d24011c.html)。 
 
 ## <a name="next-steps"></a>后续步骤
 

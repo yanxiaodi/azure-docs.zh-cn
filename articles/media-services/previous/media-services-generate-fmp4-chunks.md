@@ -4,20 +4,21 @@ description: 本主题介绍如何创建生成 fMP4 区块的编码任务。 将
 services: media-services
 documentationcenter: ''
 author: juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.service: media-services
 ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 12/09/2017
+ms.date: 03/18/2019
 ms.author: juliako
-ms.openlocfilehash: 09dd5ea447449bc23f49699dc69647550f62738a
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 48c09a6100586c0c99f3d54f9708c770488c681f
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61463814"
 ---
 #  <a name="create-an-encoding-task-that-generates-fmp4-chunks"></a>创建生成 fMP4 区块的编码任务
 
@@ -37,7 +38,7 @@ ms.lasthandoff: 05/07/2018
 
 - 创建编码作业。
 - 获取对 **Media Encoder Standard** 编码器的引用。
-- 向作业添加一个编码任务，指定使用“自适应流式处理”预设。 
+- 向作业添加一个编码任务，指定使用“自适应流式处理”预设。  
 - 创建一个输出资产，其中将包含 fMP4 区块和 .ism 文件。
 - 添加事件处理程序以检查作业进度。
 - 提交作业。

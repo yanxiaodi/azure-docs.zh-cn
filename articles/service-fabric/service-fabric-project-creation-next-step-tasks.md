@@ -3,8 +3,8 @@ title: Service Fabric 项目创建后续步骤 | Microsoft 文档
 description: 了解刚才在 Visual Studio 中创建的应用程序项目。  了解如何使用教程生成服务以及有关开发 Service Fabric 服务的详细信息。
 services: service-fabric
 documentationcenter: .net
-author: rwike77
-manager: timlt
+author: athinanthny
+manager: chackdan
 editor: ''
 ms.assetid: 299d1f97-1ca9-440d-9f81-d1d0dd2bf4df
 ms.service: service-fabric
@@ -13,12 +13,13 @@ ms.topic: conceptual
 ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 12/07/2017
-ms.author: rwike77
-ms.openlocfilehash: a87dd6f4afa152aebafdde24defcabe841ae2e9c
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.author: atsenthi
+ms.openlocfilehash: e5371cd3ea9de1993f0f824325f6cbf1e25343d4
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60773037"
 ---
 # <a name="your-service-fabric-application-and-next-steps"></a>Service Fabric 应用程序和后续步骤
 已创建 Azure Service Fabric 应用程序。 本文介绍了一些试验教程、项目的组成、你可能感兴趣的其他信息以及有可能执行的后续步骤。
@@ -34,7 +35,7 @@ ms.lasthandoff: 05/16/2018
 - [基于 Windows 的来宾可执行服务](quickstart-guest-app.md) 
 - [Windows 容器应用程序](service-fabric-get-started-containers.md) 
 
-还可以尝试[示例应用程序](http://aka.ms/servicefabricsamples)。
+还可以尝试[示例应用程序](https://aka.ms/servicefabricsamples)。
 
 ## <a name="have-questions-or-feedback--need-to-report-an-issue"></a>还有任何疑问或反馈？  需要报告问题？
 请浏览[常见问题](service-fabric-common-questions.md)，了解有关 Service Fabric 的功能及用法方面的解答。

@@ -1,24 +1,17 @@
 ---
-title: "如何查看 Azure 数据目录中的相关数据资产 | Microsoft Docs"
-description: "本文介绍如何在 Azure 数据目录中查看所选数据资产的相关数据资产。"
-services: data-catalog
-documentationcenter: 
-author: steelanddata
-manager: NA
-editor: 
-tags: 
+title: 如何查看 Azure 数据目录中的相关数据资产
+description: 本文介绍如何在 Azure 数据目录中查看所选数据资产的相关数据资产。
+author: JasonWHowell
+ms.author: jasonh
 ms.service: data-catalog
-ms.devlang: NA
-ms.topic: article
-ms.tgt_pltfrm: NA
-ms.workload: data-catalog
-ms.date: 01/18/2018
-ms.author: maroche
-ms.openlocfilehash: 37d12209d28b73f0d7fc6d940ded344fbeae968d
-ms.sourcegitcommit: be9a42d7b321304d9a33786ed8e2b9b972a5977e
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 08/01/2019
+ms.openlocfilehash: 212ba647e6eb44e800a589928620f56fba65107c
+ms.sourcegitcommit: c662440cf854139b72c998f854a0b9adcd7158bb
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/19/2018
+ms.lasthandoff: 08/02/2019
+ms.locfileid: "68737019"
 ---
 # <a name="how-to-view-related-data-assets-in-azure-data-catalog"></a>如何查看 Azure 数据目录中的相关数据资产？
 借助 Azure 数据目录，可以查看与所选数据资产相关的数据资产，并查看它们之间的关系。 
@@ -37,7 +30,7 @@ ms.lasthandoff: 01/19/2018
 ## <a name="view-related-data-assets"></a>查看相关数据资产
 若要查看与所选数据集相关的数据资产，请使用下图所示的“关系”选项卡： 
 
-![Azure 数据目录 - 查看相关数据资产](media\data-catalog-how-to-view-related-data-assets\relationships-tab.png)
+![Azure 数据目录 - 查看相关数据资产](media/data-catalog-how-to-view-related-data-assets/relationships-tab.png)
 
 在此示例中，所选 ProductSubcategory 数据资产之间存在两种关系： 
 
@@ -49,7 +42,7 @@ ms.lasthandoff: 01/19/2018
 
 若要查看更多详细信息（如列的完全限定名），请将鼠标移动到其上，此时会出现一个弹出窗口，如下图所示： 
 
-![Azure 数据目录 - 关系弹出窗口](media\data-catalog-how-to-view-related-data-assets\relationship-popup.png)
+![Azure 数据目录 - 关系弹出窗口](media/data-catalog-how-to-view-related-data-assets/relationship-popup.png)
 
 若要包括已注册资产之间的关系，请重新注册这些资产。
 

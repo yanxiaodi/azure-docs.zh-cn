@@ -1,20 +1,22 @@
 ---
 title: SQL 数据库多租户应用示例指南 - Wingtip SaaS | Microsoft Docs
 description: 提供有关安装和运行使用 Azure SQL 数据库（Wingtip Tickets SaaS 示例）的示例多租户应用程序的步骤和指南。
-keywords: sql 数据库教程
 services: sql-database
-author: MightyPen
-manager: craigg
 ms.service: sql-database
-ms.custom: scale out apps
-ms.topic: article
-ms.date: 04/01/2018
+ms.subservice: scenario
+ms.custom: ''
+ms.devlang: ''
+ms.topic: conceptual
+author: MightyPen
 ms.author: genemi
-ms.openlocfilehash: 1e3ecd27ce7ec2e2763a7249428875e51872bf63
-ms.sourcegitcommit: 3a4ebcb58192f5bf7969482393090cb356294399
-ms.translationtype: HT
+ms.reviewer: sstein
+ms.date: 12/18/2018
+ms.openlocfilehash: 6c14fd69521be85dbda5ec4ceda991dfdff54ae0
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68570064"
 ---
 # <a name="general-guidance-for-working-with-wingtip-tickets-sample-saas-apps"></a>使用 Wingtip Tickets 示例 SaaS 应用的一般指南
 
@@ -32,7 +34,7 @@ ms.lasthandoff: 04/06/2018
 3. 单击“下载 zip”并保存文件。
 4. 右键单击 zip 文件并选择“属性”。 zip 文件名与存储库名称对应。 （例如： WingtipTicketsSaaS-DbPerTenant-master.zip）
 5. 在“常规”选项卡上，选择“取消阻止”。
-6. 单击“确定”。
+6. 单击 **“确定”** 。
 7. 解压缩文件。
 
 脚本位于 ..\\Learning Modules 文件夹中。
@@ -54,7 +56,7 @@ ms.lasthandoff: 04/06/2018
 
 ### <a name="execute-the-scripts-by-pressing-f5"></a>按 F5 执行脚本
 
-多个脚本使用 $PSScriptRoot 来浏览文件夹，且仅在按 F5 执行脚本时才对 $PSScriptRoot 求值。  突出显示和运行某个选择的内容 (F8) 时，可能会生成错误，因此请在运行脚本时按 F5。
+多个脚本使用 $PSScriptRoot 来浏览文件夹，且仅在按 F5 执行脚本时才对 $PSScriptRoot 求值。  突出显示和运行某个选择的内容 (F8) 时，可能会生成错误，因此请在运行脚本时按 F5。
 
 ### <a name="step-through-the-scripts-to-examine-the-implementation"></a>以分步执行脚本的方式检查实现情况
 
@@ -74,24 +76,24 @@ ms.lasthandoff: 04/06/2018
 
 使用 [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms) 连接和浏览应用程序服务器和数据库。
 
-该部署最初具有要连接的租户和目录 SQL 数据库服务器。 服务器的命名取决于数据库租户模式（请参阅下文了解详细信息）。 
+该部署最初具有要连接到的租户和目录 SQL 数据库服务器。 服务器的命名取决于数据库租户模式（请参阅下文了解详细信息）。 
 
-   - **独立的应用程序：**每个租户的服务器（例如： contosoconcerthall-&lt;User&gt; 服务器）和 catalog-sa-&lt;User&gt;
-   - **每个租户一个数据库：**tenants1-dpt-&lt;User&gt; 和 catalog-dpt-&lt;User&gt; 服务器
-   - **多租户数据库：**tenants1-mt-&lt;User&gt; 和 catalog-mt-&lt;User&gt; 服务器
+   - **独立的应用程序：** 每个租户的服务器（例如： contosoconcerthall-&lt;User&gt; 服务器）和 catalog-sa-&lt;User&gt;
+   - **每个租户一个数据库：** tenants1-dpt-&lt;User&gt; 和 catalog-dpt-&lt;User&gt; 服务器
+   - **多租户数据库：** tenants1-mt-&lt;User&gt; 和 catalog-mt-&lt;User&gt; 服务器
 
 为确保成功连接演示，所有服务器的[防火墙规则](sql-database-firewall-configure.md)都允许所有 IP 通过。
 
 
 1. 打开 SSMS 并连接到租户。 服务器名称取决于所选数据库租户模式（请参阅下文了解详细信息）：
-    - **独立的应用程序：**各个租户的服务器（例如： contosoconcerthall-&lt;User&gt;.database.windows.net） 
-    - **每个租户一个数据库：**tenants1-dpt-&lt;User&gt;.database.windows.net
-    - **多租户数据库：**tenants1-mt-&lt;User&gt;.database.windows.net 
+    - **独立的应用程序：** 各个租户的服务器（例如： contosoconcerthall-&lt;User&gt;.database.windows.net） 
+    - **每个租户一个数据库：** tenants1-dpt-&lt;User&gt;.database.windows.net
+    - **多租户数据库：** tenants1-mt-&lt;User&gt;.database.windows.net 
 2. 单击“连接” > “数据库引擎...”：
 
    ![编录服务器](media/saas-tenancy-wingtip-app-guidance-tips/connect.png)
 
-3. 演示凭据为：登录名 = *developer*，密码 = *P@ssword1*
+3. 演示凭据为：登录名 = *developer*, Password *=\@P ssword1*
 
     下图显示“每个租户一个数据库”模式的登录。 
     ![连接](media/saas-tenancy-wingtip-app-guidance-tips/tenants1-connect.png)
@@ -99,9 +101,9 @@ ms.lasthandoff: 04/06/2018
    
 
 4. 重复步骤 2-3，并连接到目录服务器（请参阅下文，了解基于所选数据库租户模式的特定服务器名称）
-    - **独立的应用程序：**catalog-sa-&lt;User&gt;.database.windows.net
-    - **每个租户一个数据库：**catalog-dpt-&lt;User&gt;.database.windows.net
-    - **多租户数据库：**catalog-mt-&lt;User&gt;.database.windows.net
+    - **独立的应用程序：** catalog-sa-&lt;User&gt;.database.windows.net
+    - **每个租户一个数据库：** catalog-dpt-&lt;User&gt;.database.windows.net
+    - **多租户数据库：** catalog-mt-&lt;User&gt;.database.windows.net
 
 
 成功连接后，会看到所有服务器。 你的数据库列表可能会有所不同，具体取决于已预配的租户。

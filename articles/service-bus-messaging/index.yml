@@ -1,0 +1,115 @@
+### YamlMime:Landing
+title: Azure 服务总线消息传送文档
+summary: 了解如何设置消息传送，用于连接跨本地和云环境的应用程序与服务。
+metadata:
+  title: Azure 服务总线消息传送文档
+  description: 了解如何设置消息传送，用于连接跨本地和云环境的应用程序与服务。
+  services: service-bus-messaging
+  ms.service: service-bus-messaging
+  ms.subservice: 
+  ms.topic: landing-page
+  ms.collection: collection
+  author: spelluru
+  ms.author: spelluru
+  ms.date: 09/12/2019
+  ms.openlocfilehash: e1104c8caf1080aab3b6c5300dcbe4cd04d6b61a
+  ms.sourcegitcommit: dd69b3cda2d722b7aecce5b9bd3eb9b7fbf9dc0a
+  ms.translationtype: HT
+  ms.contentlocale: zh-CN
+  ms.lasthandoff: 09/12/2019
+  ms.locfileid: "70962499"
+landingContent:
+- title: 关于服务总线消息传送
+  linkLists:
+  - linkListType: overview
+    links:
+    - text: 什么是服务总线消息传送？
+      url: service-bus-messaging-overview.md
+  - linkListType: concept
+    links:
+    - text: 比较 Azure 消息传送服务
+      url: ../event-grid/compare-messaging-services.md?toc=%2fazure%2fservice-bus-messaging%2ftoc.json
+    - text: Azure 队列与服务总线队列的比较
+      url: service-bus-azure-and-service-bus-queues-compared-contrasted.md
+    - text: 队列、主题和订阅
+      url: service-bus-queues-topics-subscriptions.md
+- title: 创建服务总线队列
+  linkLists:
+  - linkListType: quickstart
+    links:
+    - text: Azure 门户
+      url: service-bus-quickstart-portal.md
+    - text: Azure CLI
+      url: service-bus-quickstart-cli.md
+    - text: Azure PowerShell
+      url: service-bus-quickstart-powershell.md
+    - text: Azure 资源管理器模板
+      url: service-bus-resource-manager-namespace-queue.md
+- title: 创建服务总线主题和订阅
+  linkLists:
+  - linkListType: quickstart
+    links:
+    - text: Azure 门户
+      url: service-bus-quickstart-topics-subscriptions-portal.md
+    - text: Azure 资源管理器模板
+      url: service-bus-resource-manager-namespace-topic.md
+- title: 发送和接收消息 - 队列
+  linkLists:
+  - linkListType: quickstart
+    links:
+    - text: .NET
+      url: service-bus-dotnet-get-started-with-queues.md
+    - text: Java
+      url: service-bus-java-how-to-use-queues.md
+    - text: Node.js
+      url: service-bus-nodejs-how-to-use-queues-new-package.md
+    - text: Python
+      url: service-bus-python-how-to-use-queues.md
+    - text: PHP
+      url: service-bus-php-how-to-use-queues.md
+    - text: Ruby
+      url: service-bus-ruby-how-to-use-queues.md
+- title: 发布和订阅消息
+  linkLists:
+  - linkListType: quickstart
+    links:
+    - text: .NET
+      url: service-bus-dotnet-how-to-use-topics-subscriptions.md
+    - text: Java
+      url: service-bus-java-how-to-use-topics-subscriptions.md
+    - text: Node.js
+      url: service-bus-nodejs-how-to-use-topics-subscriptions-new-package.md
+    - text: Python
+      url: service-bus-python-how-to-use-topics-subscriptions.md
+    - text: PHP
+      url: service-bus-php-how-to-use-topics-subscriptions.md
+    - text: Ruby
+      url: service-bus-ruby-how-to-use-topics-subscriptions.md
+- title: 监视和管理
+  linkLists:
+  - linkListType: how-to-guide
+    links:
+    - text: 使用 PowerShell 预配实体
+      url: service-bus-manage-with-ps.md
+    - text: 使用 Azure Monitor 监视服务总线
+      url: service-bus-metrics-azure-monitor.md
+    - text: 设置诊断日志
+      url: service-bus-diagnostic-logs.md
+    - text: 暂停和重新激活消息传递实体
+      url: entity-suspend.md
+    - text: 使用 Azure 资源管理器模板
+      url: service-bus-resource-manager-overview.md
+    - text: 排查异常
+      url: service-bus-messaging-exceptions.md
+- title: 安全
+  linkLists:
+  - linkListType: how-to-guide
+    links:
+    - text: 身份验证和授权
+      url: service-bus-authentication-and-authorization.md
+    - text: 使用共享访问签名进行身份验证
+      url: service-bus-sas.md
+    - text: 使用 Azure Active Directory 对托管标识进行身份验证
+      url: service-bus-managed-service-identity.md
+    - text: 使用 Azure Active Directory 对应用程序进行身份验证
+      url: authenticate-application.md

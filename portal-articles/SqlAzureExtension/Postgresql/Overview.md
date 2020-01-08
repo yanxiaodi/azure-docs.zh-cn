@@ -1,6 +1,6 @@
 ---
-title: "Azure Database for PostgreSQL 概述 | Microsoft Docs"
-description: "Azure 门户中 Azure Database for PostgreSQL 概述的帮助内容"
+title: Azure Database for PostgreSQL 概述 | Microsoft Docs
+description: Azure 门户中 Azure Database for PostgreSQL 概述的帮助内容
 services: app-service
 author: sewatson
 manager: lwelicki
@@ -8,11 +8,12 @@ ms.service: postgresql
 ms.topic: article
 ms.date: 05/10/2017
 ms.author: sewatson
-ms.openlocfilehash: 9c930d1171b77ddf0bb6621fbf012f98816fd763
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
+ms.openlocfilehash: 6282acaf165d2f31a1a1ac525dad75ebc64a2a7c
+ms.sourcegitcommit: 509e1583c3a3dde34c8090d2149d255cb92fe991
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 05/27/2019
+ms.locfileid: "62113946"
 ---
 # <a name="azure-database-for-postgresql-documentation"></a>用于 PostgreSQL 的 Azure 数据库文档
 
@@ -22,7 +23,7 @@ ms.lasthandoff: 10/11/2017
 
 了解如何通过以下方式创建 PostgreSQL 数据库：
 
-- [在 Azure 应用服务中创建 Java Web 应用](/azure/postgresql/quickstart-create-server-database-portal)
+- [Azure 门户](/azure/postgresql/quickstart-create-server-database-portal)
 - [Azure CLI](/azure/postgresql/quickstart-create-server-database-azure-cli)
 
 ## <a name="step-by-step-tutorials"></a>分步教程
@@ -30,7 +31,7 @@ ms.lasthandoff: 10/11/2017
 了解如何：
 
 - 设计数据库：[Azure 门户](/azure/postgresql/tutorial-design-database-using-azure-portal) |  [Azure CLI](/azure/postgresql/tutorial-design-database-using-azure-cli)
-- [使用 Python 和 CLI 生成 Web 应用](/azure/app-service-web/app-service-web-tutorial-docker-python-postgresql-app?toc=%2fazure%2fpostgresql%2ftoc.json)
+- [使用 Python 和 CLI 生成 Web 应用](/azure/app-service/containers/tutorial-python-postgresql-app?toc=%2fazure%2fpostgresql%2ftoc.json)
 
 ## <a name="samples"></a>示例 
 

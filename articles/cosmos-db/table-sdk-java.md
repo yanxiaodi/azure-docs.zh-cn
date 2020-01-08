@@ -1,29 +1,24 @@
 ---
-title: 用于 Java 的 Azure Cosmos DB 表 API | Microsoft Docs
+title: 用于 Java 的 Azure Cosmos DB 表 API
 description: 了解有关 Azure Cosmos DB 表 API 的全部信息，包括发布日期、停用日期和各版本之间进行的更改。
-services: cosmos-db
-documentationcenter: java
-author: yarong
-manager: kfile
-editor: ''
-ms.assetid: ''
 ms.service: cosmos-db
-ms.workload: data-services
-ms.tgt_pltfrm: na
+ms.subservice: cosmosdb-table
 ms.devlang: java
-ms.topic: article
-ms.date: 11/20/2017
-ms.author: yaronyg
-ms.custom: ''
-ms.openlocfilehash: ac699f3b0d8e0e352d7701682f832c53074b0238
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.topic: reference
+ms.date: 11/20/2018
+author: wmengmsft
+ms.author: wmeng
+ms.openlocfilehash: c98cd6054b2e48f4c0c886528653e6d3fda96a34
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66480191"
 ---
 # <a name="azure-cosmos-db-table-api-for-java-release-notes-and-resources"></a>用于 Java 的 Azure Cosmos DB 表 API：发行说明和资源
 > [!div class="op_single_selector"]
 > * [.NET](table-sdk-dotnet.md)
+> * [.NET 标准](table-sdk-dotnet-standard.md)
 > * [Java](table-sdk-java.md)
 > * [Node.js](table-sdk-nodejs.md)
 > * [Python](table-sdk-python.md)
@@ -32,7 +27,7 @@ ms.lasthandoff: 04/16/2018
 |   |   |
 |---|---|
 |**SDK 下载**|[下载选项](https://github.com/azure/azure-storage-java#download)|
-|**API 文档**|[Java API 参考文档](http://azure.github.io/azure-storage-java/)|
+|**API 文档**|[Java API 参考文档](https://azure.github.io/azure-storage-java/)|
 |**参与 SDK**|[GitHub](https://github.com/Azure/azure-storage-java#contribute-code-or-provide-feedback)|
 
 > [!IMPORTANT]
@@ -49,11 +44,11 @@ Microsoft 至少会在停用 SDK 的 **12 个月**之前发出通知，以便顺
 
 新特性和功能以及优化仅添加到当前 SDK，因此建议始终尽早升级到最新的 SDK 版本。 
 
-| 版本 | 发布日期 | 停用日期 |
+| Version | 发布日期 | 停用日期 |
 | --- | --- | --- |
 | [1.0.0](#1.0.0) |2017 年 11 月 15 日 |--- |
 
-## <a name="faq"></a>常见问题
+## <a name="faq"></a>常见问题解答
 [!INCLUDE [cosmos-db-sdk-faq](../../includes/cosmos-db-sdk-faq.md)]
 
 ## <a name="see-also"></a>另请参阅

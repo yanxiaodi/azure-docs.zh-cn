@@ -1,20 +1,20 @@
 ---
-title: 关于使用 Site Recovery 进行 Hyper-V VM（使用 VMM）复制到 Azure 的网络映射 | Microsoft Docs
-description: 介绍了如何设置网络映射，以便使用 Azure Site Recovery 复制 VMM 云中托管的 Hyper-V VM。
-services: site-recovery
+title: 关于通过 Site Recovery 将 Hyper-v VM （带 VMM）灾难恢复到 Azure 的网络映射
+description: 介绍如何使用 Azure Site Recovery 为 Hyper-V VM（在 VMM 云中托管）到 Azure 的灾难恢复设置网络映射。
 author: rayne-wiselman
 manager: carmonm
 ms.service: site-recovery
-ms.topic: article
-ms.date: 05/02/2018
+ms.topic: conceptual
+ms.date: 09/09/2019
 ms.author: raynew
-ms.openlocfilehash: fa596bf4941ac791fa1bc697399a4591d97ba68f
-ms.sourcegitcommit: fc64acba9d9b9784e3662327414e5fe7bd3e972e
-ms.translationtype: HT
+ms.openlocfilehash: 637f327b40341ac04f37baf9e43f136a0315b17f
+ms.sourcegitcommit: fa4852cca8644b14ce935674861363613cf4bfdf
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/12/2018
+ms.lasthandoff: 09/09/2019
+ms.locfileid: "70813671"
 ---
-# <a name="prepare-network-mapping-for-hyper-v-vm-replication-to-azure"></a>准备网络映射以将 Hyper-V VM 复制到 Azure
+# <a name="prepare-network-mapping-for-hyper-v-vm-disaster-recovery-to-azure"></a>为 Hyper-V VM 灾难恢复到 Azure 准备网络映射
 
 
 本文有助于理解及准备使用 [Azure Site Recovery](site-recovery-overview.md) 服务将 System Center Virtual Machine Manager (VMM) 云中的 Hyper-V VM 复制到 Azure 或辅助站点时的网络映射。
@@ -23,8 +23,8 @@ ms.lasthandoff: 05/12/2018
 ## <a name="prepare-network-mapping-for-replication-to-azure"></a>为复制到 Azure 准备网络映射
 
 复制到 Azure 时，网络映射在源 VMM 服务器上的 VM 网络与目标 Azure 虚拟网络之间进行映射。 映射可执行以下操作：
-    -  **网络连接**：确保复制的 Azure VM 连接到映射的网络。 在同一网络上进行故障转移的所有计算机都可互相连接，即使这些计算机在不同的恢复计划中进行故障转移。
-    - **网络网关**：如果在目标 Azure 网络上设置了网络网关，VM 可连接到其他本地虚拟机。
+-  **网络连接**：确保复制的 Azure VM 连接到映射的网络。 在同一网络上进行故障转移的所有计算机都可互相连接，即使这些计算机在不同的恢复计划中进行故障转移。
+- **网络网关**：如果在目标 Azure 网络上设置了网络网关，VM 可连接到其他本地虚拟机。
 
 网络映射的工作原理如下所述：
 
@@ -53,9 +53,9 @@ ms.lasthandoff: 05/12/2018
 
 以下示例演示了此机制。 假设一个组织有两个经营地点：纽约和芝加哥。
 
-**位置** | **VMM 服务器** | **VM 网络** | **映射到**
+**Location** | **VMM 服务器** | **VM 网络** | **映射到**
 ---|---|---|---
-纽约 | VMM-NewYork| VMNetwork1-NewYork | 映射到 VMNetwork1-Chicago
+New York | VMM-NewYork| VMNetwork1-NewYork | 映射到 VMNetwork1-Chicago
  |  | VMNetwork2-NewYork | 未映射
 芝加哥 | VMM-Chicago| VMNetwork1-Chicago | 映射到 VMNetwork1-NewYork
  | | VMNetwork2-Chicago | 未映射
@@ -78,9 +78,9 @@ SilverCloud2 | <p>不可用</p><p></p> | <p>LogicalNetwork1-NewYork</p><p>Logica
 
 ### <a name="logical-and-vm-network-settings"></a>逻辑和 VM 网络设置
 
-**位置** | **逻辑网络** | **关联的 VM 网络**
+**Location** | **逻辑网络** | **关联的 VM 网络**
 ---|---|---
-纽约 | LogicalNetwork1-NewYork | VMNetwork1-NewYork
+New York | LogicalNetwork1-NewYork | VMNetwork1-NewYork
 芝加哥 | LogicalNetwork1-Chicago | VMNetwork1-Chicago
  | LogicalNetwork2Chicago | VMNetwork2-Chicago
 
@@ -88,7 +88,7 @@ SilverCloud2 | <p>不可用</p><p></p> | <p>LogicalNetwork1-NewYork</p><p>Logica
 
 根据这些设置，选择目标 VM 网络时，下表显示将可用的选项。
 
-**Select** | **受保护的云** | **提供保护的云** | **可用目标网络**
+**选择** | **受保护的云** | **提供保护的云** | **可用目标网络**
 ---|---|---|---
 VMNetwork1-Chicago | SilverCloud1 | SilverCloud2 | 可用
  | GoldCloud1 | GoldCloud2 | 可用

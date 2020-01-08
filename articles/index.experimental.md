@@ -1,21 +1,15 @@
----
+--- 
 layout: HubPage
 hide_bc: true
 title: Microsoft Azure 文档
 description: 了解如何使用 Microsoft Azure 云服务构建和管理功能强大的应用程序。 获取文档、示例代码、教程等等。
-ms.openlocfilehash: c7f46f9b22bd3696b7d281815687cca2b90b22b3
-ms.sourcegitcommit: c52123364e2ba086722bc860f2972642115316ef
-ms.translationtype: HT
-ms.contentlocale: zh-CN
-ms.lasthandoff: 05/11/2018
-ms.locfileid: "34070051"
 ---
 <div id="main" class="v2">
     <div class="container">
         <h1 class="screenReader">Microsoft Azure 文档</h1>
         <ul class="cardsY panelContent featuredContent">
             <li>
-                <a href="http://aka.ms/azuredevgetstarted/">
+                <a href="https://aka.ms/azuredevgetstarted/">
                     <div class="cardSize">
                         <div class="cardPadding">
                             <div class="card">
@@ -137,7 +131,7 @@ ms.locfileid: "34070051"
                                                 </div>
                                                 <div class="ico48Link">
                                                     <a href="/go/azure/">
-                                                        <img src="https://docs.microsoft.com/en-us/media/logos/logo_Go-lightblue.svg" alt=""/>
+                                                        <img src="https://docs.microsoft.com/media/logos/logo_Go-lightblue.svg" alt=""/>
                                                         <span>Go</span>
                                                     </a>
                                                 </div>
@@ -208,7 +202,7 @@ ms.locfileid: "34070051"
                             <li></li>
                             <li class="bottomRightItem">
                                 <a href="https://aka.ms/j3wr7y">
-                                <button style="cursor: pointer;position: relative; background: #0050C5; border:none; padding:8px 16px; padding-right:30px;color: white; font-size:14px;">查看所有 Azure 服务<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 14" style="fill:white;height: 14px;position: absolute;bottom: 13px;right: 12px;width: 1em;"><path d="M7.4 7L1 .6l.6-.6 7 7-7 7-.6-.7L7.4 7z"/></svg></button>
+                                <button style="cursor: pointer;position: relative; background: #0050C5; border:none; padding:8px 16px; padding-right:30px;color: white; font-size:14px;">查看所有 Azure 服务<svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 10 14" style="fill:white;height: 14px;position: absolute;bottom: 13px;right: 12px;width: 1em;"><path d="M7.4 7L1 .6l.6-.6 7 7-7 7-.6-.7L7.4 7z"/></svg></button>
                                 </a>
                             </li>
                             </li>
@@ -321,9 +315,9 @@ ms.locfileid: "34070051"
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="/azure/redis-cache/">
+                                            <a href="/azure/azure-cache-for-redis/">
                                                 <img src="media/index/RedisCache.svg" alt="" />
-                                                <p>Redis 缓存</p>
+                                                <p>用于 Redis 的 Azure 缓存</p>
                                             </a>
                                         </li>
                                         <li>
@@ -770,7 +764,7 @@ ms.locfileid: "34070051"
                                         <li>
                                             <a href="https://docs.botframework.com/en-us/azure-bot-service/">
                                                 <img src="media/index/bot-service.svg" alt="" />
-                                                <p>Azure 机器人服务</p>
+                                                <p>Azure Bot 服务</p>
                                             </a>
                                         </li>
                                     </ul>
@@ -779,11 +773,11 @@ ms.locfileid: "34070051"
                                         <li>
                                             <a href="https://www.visualstudio.com/docs/overview">
                                                 <img src="media/index/VisualStudioTeamServices.svg" alt="" />
-                                                <p>Visual Studio Team Services</p>
+                                                <p>Azure DevOps</p>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="/azure/devtest-lab/">
+                                            <a href="/azure/lab-services/">
                                                 <img src="media/index/DevTestLabs.svg" alt="" />
                                                 <p>Azure 开发测试实验室</p>
                                             </a>
@@ -902,12 +896,6 @@ ms.locfileid: "34070051"
                                             <a href="/azure/search/">
                                                 <img src="media/index/Search.svg" alt="" />
                                                 <p>搜索</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="/azure/mobile-engagement/">
-                                                <img src="media/index/MobileEngagement.svg" alt="" />
-                                                <p>Mobile Engagement</p>
                                             </a>
                                         </li>
                                         <li>
@@ -1642,25 +1630,6 @@ ms.locfileid: "34070051"
                                 </a>
                             </li>
                             <li>
-                                <a href="/azure/mobile-engagement/">
-                                    <div class="cardSize">
-                                        <div class="cardPadding">
-                                            <div class="card">
-                                                <div class="cardImageOuter">
-                                                    <div class="cardImage">
-                                                        <img src="media/index/MobileEngagement.svg" alt="" />
-                                                    </div>
-                                                </div>
-                                                <div class="cardText">
-                                                    <h3>Mobile Engagement</h3>
-                                                    <p>提高应用使用率和用户保留率</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
                                 <a href="/azure/notification-hubs/">
                                     <div class="cardSize">
                                         <div class="cardPadding">
@@ -1899,7 +1868,7 @@ ms.locfileid: "34070051"
                                 </a>
                             </li>
                             <li>
-                                <a href="/azure/redis-cache/">
+                                <a href="/azure/azure-cache-for-redis/">
                                     <div class="cardSize">
                                         <div class="cardPadding">
                                             <div class="card">
@@ -1909,7 +1878,7 @@ ms.locfileid: "34070051"
                                                     </div>
                                                 </div>
                                                 <div class="cardText">
-                                                    <h3>Redis 缓存</h3>
+                                                    <h3>用于 Redis 的 Azure 缓存</h3>
                                                     <p>对数据进行高吞吐量、低延迟访问，构建快速、可缩放的应用程序</p>
                                                 </div>
                                             </div>
@@ -2737,7 +2706,7 @@ ms.locfileid: "34070051"
                                                     </div>
                                                 </div>
                                                 <div class="cardText">
-                                                    <h3>Visual Studio Team Services</h3>
+                                                    <h3>Azure DevOps</h3>
                                                     <p>供团队共享代码、跟踪工作和传输软件的服务</p>
                                                 </div>
                                             </div>
@@ -2746,7 +2715,7 @@ ms.locfileid: "34070051"
                                 </a>
                             </li>
                             <li>
-                                <a href="/azure/devtest-lab/">
+                                <a href="/azure/lab-services/">
                                     <div class="cardSize">
                                         <div class="cardPadding">
                                             <div class="card">
@@ -3150,10 +3119,10 @@ ms.locfileid: "34070051"
                                                     <a href="https://pypi.python.org/pypi/azure">获取 Python SDK</a>
                                                 </h3>
                                                 <p>
-                                                    <a href="http://azure-sdk-for-python.readthedocs.io/en/latest/">入门</a>
+                                                    <a href="https://docs.microsoft.com/python/azure/?view=azure-python">入门</a>
                                                 </p>
                                                 <p>
-                                                    <a href="http://azure-sdk-for-python.readthedocs.io/en/latest/">API 参考</a>
+                                                    <a href="https://docs.microsoft.com/python/azure/?view=azure-python">API 参考</a>
                                                 </p>
                                                 <p>
                                                     <a href="https://azure.microsoft.com/resources/samples/?platform=python">获取示例</a>
@@ -3180,10 +3149,10 @@ ms.locfileid: "34070051"
                                                     <a href="https://www.npmjs.com/package/azure">获取 Node.js SDK</a>
                                                 </h3>
                                                 <p>
-                                                    <a href="http://azure.github.io/azure-sdk-for-node/">入门</a>
+                                                    <a href="https://azure.github.io/azure-sdk-for-node/">入门</a>
                                                 </p>
                                                 <p>
-                                                    <a href="http://azure.github.io/azure-sdk-for-node/">API 参考</a>
+                                                    <a href="https://azure.github.io/azure-sdk-for-node/">API 参考</a>
                                                 </p>
                                                 <p>
                                                     <a href="https://azure.microsoft.com/documentation/samples/?platform=nodejs">获取示例</a>
@@ -3256,7 +3225,7 @@ ms.locfileid: "34070051"
                                         <div class="card">
                                             <div class="cardImageOuter">
                                                 <div class="cardImage">
-                                                    <img src="https://docs.microsoft.com/en-us/media/logos/logo_Go-lightblue.svg" alt="" />
+                                                    <img src="https://docs.microsoft.com/media/logos/logo_Go-lightblue.svg" alt="" />
                                                 </div>
                                             </div>
                                             <div class="cardText">
@@ -3313,12 +3282,12 @@ ms.locfileid: "34070051"
                                                 </div>
                                             </div>
                                             <div class="cardText">
-                                                <h3>Azure CLI 2.0 </h3>
+                                                <h3>Azure CLI </h3>
                                                 <p>
                                                     <a href="/cli/azure">入门</a>
                                                 </p>
                                                 <p>
-                                                    <a href="/cli/azure/install-azure-cli">下载 Azure CLI 2.0</a>
+                                                    <a href="/cli/azure/install-azure-cli">下载 Azure CLI</a>
                                                 </p>
                                                 <p>
                                                     <a href="/cli/azure">参考</a>
@@ -3343,7 +3312,7 @@ ms.locfileid: "34070051"
                                                     <a href="/powershell/azure/get-started-azureps">入门</a>
                                                 </p>
                                                 <p>
-                                                    <a href="/powershell/azure/install-azurerm-ps">下载 PowerShell</a>
+                                                    <a href="/powershell/azure/azurerm/install-azurerm-ps">下载 PowerShell</a>
                                                 </p>
                                                 <p>
                                                     <a href="/powershell/azure/overview">参考</a>
@@ -3363,18 +3332,18 @@ ms.locfileid: "34070051"
                                                 </div>
                                             </div>
                                             <div class="cardText">
-                                                <h3>Azure CLI </h3>
+                                                <h3>Azure 经典 CLI </h3>
                                                 <p>
                                                     <a href="/azure/xplat-cli-install?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json">入门</a>
                                                 </p>
                                                 <p>
-                                                    <a href="http://aka.ms/linux-azure-cli">下载用于 Linux 的 Azure CLI</a>
+                                                    <a href="https://aka.ms/linux-azure-cli">下载用于 Linux 的 Azure CLI</a>
                                                 </p>
                                                 <p>
-                                                    <a href="http://aka.ms/mac-azure-cli">下载用于 Mac 的 Azure CLI</a>
+                                                    <a href="https://aka.ms/mac-azure-cli">下载用于 Mac 的 Azure CLI</a>
                                                 </p>
                                                 <p>
-                                                    <a href="http://aka.ms/webpi-azure-cli">下载用于 Windows 的 Azure CLI</a>
+                                                    <a href="https://aka.ms/webpi-azure-cli">下载用于 Windows 的 Azure CLI</a>
                                                 </p>
                                                 <p>
                                                     <a href="/azure/virtual-machines/azure-cli-arm-commands?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json">参考</a>
@@ -3427,13 +3396,13 @@ ms.locfileid: "34070051"
                                                     <a href="/dotnet/articles/core/docker/visual-studio-tools-for-docker">入门</a>
                                                 </p>
                                                 <p>
-                                                    <a href="https://go.microsoft.com/fwlink/?LinkId=780680">适用于 Visual Studio 的下载项</a>
+                                                    <a href="https://marketplace.visualstudio.com/items?itemName=Click2CloudInc.Click2CloudDockerExtensionForVisualStudio2017">适用于 Visual Studio 的下载项</a>
                                                 </p>
                                                 <p>
                                                     <a href="https://go.microsoft.com/fwlink/?LinkId=780681">适用于 Visual Studio Code 的下载项</a>
                                                 </p>
                                                 <p>
-                                                    <a href="https://go.microsoft.com/fwlink/?LinkId=780682">适用于 Team Services 的下载项</a>
+                                                    <a href="https://go.microsoft.com/fwlink/?LinkId=780682">Azure DevOps 的下载</a>
                                                 </p>
                                             </div>
                                         </div>
@@ -3472,19 +3441,19 @@ ms.locfileid: "34070051"
                                             </div>
                                             <div class="cardText">
                                                 <h3>
-                                                    <a href="http://storageexplorer.com">存储资源管理器</a>
+                                                    <a href="https://storageexplorer.com">存储资源管理器</a>
                                                 </h3>
                                                 <p>
                                                     <a href="/azure/vs-azure-tools-storage-manage-with-storage-explorer">入门</a>
                                                 </p>
                                                 <p>
-                                                     <a  href="http://go.microsoft.com/fwlink/?LinkId=722418">适用于 Linux 的下载项</a>
+                                                     <a  href="https://go.microsoft.com/fwlink/?LinkId=722418">适用于 Linux 的下载项</a>
                                                 </p>
                                                 <p>
-                                                    <a href="http://go.microsoft.com/fwlink/?LinkId=708342">适用于 Mac 的下载项</a>
+                                                    <a href="https://go.microsoft.com/fwlink/?LinkId=708342">适用于 Mac 的下载项</a>
                                                 </p>
                                                 <p>
-                                                    <a href="http://go.microsoft.com/fwlink/?LinkId=708343">适用于 Windows 的下载项</a>
+                                                    <a href="https://go.microsoft.com/fwlink/?LinkId=708343">适用于 Windows 的下载项</a>
                                                 </p>
                                             </div>
                                         </div>
@@ -3502,13 +3471,13 @@ ms.locfileid: "34070051"
                                             </div>
                                             <div class="cardText">
                                                 <h3>
-                                                    <a href="https://www.visualstudio.com/vs/python">Python 工具</a>
+                                                    <a href="https://aka.ms/ptvs">Python 工具</a>
                                                 </h3>
                                                 <p>
-                                                    <a href="https://github.com/Microsoft/PTVS/wiki/PTVS-Installation">Visual Studio 入门</a>
+                                                    <a href="https://aka.ms/ptvsdocs">Visual Studio 入门</a>
                                                 </p>
                                                 <p>
-                                                    <a href="https://marketplace.visualstudio.com/items?itemName=donjayamanne.python">Visual Studio Code 入门</a>
+                                                    <a href="https://code.visualstudio.com/docs/python/python-tutorial">Visual Studio Code 入门</a>
                                                 </p>
                                             </div>
                                         </div>
@@ -3598,7 +3567,7 @@ ms.locfileid: "34070051"
                                                     </div>
                                                 </div>
                                                 <div class="cardText">
-                                                    <h3>云应用程序最佳做法</h3>
+                                                    <h3>云应用程序最佳实践</h3>
                                                     <p>适用于云应用程序的一套最佳实践，涉及自动缩放、缓存、数据分区、API 设计和监视等多个方面。</p>
                                                 </div>
                                             </div>

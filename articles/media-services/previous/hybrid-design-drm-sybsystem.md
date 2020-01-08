@@ -4,7 +4,7 @@ description: 本主题介绍如何使用 Azure 媒体服务进行 DRM 子系统�
 services: media-services
 documentationcenter: ''
 author: willzhan
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: 18213fc1-74f5-4074-a32b-02846fe90601
 ms.service: media-services
@@ -12,15 +12,17 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 07/17/2017
-ms.author: willzhan;juliako
-ms.openlocfilehash: 1584dab96d1cd772bf04620c68dbe1f133304a1c
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.date: 03/14/2019
+ms.author: willzhan
+ms.reviewer: juliako
+ms.openlocfilehash: d15bfcfbae3b24e1a9b29dc74f9b41a979e63ae9
+ms.sourcegitcommit: de47a27defce58b10ef998e8991a2294175d2098
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/15/2019
+ms.locfileid: "69014686"
 ---
-# <a name="hybrid-design-of-drm-subsystems"></a>DRM 子系统的混合设计
+# <a name="hybrid-design-of-drm-subsystems"></a>DRM 子系统的混合设计 
 
 本主题介绍如何使用 Azure 媒体服务进行 DRM 子系统的混合设计。
 
@@ -67,8 +69,8 @@ DRM 支持包括 DRM 加密（动态加密）和许可证传送，其中的 Azur
 
 ### <a name="drm-license-delivery"></a>DRM 许可证传送
 
-* AMS：DRM 许可证由 AMS 许可证传送服务传送。
-* 第三方：DRM 许可证由 AMS 外部的第三方 DRM 许可证服务器传送。
+* AMS：DRM 许可证由 AMS 许可证传送服务提供。
+* 第三方：DRM 许可证由 AMS 外部的第三方 DRM 许可证服务器提供。
 
 ## <a name="configure-based-on-your-hybrid-scenario"></a>根据混合方案进行配置
 
@@ -101,31 +103,31 @@ DRM 支持包括 DRM 加密（动态加密）和许可证传送，其中的 Azur
 |AMS|第三方|外部|否|否|示例 4|
 |第三方|第三方|AMS|是|否|    
 
-在示例中，PlayReady 保护适用于 DASH 和平滑流式处理。 以下视频 URL 是平滑流式处理 URL。 若要获取相应的 DASH URL，只需追加“(format=mpd-time-csf)”。 可以使用 [azure media test player](http://aka.ms/amtest) 在浏览器中进行测试。 这样就可以配置要在哪种技术下使用哪个流式处理协议。 Windows 10 上的 IE11 和 MS Edge 支持通过 EME 使用 PlayReady。 有关详细信息，请参阅[有关测试工具的详细信息](https://blogs.msdn.microsoft.com/playready4/2016/02/28/azure-media-test-tool/)。
+在示例中，PlayReady 保护适用于 DASH 和平滑流式处理。 以下视频 URL 是平滑流式处理 URL。 若要获取相应的 DASH URL，只需追加“(format=mpd-time-csf)”。 可以使用 [azure media test player](https://aka.ms/amtest) 在浏览器中进行测试。 这样就可以配置要在哪种技术下使用哪个流式处理协议。 Windows 10 上的 IE11 和 Microsoft Edge 支持通过 EME 使用 PlayReady。 有关详细信息，请参阅[有关测试工具的详细信息](https://blogs.msdn.microsoft.com/playready4/2016/02/28/azure-media-test-tool/)。
 
 ### <a name="sample-1"></a>示例 1
 
-* 源（基）URL：https://willzhanmswest.streaming.mediaservices.windows.net/1efbd6bb-1e66-4e53-88c3-f7e5657a9bbd/RussianWaltz.ism/manifest 
-* PlayReady LA_URL（DASH 和平滑流式处理）：https://willzhanmswest.keydelivery.mediaservices.windows.net/PlayReady/ 
-* Widevine LA_URL (DASH)：https://willzhanmswest.keydelivery.mediaservices.windows.net/Widevine/?kid=78de73ae-6d0f-470a-8f13-5c91f7c4 
-* FairPlay LA_URL (HLS)：https://willzhanmswest.keydelivery.mediaservices.windows.net/FairPlay/?kid=ba7e8fb0-ee22-4291-9654-6222ac611bd8 
+* 源（基）URL： https://willzhanmswest.streaming.mediaservices.windows.net/1efbd6bb-1e66-4e53-88c3-f7e5657a9bbd/RussianWaltz.ism/manifest 
+* PlayReady LA_URL（DASH 和平滑流式处理）： https://willzhanmswest.keydelivery.mediaservices.windows.net/PlayReady/ 
+* Widevine LA_URL (DASH)： https://willzhanmswest.keydelivery.mediaservices.windows.net/Widevine/?kid=78de73ae-6d0f-470a-8f13-5c91f7c4 
+* FairPlay LA_URL (HLS)： https://willzhanmswest.keydelivery.mediaservices.windows.net/FairPlay/?kid=ba7e8fb0-ee22-4291-9654-6222ac611bd8 
 
 ### <a name="sample-2"></a>示例 2
 
-* 源（基）URL：http://willzhanmswest.streaming.mediaservices.windows.net/1a670626-4515-49ee-9e7f-cd50853e41d8/Microsoft_HoloLens_TransformYourWorld_816p23.ism/Manifest 
-* PlayReady LA_URL（DASH 和平滑流式处理）：http://willzhan12.cloudapp.net/PlayReady/RightsManager.asmx 
+* 源（基）URL： https://willzhanmswest.streaming.mediaservices.windows.net/1a670626-4515-49ee-9e7f-cd50853e41d8/Microsoft_HoloLens_TransformYourWorld_816p23.ism/Manifest 
+* PlayReady LA_URL（DASH 和平滑流式处理）： http://willzhan12.cloudapp.net/PlayReady/RightsManager.asmx 
 
 ### <a name="sample-3"></a>示例 3
 
-* 源 URL：https://willzhanmswest.streaming.mediaservices.windows.net/8d078cf8-d621-406c-84ca-88e6b9454acc/20150807-bridges-2500.ism/manifest 
-* PlayReady LA_URL（DASH 和平滑流式处理）：https://willzhanmswest.keydelivery.mediaservices.windows.net/PlayReady/ 
+* 源 URL： https://willzhanmswest.streaming.mediaservices.windows.net/8d078cf8-d621-406c-84ca-88e6b9454acc/20150807-bridges-2500.ism/manifest 
+* PlayReady LA_URL（DASH 和平滑流式处理）： https://willzhanmswest.keydelivery.mediaservices.windows.net/PlayReady/ 
 
 ### <a name="sample-4"></a>示例 4
 
-* 源 URL：https://willzhanmswest.streaming.mediaservices.windows.net/7c085a59-ae9a-411e-842c-ef10f96c3f89/20150807-bridges-2500.ism/manifest 
-* PlayReady LA_URL（DASH 和平滑流式处理）：https://willzhan12.cloudapp.net/playready/rightsmanager.asmx 
+* 源 URL： https://willzhanmswest.streaming.mediaservices.windows.net/7c085a59-ae9a-411e-842c-ef10f96c3f89/20150807-bridges-2500.ism/manifest 
+* PlayReady LA_URL（DASH 和平滑流式处理）： https://willzhan12.cloudapp.net/playready/rightsmanager.asmx 
 
-## <a name="summary"></a>摘要
+## <a name="summary"></a>总结
 
 总而言之，Azure 媒体服务 DRM 组件非常灵活，只需根据本主题中所述适当配置内容密钥和资产传送策略，即可在混合方案中使用这些组件。
 

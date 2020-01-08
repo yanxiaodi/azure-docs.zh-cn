@@ -1,25 +1,26 @@
 ---
-title: Azure 容器实例教程 - 部署应用
-description: Azure 容器实例教程第 3 部分 - 部署应用程序
+title: 教程 - 将容器应用部署到 Azure 容器实例
+description: Azure 容器实例教程第 3 部分（共 3 部分）- 将容器应用程序部署到 Azure 容器实例
 services: container-instances
-author: mmacy
-manager: jeconnoc
+author: dlepow
+manager: gwallace
 ms.service: container-instances
 ms.topic: tutorial
 ms.date: 03/21/2018
-ms.author: marsma
-ms.custom: mvc
-ms.openlocfilehash: 2438914449ff609d149fca20f2f3756576877752
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.author: danlep
+ms.custom: seodec18, mvc
+ms.openlocfilehash: e14a3ba50d75161afa3325b3b7bcbfe96ea24cc3
+ms.sourcegitcommit: 4b431e86e47b6feb8ac6b61487f910c17a55d121
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 07/18/2019
+ms.locfileid: "68325630"
 ---
-# <a name="tutorial-deploy-a-container-to-azure-container-instances"></a>教程：将容器部署到 Azure 容器实例
+# <a name="tutorial-deploy-a-container-application-to-azure-container-instances"></a>教程：将容器应用程序部署到 Azure 容器实例
 
 这是由三个部分组成的系列教程的最后一个教程。 在本系列教程的前几篇文章中，我们已[创建一个容器映像](container-instances-tutorial-prepare-app.md)并将其[推送到 Azure 容器注册表](container-instances-tutorial-prepare-acr.md)。 本文是本系列教程的最后一篇，介绍如何将容器部署到 Azure 容器实例。
 
-在本教程中：
+本教程介绍以下操作：
 
 > [!div class="checklist"]
 > * 将容器从 Azure 容器注册表部署到 Azure 容器实例
@@ -36,26 +37,20 @@ ms.lasthandoff: 04/28/2018
 
 ### <a name="get-registry-credentials"></a>获取注册表凭据
 
-部署托管在专用容器注册表（例如[第二篇教程](container-instances-tutorial-prepare-acr.md)中创建的注册表）中的映像时，必须提供该注册表的凭据。
+部署托管在专用容器注册表（例如[第二篇教程](container-instances-tutorial-prepare-acr.md)中创建的注册表）中的映像时，必须提供用于访问该注册表的凭据。 正如[使用 Azure 容器注册表从 Azure 容器实例进行身份验证](../container-registry/container-registry-auth-aci.md)中所示，对于许多方案来说，最佳做法是创建和配置对注册表具有“拉取”  权限的 Azure Active Directory 服务主体。 有关用于创建具有必要权限的服务主体的示例脚本，请参阅该文章。 请记下服务主体 ID 和服务主体密码。 部署容器时将使用这些凭据。
 
-首先，获取容器注册表登录服务器的完整名称（请将 `<acrName>` 替换为注册表的名称）:
+还需要容器注册表登录服务器的完整名称（请将 `<acrName>` 替换为注册表的名称）:
 
 ```azurecli
 az acr show --name <acrName> --query loginServer
 ```
 
-接下来，获取容器注册表密码：
-
-```azurecli
-az acr credential show --name <acrName> --query "passwords[0].value"
-```
-
 ### <a name="deploy-container"></a>部署容器
 
-现在，使用 [az container create][az-container-create] 部署容器。 将 `<acrLoginServer>` 和 `<acrPassword>` 替换为之前两个命令获得的值。 将 `<acrName>` 替换为容器注册表的名称。
+现在，使用 [az container create][az-container-create] 部署容器。 将 `<acrLoginServer>` 替换为从前一命令中获得的值。 将 `<service-principal-ID>` 和 `<service-principal-password>` 替换为你为访问注册表而创建的服务主体 ID 和密码。 将 `<aciDnsLabel>` 替换为所需的 DNS 名称。
 
 ```azurecli
-az container create --resource-group myResourceGroup --name aci-tutorial-app --image <acrLoginServer>/aci-tutorial-app:v1 --cpu 1 --memory 1 --registry-username <acrName> --registry-password <acrPassword> --dns-name-label aci-demo --ports 80
+az container create --resource-group myResourceGroup --name aci-tutorial-app --image <acrLoginServer>/aci-tutorial-app:v1 --cpu 1 --memory 1 --registry-login-server <acrLoginServer> --registry-username <service-principal-ID> --registry-password <service-principal-password> --dns-name-label <aciDnsLabel> --ports 80
 ```
 
 将在几秒钟内收到来自 Azure 的初始响应。 在创建容器实例时所在的 Azure 区域中，`--dns-name-label` 值必须是唯一的。 如果在执行命令时收到 **DNS 名称标签**错误消息，请修改前一命令中的值。
@@ -68,7 +63,7 @@ az container create --resource-group myResourceGroup --name aci-tutorial-app --i
 az container show --resource-group myResourceGroup --name aci-tutorial-app --query instanceView.state
 ```
 
-重复 [az container show][az-container-show] 命令，直到状态从“挂起”更改为“正在运行”为止，此过程应不到 1 分钟。 当容器状态为“正在运行”时，请继续执行下一步。
+重复 [az container show][az-container-show] 命令，直到状态从“挂起”更改为“正在运行”为止，此过程应不到 1 分钟   。 当容器状态为“正在运行”时，请继续执行下一步  。
 
 ## <a name="view-the-application-and-container-logs"></a>查看应用程序和容器日志
 
@@ -137,8 +132,8 @@ az group delete --name myResourceGroup
 [docker-windows]: https://docs.docker.com/docker-for-windows/
 
 <!-- LINKS - internal -->
-[az-container-create]: /cli/azure/container#az_container_create
-[az-container-show]: /cli/azure/container#az_container_show
-[az-group-delete]: /cli/azure/group#az_group_delete
+[az-container-create]: /cli/azure/container#az-container-create
+[az-container-show]: /cli/azure/container#az-container-show
+[az-group-delete]: /cli/azure/group#az-group-delete
 [azure-cli-install]: /cli/azure/install-azure-cli
 [prepare-app]: ./container-instances-tutorial-prepare-app.md

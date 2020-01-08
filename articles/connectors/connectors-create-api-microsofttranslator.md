@@ -1,26 +1,22 @@
 ---
-title: 在逻辑应用中添加 Microsoft Translator | Microsoft Docs
-description: 使用 REST API 参数的 Microsoft Translator 连接器概述
-services: ''
-suite: ''
-documentationcenter: ''
+title: 连接到 Microsoft Translator - Azure 逻辑应用 | Microsoft Docs
+description: 使用 Microsoft Translator REST API 和 Azure 逻辑应用翻译文本和执行其他语言任务
 author: ecfan
-manager: anneta
-editor: ''
-tags: connectors
-ms.assetid: da782baf-8bf8-4973-8238-e469865f5328
-ms.service: multiple
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: na
+manager: jeconnoc
+ms.author: estfan
 ms.date: 11/07/2016
-ms.author: estfan; ladocs
-ms.openlocfilehash: 83d6324dce93fd9943cbd596c808abce23e5d432
-ms.sourcegitcommit: 8aab1aab0135fad24987a311b42a1c25a839e9f3
-ms.translationtype: HT
+ms.topic: article
+ms.service: logic-apps
+services: logic-apps
+ms.reviewer: klam, LADocs
+ms.suite: integration
+tags: connectors
+ms.openlocfilehash: 29212cf1c1f06ecae9892e0fc8aaaa4a01b2612b
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "62105779"
 ---
 # <a name="get-started-with-the-microsoft-translator-connector"></a>Microsoft Translator 连接器入门
 连接到 Microsoft Translator，翻译文本、检测语言等。 通过 Microsoft Translator，可以： 

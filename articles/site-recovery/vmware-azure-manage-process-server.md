@@ -1,43 +1,77 @@
 ---
-title: "在 Azure Site Recovery 中管理进程服务器 | Microsoft Doc"
-description: "本文介绍如何在 Azure Site Recovery 中管理为 VMware VM 和物理服务器复制设置的进程服务器。"
-services: site-recovery
-author: AnoopVasudavan
-manager: gauravd
-editor: 
+title: 管理用于 VMware Vm 和物理服务器到 Azure 中使用 Azure Site Recovery 的灾难恢复的进程服务器 |Microsoft Docs
+description: 本文介绍使用 Azure Site Recovery 管理为 VMware VM 和物理服务器灾难恢复到 Azure 而设置的进程服务器。
+author: Rajeswari-Mamilla
+manager: rochakm
 ms.service: site-recovery
-ms.topic: article
-ms.date: 03/05/2018
-ms.author: anoopkv
-ms.openlocfilehash: 096b2890d41402448809ae87759fcd6b67bee2fe
-ms.sourcegitcommit: 168426c3545eae6287febecc8804b1035171c048
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 04/28/2019
+ms.author: ramamill
+ms.openlocfilehash: 2c27779719c73adf4d7fc1a61a0c77d03df71815
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/08/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64925613"
 ---
 # <a name="manage-process-servers"></a>管理进程服务器
 
-默认情况下，将 VMware VM 或物理服务器复制到 Azure 时使用的进程服务器安装在本地配置服务器计算机上。 需要在几个实例中设置单独的进程服务器：
+本文介绍用于管理 Site Recovery 进程服务器的常见任务。
+
+进程服务器用于接收、优化复制数据并将复制数据发送到 Azure。 它还会在要复制的 VMware VM 和物理服务器上执行移动服务的推送安装，并对本地计算机执行自动发现。 默认情况下，进程服务器安装在配置服务器计算机上，目的是将本地 VMware VM 或物理服务器复制到 Azure。 
 
 - 对于大型部署，可能需要使用额外的本地进程服务器来扩展容量。
-- 对于故障回复，需要在 Azure 中设置临时进程服务器。 故障回复完成后，可以删除此 VM。 
+- 若要从 Azure 故障回复到本地，必须在 Azure 中设置临时进程服务器。 故障回复完成后，可以删除此 VM。 
 
-本文汇总了这些额外的进程服务器的典型管理任务。
+详细了解进程服务器。
+
 
 ## <a name="upgrade-a-process-server"></a>升级进程服务器
 
-升级在本地或 Azure 中运行的进程服务器（用于故障回复），如下所示：
+将进程服务器部署到本地或部署为故障回复所需的 Azure VM 时，会安装最新版的进程服务器。 Site Recovery 团队会定期发布修补程序和增强功能，因此我们建议你使进程服务器保持最新。 可以升级进程服务器，如下所述：
 
 [!INCLUDE [site-recovery-vmware-upgrade -process-server](../../includes/site-recovery-vmware-upgrade-process-server-internal.md)]
 
-> [!NOTE]
-  通常，使用 Azure 库映像在 Azure 中创建用于故障回复的进程服务器时，该进程服务器运行最新的可用版本。 Site Recovery 团队会定期发布修补程序和增强功能，因此我们建议你使进程服务器保持最新。
+
+## <a name="move-vms-to-balance-the-process-server-load"></a>移动 VM，均衡进程服务器负载
+
+在两个进程服务器之间移动 VM，对负载进行均衡，如下所述：
+
+1. 在保管库的“管理”下，单击“Site Recovery 基础结构”。   在“针对 VMware 和物理计算机”下，单击“配置服务器”。  
+2. 单击进程服务器注册到的配置服务器。
+3. 单击要对其流量进行负载均衡的进程服务器。
+
+    ![LoadBalance](media/vmware-azure-manage-process-server/LoadBalance.png)
+
+4. 单击“负载均衡”，选择要将计算机移动到其中的目标进程服务器。  然后单击“确定” 
+
+    ![LoadPS](media/vmware-azure-manage-process-server/LoadPS.PNG)
+
+2. 单击“选择计算机”，选择要从当前进程服务器移动到目标进程服务器的计算机  。 针对每个虚拟机显示平均数据更改的详细信息。 然后单击“确定”  。 
+3. 在保管库的“监视” > “Site Recovery 作业”下监视作业进程。  
+
+所做的更改反映在门户中需要大约 15 分钟。 若要更快地显示效果，请[刷新配置服务器](vmware-azure-manage-configuration-server.md#refresh-configuration-server)。
+
+## <a name="switch-an-entire-workload-to-another-process-server"></a>将整个工作负荷切换到另一进程服务器
+
+将某个进程服务器处理的整个工作负荷移到另一进程服务器，如下所示：
+
+1. 在保管库的“管理”下，单击“Site Recovery 基础结构”。   在“针对 VMware 和物理计算机”下，单击“配置服务器”。  
+2. 单击进程服务器注册到的配置服务器。
+3. 单击要在其中切换工作负荷的进程服务器。
+4. 单击“切换”，选择要将工作负荷移动到其中的目标进程服务器。  然后单击“确定” 
+
+    ![开关](media/vmware-azure-manage-process-server/Switch.PNG)
+
+5. 在保管库的“监视” > “Site Recovery 作业”下监视作业进程。  
+
+所做的更改反映在门户中需要大约 15 分钟。 若要更快地显示效果，请[刷新配置服务器](vmware-azure-manage-configuration-server.md#refresh-configuration-server)。
 
 
 
 ## <a name="reregister-a-process-server"></a>重新注册进程服务器
 
-如果需要将在本地或 Azure 中运行的进程服务器重新注册到配置服务器中，请执行以下操作：
+将在本地或 Azure VM 中运行的进程服务器重新注册到配置服务器，如下所示：
 
 [!INCLUDE [site-recovery-vmware-register-process-server](../../includes/site-recovery-vmware-register-process-server.md)]
 
@@ -54,31 +88,41 @@ ms.lasthandoff: 03/08/2018
 
 ## <a name="modify-proxy-settings-for-an-on-premises-process-server"></a>修改本地进程服务器的代理设置
 
-如果在进程服务器使用代理连接到 Azure 中的 Site Recovery 的情况下需要修改现有代理设置，请使用此过程。
+如果本地进程服务器使用代理连接到 Azure，则可修改代理设置，如下所示：
 
 1. 登录到进程服务器计算机。 
 2. 打开管理员 PowerShell 命令窗口并运行以下命令：
-  ```
-  $pwd = ConvertTo-SecureString -String MyProxyUserPassword
-  Set-OBMachineSetting -ProxyServer http://myproxyserver.domain.com -ProxyPort PortNumber –ProxyUserName domain\username -ProxyPassword $pwd
-  net stop obengine
-  net start obengine
-  ```
+   ```powershell
+   $pwd = ConvertTo-SecureString -String MyProxyUserPassword
+   Set-OBMachineSetting -ProxyServer http://myproxyserver.domain.com -ProxyPort PortNumber –ProxyUserName domain\username -ProxyPassword $pwd
+   net stop obengine
+   net start obengine
+   ```
 2. 浏览到文件夹 **%PROGRAMDATA%\ASR\Agent**，并运行以下命令：
-  ```
-  cmd
-  cdpcli.exe --registermt
+   ```
+   cmd
+   cdpcli.exe --registermt
 
-  net stop obengine
+   net stop obengine
 
-  net start obengine
+   net start obengine
 
-  exit
-  ```
-
+   exit
+   ```
 
 ## <a name="remove-a-process-server"></a>删除进程服务器
 
 [!INCLUDE [site-recovery-vmware-unregister-process-server](../../includes/site-recovery-vmware-unregister-process-server.md)]
 
+## <a name="exclude-folders-from-anti-virus-software"></a>请从防病毒软件中排除文件夹
 
+如果防病毒软件在横向扩展进程服务器（或主目标服务器）上运行，请从防病毒操作中排除以下文件夹：
+
+
+- C:\Program Files\Microsoft Azure Recovery Services Agent
+- C:\ProgramData\ASR
+- C:\ProgramData\ASRLogs
+- C:\ProgramData\ASRSetupLogs
+- C:\ProgramData\LogUploadServiceLogs
+- C:\ProgramData\Microsoft Azure Site Recovery
+- 进程服务器安装目录。 例如：C:\Program Files (x86)\Microsoft Azure Site Recovery

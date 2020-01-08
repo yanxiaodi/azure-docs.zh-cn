@@ -3,25 +3,24 @@ title: 使用 Azure 数据工厂更新机器学习模型 | Microsoft 文档
 description: 描述如何使用 Azure 数据工厂和 Azure 机器学习创建预测管道
 services: data-factory
 documentationcenter: ''
-author: sharonlo101
-manager: craigg
+author: djpmsft
+ms.author: daperlov
+manager: jroth
+ms.reviewer: maghan
 ms.service: data-factory
 ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/22/2018
-ms.author: shlo
-robots: noindex
-ms.openlocfilehash: 3702f4b7a58e9ca65a8ee309699a7e31b207159b
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: a980f269c8b88618ffa3311c05310a88ade379ed
+ms.sourcegitcommit: d200cd7f4de113291fbd57e573ada042a393e545
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70140471"
 ---
 # <a name="updating-azure-machine-learning-models-using-update-resource-activity"></a>使用更新资源活动更新 Azure 机器学习模型
 
-> [!div class="op_single_selector" title1="Transformation Activities"]
+> [!div class="op_single_selector" title1="转换活动"]
 > * [Hive 活动](data-factory-hive-activity.md) 
 > * [Pig 活动](data-factory-pig-activity.md)
 > * [MapReduce 活动](data-factory-map-reduce.md)
@@ -35,9 +34,9 @@ ms.lasthandoff: 03/23/2018
 
 
 > [!NOTE]
-> 本文适用于数据工厂版本 1（正式版 (GA)）。 如果使用数据工厂服务版本 2（即预览版），请参阅[在数据工厂版本 2 中更新机器学习模型](../update-machine-learning-models.md)。
+> 本文适用于数据工厂版本 1。 如果使用当前版本数据工厂服务，请参阅[在数据工厂中更新机器学习模型](../update-machine-learning-models.md)。
 
-本文是 Azure 数据工厂和 Azure 机器学习集成主要文章[使用 Azure 机器学习和 Azure 数据工厂创建预测管道](data-factory-azure-ml-batch-execution-activity.md)的补充。 如果尚未执行此操作，请在阅读本文之前查阅此主要文章。 
+本文是对主要 Azure 数据工厂 - Azure 机器学习集成文章的补充：[使用 Azure 机器学习和 Azure 数据工厂创建预测管道](data-factory-azure-ml-batch-execution-activity.md)。 如果尚未执行此操作，请在阅读本文之前查阅此主要文章。 
 
 ## <a name="overview"></a>概述
 随着时间推移，需要使用新的输入数据集重新定型 Azure 机器学习评分实验中的预测模型。 完成重新定型后，需使用重新定型的机器学习模型更新评分 Web 服务。 通过 Web 服务重新定型和更新 Azure 机器学习模型的常规步骤如下：
@@ -89,7 +88,7 @@ ms.lasthandoff: 03/23/2018
 https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resource-group-name}/providers/Microsoft.MachineLearning/webServices/{web-service-name}?api-version=2016-05-01-preview. 
 ```
 
-在 [Azure 机器学习 Web 服务门户](https://services.azureml.net/)上查询 Web 服务时可获取 URL 中占位符的值。 新类型的更新资源终结点要求 AAD (Azure Active Directory) 令牌。 指定 AzureML 链接服务中的 **servicePrincipalId** 和 **servicePrincipalKey**。 请参阅[如何创建服务主体和分配权限来管理 Azure 资源](../../azure-resource-manager/resource-group-create-service-principal-portal.md)。 此处为一示例 AzureML 链接服务定义： 
+在 [Azure 机器学习 Web 服务门户](https://services.azureml.net/)上查询 Web 服务时可获取 URL 中占位符的值。 新类型的更新资源终结点要求 AAD (Azure Active Directory) 令牌。 指定 AzureML 链接服务中的 **servicePrincipalId** 和 **servicePrincipalKey**。 请参阅[如何创建服务主体和分配权限来管理 Azure 资源](../../active-directory/develop/howto-create-service-principal-portal.md)。 此处为一示例 AzureML 链接服务定义： 
 
 ```json
 {

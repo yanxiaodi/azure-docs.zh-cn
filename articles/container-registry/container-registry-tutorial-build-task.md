@@ -1,236 +1,214 @@
 ---
-title: 教程 - 使用 Azure 容器注册表自动生成容器映像
-description: 本教程介绍如何对生成任务进行配置，使其在你向 Git 存储库提交源代码时在云中自动触发容器映像生成。
+title: 教程 - 自动化容器映像生成 - Azure 容器注册表任务
+description: 本教程介绍如何配置一个 Azure 容器注册表任务，以便在向 Git 存储库提交源代码时在云中自动触发容器映像生成。
 services: container-registry
-author: mmacy
-manager: jeconnoc
+author: dlepow
+manager: gwallace
 ms.service: container-registry
 ms.topic: tutorial
-ms.date: 05/07/2018
-ms.author: marsma
-ms.custom: mvc
-ms.openlocfilehash: fba499441d092f4dce09d13d607dfc5de65d98b2
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
+ms.date: 05/04/2019
+ms.author: danlep
+ms.custom: seodec18, mvc
+ms.openlocfilehash: 25a0ef528d67deb5ea71720d2ff8e4d62b3b98a5
+ms.sourcegitcommit: 86d49daccdab383331fc4072b2b761876b73510e
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 09/06/2019
+ms.locfileid: "70744573"
 ---
-# <a name="tutorial-automate-container-image-builds-with-azure-container-registry-build"></a>教程：使用 Azure 容器注册表自动生成容器映像
+# <a name="tutorial-automate-container-image-builds-in-the-cloud-when-you-commit-source-code"></a>教程：提交源代码时，在云中自动化容器映像生成
 
-除[快速生成](container-registry-tutorial-quick-build.md)之外，ACR 生成还支持通过生成任务自动执行 Docker 容器映像生成。 此教程介绍如何使用 Azure CLI 创建一个生成任务，你将源代码提交到 Git 存储库时，该任务会在云中自动触发映像生成。
+除了[快速任务](container-registry-tutorial-quick-task.md)之外，ACR 任务还支持在将源代码提交到 Git 存储库时自动在云中生成 Docker 容器映像。
 
-本教程（教程系列的第二部分）的内容包括：
+在本教程中，在你将源代码提交到 Git 存储库时，ACR 任务会生成并推送在 Dockerfile 中指定的单一容器映像。 要创建[多步骤任务](container-registry-tasks-multi-step.md)并让其使用 YAML 文件来定义相关步骤，以便在提交代码时生成、推送和测试（可选）多个容器，请参阅[教程：提交源代码时在云中运行多步骤容器工作流](container-registry-tutorial-multistep-task.md)。 有关 ACR 任务的概述，请参阅[使用 ACR 任务自动执行 OS 和框架修补](container-registry-tasks-overview.md)
+
+本教程的内容：
 
 > [!div class="checklist"]
-> * 创建生成任务
-> * 测试生成任务
-> * 查看生成状态
-> * 使用代码提交触发生成任务
+> * 创建任务
+> * 测试任务
+> * 查看任务状态
+> * 使用代码提交触发任务
 
-本教程假设你已完成[前面教程](container-registry-tutorial-quick-build.md)中的任务。 如果尚未完成，请先完成前面教程[先决条件](container-registry-tutorial-quick-build.md#prerequisites)部分中的步骤，再继续操作。
-
-> [!IMPORTANT]
-> 目前，ACR 生成为预览版，仅在美国东部 (eastus) 和欧洲西部 (westeurope) 区域的 Azure 容器注册表中受支持。 需同意[补充使用条款][terms-of-use]才可使用预览版。 在正式版推出之前，此功能的某些方面可能会有所更改。
+本教程假设你已完成[前面教程](container-registry-tutorial-quick-task.md)中的任务。 如果尚未完成，请先完成前面教程[先决条件](container-registry-tutorial-quick-task.md#prerequisites)部分中的步骤，再继续操作。
 
 [!INCLUDE [cloud-shell-try-it.md](../../includes/cloud-shell-try-it.md)]
 
-如果想在本地使用 Azure CLI，必须安装 2.0.32 或更高版本的 Azure CLI。 运行 `az --version` 即可查找版本。 如果需要安装或升级 CLI，请参阅[安装 Azure CLI 2.0][azure-cli]。
+若要在本地使用 Azure CLI，必须安装 Azure CLI **2.0.46** 或更高版本，并使用 [az login][az-login] 登录。 运行 `az --version` 即可查找版本。 如果需要安装或升级 CLI，请参阅[安装 Azure CLI][azure-cli]。
 
-## <a name="prerequisites"></a>先决条件
+[!INCLUDE [container-registry-task-tutorial-prereq.md](../../includes/container-registry-task-tutorial-prereq.md)]
 
-### <a name="get-sample-code"></a>获取示例代码
+## <a name="create-the-build-task"></a>创建生成任务
 
-本教程假设你已完成[前面教程](container-registry-tutorial-quick-build.md)中的步骤，并且已经创建分支和克隆示例存储库。 如果尚未完成，请先完成前面教程[先决条件](container-registry-tutorial-quick-build.md#prerequisites)部分中的步骤，再继续操作。
+现已完成启用 ACR 任务以读取提交状态和在存储库中创建 Webhook 所需的步骤，接下来可以创建任务，以便在向存储库提交内容时触发容器映像生成。
 
-### <a name="container-registry"></a>容器注册表
-
-Azure 订阅中必须具有 Azure 容器注册表才能完成此教程。 如果需要注册表，请参阅[前面教程](container-registry-tutorial-quick-build.md)，或[快速入门：使用 Azure CLI 创建容器注册表](container-registry-get-started-azure-cli.md)。
-
-## <a name="build-task"></a>生成任务
-
-生成任务定义自动生成的属性，包括容器映像源代码的位置和触发生成的事件。 生成任务中定义的事件发生时（例如向 Git 存储库提交内容），ACR 生成会在云中启动容器映像生成。 默认情况下，它之后会将成功生成的映像推送给任务中指定的 Azure 容器注册表。
-
-ACR 生成目前支持以下生成任务触发事件：
-
-* 向 Git 存储库提交内容
-* 更新基础映像
-
-## <a name="create-a-build-task"></a>创建生成任务
-
-此部分中首先创建一个供 ACR 生成使用的 GitHub 个人访问令牌 (PAT)。 然后创建生成任务，向存储库分支提交代码时，该任务会触发生成。
-
-### <a name="create-a-github-personal-access-token"></a>创建 GitHub 个人访问令牌
-
-要在向 Git 存储库提交内容时触发生成，ACR 生成需要一个访问存储库的个人访问令牌 (PAT)。 请按照以下步骤进行操作，在 GitHub 中生成 PAT：
-
-1. 导航到 GitHub 上的 PAT 创建页面 https://github.com/settings/tokens/new
-1. 输入关于令牌的简短说明，例如“ACR 生成任务演示”
-1. 在“存储库”下方，启用“存储库:状态”和“public_repo”
-
-   ![GitHub 中个人访问令牌生成页面的屏幕截图][build-task-01-new-token]
-
-1. 选择“生成令牌”按钮（可能会要求你确认密码）
-1. 将生成的令牌复制并保存到安全位置（后面定义生成任务时会使用此令牌）
-
-   ![GitHub 中已生成的个人访问令牌的屏幕截图][build-task-02-generated-token]
-
-### <a name="create-the-build-task"></a>创建生成任务
-
-现在已完成启用 ACR 生成以读取提交状态和在存储库中创建 Webhook 所需的步骤，可以创建生成任务，向存储库提交内容时触发容器映像生成。
-
-首先，使用适用于环境的值填充这些 shell 环境变量。 这一步并非必须执行的步骤，但它能让在此教程中执行多个 Azure CLI 命令更容易。 如果没有填充这些环境变量，示例命令中出现时则必须手动替换每个值。
+首先，使用适用于环境的值填充这些 shell 环境变量。 此步骤并非必须执行的步骤，但它能让在此教程中执行多个 Azure CLI 命令更容易。 如果未填充这些环境变量，则每当示例命令中出现每个值，都必须手动替换该值。
 
 ```azurecli-interactive
-ACR_NAME=mycontainerregistry # The name of your Azure container registry
-GIT_USER=gituser             # Your GitHub user account name
-GIT_PAT=personalaccesstoken  # The PAT you generated in the previous section
+ACR_NAME=<registry-name>        # The name of your Azure container registry
+GIT_USER=<github-username>      # Your GitHub user account name
+GIT_PAT=<personal-access-token> # The PAT you generated in the previous section
 ```
 
-现在可通过执行以下 [az acr build-task create][az-acr-build-task-create] 命令创建生成任务：
+现在，请执行以下 [az acr task create][az-acr-task-create] 命令创建该任务：
 
 ```azurecli-interactive
-az acr build-task create \
+az acr task create \
     --registry $ACR_NAME \
-    --name buildhelloworld \
-    --image helloworld:{{.Build.ID}} \
-    --context https://github.com/$GIT_USER/acr-build-helloworld-node \
-    --branch master \
+    --name taskhelloworld \
+    --image helloworld:{{.Run.ID}} \
+    --context https://github.com/$GIT_USER/acr-build-helloworld-node.git \
+    --file Dockerfile \
     --git-access-token $GIT_PAT
 ```
 
-此生成任务指定向 `--context` 指定的主要分支存储库提交代码时，ACR 生成将根据该分支中的代码生成容器映像。 `--image` 参数为映像标记的版本部分指定参数化的 `{{.Build.ID}}` 值，确保生成映像与特定生成关联且被唯一标记。
+> [!IMPORTANT]
+> 如果以前在预览期使用 `az acr build-task` 创建了任务，则需要使用 [az acr task][az-acr-task] 命令重新创建这些任务。
 
-成功的 [az acr build-task create][az-acr-build-task-create] 命令产生的输出应如下所示：
+此任务指定向 `--context` 指定的主分支存储库提交代码时，ACR 任务将根据该分支中的代码生成容器映像  。 将使用存储库根目录中由 `--file` 指定的 Dockerfile 来生成映像。 `--image` 参数为映像标记的版本部分指定参数化的 `{{.Run.ID}}` 值，确保生成映像与特定生成关联且被唯一标记。
+
+成功的 [az acr task create][az-acr-task-create] 命令的输出应如下所示：
 
 ```console
-$ az acr build-task create \
->     --registry $ACR_NAME \
->     --name buildhelloworld \
->     --image helloworld:{{.Build.ID}} \
->     --context https://github.com/$GIT_USER/acr-build-helloworld-node \
->     --branch master \
->     --git-access-token $GIT_PAT
 {
-  "additionalProperties": {},
-  "alias": "buildhelloworld",
-  "creationDate": "2018-04-18T23:14:45.905395+00:00",
-  "id": "/subscriptions/<subscriptionID>/resourceGroups/myResourceGroup/providers/Microsoft.ContainerRegistry/registries/mycontainerregistry/buildTasks/buildhelloworld",
-  "location": "eastus",
-  "name": "buildhelloworld",
+  "agentConfiguration": {
+    "cpu": 2
+  },
+  "creationDate": "2018-09-14T22:42:32.972298+00:00",
+  "id": "/subscriptions/<Subscription ID>/resourceGroups/myregistry/providers/Microsoft.ContainerRegistry/registries/myregistry/tasks/taskhelloworld",
+  "location": "westcentralus",
+  "name": "taskhelloworld",
   "platform": {
-    "additionalProperties": {},
-    "cpu": 1,
-    "osType": "Linux"
+    "architecture": "amd64",
+    "os": "Linux",
+    "variant": null
   },
   "provisioningState": "Succeeded",
-  "resourceGroup": "myResourceGroup",
-  "sourceRepository": {
-    "additionalProperties": {},
-    "isCommitTriggerEnabled": true,
-    "repositoryUrl": "https://github.com/gituser/acr-build-helloworld-node",
-    "sourceControlAuthProperties": null,
-    "sourceControlType": "Github"
+  "resourceGroup": "myregistry",
+  "status": "Enabled",
+  "step": {
+    "arguments": [],
+    "baseImageDependencies": null,
+    "contextPath": "https://github.com/gituser/acr-build-helloworld-node",
+    "dockerFilePath": "Dockerfile",
+    "imageNames": [
+      "helloworld:{{.Run.ID}}"
+    ],
+    "isPushEnabled": true,
+    "noCache": false,
+    "type": "Docker"
   },
-  "status": "enabled",
   "tags": null,
-  "timeout": null,
-  "type": "Microsoft.ContainerRegistry/registries/buildTasks"
+  "timeout": 3600,
+  "trigger": {
+    "baseImageTrigger": {
+      "baseImageTriggerType": "Runtime",
+      "name": "defaultBaseimageTriggerName",
+      "status": "Enabled"
+    },
+    "sourceTriggers": [
+      {
+        "name": "defaultSourceTriggerName",
+        "sourceRepository": {
+          "branch": "master",
+          "repositoryUrl": "https://github.com/gituser/acr-build-helloworld-node",
+          "sourceControlAuthProperties": null,
+          "sourceControlType": "GitHub"
+        },
+        "sourceTriggerEvents": [
+          "commit"
+        ],
+        "status": "Enabled"
+      }
+    ]
+  },
+  "type": "Microsoft.ContainerRegistry/registries/tasks"
 }
-
 ```
 
 ## <a name="test-the-build-task"></a>测试生成任务
 
-现在你已具有定义生成的生成任务。 若要测试生成定义，请通过执行 [az acr build-task run][az-acr-build-task-run] 命令手动触发生成：
+现已创建一个用于定义生成的任务。 若要测试生成管道，请执行 [az acr task run][az-acr-task-run] 命令手动触发生成：
 
 ```azurecli-interactive
-az acr build-task run --registry $ACR_NAME --name buildhelloworld
+az acr task run --registry $ACR_NAME --name taskhelloworld
 ```
 
-默认情况下，执行此命令时，`az acr build-task run` 命令会将日志流式传输到控制台。 此处输出会显示生成 eastus2 已排队和已生成。
+默认情况下，执行此命令时，`az acr task run` 命令会将日志流式传输到控制台。
 
 ```console
-$ az acr build-task run --registry mycontainerregistry --name buildhelloworld
-Queued a build with build-id: eastus2.
-Starting to stream the logs...
-Cloning into '/root/acr-builder/src'...
-time="2018-04-19T00:06:20Z" level=info msg="Running command git checkout master"
-Already on 'master'
-Your branch is up to date with 'origin/master'.
-ffef1347389a008c9a8bfdf8c6a0ed78b0479894
-time="2018-04-19T00:06:20Z" level=info msg="Running command git rev-parse --verify HEAD"
-time="2018-04-19T00:06:20Z" level=info msg="Running command docker build --pull -f Dockerfile -t mycontainerregistry.azurecr.io/helloworld:eastus2 ."
-Sending build context to Docker daemon  182.8kB
+$ az acr task run --registry $ACR_NAME --name taskhelloworld
+
+2018/09/17 22:51:00 Using acb_vol_9ee1f28c-4fd4-43c8-a651-f0ed027bbf0e as the home volume
+2018/09/17 22:51:00 Setting up Docker configuration...
+2018/09/17 22:51:02 Successfully set up Docker configuration
+2018/09/17 22:51:02 Logging in to registry: myregistry.azurecr.io
+2018/09/17 22:51:03 Successfully logged in
+2018/09/17 22:51:03 Executing step: build
+2018/09/17 22:51:03 Obtaining source code and scanning for dependencies...
+2018/09/17 22:51:05 Successfully obtained source code and scanned for dependencies
+Sending build context to Docker daemon  23.04kB
 Step 1/5 : FROM node:9-alpine
-9: Pulling from library/node
-Digest: sha256:bd7b9aaf77ab2ce1e83e7e79fc0969229214f9126ced222c64eab49dc0bdae90
+9-alpine: Pulling from library/node
+Digest: sha256:8dafc0968fb4d62834d9b826d85a8feecc69bd72cd51723c62c7db67c6dec6fa
 Status: Image is up to date for node:9-alpine
- ---> aa3e171e4e95
+ ---> a56170f59699
 Step 2/5 : COPY . /src
- ---> e1c04dc2993b
+ ---> 5f574fcf5816
+Step 3/5 : RUN cd /src && npm install
+ ---> Running in b1bca3b5f4fc
+npm notice created a lockfile as package-lock.json. You should commit this file.
+npm WARN helloworld@1.0.0 No repository field.
 
+up to date in 0.078s
+Removing intermediate container b1bca3b5f4fc
+ ---> 44457db20dac
+Step 4/5 : EXPOSE 80
+ ---> Running in 9e6f63ec612f
+Removing intermediate container 9e6f63ec612f
+ ---> 74c3e8ea0d98
+Step 5/5 : CMD ["node", "/src/server.js"]
+ ---> Running in 7382eea2a56a
+Removing intermediate container 7382eea2a56a
+ ---> e33cd684027b
+Successfully built e33cd684027b
+Successfully tagged myregistry.azurecr.io/helloworld:da2
+2018/09/17 22:51:11 Executing step: push
+2018/09/17 22:51:11 Pushing image: myregistry.azurecr.io/helloworld:da2, attempt 1
+The push refers to repository [myregistry.azurecr.io/helloworld]
+4a853682c993: Preparing
 [...]
-
-6e5e20cbf4a7: Layer already exists
-b69680cb4898: Pushed
-b54af9b858b7: Pushed
-eastus2: digest: sha256:9a7b73d06077ced2a02f7462f53e31a3e51e95ea5544fbcdb01e2fef094da1b6 size: 2423
-time="2018-04-19T00:06:51Z" level=info msg="Running command docker inspect --format \"{{json .RepoDigests}}\" mycontainerregistry.azurecr.io/helloworld:eastus2"
-"["mycontainerregistry.azurecr.io/helloworld@sha256:9a7b73d06077ced2a02f7462f53e31a3e51e95ea5544fbcdb01e2fef094da1b6"]"
-time="2018-04-19T00:06:51Z" level=info msg="Running command docker inspect --format \"{{json .RepoDigests}}\" node:9-alpine"
-"["node@sha256:bd7b9aaf77ab2ce1e83e7e79fc0969229214f9126ced222c64eab49dc0bdae90"]"
-ACR Builder discovered the following dependencies:
+4a853682c993: Pushed
+[...]
+da2: digest: sha256:c24e62fd848544a5a87f06ea60109dbef9624d03b1124bfe03e1d2c11fd62419 size: 1366
+2018/09/17 22:51:21 Successfully pushed image: myregistry.azurecr.io/helloworld:da2
+2018/09/17 22:51:21 Step id: build marked as successful (elapsed time in seconds: 7.198937)
+2018/09/17 22:51:21 Populating digests for step id: build...
+2018/09/17 22:51:22 Successfully populated digests for step id: build
+2018/09/17 22:51:22 Step id: push marked as successful (elapsed time in seconds: 10.180456)
+The following dependencies were found:
 - image:
-    registry: mycontainerregistry.azurecr.io
+    registry: myregistry.azurecr.io
     repository: helloworld
-    tag: eastus2
-    digest: sha256:9a7b73d06077ced2a02f7462f53e31a3e51e95ea5544fbcdb01e2fef094da1b6
+    tag: da2
+    digest: sha256:c24e62fd848544a5a87f06ea60109dbef9624d03b1124bfe03e1d2c11fd62419
   runtime-dependency:
     registry: registry.hub.docker.com
     repository: library/node
     tag: 9-alpine
-    digest: sha256:5149aec8f508d48998e6230cdc8e6832cba192088b442c8ef7e23df3c6892cd3
+    digest: sha256:8dafc0968fb4d62834d9b826d85a8feecc69bd72cd51723c62c7db67c6dec6fa
   git:
-    git-head-revision: 6944c6bd0602f96e5fecf56ff8d66e2d268223e3
+    git-head-revision: 68cdf2a37cdae0873b8e2f1c4d80ca60541029bf
 
-Build complete
-Build ID: eastus2 was successful after 39.789138274s
-```
 
-## <a name="view-build-status"></a>查看生成状态
-
-有时查看未手动触发的正在进行的生成的状态很有用。 例如，故障排除由源代码提交触发的生成时。 本部分中将触发一个手动生成，但阻止将生成日志流式传输到控制台的默认行为。 然后使用 `az acr build-task logs` 命令来监视正在进行的生成。
-
-首先，像之前一样手动触发一个生成，但要指定 `--no-logs` 参数阻止将日志传输到控制台：
-
-```azurecli-interactive
-az acr build-task run --registry $ACR_NAME --name buildhelloworld --no-logs
-```
-
-接下来使用 `az build-task logs` 命令查看当前正在运行的生成的日志：
-
-```azurecli-interactive
-az acr build-task logs --registry $ACR_NAME
-```
-
-当前正在运行的生成的日志已流式传输到控制台，应与以下输出类似（此处的显示内容已截断）：
-
-```console
-$ az acr build-task logs --registry $ACR_NAME
-Showing logs for the last updated build...
-Build-id: eastus3
-
-[...]
-
-Build complete
-Build ID: eastus3 was successful after 30.076988169s
+Run ID: da2 was successful after 27s
 ```
 
 ## <a name="trigger-a-build-with-a-commit"></a>使用命令触发生成
 
-通过手动运行生成任务对其进行测试后，可通过更改源代码手动触发该生成任务。
+通过手动运行任务对其进行测试后，可通过更改源代码手动触发该任务。
 
-首先，确保目录中包含[存储库][sample-repo]的本地克隆：
+首先，确保你位于包含[存储库][sample-repo]的本地克隆的目录中：
 
 ```azurecli-interactive
 cd acr-build-helloworld-node
@@ -241,7 +219,7 @@ cd acr-build-helloworld-node
 ```azurecli-interactive
 echo "Hello World!" > hello.txt
 git add hello.txt
-git commit -m "Testing ACR Build"
+git commit -m "Testing ACR Tasks"
 git push origin master
 ```
 
@@ -253,63 +231,62 @@ Username for 'https://github.com': <github-username>
 Password for 'https://githubuser@github.com': <personal-access-token>
 ```
 
-将提交推送至存储库后，ACR 生成所创建的 Webhook 便会在 Azure 容器注册表中触发并启动一个生成。 显示当前正在运行的生成的生成日志，验证和监视生成进度：
+将提交推送至存储库后，ACR 任务所创建的 Webhook 便会在 Azure 容器注册表中触发并启动一个生成。 显示当前正在运行的任务的日志，以验证和监视生成进度：
 
 ```azurecli-interactive
-az acr build-task logs --registry $ACR_NAME
+az acr task logs --registry $ACR_NAME
 ```
 
-输出结果类似于以下内容，显示当前执行（或最近执行）的生成：
+输出结果类似于以下内容，显示当前执行（或最近执行）的任务：
 
 ```console
-$ az acr build-task logs --registry $ACR_NAME
-Showing logs for the last updated build...
-Build-id: eastus4
+$ az acr task logs --registry $ACR_NAME
+Showing logs of the last created run.
+Run ID: da4
 
 [...]
 
-Build complete
-Build ID: eastus4 was successful after 28.9587031s
+Run ID: da4 was successful after 38s
 ```
 
 ## <a name="list-builds"></a>生成列表
 
-若要查看 ACR 生成为注册表完成的生成列表，请运行 [az acr build-task list-builds][az-acr-build-task-list-builds] 命令：
+若要查看 ACR 任务对注册表完成的任务运行列表，请运行 [az acr task list-runs][az-acr-task-list-runs] 命令：
 
 ```azurecli-interactive
-az acr build-task list-builds --registry $ACR_NAME --output table
+az acr task list-runs --registry $ACR_NAME --output table
 ```
 
-该命令产生的输出应如下所示。 会显示 ACR 生成已执行的生成，并在最新生成的 TRIGGER 列中显示“Git Commit”：
+该命令产生的输出应如下所示。 将显示 ACR 任务已执行的运行，并在最近执行的任务的 TRIGGER 列中显示“Git Commit”：
 
 ```console
-$ az acr build-task list-builds --registry $ACR_NAME --output table
-BUILD ID    TASK             PLATFORM    STATUS     TRIGGER     STARTED               DURATION
-----------  ---------------  ----------  ---------  ----------  --------------------  ----------
-eastus4     buildhelloworld  Linux       Succeeded  Git Commit  2018-04-20T22:50:27Z  00:00:35
-eastus3     buildhelloworld  Linux       Succeeded  Manual      2018-04-20T22:47:19Z  00:00:30
-eastus2     buildhelloworld  Linux       Succeeded  Manual      2018-04-20T22:46:14Z  00:00:55
-eastus1                                  Succeeded  Manual      2018-04-20T22:38:22Z  00:00:55
+$ az acr task list-runs --registry $ACR_NAME --output table
+
+RUN ID    TASK             PLATFORM    STATUS     TRIGGER     STARTED               DURATION
+--------  --------------  ----------  ---------  ----------  --------------------  ----------
+da4       taskhelloworld  Linux       Succeeded  Git Commit  2018-09-17T23:03:45Z  00:00:44
+da3       taskhelloworld  Linux       Succeeded  Manual      2018-09-17T22:55:35Z  00:00:35
+da2       taskhelloworld  Linux       Succeeded  Manual      2018-09-17T22:50:59Z  00:00:32
+da1                       Linux       Succeeded  Manual      2018-09-17T22:29:59Z  00:00:57
 ```
 
 ## <a name="next-steps"></a>后续步骤
 
-本教程介绍了如何使用生成任务，在你向 Git 存储库提交源代码时在 Azure 中自动触发容器映像生成。 请转到下一教程，了解如何创建生成任务，使其在更新容器映像的基础映像时触发生成。
+在本教程中，我们已了解如何在向 Git 存储库提交源代码时，使用一个任务在 Azure 中自动触发容器映像生成。 请转到下一教程来了解如何创建任务，用于在更新容器映像的基础映像时触发生成。
 
 > [!div class="nextstepaction"]
 > [在更新基础映像时自动生成](container-registry-tutorial-base-image-update.md)
 
 <!-- LINKS - External -->
-[terms-of-use]: https://azure.microsoft.com/support/legal/preview-supplemental-terms/
 [sample-repo]: https://github.com/Azure-Samples/acr-build-helloworld-node
 
 <!-- LINKS - Internal -->
 [azure-cli]: /cli/azure/install-azure-cli
-[az-acr-build-task]: /cli/azure/acr#az-acr-build-task
-[az-acr-build-task-create]: /cli/azure/acr#az-acr-build-task-create
-[az-acr-build-task-run]: /cli/azure/acr#az-acr-build-task-run
-[az-acr-build-task-list-builds]: /cli/azure/acr#az-acr-build-task-list-build
+[az-acr-task]: /cli/azure/acr/task
+[az-acr-task-create]: /cli/azure/acr/task#az-acr-task-create
+[az-acr-task-run]: /cli/azure/acr/task#az-acr-task-run
+[az-acr-task-list-runs]: /cli/azure/acr/task#az-acr-task-list-runs
+[az-login]: /cli/azure/reference-index#az-login
 
-<!-- IMAGES -->
-[build-task-01-new-token]: ./media/container-registry-tutorial-build-tasks/build-task-01-new-token.png
-[build-task-02-generated-token]: ./media/container-registry-tutorial-build-tasks/build-task-02-generated-token.png
+
+

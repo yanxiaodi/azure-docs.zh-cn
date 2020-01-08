@@ -1,24 +1,25 @@
 ---
-title: "Azure 服务总线主题和订阅入门 | Microsoft Docs"
-description: "编写一个 C# .NET Core 控制台应用程序，以便使用服务总线消息传递主题和订阅。"
+title: Azure 服务总线主题和订阅入门 | Microsoft Docs
+description: 编写一个 C# .NET Core 控制台应用程序，以便使用服务总线消息传递主题和订阅。
 services: service-bus-messaging
 documentationcenter: .net
-author: sethmanheim
+author: axisc
 manager: timlt
-editor: 
-ms.assetid: 
+editor: spelluru
+ms.assetid: ''
 ms.service: service-bus-messaging
 ms.devlang: tbd
-ms.topic: hero-article
+ms.topic: conceptual
 ms.tgt_pltfrm: dotnet
 ms.workload: na
-ms.date: 12/6/2017
-ms.author: sethm
-ms.openlocfilehash: aa75ac48d650f28d4aaeb612f2900d705cf71b5b
-ms.sourcegitcommit: d87b039e13a5f8df1ee9d82a727e6bc04715c341
-ms.translationtype: HT
+ms.date: 04/15/2019
+ms.author: aschhab
+ms.openlocfilehash: 2ca8f0e34b63802453c8876f878b531e78e66d76
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/21/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "65991779"
 ---
 # <a name="get-started-with-service-bus-topics"></a>服务总线主题入门
 
@@ -26,54 +27,21 @@ ms.lasthandoff: 02/21/2018
 
 本教程涵盖以下步骤：
 
-1. 使用 Azure 门户创建服务总线命名空间。
-2. 使用 Azure 门户创建服务总线主题。
-3. 使用 Azure 门户创建该主题的服务总线订阅。
-4. 编写 .NET Core 控制台应用程序，向主题发送一组消息。
-5. 编写 .NET Core 控制台应用程序，从订阅接收这些消息。
+1. 编写 .NET Core 控制台应用程序，向主题发送一组消息。
+2. 编写 .NET Core 控制台应用程序，从订阅接收这些消息。
 
-## <a name="prerequisites"></a>先决条件
+## <a name="prerequisites"></a>必备组件
 
-1. [Visual Studio 2017 Update 3（版本 15.3 (26730.01)）](http://www.visualstudio.com/vs)或更高版本。
-2. [NET Core SDK](https://www.microsoft.com/net/download/windows) 2.0 或更高版本。
-2. Azure 订阅。
-
-[!INCLUDE [create-account-note](../../includes/create-account-note.md)]
-
-## <a name="1-create-a-namespace-using-the-azure-portal"></a>1.使用 Azure 门户创建命名空间
-
-> [!NOTE] 
-> 也可使用 [PowerShell](/powershell/azure/get-started-azureps) 创建服务总线命名空间和消息实体。 有关详细信息，请参阅[使用 PowerShell 管理服务总线资源](service-bus-manage-with-ps.md)。
-
-如果已创建服务总线消息传递命名空间，请跳转到[使用 Azure 门户创建主题](#2-create-a-topic-using-the-azure-portal)部分。
-
-[!INCLUDE [service-bus-create-namespace-portal](../../includes/service-bus-create-namespace-portal.md)]
-
-## <a name="2-create-a-topic-using-the-azure-portal"></a>2.使用 Azure 门户创建主题
-
-1. 登录到 [Azure 门户][azure-portal]。
-2. 在门户左侧的导航窗格中，单击“服务总线”（如果未看到“服务总线”，请单击“所有服务”或“所有资源”）。 单击要在其中创建主题的命名空间。 
-3. 此时会打开“命名空间概览”窗口。 单击“主题”：
-   
-    ![创建主题][createtopic1]
-4. 单击“+ 主题”：
-   
-    ![选择主题][createtopic2]
-5. 输入主题名称。 将其他选项保留默认值。
-   
-    ![选择“新建”][createtopic3]
-6. 单击对话框底部的“创建”。
-
-## <a name="3-create-a-subscription-to-the-topic"></a>3.创建主题的订阅
-
-1. 在门户资源窗格中，依次单击在步骤 1 中创建的命名空间、“主题”、在步骤 2 中创建的主题的名称。
-2. 在概览窗格顶部单击“+ 订阅”，以便添加该主题的订阅。
-
-    ![创建订阅][createtopic4]
-
-3. 输入订阅的名称。 将其他选项保留默认值。
-
-## <a name="4-send-messages-to-the-topic"></a>4.将消息发送到主题
+1. Azure 订阅。 要完成本教程，需要一个 Azure 帐户。 可以[激活 Visual Studio 或 MSDN 订阅者权益](https://azure.microsoft.com/pricing/member-offers/msdn-benefits-details/?WT.mc_id=A85619ABF)或者注册[免费试用帐户](https://azure.microsoft.com/free/?WT.mc_id=A85619ABF)。
+2. 按照[快速入门：使用 Azure 门户创建服务总线主题和主题的订阅](service-bus-quickstart-topics-subscriptions-portal.md)来执行以下任务：
+    1. 创建一个服务总线**命名空间**。
+    2. 获取**连接字符串**。
+    3. 在此命名空间中创建一个**主题**。
+    4. 在此命名空间中创建对此主题的**一个订阅**。
+3. [Visual Studio 2017 Update 3（版本 15.3 (26730.01)）](https://www.visualstudio.com/vs)或更高版本。
+4. [NET Core SDK](https://www.microsoft.com/net/download/windows) 2.0 或更高版本。
+ 
+## <a name="send-messages-to-the-topic"></a>将消息发送到主题
 
 为了将消息发送到主题中，请使用 Visual Studio 编写一个 C# 控制台应用程序。
 
@@ -83,8 +51,8 @@ ms.lasthandoff: 02/21/2018
 
 ### <a name="add-the-service-bus-nuget-package"></a>添加服务总线 NuGet 包
 
-1. 右键单击新创建的项目，并选择“管理 NuGet 包” 。
-2. 单击“浏览”选项卡，搜索 [Microsoft.Azure.ServiceBus](https://www.nuget.org/packages/Microsoft.Azure.ServiceBus/)，然后选择“Microsoft.Azure.ServiceBus”项。 单击“安装”以完成安装，并关闭此对话框。
+1. 右键单击新创建的项目，并选择“管理 NuGet 包”  。
+2. 单击“浏览”  选项卡，搜索 [Microsoft.Azure.ServiceBus](https://www.nuget.org/packages/Microsoft.Azure.ServiceBus/)，然后选择“Microsoft.Azure.ServiceBus”   项。 单击“安装”  以完成安装，并关闭此对话框。
    
     ![选择 NuGet 包][nuget-pkg]
 
@@ -226,13 +194,13 @@ ms.lasthandoff: 02/21/2018
     }
     ```
 
-3. 运行该程序并检查 Azure 门户：在命名空间“概览”窗口中单击主题的名称。 此时会显示主题的“基本信息”屏幕。 请注意，在列在窗口底部附近的订阅中，订阅的“消息计数”值现在应该为 **10**。 每次运行发件人应用程序而没有检索消息（如下一部分所述）时，该值会增加 10。 另请注意，每次该应用将消息添加到主题，主题的当前大小就会递增，增量为“基本信息”窗口中的“当前”值。
+3. 运行该程序并检查 Azure 门户：在命名空间“概览”窗口中单击主题的名称。  此时会显示主题的“基本信息”屏幕。  请注意，在列在窗口底部附近的订阅中，订阅的“消息计数”值现在应该为 **10**。  每次运行发件人应用程序而没有检索消息（如下一部分所述）时，该值会增加 10。 另请注意，每次该应用将消息添加到主题，主题的当前大小就会递增，增量为“基本信息”窗口中的“当前”值。  
    
       ![消息大小][topic-message]
 
-## <a name="5-receive-messages-from-the-subscription"></a>5.从订阅接收消息
+## <a name="receive-messages-from-the-subscription"></a>从订阅接收消息
 
-若要接收刚发送的消息，请创建另一 .NET Core 控制台应用程序并安装 **Microsoft.Azure.ServiceBus** NuGet 包，类似于前面的发件人应用程序。
+若要接收你发送的消息，请创建另一个 .NET Core 控制台应用程序并安装 **Microsoft.Azure.ServiceBus** NuGet 包，类似于前面的发件人应用程序。
 
 ### <a name="write-code-to-receive-messages-from-the-subscription"></a>编写从订阅接收消息的代码
 
@@ -420,15 +388,18 @@ ms.lasthandoff: 02/21/2018
         }
     }
     ```
-9. 运行该程序，并再次检查门户。 请注意，“消息计数”和“当前”值现在为 **0**。
+9. 运行该程序，并再次检查门户。 请注意，“消息计数”和“当前”值现在为 **0**。  
    
     ![主题长度][topic-message-receive]
 
-祝贺你！ 你现在已使用 .NET Standard 库创建主题和订阅，发送了 10 条消息，并接收到了这些消息。
+祝贺你！ 现已使用 .NET Standard 库创建主题和订阅，发送了 10 条消息，并接收到了这些消息。
+
+> [!NOTE]
+> 可以使用[服务总线资源管理器](https://github.com/paolosalvatori/ServiceBusExplorer/)管理服务总线资源。 服务总线资源管理器允许用户连接到服务总线命名空间并以一种简单的方式管理消息传送实体。 该工具提供高级功能，如导入/导出功能或用于对主题、队列、订阅、中继服务、通知中心和事件中心进行测试的功能。 
 
 ## <a name="next-steps"></a>后续步骤
 
-查看 [GitHub 存储库](https://github.com/Azure/azure-service-bus/tree/master/samples)中的示例，了解服务总线消息传送的一些更高级的功能。
+查看服务总线 [GitHub 存储库](https://github.com/Azure/azure-service-bus/tree/master/samples)中的示例，了解服务总线消息传送的一些更高级的功能。
 
 <!--Image references-->
 

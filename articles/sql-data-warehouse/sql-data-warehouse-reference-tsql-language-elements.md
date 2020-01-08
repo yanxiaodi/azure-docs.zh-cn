@@ -2,19 +2,20 @@
 title: T-SQL 语言元素 - Azure SQL 数据仓库 | Microsoft Docs
 description: 有关 Azure SQL 数据仓库中支持的 T-SQL 语句文档的链接。
 services: sql-data-warehouse
-author: ckarst
-manager: craigg-msft
+author: XiaoyuMSFT
+manager: craigg
 ms.service: sql-data-warehouse
 ms.topic: conceptual
-ms.component: implement
-ms.date: 04/17/2018
-ms.author: cakarst
+ms.subservice: query
+ms.date: 06/13/2018
+ms.author: xiaoyul
 ms.reviewer: igorstan
-ms.openlocfilehash: bd7665798e5bf26c0e538deb713ef9696c84338c
-ms.sourcegitcommit: 59914a06e1f337399e4db3c6f3bc15c573079832
-ms.translationtype: HT
+ms.openlocfilehash: 5d623ebbb5434338e2d7263ca63dd545230a612d
+ms.sourcegitcommit: 75a56915dce1c538dc7a921beb4a5305e79d3c7a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/19/2018
+ms.lasthandoff: 07/24/2019
+ms.locfileid: "68479422"
 ---
 # <a name="t-sql-language-elements-supported-in-azure-sql-data-warehouse"></a>Azure SQL 数据仓库中支持的 T-SQL 语言元素
 有关 Azure SQL 数据仓库中支持的 T-SQL 语言元素文档的链接。

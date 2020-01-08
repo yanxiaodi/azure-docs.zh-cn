@@ -15,12 +15,12 @@ ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 04/26/2017
 ms.author: victorh
-ms.openlocfilehash: 97d1376dc7908b72d8e8ec15145229cf3cf4acae
-ms.sourcegitcommit: c47ef7899572bf6441627f76eb4c4ac15e487aec
-ms.translationtype: HT
+ms.openlocfilehash: 01c1768f60da98206f0dfd041745428256f545fc
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/04/2018
-ms.locfileid: "33201940"
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "58861873"
 ---
 # <a name="create-a-custom-probe-for-azure-application-gateway-classic-by-using-powershell"></a>使用 PowerShell 创建 Azure 应用程序网关（经典）的自定义探测
 
@@ -32,7 +32,7 @@ ms.locfileid: "33201940"
 在本文中，将使用 PowerShell 向现有应用程序网关添加自定义探测。 如果应用程序包含特定运行状况检查页面。或者未在默认 Web 应用程序上提供成功的响应，那么它们非常适合使用自定义探测。
 
 > [!IMPORTANT]
-> Azure 提供两个不同的部署模型用于创建和处理资源：[Resource Manager 和经典模型](../azure-resource-manager/resource-manager-deployment-model.md)。 本文介绍如何使用经典部署模型。 Microsoft 建议大多数新部署使用资源管理器模型。 了解如何[使用 Resource Manager 模型执行这些步骤](application-gateway-create-probe-ps.md)。
+> Azure 具有用于创建和处理资源的两个不同部署模型：[资源管理器部署模型和经典部署模型](../azure-resource-manager/resource-manager-deployment-model.md)。 本文介绍如何使用经典部署模型。 Microsoft 建议大多数新部署使用资源管理器模型。 了解如何[使用 Resource Manager 模型执行这些步骤](application-gateway-create-probe-ps.md)。
 
 [!INCLUDE [azure-ps-prerequisites-include.md](../../includes/azure-ps-prerequisites-include.md)]
 
@@ -74,7 +74,7 @@ Get-AzureApplicationGateway AppGwTest
 将以下文本复制到记事本中。
 
 ```xml
-<ApplicationGatewayConfiguration xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/windowsazure">
+<ApplicationGatewayConfiguration xmlns:i="https://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/windowsazure">
 <FrontendIPConfigurations>
     <FrontendIPConfiguration>
         <Name>fip1</Name>
@@ -139,7 +139,7 @@ Get-AzureApplicationGateway AppGwTest
 
 编辑配置项的括号之间的值。 使用扩展名 .xml 保存文件。
 
-以下示例演示如何使用配置文件设置应用程序网关负载均衡公共端口 80 上的 HTTP 流量，然后使用自定义探测将网络流量发送到 2 个 IP 地址之间的后端端口 80。
+以下示例演示如何使用配置文件设置应用程序网关负载均衡公共端口 80 上的 HTTP 流量，然后使用自定义探测将网络流量发送到两个 IP 地址之间的后端端口 80。
 
 > [!IMPORTANT]
 > 协议项 Http 或 Https 区分大小写。
@@ -148,14 +148,14 @@ Get-AzureApplicationGateway AppGwTest
 
 配置参数为：
 
-|参数|说明|
+|参数|描述|
 |---|---|
-|**Name** |自定义探测的引用名称。 |
-Protocol*  | 使用的协议（可能的值为 HTTP 或 HTTPS）。|
-| Host 和 Path | 应用程序网关为了确定实例运行状况而调用的完整 URL 路径。 例如，如果网站为 http://contoso.com/，则可以为“http://contoso.com/path/custompath.htm”配置自定义探测，使探测检查能够获得成功的 HTTP 响应。|
-| **间隔** | 配置探测检查间隔，以秒为单位。|
+|**名称** |自定义探测的引用名称。 |
+| 协议  | 使用的协议（可能的值为 HTTP 或 HTTPS）。|
+| Host  和 Path  | 应用程序网关为了确定实例运行状况而调用的完整 URL 路径。 例如，如果网站为 http:\//contoso.com/，则可以为“http:\//contoso.com/path/custompath.htm”配置自定义探测，使探测检查能够获得成功的 HTTP 响应。|
+| 间隔  | 配置探测检查间隔，以秒为单位。|
 | **超时** | 定义 HTTP 响应检查的探测超时。|
-| UnhealthyThreshold | 将后端实例标记为不正常所需的失败 HTTP 响应数目。|
+| UnhealthyThreshold  | 将后端实例标记为“不正常”  所需的失败 HTTP 响应数目。|
 
 \<BackendHttpSettings\> 配置中会引用探测名称，以分配使用自定义探测设置的后端池。
 
@@ -165,14 +165,14 @@ Protocol*  | 使用的协议（可能的值为 HTTP 或 HTTPS）。|
 
 1. 使用 `Get-AzureApplicationGatewayConfig` 获取 XML 文件。 此 cmdlet 会导出要修改的配置 XML 以添加探测设置。
 
-  ```powershell
-  Get-AzureApplicationGatewayConfig -Name "<application gateway name>" -Exporttofile "<path to file>"
-  ```
+   ```powershell
+   Get-AzureApplicationGatewayConfig -Name "<application gateway name>" -Exporttofile "<path to file>"
+   ```
 
 1. 在文本编辑器中打开 XML 文件。 将 `<probe>` 节添加到 `<frontendport>` 的后面。
 
-  ```xml
-<Probes>
+   ```xml
+   <Probes>
     <Probe>
         <Name>Probe01</Name>
         <Protocol>Http</Protocol>
@@ -182,12 +182,12 @@ Protocol*  | 使用的协议（可能的值为 HTTP 或 HTTPS）。|
         <Timeout>15</Timeout>
         <UnhealthyThreshold>5</UnhealthyThreshold>
     </Probe>
-</Probes>
-  ```
+   </Probes>
+   ```
 
-  在 XML 的 backendHttpSettings 节中，添加以下示例中所示的探测名称：
+   在 XML 的 backendHttpSettings 节中，添加以下示例中所示的探测名称：
 
-  ```xml
+   ```xml
     <BackendHttpSettings>
         <Name>setting1</Name>
         <Port>80</Port>
@@ -196,9 +196,9 @@ Protocol*  | 使用的协议（可能的值为 HTTP 或 HTTPS）。|
         <RequestTimeout>120</RequestTimeout>
         <Probe>Probe01</Probe>
     </BackendHttpSettings>
-  ```
+   ```
 
-  保存该 XML 文件。
+   保存该 XML 文件。
 
 1. 通过 `Set-AzureApplicationGatewayConfig` 使用新的 XML 文件更新应用程序网关配置。 此 cmdlet 使用新配置更新应用程序网关。
 
@@ -210,5 +210,5 @@ Set-AzureApplicationGatewayConfig -Name "<application gateway name>" -Configfile
 
 如果要配置安全套接字层 (SSL) 卸载，请参阅[配置应用程序网关以进行 SSL 卸载](application-gateway-ssl.md)。
 
-如果想要将应用程序网关配置为与内部负载均衡器配合使用，请参阅 [Create an application gateway with an internal Load Balancer (ILB)](application-gateway-ilb.md)（创建具有内部负载均衡器 (ILB) 的应用程序网关）。
+如果要将应用程序网关配置为与内部负载均衡器配合使用，请参阅 [Create an application gateway with an internal load balancer (ILB)](application-gateway-ilb.md)（创建具有内部负载均衡器 (ILB) 的应用程序网关）。
 

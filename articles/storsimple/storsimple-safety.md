@@ -1,11 +1,11 @@
 ---
-title: "StorSimple 设备的安全性 | Microsoft Docs"
-description: "描述安全约定、指南和注意事项，并解释如何安全地安装和运行 StorSimple 设备。"
+title: StorSimple 设备的安全性 | Microsoft Docs
+description: 描述安全约定、指南和注意事项，并解释如何安全地安装和运行 StorSimple 设备。
 services: storsimple
-documentationcenter: 
+documentationcenter: ''
 author: alkohli
 manager: carmonm
-editor: 
+editor: ''
 ms.assetid: dae6d535-1ca2-4d2b-b221-6819043aa068
 ms.service: storsimple
 ms.devlang: na
@@ -14,22 +14,26 @@ ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 11/16/2016
 ms.author: alkohli
-ms.openlocfilehash: a178e8880bcbcada9d66eaacf5ccbdb7c55957cb
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.openlocfilehash: 4622a8575d7b6a38226ee3a980c05f143c128356
+ms.sourcegitcommit: 5d6c8231eba03b78277328619b027d6852d57520
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 08/13/2019
+ms.locfileid: "68963540"
 ---
 # <a name="safely-install-and-operate-your-storsimple-device"></a>安全地安装和运行 StorSimple 设备
+
+[!INCLUDE [storsimple-8000-eol-banner](../../includes/storsimple-8000-eol-banner.md)]
+
 ![警告图标](./media/storsimple-safety/IC740879.png)
 ![阅读安全注意事项图标](./media/storsimple-safety/IC740885.png) **阅读安全和运行状况信息**
 
-阅读本文中适用于 Microsoft Azure StorSimple 设备的所有安全和运行状况信息。 保留 StorSimple 设备附带的所有打印的指南以供将来参考。 如果不按说明对此产品进行正确设置、使用和护理等操作，伤亡或设备损坏风险会增加。 [本指南提供可下载版本](http://www.microsoft.com/download/details.aspx?id=44233)。
+阅读本文中适用于 Microsoft Azure StorSimple 设备的所有安全和运行状况信息。 保留 StorSimple 设备附带的所有打印的指南以供将来参考。 如果不按说明对此产品进行正确设置、使用和护理等操作，伤亡或设备损坏风险会增加。 [本指南提供可下载版本](https://www.microsoft.com/download/details.aspx?id=44233)。
 
 ## <a name="safety-icon-conventions"></a>安全图标约定
 以下是在查看安全预防措施时出现的图标，安装和运行 Microsoft Azure StorSimple 设备时应遵循这些措施。
 
-| 图标 | 说明 |
+| 图标 | 描述 |
 |:--- |:--- |
 | ![危险图标](./media/storsimple-safety/IC740879.png) **DANGER!** |指示如果未能避免危险情况，将导致死亡或重伤。 此警示语仅限于最为极端的情况。 |
 | ![警告图标](./media/storsimple-safety/IC740879.png) **WARNING!** |指示如果未能避免危险情况，可能导致死亡或重伤。 |
@@ -144,7 +148,7 @@ ms.lasthandoff: 10/11/2017
 
 ![注意图标](./media/storsimple-safety/IC740881.png) **NOTICE:**
 
-当通过船运或空运对电池进行运输时，请遵循 [http://www.iata.org/whatwedo/cargo/dgr/Pages/lithium-batteries.aspx](http://www.iata.org/whatwedo/cargo/dgr/Pages/lithium-batteries.aspx) 中提供的 IATA 锂电池指南文档
+当通过船运或空运对电池进行运输时，请遵循 [https://www.iata.org/whatwedo/cargo/dgr/Pages/lithium-batteries.aspx](https://www.iata.org/whatwedo/cargo/dgr/Pages/lithium-batteries.aspx) 中提供的 IATA 锂电池指南文档
 
 查看完这些安全注意事项之后，后续步骤是对设备进行解包、安装机架并连接电缆。
 

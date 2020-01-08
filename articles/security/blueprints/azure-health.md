@@ -3,35 +3,32 @@ title: Azure 健康分析蓝图
 description: 部署 HIPAA/HITRUST 健康分析蓝图指南
 services: security
 documentationcenter: na
-author: jomolesk
-manager: mbaldwin
-editor: tomsh
+author: RajeevRangappa
 ms.assetid: 26566e0a-0a54-49f4-a91d-48e20b7cef71
 ms.service: security
-ms.devlang: na
 ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: na
-ms.date: 02/27/2018
-ms.author: jomolesk
-ms.openlocfilehash: e627019f6219509c21ca6245ee1f7f54f2e1669a
-ms.sourcegitcommit: 6116082991b98c8ee7a3ab0927cf588c3972eeaa
-ms.translationtype: HT
+ms.date: 07/23/2018
+ms.author: rarangap
+ms.openlocfilehash: 70721b8bfbecaf554a9502b9ec3417fc8e561b3f
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 06/05/2018
-ms.locfileid: "33894307"
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60609677"
 ---
 # <a name="azure-security-and-compliance-blueprint---hipaahitrust-health-data-and-ai"></a>Azure 安全性和符合性蓝图 - HIPAA/HITRUST 健康数据和 AI
 
 ## <a name="overview"></a>概述
 
-**Azure 安全性和符合性蓝图 - HIPAA/HITRUST 健康数据和 AI 提供了包含 Azure PaaS 解决方案在内的一整套部署，用于演示如何在遵循行业符合性要求的情况下，安全地引入、存储、分析健康数据并与之交互。对于其数据受到监管的客户来说，本蓝图有助于他们加速采用和利用云。**
+**Azure 安全性与合规性蓝图 - HIPAA/HITRUST 健康数据和 AI 提供了包含 Azure PaaS 解决方案和 IaaS 解决方案在内的一整套部署，用于演示如何在遵循行业符合性要求的情况下，引入、存储、分析、识别健康数据并与之交互以及安全部署解决方案。对于其数据受到监管的客户来说，本蓝图有助于他们加速采用和利用云。**
 
-Azure 安全性和符合性蓝图 - HIPAA/HITRUST 健康数据和 AI 蓝图提供的工具和指南有助于部署安全且符合美国健康保险流通与责任法案 (HIPAA) 和健康信息信托联盟 (HITRUST) 规定的平台即服务 (PaaS) 环境，以便在安全的已部署为端到端解决方案的多层云环境中引入、存储、分析个人与非个人医疗记录并与之交互。 其中展示了常用的参考体系结构，旨在简化 Microsoft Azure 的采用。 这个规定的体系结构演示了一个解决方案，寻求通过基于云的方法减轻部署负担和成本的组织可以利用此解决方案解决其需求。
+Azure 安全性和符合性蓝图 - HIPAA/HITRUST 健康数据和 AI 蓝图提供的工具和指南有助于部署安全且符合美国健康保险流通与责任法案 (HIPAA) 和健康信息信托联盟 (HITRUST) 规定的平台即服务 (PaaS) 环境，以便在安全的已部署为端到端解决方案的多层云环境中引入、存储、分析个人与非个人医疗记录并与之交互。 
+
+IaaS 解决方案演示如何将本地基于 SQL 的解决方案迁移到 Azure，以及如何实现特权访问工作站 (PAW) 以安全地管理基于云的服务和解决方案。 IaaS SQL Server 数据库将潜在的试验数据添加到 SQL IaaS VM 中，并且该 VM 使用经过 MSI 身份验证的访问权限来与 SQL Azure PaaS 服务交互。这些示例都展示了一个通用的参考体系结构，旨在简化对 Microsoft Azure 的采用。 这个规定的体系结构演示了一个解决方案，寻求通过基于云的方法减轻部署负担和成本的组织可以利用此解决方案解决其需求。
 
 ![](images/components.png)
 
-根据设计，此解决方案可以使用一个示例数据集并以安全的方式对其进行存储。该数据集已采用快速医疗保健互操作性资源 (FHIR) 进行格式化，而此格式是一种世界性的标准，用于通过电子方式交换医疗保健信息。 然后，客户就可以通过 Azure 机器学习来利用强大的商业智能工具和分析，审核根据示例数据做出的预测。 Azure 机器学习可以促进特定类型的试验，例如，本蓝图包括的示例数据集、脚本和工具可以用来预测病人的住院时间。 
+根据设计，此解决方案可以使用一个示例数据集并以安全的方式对其进行存储。该数据集已采用快速医疗保健互操作性资源 (FHIR) 进行格式化，而此格式是一种世界性的标准，用于通过电子方式交换医疗保健信息。 然后，客户就可以通过 Azure 机器学习工作室来利用强大的商业智能工具和分析，审核根据示例数据做出的预测。 Azure 机器学习工作室可以促进特定类型的试验，例如，本蓝图包括的示例数据集、脚本和工具可以用来预测病人的住院时间。 
 
 本蓝图旨在充当一个模块化的基础，方便客户按照特定的要求进行调整，开发新的 Azure 机器学习试验来解决临床和操作用例方案的问题。 根据设计，它在部署后是安全且合规的；但是，客户有责任正确配置角色并实施修改。 注意以下事项：
 
@@ -43,39 +40,31 @@ Azure 安全性和符合性蓝图 - HIPAA/HITRUST 健康数据和 AI 蓝图提�
 
 ## <a name="deploying-the-automation"></a>部署自动化
 
-- 若要部署此解决方案，请遵循部署指南中提供的说明。 
+- 若要部署此解决方案，请遵循[部署指南](https://github.com/Azure/Health-Data-and-AI-Blueprint/blob/master/deployment.md)中提供的说明。 
 
-[![](./images/deploy.png)](https://aka.ms/healthblueprintdeploy)
-
-有关本解决方案工作原理的简要概述，请观看[此视频](https://aka.ms/healthblueprintvideo)，其中解释并演示了其部署。
+- 有关本解决方案工作原理的简要概述，请观看[此视频](https://aka.ms/healthblueprintvideo)，其中解释并演示了其部署。
 
 - 常见问题可参阅[常见问题解答](https://aka.ms/healthblueprintfaq)指南。
 
 -   **体系结构图。** 此图显示了用于蓝图和示例用例方案的引用体系结构。
 
--   **部署模板**。 在此部署中，[Azure 资源管理器模板](/azure/azure-resource-manager/resource-group-overview#template-deployment)通过在安装期间指定配置参数，将体系结构的组件自动部署到 Microsoft Azure。
-
--   **[自动化部署脚本](https://aka.ms/healthblueprintdeploy)**。 这些脚本帮助部署解决方案。 脚本包括：
-
-
--   一个模块安装和[全局管理员](/azure/active-directory/active-directory-assign-admin-roles-azure-portal)设置脚本，用于安装所需的 PowerShell 模块，并验证是否已正确配置全局管理员角色。 
--   可以使用安装 PowerShell 脚本来部署通过 .zip 文件（其中包含预建的演示函数）提供的此解决方案。
+-   [IaaS 扩展](https://github.com/Azure/Health-Data-and-AI-Blueprint/blob/master/README%20IaaS.md)此解决方案将演示如何将本地基于 SQL 解决方案迁移到 Azure，以及如何实现特权访问工作站安全地管理基于云的服务和解决方案。 
 
 ## <a name="solution-components"></a>解决方案组件
 
 
 基础体系结构由以下组件构成：
 
--   **[威胁模型](https://aka.ms/healththreatmodel)**：以 tm7 格式提供的综合性威胁模型适用于 [Microsoft Threat Modeling Tool](https://www.microsoft.com/en-us/download/details.aspx?id=49168)，可以显示解决方案的组件、组件之间的数据流，以及信任边界。 此模型有助于客户了解在开发机器学习组件或其他修改项时系统基础结构中存在的潜在风险点。
+-   **[威胁模型](https://aka.ms/healththreatmodel)** ：以 tm7 格式提供的综合性威胁模型适用于 [Microsoft Threat Modeling Tool](https://www.microsoft.com/en-us/download/details.aspx?id=49168)，可以显示解决方案的组件、组件之间的数据流，以及信任边界。 此模型有助于客户了解在开发机器学习工作室组件或其他修改项时系统基础结构中存在的潜在风险点。
 
--   **[客户实现矩阵](https://aka.ms/healthcrmblueprint)**：一种 Microsoft Excel 工作簿，其中列出了相关的 HITRUST 要求，并说明了 Microsoft 和客户的相互责任。
+-   **[客户实现矩阵](https://aka.ms/healthcrmblueprint)** ：一种 Microsoft Excel 工作簿，其中列出了相关的 HITRUST 要求，并说明了 Microsoft 和客户的相互责任。
 
--   **[健康审核](https://aka.ms/healthreviewpaper)**。 此解决方案已由 Coalfire systems, Inc. 审核。有关健康符合性（HIPAA 和 HITRUST）实施方面的审核和指南提供了审核员对此解决方案的审核意见，\'以及在将蓝图转换为生产就绪型部署过程中的注意事项。
+-   **[健康审核](https://aka.ms/healthreviewpaper)** 。 此解决方案已由 Coalfire systems, Inc. 审核。有关健康符合性（HIPAA 和 HITRUST）实施方面的审核和指南提供了审核员对此解决方案的审核意见，以及在将蓝图转换为生产就绪型部署过程中的注意事项。
 
-# <a name="architectural-diagram"></a>体系结构图
+## <a name="architectural-diagram"></a>体系结构图
 
 
-![](images/refarch.png)
+![](images/ra2.png)
 
 ## <a name="roles"></a>角色
 
@@ -102,18 +91,18 @@ Azure 安全性和符合性蓝图 - HIPAA/HITRUST 健康数据和 AI 蓝图提�
 
 -   自定义角色分配：不适用
 
--   范围：ResourceGroup
+-   范围：resourceGroup
 
- ### <a name="data-scientist"></a>数据科学家
+### <a name="data-scientist"></a>数据科学家
 
 
-数据科学家操作 Azure 机器学习服务。 他们可以导入、导出和管理数据，并且可以运行报表。 数据科学家有权访问病人数据，但没有管理员权限。
+数据科学家操作 Azure 机器学习工作室。 他们可以导入、导出和管理数据，并且可以运行报表。 数据科学家有权访问病人数据，但没有管理员权限。
 
 -   内置角色分配：[存储帐户参与者](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#storage-account-contributor)
 
 -   自定义角色分配：不适用
 
--   范围：ResourceGroup
+-   范围：resourceGroup
 
 ### <a name="chief-medical-information-officer-cmio"></a>首席医疗信息官 (CMIO)
 
@@ -132,14 +121,14 @@ CMIO 有效地解决了医疗保健机构中医疗保健专业人员不懂信息
 
 -   自定义角色分配：有权运行 HealthcareDemo.ps1，负责病人入院和出院事项。
 
--   范围：ResourceGroup
+-   范围：resourceGroup
 
 ### <a name="auditor"></a>审核员
 
 
 审核员评估解决方案的符合性。 他们不能直接访问网络。
 
--   内置角色分配：[读者](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#reader)
+-   内置角色分配：[读取者](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#reader)
 
 -   自定义角色分配：不适用
 
@@ -148,12 +137,12 @@ CMIO 有效地解决了医疗保健机构中医疗保健专业人员不懂信息
 ## <a name="example-use-case"></a>示例用例
 
 
-本蓝图随附的示例用例演示了如何使用蓝图对云中的健康数据启用机器学习和分析操作。 Contosoclinic 是美国的一家小医院。 医院网络管理员希望使用 Azure 机器学习，在病人入院时更好地预测其住院时间，以便提高操作性工作负荷效率，改进所能提供的护理的质量。
+本蓝图随附的示例用例演示了如何使用蓝图对云中的健康数据启用机器学习和分析操作。 Contosoclinic 是美国的一家小医院。 医院网络管理员希望使用 Azure 机器学习工作室，在病人入院时更好地预测其住院时间，以便提高操作性工作负荷效率，改进所能提供的护理的质量。
 
 ### <a name="predicting-length-of-stay"></a>预测住院时间
 
 
-示例用例方案使用 Azure 机器学习将病人入住时获取的详细医疗信息与根据过往病人的情况聚合的历史数据进行比较，从而预测新入院病人的住院时间。
+示例用例方案使用 Azure 机器学习工作室将病人入住时获取的详细医疗信息与根据过往病人的情况聚合的历史数据进行比较，从而预测新入院病人的住院时间。
 蓝图包括大量的匿名医疗记录，用于演示解决方案的定型和预测功能。 在生产部署中，客户会使用自己的记录给解决方案定型，以便进行更准确的预测，使预测结果能够反映客户的环境、设施和病人的具体详细情况。
 
 ### <a name="users-and-roles"></a>用户和角色
@@ -161,19 +150,19 @@ CMIO 有效地解决了医疗保健机构中医疗保健专业人员不懂信息
 
 **站点管理员 -- Alex**
 
-电子邮件：Alex\_SiteAdmin
+*电子邮件：Alex\_SiteAdmin*
 
 Alex 的工作是对那些能够减轻本地网络管理负担并降低管理成本的技术进行评估。 Alex 已经对 Azure 进行了一段时间的评估，但仍然在努力地根据 HiTrust 符合性要求配置所需的服务，以便将病人数据存储在云中。 Alex 选择了 Azure 健康 AI 来部署没有符合性问题的健康解决方案，满足客户在 HiTrust 方面的要求。
 
 **数据科学家 -- Debra**
 
-电子邮件：Debra\_DataScientist
+*电子邮件：Debra\_DataScientist*
 
 Debra 负责创建和使用模型来分析医疗记录，以便深入了解病人护理。 Debra 使用 SQL 和 R 统计编程语言来创建其模型。
 
 **数据库分析师 -- Danny**
 
-电子邮件：Danny\_DBAnalyst
+*电子邮件：Danny\_DBAnalyst*
 
 有关 Microsoft SQL Server（用于存储 Contosoclinic 的所有病人数据）的事项，应主要联系 Danny。 Danny 是一位有经验的 SQL Server 管理员，最近开始熟悉 Azure SQL 数据库工作。
 
@@ -184,18 +173,18 @@ Caroline 使用住院时间 (LOS) 解决方案的预测来确定是否已在医�
 
 **医护管理员 -- Chris**
 
-电子邮件：Chris\_CareLineManager
+*电子邮件：Chris\_CareLineManager*
 
 作为直接在 Contosoclinic 负责管理病人入院和出院的人员，Chris 使用 LOS 解决方案生成的预测来确保安排足够的人员为住院病人提供照护。
 
 **审核员 -- Han**
 
-电子邮件：Han\_Auditor
+*电子邮件：Han\_Auditor*
 
 Han 是获得认证的审核员，拥有 ISO、SOC 和 HiTrust 方面的审核经验。 雇佣 Han 是为了审核 Contosoclinc 的网络。 Han 可以审核解决方案随附的“客户责任矩阵”，确保蓝图和 LOS 解决方案可以用来存储、处理和显示敏感的个人数据。
 
 
-# <a name="design-configuration"></a>设计配置
+## <a name="design-configuration"></a>设计配置
 
 
 此部分详述内置到蓝图中的默认配置和安全措施，大致可用于：
@@ -252,7 +241,7 @@ Han 是获得认证的审核员，拥有 ISO、SOC 和 HiTrust 方面的审核�
 -   Key Vault 中的所有密钥都受 HSM 保护 \[密钥类型 = 受 HSM 保护的 2048 位 RSA 密钥\]
 -   使用基于角色的访问控制 (RBAC) 向所有用户/标识授予了最低必需权限
 -   应用程序共享 Key Vault 的前提是彼此信任且需要在运行时访问相同的机密
--   启用 Key Vault 的诊断日志时，保留期设置为至少 365 天。
+-   Key Vault 的诊断日志已启用，其保留期至少为 365 天。
 -   对密钥进行允许的加密操作时，仅限必需的操作
 
 ## <a name="ingest"></a>引入 
@@ -262,7 +251,7 @@ Han 是获得认证的审核员，拥有 ISO、SOC 和 HiTrust 方面的审核�
 
 **1.批量导入客户数据 phi 数据**
 
-根据 “部署和运行演示”中的概述，将演示脚本..\\HealthcareDemo.ps1 与 **BulkPatientAdmission** 开关配合使用时，该脚本会执行以下处理管道：
+根据  “部署和运行演示”中的概述，将演示脚本..\\HealthcareDemo.ps1 与 **BulkPatientAdmission** 开关配合使用时，该脚本会执行以下处理管道：
 1. **Azure Blob 存储** - 病人数据 .csv 文件示例上传到存储
 2. **事件网格** - 事件将数据发布到 Azure Function（批量导入 - Blob 事件）
 3. **Azure Function** - 进行处理后，将数据存储到 SQL 存储中，使用的是安全的函数 - event(type; blob url)
@@ -278,12 +267,12 @@ Han 是获得认证的审核员，拥有 ISO、SOC 和 HiTrust 方面的审核�
 
 **2.新病人入院**
 
-根据 “部署和运行演示”中的概述，将演示脚本..\\HealthcareDemo.ps1 与 **BulkPatientadmission** 开关配合使用时，该脚本会执行以下处理管道：![](images/securetransact.png)
+根据  “部署和运行演示”中的概述，将演示脚本..\\HealthcareDemo.ps1 与 **BulkPatientadmission** 开关配合使用时，该脚本会执行以下处理管道：![](images/securetransact.png)
 **1.Azure Function** 被触发，该函数从 Azure Active Directory 请求[持有者令牌](/rest/api/)。
 
 **2.Key Vault** 请求获取与请求的令牌关联的机密。
 
-**3. Azure 角色验证请求，并对向 Key Vault 发出的访问请求授权。
+**3.Azure 角色**验证请求，并授予对 Key Vault 的访问请求。
 
 **4.Key Vault** 返回机密。在此示例中，该机密为 SQL DB 连接字符串。
 
@@ -356,8 +345,8 @@ Han 是获得认证的审核员，拥有 ISO、SOC 和 HiTrust 方面的审核�
 ### <a name="machine-learning"></a>机器学习
 
 
--   已为机器学习 Web 服务[启用日志记录](/azure/machine-learning/studio/web-services-logging)。
-- 使用 [Machine Learning](/azure/machine-learning/desktop-workbench/experimentation-service-configuration) Workbench 要求开发各种试验，以便向解决方案集提供预测功能。 [集成 Workbench](/azure/machine-learning/desktop-workbench/using-git-ml-project) 有助于简化试验的管理。
+- 已为机器学习工作室 Web 服务[启用日志记录](/azure/machine-learning/studio/web-services-logging)。
+- 使用[机器学习工作室](/azure/machine-learning/studio/what-is-ml-studio)需要开发各种试验，以便向解决方案集提供预测功能。
 
 ## <a name="security"></a>安全性
 
@@ -370,10 +359,10 @@ Han 是获得认证的审核员，拥有 ISO、SOC 和 HiTrust 方面的审核�
 - [Application Insights](/azure/application-insights/app-insights-overview) 是多个平台上面向 Web 开发人员的可扩展应用程序性能管理 (APM) 服务。 使用它可以监视实时 Web 应用程序。 它检测性能异常。 其中包含强大的分析工具来帮助诊断问题，了解用户在应用中实际执行了哪些操作。 Application Insights 有助于持续提高性能与可用性。
 
 ### <a name="azure-alerts"></a>Azure 警报
-- 可以通过警报这种方法来监视 Azure 服务并根据数据来配置条件。 当警报条件与监视的数据匹配时，警报还会提供通知。
+- [警报](/azure/azure-monitor/platform/alerts-metric)种方法来监视 Azure 服务并允许您配置数据条件。 当警报条件与监视的数据匹配时，警报还会提供通知。
 
-### <a name="operations-management-suite-oms"></a>Operations Management Suite (OMS)
-[Operations Management Suite（简称 OMS）](/azure/operations-management-suite/operations-management-suite-overview)是管理服务的集合。
+### <a name="azure-monitor-logs"></a>Azure Monitor 日志
+[Azure Monitor 日志](/azure/operations-management-suite/operations-management-suite-overview)是管理服务的集合。
 
 -   已为安全中心启用工作区
 

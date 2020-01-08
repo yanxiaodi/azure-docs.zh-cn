@@ -1,130 +1,61 @@
 ---
-title: 部署 Azure IoT Central 应用程序 | Microsoft Docs
-description: 创建一个新的 Azure IoT Central 应用程序用于管理冷藏食品贩卖设备。 查看模拟设备生成的遥测数据。
+title: 创建 Azure IoT Central 应用程序 | Microsoft Docs
+description: 创建新的 Azure IoT Central 应用程序。 使用应用程序模板创建试用版或即用即付应用程序。
+author: viv-liu
+ms.author: viviali
+ms.date: 08/02/2019
+ms.topic: quickstart
+ms.service: iot-central
 services: iot-central
-author: tanmaybhagwat
-ms.author: tanmayb
-ms.date: 04/15/2018
-ms.topic: hero-article
-ms.prod: microsoft-iot-central
 ms.custom: mvc
-manager: timlt
-ms.openlocfilehash: 54219246f073f48c2a7e1b04dce7653bd2da0b40
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
+manager: corywink
+ms.openlocfilehash: eb6759d95ab0fb7afd3b6179babf052dfb029ff2
+ms.sourcegitcommit: 23389df08a9f4cab1f3bb0f474c0e5ba31923f12
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
-ms.locfileid: "34202367"
+ms.lasthandoff: 09/10/2019
+ms.locfileid: "70873446"
 ---
 # <a name="create-an-azure-iot-central-application"></a>创建 Azure IoT Central 应用程序
 
-构建人员可以使用 Azure IoT Central UI 来定义 Microsoft Azure IoT Central 应用程序。 本快速入门演示如何：
+[!INCLUDE [iot-central-original-pnp](../../includes/iot-central-original-pnp-note.md)]
 
-- 创建一个包含示例设备模板和模拟设备的 Azure IoT Central 应用程序。
-- 查看应用程序中“冷藏食品贩卖机”设备模板的功能。
-- 查看模拟“冷冻机”设备发送的遥测和分析数据。
+构建人员可以使用 Azure IoT Central UI 来定义 Microsoft Azure IoT Central 应用程序。  本快速入门介绍如何创建一个包含示例设备模板和模拟设备的 Azure IoT Central 应用程序。  
 
-在本快速入门中，我们将查看设备模板中的模拟“冷冻机”设备。 该模拟设备：
+## <a name="create-an-application"></a>创建应用程序
 
-* 将遥测数据（例如温度和压力）发送到应用程序。
-* 向应用程序报告设备属性值，例如运动警报。
-* 具有可在应用程序中设置的设备设置，例如风扇速度。
+导航到 [Azure IoT Central 应用程序管理器](https://aka.ms/iotcentral)网站。 需要使用 Microsoft 个人、工作或学校帐户登录。
 
-在 Azure IoT Central 应用程序中基于设备模板创建模拟设备时，该模拟设备允许在连接真实设备之前测试应用程序。
-
-## <a name="create-the-application"></a>创建应用程序
-
-若要完成本快速入门，需要基于“Contoso 示例”应用程序模板创建一个 Azure IoT Central 应用程序。
-
-导航到 Azure IoT Central 的“应用程序管理器”页。[](https://aka.ms/iotcentral) 输入用于访问 Azure 订阅的电子邮件地址和密码：
-
-![输入组织帐户](media/quick-deploy-iot-central/sign-in.png)
-
-若要开始创建新的 Azure IoT Central 应用程序，请选择“新建应用程序”：
-
-![Azure IoT Central 的“应用程序管理器”页](media/quick-deploy-iot-central/iotcentralhome.png)
-
-若要创建新的 Azure IoT Central 应用程序：
-
-1. 选择“免费试用应用程序”付款计划。
-1. 选择一个友好的应用程序名称，例如 **Contoso IoT**。 Azure IoT Central 将会生成唯一的 URL 前缀。 可将此 URL 前缀更改为更容易记住的内容。
-1. 选择“Contoso 示例”应用程序模板。
-1. 选择“创建”。
+若要开始创建新的 Azure IoT Central 应用程序，请选择“新建应用程序”  。 此时将转到“创建应用程序”  页。
 
 ![Azure IoT Central 的“创建应用程序”页](media/quick-deploy-iot-central/iotcentralcreate.png)
 
-## <a name="navigate-to-the-application"></a>导航到该应用程序
+若要创建新的 Azure IoT Central 应用程序：
 
-应用程序准备就绪时，会显示应用程序的“主页”。 可以切换右上角的“设计模式”来编辑主页。 应用程序 URL 是在上一步骤中指定的 URL：
+1. 选择付款计划：
+   - **试用版**应用程序免费 7 天，然后过期。 它们可以在到期之前随时转换为即用即付。 若要创建试用版应用程序，则需要输入联系信息并选择是否接收 Microsoft 发送的信息和使用技巧  。
+   - **即用即付**应用程序按设备收费，前 5 台设备免费。 若要创建即用即付应用程序，需要选择“目录”、“Azure 订阅”和“区域”     ：
+      - 目录是用于创建应用程序的 Azure Active Directory (AD)  。 它包含用户标识、凭据和其他组织信息。 如果没有 Azure AD，则在创建 Azure 订阅时，系统会为你创建一个 Azure AD。
+      - 有了 *Azure 订阅*，就可以创建 Azure 服务的实例。 IoT Central 将在订阅中预配资源。 如果没有 Azure 订阅，则可在 [Azure 注册页](https://aka.ms/createazuresubscription)上创建一个。 创建 Azure 订阅以后，请导航回“创建应用程序”页。  新订阅显示在“Azue 订阅”  下拉列表中。
+      - 区域  是你想要创建应用程序的物理位置或[地理位置](https://azure.microsoft.com/global-infrastructure/geographies/)。 通常，应选择物理上离设备最近的区域以获得最佳性能。 可以在[可用产品(按区域)](https://azure.microsoft.com/global-infrastructure/services/?products=iot-central)页面上查看提供 Azure IoT Central 的区域。 选择一个区域后，就不能在以后将应用程序移到其他区域。
 
-![应用程序构建人员页](media/quick-deploy-iot-central/apphome.png)
+      可在 [Azure IoT Central 定价页](https://azure.microsoft.com/pricing/details/iot-central/)上了解定价详细信息。
 
-使用左侧导航菜单来访问新 Azure IoT Central 应用程序的不同区域：
+1. 选择应用程序模板。 应用程序模板可能包含入门所需的预定义项目（例如设备模板和仪表板）。
 
-![左侧导航菜单](media/quick-deploy-iot-central/navbar.png)
+    | 应用程序模板 | 说明 |
+    | -------------------- | ----------- |
+    | 示例 Contoso       | 创建一个应用程序，其中包含已为冷藏食品贩卖机创建的设备模板。 通过此模板来完成 Azure IoT Central 的入门。 |
+    | 示例 Devkit       | 创建一个应用程序，其中的设备模板可以用来连接 MXChip 或 Raspberry Pi 设备。 如果你是在这其中任一设备上进行试验的设备开发人员，请使用此模板。 |
+    | 自定义应用程序   | 创建一个空的应用程序，以便在其中填充你自己的设备模板和设备。 |
 
-若要查看应用程序中的设备模板和设备，请在左侧导航菜单中选择“Device Explorer”。 示例应用程序包含“冷藏食品贩卖机”设备模板。 已基于此设备模板创建三个模拟设备：
+1. 输入一个友好的应用程序名称，例如 **Contoso IoT**。 Azure IoT Central 将会生成唯一的 URL 前缀。 可将此 URL 前缀更改为更容易记住的内容。
 
-![设备资源管理器](media/quick-deploy-iot-central/deviceexplorer.png)
-
-## <a name="view-the-device-template-and-devices"></a>查看设备模板和设备
-
-使用以下步骤查看基于“冷藏食品贩卖机”设备模板创建的冷冻机设备。 设备模板定义：
-
-* 度量，例如设备发送的温度遥测数据。
-* 用于控制设备的设置，例如风扇转速。
-* 用于存储有关设备的信息的属性，例如序列号。
-* 用于根据设备的行为将操作自动化的[规则](howto-create-telemetry-rules.md)。
-* 显示有关设备的信息的可自定义仪表板。
-
-可以基于设备模板创建模拟设备和真实设备。
-
-### <a name="measurements"></a>度量
-
-将显示“冷冻机 1”设备的“度量”页。 可以看到模拟设备发送的度量值列表。 该页还显示可见度量的可自定义图表：
-
-![“度量”页](media/quick-deploy-iot-central/measurements.png)
-
-可以切换各个元素的可见性以及自定义图表。 当前图表显示来自模拟设备的遥测数据。 如果有相应的权限，则可将新的度量添加到设备模板。
-
-> [!NOTE]
-> 可能需要等待片刻，模拟数据才会显示在图表上。
-
-### <a name="settings"></a>设置
-
-选择“设置”。 在“设置”页上可以控制设备。 例如，可以更新冷冻机上的风扇速度：
-
-![设置](media/quick-deploy-iot-central/settings.png)
-
-设备确认更改时，设置会显示为“已同步”。
-
-### <a name="properties"></a>属性
-
-选择“属性”。 在“属性”页上，可以：
-
-* 维护有关设备的信息，例如客户名称。
-* 查看设备报告的属性值，例如运动警报。
-
-![属性](media/quick-deploy-iot-central/properties.png)
-
-### <a name="dashboard"></a>仪表板
-
-选择“仪表板”。 仪表板是显示有关设备的信息（例如度量、属性和 KPI）的可自定义视图：
-
-![仪表板](media/quick-deploy-iot-central/dashboard.png)
-
-## <a name="view-analytics"></a>查看分析数据
-
-上一部分介绍了如何查看有关单个设备的信息。 可以使用[设备集](howto-use-device-sets.md)和[分析](howto-create-analytics.md)功能查看来自多个设备的整合信息。
-
-设备集使用查询来动态选择一组与条件匹配的设备。 例如，**Machines in Seattle** 设备集会选择位于 Seattle 的冷冻机设备。 若要查看 **Machines in Seattle** 设备集，请在左侧导航菜单中选择“设备集”，然后选择“Machines in Seattle”：
-
-![Machines in Seattle 设备集](media/quick-deploy-iot-central/deviceset.png)
-
-可以在“分析”页上查看某个设备集中的设备的分析数据：
-
-![Machines in Seattle 的分析数据](media/quick-deploy-iot-central/analytics.png)
+1. 单击“创建”。 
 
 ## <a name="next-steps"></a>后续步骤
 
-在本快速入门中，我们创建了一个包含“冷藏食品贩卖机”设备模板和模拟设备的预填充 Azure IoT Central 应用程序。 请参阅[在应用程序中定义新设备模板](tutorial-define-device-type.md)，详细了解构建人员如何定义自己的设备模板。
+在本快速入门中，创建了 IoT Central 应用程序。 下面是建议的后续步骤：
+
+> [!div class="nextstepaction"]
+> [在 Azure IoT Central 应用程序中定义新的设备类型](./tutorial-define-device-type.md)

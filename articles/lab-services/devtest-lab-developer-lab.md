@@ -14,11 +14,12 @@ ms.devlang: na
 ms.topic: article
 ms.date: 04/17/2018
 ms.author: spelluru
-ms.openlocfilehash: 96432abe619ea23c1a06735567d00660e5430550
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 5a293946e4672e7737f912f42511ad0907ba4a81
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61293924"
 ---
 # <a name="use-azure-devtest-labs-for-developers"></a>使用面向开发人员的 Azure 开发测试实验室
 可使用 Azure 开发测试实验室来实现许多关键方案，但其中一个主要方案涉及使用开发测试实验室为开发人员托管开发计算机。 在此方案中，开发测试实验室具有以下优势：
@@ -43,9 +44,9 @@ ms.lasthandoff: 05/07/2018
    | 任务 | 学习内容 |
    | --- | --- |
    | [在 Azure 开发测试实验室中创建实验室](devtest-lab-create-lab.md) |了解如何在 Azure 门户中的 Azure 开发测试实验室中创建实验室。 |
-2. 使用现成应用商店映像和自定义映像在几分钟内创建 VM 
+2. 使用现成市场映像和自定义映像在几分钟内创建 VM  
    
-    可在 Azure Marketplace 从多种映像中选择现成映像并使它们在实验室中可用。 如果现成的映像不能满足需求，可使用 Azure Marketplace 中的现成映像创建实验室 VM，安装所需的所有软件并在实验室中将 VM 保存为自定义映像来创建自定义映像。
+    可从 Azure 市场的多种映像中选择现成映像并使它们在实验室中可用。 如果现成的映像不能满足需求，可使用 Azure 市场中的现成映像创建实验室 VM，安装所需的所有软件并在实验室中将 VM 保存为自定义映像来创建自定义映像。
 
     如果将使用自定义映像，请考虑使用映像工厂创建和分发映像。 映像工厂是一种配置即代码解决方案，自动定期生成并分发配置的映像。 这节约了使用基本 OS 创建 VM 后手动配置系统所需的时间。
   
@@ -53,11 +54,11 @@ ms.lasthandoff: 05/07/2018
    
    | 任务 | 学习内容 |
    | --- | --- |
-   | [配置 Azure Marketplace 映像](devtest-lab-configure-marketplace-images.md) |了解如何将 Azure Marketplace 映像列入允许列表，仅使需用于开发人员的映像可供选择。|
+   | [配置 Azure 市场映像](devtest-lab-configure-marketplace-images.md) |了解如何将 Azure 市场映像列入允许列表，仅使需用于开发人员的映像可供选择。|
    | [创建自定义映像](devtest-lab-create-template.md) |通过预安装所需的软件创建自定义映像，让开发人员能够使用自定义映像快速创建 VM。|
    | [了解映像工厂](https://blogs.msdn.microsoft.com/devtestlab/2017/04/17/video-custom-image-factory-with-azure-devtest-labs/) |观看介绍如何设置和使用映像工厂的视频。|
 
-3. 为开发人员计算机创建可重复使用的模板 
+3. 为开发人员计算机创建可重复使用的模板  
    
     Azure 开发测试实验室中的公式是用于创建 VM 的默认属性值的列表。 可通过选取映像、VM 大小（CPU 和 RAM 的组合）和虚拟网络在实验室中创建公式。 每个开发人员都可在实验室中查看公式并使用公式创建 VM。 
    
@@ -99,7 +100,7 @@ ms.lasthandoff: 05/07/2018
    | [定义实验室策略](devtest-lab-set-lab-policy.md) |通过在实验室中设置策略来控制成本。 |
    | [使用 PowerShell 脚本删除所有实验室 VM](devtest-lab-faq.md#how-do-i-automate-the-process-of-deleting-all-the-vms-in-my-lab) |开发完成后，在一次操作中删除所有实验室。|
 
-1. 将虚拟网络添加到 VM 
+1. 将虚拟网络添加到 VM  
    
     每当创建实验室时，开发测试实验室都会创建新的虚拟网络 (VNET)。 如果已配置自己的 VNET（例如，使用 ExpressRoute 或站点到站点 VPN 配置），可将此 VNET 添加到实验室的虚拟网络设置，使其在创建 VM 时可用。
 
@@ -111,7 +112,7 @@ ms.lasthandoff: 05/07/2018
    | --- | --- |
    | [在 Azure 开发测试实验室中配置虚拟网络](devtest-lab-configure-vnet.md) |了解如何使用 Azure 门户在 Azure 开发测试实验室中配置虚拟网络。|
 
-6. 与每个开发人员共享实验室
+6. 与每个开发人员共享实验室 
    
     可使用与开发人员共享的链接直接访问实验室。 开发人员甚至不需要具有 Azure 帐户，只要他们具有 [Microsoft 帐户](devtest-lab-faq.md#what-is-a-microsoft-account)即可。 开发人员无法看到其他开发人员创建的 VM。  
    
@@ -123,7 +124,7 @@ ms.lasthandoff: 05/07/2018
    | [使用 PowerShell 脚本将开发人员添加到实验室](devtest-lab-add-devtest-user.md#add-an-external-user-to-a-lab-using-powershell) |使用 PowerShell 自动将开发人员添加到实验室。 |
    | [获取实验室的链接](devtest-lab-faq.md#how-do-i-share-a-direct-link-to-my-lab) |了解开发人员如何通过超链接直接访问实验室。|
 
-7. 自动为多个团队创建实验室 
+7. 自动为多个团队创建实验室  
    
     可通过创建Resource Manager 模板自动化实验室创建（包括自定义设置）并将其用于反复创建相同实验室。 
    

@@ -1,26 +1,22 @@
 ---
 title: 使用 Azure SQL 数据仓库针对租户数据库运行分析查询 | Microsoft Docs
-description: 使用从多个“Azure SQL 数据库”数据库提取的数据运行跨租户分析查询。
-keywords: sql 数据库教程
+description: 使用从 Azure SQL 数据库、SQL 数据仓库、Azure 数据工厂或 Power BI 中提取的数据进行跨租户分析查询。
 services: sql-database
-documentationcenter: ''
-author: anumjs
-manager: craigg
-editor: MightyPen
 ms.service: sql-database
-ms.custom: scale out apps
-ms.workload: Inactive
-ms.tgt_pltfrm: ''
+ms.subservice: scenario
+ms.custom: ''
 ms.devlang: ''
-ms.topic: article
-ms.date: 11/08/2017
+ms.topic: conceptual
+author: anumjs
 ms.author: anjangsh
-ms.openlocfilehash: dd51480f30187456104a0f9d72ec17082dc1e39e
-ms.sourcegitcommit: c47ef7899572bf6441627f76eb4c4ac15e487aec
-ms.translationtype: HT
+ms.reviewer: MightyPen, sstein
+ms.date: 12/18/2018
+ms.openlocfilehash: b22a9cf8c79530fd931cbe944ef5bfc876a02243
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/04/2018
-ms.locfileid: "33208050"
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68570132"
 ---
 # <a name="explore-saas-analytics-with-azure-sql-database-sql-data-warehouse-data-factory-and-power-bi"></a>探索如何使用 Azure SQL 数据库、SQL 数据仓库、数据工厂和 Power BI 运行 SaaS 分析
 
@@ -66,7 +62,7 @@ SaaS 应用程序在云中保存租户数据，这些数据可能非常庞大。
 
 本教程提供了基本示例，演示可从 Wingtip Tickets 数据中收集的见解。 例如，如果 Wingtip Tickets 供应商了解每个会场使用该服务的方式，则他们就能思考如何针对或多或少的活跃会场运用不同的服务计划。 
 
-## <a name="setup"></a>设置
+## <a name="setup"></a>安装
 
 ### <a name="prerequisites"></a>先决条件
 
@@ -97,7 +93,7 @@ SaaS 应用程序在云中保存租户数据，这些数据可能非常庞大。
 
 现在，查看部署的 Azure 资源：
 #### <a name="tenant-databases-and-analytics-store"></a>租户数据库和分析存储
-使用 [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms) 连接到 **tenants1-dpt-&lt;user&gt;** 和 **catalog-dpt-&lt;user&gt;** 服务器。 将 &lt;user&gt; 替换为部署应用时使用的值。 使用登录名 *developer* 和密码 *P@ssword1*。 有关更多指导，请参阅[简介教程](saas-dbpertenant-wingtip-app-overview.md)。
+使用 [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms) 连接到 **tenants1-dpt-&lt;user&gt;** 和 **catalog-dpt-&lt;user&gt;** 服务器。 将 &lt;user&gt; 替换为部署应用时使用的值。 使用 Login = *developer*和 Password = *P\@ssword1*。 有关更多指导，请参阅[简介教程](saas-dbpertenant-wingtip-app-overview.md)。
 
 ![从 SSMS 连接到 SQL 数据库服务器](media/saas-tenancy-tenant-analytics/ssmsSignIn.JPG)
 
@@ -116,7 +112,7 @@ SaaS 应用程序在云中保存租户数据，这些数据可能非常庞大。
 #### <a name="blob-storage"></a>Blob 存储
 1. 在 [Azure 门户](https://ms.portal.azure.com)中，导航到用于部署应用程序的资源组。 确认是否已添加名为 **wingtipstaging\<user\>** 的存储帐户。
 
-  ![DWtables](media/saas-tenancy-tenant-analytics/adf-staging-storage.PNG)
+   ![DWtables](media/saas-tenancy-tenant-analytics/adf-staging-storage.PNG)
 
 1. 单击 **wingtipstaging\<user\>** 存储帐户浏览现有的对象。
 1. 单击“Blob”磁贴
@@ -145,11 +141,11 @@ Azure 数据工厂用于协调数据的提取、加载和转换。 从本教程�
 在概述页中，切换到左侧面板中的“创作”选项卡，并观察是否已创建三个[管道](https://docs.microsoft.com/azure/data-factory/concepts-pipelines-activities)和三个[数据集](https://docs.microsoft.com/azure/data-factory/concepts-datasets-linked-services)。
 ![adf_author](media/saas-tenancy-tenant-analytics/adf_author_tab.JPG)
 
-三个嵌套的管道为：SQLDBToDW、DBCopy 和 TableCopy。
+三个嵌套管道为：SQLDBToDW、DBCopy 和 TableCopy。
 
 **管道 1 - SQLDBToDW** 查找目录数据库中存储的租户数据库的名称（表名称：[__ShardManagement].[ShardsGlobal]），查找每个租户数据库，并执行 **DBCopy** 管道。 完成后，将执行提供的 **sp_TransformExtractedData** 存储过程架构。 此存储过程转换临时表中加载的数据，并填充星型架构表。
 
-**管道 2 - DBCopy** 查找 Blob 存储中存储的配置文件中的源表和列的名称。  然后，针对以下四个表中的每一个运行 **TableCopy** 管道：TicketFacts、CustomerFacts、EventFacts 和 VenueFacts。 对所有 20 个数据库并行执行 **[Foreach](https://docs.microsoft.com/azure/data-factory/control-flow-for-each-activity)** 活动。 ADF 允许并行运行最多 20 个循环迭代。 请考虑为其他数据库创建多个管道。    
+**管道 2 - DBCopy** 查找 Blob 存储中存储的配置文件中的源表和列的名称。  随后为以下四个表分别运行 **TableCopy** 管道：TicketFacts、CustomerFacts、EventFacts 和 VenueFacts。 对所有 20 个数据库并行执行 **[Foreach](https://docs.microsoft.com/azure/data-factory/control-flow-for-each-activity)** 活动。 ADF 允许并行运行最多 20 个循环迭代。 请考虑为其他数据库创建多个管道。    
 
 **管道 3 - TableCopy** 使用 SQL 数据库中的行版本号 (_rowversion_) 来识别已更改或更新的行。 此活动将会查找用于从源表提取行的起始和结束行版本。 每个租户数据库中存储的 **CopyTracker** 表跟踪在每次运行时从每个源表提取的最后一行。 新的或已更改的行将复制到数据仓库中的相应临时表：**raw_Tickets**、**raw_Customers**、**raw_Venues** 和 **raw_Events**。 最后，将在 **CopyTracker** 表中保存最后一个行版本，用作下次提取操作的初始行版本。 
 
@@ -198,7 +194,7 @@ SQL 数据仓库用作分析存储，对租户数据执行聚合。 本示例中
 
     ![sign-in-to-power-bi](./media/saas-tenancy-tenant-analytics/powerBISignIn.PNG)
 
-5. 在左窗格中选择“数据库”，输入 *developer* 作为用户名，输入 *P@ssword1* 作为密码。 单击“连接”。  
+5. 选择左窗格中的 "**数据库**", 然后输入 "用户名 =*开发人员*", 并输入 password = *P\@ssword1*。 单击“连接”。  
 
     ![database-sign-in](./media/saas-tenancy-tenant-analytics/databaseSignIn.PNG)
 
@@ -230,7 +226,7 @@ SQL 数据仓库用作分析存储，对租户数据执行聚合。 本示例中
 
 此绘图显示 Contoso Concert Hall 举办的每场活动在不同时间的累积门票销量，从中可以看出，并非所有活动都出现了销量剧增的情况。 请体验不同的筛选选项，以浏览其他会场的销量趁势。
 
-门票销售模式的见解可以引导 Wingtip Tickets 优化其业务模式。 Wingtip 也许可以不向所有租户收取相同的费用，而是推出具有不同性能级别的服务层。 可以根据更高的服务级别协议 (SLA)，向每日售出较多门票的大型会场提供更高的层。 这些会场可将数据库放在具有更高的数据库资源限制的池中。 每个服务层可以采用按小时售量分配，超出分配即会收取额外的费用。 定期出现销量喷发的大型会场将会受益于更高的层，而 Wingtip Tickets 可以更高效地将服务变现。
+门票销售模式的见解可以引导 Wingtip Tickets 优化其业务模式。 Wingtip 也许可以不向所有租户收取相同的费用，而是推出具有不同计算大小的服务层级。 可以根据更高的服务级别协议 (SLA)，向每日售出较多门票的大型会场提供更高的层。 这些会场可将数据库放在具有更高的数据库资源限制的池中。 每个服务层级可以采用按小时售量分配，超出分配即会收取额外的费用。 定期出现销量喷发的大型会场将会受益于更高的层，而 Wingtip Tickets 可以更高效地将服务变现。
 
 同时，某些 Wingtip Tickets 客户抱怨他们正在努力售出足够多的票证，以抵消服务费用。 通过这些见解，绩效不佳的会场也许能够找到促升门票销量的机会。 销量提高会增大服务的认知价值。 右键单击“fact_Tickets”并选择“新建度量值”。 针对名为 **AverageTicketsSold** 的新度量值输入以下表达式：
 
@@ -252,7 +248,7 @@ AverageTicketsSold = DIVIDE(DIVIDE(COUNTROWS(fact_Tickets),DISTINCT(dim_Venues[V
 
 ## <a name="next-steps"></a>后续步骤
 
-本教程介绍了如何：
+在本教程中，你将了解：
 
 > [!div class="checklist"]
 > * 部署填充了星型架构的 SQL 数据仓库，以进行租户分析。

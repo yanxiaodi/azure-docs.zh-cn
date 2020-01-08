@@ -1,26 +1,23 @@
 ---
-title: "验证 XML - Azure 逻辑应用 | Microsoft 文档"
-description: "通过 Enterprise Integration Pack 使用 Azure 逻辑应用和 B2B 方案的架构验证 XML"
+title: 验证用于 B2B 企业集成的 XML - Azure 逻辑应用 | Microsoft Docs
+description: 在带有 Enterprise Integration Pack 的 Azure 逻辑应用中针对 B2B 解决方案使用架构验证 XML
 services: logic-apps
-documentationcenter: .net,nodejs,java
-author: msftman
-manager: anneta
-editor: cgronlun
-ms.assetid: d700588f-2d8a-4c92-93eb-e1e6e250e760
 ms.service: logic-apps
-ms.workload: integration
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.suite: integration
+author: divyaswarnkar
+ms.author: divswa
+ms.reviewer: jonfan, estfan, LADocs
 ms.topic: article
+ms.assetid: d700588f-2d8a-4c92-93eb-e1e6e250e760
 ms.date: 07/08/2016
-ms.author: LADocs; padmavc
-ms.openlocfilehash: 9c4b2c1b2fdd9bf70775e5fd4369d1633258ae2a
-ms.sourcegitcommit: 68aec76e471d677fd9a6333dc60ed098d1072cfc
-ms.translationtype: HT
+ms.openlocfilehash: 8db0dbadd944007ff953f9ea69695bf988ffebb7
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/18/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60995831"
 ---
-# <a name="validate-xml-for-enterprise-integration"></a>验证企业集成的 XML
+# <a name="validate-xml-for-b2b-enterprise-integration-in-azure-logic-apps-with-enterprise-integration-pack"></a>在带有 Enterprise Integration Pack 的 Azure 逻辑应用中验证用于 B2B 企业集成的 XML
 
 通常在 B2B 方案中，协议中的合作伙伴必须确保他们交换的消息有效，才能开始处理数据。 可以使用 Enterprise Integration Pack 中的 XML 验证连接器针对预定义的架构验证文档。
 
@@ -28,17 +25,17 @@ ms.lasthandoff: 12/18/2017
 
 1. 创建逻辑应用并[将应用链接到包含用于验证 XML 数据的架构的集成帐户](../logic-apps/logic-apps-enterprise-integration-accounts.md "了解如何将集成帐户链接到逻辑应用")。
 
-2. 向逻辑应用添加“请求 - 当收到 HTTP 请求时”触发器。
+2. 向逻辑应用添加“请求 - 当收到 HTTP 请求时”  触发器。
 
     ![](./media/logic-apps-enterprise-integration-xml-validation/xml-1.png)
 
-3. 若要添加“XML 验证”操作，请选择“添加操作”。
+3. 若要添加“XML 验证”  操作，请选择“添加操作”  。
 
-4. 若要在所有操作中筛选出所需的操作，请在搜索框中输入“xml”。 选择“XML 验证”。
+4. 若要在所有操作中筛选出所需的操作，请在搜索框中输入“xml”  。 选择“XML 验证”  。
 
     ![](./media/logic-apps-enterprise-integration-xml-validation/xml-2.png)
 
-5. 若要指定要验证的 XML 内容，请选择“内容”。
+5. 若要指定要验证的 XML 内容，请选择“内容”  。
 
     ![](./media/logic-apps-enterprise-integration-xml-validation/xml-1-5.png)
 

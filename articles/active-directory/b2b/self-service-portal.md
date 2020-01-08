@@ -1,21 +1,22 @@
 ---
-title: Azure Active Directory B2B 协作的自助注册门户 | Microsoft Docs
+title: 适用于 B2B 协作的自助注册门户 - Azure Active Directory | Microsoft Docs
 description: Azure Active Directory B2B 协作可让业务合作伙伴有选择性地访问本方的企业应用程序，为跨公司合作关系提供支持
 services: active-directory
 ms.service: active-directory
-ms.component: B2B
-ms.topic: article
+ms.subservice: B2B
+ms.topic: sample
 ms.date: 05/08/2018
-ms.author: twooley
-author: twooley
-manager: mtillman
-ms.reviewer: sasubram
-ms.openlocfilehash: 5ee55034e84fe09484a2f7613cc2224be70fdebb
-ms.sourcegitcommit: 96089449d17548263691d40e4f1e8f9557561197
+ms.author: mimart
+author: msmimart
+manager: celestedg
+ms.reviewer: mal
+ms.collection: M365-identity-device-management
+ms.openlocfilehash: 28db43a345fb29a7529136ddfb929f5a48ccb1f8
+ms.sourcegitcommit: 36c50860e75d86f0d0e2be9e3213ffa9a06f4150
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/17/2018
-ms.locfileid: "34259492"
+ms.lasthandoff: 05/16/2019
+ms.locfileid: "65785436"
 ---
 # <a name="self-service-portal-for-azure-ad-b2b-collaboration-sign-up"></a>Azure AD B2B 协作注册的自助服务门户
 

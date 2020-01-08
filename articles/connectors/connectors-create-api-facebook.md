@@ -1,27 +1,25 @@
 ---
-title: 在逻辑应用中添加 Facebook 连接器 | Microsoft Docs
-description: 使用 REST API 参数的 Facebook 连接器概述
-services: ''
-documentationcenter: ''
+title: 连接到 Facebook-Azure 逻辑应用
+description: 使用 Facebook REST API 和 Azure 逻辑应用管理时间线和页面
+services: logic-apps
+ms.service: logic-apps
+ms.suite: integration
 author: ecfan
-manager: anneta
-editor: ''
-tags: connectors
-ms.assetid: f4d6f0ed-c09b-488c-be1c-8cf2b5b1d4b8
-ms.service: multiple
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: na
+ms.author: estfan
+manager: carmonm
+ms.reviewer: klam, LADocs
+ms.topic: conceptual
 ms.date: 11/07/2016
-ms.author: estfan; ladocs
-ms.openlocfilehash: b0a1e2f04b6a4c7992db582f1238be4bcc3c6174
-ms.sourcegitcommit: 8aab1aab0135fad24987a311b42a1c25a839e9f3
-ms.translationtype: HT
+tags: connectors
+ms.openlocfilehash: 83431184d7e9c5970ece6af143ee9b5166da96d5
+ms.sourcegitcommit: bba811bd615077dc0610c7435e4513b184fbed19
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/16/2018
+ms.lasthandoff: 08/27/2019
+ms.locfileid: "70050955"
 ---
-# <a name="get-started-with-the-facebook-connector"></a>Facebook 连接器入门
+# <a name="manage-your-facebook-timeline-and-page-by-using-azure-logic-apps"></a>使用 Azure 逻辑应用管理 Facebook 时间线和页面
+
 连接到 Facebook，发布到时间线、获取页面源等。 通过 Facebook，可以：
 
 * 根据从 Facebook 中获取的数据生成业务流。 
@@ -31,18 +29,20 @@ ms.lasthandoff: 03/16/2018
 若要立即开始创建逻辑应用，请参阅[创建逻辑应用](../logic-apps/quickstart-create-first-logic-app-workflow.md)。
 
 ## <a name="create-a-connection-to-facebook"></a>创建到 Facebook 的连接
+
 将此连接器添加到逻辑应用时，必须授权逻辑应用连接到 Facebook。
 
-1. 登录到 Facebook 帐户
+1. 登录到 Facebook 帐户。
+
 2. 选择“授权”，允许逻辑应用连接和使用 Facebook。 
 
 > [!INCLUDE [Steps to create a connection to Facebook](../../includes/connectors-create-api-facebook.md)]
 > 
 
+## <a name="connector-reference"></a>连接器参考
 
-## <a name="connector-specific-details"></a>特定于连接器的详细信息
+如需技术详细信息（例如触发器、操作和限制，如连接器的 OpenAPI（以前为 Swagger）文件所述），请参阅[连接器的参考页](/connectors/facebook/)。
 
-在[连接器详细信息](/connectors/facebook/)中查看在 Swagger 中定义的触发器和操作，并查看限制。
+## <a name="next-steps"></a>后续步骤
 
-## <a name="more-connectors"></a>更多连接器
-返回到 [API 列表](apis-list.md)。
+* 了解其他[逻辑应用连接器](../connectors/apis-list.md)

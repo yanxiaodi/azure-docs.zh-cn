@@ -1,30 +1,32 @@
 ---
-title: "将 StorSimple 5000-7000 系列上的数据迁移到 8000 系列设备 | Microsoft 文档"
-description: "概述迁移功能和先决条件。"
+title: 将 StorSimple 5000-7000 系列上的数据迁移到 8000 系列设备 | Microsoft 文档
+description: 概述迁移功能和先决条件。
 services: storsimple
 documentationcenter: NA
 author: alkohli
-manager: jeconnoc
-ms.assetid: 
+manager: twooley
+ms.assetid: ''
 ms.service: storsimple
 ms.devlang: NA
 ms.topic: article
 ms.tgt_pltfrm: NA
 ms.workload: NA
-ms.date: 12/11/2017
+ms.date: 08/23/2018
 ms.author: alkohli
-ms.openlocfilehash: 36df62c4b01c623702707d39c6af59f4752ee6e0
-ms.sourcegitcommit: a5f16c1e2e0573204581c072cf7d237745ff98dc
-ms.translationtype: HT
+ms.openlocfilehash: 967c03f3c4201bdcf1529fdda93717b6eb74e771
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60631630"
 ---
 # <a name="migrate-data-from-storsimple-5000-7000-series-to-8000-series-device"></a>将数据从 StorSimple 5000-7000 系列迁移到 8000 系列设备
 
 > [!IMPORTANT]
+> - 在 2019 年 7 月 31 日，StorSimple 5000/7000 系列将达到支持终止 (EOS) 状态。 我们建议 StorSimple 5000/7000 系列客户迁移到本文档中所述的替代方案之一。
 > - 迁移当前是一项辅助的操作。 如果想要将数据从 StorSimple 5000-7000 系列设备迁移到 8000 系列设备，需要与 Microsoft 支持部门一起制定迁移计划。 然后，Microsoft 支持部门将启用你的迁移订阅。 有关详细信息，请参阅如何[开具支持票证](storsimple-8000-contact-microsoft-support.md)。
 > - 提交服务请求文件后，可能需要几周的时间来执行迁移计划和实际启动迁移。
-> - 在联系 Microsoft 支持部门前，请确保审阅并完成本文中所示的[迁移先决条件](#migration-prerequisites)。
+> - 在联系 Microsoft 支持部门前，请确保审阅并实现本文中所述的[迁移先决条件](#migration-prerequisites)。
 
 ## <a name="overview"></a>概述
 
@@ -55,7 +57,7 @@ ms.lasthandoff: 12/11/2017
 | 3.   | 在成功迁移后，所有数据都将迁移到本地设备上。 当访问数据时将不存在延迟。 | Azure 存储空间的使用将会增加，直到将数据从 5000/7000 设备中删除。                                                                                                        |
 | 4.   |                                                                                                                           | 如果 7000/5000 系列设备包含大量数据，则在迁移期间，需要从 Azure 下载该数据，而这将产生与从 Azure 中下载数据相关的成本和延迟。 |
 
-本文仅着重介绍从 5000/7000 到 8000 系列设备的迁移功能。 有关主机端迁移的详细信息，请转到[从其他存储设备中迁移](http://download.microsoft.com/download/9/4/A/94AB8165-CCC4-430B-801B-9FD40C8DA340/Migrating Data to StorSimple Volumes_09-02-15.pdf)。
+本文仅着重介绍从 5000/7000 到 8000 系列设备的迁移功能。 有关主机端迁移的详细信息，请转到[从其他存储设备中迁移](https://download.microsoft.com/download/9/4/A/94AB8165-CCC4-430B-801B-9FD40C8DA340/Migrating%20Data%20to%20StorSimple%20Volumes_09-02-15.pdf)。
 
 ## <a name="migration-prerequisites"></a>迁移先决条件
 
@@ -119,11 +121,11 @@ StorSimple 迁移工具是一个基于 UI 的工具，可用于将数据从 Stor
 
 请执行以下步骤，在你的计算机上安装 StorSimple 迁移工具。
 
-1. 将文件夹 StorSimple8000SeriesMigrationTool 复制到你的 Windows 计算机。 请确保复制软件的驱动器具有足够的空间。
+1. 将文件夹 StorSimple8000SeriesMigrationTool  复制到你的 Windows 计算机。 请确保复制软件的驱动器具有足够的空间。
 
-    打开文件夹中的工具配置文件 StorSimple8000SeriesMigrationTool.exe.config。 以下是文件的代码段。
+    打开文件夹中的工具配置文件 StorSimple8000SeriesMigrationTool.exe.config  。 以下是文件的代码段。
     
-    ```
+    ```xml
         <add key="UserName" value="username@xyz.com" />
         <add key="SubscriptionName" value="YourSubscriptionName" />
         <add key="SubscriptionId" value="YourSubscriptionId" />
@@ -135,15 +137,15 @@ StorSimple 迁移工具是一个基于 UI 的工具，可用于将数据从 Stor
 2. 编辑对应于密钥的值，并替换为：
 
     * `UserName` – 登录到 Azure 门户的用户名。
-    * `SubscriptionName and SubscriptionId` - 你的 Azure 订阅的名称和 ID。 在 StorSimple 设备管理器服务登陆页中，单击“常规”下的“属性”。 复制与你的服务相关联的订阅名称和订阅 ID。
+    * `SubscriptionName and SubscriptionId` - 你的 Azure 订阅的名称和 ID。 在 StorSimple 设备管理器服务登陆页中，单击“常规”  下的“属性”  。 复制与你的服务相关联的订阅名称和订阅 ID。
     * `ResourceName` – Azure 门户中你的 StorSimple 设备管理器服务的名称。 也会显示在服务属性下。
     * `ResourceGroup` – Azure 门户中与你的 StorSimple 设备管理器服务相关联的资源组的名称。 也会显示在服务属性下。
     ![检查目标设备的服务属性](media/storsimple-8000-migrate-from-5000-7000/check-service-properties1.png)
-    * `TenantId` - Azure 门户中的 Azure Active Directory 租户 ID。 以管理员身份登录到 Microsoft Azure。 在 Microsoft Azure 门户中，单击“Azure Active Directory”。 在“管理”下，单击“属性”。 租户 ID 将显示在“目录 ID”框中。
+    * `TenantId` - Azure 门户中的 Azure Active Directory 租户 ID。 以管理员身份登录到 Microsoft Azure。 在 Microsoft Azure 门户中，单击“Azure Active Directory”  。 在“管理”  下，单击“属性”  。 租户 ID 将显示在“目录 ID”  框中。
     ![检查 Azure Active Directory 的租户 ID](media/storsimple-8000-migrate-from-5000-7000/check-tenantid-aad.png)
 
 3.  保存对配置文件所做的更改。
-4.  运行 StorSimple8000SeriesMigrationTool.exe 以启动工具。 当系统提示输入凭据时，在 Azure 门户中提供与你的订阅相关联的凭据。 
+4.  运行 StorSimple8000SeriesMigrationTool.exe  以启动工具。 当系统提示输入凭据时，在 Azure 门户中提供与你的订阅相关联的凭据。 
 5.  将显示 StorSimple 迁移工具 UI。
   
 

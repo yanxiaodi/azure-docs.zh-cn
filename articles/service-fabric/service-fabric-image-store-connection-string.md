@@ -4,7 +4,7 @@ description: 了解映像存储连接字符串
 services: service-fabric
 documentationcenter: .net
 author: alexwun
-manager: timlt
+manager: chackdan
 editor: ''
 ms.assetid: 00f8059d-9d53-4cb8-b44a-b25149de3030
 ms.service: service-fabric
@@ -14,11 +14,12 @@ ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 02/27/2018
 ms.author: alexwun
-ms.openlocfilehash: 7d164fea62afac83c4fe2216c56a9980d9279f3a
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: 4a56b48c0041e963b89312c59335b45cabacc1bb
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60720159"
 ---
 # <a name="understand-the-imagestoreconnectionstring-setting"></a>了解 ImageStoreConnectionString 设置
 
@@ -42,11 +43,11 @@ Service Fabric 起初是一个供许多不同团队在内部 Microsoft 使用的
 
 通过在群集自身的系统服务中承载映像存储区，可消除程序包存储库的外部依赖关系，并可更大程度控制存储区域。 围绕映像存储区的后续改进很可能先针对映像存储区提供程序（若非唯一目标）。 由于客户端已连接到目标群集，因此映像存储区服务提供程序的连接字符串不具有任何唯一信息。 客户端只需知道应使用哪些面向系统服务的协议。
 
-开发期间，为了略微加快群集的启动，将对本地单机群集使用文件系统提供程序，而不是映像存储区服务。 区别通常很小，但对大多数人而言，这是开发期间的一项实用优化。 也可通过其他存储提供程序类型部署本地单机群集，但通常无需这样做，因为不管提供程序如何，开发/测试工作流将保持不变。 Azure 存储提供程序仅用于为在引入映像存储服务提供程序前部署的旧群集提供旧版支持。
+开发期间，为了略微加快群集的启动，将对本地单机群集使用文件系统提供程序，而不是映像存储区服务。 区别通常很小，但对大多数人而言，这是开发期间的一项实用优化。 也可通过其他存储提供程序类型部署本地单机群集，但通常无需这样做，因为不管提供程序如何，开发/测试工作流都将保持不变。 Azure 存储提供程序仅用于为在引入映像存储服务提供程序前部署的旧群集提供旧版支持。
 
-此外，文件系统提供程序和 Azure 存储提供程序都不应用作在多个群集之间共享映像存储的方法 - 这会导致群集配置数据损坏，因为每个群集都可以将冲突数据写入到映像存储。 若要在多个群集之间共享预配的应用程序包，请改用 [sfpkg][12] 文件，可以使用下载 URI 将这些文件上传到任何外部存储。
+此外，文件系统提供程序或 Azure 存储提供程序都不应用作在多个群集之间共享映像存储的方法 - 这会导致群集配置数据损坏，因为每个群集都可将冲突数据写入到映像存储。 若要在多个群集之间共享预配的应用程序包，请改用 [sfpkg][12] 文件，可以使用下载 URI 将这些文件上传到任何外部存储。
 
-因此虽然可配置 ImageStoreConnectionString，但通常只需使用默认设置。 通过 Visual Studio 发布到 Azure 时，该参数会相应地自动设置。 对于 Azure 中托管的群集的编程部署，连接字符串始终为“fabric: ImageStore”。 有疑问时，始终可通过 [PowerShell](https://docs.microsoft.com/powershell/servicefabric/vlatest/get-servicefabricclustermanifest)、[.NET](https://msdn.microsoft.com/library/azure/mt161375.aspx) 或 [REST](https://docs.microsoft.com/rest/api/servicefabric/get-a-cluster-manifest) 检索群集清单验证其值。 同样，本地测试和生产群集应始终配置为使用映像存储区服务提供程序。
+因此虽然可配置 ImageStoreConnectionString，但只需使用默认设置。 通过 Visual Studio 发布到 Azure 时，该参数会相应地自动设置。 对于 Azure 中托管的群集的编程部署，连接字符串始终为“fabric: ImageStore”。 有疑问时，始终可通过 [PowerShell](https://docs.microsoft.com/powershell/module/servicefabric/get-servicefabricclustermanifest)、[.NET](https://msdn.microsoft.com/library/azure/mt161375.aspx) 或 [REST](https://docs.microsoft.com/rest/api/servicefabric/get-a-cluster-manifest) 检索群集清单验证其值。 同样，本地测试和生产群集应始终配置为使用映像存储区服务提供程序。
 
 ### <a name="next-steps"></a>后续步骤
 [使用 PowerShell 部署和删除应用程序][10]

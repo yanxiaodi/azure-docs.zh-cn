@@ -1,25 +1,26 @@
 ---
 title: 针对 Azure SQL 数据库运行分析查询 | Microsoft 文档
-description: 使用从多个“Azure SQL 数据库”数据库提取的数据运行跨租户分析查询。
-keywords: SQL 教程
+description: 在多租户应用中使用从多个“Azure SQL 数据库”数据库提取的数据运行跨租户分析查询。
 services: sql-database
-author: stevestein
-manager: craigg
 ms.service: sql-database
-ms.custom: scale out apps
-ms.topic: article
-ms.date: 04/01/2018
-ms.author: anjangsh
-ms.reviewer: billgib, genemi
-ms.openlocfilehash: c0ffbdfb9110860a6a9083423b91a571671c3308
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.subservice: scenario
+ms.custom: ''
+ms.devlang: ''
+ms.topic: conceptual
+author: stevestein
+ms.author: sstein
+ms.reviewer: anjangsh,billgib,genemi
+ms.date: 09/19/2018
+ms.openlocfilehash: b36911d274a3afb3582d60ea7e85b5afd5f52ece
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68570296"
 ---
-# <a name="cross-tenant-analytics-using-extracted-data"></a>使用提取的数据运行跨租户分析
-
-本教程逐步讲解一个完整的分析方案。 该方案演示企业如何通过分析做出明智的决策。 借助从分片数据库提取的数据，可以使用分析来获取租户行为的见解，包括租户如何使用示例 Wingtip Tickets SaaS 应用程序。 此方案涉及三个步骤： 
+# <a name="cross-tenant-analytics-using-extracted-data---multi-tenant-app"></a>使用提取的数据运行跨租户分析 - 多租户应用
+ 
+本教程将逐步完成一个多租户实现的完整分析方案。 该方案演示企业如何通过分析做出明智的决策。 借助从分片数据库提取的数据，可以使用分析来获取租户行为的见解，包括租户如何使用示例 Wingtip Tickets SaaS 应用程序。 此方案涉及三个步骤： 
 
 1.  从每个租户数据库**提取数据**到分析存储。
 2.  **优化提取的数据**以进行分析处理。
@@ -62,7 +63,7 @@ ms.lasthandoff: 05/20/2018
 
 了解每个租户如何一致使用服务提供了根据需要创建服务计划的机会。 本教程提供从租户数据收集见解的基本示例。
 
-## <a name="setup"></a>设置
+## <a name="setup"></a>安装
 
 ### <a name="prerequisites"></a>先决条件
 
@@ -90,9 +91,9 @@ ms.lasthandoff: 05/20/2018
 2. 设置脚本中的 $DemoScenario 变量，使其与所选的分析存储匹配。 为了方便学习，建议使用不包含列存储的 SQL 数据库。
     - 若要使用不包含列存储的 SQL 数据库，请设置 **$DemoScenario** = **2**
     - 若要使用包含列存储的 SQL 数据库，请设置 **$DemoScenario** = **3**  
-3. 按 **F5** 运行演示脚本（用于调用 *Deploy-TenantAnalytics<XX>.ps1* 脚本），以创建租户分析存储。 
+3. 按**F5**运行演示脚本 (调用*TenantAnalytics\<XX > ps1*脚本), 该脚本会创建租户分析存储。 
 
-至此，你已部署应用程序并在其中填充了所需的租户数据，接下来，请使用 [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms) 并以登录名 *developer* 和密码 *P@ssword1* 来连接 **tenants1-mt-\<User\>** 和 **catalog-mt-\<User\>** 服务器。
+现在, 你已部署了应用程序, 并使用了兴趣的租户数据对其进行了填充, 请使用[SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms)连接**tenants1\<-用户\>** 和**目录-mt\<\>** 使用 Login = *developer*, Password = *P\@ssword1*的服务器。
 
 ![architectureOverView](media/saas-multitenantdb-tenant-analytics/ssmsSignIn.png)
 
@@ -119,7 +120,7 @@ ms.lasthandoff: 05/20/2018
 
 1. 在 SSMS 中，连接到 catalog-mt-\<User\> 中的 **jobaccount** 数据库。
 2. 在 SSMS 中，打开 *…\Learning Modules\Operational Analytics\Tenant Analytics\ TargetGroups.sql* 
-3. 修改脚本顶部的 @User 变量，将 <User> 替换为部署 Wingtip Tickets SaaS 多租户数据库应用程序时使用的用户值。
+3. 修改脚本顶部的 @User 变量，将 `<User>` 替换为部署 Wingtip Tickets SaaS 多租户数据库应用程序时使用的用户值。
 4. 按 **F5** 运行脚本，以创建两个目标组。
 
 ### <a name="extract-raw-data-from-all-tenants"></a>从所有租户提取原始数据
@@ -133,7 +134,7 @@ ms.lasthandoff: 05/20/2018
 
 1. 在 SSMS 中，连接到 catalog-mt-\<User\> 服务器中的 **jobaccount** 数据库。
 2. 在 SSMS 中，打开 *...\Learning Modules\Operational Analytics\Tenant Analytics\ExtractTickets.sql*。
-3. 修改脚本顶部的 @User，并将 <User> 替换为部署 Wingtip Tickets SaaS 多租户数据库应用程序时使用的用户名。 
+3. 修改脚本顶部的 @User，并将 `<User>` 替换为部署 Wingtip Tickets SaaS 多租户数据库应用程序时使用的用户名。 
 4. 按“F5”，以运行创建和运行从每个租户数据库提取票证和客户数据的作业脚本。 该作业会将数据保存到分析存储中。
 5. 查询 tenantanalytics 数据库中的 TicketsRawData 表，确保该表中已填充来自所有租户的门票信息。
 
@@ -174,7 +175,7 @@ ms.lasthandoff: 05/20/2018
 
     ![powerBISignIn](media/saas-multitenantdb-tenant-analytics/powerBISignIn.PNG)
 
-5. 在左窗格中选择“数据库”，输入 *developer* 作为用户名，输入 *P@ssword1* 作为密码。 单击“连接”。  
+5. 选择左窗格中的 "**数据库**", 然后输入 "用户名 =*开发人员*", 并输入 password = *P\@ssword1*。 单击“连接”。  
 
     ![DatabaseSignIn](media/saas-multitenantdb-tenant-analytics/databaseSignIn.PNG)
 
@@ -206,7 +207,7 @@ ms.lasthandoff: 05/20/2018
 
 上面的 Contoso Concert Hall 绘图显示，并非所有活动都出现销量剧增。 请体验不同的筛选选项，以查看其他会场的售量趁势。
 
-门票销售模式的见解可以引导 Wingtip Tickets 优化其业务模式。 Wingtip 也许可以不向所有租户收取相同的费用，而是推出具有不同性能级别的服务层。 可以根据更高的服务级别协议 (SLA)，向每日售出较多门票的大型会场提供更高的层。 这些会场可将数据库放在具有更高的数据库资源限制的池中。 每个服务层可以采用按小时售量分配，超出分配即会收取额外的费用。 定期出现销量喷发的大型会场将会受益于更高的层，而 Wingtip Tickets 可以更高效地将服务变现。
+门票销售模式的见解可以引导 Wingtip Tickets 优化其业务模式。 Wingtip 也许可以不向所有租户收取相同的费用，而是推出具有不同计算大小的服务层级。 可以根据更高的服务级别协议 (SLA)，向每日售出较多门票的大型会场提供更高的层。 这些会场可将数据库放在具有更高的数据库资源限制的池中。 每个服务层级可以采用按小时售量分配，超出分配即会收取额外的费用。 定期出现销量喷发的大型会场将会受益于更高的层，而 Wingtip Tickets 可以更高效地将服务变现。
 
 同时，某些 Wingtip Tickets 客户抱怨他们正在努力售出足够多的票证，以抵消服务费用。 通过这些见解，绩效不佳的会场也许能够找到促升门票销量的机会。 销量提高会增大服务的认知价值。 右键单击“fact_Tickets”并选择“新建度量值”。 针对名为 **AverageTicketsSold** 的新度量值输入以下表达式：
 
@@ -226,7 +227,7 @@ AverageTicketsSold = DIVIDE(DIVIDE(COUNTROWS(fact_Tickets),DISTINCT(dim_Venues[V
 
 ## <a name="next-steps"></a>后续步骤
 
-本教程介绍了如何：
+在本教程中，你将了解：
 
 > [!div class="checklist"]
 > - 部署包含预定义星型架构表的租户分析数据库
@@ -239,5 +240,6 @@ AverageTicketsSold = DIVIDE(DIVIDE(COUNTROWS(fact_Tickets),DISTINCT(dim_Venues[V
 
 ## <a name="additional-resources"></a>其他资源
 
-<!-- - Additional [tutorials that build upon the Wingtip SaaS application](saas-dbpertenant-wingtip-app-overview.md#sql-database-wingtip-saas-tutorials). -->
-- [弹性作业](sql-database-elastic-jobs-overview.md)。
+其他[基于 Wingtip SaaS 应用程序编写的教程](saas-dbpertenant-wingtip-app-overview.md#sql-database-wingtip-saas-tutorials)。 
+- [弹性作业](elastic-jobs-overview.md)。
+- [使用提取的数据运行跨租户分析 - 单租户应用](saas-tenancy-tenant-analytics.md) 

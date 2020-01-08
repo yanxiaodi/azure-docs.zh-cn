@@ -3,7 +3,7 @@ title: 以编程方式创建 Azure 仪表板 | Microsoft Docs
 description: 本文介绍如何以编程方式创建 Azure 仪表板。
 services: azure-portal
 documentationcenter: ''
-author: adamab
+author: adamabmsft
 manager: dougeby
 editor: tysonn
 ms.service: azure-portal
@@ -12,12 +12,13 @@ ms.topic: conceptual
 ms.tgt_pltfrm: NA
 ms.workload: na
 ms.date: 09/01/2017
-ms.author: adamab
-ms.openlocfilehash: 8670d25e10b58c40b9d0807de1db88c3296b193d
-ms.sourcegitcommit: d78bcecd983ca2a7473fff23371c8cfed0d89627
-ms.translationtype: HT
+ms.author: kfollis
+ms.openlocfilehash: b24a0397a1365479907fedc6348caa54508dbbb0
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/14/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60552136"
 ---
 # <a name="programmatically-create-azure-dashboards"></a>以编程方式创建 Azure 仪表板
 
@@ -27,7 +28,7 @@ ms.lasthandoff: 05/14/2018
 
 ## <a name="overview"></a>概述
 
-Azure 中的共享仪表板与虚拟机和存储帐户一样，是一种[资源](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-overview)。  因此，可通过 [Azure 资源管理器 REST API](/rest/api/)、[Azure CLI](https://docs.microsoft.com/cli/azure)、[Azure PowerShell 命令](https://docs.microsoft.com/powershell/azure/get-started-azureps?view=azurermps-4.2.0) 和许多基于这些 API 构建的 [Azure 门户](https://portal.azure.com)功能，以编程方式更轻松地管理这些资源。  
+Azure 中的共享仪表板与虚拟机和存储帐户一样，是一种[资源](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-overview)。  因此，可通过 [Azure 资源管理器 REST API](/rest/api/)、[Azure CLI](https://docs.microsoft.com/cli/azure)、[Azure PowerShell 命令](https://docs.microsoft.com/powershell/azure/get-started-azureps) 和许多基于这些 API 构建的 [Azure 门户](https://portal.azure.com)功能，以编程方式更轻松地管理这些资源。  
 
 所有这些 API 和工具都提供了创建、罗列、检索、修改和删除资源的方法。  由于仪表板是资源，因此可以选择使用最喜欢的 API/工具。
 
@@ -88,18 +89,18 @@ Azure 提供协调多资源部署的功能。 创建用于表达要部署的资�
 如果要使用模板部署，则应使用模板的参数语法来实现参数化。  替换之前找到的所有资源 id 的实例，如下所示。
 
 ### <a name="example-json-property-with-hard-coded-resource-id"></a>具有硬编码的资源 Id 的示例 JSON 属性
-`id: “/subscriptions/6531c8c8-df32-4254-d717-b6e983273e5d/resourceGroups/contoso/providers/Microsoft.Compute/virtualMachines/myVM1”`
+`id: "/subscriptions/6531c8c8-df32-4254-d717-b6e983273e5d/resourceGroups/contoso/providers/Microsoft.Compute/virtualMachines/myVM1"`
 
 ### <a name="example-json-property-converted-to-a-parameterized-version-based-on-template-parameters"></a>基于模板参数转换为参数化版本的示例 JSON 属性
 
-`id: "[resourceId(parameters('virtualMachineResourceGroup'), ‘Microsoft.Compute/virtualMachines’, parameters('virtualMachineName'))]"`
+`id: "[resourceId(parameters('virtualMachineResourceGroup'), 'Microsoft.Compute/virtualMachines', parameters('virtualMachineName'))]"`
 
 还需要在 json 模板顶部声明某些必需的模板元数据和参数，如下所示：
 
 ```json
 
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "virtualMachineName": {
@@ -119,7 +120,7 @@ Azure 提供协调多资源部署的功能。 创建用于表达要部署的资�
 
 __可在本文档末尾查看完整的工作模板。__
 
-设置模板后，便可使用 [REST API](https://docs.microsoft.com/rest/api/resources/deployments)、[PowerShell](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-template-deploy)、[Azure CLI](https://docs.microsoft.com/cli/azure/group/deployment#az_group_deployment_create) 或[门户的模板部署页](https://portal.azure.com/#create/Microsoft.Template)部署该模板。
+设置模板后，便可使用 [REST API](https://docs.microsoft.com/rest/api/resources/deployments)、[PowerShell](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-template-deploy)、[Azure CLI](https://docs.microsoft.com/cli/azure/group/deployment#az-group-deployment-create) 或[门户的模板部署页](https://portal.azure.com/#create/Microsoft.Template)部署该模板。
 
 以下是示例仪表板 JSON 的两个版本。 第一个版本是从门户导出的、已绑定到资源的模板。 第二个是可以编程方式绑定到任何 VM 并使用 Azure 资源管理器进行部署的模板版本。
 
@@ -379,13 +380,13 @@ __可在本文档末尾查看完整的工作模板。__
 
 ### <a name="template-representation-of-our-example-dashboard"></a>示例仪表板的模板表示形式
 
-仪表板的模板版本定义了三个参数，分别为virtualMachineName、virtualMachineResourceGroup 和 dashboardName。  使用这些参数可在每次部署时将此仪表板指向不同的 Azure 虚拟机。 突出显示了参数化的 id，用于指示此仪表板可以编程方式配置并部署为指向任何 Azure 虚拟机。 测试此功能的最简单方法是复制以下模板并将其粘贴到 [Azure 门户的模板部署页](https://portal.azure.com/#create/Microsoft.Template)。 
+仪表板的模板版本定义了三个参数，分别为virtualMachineName、virtualMachineResourceGroup 和 dashboardName    。  使用这些参数可在每次部署时将此仪表板指向不同的 Azure 虚拟机。 突出显示了参数化的 id，用于指示此仪表板可以编程方式配置并部署为指向任何 Azure 虚拟机。 测试此功能的最简单方法是复制以下模板并将其粘贴到 [Azure 门户的模板部署页](https://portal.azure.com/#create/Microsoft.Template)。 
 
 此示例自行部署了一个仪表板，但使用模板语言可部署多个资源并将其与一个或多个仪表板绑定。 
 
 ```json
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "virtualMachineName": {

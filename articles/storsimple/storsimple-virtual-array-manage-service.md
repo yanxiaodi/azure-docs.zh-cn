@@ -1,27 +1,31 @@
 ---
-title: "部署 StorSimple 设备管理器服务 | Microsoft 文档"
-description: "说明如何在 Azure 门户中创建和删除 StorSimple Device Manager 服务，并介绍了如何管理服务注册密钥。"
+title: 部署 StorSimple 设备管理器服务 | Microsoft 文档
+description: 说明如何在 Azure 门户中创建和删除 StorSimple Device Manager 服务，并介绍了如何管理服务注册密钥。
 services: storsimple
-documentationcenter: 
+documentationcenter: ''
 author: alkohli
 manager: carmonm
-editor: 
+editor: ''
 ms.assetid: 28499494-8c4d-4a7f-9d44-94b2b8a93c93
 ms.service: storsimple
 ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: na
-ms.date: 11/29/2016
+ms.date: 07/25/2019
 ms.author: alkohli
-ms.openlocfilehash: 1881a0625b107ae1a90e5b772f5296a4d728973d
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.openlocfilehash: 2ff987448e3900c2a533789b2f38fd3ced71ce72
+ms.sourcegitcommit: f5cc71cbb9969c681a991aa4a39f1120571a6c2e
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68516668"
 ---
 # <a name="deploy-the-storsimple-device-manager-service-for-storsimple-virtual-array"></a>为 StorSimple 虚拟阵列部署 StorSimple Device Manager 服务
+
 ## <a name="overview"></a>概述
+
+[!INCLUDE [storsimple-virtual-array-eol-banner](../../includes/storsimple-virtual-array-eol-banner.md)]
 
 StorSimple Device Manager 服务在 Microsoft Azure 中运行并连接到多个 StorSimple 设备。 创建该服务后，可以使用它从浏览器中运行的 Microsoft Azure 门户管理设备。 这使得可以从单个中央位置监视连接到 StorSimple Device Manager 服务的所有设备，因此最大限度地减少了管理负担。
 
@@ -69,7 +73,7 @@ StorSimple Device Manager 服务在 Microsoft Azure 中运行并连接到多个 
 1. 转到“所有资源”。 搜索 StorSimple Device Manager 服务。 选择要删除的服务。
    
     ![选择要删除的服务](./media/storsimple-virtual-array-manage-service/deleteservice2.png)
-2. 转到服务仪表板，确保没有设备连接到该服务。 如果没有设备注册到此服务，则还将看到指示此内容的横幅消息。 单击“删除” 。
+2. 转到服务仪表板，确保没有设备连接到该服务。 如果没有设备注册到此服务，则还将看到指示此内容的横幅消息。 单击“删除”。
    
     ![删除服务](./media/storsimple-virtual-array-manage-service/deleteservice3.png)
 
@@ -87,7 +91,7 @@ StorSimple Device Manager 服务在 Microsoft Azure 中运行并连接到多个 
 ## <a name="get-the-service-registration-key"></a>获取服务注册密钥
 成功创建服务后，需要为 StorSimple 设备注册该服务。 若要注册第一台 StorSimple 设备，需要使用服务注册密钥。 若要向现有 StorSimple 服务注册额外的设备，需要使用注册密钥和服务数据加密密钥（后者是在注册期间在第一台设备上生成的）。 有关服务数据加密密钥的详细信息，请参阅 [StorSimple 安全性](storsimple-security.md)。 可以通过访问服务的“密钥”边栏选项卡来获取注册密钥。
 
-执行以下步骤，获取服务注册密钥。
+可以执行以下步骤来获取服务注册密钥。
 
 #### <a name="to-get-the-service-registration-key"></a>获取服务注册密钥
 1. 在“StorSimple Device Manager”边栏选项卡中，转到“管理”&gt;“密钥”。

@@ -2,31 +2,34 @@
 title: SQL 数据库的 XEvent 环形缓冲区代码 | Microsoft 文档
 description: 提供一个 Transact-SQL 代码示例，以帮助你快速轻松地在 Azure SQL 数据库中使用环形缓冲区目标。
 services: sql-database
-author: MightyPen
-manager: craigg
 ms.service: sql-database
-ms.custom: monitor & tune
-ms.topic: article
-ms.date: 04/01/2018
+ms.subservice: monitor
+ms.custom: ''
+ms.devlang: PowerShell
+ms.topic: conceptual
+author: MightyPen
 ms.author: genemi
-ms.openlocfilehash: ee6181baf7a16bc827d35aaf5d18b281bcf9c3f7
-ms.sourcegitcommit: 3a4ebcb58192f5bf7969482393090cb356294399
-ms.translationtype: HT
+ms.reviewer: jrasnik
+ms.date: 12/19/2018
+ms.openlocfilehash: f1ec9cd3a4256597ade409fb3e04d44171277554
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68566155"
 ---
 # <a name="ring-buffer-target-code-for-extended-events-in-sql-database"></a>SQL 数据库中扩展事件的环形缓冲区目标代码
 
 [!INCLUDE [sql-database-xevents-selectors-1-include](../../includes/sql-database-xevents-selectors-1-include.md)]
 
-需要完整的代码示例以最简单快速的方式在测试期间捕获和报告扩展事件的信息。 扩展事件数据最简单的目标是[环形缓冲区目标](http://msdn.microsoft.com/library/ff878182.aspx)。
+需要完整的代码示例以最简单快速的方式在测试期间捕获和报告扩展事件的信息。 扩展事件数据最简单的目标是[环形缓冲区目标](https://msdn.microsoft.com/library/ff878182.aspx)。
 
 本主题演示一个 Transact-SQL 代码示例：
 
 1. 创建一个包含要演示的数据的表。
 2. 创建现有扩展事件的会话，即 **sqlserver.sql_statement_starting**。
    
-   * 此事件仅限于包含特定 Update 字符串的 SQL 语句：**statement LIKE '%UPDATE tabEmployee%'**。
+   * 此事件仅限于包含特定 Update 字符串的 SQL 语句：**statement LIKE '%UPDATE tabEmployee%'** 。
    * 选择要将事件的输出发送给环形缓冲区类型的目标，即 **package0.ring_buffer**。
 3. 启动事件会话。
 4. 发出几个简单的 SQL UPDATE 语句。
@@ -46,14 +49,14 @@ ms.lasthandoff: 04/06/2018
 * SQL Server Management Studio (ssms.exe)，最好是每月更新版。 
   可从以下位置下载最新的 ssms.exe：
   
-  * 标题为[下载 SQL Server Management Studio](http://msdn.microsoft.com/library/mt238290.aspx) 的主题。
-  * [直接指向下载位置的链接。](http://go.microsoft.com/fwlink/?linkid=616025)
+  * 标题为[下载 SQL Server Management Studio](https://msdn.microsoft.com/library/mt238290.aspx) 的主题。
+  * [直接指向下载位置的链接。](https://go.microsoft.com/fwlink/?linkid=616025)
 
 ## <a name="code-sample"></a>代码示例
 
 只要稍加修改，就可以在 Azure SQL 数据库或 Microsoft SQL Server 上运行以下环形缓冲区的代码示例。 不同之处在于步骤 5 的 FROM 子句中使用的某些动态管理视图 (DMV) 名称出现了节点“_database”。 例如：
 
-* sys.dm_xe**_database**_session_targets
+* sys.dm_xe<strong>_database</strong>_session_targets
 * sys.dm_xe_session_targets
 
 &nbsp;
@@ -217,9 +220,9 @@ GO
 
 为了查看结果，我们单击了 **target_data_XML** 列标题下的单元格。
 
-然后，在结果窗格中，我们单击了 target_data_XML 列标题下的单元格。 这个单击动作在 ssms.exe 中按结果单元格内容显示的顺序，以 XML 格式创建了另一个文件选项卡。
+然后，在结果窗格中，我们单击了 **target_data_XML** 列标题下的单元格。 这个单击动作在 ssms.exe 中按结果单元格内容显示的顺序，以 XML 格式创建了另一个文件选项卡。
 
-输出显示在以下块中。 结果看起来很长，但其实只是两个 **<event>** 元素。
+输出显示在以下块中。 结果看起来很长，但其实只是两个 **\<event>** 元素。
 
 &nbsp;
 
@@ -349,6 +352,6 @@ ALTER EVENT SESSION eventsession_gm_azuresqldb51
 <!--
 ('lock_acquired' event.)
 
-- Code sample for SQL Server: [Determine Which Queries Are Holding Locks](http://msdn.microsoft.com/library/bb677357.aspx)
-- Code sample for SQL Server: [Find the Objects That Have the Most Locks Taken on Them](http://msdn.microsoft.com/library/bb630355.aspx)
+- Code sample for SQL Server: [Determine Which Queries Are Holding Locks](https://msdn.microsoft.com/library/bb677357.aspx)
+- Code sample for SQL Server: [Find the Objects That Have the Most Locks Taken on Them](https://msdn.microsoft.com/library/bb630355.aspx)
 -->

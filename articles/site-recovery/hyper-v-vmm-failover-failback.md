@@ -1,19 +1,19 @@
 ---
-title: 使用 Site Recovery 对复制到辅助数据中心的 Hyper-V VM 进行故障转移和故障回复 | Microsoft Docs
-description: 了解如何使用 Azure Site Recovery 将 Hyper-V VM 故障转移到辅助本地站点以及故障回复到主站点
+title: 在灾难恢复期间使用 Azure Site Recovery 故障转移并故障回复复制到辅助数据中心的 Hyper-V VM | Microsoft Docs
+description: 了解如何在灾难恢复期间使用 Azure Site Recovery 将 Hyper-V VM 故障转移到辅助本地站点以及故障回复到主站点。
 services: site-recovery
 author: rayne-wiselman
 manager: carmonm
 ms.service: site-recovery
-ms.topic: article
-ms.date: 05/02/2018
+ms.topic: conceptual
+ms.date: 09/09/2019
 ms.author: raynew
-ms.openlocfilehash: ecb0b9395ce7071442ddf0dd976e1ca57b8be906
-ms.sourcegitcommit: e14229bb94d61172046335972cfb1a708c8a97a5
-ms.translationtype: HT
+ms.openlocfilehash: f93c9bd679272f76665a6c8e4a0c611327699839
+ms.sourcegitcommit: fa4852cca8644b14ce935674861363613cf4bfdf
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/14/2018
-ms.locfileid: "34161135"
+ms.lasthandoff: 09/09/2019
+ms.locfileid: "70813700"
 ---
 # <a name="fail-over-and-fail-back-hyper-v-vms-replicated-to-your-secondary-on-premises-site"></a>对复制到辅助本地站点的 Hyper-V VM 进行故障转移和故障回复
 
@@ -49,7 +49,7 @@ ms.locfileid: "34161135"
 - 使用常规故障转移处理意外中断。 当运行此故障转移时，Site Recovery 会在辅助站点中创建一个 VM，并将其启动。 根据未同步的挂起数据，可能会丢失数据。
 - 可在维护或预期中断过程中使用计划内故障转移。 此选项保证无数据丢失。 触发计划内故障转移时，关闭源 VM。 同步未同步的数据，并触发故障转移。 
 - 
-本过程介绍如何运行常规故障转移。
+  本过程介绍如何运行常规故障转移。
 
 
 1. 在“设置” > “复制的项”中，单击“VM”>“故障转移”。
@@ -58,7 +58,7 @@ ms.locfileid: "34161135"
 3. 验证 VM 后，“提交”故障转移。 这会删除所有可用的恢复点。
 
 > [!WARNING]
-> **请勿取消正在进行的故障转移**：在故障转移开始前，停止 VM 复制。 如果取消正在进行的故障转移，故障转移会停止，但 VM 将不再进行复制。  
+> **不会取消正在进行的故障转移**：在故障转移开始前，VM 复制已停止。 如果取消正在进行的故障转移，故障转移会停止，但 VM 将不再进行复制。  
 
 
 ## <a name="reverse-replicate-and-failover"></a>反向复制和故障转移

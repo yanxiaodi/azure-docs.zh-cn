@@ -7,13 +7,14 @@ author: eamonoreilly
 ms.author: eamono
 manager: carmonm
 ms.topic: tutorial
-ms.date: 03/16/2018
+ms.date: 05/10/2018
 ms.custom: mvc
-ms.openlocfilehash: 97db493b77483d68860c6124f1063bc4a743c3be
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
+ms.openlocfilehash: d247369647106cf1671a8770a6dce21f1a34a4b9
+ms.sourcegitcommit: 5839af386c5a2ad46aaaeb90a13065ef94e61e74
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 03/19/2019
+ms.locfileid: "58082188"
 ---
 # <a name="onboard-update-and-change-tracking-solutions-to-azure-automation"></a>将更新和更改跟踪解决方案加入 Azure 自动化
 
@@ -36,7 +37,7 @@ ms.lasthandoff: 03/23/2018
 
 ## <a name="onboard-an-azure-vm"></a>载入 Azure VM
 
-可以通过多种方式来载入虚拟机。可以通过[虚拟机](automation-onboard-solutions-from-vm.md)、[自动化帐户](automation-onboard-solutions-from-automation-account.md)或 Runbook 载入解决方案。 本教程详细介绍了如何通过 Runbook 启用更新管理。 若要大规模载入 Azure 虚拟机，须使用更改跟踪或更新管理解决方案载入现有 VM。 在此步骤中，使用更新管理和更改跟踪载入虚拟机。
+可以通过多种方式来载入计算机，可以[通过虚拟机](automation-onboard-solutions-from-vm.md)、[通过浏览多个计算机](automation-onboard-solutions-from-browse.md)、[通过自动化帐户](automation-onboard-solutions-from-automation-account.md)或通过 Runbook 载入解决方案。 本教程详细介绍了如何通过 Runbook 启用更新管理。 若要大规模载入 Azure 虚拟机，须使用更改跟踪或更新管理解决方案载入现有 VM。 在此步骤中，使用更新管理和更改跟踪载入虚拟机。
 
 ### <a name="enable-change-tracking-and-inventory"></a>启用更改跟踪和清单
 
@@ -55,7 +56,7 @@ ms.lasthandoff: 03/23/2018
 使用更新管理解决方案可以管理 Azure Windows VM 的更新和修补程序。 可评估可用更新的状态、计划所需更新的安装以及查看部署结果，验证更新是否已成功应用到 VM。 在此步骤中，为 VM 启用解决方案。
 
 1. 从自动化帐户，选择“更新管理”下的“更新管理”。
-1. 选定的日志分析工作区即为上一步骤中使用的工作区。 单击“启用”以载入更新管理解决方案。
+1. 选定的 Log Analytics 工作区即为上一步骤中使用的工作区。 单击“启用”以载入更新管理解决方案。
 
 ![载入更新解决方案](media/automation-onboard-solutions/update-onboard.png)
 
@@ -80,7 +81,7 @@ ms.lasthandoff: 03/23/2018
    ![为虚拟机启用更新解决方案](media/automation-onboard-solutions/enable-update.png)
 
 > [!NOTE]
-> 如果不等待至另一个解决方案完成，启用下一个解决方案时会收到一条消息：*此虚拟机或另一台虚拟机上正在安装另一个解决方案。待该解决方案安装完成后，“启用”按钮处于启用状态，可请求在此虚拟机上安装下一个解决方案。*
+> 如果不等待其他解决方案完成，则在启用下一个解决方案时，你会收到一条消息，说明：*此虚拟机或其他虚拟机上正在安装其他解决方案。待该解决方案安装完成后，“启用”按钮处于启用状态，可请求在此虚拟机上安装下一个解决方案。*
 
 ## <a name="install-and-update-modules"></a>安装和更新模块
 
@@ -104,7 +105,7 @@ ms.lasthandoff: 03/23/2018
 1. 选择“浏览库”。
 1. 搜索“更新和更改跟踪”，单击 runbook，然后选择“查看源”页上的“导入”。 选择“确定”，将 runbook 导入自动化帐户。
 
-  ![导入载入 Runbook](media/automation-onboard-solutions/import-from-gallery.png)
+   ![导入载入 Runbook](media/automation-onboard-solutions/import-from-gallery.png)
 
 1. 在“Runbook”页上，选择“编辑”，然后选择“发布”。 在“发布 Runbook”对话框中，选择“是”以发布 runbook。
 

@@ -1,3 +1,16 @@
+---
+author: cynthn
+ms.service: virtual-machines
+ms.topic: include
+ms.date: 04/11/2019
+ms.author: cynthn
+ms.openlocfilehash: 15724adfc6eb875f3d2d5b6d3ecbbb54135a7265
+ms.sourcegitcommit: 2e4b99023ecaf2ea3d6d3604da068d04682a8c2d
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 07/09/2019
+ms.locfileid: "67671437"
+---
 # <a name="use-infrastructure-automation-tools-with-virtual-machines-in-azure"></a>在 Azure 中将基础结构自动化工具与虚拟机配合使用
 若要以一致的方式大规模创建和管理 Azure 虚拟机 (VM)，通常需要某种形式的自动化。 可以通过许多工具和解决方案来自动完成整个 Azure 基础结构部署和管理生命周期。 本文介绍了一些可以在 Azure 中使用的基础结构自动化工具。 这些工具通常适合以下某个方法：
 
@@ -10,8 +23,7 @@
     - [Azure 自动化](#azure-automation)可以跨 Azure 和本地基础结构执行操作。
 
 - 自动执行应用程序部署和交付
-    - 示例包括 [Visual Studio Team Services](#visual-studio-team-services) 和 [Jenkins](#jenkins)。
-
+    - 示例包括 [Azure DevOps Services](#azure-devops-services) 和 [Jenkins](#jenkins)。
 
 ## <a name="ansible"></a>Ansible
 [Ansible](https://www.ansible.com/) 是适用于配置管理、VM 创建或应用程序部署的自动化引擎。 Ansible 通常将无代理的模型与 SSH 密钥配合使用，对目标计算机进行身份验证和管理。 配置任务在 playbook 中定义，可以使用多个 Ansible 模块来执行特定任务。 有关详细信息，请参阅 [How Ansible works](https://www.ansible.com/how-ansible-works)（Ansible 工作原理）。
@@ -19,8 +31,8 @@
 了解如何：
 
 - [在 Linux 上安装和配置与 Azure 配合使用的 Ansible](../articles/virtual-machines/linux/ansible-install-configure.md)。
-- [创建基本 VM](../articles/virtual-machines/linux/ansible-create-vm.md)。
-- [创建包括支持资源在内的完整 VM 环境](../articles/virtual-machines/linux/ansible-create-complete-vm.md)。
+- [创建 Linux 虚拟机](../articles/virtual-machines/linux/ansible-create-vm.md)。
+- [管理 Linux 虚拟机](../articles/virtual-machines/linux/ansible-manage-linux-vm.md)。
 
 
 ## <a name="chef"></a>Chef
@@ -28,34 +40,24 @@
 
 了解如何：
 
-- [从 Azure Marketplace 部署 Chef Automate](https://azuremarketplace.microsoft.com/marketplace/apps/chef-software.chef-automate?tab=Overview)。
+- [从 Azure 市场部署 Chef Automate](https://azuremarketplace.microsoft.com/marketplace/apps/chef-software.chef-automate?tab=Overview)。
 - [在 Windows 上安装 Chef 并创建 Azure VM](../articles/virtual-machines/windows/chef-automation.md)。
 
 
 ## <a name="puppet"></a>Puppet
-[Puppet](https://www.puppet.com) 是可供企业使用的自动化平台，用于处理应用程序交付和部署过程。 代理安装在目标计算机上，因此 Puppet Master 可以通过运行清单来定义 Azure 基础结构和 VM 的所需配置。 Puppet 可以通过集成其他解决方案（例如 Jenkins 和 GitHub）来改进 DevOps 工作流。 有关详细信息，请参阅 [How Puppet works](https://puppet.com/product/how-puppet-works)（Puppet 工作原理）。
+[Puppet](https://www.puppet.com) 是可供企业使用的自动化平台，用于处理应用程序交付和部署过程。 代理安装在目标计算机上，因此 Puppet Master 可以通过运行清单来定义 Azure 基础结构和 VM 的所需配置。 Puppet 可以通过集成其他解决方案（例如 Jenkins 和 GitHub）来改进 DevOps 工作流。 有关详细信息，请参阅 [How Puppet works](https://puppet.com/products/how-puppet-works)（Puppet 工作原理）。
 
 了解如何：
 
-- [从 Azure Marketplace 部署 Puppet](https://azuremarketplace.microsoft.com/marketplace/apps/puppet.puppet-enterprise-2016-1?tab=Overview)。
+- [从 Azure 市场部署 Puppet](https://azuremarketplace.microsoft.com/marketplace/apps/puppet.puppet-enterprise-2017-2?tab=Overview)。
 
 
 ## <a name="cloud-init"></a>Cloud-init
-[Cloud-init](https://cloudinit.readthedocs.io) 是一种广泛使用的方法，用于在首次启动 Linux VM 时对其进行自定义。 可使用 cloud-init 安装程序包和写入文件，或者配置用户和安全。 由于是在初始启动过程中调用 cloud-init，因此无需额外的步骤且无需代理来应用配置。  有关如何正确设置 `#cloud-config` 文件格式的详细信息，请参阅 [cloud-init 文档站点](http://cloudinit.readthedocs.io/en/latest/topics/format.html#cloud-config-data)。  `#cloud-config` 文件是采用 base64 编码的文本文件。
+[Cloud-init](https://cloudinit.readthedocs.io) 是一种广泛使用的方法，用于在首次启动 Linux VM 时对其进行自定义。 可使用 cloud-init 安装程序包和写入文件，或者配置用户和安全。 由于是在初始启动过程中调用 cloud-init，因此无需额外的步骤且无需代理来应用配置。  有关如何正确设置 `#cloud-config` 文件格式的详细信息，请参阅 [cloud-init 文档站点](https://cloudinit.readthedocs.io/en/latest/topics/format.html#cloud-config-data)。  `#cloud-config` 文件是采用 base64 编码的文本文件。
 
-Cloud-init 还支持不同的分发。 例如，不要使用 apt-get 安装或 yum 安装来安装包。 可定义要安装的程序包的列表。 Cloud-init 将为所选发行版自动使用本机包管理工具。
+Cloud-init 还支持不同的分发。 例如，不要使用 apt-get 安装  或 yum 安装  来安装包。 可定义要安装的程序包的列表。 Cloud-init 将为所选发行版自动使用本机包管理工具。
 
- 我们正在积极地与我们认可的 Linux 发行版合作伙伴合作，以便在 Azure Marketplace 中提供已启用 cloud-init 的映像。 这些映像可使 cloud-init 部署和配置无缝地应用于 VM 和虚拟机规模集。 下表概述了当前启用了 cloud-init 的映像在 Azure 平台上的可用性：
-
-| 发布者 | 产品 | SKU | 版本 | cloud-init 就绪
-|:--- |:--- |:--- |:--- |:--- |:--- |
-|Canonical |UbuntuServer |16.04-LTS |最新 |是 | 
-|Canonical |UbuntuServer |14.04.5-LTS |最新 |是 |
-|CoreOS |CoreOS |Stable |最新 |是 |
-|OpenLogic |CentOS |7-CI |最新 |预览 |
-|RedHat |RHEL |7-RAW-CI |最新 |预览 |
-
-了解有关 Azure 上的 cloud-init 的更多详细信息：
+我们正在积极地与我们认可的 Linux 发行版合作伙伴合作，以便在 Azure 市场中提供已启用 cloud-init 的映像。 这些映像可使 cloud-init 部署和配置无缝地应用于 VM 和虚拟机规模集。 了解有关 Azure 上的 cloud-init 的更多详细信息：
 
 - [Cloud-init 对 Azure 中 Linux 虚拟机的支持](../articles/virtual-machines/linux/using-cloud-init.md)
 - [试着学习使用 cloud-init 自动进行 VM 配置的教程](../articles/virtual-machines/linux/tutorial-automate-vm-deployment.md)。
@@ -68,7 +70,7 @@ DSC 配置定义要在计算机上安装的内容，以及如何配置主机。 
 
 了解如何：
 
-- [创建基本的 DSC 配置](https://msdn.microsoft.com/powershell/dsc/quickstart)。
+- [创建基本的 DSC 配置](https://msdn.microsoft.com/powershell/dsc/quickstarts/website-quickstart)。
 - [配置 DSC 拉取服务器](https://msdn.microsoft.com/powershell/dsc/pullserver)。
 - [使用适用于 Linux 的 DSC](https://msdn.microsoft.com/powershell/dsc/lnxgettingstarted)。
 
@@ -114,16 +116,16 @@ Azure 自动化还提供 Desired State Configuration (DSC) 服务，用于针对
 - [使用 Azure 自动化 DSC](../articles/automation/automation-dsc-getting-started.md)。
 
 
-## <a name="visual-studio-team-services"></a>Visual Studio Team Services
-[Team Services](https://www.visualstudio.com/team-services/) 是一套工具，用于共享和跟踪代码、使用自动化生成，以及创建完整的持续集成和开发 (CI/CD) 管道。 Team Services 集成 Visual Studio 和其他编辑器，简化了使用过程。 Team Services 还可以创建和配置 Azure VM，然后向其部署代码。
+## <a name="azure-devops-services"></a>Azure DevOps Services
+[Azure DevOps Services](https://www.visualstudio.com/team-services/) 是一套工具，用于共享和跟踪代码、使用自动化生成，以及创建完整的持续集成和开发 (CI/CD) 管道。 Azure DevOps Services 集成了 Visual Studio 和其他编辑器，简化了使用过程。 Azure DevOps Services 还可以创建和配置 Azure VM，然后向其部署代码。
 
-了解如何：
+了解有关以下方面的详细信息：
 
-- [使用 Team Services 创建持续集成管道](../articles/virtual-machines/windows/tutorial-vsts-iis-cicd.md)。
+- [Azure DevOps Services](https://docs.microsoft.com/azure/devops/user-guide/index?view=vsts)。
 
 
 ## <a name="jenkins"></a>Jenkins
-[Jenkins](https://www.jenkins.io) 是一种持续集成服务器，用于部署和测试应用程序，以及创建进行代码交付的自动化管道。 可以通过成百上千的插件来扩展核心 Jenkins 平台，还可以通过 Webhook 集成许多其他的产品和解决方案。 可以在 Azure VM 上手动安装 Jenkins，从 Docker 容器内部运行 Jenkins，或者使用预建的 Azure Marketplace 映像。
+[Jenkins](https://www.jenkins.io) 是一种持续集成服务器，用于部署和测试应用程序，以及创建进行代码交付的自动化管道。 可以通过成百上千的插件来扩展核心 Jenkins 平台，还可以通过 Webhook 集成许多其他的产品和解决方案。 可以在 Azure VM 上手动安装 Jenkins，从 Docker 容器内部运行 Jenkins，或者使用预建的 Azure 市场映像。
 
 了解如何：
 

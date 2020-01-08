@@ -1,31 +1,33 @@
 ---
 title: 从 Azure 访问控制服务迁移 | Microsoft Docs
-description: 从 Azure 访问控制服务迁移应用和服务的方法
+description: 了解用于从 Azure 访问控制服务 (ACS) 迁移应用和服务的选项。
 services: active-directory
 documentationcenter: dev-center-name
-author: CelesteDG
-manager: mtillman
+author: rwike77
+manager: CelesteDG
 editor: ''
 ms.assetid: 820acdb7-d316-4c3b-8de9-79df48ba3b06
 ms.service: active-directory
-ms.component: develop
+ms.subservice: develop
+ms.custom: aaddev
 ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.tgt_pltfrm: na
 ms.workload: identity
-ms.date: 11/14/2017
-ms.author: celested
-ms.reviewer: dastrock
-ms.openlocfilehash: c1c86f21d5a99cf251b0b83f41576c2cdaf96dfb
-ms.sourcegitcommit: e14229bb94d61172046335972cfb1a708c8a97a5
-ms.translationtype: HT
+ms.date: 10/03/2018
+ms.author: ryanwi
+ms.reviewer: jlu, annaba, hirsin
+ms.collection: M365-identity-device-management
+ms.openlocfilehash: 59a2cc971fbc1df967bc2655c672ab8f419eef71
+ms.sourcegitcommit: bc3a153d79b7e398581d3bcfadbb7403551aa536
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/14/2018
+ms.lasthandoff: 08/06/2019
+ms.locfileid: "68835518"
 ---
-# <a name="migrate-from-the-azure-access-control-service"></a>从 Azure 访问控制服务迁移
+# <a name="how-to-migrate-from-the-azure-access-control-service"></a>如何：从 Azure 访问控制服务迁移
 
-Azure 访问控制（一种 Azure Active Directory (Azure AD) 服务）将于 2018 年 11 月 7 日停用。 在那之前，当前使用访问控制的应用程序和服务必须全部完整迁移到其他身份验证机制。 本文为打算弃用访问控制的当前客户提供相关建议。 如果当前未使用访问控制，则无需执行任何操作。
-
+Microsoft Azure 访问控制服务 (ACS) 是一种 Azure Active Directory (Azure AD) 服务，将于 2018 年 11 月 7 日停用。 在那之前，当前使用访问控制的应用程序和服务必须全部完整迁移到其他身份验证机制。 本文为打算弃用访问控制的当前客户提供相关建议。 如果当前未使用访问控制，则无需执行任何操作。
 
 ## <a name="overview"></a>概述
 
@@ -37,7 +39,7 @@ Azure 访问控制（一种 Azure Active Directory (Azure AD) 服务）将于 20
 - 向 Web 应用程序添加身份验证，包括自定义和预打包的应用程序（如 SharePoint）。 通过使用访问控制“被动”身份验证，Web 应用程序可支持使用 Microsoft 帐户（以前称为 Live ID）以及 Google、Facebook、Yahoo、Azure AD 和 Active Directory 联合身份验证服务 (AD FS) 的帐户登录。
 - 使用访问控制颁发的令牌保护自定义 Web 服务。 使用“主动”身份验证，Web 服务可确保只允许已通过访问控制验证的已知客户端进行访问。
 
-下面各部分介绍了每个用例及其推荐迁移策略。 
+下面各部分介绍了每个用例及其推荐迁移策略。
 
 > [!WARNING]
 > 在大多数情况下，必须大量更改代码，才能将现有应用和服务迁移到较新的技术。 建议立即开始计划和执行迁移，以避免出现任何潜在的中断或故障时间。
@@ -56,11 +58,56 @@ Azure 访问控制（一种 Azure Active Directory (Azure AD) 服务）将于 20
 https://<mynamespace>.accesscontrol.windows.net
 ```
 
-与 STS 的所有通信以及管理操作都是通过此 URL 完成。 所用路径因用途而异。 若要确定应用程序或服务是否使用访问控制，可监视抵达 https://<namespace>.accesscontrol.windows.net 的任何通信流。 流至此 URL 的任何流量都是由访问控制进行处理，需停止使用。 
+与 STS 的所有通信以及管理操作都是通过此 URL 完成。 所用路径因用途而异。 若要确定应用程序或服务是否使用访问控制，可监视抵达 https://&lt;命名空间&gt;.accesscontrol.windows.net 的任何通信流。 流至此 URL 的任何流量都是由访问控制进行处理，需停止使用。 
 
 抵达 `https://accounts.accesscontrol.windows.net` 的任何流量除外。 流至此 URL 的流量已由其他服务进行处理，**不受**访问控制弃用影响。 
 
 有关访问控制的详细信息，请参阅[访问控制服务 2.0（已存档）](https://msdn.microsoft.com/library/hh147631.aspx)。
+
+## <a name="find-out-which-of-your-apps-will-be-impacted"></a>查明哪些应用将受影响
+
+按照本部分中的步骤查明哪些应用程序将受 ACS 停用影响。
+
+### <a name="download-and-install-acs-powershell"></a>下载并安装 ACS PowerShell
+
+1. 转到 PowerShell 库并下载 [Acs.Namespaces](https://www.powershellgallery.com/packages/Acs.Namespaces/1.0.2)。
+1. 通过运行以下命令安装模块
+
+    ```powershell
+    Install-Module -Name Acs.Namespaces
+    ```
+
+1. 通过运行以下命令获取所有可能的命令的列表
+
+    ```powershell
+    Get-Command -Module Acs.Namespaces
+    ```
+
+    若要获取有关特定命令的帮助，请运行：
+
+    ```
+     Get-Help [Command-Name] -Full
+    ```
+    
+    其中，`[Command-Name]` 是 ACS 命令的名称。
+
+### <a name="list-your-acs-namespaces"></a>列出 ACS 命名空间
+
+1. 使用 **Connect-AcsAccount** cmdlet 连接到 ACS。
+  
+    您可能需要运行 `Set-ExecutionPolicy -ExecutionPolicy Bypass`，然后才能执行命令，并且需要是那些订阅的管理员，才能执行命令。
+
+1. 使用 **Get-AcsSubscription** cmdlet 列出可用的 Azure 订阅。
+1. 使用 **Get-AcsNamespace** cmdlet 列出 ACS 命名空间。
+
+### <a name="check-which-applications-will-be-impacted"></a>检查哪些应用程序将受影响
+
+1. 使用上一步中的命名空间并转到 `https://<namespace>.accesscontrol.windows.net`
+
+    例如，如果某个命名空间是 contoso-test，请转到 `https://contoso-test.accesscontrol.windows.net`
+
+1. 在“信任关系”下，选择“信赖方应用”以查看将受 ACS 停用影响的应用列表。
+1. 对于你拥有的任何其他 ACS 命名空间，重复步骤 1-2。
 
 ## <a name="retirement-schedule"></a>停用计划
 
@@ -68,10 +115,12 @@ https://<mynamespace>.accesscontrol.windows.net
 
 以下是访问控制组件停用计划：
 
-- **2017 年 11 月**：[停用](https://blogs.technet.microsoft.com/enterprisemobility/2017/09/18/marching-into-the-future-of-the-azure-ad-admin-experience-retiring-the-azure-classic-portal/) Azure 经典门户中的 Azure AD 管理体验。 届时，将通过以下新专用 URL 管理访问控制命名空间：`http://manage.windowsazure.com?restoreClassic=true`。 如有需要，可使用此 URl 查看现有命名空间、启用/禁用命名空间和删除命名空间。
+- **2017 年 11 月**：[停用](https://blogs.technet.microsoft.com/enterprisemobility/2017/09/18/marching-into-the-future-of-the-azure-ad-admin-experience-retiring-the-azure-classic-portal/) Azure 经典门户中的 Azure AD 管理体验。 届时，将通过以下新专用 URL 管理访问控制命名空间：`https://manage.windowsazure.com?restoreClassic=true`。 如有需要，可使用此 URl 查看现有命名空间、启用/禁用命名空间和删除命名空间。
 - **2018 年 4 月 2 日**：完全停用 Azure 经典门户，这意味着，不再可以通过任何 URL 管理访问控制命名空间。 此时，不能禁用/启用、删除或枚举访问控制命名空间。 但可通过 `https://\<namespace\>.accesscontrol.windows.net` 访问功能完善的访问控制管理门户。 访问控制的其他所有组件继续正常运行。
 - **2018 年 11 月 7 日**：永久关闭所有访问控制组件。 这包括访问控制管理门户、管理服务、STS 和令牌转换规则引擎。 此时，发送到访问控制（位于 \<命名空间\>.accesscontrol.windows.net）的所有请求都会失败。 应在此之前将所有现有应用和服务迁移到其他技术。
 
+> [!NOTE]
+> 策略会禁用在一段时间内未请求令牌的命名空间。 自 2018 年 9 月初起，这段时间目前是 14 天处于不活动状态，但在未来几周内将缩短为 7 天处于不活动状态。 如果有当前已禁用的访问控制命名空间，则可以[下载并安装 ACS PowerShell](#download-and-install-acs-powershell) 以重新启用命名空间。
 
 ## <a name="migration-strategies"></a>迁移策略
 
@@ -85,28 +134,27 @@ https://<mynamespace>.accesscontrol.windows.net
 | ------- | -------- |
 | Azure 服务总线 | [迁移到共享访问签名](https://docs.microsoft.com/azure/service-bus-messaging/service-bus-migrate-acs-sas) |
 | Azure 服务总线中继 | [迁移到共享访问签名](https://docs.microsoft.com/azure/service-bus-relay/relay-migrate-acs-sas) |
-| Azure 托管缓存 | [迁移到 Azure Redis 缓存](https://docs.microsoft.com/azure/redis-cache/cache-faq#which-azure-cache-offering-is-right-for-me) |
+| Azure 托管缓存 | [迁移到用于 Redis 的 Azure 缓存](https://docs.microsoft.com/azure/azure-cache-for-redis/cache-faq#which-azure-cache-offering-is-right-for-me) |
 | Azure DataMarket | [迁移到认知服务 API](https://docs.microsoft.com/azure/machine-learning/studio/datamarket-deprecation) |
 | BizTalk 服务 | [迁移到 Azure 应用服务的逻辑应用功能](https://docs.microsoft.com/azure/machine-learning/studio/datamarket-deprecation) |
 | Azure 媒体服务 | [迁移到 Azure AD 身份验证](https://azure.microsoft.com/blog/azure-media-service-aad-auth-and-acs-deprecation/) |
 | Azure 备份 | [升级 Azure 备份代理](https://docs.microsoft.com/azure/backup/backup-azure-file-folder-backup-faq) |
 
 <!-- Dynamics CRM: Migrate to new SDK, Dynamics team handling privately -->
-<!-- Azure RemoteApp deprecated in favor of Citrix: http://www.zdnet.com/article/microsoft-to-drop-azure-remoteapp-in-favor-of-citrix-remoting-technologies/ -->
+<!-- Azure RemoteApp deprecated in favor of Citrix: https://www.zdnet.com/article/microsoft-to-drop-azure-remoteapp-in-favor-of-citrix-remoting-technologies/ -->
 <!-- Exchange push notifications are moving, customers don't need to move -->
 <!-- Retail federation services are moving, customers don't need to move -->
 <!-- Azure StorSimple: TODO -->
 <!-- Azure SiteRecovery: TODO -->
 
-
 ### <a name="sharepoint-customers"></a>SharePoint 客户
 
-长期以来，SharePoint 2013、2016 和 SharePoint Online 客户都是使用 ACS 在云、本地和混合场景中进行身份验证。 有些 SharePoint 功能和用例会受 ACS 停用的影响，但有些则不会。 下表汇总了对利用 ACS 的某些最流行 SharePoint 功能进行迁移的指导：
+对于云、本地和混合方案, SharePoint 2013、2016和 SharePoint Online 客户使用 ACS 进行身份验证。 有些 SharePoint 功能和用例会受 ACS 停用的影响，但有些则不会。 下表汇总了对利用 ACS 的某些最流行 SharePoint 功能进行迁移的指导：
 
 | 功能 | 指南 |
 | ------- | -------- |
-| 从 Azure AD 对用户进行身份验证 | 以前，Azure AD 不支持 SharePoint 用来执行身份验证的 SAML 1.1 令牌，并将 ACS 用作中介，使 SharePoint 能够与 Azure AD 令牌格式兼容。 现在，可以[使用令牌颁发策略将 SharePoint 直接连接到 Azure AD](https://docs.microsoft.com/Office365/Enterprise/using-azure-ad-for-sharepoint-server-authentication)。 |
-| [本地 SharePoint 中的应用身份验证和服务器到服务器身份验证](https://technet.microsoft.com/library/jj219571(v=office.16).aspx) | 不受 ACS 停用的影响；无需更改。 | 
+| 从 Azure AD 对用户进行身份验证 | 以前，Azure AD 不支持 SharePoint 进行身份验证所需的 SAML 1.1 令牌，并将 ACS 用作中介，使 SharePoint 能够与 Azure AD 令牌格式兼容。 现在, 你可以[使用本地应用 Azure AD 应用库 sharepoint 将 sharepoint 直接连接到 Azure AD](https://docs.microsoft.com/azure/active-directory/saas-apps/sharepoint-on-premises-tutorial)。 |
+| [应用身份验证 & 本地 SharePoint 中的服务器到服务器身份验证](https://technet.microsoft.com/library/jj219571(v=office.16).aspx) | 不受 ACS 停用的影响；无需更改。 | 
 | [SharePoint 加载项的低信任授权（提供程序托管和 SharePoint 托管）](https://docs.microsoft.com/sharepoint/dev/sp-add-ins/three-authorization-systems-for-sharepoint-add-ins) | 不受 ACS 停用的影响；无需更改。 |
 | [SharePoint 云混合搜索](https://blogs.msdn.microsoft.com/spses/2015/09/15/cloud-hybrid-search-service-application/) | 不受 ACS 停用的影响；无需更改。 |
 
@@ -142,7 +190,7 @@ Azure AD 也未必支持与访问控制完全相同的身份验证协议。 例�
 
 大致看来，如果只允许用户使用 Microsoft 工作或学校帐户进行登录，那么迁移到 Azure Active Directory 或许是最佳选择。
 
-| 功能 | 访问控制支持 | Azure AD 支持 |
+| 能力 | 访问控制支持 | Azure AD 支持 |
 | ---------- | ----------- | ---------------- |
 | **帐户类型** | | |
 | Microsoft 工作或学校帐户 | 支持 | 支持 |
@@ -174,26 +222,14 @@ Azure AD 也未必支持与访问控制完全相同的身份验证协议。 例�
 - 可以完全灵活地自定义 Azure AD 令牌。 可以自定义 Azure AD 发布的声明，使其与访问控制发布的声明相匹配。 尤其是用户 ID 或名称标识符声明。 若要在更换技术后，仍继续为用户接收一致的用户标识符，需确保 Azure AD 和访问控制颁发的用户 ID 一致。
 - 可以配置应用程序专属令牌签名证书，且由自己控制其生存期。
 
-<!--
-
-Possible nameIdentifiers from Access Control (via AAD or AD FS):
-- AD FS - Whatever AD FS is configured to send (email, UPN, employeeID, what have you)
-- Default from AAD using App Registrations, or Custom Apps before ClaimsIssuance policy: subject/persistent ID
-- Default from AAD using Custom apps nowadays: UPN
-- Kusto can't tell us distribution, it's redacted
-
--->
-
 > [!NOTE]
 > 这种方法需要使用 Azure AD Premium 许可证。 如果你是访问控制客户，并且需要 Premium 许可证来设置应用程序的单一登录，请与我们联系。 我们很乐意为你提供开发人员许可证。
 
 另一种方法是遵循[此代码示例](https://github.com/Azure-Samples/active-directory-dotnet-webapp-wsfederation)，其中有关如何设置 WS 联合身份验证的说明略有不同。 此代码示例不使用 WIF，而是使用 ASP.NET 4.5 OWIN 中间件。 不过，应用注册说明也适用于使用 WIF 的应用，但不需要使用 Azure AD Premium 许可证。 
 
-如果采用这种方法，需要了解 [Azure AD 中的签名密钥滚动更新](https://docs.microsoft.com/azure/active-directory/develop/active-directory-signing-key-rollover)。 这种方法使用 Azure AD 全局签名密钥来颁发令牌。 默认情况下，WIF 不会自动刷新签名密钥。 如果 Azure AD 轮播全局签名密钥，WIF 实现需要做好接受更改的准备。
+如果采用这种方法，需要了解 [Azure AD 中的签名密钥滚动更新](https://docs.microsoft.com/azure/active-directory/develop/active-directory-signing-key-rollover)。 这种方法使用 Azure AD 全局签名密钥来颁发令牌。 默认情况下，WIF 不会自动刷新签名密钥。 如果 Azure AD 轮播全局签名密钥，WIF 实现需要做好接受更改的准备。 有关详细信息，请参阅[有关 Azure AD 中签名密钥滚动更新的重要信息](https://msdn.microsoft.com/library/azure/dn641920.aspx)。
 
 如果能够通过 OpenID Connect 或 OAuth 协议与 Azure AD 集成，则建议这样做。 [Azure AD 开发人员指南](https://aka.ms/aaddev)中收录了大量有关如何将 Azure AD 集成到 Web 应用程序的文档和指南。
-
-<!-- TODO: If customers ask about authZ, let's put a blurb on role claims here -->
 
 #### <a name="migrate-to-azure-active-directory-b2c"></a>迁移到 Azure Active Directory B2C
 
@@ -205,7 +241,7 @@ Possible nameIdentifiers from Access Control (via AAD or AD FS):
 
 下表对与 Web 应用程序相关的访问控制功能和 Azure AD B2C 中提供的功能进行了比较。 粗略来看，如果应用面向使用者或支持许多不同类型的帐户，那么正确选择可能是迁移到 Azure AD B2C。
 
-| 功能 | 访问控制支持 | Azure AD B2C 支持 |
+| 能力 | 访问控制支持 | Azure AD B2C 支持 |
 | ---------- | ----------- | ---------------- |
 | **帐户类型** | | |
 | Microsoft 工作或学校帐户 | 支持 | 支持（通过自定义策略）  |
@@ -236,7 +272,6 @@ Possible nameIdentifiers from Access Control (via AAD or AD FS):
 - [Azure AD B2C 自定义策略](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-overview-custom)
 - [Azure AD B2C 定价](https://azure.microsoft.com/pricing/details/active-directory-b2c/)
 
-
 #### <a name="migrate-to-ping-identity-or-auth0"></a>迁移到 Ping 标识或 Auth0
 
 在某些情况下，可能会发现如果不修改主要代码，则在 Web 应用程序中，Azure AD 和 Azure AD B2C 不足以替代访问控制。 一些常见示例可能包括：
@@ -249,18 +284,16 @@ Possible nameIdentifiers from Access Control (via AAD or AD FS):
 
 在这些情况下，可能需要考虑将 Web 应用程序迁移到另一个云身份验证服务。 建议了解以下选项。 以下每个选项都提供了与访问控制类似的功能：
 
-
-
-|     |     | 
+|     |     |
 | --- | --- |
-| ![Auth0](./media/active-directory-acs-migration/rsz_auth0.png) | [Auth0](https://auth0.com/acs) 是一种灵活的云标识服务，该服务创建了[针对访问控制客户的高级迁移指南](https://auth0.com/acs)，并且几乎支持 ACS 所支持的所有功能。 |
-| ![Ping](./media/active-directory-acs-migration/rsz_ping.png) | [Ping 标识](https://www.pingidentity.com)提供两种类似于 ACS 的解决方案。 PingOne 是一种云标识服务，支持多种与 ACS 相同的功能，PingFederate 是一个类似的本地标识产品，可提供更大的灵活性。 若要深入了解如何使用这些产品，请参阅 [Ping 的 ACS 停用指南](https://www.pingidentity.com/en/company/blog/2017/11/20/migrating_from_microsoft_acs_to_ping_identity.html)。 |
+| ![此图像显示 Auth0 徽标](./media/active-directory-acs-migration/rsz_auth0.png) | [Auth0](https://auth0.com/acs) 是一种灵活的云标识服务，该服务创建了[针对访问控制客户的高级迁移指南](https://auth0.com/acs)，并且几乎支持 ACS 所支持的所有功能。 |
+| ![此图显示了 Ping 标识徽标](./media/active-directory-acs-migration/rsz_ping.png) | [Ping 标识](https://www.pingidentity.com)提供两种类似于 ACS 的解决方案。 PingOne 是一种云标识服务, 它支持与 ACS 相同的许多功能, 而 PingFederate 是一种类似的本地标识产品, 可提供更大的灵活性。 若要深入了解如何使用这些产品，请参阅 [Ping 的 ACS 停用指南](https://www.pingidentity.com/en/company/blog/2017/11/20/migrating_from_microsoft_acs_to_ping_identity.html)。 |
 
 使用 Ping 标识和 Auth0 是为了确保所有访问控制客户都拥有适用于其应用和服务的迁移途径，从而最大限度地减少从访问控制迁移所需的工作量。
 
 <!--
 
-## Sharepoint 2010, 2013, 2016
+## SharePoint 2010, 2013, 2016
 
 TODO: Azure AD only, use Azure AD SAML 1.1 tokens, when we bring it back online.
 Other IDPs: use Auth0? https://auth0.com/docs/integrations/sharepoint.
@@ -287,7 +320,7 @@ Other IDPs: use Auth0? https://auth0.com/docs/integrations/sharepoint.
 
 也可使用 Azure AD 进行服务器间身份验证（通过使用 OAuth 客户端凭据授权的 Azure AD 实现）。 下表对服务器间身份验证中的访问控制功能和 Azure AD 中提供的功能进行了比较。
 
-| 功能 | 访问控制支持 | Azure AD 支持 |
+| 能力 | 访问控制支持 | Azure AD 支持 |
 | ---------- | ----------- | ---------------- |
 | 如何注册 Web 服务 | 在访问控制管理门户中创建信赖方 | 在 Azure 门户中创建 Azure AD Web 应用程序 |
 | 如何注册客户端 | 在访问控制管理门户中创建服务标识 | 在 Azure 门户中创建另一个 Azure AD Web 应用程序 |
@@ -313,12 +346,16 @@ Other IDPs: use Auth0? https://auth0.com/docs/integrations/sharepoint.
 
 在这些情况下，可能要考虑将 Web 应用程序迁移到另一个云身份验证服务。 建议了解以下选项。 以下每个选项都提供了与访问控制类似的功能：
 
-|     |     | 
+|     |     |
 | --- | --- |
-| ![Auth0](./media/active-directory-acs-migration/rsz_auth0.png) | [Auth0](https://auth0.com/acs) 是一种灵活的云标识服务，该服务创建了[针对访问控制客户的高级迁移指南](https://auth0.com/acs)，并且几乎支持 ACS 所支持的所有功能。 |
-| ![Ping](./media/active-directory-acs-migration/rsz_ping.png) | [Ping 标识](https://www.pingidentity.com)提供两种类似于 ACS 的解决方案。 PingOne 是一种云标识服务，支持多种与 ACS 相同的功能，PingFederate 是一个类似的本地标识产品，可提供更大的灵活性。 若要深入了解如何使用这些产品，请参阅 [Ping 的 ACS 停用指南](https://www.pingidentity.com/en/company/blog/2017/11/20/migrating_from_microsoft_acs_to_ping_identity.html)。 |
+| ![此图像显示 Auth0 徽标](./media/active-directory-acs-migration/rsz_auth0.png) | [Auth0](https://auth0.com/acs) 是一种灵活的云标识服务，该服务创建了[针对访问控制客户的高级迁移指南](https://auth0.com/acs)，并且几乎支持 ACS 所支持的所有功能。 |
+| ![此图显示了 Ping 标识徽标](./media/active-directory-acs-migration/rsz_ping.png) | [Ping 标识](https://www.pingidentity.com)提供两种类似于 ACS 的解决方案。 PingOne 是一种云标识服务, 它支持与 ACS 相同的许多功能, 而 PingFederate 是一种类似的本地标识产品, 可提供更大的灵活性。 若要深入了解如何使用这些产品，请参阅 [Ping 的 ACS 停用指南](https://www.pingidentity.com/en/company/blog/2017/11/20/migrating_from_microsoft_acs_to_ping_identity.html)。 |
 
 使用 Ping 标识和 Auth0 是为了确保所有访问控制客户都拥有适用于其应用和服务的迁移途径，从而最大限度地减少从访问控制迁移所需的工作量。
+
+#### <a name="passthrough-authentication"></a>直通身份验证
+
+对于使用任意令牌转换的直通身份验证，没有与 ACS 等价的 Microsoft 技术。 如果你的客户需要此身份验证，Auth0 可能是提供最接近的近似解决方案的服务。
 
 ## <a name="questions-concerns-and-feedback"></a>问题、疑虑和反馈
 

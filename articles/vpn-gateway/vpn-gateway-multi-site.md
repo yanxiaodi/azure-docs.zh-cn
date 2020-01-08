@@ -1,11 +1,11 @@
 ---
-title: "使用 VPN 网关和 PowerShell 将虚拟网络连接到多个站点：经典 | Microsoft Docs"
-description: "通过 VPN 网关将多个本地网站连接到经典虚拟网络。"
+title: 使用 VPN 网关和 PowerShell 将虚拟网络连接到多个站点：经典 | Microsoft Docs
+description: 通过 VPN 网关将多个本地网站连接到经典虚拟网络。
 services: vpn-gateway
 documentationcenter: na
 author: yushwang
 manager: rossort
-editor: 
+editor: ''
 tags: azure-service-management
 ms.assetid: b043df6e-f1e8-4a4d-8467-c06079e2c093
 ms.service: vpn-gateway
@@ -15,18 +15,19 @@ ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 02/14/2018
 ms.author: yushwang
-ms.openlocfilehash: c0af4271df0e88354edb717b8d6f4c99ab29e573
-ms.sourcegitcommit: d87b039e13a5f8df1ee9d82a727e6bc04715c341
-ms.translationtype: HT
+ms.openlocfilehash: 77f8b7094c96e507eef1d360a26240627bc0e350
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/21/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60836072"
 ---
 # <a name="add-a-site-to-site-connection-to-a-vnet-with-an-existing-vpn-gateway-connection-classic"></a>将站点到站点连接添加到包含现有 VPN 网关连接的 VNet（经典）
 
 [!INCLUDE [deployment models](../../includes/vpn-gateway-classic-deployment-model-include.md)]
 
 > [!div class="op_single_selector"]
-> * [Azure portal](vpn-gateway-howto-multi-site-to-site-resource-manager-portal.md)
+> * [Azure 门户](vpn-gateway-howto-multi-site-to-site-resource-manager-portal.md)
 > * [PowerShell（经典）](vpn-gateway-multi-site.md)
 >
 >
@@ -35,7 +36,7 @@ ms.lasthandoff: 02/21/2018
 
 ### <a name="deployment-models-and-methods"></a>部署模型和方法
 
-[!INCLUDE [vpn-gateway-clasic-rm](../../includes/vpn-gateway-classic-rm-include.md)]
+[!INCLUDE [vpn-gateway-classic-rm](../../includes/vpn-gateway-classic-rm-include.md)]
 
 当我们发布有关此配置的新文章和其他可用工具时，会更新此表格。 有相关的文章发布时，我们会直接从此表格链接到该文章。
 
@@ -51,7 +52,7 @@ ms.lasthandoff: 02/21/2018
 
 ## <a name="points-to-consider"></a>考虑的要点
 
-不可通过门户更改此虚拟网络。 需更改网络配置文件，而不是使用门户。 若在门户中进行更改，更改将覆盖此虚拟网络的多站点引用设置。
+不可通过门户更改此虚拟网络。  需更改网络配置文件，而不是使用门户。 若在门户中进行更改，更改将覆盖此虚拟网络的多站点引用设置。
 
 在完成多站点过程后，便可轻松自如地使用网络配置文件。 但是，如果有多个人在处理网络配置，需要确保每个人都知道这个限制。 这并不意味着完全不能使用门户。 除了无法对此特定虚拟网络进行配置更改以外，可以使用它来完成其他任何操作。
 
@@ -74,7 +75,7 @@ ms.lasthandoff: 02/21/2018
 2. 配置新网关并创建 VPN 隧道。 有关说明，请参阅[指定 SKU 和 VPN 类型](vpn-gateway-howto-site-to-site-classic-portal.md#sku)。 请确保将“路由类型”指定为“动态”。
 
 ### <a name="if-you-dont-have-a-site-to-site-virtual-network"></a>如果没有站点到站点虚拟网络：
-1. 按照以下说明创建站点到站点虚拟网络：[创建使用站点到站点 VPN 连接的虚拟网络](vpn-gateway-site-to-site-create.md)。  
+1. 使用以下说明创建站点到站点虚拟网络：[创建具有站点到站点 VPN 连接的虚拟网络](vpn-gateway-site-to-site-create.md)。  
 2. 按照以下说明配置动态路由网关：[配置 VPN 网关](vpn-gateway-configure-vpn-gateway-mp.md)。 请务必为网关类型选择“**动态路由**”。
 
 ## <a name="export"></a>2.导出网络配置文件
@@ -87,7 +88,7 @@ Get-AzureVNetConfig -ExportToFile C:\AzureNet\NetworkConfig.xml
 ## <a name="3-open-the-network-configuration-file"></a>3.打开网络配置文件
 打开上一步骤中下载的网络配置文件。 使用偏好的任何 xml 编辑器。 该文件的内容类似于：
 
-        <NetworkConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/ServiceHosting/2011/07/NetworkConfiguration">
+        <NetworkConfiguration xmlns:xsd="https://www.w3.org/2001/XMLSchema" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/ServiceHosting/2011/07/NetworkConfiguration">
           <VirtualNetworkConfiguration>
             <LocalNetworkSites>
               <LocalNetworkSite name="Site1">
@@ -137,7 +138,7 @@ Get-AzureVNetConfig -ExportToFile C:\AzureNet\NetworkConfig.xml
 ## <a name="4-add-multiple-site-references"></a>4.添加多个站点引用
 在添加或删除站点引用信息时，会对 ConnectionsToLocalNetwork/LocalNetworkSiteRef 进行配置更改。 添加新的本地站点引用会触发 Azure 来创建新隧道。 在以下示例中，网络配置适用于单站点连接。 更改完后，请保存该文件。
 
-```
+```xml
   <Gateway>
     <ConnectionsToLocalNetwork>
       <LocalNetworkSiteRef name="Site1"><Connection type="IPsec" /></LocalNetworkSiteRef>
@@ -147,7 +148,7 @@ Get-AzureVNetConfig -ExportToFile C:\AzureNet\NetworkConfig.xml
 
 若要添加其他站点引用（创建多站点配置），只需添加其他“LocalNetworkSiteRef”行，如下例所示：
 
-```
+```xml
   <Gateway>
     <ConnectionsToLocalNetwork>
       <LocalNetworkSiteRef name="Site1"><Connection type="IPsec" /></LocalNetworkSiteRef>

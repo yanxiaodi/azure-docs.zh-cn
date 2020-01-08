@@ -1,99 +1,118 @@
 ---
-title: 根据自定义映像预配 Azure Batch 池 | Microsoft Docs
-description: 可根据自定义映像创建 Batch 池，以预配包含应用程序所需的软件和数据的计算节点。 自定义映像是配置计算节点以运行 Batch 工作负载的高效方法。
+title: 使用共享映像库创建池-Azure Batch |Microsoft Docs
+description: 使用共享映像库创建 Batch 池, 以将自定义映像设置为包含应用程序所需的软件和数据的计算节点。 自定义映像是配置计算节点以运行 Batch 工作负载的高效方法。
 services: batch
-author: dlepow
-manager: jeconnoc
+author: laurenhughes
+manager: gwallace
 ms.service: batch
 ms.topic: article
-ms.date: 04/23/2018
-ms.author: danlep
-ms.openlocfilehash: 78bc50a1189d8f42281f81643a5e907d94480082
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.date: 08/28/2019
+ms.author: lahugh
+ms.openlocfilehash: 3c2213c25a8fdc6d6545711bd2af9b94662ee609
+ms.sourcegitcommit: d200cd7f4de113291fbd57e573ada042a393e545
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
-ms.locfileid: "32158606"
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70141822"
 ---
-# <a name="use-a-managed-custom-image-to-create-a-pool-of-virtual-machines"></a>使用托管的自定义映像创建虚拟机池 
+# <a name="use-the-shared-image-gallery-to-create-a-pool"></a>使用共享映像库创建池
 
-使用虚拟机配置创建 Azure Batch 池时，需指定一个虚拟机 (VM) 映像，为池中每个计算节点提供操作系统。 可以使用 Azure Marketplace 映像或自定义映像（自行创建并配置的 VM 映像）创建虚拟机池。 自定义映像必须是 Batch 帐户所在的同一个 Azure 订阅和区域中的托管映像资源。
+使用虚拟机配置创建 Azure Batch 池时，需指定一个虚拟机 (VM) 映像，为池中每个计算节点提供操作系统。 你可以使用受支持的 Azure Marketplace 映像创建虚拟机池, 或者使用[共享映像库](../virtual-machines/windows/shared-image-galleries.md)创建自定义映像。
 
-## <a name="why-use-a-custom-image"></a>为何使用自定义映像？
-提供自定义映像时，可以控制操作系统配置，以及要使用的操作系统和数据磁盘的类型。 自定义映像可以包含应用程序和引用数据，Batch 池节点预配好后即可使用这些数据。
+## <a name="benefits-of-the-shared-image-gallery"></a>共享映像库的优点
 
-在准备池的计算节点以运行 Batch 工作负荷时，使用自定义映像可以节省时间。 虽然可以在每个计算节点（预配后）上使用 Azure Marketplace 映像和安装软件，但使用自定义映像可能更加高效。
+使用自定义映像的共享映像库时, 可以控制操作系统类型和配置, 以及数据磁盘的类型。 共享映像可包括应用程序和引用数据, 这些数据在预配后就会在所有 Batch 池节点上可用。
 
-使用根据方案配置的自定义映像可提供几个优点：
+你还可以根据需要为你的环境提供多个版本的映像。 使用映像版本创建 VM 时, 映像版本用于为 VM 创建新磁盘。
 
-- **配置操作系统 (OS)**。 可对自定义映像的操作系统磁盘执行特殊的操作系统配置。 
-- **预安装应用程序。** 可在 OS 磁盘中创建包含预装应用程序的自定义映像，与使用 StartTask 预配计算节点后再安装应用程序相比，这种方法更加高效，且不容易出错。
-- **节省 VM 上的重新启动时间。** 安装应用程序通常需要重新启动 VM，这是一个耗时的过程。 预安装应用程序可节省重新启动时间。 
-- **一次复制极大量的数据。** 可将静态数据复制到托管映像的数据磁盘，使这些数据成为托管的自定义映像的一部分。 只需执行此操作一次，然后，数据可供池的每个节点使用。
-- **选择磁盘类型。** 可以从 VHD、Azure VM 的托管磁盘、这些磁盘的快照，或者自己配置的 Linux 或 Windows 安装创建托管的自定义映像。 可以为 OS 磁盘和数据磁盘使用高级存储。
-- **将池扩大到任何大小。** 使用托管的自定义映像创建池时，池可以扩大到所请求的任何大小。 无需创建映像 Blob VHD 的副本即可适应 VM 的数目。 
+使用共享映像可节省准备池的计算节点以运行 Batch 工作负荷的时间。 预配后, 可以使用 Azure Marketplace 映像并在每个计算节点上安装软件, 但使用共享映像通常效率更高。 此外, 你可以为共享映像指定多个副本, 因此, 当你创建包含多个 Vm (超过600个 Vm) 的池时, 你将在创建池时节省时间。
 
+使用为你的方案配置的共享映像可提供以下优势:
+
+* **跨区域使用相同的图像。** 可以在不同的区域中创建共享的映像副本, 以便所有池使用同一个映像。
+* **配置操作系统 (OS)。** 可以自定义映像操作系统磁盘的配置。
+* **预安装应用程序。** 在使用启动任务预配计算节点后, 在 OS 磁盘上预先安装应用程序比安装应用程序更高效且容易出错。
+* **复制大量数据一次。** 将静态数据复制到托管映像的数据磁盘, 使其成为托管共享映像的一部分。 只需执行此操作一次，然后，数据可供池的每个节点使用。
+* **将池增长到更大的大小。** 利用共享映像库, 可以创建更大的池, 以及自定义映像和更多共享映像副本。
+* **比自定义映像更好的性能。** 使用共享映像, 池达到稳定状态所用的时间最快可达 25%, 并且 VM 空闲延迟最多可达 30%。
+* **用于简化管理的图像版本控制和分组。** 映像分组定义包含有关创建映像的原因、其适用的操作系统以及有关使用映像的信息。 通过对图像进行分组, 可以更轻松地管理图像。 有关详细信息, 请参阅[映像定义](../virtual-machines/windows/shared-image-galleries.md#image-definitions)。
 
 ## <a name="prerequisites"></a>先决条件
 
-- **托管映像资源**。 若要使用自定义映像创建虚拟机池，需在 Batch 帐户所在的同一 Azure 订阅和区域中创建托管映像资源。 有关准备托管映像的选项，请参阅以下部分。
-- **Azure Active Directory (AAD) 身份验证**。 Batch 客户端 API 必须使用 AAD 身份验证。 有关 Azure Batch 对 AAD 的支持，请参阅[使用 Active Directory 对 Batch 服务解决方案进行身份验证](batch-aad-auth.md)。
+* 一个 Azure Batch 帐户。 若要创建批处理帐户, 请参阅使用[Azure 门户](quick-create-portal.md)或[Azure CLI](quick-create-cli.md)的批处理快速入门。
 
-    
-## <a name="prepare-a-custom-image"></a>准备自定义映像
-可以从 VHD、包含托管磁盘的 Azure VM 或 VM 快照准备托管映像。 对于 Batch，建议使用托管磁盘或 VM 快照从 VM 创建托管映像。 应存在托管映像和基础资源，以便池可以纵向扩展，并且可在删除池后将其删除。 
-
-准备映像时，请记住以下要点：
-
-* 确保用于预配 Batch 池的基础 OS 映像没有任何预安装的 Azure 扩展，例如自定义脚本扩展。 如果映像包含预安装的扩展，Azure 可能会在部署 VM 时遇到问题。
-* 确保所提供的基础 OS 映像使用默认临时驱动器。 Batch 节点代理目前需要使用默认的临时驱动器。
-* 在 Batch 池的生存期内，无法删除该池引用的托管映像资源。 如果删除托管映像资源，池无法进一步扩大。 
-
-### <a name="to-create-a-managed-image"></a>创建托管映像
-可以使用任何已准备好的现有 Windows 或 Linux 操作系统磁盘来创建托管映像。 例如，如果希望使用本地映像，请使用 AzCopy 或其他上传工具，将本地磁盘上传到 Batch 帐户所在的同一订阅和区域中的 Azure 存储帐户。 有关上传 VHD 和创建托管映像的详细步骤，请参阅 [Windows](../virtual-machines/windows/upload-generalized-managed.md) 或 [Linux](../virtual-machines/linux/upload-vhd.md) VM 相关的指导。
-
-还可以从新的或现有的 Azure VM，或者 VM 快照准备托管映像。 
-
-* 若要创建新的 VM，可将 Azure Marketplace 映像用作托管映像的基础映像，然后对其进行自定义。 
-
-* 如果打算使用门户捕获映像，请确保使用托管磁盘创建 VM。 这是创建 VM 时的默认存储设置。
-
-* VM 开始运行后，请通过 RDP（适用于 Windows）或 SSH（适用于 Linux）进行连接。 安装所需的任何软件，或复制所需数据，然后通用化 VM。  
-
-有关通用化 Azure VM 和创建托管映像的步骤，请参阅 [Windows](../virtual-machines/windows/capture-image-resource.md) 或 [Linux](../virtual-machines/linux/capture-image.md) VM 相关的指导。
-
-根据创建包含映像的 Batch 池的预期方式，需要准备好映像的以下标识符：
-
-* 如果打算使用 Batch API 创建包含映像的池，则需要准备好映像的**资源 ID**，其格式为 `/subscriptions/xxxx-xxxxxx-xxxxx-xxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.Compute/images/myImage`。 
-* 如果打算使用门户，则需要准备好映像的**名称**。 
-
-
-
-
-
-## <a name="create-a-pool-from-a-custom-image-in-the-portal"></a>在 Azure 门户中使用自定义映像创建池
-
-如果已保存自定义映像，并且知道其资源 ID 或名称，则可以从该映像创建 Batch 池。 以下步骤说明如何从 Azure 门户创建池。
+* **共享图像库图像**。 有关准备共享映像的详细信息和步骤, 请参阅使用[Azure CLI 创建共享图像库](../virtual-machines/linux/shared-images.md)或[使用 Azure 门户创建共享图像库](../virtual-machines/linux/shared-images-portal.md)。
 
 > [!NOTE]
-> 若要使用某个 Batch API 创建池，请确保用于 AAD 身份验证的标识对映像资源拥有权限。 请参阅[使用 Active Directory 对 Batch 服务解决方案进行身份验证](batch-aad-auth.md)。
->
+> 共享映像必须与 Batch 帐户位于同一订阅中。 只要共享映像在与 Batch 帐户相同的区域中具有副本, 就可以在不同的区域中。
 
-1. 导航到 Azure 门户中的批处理帐户。 此帐户必须与包含自定义映像的资源组在同一订阅和区域中。 
-2. 在左侧的“设置”窗口中，选择“池”菜单项。
-3. 在“池”窗口中，选择“添加”命令。
-4. 在“添加池”窗口中，从“映像类型”下拉列表中选择“自定义映像(Linux/Windows)”。 在“自定义 VM 映像”下拉列表中，选择映像名称（资源 ID 的短格式）。
-5. 为自定义映像选择正确的“发布服务器/产品/SKU”。
-6. 指定剩余所需设置，包括“节点大小”、“目标专用节点”和“低优先级节点”，以及任何所需的可选设置。
+## <a name="create-a-pool-from-a-shared-image-using-the-azure-cli"></a>使用 Azure CLI 从共享映像创建池
 
-    例如，对于 Microsoft Windows Server Datacenter 2016 自定义映像，会显示“添加池”窗口，如下所示：
+若要使用 Azure CLI 从共享映像创建池, 请使用`az batch pool create`命令。 在`--image`字段中指定共享映像 ID。 请确保 OS 类型和 SKU 与指定的版本匹配`--node-agent-sku-id`
 
-    ![从自定义 Windows 映像添加池](media/batch-custom-images/add-pool-custom-image.png)
-  
-要检查现有池是否基于自定义映像，请查看“池”窗口的资源摘要部分中的“操作系统”属性。 如果池是从自定义映像创建的，该属性会设置为“自定义 VM 映像”。
+```azurecli
+az batch pool create \
+    --id mypool --vm-size Standard_A1_v2 \
+    --target-dedicated-nodes 2 \
+    --image "/subscriptions/{sub id}/resourceGroups/{resource group name}/providers/Microsoft.Compute/galleries/{gallery name}/images/{image definition name}/versions/{version id}" \
+    --node-agent-sku-id "batch.node.ubuntu 16.04"
+```
 
-与池关联的所有自定义映像已显示在池的“属性”窗口中。
- 
+## <a name="create-a-pool-from-a-shared-image-using-c"></a>使用从共享映像创建池C#
+
+或者, 可以使用C# SDK 从共享映像创建池。
+
+```csharp
+private static VirtualMachineConfiguration CreateVirtualMachineConfiguration(ImageReference imageReference)
+{
+    return new VirtualMachineConfiguration(
+        imageReference: imageReference,
+        nodeAgentSkuId: "batch.node.windows amd64");
+}
+
+private static ImageReference CreateImageReference()
+{
+    return new ImageReference(
+        virtualMachineImageId: "/subscriptions/{sub id}/resourceGroups/{resource group name}/providers/Microsoft.Compute/galleries/{gallery name}/images/{image definition name}/versions/{version id}");
+}
+
+private static void CreateBatchPool(BatchClient batchClient, VirtualMachineConfiguration vmConfiguration)
+{
+    try
+    {
+        CloudPool pool = batchClient.PoolOperations.CreatePool(
+            poolId: PoolId,
+            targetDedicatedComputeNodes: PoolNodeCount,
+            virtualMachineSize: PoolVMSize,
+            virtualMachineConfiguration: vmConfiguration);
+
+        pool.Commit();
+    }
+    ...
+}
+```
+
+## <a name="create-a-pool-from-a-shared-image-using-the-azure-portal"></a>使用 Azure 门户从共享映像创建池
+
+使用以下步骤从 Azure 门户中的共享映像创建池。
+
+1. 打开 [Azure 门户](https://portal.azure.com)。
+1. 中转到 " **Batch 帐户**" 并选择你的帐户。
+1. 选择 "**池**", 然后单击 "**添加**" 创建新池。
+1. 在 "**映像类型**" 部分中, 选择 "**共享图像库**"。
+1. 填写剩余部分, 其中包含有关托管映像的信息。
+1. 选择“确定”。
+
+![使用门户通过共享映像创建池。](media/batch-custom-images/create-custom-pool.png)
+
+## <a name="considerations-for-large-pools"></a>大型池的注意事项
+
+如果计划使用共享映像创建包含数百或数千个 Vm 或更多 Vm 的池, 请使用以下指南。
+
+* **共享图像库副本数。**  对于每个具有多达600实例的池, 建议至少保留一个副本。 例如, 如果要创建包含 3000 Vm 的池, 则应至少保留映像的5个副本。 我们始终建议保留比最低要求更多的副本, 以获得更好的性能。
+
+* **调整超时**如果池包含固定数量的节点 (如果不自动缩放), 请根据池大小`resizeTimeout`增加池的属性。 对于每个 1000 Vm, 建议的大小调整超时至少为15分钟。 例如, 对于包含 2000 Vm 的池, 建议的大小调整超时至少为30分钟。
+
 ## <a name="next-steps"></a>后续步骤
 
-- 有关 Batch 深入概述的信息，请参阅[使用 Batch 开发大规模并行计算解决方案](batch-api-basics.md)。
+* 有关 Batch 深入概述的信息，请参阅[使用 Batch 开发大规模并行计算解决方案](batch-api-basics.md)。

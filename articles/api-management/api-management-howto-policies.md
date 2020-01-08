@@ -1,29 +1,29 @@
 ---
-title: "Azure API 管理中的策略 | Microsoft Docs"
-description: "了解如何在 API 管理创建、编辑和配置策略。"
+title: Azure API 管理中的策略 | Microsoft Docs
+description: 了解如何在 API 管理创建、编辑和配置策略。
 services: api-management
-documentationcenter: 
+documentationcenter: ''
 author: vladvino
 manager: erikre
-editor: 
+editor: ''
 ms.service: api-management
 ms.workload: mobile
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 11/29/2017
 ms.author: apimpm
-ms.openlocfilehash: 54fbba197f6609731ffaf3ff15143a28e70a955f
-ms.sourcegitcommit: 83ea7c4e12fc47b83978a1e9391f8bb808b41f97
-ms.translationtype: HT
+ms.openlocfilehash: c10939b50a66cd608d27a71f02d959fbc2380f59
+ms.sourcegitcommit: 82499878a3d2a33a02a751d6e6e3800adbfa8c13
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/28/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70072304"
 ---
 # <a name="policies-in-azure-api-management"></a>Azure API 管理中的策略
 
 在 Azure API 管理 (APIM) 中，策略是一项强大的系统功能，允许发布者通过配置更改 API 的行为。 策略是一组语句，在请求或 API 的响应时按顺序执行。 流行的语句包括从 XML 到 JSON 的格式转换，并调用速率限制来限制从一名开发人员的传入调用。 许多策略开箱即用。
 
-策略在网关内部应用，该网关位于 API 使用者和托管 API 之间。 该网关接收所有请求，并通常将其原封不动地转发到基础 API。 但是策略可以将更改应用于入站的请求和出站响应。
+策略在网关内部应用，该网关位于 API 使用者和托管 API 之间。 该网关接收所有请求，并通常将其原封不动地转发到基础 API。 但是策略可以将更改应用于入站请求和出站响应。
 
 在任何 API 管理策略中，策略表达式可以用作属性值或文本值，除非该策略另外指定。 某些策略（如[控制流][Control flow]和[设置变量][Set variable]策略）基于策略表达式。 有关详细信息，请参阅[高级策略][Advanced policies]和[策略表达式][Policy expressions]。
 
@@ -34,7 +34,7 @@ ms.lasthandoff: 02/28/2018
 单击启用的语句会在定义视图中的光标位置添加相应的 XML。 
 
 > [!NOTE]
-> 如果无法启用要添加的策略，请确保为该策略设置的范围是正确的。 每个策略语句都设计有特定的使用范围，需在特定的策略部分使用。 若要查看某个策略的策略部分和范围，请参阅[策略参考][Policy Reference]中该策略的“用法”部分。
+> 如果无法启用要添加的策略，请确保为该策略设置的范围是正确的。 每个策略语句都设计有特定的使用范围，需在特定的策略部分使用。 若要查看某个策略的策略部分和范围, 请在 "[策略参考][Policy Reference]" 中查看该策略的 "**使用情况**" 部分。
 > 
 > 
 
@@ -58,7 +58,7 @@ ms.lasthandoff: 02/28/2018
 </policies> 
 ```
 
-如果在处理请求的过程中出错，则会忽略 `inbound`、`backend` 或 `outbound` 部分的其余步骤，跳到 `on-error` 部分执行相关语句。 将策略语句置于 `on-error` 部分以后，即可使用 `context.LastError` 属性查看错误、使用 `set-body` 策略检查和自定义错误响应，以及配置发生错误时的应对措施。 错误代码可针对内置步骤，也可针对在处理策略语句的过程中会发生的错误。 有关详细信息，请参阅 [Error handling in API Management policies](https://msdn.microsoft.com/library/azure/mt629506.aspx)（API 管理策略中的错误处理）。
+如果在处理请求的过程中出错，则会忽略 `inbound`、`backend` 或 `outbound` 部分的其余步骤，跳到 `on-error` 部分执行相关语句。 将策略语句置于 `on-error` 部分以后，即可使用 `context.LastError` 属性查看错误、使用 `set-body` 策略检查和自定义错误响应，以及配置发生错误时的应对措施。 错误代码可针对内置步骤，也可针对在处理策略语句的过程中会发生的错误。 有关详细信息，请参阅 [Error handling in API Management policies](/azure/api-management/api-management-error-handling-policies)（API 管理策略中的错误处理）。
 
 ## <a name="scopes"> </a>如何配置策略
 

@@ -1,31 +1,29 @@
 ---
 title: 检查状态、设置日志记录并获取警报 - Azure 逻辑应用 | Microsoft Docs
-description: 监视逻辑应用的状态和性能，记录诊断数据并设置警报
-author: jeffhollan
-manager: anneta
-editor: ''
+description: 针对 Azure 逻辑应用监视状态、记录诊断数据并设置警报
 services: logic-apps
-documentationcenter: ''
-ms.assetid: 5c1b1e15-3b6c-49dc-98a6-bdbe7cb75339
 ms.service: logic-apps
-ms.workload: integration
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.suite: integration
+author: divyaswarnkar
+ms.author: divswa
+ms.reviewer: jonfan, estfan, LADocs
 ms.topic: article
-ms.custom: H1Hack27Feb2017
+ms.assetid: 5c1b1e15-3b6c-49dc-98a6-bdbe7cb75339
 ms.date: 07/21/2017
-ms.author: LADocs; jehollan
-ms.openlocfilehash: c1d5bc55b132b449ebc2964ef95016a6a4780c19
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: f6ece10c43c2c4a6bea92d14a8bf6fbdb49fd318
+ms.sourcegitcommit: 55f7fc8fe5f6d874d5e886cb014e2070f49f3b94
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 09/25/2019
+ms.locfileid: "71261364"
 ---
 # <a name="monitor-status-set-up-diagnostics-logging-and-turn-on-alerts-for-azure-logic-apps"></a>针对 Azure 逻辑应用监视状态、设置诊断日志记录，并启用警报
 
 在[创建并运行逻辑应用](../logic-apps/quickstart-create-first-logic-app-workflow.md)后，可以检查其运行历史记录、触发历史记录、状态和性能。 对于实时事件监视和更丰富的调试，为逻辑应用设置[诊断记录](#azure-diagnostics)。 这样，就可以[查找和查看事件](#find-events)，例如触发事件、运行事件和操作事件。 还可以将此[诊断数据用于其他服务](#extend-diagnostic-data)，如 Azure 存储和 Azure 事件中心。 
 
 要获取关于故障或其他可能问题的通知，请设置[警报](#add-azure-alerts)。 例如，可以创建一个警报，用于检测“一小时内运行失败超过五次的情况”。 还可以使用 [Azure 诊断事件设置和属性](#diagnostic-event-properties)以编程方式设置监视、跟踪和记录。
+
+[!INCLUDE [azure-monitor-log-analytics-rebrand](../../includes/azure-monitor-log-analytics-rebrand.md)]
 
 ## <a name="view-runs-and-trigger-history-for-your-logic-app"></a>查看逻辑应用的运行和触发历史记录
 
@@ -76,13 +74,13 @@ ms.lasthandoff: 04/16/2018
 
 ## <a name="turn-on-diagnostics-logging-for-your-logic-app"></a>为逻辑应用启用诊断日志记录
 
-对于针对运行时详细信息和事件的更丰富调试，可以使用 [Azure Log Analytics](../log-analytics/log-analytics-overview.md) 设置诊断日志记录。 Log Analytics 是 Azure 中的一个服务，用于监视云和本地环境，帮助使其保持较高的可用性和性能。 
+若要在运行时详细信息和事件中进行更丰富的调试, 可以设置[Azure Monitor 日志](../log-analytics/log-analytics-overview.md)的诊断日志记录。 Azure Monitor 是 Azure 中的一个服务，用于监视云和本地环境，帮助使其保持较高的可用性和性能。 
 
-在开始之前，需要具有 Log Analytics 工作区。 了解[如何创建 Log Analytics 工作区](../log-analytics/log-analytics-quick-create-workspace.md)。
+在开始之前，需要具有一个 Log Analytics 工作区。 了解[如何创建 Log Analytics 工作区](../azure-monitor/learn/quick-create-workspace.md)。
 
 1. 在 [Azure 门户](https://portal.azure.com)中，查找并选择“逻辑应用”。 
 
-2. 在“逻辑应用”边栏选项卡菜单的“监视”下，选择“诊断” > “诊断设置”。
+2. 在 "逻辑应用" 边栏选项卡上的 "**监视**" 下, 选择 "**诊断** > **诊断设置**"。
 
    ![依次转到“监视”、“诊断”、“诊断设置”](media/logic-apps-monitor-your-logic-apps/logic-app-diagnostics.png)
 
@@ -94,7 +92,9 @@ ms.lasthandoff: 04/16/2018
 
    1. 选择“发送到 Log Analytics”。 
    2. 在“Log Analytics”下，选择“配置”。 
-   3. 在“OMS 工作区”下，选择要用于日志记录的 Log Analytics 工作区。
+   3. 在“OMS 工作区”下，选择要用于日志记录的工作区。
+      > [!NOTE]
+      > OMS 工作区现在称为 Log Analytics 工作区。
    4. 在“日志”下，选择“WorkflowRuntime”类别。
    5. 选择指标间隔。
    6. 完成后，选择“保存”。
@@ -117,58 +117,50 @@ ms.lasthandoff: 04/16/2018
 
    ![选择你的 Log Analytics 工作区](media/logic-apps-monitor-your-logic-apps/selectla.png)
 
-3. 在“管理”下，选择“OMS 门户”。
+3. 在“管理”下，选择“日志搜索”。
 
-   ![选择“OMS 门户”](media/logic-apps-monitor-your-logic-apps/omsportalpage.png)
+   ![选择“日志搜索”](media/logic-apps-monitor-your-logic-apps/log-search.png)
 
-4. 在主页上，选择“日志搜索”。
-
-   ![在主页上，选择“日志搜索”](media/logic-apps-monitor-your-logic-apps/logsearch.png)
-
-   -或-
-
-   ![在菜单上，选择“日志搜索”](media/logic-apps-monitor-your-logic-apps/logsearch-2.png)
-
-5. 在搜索框中，指定要查找的字段，然后按下 Enter 键。 开始输入时，会显示可能的匹配和可以使用的操作。 
+4. 在搜索框中，指定要查找的字段，然后按下 Enter 键。 开始输入时，会显示可能的匹配和可以使用的操作。 
 
    例如，要查找发生的前 10 个事件，请输入并选择此搜索查询：search Category == "WorkflowRuntime" | limit 10
 
    ![输入搜索字符串](media/logic-apps-monitor-your-logic-apps/oms-start-query.png)
 
-   详细了解[如何在 Log Analytics 中查找数据](../log-analytics/log-analytics-log-searches.md)。
+   详细了解[如何查找 Azure Monitor 日志中的数据](../log-analytics/log-analytics-log-searches.md)。
 
-6. 在结果页的左侧栏中，选择要查看的时间范围。
+5. 在结果页的左侧栏中，选择要查看的时间范围。
 若要通过添加筛选器优化查询，请选择“+添加”。
 
    ![选择查询结果的时间范围](media/logic-apps-monitor-your-logic-apps/query-results.png)
 
-7. 在“添加筛选器”下，输入筛选器名称，以便查找所需的筛选器。 选择筛选器，然后选择“+添加”。
+6. 在“添加筛选器”下，输入筛选器名称，以便查找所需的筛选器。 选择筛选器，然后选择“+添加”。
 
    本示例使用“status”一词在“AzureDiagnostics”下查找失败的事件。
-   此处已选中 status_s 的筛选器。
+   此处已选中 status_s的筛选器。
 
    ![选择筛选器](media/logic-apps-monitor-your-logic-apps/log-search-add-filter.png)
 
-8. 在左侧栏中，选择要使用的筛选器值，然后选择“应用”。
+7. 在左侧栏中，选择要使用的筛选器值，然后选择“应用”。
 
    ![选择筛选器值，然后选择“应用”](media/logic-apps-monitor-your-logic-apps/log-search-apply-filter.png)
 
-9. 现在返回到你正在生成的查询。 该查询已通过你选定的筛选器和值进行更新。 以前的结果现在也已进行了筛选。
+8. 现在返回到你正在生成的查询。 该查询已通过你选定的筛选器和值进行更新。 以前的结果现在也已进行了筛选。
 
    ![返回到包含筛选结果的查询](media/logic-apps-monitor-your-logic-apps/log-search-query-filtered-results.png)
 
-10. 若要保存查询供将来使用，请选择“保存”。 了解[如何保存查询](../logic-apps/logic-apps-track-b2b-messages-omsportal-query-filter-control-number.md#save-oms-query)。
+9. 若要保存查询供将来使用，请选择“保存”。 了解[如何保存查询](../logic-apps/logic-apps-track-b2b-messages-omsportal-query-filter-control-number.md#save-oms-query)。
 
 <a name="extend-diagnostic-data"></a>
 
 ## <a name="extend-how-and-where-you-use-diagnostic-data-with-other-services"></a>扩展将诊断数据用于其他服务的方式和位置
 
-结合使用 Azure Log Analytics 后，可以扩展将逻辑应用的诊断数据用于其他 Azure 服务的方式，例如： 
+结合使用 Azure Monitor 日志后，可以扩展将逻辑应用的诊断数据用于其他 Azure 服务的方式，例如： 
 
-* [在 Azure 存储中存档 Azure 诊断日志](../monitoring-and-diagnostics/monitoring-archive-diagnostic-logs.md)
-* [将 Azure 诊断日志流式传输到 Azure 事件中心](../monitoring-and-diagnostics/monitoring-stream-diagnostic-logs-to-event-hubs.md) 
+* [在 Azure 存储中存档 Azure 诊断日志](../azure-monitor/platform/archive-diagnostic-logs.md)
+* [将 Azure 诊断日志流式传输到 Azure 事件中心](../azure-monitor/platform/resource-logs-stream-event-hubs.md) 
 
-然后，可通过使用其他服务（如 [Azure 流分析](../stream-analytics/stream-analytics-introduction.md)和 [Power BI](../log-analytics/log-analytics-powerbi.md)）的遥测数据和分析来进行实时监视。 例如：
+然后，可通过使用其他服务（如 [Azure 流分析](../stream-analytics/stream-analytics-introduction.md)和 [Power BI](../azure-monitor/platform/powerbi.md)）的遥测数据和分析来进行实时监视。 例如：
 
 * [将数据从事件中心流式传输到流分析](../stream-analytics/stream-analytics-define-inputs.md)
 * [在 Power BI 中使用流分析来分析流数据，并创建实时分析仪表板](../stream-analytics/stream-analytics-power-bi-dashboard.md)
@@ -184,9 +176,9 @@ ms.lasthandoff: 04/16/2018
 
 ## <a name="set-up-alerts-for-your-logic-app"></a>为逻辑应用设置警报
 
-要监视逻辑应用的特定指标或超出的阈值，请[在 Azure 中设置警报](../monitoring-and-diagnostics/monitoring-overview-alerts.md)。 了解 [Azure 中的指标](../monitoring-and-diagnostics/monitoring-overview-metrics.md)。 
+要监视逻辑应用的特定指标或超出的阈值，请[在 Azure 中设置警报](../azure-monitor/platform/alerts-overview.md)。 了解 [Azure 中的指标](../monitoring-and-diagnostics/monitoring-overview-metrics.md)。 
 
-若要在不使用 [Azure Log Analytics](../log-analytics/log-analytics-overview.md) 的情况下设置警报，请按照下列步骤执行。 有关更高级的警报条件和操作，也可以[设置 Log Analytics](#azure-diagnostics)。
+若要设置警报而不[Azure Monitor 日志](../log-analytics/log-analytics-overview.md), 请执行以下步骤。 有关更高级的警报条件和操作，也可以[设置 Azure Monitor 日志](#azure-diagnostics)。
 
 1. 在“逻辑应用”边栏选项卡菜单的“监视”下，选择“诊断” > “警报规则” > “添加警报”，如下所示：
 
@@ -217,7 +209,7 @@ ms.lasthandoff: 04/16/2018
 
 ## <a name="azure-diagnostics-event-settings-and-details"></a>Azure 诊断事件设置和详细信息
 
-每个诊断事件都有关于逻辑应用和该事件的详细信息，例如状态、开始时间、结束时间等。 若要以编程方式设置监视、跟踪和日志记录，可以将这些详细信息用于 [Azure 逻辑应用适用的 REST API](https://docs.microsoft.com/rest/api/logic) 和 [Azure 诊断适用的 REST API](../monitoring-and-diagnostics/monitoring-supported-metrics.md#microsoftlogicworkflows)。
+每个诊断事件都有关于逻辑应用和该事件的详细信息，例如状态、开始时间、结束时间等。 若要以编程方式设置监视、跟踪和日志记录，可以将这些详细信息用于 [Azure 逻辑应用适用的 REST API](https://docs.microsoft.com/rest/api/logic) 和 [Azure 诊断适用的 REST API](../azure-monitor/platform/metrics-supported.md#microsoftlogicworkflows)。
 
 例如，`ActionCompleted` 事件具有可用于跟踪和监视的 `clientTrackingId` 和 `trackedProperties` 属性：
 
@@ -278,9 +270,29 @@ ms.lasthandoff: 04/16/2018
     }
   }
   ```
+  下面是使用“初始化变量”操作的另一个示例。 该示例从操作的输入添加跟踪的属性，其中输入是数组，而不是记录。  
+
+  ``` json
+  "actions": { 
+   "Initialize_variable": { 
+      "inputs": { 
+         "variables": [{ 
+            "name": "ConnectorName", 
+            "type": "String", 
+            "value": "SFTP-SSH" 
+         }]
+      },
+      "runAfter": {},
+      "trackedProperties": { 
+         "Track1": "@action().inputs.variables[0].value"
+      },
+      "type": "InitializeVariable"
+   } 
+  }
+  ```
 
 ## <a name="next-steps"></a>后续步骤
 
-* [创建模板以用于逻辑应用部署和版本管理](../logic-apps/logic-apps-create-deploy-template.md)
+* [自动完成逻辑应用部署](../logic-apps/logic-apps-azure-resource-manager-templates-overview.md)
 * [具有 Enterprise Integration Pack 的 B2B 方案](../logic-apps/logic-apps-enterprise-integration-overview.md)
 * [监视 B2B 消息](../logic-apps/logic-apps-monitor-b2b-message.md)

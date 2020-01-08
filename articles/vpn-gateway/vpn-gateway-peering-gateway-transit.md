@@ -10,16 +10,17 @@ tags: azure-resource-manager
 ms.assetid: 0683c664-9c03-40a4-b198-a6529bf1ce8b
 ms.service: vpn-gateway
 ms.devlang: na
-ms.topic: get-started-article
+ms.topic: conceptual
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 03/25/2018
 ms.author: yushwang
-ms.openlocfilehash: cced9a313664eaeaed4dd1298488670960b76413
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.openlocfilehash: d5e62bf1838c8f07068208019d28d7273c28bd63
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60457349"
 ---
 # <a name="configure-vpn-gateway-transit-for-virtual-network-peering"></a>针对虚拟网络对等互连配置 VPN 网关传输
 
@@ -29,17 +30,16 @@ ms.lasthandoff: 04/28/2018
 
 在图中，对等互连的虚拟网络通过网关传输来使用 Hub-RM 中的 Azure VPN 网关。 在 VPN 网关上提供的连接（包括 S2S 连接、P2S 连接和 VNet 到 VNet 连接）适用于所有三种虚拟网络。 传输选项适用于在相同的或不同的部署模型之间进行对等互连。 约束条件是，VPN 网关只能位于使用资源管理器部署模型的虚拟网络中，如图所示。
 
-在中心辐射型网络体系结构中，辐射虚拟网络可以通过网关传输共享中心的 VPN 网关，不必在每个辐射虚拟网络中部署 VPN 网关。 通往网关连接的虚拟网络或本地网络的路由会通过网关传输传播到对等互连的虚拟网络的路由表。 可以禁用源自 VPN 网关的自动路由传播。 使用“禁用 BGP 路由传播”选项创建一个路由表，将路由表关联到子网，防止将路由分发到这些子网。 有关详细信息，请参阅[虚拟网络路由表](../virtual-network/manage-route-table.md)。
+在中心辐射型网络体系结构中，辐射虚拟网络可以通过网关传输共享中心的 VPN 网关，不必在每个辐射虚拟网络中部署 VPN 网关。 通往网关连接的虚拟网络或本地网络的路由会通过网关传输传播到对等互连的虚拟网络的路由表。 可以禁用源自 VPN 网关的自动路由传播。 使用“禁用 BGP 路由传播”选项创建一个路由表，  将路由表关联到子网，防止将路由分发到这些子网。 有关详细信息，请参阅[虚拟网络路由表](../virtual-network/manage-route-table.md)。
 
 本文档介绍两个方案：
 
 1. 两种虚拟网络都使用资源管理器部署模型
 2. 辐射虚拟网络为经典部署模型，带网关的中心虚拟网络为资源管理器部署模型
 
-> [!IMPORTANT]
-> 全局虚拟网络对等互连目前不支持网关传输。
-
 ## <a name="requirements"></a>要求
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
 本文档中的示例要求创建以下资源：
 
@@ -75,25 +75,25 @@ ms.lasthandoff: 04/28/2018
     - 设置“资源管理器”选项
     - 在相应的订阅中选择 Hub-RM 虚拟网络
     - 确保“允许虚拟网络访问”为“已启用”
-    - 设置“使用远程网关”选项
+    - 设置“使用远程网关”选项 
     - 单击“确定”
 
-    ![spokerm-to-hubrm](./media/vpn-gateway-peering-gateway-transit/spokerm-hubrm-peering.png)
+      ![spokerm-to-hubrm](./media/vpn-gateway-peering-gateway-transit/spokerm-hubrm-peering.png)
 
-2. 如果已创建对等互连，请导航到对等互连资源，然后启用“使用远程网关”选项（类似于步骤 (1) 中所示的屏幕截图）
+2. 如果已创建对等互连，请导航到对等互连资源，然后启用“使用远程网关”选项（类似于步骤 (1) 中所示的屏幕截图） 
 
 3. 在 Azure 门户中创建或更新从 Hub-RM 到 Spoke-RM 的虚拟网络对等互连。 导航到 Hub-RM 虚拟网络资源，单击“对等互连”，然后单击“添加”：
     - 设置“资源管理器”选项
     - 确保“允许虚拟网络访问”为“已启用”
     - 在相应的订阅中选择“Spoke-RM”虚拟网络
-    - 设置“允许网关传输”选项
+    - 设置“允许网关传输”选项 
     - 单击“确定”
 
-    ![hubrm-to-spokerm](./media/vpn-gateway-peering-gateway-transit/hubrm-spokerm-peering.png)
+      ![hubrm-to-spokerm](./media/vpn-gateway-peering-gateway-transit/hubrm-spokerm-peering.png)
 
-4. 如果已创建对等互连，请导航到对等互连资源，然后启用“允许网关传输”选项（类似于步骤 (3) 中所示的屏幕截图）
+4. 如果已创建对等互连，请导航到对等互连资源，然后启用“允许网关传输”选项（类似于步骤 (3) 中所示的屏幕截图） 
 
-5. 验证两个虚拟网络上的对等互连状态是否为“已连接”
+5. 验证两个虚拟网络上的对等互连状态是否为“已连接” 
 
 ### <a name="powershell-sample"></a>PowerShell 示例
 
@@ -105,16 +105,16 @@ $SpokeRM = "Spoke-RM"
 $HubRG   = "HubRG1"
 $HubRM   = "Hub-RM"
 
-$spokermvnet = Get-AzureRmVirtualNetwork -Name $SpokeRM -ResourceGroup $SpokeRG
-$hubrmvnet   = Get-AzureRmVirtualNetwork -Name $HubRM -ResourceGroup $HubRG
+$spokermvnet = Get-AzVirtualNetwork -Name $SpokeRM -ResourceGroup $SpokeRG
+$hubrmvnet   = Get-AzVirtualNetwork -Name $HubRM -ResourceGroup $HubRG
 
-Add-AzureRmVirtualNetworkPeering `
+Add-AzVirtualNetworkPeering `
   -Name SpokeRMtoHubRM `
   -VirtualNetwork $spokermvnet `
   -RemoteVirtualNetworkId $hubrmvnet.Id `
   -UseRemoteGateways
 
-Add-AzureRmVirtualNetworkPeering `
+Add-AzVirtualNetworkPeering `
   -Name HubRMToSpokeRM `
   -VirtualNetwork $hubrmvnet `
   -RemoteVirtualNetworkId $spokermvnet.Id `
@@ -126,19 +126,19 @@ Add-AzureRmVirtualNetworkPeering `
 步骤类似于资源管理器示例，区别是操作仅应用于 Hub-RM 虚拟网络。
 
 1. 在 Azure 门户中创建或更新从 Hub-RM 到 Spoke-RM 的虚拟网络对等互连。 导航到 Hub-RM 虚拟网络资源，单击“对等互连”，然后单击“添加”：
-    - 设置“经典”选项作为虚拟网络部署模型
-    - 在相应的订阅中选择“Spoke-Classic”虚拟网络
-    - 确保“允许虚拟网络访问”为“已启用”
-    - 设置“允许网关传输”选项
-    - 单击“确定”
+   - 设置“经典”选项作为虚拟网络部署模型
+   - 在相应的订阅中选择“Spoke-Classic”虚拟网络
+   - 确保“允许虚拟网络访问”为“已启用”
+   - 设置“允许网关传输”选项 
+   - 单击“确定”
 
-    ![hubrm-to-spokeclassic](./media/vpn-gateway-peering-gateway-transit/hubrm-spokeclassic-peering.png)
+     ![hubrm-to-spokeclassic](./media/vpn-gateway-peering-gateway-transit/hubrm-spokeclassic-peering.png)
 
-2. 如果已创建对等互连，请导航到对等互连资源，然后启用“允许网关传输”选项（类似于步骤 (1) 中所示的屏幕截图）
+2. 如果已创建对等互连，请导航到对等互连资源，然后启用“允许网关传输”选项（类似于步骤 (1) 中所示的屏幕截图） 
 
 3. 在 Spoke-Classic 虚拟网络上没有任何操作
 
-4. 验证 Hub-RM 虚拟网络上的对等互连状态是否为“已连接”
+4. 验证 Hub-RM 虚拟网络上的对等互连状态是否为“已连接” 
 
 状态显示“已连接”后，辐射虚拟网络即可通过中心虚拟网络中的 VPN 网关使用 VNet 到 VNet 连接或跨界连接。
 
@@ -150,9 +150,9 @@ Add-AzureRmVirtualNetworkPeering `
 $HubRG   = "HubRG1"
 $HubRM   = "Hub-RM"
 
-$hubrmvnet   = Get-AzureRmVirtualNetwork -Name $HubRM -ResourceGroup $HubRG
+$hubrmvnet   = Get-AzVirtualNetwork -Name $HubRM -ResourceGroup $HubRG
 
-Add-AzureRmVirtualNetworkPeering `
+Add-AzVirtualNetworkPeering `
   -Name HubRMToSpokeRM `
   -VirtualNetwork $hubrmvnet `
   -RemoteVirtualNetworkId "/subscriptions/<subscription Id>/resourceGroups/Default-Networking/providers/Microsoft.ClassicNetwork/virtualNetworks/Spoke-Classic" `

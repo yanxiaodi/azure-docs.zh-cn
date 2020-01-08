@@ -1,11 +1,11 @@
 ---
-title: "DNS 区域和记录概述 - Azure DNS | Microsoft Docs"
-description: "对在 Microsoft Azure DNS 中托管 DNS 区域和记录的支持的概述。"
+title: DNS 区域和记录概述 - Azure DNS | Microsoft Docs
+description: 对在 Microsoft Azure DNS 中托管 DNS 区域和记录的支持的概述。
 services: dns
 documentationcenter: na
-author: KumudD
+author: vhorne
 manager: jeconnoc
-editor: 
+editor: ''
 ms.assetid: be4580d7-aa1b-4b6b-89a3-0991c0cda897
 ms.service: dns
 ms.devlang: na
@@ -14,12 +14,13 @@ ms.tgt_pltfrm: na
 ms.custom: H1Hack27Feb2017
 ms.workload: infrastructure-services
 ms.date: 12/18/2017
-ms.author: kumud
-ms.openlocfilehash: 0a0808d3963cc037aaf113c67fd01679ee8c1d40
-ms.sourcegitcommit: b7adce69c06b6e70493d13bc02bd31e06f291a91
-ms.translationtype: HT
+ms.author: victorh
+ms.openlocfilehash: ccc418cd3af14c0468ab8d669ad2e2e11a0b6d57
+ms.sourcegitcommit: a4b5d31b113f520fcd43624dd57be677d10fc1c0
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/19/2017
+ms.lasthandoff: 09/06/2019
+ms.locfileid: "70772255"
 ---
 # <a name="overview-of-dns-zones-and-records"></a>DNS 区域和记录概述
 
@@ -27,9 +28,9 @@ ms.lasthandoff: 12/19/2017
 
 ## <a name="domain-names"></a>域名
 
-域名系统是域的层次结构。 该层次结构从名为“**.**”的“根”域开始。  根域的下面是顶级域，例如“com”、“net”、“org”、“uk”或“jp”。  再往下是二级域，例如“org.uk”或“co.jp”。 DNS 层次结构中的域遍布全球，由世界各地的 DNS 名称服务器托管。
+域名系统是域的层次结构。 该层次结构从名为“ **.** ”的“根”域开始。  根域的下面是顶级域，例如“com”、“net”、“org”、“uk”或“jp”。  再往下是二级域，例如“org.uk”或“co.jp”。 DNS 层次结构中的域遍布全球，由世界各地的 DNS 名称服务器托管。
 
-域名注册机构是一个组织，可以通过该组织购买域名，例如“contoso.com”。  购买域名便有权控制该域名下的 DNS 层次结构，例如可将名称“www.contoso.com”定向到公司网站。 注册机构会代表用户在域自身的名称服务器中托管域，或者允许用户指定可选名称服务器。
+域名注册机构是一个组织，可以通过该组织购买域名，例如“contoso.com”。  购买域名后，你可以通过该名称控制 DNS 层次结构，例如，允许你将名称 www.contoso.com 定向到公司网站。 注册机构会代表用户在域自身的名称服务器中托管域，或者允许用户指定可选名称服务器。
 
 Azure DNS 提供全球分布的高可用性名称服务器基础结构，可将其用于托管域。 通过在 Azure DNS 中托管域，用户可以使用与其他 Azure 服务相同的凭据、API、工具、计费和支持来管理 DNS 记录。
 
@@ -69,23 +70,25 @@ CAA 记录允许域所有者指定哪些证书颁发机构 (CA) 有权为其域�
 
 CNAME 记录集不能与其他具有相同名称的记录集共存。 例如，不能同时创建具有相对名称“www”的 CNAME 记录集和具有相对名称“www”的 A 记录。
 
-由于区域顶点（名称 =“@”）始终包含创建区域时创建的 NS 和 SOA 记录集，因此不能在区域顶点创建 CNAME 记录集。
+由于区域顶点（名称 =“\@”）始终包含创建区域时创建的 NS 和 SOA 记录集，因此不能在区域顶点创建 CNAME 记录集。
 
 这些约束起源于 DNS 标准，并非 Azure DNS 的限制。
 
 ### <a name="ns-records"></a>NS 记录
 
-区域顶点（名称“@”）处的 NS 记录集随每个 DNS 区域自动创建，并在删除该区域时自动删除（不能单独删除）。
+区域顶点（名称“\@”）处的 NS 记录集随每个 DNS 区域自动创建，并在删除该区域时自动删除（不能单独删除）。
 
 此记录集包含分配给该区域的 Azure DNS 名称服务器名称。 可向此 NS 记录集添加其他名称服务器，从而支持与多个 DNS 提供商共同托管域。 还可修改此记录集的 TTL 和元数据。 但是，无法删除或修改预填充的 Azure DNS 名称服务器。 
 
-请注意，这仅适用于区域顶点处的 NS 记录集。 区域中的其他 NS 记录集（用于委派子区域）不受约束，可进行创建、修改和删除。
+这仅适用于区域顶点处的 NS 记录集。 区域中的其他 NS 记录集（用于委派子区域）不受约束，可进行创建、修改和删除。
 
 ### <a name="soa-records"></a>SOA 记录
 
-SOA 记录集在每个区域（名称 =“@”）的顶点处自动创建，并在删除该区域时自动删除。  无法单独创建或删除 SOA 记录。
+SOA 记录集在每个区域（名称 =“\@”）的顶点处自动创建，并在删除该区域时自动删除。  无法单独创建或删除 SOA 记录。
 
 用户可以修改 SOA 记录的所有属性，但“主机”属性除外，此属性预配置为引用 Azure DNS 所提供的主名称服务器名。
+
+当对区域中的记录进行更改时，SOA 记录中的区域序列号不会自动更新。 如果需要，可以通过编辑 SOA 记录手动进行更新。
 
 ### <a name="spf-records"></a>SPF 记录
 
@@ -95,7 +98,7 @@ SOA 记录集在每个区域（名称 =“@”）的顶点处自动创建，并�
 
 多种服务使用 [SRV 记录](https://en.wikipedia.org/wiki/SRV_record)指定服务器位置。 在 Azure DNS 中指定 SRV 记录时：
 
-* 服务和协议 必须指定为前面带下划线的记录集名称的一部分。  例如，“\_sip.\_tcp.name”。  对于区域顶点处的记录，无需在记录名称中指定“@”，只需使用服务和协议，例如“\_sip.\_tcp”。
+* 服务和协议 必须指定为前面带下划线的记录集名称的一部分。  例如，“\_sip.\_tcp.name”。  对于区域顶点处的记录，无需在记录名称中指定“\@”，只需使用服务和协议，例如“\_sip.\_tcp”。
 * 将 priority、weight、port 和 target 指定为记录集中每个记录的参数。
 
 ### <a name="txt-records"></a>TXT 记录
@@ -110,7 +113,7 @@ DNS 记录中的多个字符串不应与 TXT 记录集的多个 TXT 记录混淆
 
 ## <a name="tags-and-metadata"></a>标记和元数据
 
-### <a name="tags"></a>标记
+### <a name="tags"></a>Tags
 
 标记是名称/值列表，Azure 资源管理器利用它们来标记资源。  Azure 资源管理器使用标记来启用 Azure 帐单的筛选视图，并支持设置需要标记的策略。 有关标记的详细信息，请参阅 [使用标记来组织 Azure 资源](../azure-resource-manager/resource-group-using-tags.md)。
 
@@ -130,10 +133,10 @@ Azure DNS 使用 Etag 来安全地处理对同一资源的并发更改。 Etag �
 
 Etag 是在 Azure DNS REST API 级别使用 HTTP 标头指定的。  下表给出了它们的行为：
 
-| 标头 | 行为 |
+| Header | 行为 |
 | --- | --- |
 | 无 |PUT 始终成功（没有 Etag 检查） |
-| If-match <etag> |只有当资源存在并且 Etag 匹配时，PUT 才会成功 |
+| If-match \<etag> |只有当资源存在并且 Etag 匹配时，PUT 才会成功 |
 | If-match * |只有当资源存在时，PUT 才会成功 |
 | If-none-match * |只有当资源不存在时，PUT 才会成功 |
 

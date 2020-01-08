@@ -1,4 +1,15 @@
-虚拟网络中的 IaaS 虚拟机 (VM) 和 PaaS 角色实例将基于连接到的子网自动接收来自指定范围的专用 IP 地址。 该地址会被这些 VM 和角色实例保留，直到这些 VM 和角色实例被停用。 通过从 PowerShell、Azure CLI 或 Azure 门户停止 VM 或角色实例可将其停用。 在这些情况下，重新启动该 VM 或角色实例后，它将从 Azure 基础结构接收一个可用的 IP 地址，该 IP 地址可能与以前使用的 IP 地址不相同。 如果从来宾操作系统关闭 VM 或角色实例，该 VM 或角色实例将保留它的 IP 地址。  
-
-在某些情况下（例如，如果 VM 要运行 DNS 或者将作为域控制器），会希望 VM 或角色实例具有静态 IP 地址。 可通过设置静态专用 IP 地址来实现此目的。
+---
+author: genlin
+ms.service: virtual-network
+ms.topic: include
+ms.date: 02/27/2019
+ms.author: genli
+ms.openlocfilehash: 63853ee34d99516b139b0356f609f41637ac2b39
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67172861"
+---
+系统会从指定的范围自动为虚拟机 (VM) 分配专用 IP 地址，具体取决于部署时所在的子网。 该地址会由某个 VM 保留，直到该 VM 被删除。 Azure 从你创建 VM 时所在的子网动态分配下一个可用的专用 IP 地址。 如果需要已分配给 VM 的子网中的特定 IP 地址，请分配静态 IP 地址。
 

@@ -1,31 +1,35 @@
 ---
-title: 将数据移入和移出 Azure Blob 存储 | Microsoft Docs
+title: 将数据移入和移出 Azure Blob 存储 - Team Data Science Process
 description: 将数据移入和移出 Azure Blob 存储
-services: machine-learning,storage
-documentationcenter: ''
-author: deguhath
-manager: jhubbard
+services: machine-learning
+author: marktab
+manager: cgronlun
 editor: cgronlun
-ms.assetid: d6681e30-ab45-45ea-a9fb-ac8acefe544d
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/04/2017
-ms.author: deguhath
-ms.openlocfilehash: 424216226ca4b92f17cec78dadbb0643defa8d0c
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: 7b45f9950ef63bc29d23d78d20909f223cb30350
+ms.sourcegitcommit: 4b8a69b920ade815d095236c16175124a6a34996
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 08/23/2019
+ms.locfileid: "69998157"
 ---
 # <a name="move-data-to-and-from-azure-blob-storage"></a>将数据移入和移出 Azure Blob 存储
-[!INCLUDE [cap-ingest-data-selector](../../../includes/cap-ingest-data-selector.md)]
 
-<!-- just in case, adding this to separate these two include references -->
+团队数据科学过程要求引入或载入各种不同存储环境中的数据在过程的每个阶段中都以最合适的方式进行处理或分析。
 
-[!INCLUDE [blob-storage-tool-selector](../../../includes/machine-learning-blob-storage-tool-selector.md)]
+## <a name="different-technologies-for-moving-data"></a>用于移动数据的不同技术
+
+以下文章介绍了如何使用不同技术将数据移入和移出 Azure Blob 存储。
+
+* [Azure 存储资源管理器](move-data-to-azure-blob-using-azure-storage-explorer.md)
+* [AzCopy](https://docs.microsoft.com/azure/storage/common/storage-use-azcopy-v10)
+* [Python](move-data-to-azure-blob-using-python.md)
+* [SSIS](move-data-to-azure-blob-using-ssis.md)
 
 最合适的方法取决于具体的方案。 [用于 Azure 机器学习中高级分析的方案](plan-sample-scenarios.md)有助于确定用于高级分析过程的各种数据科学工作流所需的资源。
 
@@ -34,6 +38,8 @@ ms.lasthandoff: 05/03/2018
 > 
 > 
 
+## <a name="using-azure-data-factory"></a>使用 Azure 数据工厂
+
 或者，可使用 [Azure 数据工厂](https://azure.microsoft.com/services/data-factory/)来执行以下操作： 
 
 * 创建和计划从 Azure Blob 存储下载数据的管道， 
@@ -41,10 +47,10 @@ ms.lasthandoff: 05/03/2018
 * 接收预测分析结果，然后 
 * 将结果上传到存储。 
 
-有关详细信息，请参阅[使用 Azure 数据工厂和 Azure 机器学习创建预测管道](../../data-factory/v1/data-factory-azure-ml-batch-execution-activity.md)。
+有关详细信息，请参阅[使用 Azure 数据工厂和 Azure 机器学习创建预测管道](../../data-factory/transform-data-using-machine-learning.md)。
 
 ## <a name="prerequisites"></a>先决条件
-本文档假定已有 Azure 订阅、存储帐户，以及该帐户对应的存储密钥。 上传/下载数据之前，必须知道 Azure 存储帐户名和帐户密钥。
+本文假定已有 Azure 订阅、存储帐户，以及该帐户对应的存储密钥。 上传/下载数据之前，必须知道 Azure 存储帐户名和帐户密钥。
 
 * 若要设置 Azure 订阅，请参阅[免费试用一个月版](https://azure.microsoft.com/pricing/free-trial/)。
 * 有关创建存储帐户的说明和有关获取帐户和密钥的信息，请参阅[关于 Azure 存储帐户](../../storage/common/storage-create-storage-account.md)。

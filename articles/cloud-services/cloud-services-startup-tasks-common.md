@@ -1,27 +1,22 @@
 ---
-title: "云服务的常见启动任务 |Microsoft Docs"
-description: "提供你可能想要以云服务 web 角色或辅助角色执行的一些常见启动任务的示例。"
+title: 云服务的常见启动任务 |Microsoft Docs
+description: 提供你可能想要以云服务 web 角色或辅助角色执行的一些常见启动任务的示例。
 services: cloud-services
-documentationcenter: 
-author: Thraka
-manager: timlt
-editor: 
-ms.assetid: a7095dad-1ee7-4141-bc6a-ef19a6e570f1
+documentationcenter: ''
+author: georgewallace
 ms.service: cloud-services
-ms.workload: tbd
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 07/18/2017
-ms.author: adegeo
-ms.openlocfilehash: cee23da5b089b02bfc0ef10afd60f0f2272585b1
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.author: gwallace
+ms.openlocfilehash: 2eb299ad841444a3100eac207b225d5377959f85
+ms.sourcegitcommit: 4b647be06d677151eb9db7dccc2bd7a8379e5871
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 07/19/2019
+ms.locfileid: "68358954"
 ---
 # <a name="common-cloud-service-startup-tasks"></a>常见的云服务启动任务
-本文提供你可能想要在云服务中执行的一些常见启动任务的示例。 在角色启动之前，可以使用启动任务执行操作。 可能需要执行的操作包括安装组件、注册 COM 组件、设置注册表项或启动长时间运行的进程。 
+本文提供了一些可能需要在云服务中执行的常见启动任务示例。 在角色启动之前，可以使用启动任务执行操作。 可能需要执行的操作包括安装组件、注册 COM 组件、设置注册表项或启动长时间运行的进程。 
 
 参阅[本文](cloud-services-startup-tasks.md)可了解启动任务的工作方式，特别是如何创建定义启动任务的条目。
 
@@ -67,12 +62,12 @@ ms.lasthandoff: 10/11/2017
 
 比较明智的做法通常是在调用 AppCmd.exe 之后检查 **errorlevel**，如果使用 .cmd 文件包装对 AppCmd.exe 的调用，则很容易做到这一点。 如果检测到已知的 **errorlevel** 响应，可以将其忽略，否则将其返回。
 
-*AppCmd.exe* 返回的 errorlevel 在 winerror.h 文件中列出，并且还可以在 [MSDN](https://msdn.microsoft.com/library/windows/desktop/ms681382.aspx) 上看到。
+*AppCmd.exe* 返回的 errorlevel 在 winerror.h 文件中列出，并且还可以在 [MSDN](/windows/desktop/Debug/system-error-codes--0-499-) 上看到。
 
 ### <a name="example-of-managing-the-error-level"></a>管理错误级别的示例
 此示例将 JSON 的压缩节和压缩条目添加到 Web.config 文件，其中包含错误处理和日志记录。
 
-此处显示了 [ServiceDefinition.csdef] 文件的相关节，其中包括将 [executionContext](https://msdn.microsoft.com/library/azure/gg557552.aspx#Task) 属性设为 `elevated` 以为 AppCmd.exe 提供足够的权限来更改 *Web.config* 文件中的设置：
+此处显示了 [ServiceDefinition.csdef] 文件的相关节，其中包括将 [executionContext](/previous-versions/azure/reference/gg557552(v=azure.100)#task) 属性设为 `elevated` 以为 AppCmd.exe 提供足够的权限来更改 *Web.config* 文件中的设置：
 
 ```xml
 <ServiceDefinition name="MyService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
@@ -92,7 +87,7 @@ REM   *** Add a compression section to the Web.config file. ***
 %windir%\system32\inetsrv\appcmd set config /section:urlCompression /doDynamicCompression:True /commit:apphost >> "%TEMP%\StartupLog.txt" 2>&1
 
 REM   ERRORLEVEL 183 occurs when trying to add a section that already exists. This error is expected if this
-REM   batch file were executed twice. This can occur and must be accounted for in a Azure startup
+REM   batch file were executed twice. This can occur and must be accounted for in an Azure startup
 REM   task. To handle this situation, set the ERRORLEVEL to zero by using the Verify command. The Verify
 REM   command will safely set the ERRORLEVEL to zero.
 IF %ERRORLEVEL% EQU 183 DO VERIFY > NUL
@@ -185,7 +180,7 @@ powershell -ExecutionPolicy Unrestricted -command "Install-WindowsFeature Web-IP
 
 此任务将导致每次初始化 Web 角色时都运行 **startup.cmd** 批处理文件，从而确保所需的 **ipSecurity** 节处于解锁状态。
 
-最后，修改 web 角色的 **web.config** 文件的 [system.webServer 节](http://www.iis.net/configreference/system.webserver/security/ipsecurity#005)以添加授予访问权限的 IP 地址列表，如下面的示例所示：
+最后，修改 web 角色的 **web.config** 文件的 [system.webServer 节](https://www.iis.net/configreference/system.webserver/security/ipsecurity#005)以添加授予访问权限的 IP 地址列表，如下面的示例所示：
 
 此示例配置**允许**所有 IP（两个已定义的 IP 除外）访问服务器
 
@@ -249,7 +244,7 @@ EXIT /B %errorlevel%
 ## <a name="create-files-in-local-storage-from-a-startup-task"></a>通过启动任务在本地存储中创建文件
 可以使用本地存储资源来存储应用程序稍后将访问的启动任务创建的文件。
 
-要创建本地存储资源，请将 [LocalResources] 节添加到 [ServiceDefinition.csdef] 文件，然后添加 [LocalStorage] 子元素。 为本地存储资源指定唯一名称，并为启动任务指定合适大小。
+若要创建本地存储资源，请将 [LocalResources] 部分添加到 [ServiceDefinition.csdef] 文件，然后添加 [LocalStorage] 子元素。 为本地存储资源指定唯一名称，并为启动任务指定合适大小。
 
 若要在启动任务中使用本地存储资源，需要创建一个环境变量以引用本地存储资源位置。 然后，启动任务和应用程序能够在本地存储资源中读取和写入文件。
 
@@ -292,7 +287,7 @@ REM   Exit the batch file with ERRORLEVEL 0.
 EXIT /b 0
 ```
 
-可以从 Azure SDK 中使用 [GetLocalResource](https://msdn.microsoft.com/library/azure/microsoft.windowsazure.serviceruntime.roleenvironment.getlocalresource.aspx) 方法访问本地存储文件夹。
+可以从 Azure SDK 中使用 [GetLocalResource](/previous-versions/azure/reference/ee772845(v=azure.100)) 方法访问本地存储文件夹。
 
 ```csharp
 string localStoragePath = Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment.GetLocalResource("StartupLocalStorage").RootPath;
@@ -305,7 +300,7 @@ string fileContent = System.IO.File.ReadAllText(System.IO.Path.Combine(localStor
 
 可以通过在 [ServiceDefinition.csdef] 文件中创建一个环境变量来实现在计算模拟器中和云中执行不同操作的能力。 然后，会在启动任务中测试该环境变量的值。
 
-若要创建环境变量，请添加 [变量]/[RoleInstanceValue] 元素并创建 `/RoleEnvironment/Deployment/@emulated` 的 XPath 值。 在计算模拟器中运行时，**%ComputeEmulatorRunning%** 环境变量的值为 `true`，而在云中运行时，该值为 `false`。
+若要创建环境变量，请添加 [变量]/[RoleInstanceValue] 元素并创建 `/RoleEnvironment/Deployment/@emulated` 的 XPath 值。 在计算模拟器中运行时， **%ComputeEmulatorRunning%** 环境变量的值为 `true`，而在云中运行时，该值为 `false`。
 
 ```xml
 <ServiceDefinition name="MyService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
@@ -347,7 +342,7 @@ IF "%ComputeEmulatorRunning%" == "true" (
 
 ```cmd
 REM   If Task1_Success.txt exists, then Application 1 is already installed.
-IF EXIST "%RoleRoot%\Task1_Success.txt" (
+IF EXIST "%PathToApp1Install%\Task1_Success.txt" (
   ECHO Application 1 is already installed. Exiting. >> "%TEMP%\StartupLog.txt" 2>&1
   GOTO Finish
 )
@@ -360,7 +355,7 @@ IF %ERRORLEVEL% EQU 0 (
   REM   The application installed without error. Create a file to indicate that the task
   REM   does not need to be run again.
 
-  ECHO This line will create a file to indicate that Application 1 installed correctly. > "%RoleRoot%\Task1_Success.txt"
+  ECHO This line will create a file to indicate that Application 1 installed correctly. > "%PathToApp1Install%\Task1_Success.txt"
 
 ) ELSE (
   REM   An error occurred. Log the error and exit with the error code.
@@ -382,15 +377,15 @@ EXIT /B 0
 以下是在配置 web 角色或辅助角色的任务时应遵循的一些最佳做法。
 
 ### <a name="always-log-startup-activities"></a>始终记录启动活动
-Visual Studio 未提供用于单步调试批处理文件的调试器，因此最好在批处理文件操作中尽可能多地获取数据。 记录批处理文件的输出（**stdout** 和 **stderr**），可以在尝试调试和修复批处理文件时提供重要信息。 要记录 **%TEMP%** 环境变量指向的目录中 StartupLog.txt 文件的 **stdout** 和 **stderr**，请将文本 `>>  "%TEMP%\\StartupLog.txt" 2>&1` 添加到要记录的特定行的末尾。 例如，若要在 **%PathToApp1Install%** 目录中执行 setup.exe，请执行以下操作：
+Visual Studio 未提供用于单步调试批处理文件的调试器，因此最好在批处理文件操作中尽可能多地获取数据。 记录批处理文件的输出（**stdout** 和 **stderr**），可以在尝试调试和修复批处理文件时提供重要信息。 若要记录 %TEMP% 环境变量指向的目录中 StartupLog.txt 文件的 stdout 和 stderr，请将文本 `>>  "%TEMP%\\StartupLog.txt" 2>&1` 添加到要记录的特定行的末尾。 例如，若要在 **%PathToApp1Install%** 目录中执行 setup.exe，请执行以下操作：
 
     "%PathToApp1Install%\setup.exe" >> "%TEMP%\StartupLog.txt" 2>&1
 
 若要简化 xml，可以创建一个包装器 cmd 文件，使该文件调用所有启动任务以及日志记录并确保每个子任务共享相同的环境变量。
 
-不过，你可能发现在每个启动任务的末尾使用 `>> "%TEMP%\StartupLog.txt" 2>&1` 令人烦恼。 可以通过创建一个包装器来处理日志记录以强制执行任务日志记录。 此包装器调用要运行的实际批处理文件。 来自目标批处理文件的任何输出都将重定向到 Startuplog.txt 文件。
+你可能会发现在每个启动任务的末尾都使用 `>> "%TEMP%\StartupLog.txt" 2>&1` 很是恼人。 可以通过创建一个包装器来处理日志记录以强制执行任务日志记录。 此包装器调用要运行的实际批处理文件。 来自目标批处理文件的任何输出都会重定向到 *Startuplog.txt* 文件。
 
-以下示例展示了如何重定向来自某个启动批处理文件的所有输出。 在此示例中，ServerDefinition.csdef 文件将创建调用 logwrap.cmd 的启动任务。 logwrap.cmd 调用 Startup2.cmd，并将所有输出都重定向到 **%TEMP%\\StartupLog.txt**。
+以下示例展示了如何重定向来自某个启动批处理文件的所有输出。 在此示例中，ServerDefinition.csdef 文件将创建调用 logwrap.cmd 的启动任务。 logwrap.cmd 调用 Startup2.cmd，并将所有输出都重定向到 %TEMP% **\\StartupLog.txt**。
 
 ServiceDefinition.cmd：
 
@@ -480,7 +475,7 @@ EXIT %ERRORLEVEL%
 
 使用 **simple** 启动任务，可以设置顺序，让任务按照它们在 ServiceDefinition.csdef 文件中的列出顺序运行。 如果 **simple** 任务以非零退出代码结束，则启动过程将停止，并且角色不会启动。
 
-**background** 启动任务和 **foreground** 启动任务之间的区别在于 **foreground** 任务使角色一直运行，直到 **foreground** 任务结束为止。 这也意味着，如果 **foreground** 任务挂起或崩溃，角色将不会回收，直到 **foreground** 任务被强制关闭。 因此，对于异步启动任务建议使用 **background** 任务，除非需要 **foreground** 任务的功能。
+**background** 启动任务和 **foreground** 启动任务之间的区别在于 **foreground** 任务使角色一直运行，直到 **foreground** 任务结束为止。 这也意味着，如果 foreground 任务挂起或崩溃，角色将不会回收，直到 foreground 任务被强制关闭。 因此，对于异步启动任务建议使用 **background** 任务，除非需要 **foreground** 任务的功能。
 
 ### <a name="end-batch-files-with-exit-b-0"></a>以 EXIT /B 0 结束批处理文件
 仅当每个 simple 启动任务的 **errorlevel** 均为零时，角色才会启动。 并非所有程序都正确设置 **errorlevel**（退出代码），因此如果一切正常运行，批处理文件应以 `EXIT /B 0` 结束。

@@ -2,21 +2,24 @@
 title: 查询 Azure 事件网格订阅
 description: 介绍了如何列出 Azure 事件网格订阅。
 services: event-grid
-author: tfitzmac
+author: spelluru
 manager: timlt
 ms.service: event-grid
 ms.topic: conceptual
-ms.date: 04/04/2018
-ms.author: tomfitz
-ms.openlocfilehash: 2b46cde4a352e647ee97669f116a6c1926879fa0
-ms.sourcegitcommit: 688a394c4901590bbcf5351f9afdf9e8f0c89505
-ms.translationtype: HT
+ms.date: 01/04/2019
+ms.author: spelluru
+ms.openlocfilehash: 08fa9ada97c652ca609a499da1c8e87f7e4487db
+ms.sourcegitcommit: 1572b615c8f863be4986c23ea2ff7642b02bc605
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/18/2018
+ms.lasthandoff: 07/10/2019
+ms.locfileid: "67786628"
 ---
 # <a name="query-event-grid-subscriptions"></a>查询事件网格订阅 
 
 本文介绍了如何列出 Azure 订阅中的事件网格订阅。 在查询现有事件网格订阅时，了解订阅的各种类型非常重要。 你需要根据要获取的订阅的类型提供不同的参数。
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
 ## <a name="resource-groups-and-azure-subscriptions"></a>资源组和 Azure 订阅
 
@@ -34,8 +37,8 @@ az eventgrid event-subscription list
 对于 PowerShell，请使用：
 
 ```azurepowershell-interactive
-Set-AzureRmContext -Subscription "My Azure Subscription"
-Get-AzureRmEventGridSubscription
+Set-AzContext -Subscription "My Azure Subscription"
+Get-AzEventGridSubscription
 ```
 
 若要获取对 Azure 订阅的事件网格订阅，请提供主题类型 **Microsoft.Resources.Subscriptions**。
@@ -43,13 +46,13 @@ Get-AzureRmEventGridSubscription
 对于 Azure CLI，请使用：
 
 ```azurecli-interactive
-az eventgrid event-subscription list --topic-type-name "Microsoft.Resources.Subscriptions"
+az eventgrid event-subscription list --topic-type-name "Microsoft.Resources.Subscriptions" --location global
 ```
 
 对于 PowerShell，请使用：
 
 ```azurepowershell-interactive
-Get-AzureRmEventGridSubscription -TopicTypeName "Microsoft.Resources.Subscriptions"
+Get-AzEventGridSubscription -TopicTypeName "Microsoft.Resources.Subscriptions"
 ```
 
 若要获取对 Azure 订阅内的所有资源组的事件网格订阅，请提供主题类型 **Microsoft.Resources.ResourceGroups**。
@@ -57,13 +60,13 @@ Get-AzureRmEventGridSubscription -TopicTypeName "Microsoft.Resources.Subscriptio
 对于 Azure CLI，请使用：
 
 ```azurecli-interactive
-az eventgrid event-subscription list --topic-type-name "Microsoft.Resources.ResourceGroups"
+az eventgrid event-subscription list --topic-type-name "Microsoft.Resources.ResourceGroups" --location global
 ```
 
 对于 PowerShell，请使用：
 
 ```azurepowershell-interactive
-Get-AzureRmEventGridSubscription -TopicTypeName "Microsoft.Resources.ResourceGroups"
+Get-AzEventGridSubscription -TopicTypeName "Microsoft.Resources.ResourceGroups"
 ```
 
 若要获取对特定资源组的事件网格订阅，请将资源组的名称作为参数提供。
@@ -71,13 +74,13 @@ Get-AzureRmEventGridSubscription -TopicTypeName "Microsoft.Resources.ResourceGro
 对于 Azure CLI，请使用：
 
 ```azurecli-interactive
-az eventgrid event-subscription list --resource-group myResourceGroup
+az eventgrid event-subscription list --resource-group myResourceGroup --location global
 ```
 
 对于 PowerShell，请使用：
 
 ```azurepowershell-interactive
-Get-AzureRmEventGridSubscription -ResourceGroupName myResourceGroup
+Get-AzEventGridSubscription -ResourceGroupName myResourceGroup
 ```
 
 ## <a name="custom-topics-and-azure-resources"></a>自定义主题和 Azure 资源
@@ -95,7 +98,7 @@ az eventgrid event-subscription list --location westus2
 对于 PowerShell，请使用：
 
 ```azurepowershell-interactive
-Get-AzureRmEventGridSubscription -Location westus2
+Get-AzEventGridSubscription -Location westus2
 ```
 
 若要为某个位置获取对自定义主题的订阅，请提供该位置和主题类型 **Microsoft.EventGrid.Topics**。
@@ -109,7 +112,7 @@ az eventgrid event-subscription list --topic-type-name "Microsoft.EventGrid.Topi
 对于 PowerShell，请使用：
 
 ```azurepowershell-interactive
-Get-AzureRmEventGridSubscription -TopicTypeName "Microsoft.EventGrid.Topics" -Location westus2
+Get-AzEventGridSubscription -TopicTypeName "Microsoft.EventGrid.Topics" -Location westus2
 ```
 
 若要为某个位置获取对存储帐户的订阅，请提供该位置和主题类型 **Microsoft.Storage.StorageAccounts**。
@@ -123,7 +126,7 @@ az eventgrid event-subscription list --topic-type "Microsoft.Storage.StorageAcco
 对于 PowerShell，请使用：
 
 ```azurepowershell-interactive
-Get-AzureRmEventGridSubscription -TopicTypeName "Microsoft.Storage.StorageAccounts" -Location westus2
+Get-AzEventGridSubscription -TopicTypeName "Microsoft.Storage.StorageAccounts" -Location westus2
 ```
 
 若要获取对某个自定义主题的事件网格订阅，请提供该自定义主题的名称及其资源组的名称。
@@ -137,7 +140,7 @@ az eventgrid event-subscription list --topic-name myCustomTopic --resource-group
 对于 PowerShell，请使用：
 
 ```azurepowershell-interactive
-Get-AzureRmEventGridSubscription -TopicName myCustomTopic -ResourceGroupName myResourceGroup
+Get-AzEventGridSubscription -TopicName myCustomTopic -ResourceGroupName myResourceGroup
 ```
 
 若要获取对特定资源的事件网格订阅，请提供资源 ID。
@@ -152,8 +155,8 @@ az eventgrid event-subscription list --resource-id $resourceid
 对于 PowerShell，请使用：
 
 ```azurepowershell-interactive
-$resourceid = (Get-AzureRmResource -Name mystorage -ResourceGroupName myResourceGroup).ResourceId
-Get-AzureRmEventGridSubscription -ResourceId $resourceid
+$resourceid = (Get-AzResource -Name mystorage -ResourceGroupName myResourceGroup).ResourceId
+Get-AzEventGridSubscription -ResourceId $resourceid
 ```
 
 ## <a name="next-steps"></a>后续步骤

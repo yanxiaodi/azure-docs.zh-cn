@@ -1,5 +1,16 @@
-<!--author=SharS last changed: 9/17/15-->
-
+---
+author: alkohli
+ms.service: storsimple
+ms.topic: include
+ms.date: 10/26/2018
+ms.author: alkohli
+ms.openlocfilehash: 0b5d9deacdd4266da30f17c95b6e575a652d2f76
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67172992"
+---
 在此过程中，需要执行以下操作：
 
 1. [准备运行 Maintainer 可执行文件](#to-prepare-to-run-the-maintainer)。
@@ -26,7 +37,7 @@
        `exec mssqlrbs.rbs_sp_set_config_value ‘garbage_collection_time_window’ , ’time 00:00:00’`
    
        `exec mssqlrbs.rbs_sp_set_config_value ‘delete_scan_period’ , ’time 00:00:00’`
-2. 在 Web 前端服务器上的“管理中心”下，编辑所需内容数据库的“Web 应用程序常规设置”以暂时禁用回收站。 此操作同时会清空所有相关站点集合的回收站。 为此，请单击“管理中心” -> “应用程序管理” -> “Web 应用程序(管理 Web 应用程序)” -> “SharePoint - 80” -> “常规应用程序设置”。 将“回收站状态”设置为“关闭”。
+2. 在 Web 前端服务器上的“管理中心”下，编辑所需内容数据库的“Web 应用程序常规设置”以暂时禁用回收站。   此操作同时会清空所有相关站点集合的回收站。 为此，请单击“管理中心” -> “应用程序管理” -> “Web 应用程序(管理 Web 应用程序)” -> “SharePoint - 80” -> “常规应用程序设置”。      将“回收站状态”设置为“关闭”。  
    
     ![Web 应用程序常规设置](./media/storsimple-sharepoint-adapter-garbage-collection/HCS_WebApplicationGeneralSettings-include.png)
 
@@ -50,5 +61,5 @@
       `exec mssqlrbs.rbs_sp_set_config_value ‘delete_scan_period’ , ’days 30’`
    
       `exec mssqlrbs.rbs_sp_set_config_value ‘orphan_scan_period’ , ’days 30’`
-2. 在 Web 前端服务器上的“管理中心”中，编辑所需内容数据库的“Web 应用程序常规设置”以重新启用回收站。 为此，请单击“管理中心” -> “应用程序管理” -> “Web 应用程序(管理 Web 应用程序)” -> “SharePoint - 80” -> “常规应用程序设置”。 将“回收站状态”设置为“打开”。
+2. 在 Web 前端服务器上的“管理中心”中，编辑所需内容数据库的“Web 应用程序常规设置”以重新启用回收站。   为此，请单击“管理中心” -> “应用程序管理” -> “Web 应用程序(管理 Web 应用程序)” -> “SharePoint - 80” -> “常规应用程序设置”。      将“回收站状态”设置为“打开”。 
 

@@ -1,26 +1,20 @@
 ---
-title: 适用于 VMware 到 Azure 部署的 Azure Site Recovery Deployment Planner | Microsoft 文档
-description: 本文为 Azure Site Recovery Deployment Planner 用户指南。
-services: site-recovery
-documentationcenter: ''
-author: nsoneji
-manager: garavd
-editor: ''
-ms.assetid: ''
+title: 关于用于将 VMware VM 灾难恢复到 Azure 的 Azure Site Recovery 部署规划器 | Microsoft Docs
+description: 了解用于将 VMware VM 灾难恢复到 Azure 的 Azure Site Recovery 部署规划器。
+author: mayurigupta13
+manager: rochakm
 ms.service: site-recovery
-ms.workload: storage-backup-recovery
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: hero-article
-ms.date: 05/02/2018
-ms.author: nisoneji
-ms.openlocfilehash: 8d14d7af39af59bb0b4fbcd5857e8686176afb71
-ms.sourcegitcommit: 870d372785ffa8ca46346f4dfe215f245931dae1
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 07/29/2019
+ms.author: mayg
+ms.openlocfilehash: 4e1d27d133b2eb4e0d4d45a5de563e119513c79f
+ms.sourcegitcommit: 08d3a5827065d04a2dc62371e605d4d89cf6564f
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/08/2018
+ms.lasthandoff: 07/29/2019
+ms.locfileid: "68620057"
 ---
-# <a name="azure-site-recovery-deployment-planner-for-vmware-to-azure"></a>适用于 VMware 到 Azure 部署的 Azure Site Recovery 部署规划器
+# <a name="about-the-azure-site-recovery-deployment-planner-for-vmware-to-azure"></a>关于用于 VMware 到 Azure 部署的 Azure Site Recovery 部署规划器
 本文为适用于 VMware 到 Azure 生产部署的 Azure Site Recovery 部署规划器用户指南。
 
 ## <a name="overview"></a>概述
@@ -47,10 +41,9 @@ ms.lasthandoff: 05/08/2018
 
 **Azure 基础结构要求**
 
-* 每个 VM 的存储类型（标准或高级存储帐户）要求
-* 要为复制设置的标准和高级存储帐户总数
+* 每个 VM 的存储类型 (标准或高级存储) 要求
+* 要为复制设置的标准和高级存储帐户的总数 (包括缓存存储帐户)
 * 基于存储指南的存储帐户命名建议
-* 适用于所有 VM 的存储帐户归置
 * 针对订阅执行测试性故障转移或故障转移之前要设置的 Azure 核心数
 * 适用于每个本地 VM 的 Azure VM 建议大小
 
@@ -72,7 +65,7 @@ ms.lasthandoff: 05/08/2018
 | | **VMware 到 Azure** |**Hyper-V 到 Azure**|**Azure 到 Azure**|**Hyper-V 到辅助站点**|**VMware 到辅助站点**
 --|--|--|--|--|--
 支持的方案 |是|是|否|是*|否
-支持的版本 | vCenter 6.5、6.0 或 5.5| Windows Server 2016、Windows Server 2012 R2 | 不可用 |Windows Server 2016、Windows Server 2012 R2|不可用
+支持的版本 | vCenter 6.7、6.5、6.0 或 5.5| Windows Server 2016、Windows Server 2012 R2 | 不可用 |Windows Server 2016、Windows Server 2012 R2|不可用
 支持的配置|vCenter、ESXi| Hyper-V 群集、Hyper-V 主机|不可用|Hyper-V 群集、Hyper-V 主机|不可用|
 可以按 Site Recovery 部署规划器的运行实例进行分析的服务器数 |单个（一次只能分析属于一个 vCenter Server 或一个 ESXi 服务器的 VM）|多个（一次可以分析多个主机或主机群集的 VM）| 不可用 |多个（一次可以分析多个主机或主机群集的 VM）| 不可用
 
@@ -81,10 +74,10 @@ ms.lasthandoff: 05/08/2018
 ## <a name="prerequisites"></a>先决条件
 该工具的操作分两个主要阶段：分析和报告生成。 此外还有第三个选项，即仅计算吞吐量。 下表提供了可以进行分析和吞吐量测量的服务器的要求。
 
-| 服务器要求 | 说明|
+| 服务器要求 | 描述|
 |---|---|
-|分析和吞吐量测量| <ul><li>操作系统：Windows Server 2016 或 Windows Server 2012 R2<br>（理想情况下，至少符合[配置服务器的建议大小](https://aka.ms/asr-v2a-on-prem-components)）</li><li>计算机配置：8 个 vCPU，16 GB RAM，300 GB HDD</li><li>[.NET Framework 4.5](https://aka.ms/dotnet-framework-45)</li><li>[VMware vSphere PowerCLI 6.0 R3](https://aka.ms/download_powercli)</li><li>[Visual C++ Redistributable for Visual Studio 2012](https://aka.ms/vcplusplus-redistributable)</li><li>可在此服务器中通过 Internet 访问 Azure</li><li>Azure 存储帐户</li><li>服务器上的管理员访问权限</li><li>至少 100 GB 的可用磁盘空间（假定有 1,000 个 VM，每个平均包含 3 个磁盘，分析时间为 30 天）</li><li>VMware vCenter 统计信息级别设置应设置为 2 或更高级别</li><li>允许 443 端口：Site Recovery 部署规划器使用此端口连接到 vCenter 服务器/ESXi 主机</ul></ul>|
-| 报告生成 | 装有 Excel 2013 或更高版本的 Windows 电脑或 Windows Server |
+|分析和吞吐量测量| <ul><li>操作系统：Windows Server 2016 或 Windows Server 2012 R2<br>（理想情况下，至少符合[配置服务器的建议大小](https://aka.ms/asr-v2a-on-prem-components)）</li><li>计算机配置：8 个 vCPU、16 GB RAM、300 GB HDD</li><li>[.NET Framework 4.5](https://aka.ms/dotnet-framework-45)</li><li>[VMware vSphere PowerCLI 6.0 R3](https://aka.ms/download_powercli)</li><li>[Visual C++ Redistributable for Visual Studio 2012](https://aka.ms/vcplusplus-redistributable)</li><li>可在此服务器中通过 Internet 访问 Azure</li><li>Azure 存储帐户</li><li>服务器上的管理员访问权限</li><li>至少 100 GB 的可用磁盘空间（假定有 1,000 个 VM，每个平均包含 3 个磁盘，分析时间为 30 天）</li><li>VMware vCenter 统计信息级别设置可以是 1 或更高级别</li><li>允许 vCenter 端口（默认为 443）：Site Recovery 部署规划器使用此端口连接到 vCenter 服务器/ESXi 主机</ul></ul>|
+| 报告生成 | 装有 Excel 2013 或更高版本的 Windows 电脑或 Windows Server。<li>[.NET Framework 4.5](https://aka.ms/dotnet-framework-45)</li><li>[Visual C++ Redistributable for Visual Studio 2012](https://aka.ms/vcplusplus-redistributable)</li><li>仅当你在报表生成命令中传递了 -User 选项来获取 VM 的最新 VM 配置信息时才需要 [VMware vSphere PowerCLI 6.0 R3](https://aka.ms/download_powercli)。 部署规划器连接到 vCenter 服务器。 允许 vCenter 端口（默认为 443）连接到 vCenter 服务器。</li>|
 | 用户权限 | 用于在分析期间访问 VMware vCenter 服务器/VMware vSphere ESXi 主机的用户帐户的只读权限 |
 
 > [!NOTE]
@@ -105,11 +98,14 @@ ms.lasthandoff: 05/08/2018
 该文件夹包含多个文件和子文件夹。 可执行文件是父文件夹中的 ASRDeploymentPlanner.exe。
 
     示例：将 .zip 文件复制到 E:\ 驱动器并将它解压缩。
-    E:\ASR Deployment Planner_v2.2.zip
+    E:\ASR Deployment Planner_v2.3.zip
 
-    E:\ASR Deployment Planner_v2.2\ASRDeploymentPlanner.exe
+    E:\ASR Deployment Planner_v2.3\ASRDeploymentPlanner.exe
 
 ### <a name="update-to-the-latest-version-of-deployment-planner"></a>更新至最新版本的部署规划器
+
+最新更新汇总在部署规划器[版本历史记录](site-recovery-deployment-planner-history.md)中。
+
 如果部署规划器为旧版，请执行以下操作之一：
  * 如果最新版不包含分析修补程序且分析已在当前版本的 Planner 上进行，请继续该分析。
  * 如果最新版本不包含分析修补程序，则建议停止在当前版本上进行分析，使用新版本重新开始分析。
@@ -123,8 +119,8 @@ ms.lasthandoff: 05/08/2018
 
 
 ## <a name="version-history"></a>版本历史记录
-最新的 Site Recovery 部署规划器工具版本为 2.2。
-请参阅 [Site Recovery 部署规划器版本历史记录](https://social.technet.microsoft.com/wiki/contents/articles/51049.asr-deployment-planner-version-history.aspx)页，了解每个更新中增加的修补程序。
+最新的 Site Recovery 部署规划器工具版本为2.5。
+请参阅 [Site Recovery 部署规划器版本历史记录](https://docs.microsoft.com/azure/site-recovery/site-recovery-deployment-planner-history)页，了解每个更新中增加的修补程序。
 
 ## <a name="next-steps"></a>后续步骤
 [运行 Site Recovery 部署规划器](site-recovery-vmware-deployment-planner-run.md)

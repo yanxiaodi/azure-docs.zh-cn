@@ -1,24 +1,25 @@
 ---
-title: Azure-SSIS 集成运行时企业版 | Microsoft Docs
-description: 本文介绍 Azure-SSIS 集成运行时企业版的功能和配置
+title: 预配 Azure-SSIS 集成运行时企业版 | Microsoft Docs
+description: 本文介绍 Azure-SSIS 集成运行时企业版的功能以及如何配置它
 services: data-factory
 documentationcenter: ''
-author: douglaslMS
-manager: craigg
 ms.service: data-factory
 ms.workload: data-services
 ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 04/13/2018
-ms.author: douglasl
-ms.openlocfilehash: 42c0c000ef661a1a256ebf49cd099a4cae2185c0
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+author: swinarko
+ms.author: sawinark
+ms.reviewer: douglasl
+manager: craigg
+ms.openlocfilehash: d2b06d044f68972ef72dd9b53401980e84ef779f
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66152433"
 ---
-# <a name="enterprise-edition-of-the-azure-ssis-integration-runtime"></a>Azure-SSIS 集成运行时企业版
+# <a name="provision-enterprise-edition-for-the-azure-ssis-integration-runtime"></a>预配 Azure-SSIS 集成运行时企业版
 
 在 Azure-SSIS 集成运行时企业版中可以使用以下高级功能：
 -   变更数据捕获 (CDC) 组件
@@ -43,19 +44,21 @@ ms.lasthandoff: 04/16/2018
 
 ## <a name="instructions"></a>说明
 
-1.  下载并安装 [Azure PowerShell（5.4 或更高版本）](https://github.com/Azure/azure-powershell/releases/tag/v5.5.0-March2018)。
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
-2.  使用 PowerShell 预配或重新配置 Azure-SSIS IR 时，请在启动 Azure-SSIS IR 之前，先运行 `Set-AzureRmDataFactoryV2IntegrationRuntime` 并指定 **Enterprise** 作为 **Edition** 参数的值。 下面是一个示例脚本：
+1.  下载和安装 [Azure PowerShell](/powershell/azure/install-az-ps)。
+
+2.  使用 PowerShell 预配或重新配置 Azure-SSIS IR 时，请在启动 Azure-SSIS IR 之前，先运行 `Set-AzDataFactoryV2IntegrationRuntime` 并指定 **Enterprise** 作为 **Edition** 参数的值。 下面是一个示例脚本：
 
     ```powershell
     $MyAzureSsisIrEdition = "Enterprise"
 
-    Set-AzureRmDataFactoryV2IntegrationRuntime -DataFactoryName $MyDataFactoryName
+    Set-AzDataFactoryV2IntegrationRuntime -DataFactoryName $MyDataFactoryName
                                                -Name $MyAzureSsisIrName
                                                -ResourceGroupName $MyResourceGroupName
                                                -Edition $MyAzureSsisIrEdition
 
-    Start-AzureRmDataFactoryV2IntegrationRuntime -DataFactoryName $MyDataFactoryName
+    Start-AzDataFactoryV2IntegrationRuntime -DataFactoryName $MyDataFactoryName
                                                  -Name $MyAzureSsisIrName
                                                  -ResourceGroupName $MyResourceGroupName
     ```

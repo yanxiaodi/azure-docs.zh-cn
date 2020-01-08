@@ -1,29 +1,23 @@
 ---
-title: 开发 U-SQL 用户定义的运算符 (UDO) | Microsoft Docs
-description: '了解如何开发可在 Data Lake Analytics 作业中使用和重复使用的用户定义的运算符。 '
+title: 开发 U SQL 用户定义的运算符-Azure Data Lake Analytics
+description: 了解如何开发可在 Azure Data Lake Analytics 作业中使用和重复使用的用户定义的运算符。
 services: data-lake-analytics
-documentationcenter: ''
-author: saveenr
-manager: kfile
-editor: cgronlun
-ms.assetid: e5189e4e-9438-46d1-8686-ed4836bf3356
 ms.service: data-lake-analytics
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: big-data
-ms.date: 12/05/2016
+author: saveenr
 ms.author: saveenr
-ms.openlocfilehash: c0164d9f1e40778d3ce0dc7e947f6d2807234468
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.reviewer: jasonwhowell
+ms.assetid: e5189e4e-9438-46d1-8686-ed4836bf3356
+ms.topic: conceptual
+ms.date: 12/05/2016
+ms.openlocfilehash: b2d1293b06b4d8791138ed666bc3cb4abe3adf40
+ms.sourcegitcommit: 9fba13cdfce9d03d202ada4a764e574a51691dcd
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 09/26/2019
+ms.locfileid: "71316542"
 ---
 # <a name="develop-u-sql-user-defined-operators-udos"></a>开发 U-SQL 用户定义的运算符 (UDO)
-了解如何开发用户定义的运算符以处理 U-SQL 作业中的数据。
-
-有关为 U-SQL 开发通用程序集的说明，请参阅[为 Azure Data Lake Analytics 作业开发 U-SQL 程序集](data-lake-analytics-u-sql-develop-assemblies.md)
+本文介绍如何开发用户定义的运算符以处理 U-SQL 作业中的数据。
 
 ## <a name="define-and-use-a-user-defined-operator-in-u-sql"></a>在 U-SQL 中定义和使用用户定义的运算符
 **创建和提交 U-SQL 作业**
@@ -129,6 +123,6 @@ ms.lasthandoff: 04/28/2018
 1. 在“服务器资源管理器”中依次展开 “Azure”、“Data Lake Analytics”、Data Lake Analytics 帐户、“存储帐户”，右键单击“默认存储”，并单击“资源管理器”。
 2. 展开示例、展开输出，并双击 “Drivers.csv”。
 
-## <a name="see-also"></a>另请参阅
-* [Extending U-SQL Expressions with User-Code](https://msdn.microsoft.com/library/azure/mt621316.aspx)（使用用户代码扩展 U-SQL 表达式）
-* [使用适用于 Visual Studio 的工具开发 U-SQL 应用程序](data-lake-analytics-data-lake-tools-get-started.md)
+## <a name="see-also"></a>请参阅
+* [Extending U-SQL Expressions with User-Code](/u-sql/concepts/extending-u-sql-expressions-with-user-code)（使用用户代码扩展 U-SQL 表达式）
+* [使用针对 Visual Studio 的 Data Lake 工具开发 U-SQL 应用程序](data-lake-analytics-data-lake-tools-get-started.md)

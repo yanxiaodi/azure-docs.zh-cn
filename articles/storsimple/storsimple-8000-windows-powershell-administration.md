@@ -1,24 +1,25 @@
 ---
-title: "PowerShell for StorSimple 设备管理 | Microsoft Docs"
-description: "了解如何使用 Windows PowerShell for StorSimple 来管理 StorSimple 设备。"
+title: PowerShell for StorSimple 设备管理 | Microsoft Docs
+description: 了解如何使用 Windows PowerShell for StorSimple 来管理 StorSimple 设备。
 services: storsimple
 documentationcenter: NA
 author: alkohli
 manager: jeconnoc
-editor: 
-ms.assetid: 
+editor: ''
+ms.assetid: ''
 ms.service: storsimple
 ms.devlang: NA
 ms.topic: article
 ms.tgt_pltfrm: NA
 ms.workload: TBD
 ms.date: 01/09/2018
-ms.author: alkohli@microsoft.com
-ms.openlocfilehash: 291de21d3d98bf9eb65adc7d506f3549171ee0a0
-ms.sourcegitcommit: 9292e15fc80cc9df3e62731bafdcb0bb98c256e1
-ms.translationtype: HT
+ms.author: alkohli
+ms.openlocfilehash: 7e488a1b2a63323361a597aaa6a438630fc09a05
+ms.sourcegitcommit: 6a42dd4b746f3e6de69f7ad0107cc7ad654e39ae
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/10/2018
+ms.lasthandoff: 07/07/2019
+ms.locfileid: "67621622"
 ---
 # <a name="use-windows-powershell-for-storsimple-to-administer-your-device"></a>使用 Windows PowerShell for StorSimple 管理设备
 
@@ -36,7 +37,7 @@ Windows PowerShell for StorSimple 提供了一个可用于管理 Microsoft Azure
 
 > [!NOTE]
 > * 使用 Windows PowerShell for StorSimple cmdlet，可以从某个串行控制台或通过 Windows PowerShell 远程处理以远程方式管理 StorSimple 设备。 有关可以在此命令行接口中使用的各个 cmdlet 的详细信息，请参阅 [Windows PowerShell for StorSimple 的 cmdlet 参考](https://technet.microsoft.com/library/dn688168.aspx)。
-> * Azure PowerShell StorSimple cmdlet 是一个不同的 cmdlet 集合，可让你从命令行实现 StorSimple 服务级任务和迁移任务的自动化。 有关适用于 StorSimple 的 Azure Powershell cmdlet 的详细信息，请参阅 [Azure StorSimple cmdlet 参考](https://docs.microsoft.com/powershell/servicemanagement/azure.storsimple/v3.1.0/azure.storsimple)。
+> * Azure PowerShell StorSimple cmdlet 是一个不同的 cmdlet 集合，可让你从命令行实现 StorSimple 服务级任务和迁移任务的自动化。 有关适用于 StorSimple 的 Azure Powershell cmdlet 的详细信息，请参阅 [Azure StorSimple cmdlet 参考](https://docs.microsoft.com/powershell/module/servicemanagement/azure/?view=azuresmps-4.0.0&viewFallbackFrom=azuresmps-3.7.0#azure)。
 
 
 可以使用以下方法之一访问 Windows PowerShell for StorSimple：
@@ -46,7 +47,7 @@ Windows PowerShell for StorSimple 提供了一个可用于管理 Microsoft Azure
 
 ## <a name="connect-to-windows-powershell-for-storsimple-via-the-device-serial-console"></a>通过设备串行控制台连接到 Windows PowerShell for StorSimple
 
-可以[下载 PuTTY](http://www.putty.org/) 或类似的终端模拟软件来连接到 Windows PowerShell for StorSimple。 需要专门配置 PuTTY 才能访问 Microsoft Azure StorSimple 设备。 以下主题包含有关如何配置 PuTTy 并连接到设备的详细步骤。 此外还介绍了串行控制台中的各个菜单选项。
+可以[下载 PuTTY](https://www.putty.org/) 或类似的终端模拟软件来连接到 Windows PowerShell for StorSimple。 需要专门配置 PuTTY 才能访问 Microsoft Azure StorSimple 设备。 以下主题包含有关如何配置 PuTTy 并连接到设备的详细步骤。 此外还介绍了串行控制台中的各个菜单选项。
 
 ### <a name="putty-settings"></a>PuTTY 设置
 
@@ -67,13 +68,13 @@ Windows PowerShell for StorSimple 提供了一个可用于管理 Microsoft Azure
    | 启用额外的键盘功能 |Control-Alt 与 AltGr 不同 |
    
     ![支持的 Putty 设置](./media/storsimple-windows-powershell-administration/IC740877.png)
-3. 单击“应用” 。
+3. 单击“应用”  。
 4. 在“**类别**”窗格中，选择“**转换**”。
 5. 在“**远程字符集**”列表框中，选择“**UTF-8**”。
 6. 在“**处理线条图形字符**”下，选择“**使用 Unicode 线条图形代码点**”。 以下屏幕截图显示了正确的 PuTTY 选择。
    
     ![UTF PuTTY 设置](./media/storsimple-windows-powershell-administration/IC740878.png)
-7. 单击“应用” 。
+7. 单击“应用”  。
 
 现在可以通过执行以下步骤使用 PuTTY 连接到设备串行控制台。
 
@@ -109,8 +110,8 @@ Windows PowerShell for StorSimple 提供了一个可用于管理 Microsoft Azure
    * 应用更新
    * 安装修复程序
 
-    > [!NOTE]
-    > 如果忘记了设备管理员密码并且无法通过选项 1 或选项 2 进行连接，那么这是首选选项。
+     > [!NOTE]
+     > 如果忘记了设备管理员密码并且无法通过选项 1 或选项 2 进行连接，那么这是首选选项。
 
 4. **更改语言**：此选项用于更改 Windows PowerShell 界面上的显示语言。 支持的语言包括英语、日语、俄语、法语、韩语、西班牙语、意大利语、德语、中文和葡萄牙语（巴西）。
 
@@ -158,7 +159,7 @@ Windows PowerShell for StorSimple 提供了一个可用于管理 Microsoft Azure
 
 在 Windows PowerShell for StorSimple 中，有关于 cmdlet 的帮助信息。 此帮助的在线最新版本也可用，可以用它来更新系统上的帮助信息。
 
-获取关于此界面的帮助信息与获取关于 Windows PowerShell 的帮助信息很相似，且大多数与帮助信息相关的 cmdlet 将正常工作。 可以在 TechNet 库中找到关于 Windows PowerShell 的在线帮助信息：[使用 Windows PowerShell 编写脚本](http://go.microsoft.com/fwlink/?LinkID=108518)。
+获取关于此界面的帮助信息与获取关于 Windows PowerShell 的帮助信息很相似，且大多数与帮助信息相关的 cmdlet 将正常工作。 您可以联机找到适用于 Windows PowerShell 的帮助：[Microsoft.PowerShell.Core](/powershell/module/Microsoft.PowerShell.Core/).
 
 下面是关于此 Windows PowerShell 界面的帮助信息类型的简要说明，包括如何更新帮助信息。
 

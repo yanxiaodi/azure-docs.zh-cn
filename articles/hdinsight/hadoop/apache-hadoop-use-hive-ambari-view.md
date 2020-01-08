@@ -1,57 +1,44 @@
 ---
-title: 使用 Ambari 视图操作 HDInsight (Hadoop) 上的 Hive — Azure | Microsoft Docs
+title: 使用 Apache Ambari 视图操作 Hive on HDInsight (Apache Hadoop) - Azure
 description: 了解如何在 Web 浏览器中使用 Hive 视图提交 Hive 查询。 Hive 视图是基于 Linux 的 HDInsight 群集随附提供的 Ambari Web UI 的一部分。
-services: hdinsight
-documentationcenter: ''
-author: Blackmist
-manager: cgronlun
-editor: cgronlun
-tags: azure-portal
-ms.assetid: 1abe9104-f4b2-41b9-9161-abbc43de8294
+author: hrasheed-msft
+ms.reviewer: jasonh
 ms.service: hdinsight
 ms.custom: hdinsightactive
-ms.devlang: na
 ms.topic: conceptual
-ms.date: 05/16/2018
-ms.author: larryfr
-ms.openlocfilehash: 6c07e9a45cbfbc5e6ed6787277dcfa1bf4cf4b2b
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.date: 03/21/2019
+ms.author: hrasheed
+ms.openlocfilehash: da4d1ed7dec8b3b0bc61dd2959a868d03875039c
+ms.sourcegitcommit: 8ef0a2ddaece5e7b2ac678a73b605b2073b76e88
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71077015"
 ---
-# <a name="use-ambari-hive-view-with-hadoop-in-hdinsight"></a>将 Ambari Hive 视图与 HDInsight 中的 Hadoop 配合使用
+# <a name="use-apache-ambari-hive-view-with-apache-hadoop-in-hdinsight"></a>将 Apache Ambari Hive 视图与 HDInsight 中的 Apache Hadoop 配合使用
 
 [!INCLUDE [hive-selector](../../../includes/hdinsight-selector-use-hive.md)]
 
-了解如何使用 Ambari Hive 视图运行 Hive 查询。 Hive 视图允许从 Web 浏览器创作、优化和运行 Hive 查询。
+了解如何使用 Apache Ambari Hive 视图运行 Hive 查询。 Hive 视图允许从 Web 浏览器创作、优化和运行 Hive 查询。
 
 ## <a name="prerequisites"></a>先决条件
 
-* 基于 Linux 的 Hadoop on HDInsight 群集版本 3.4 或更高版本。
-
-  > [!IMPORTANT]
-  > Linux 是 HDInsight 3.4 或更高版本上使用的唯一操作系统。 有关详细信息，请参阅 [HDInsight 在 Windows 上停用](../hdinsight-component-versioning.md#hdinsight-windows-retirement)。
-
+* HDInsight 上的 Hadoop 群集。 请参阅 [Linux 上的 HDInsight 入门](./apache-hadoop-linux-tutorial-get-started.md)。
 * Web 浏览器
 
 ## <a name="run-a-hive-query"></a>运行 Hive 查询
 
-1. 打开 [Azure 门户](https://portal.azure.com)。
+1. 在 [Azure 门户](https://portal.azure.com/)中，选择群集。  有关说明，请参阅[列出和显示群集](../hdinsight-administer-use-portal-linux.md#showClusters)。 将在新的门户边栏选项卡中打开群集。
 
-2. 选择 HDInsight 群集，然后从“快速链接”部分选择“Ambari 视图”。
-
-    ![门户快速链接部分](./media/apache-hadoop-use-hive-ambari-view/quicklinks.png)
-
-    当提示进行身份验证时，请使用在创建群集时所提供的群集登录名（默认为 `admin`）帐户名称和密码。
+2. 从**群集仪表板**中，选择 " **Ambari 视图**"。 当提示进行身份验证时，请使用在创建群集时所提供的群集登录名（默认为 `admin`）帐户名称和密码。
 
 3. 在视图列表中，选择“Hive 视图”。
 
-    ![已选中 Hive 视图](./media/apache-hadoop-use-hive-ambari-view/select-hive-view.png)
+    ![Apache Ambari 选择 Apache Hive 视图](./media/apache-hadoop-use-hive-ambari-view/select-apache-hive-view.png)
 
     Hive 视图页面类似于下图：
 
-    ![Hive 视图查询工作表图像](./media/apache-hadoop-use-hive-ambari-view/ambari-hive-view.png)
+    ![Hive 视图查询工作表图像](./media/apache-hadoop-use-hive-ambari-view/ambari-worksheet-view.png)
 
 4. 将以下 HiveQL 语句从“查询”选项卡粘贴到工作表中：
 
@@ -77,7 +64,7 @@ ms.lasthandoff: 05/16/2018
    * `DROP TABLE`：删除表和数据文件（如果该表已存在）。
 
    * `CREATE EXTERNAL TABLE`：在 Hive 中创建一个新的“外部”表。
-   外部表仅在 Hive 中存储表定义。 数据将保留在原始位置。
+     外部表仅在 Hive 中存储表定义。 数据将保留在原始位置。
 
    * `ROW FORMAT`：演示如何设置数据格式。 在此情况下，每个日志中的字段以空格分隔。
 
@@ -85,55 +72,53 @@ ms.lasthandoff: 05/16/2018
 
    * `SELECT`：选择 t4 列包含值 [ERROR] 的所有行的计数。
 
-    > [!IMPORTANT]
-    > 将“数据库”选择保留为“默认”。 本文档中的示例使用 HDInsight 附带的默认数据库。
+   > [!IMPORTANT]  
+   > 将“数据库”选择保留为“默认”。 本文档中的示例使用 HDInsight 附带的默认数据库。
 
-5. 要启动查询，请使用工作表下方的“执行”按钮。 按钮变为橙色，文本更改为“停止”。
+5. 若要启动查询，请选择工作表下方的 "**执行**"。 按钮变为橙色，文本更改为“停止”。
 
 6. 完成查询后，“结果”选项卡显示操作结果。 以下文本是查询结果：
 
         loglevel       count
         [ERROR]        3
 
-    可使用“日志”选项卡查看作业创建的日志记录信息。
+    可以使用 "**日志**" 选项卡查看作业创建的日志记录信息。
 
-   > [!TIP]
-   > 通过位于“查询处理结果”部分左上角的“保存结果”下拉对话框，可下载或保存结果。
+   > [!TIP]  
+   > 从 "**结果**" 选项卡下的 "**操作**" 下拉对话框中下载或保存结果。
 
 ### <a name="visual-explain"></a>可视化说明
 
 要显示查询计划的可视化效果，选择工作表下方的“可视化说明”选项卡。
 
-查询的**可视化说明**视图可帮助理解复杂查询的流。 可使用查询编辑器上的“说明”按钮查看此视图的等效文本。
+查询的**可视化说明**视图可帮助理解复杂查询的流。
 
 ### <a name="tez-ui"></a>Tez UI
 
-要显示查询的 Tez UI，选择工作表下方的“Tez”选项卡。
+若要显示查询的 Tez UI，请选择工作表下方的 " **TEZ ui** " 选项卡。
 
-> [!IMPORTANT]
-> Tez 不用于解析所有查询。 无需使用 Tez 即可解析许多查询。 
-
-如果使用 Tez 来解析查询，会显示有向无环图 (DAG)。 若要查看之前运行的查询的 DAG，或调试 Tez 进程，请改用 [Tez 视图](../hdinsight-debug-ambari-tez-view.md)。
+> [!IMPORTANT]  
+> Tez 不用于解析所有查询。 无需使用 Tez 即可解析许多查询。
 
 ## <a name="view-job-history"></a>查看作业历史记录
 
 “作业”选项卡显示 Hive 查询的历史记录。
 
-![作业历史记录图像](./media/apache-hadoop-use-hive-ambari-view/job-history.png)
+![Apache Hive 查看作业 "选项卡历史记录](./media/apache-hadoop-use-hive-ambari-view/apache-hive-job-history.png)
 
 ## <a name="database-tables"></a>数据库表
 
 可使用“表”选项卡处理 Hive 数据库内的表。
 
-![表选项卡图像](./media/apache-hadoop-use-hive-ambari-view/tables.png)
+!["Apache Hive 表" 选项卡的图像](./media/apache-hadoop-use-hive-ambari-view/hdinsight-tables-tab.png)
 
 ## <a name="saved-queries"></a>已保存的查询
 
 在“查询”选项卡中，可以按需要保存查询。 保存查询后，可通过“已保存的查询”选项卡对其重复进行使用。
 
-![“保存的查询”选项卡图像](./media/apache-hadoop-use-hive-ambari-view/saved-queries.png)
+![Apache Hive 查看已保存的查询 "选项卡](./media/apache-hadoop-use-hive-ambari-view/ambari-saved-queries.png)
 
-> [!TIP]
+> [!TIP]  
 > 保存的查询存储在默认群集存储中。 可在路径 `/user/<username>/hive/scripts` 下找到保存的查询。 它们存储为纯文本 `.hql` 文件。
 >
 > 如果删除群集但保留存储，可使用 [Azure 存储资源管理器](https://azure.microsoft.com/features/storage-explorer/)或 Data Lake 存储资源管理器（通过 [Azure 门户](https://portal.azure.com)）等实用工具来检索查询。
@@ -144,7 +129,7 @@ ms.lasthandoff: 05/16/2018
 
 使用 Hive 视图顶部的“UDF”选项卡，声明并保存一组 UDF。 可以在**查询编辑器**中使用这些 UDF。
 
-![UDF 选项卡图像](./media/apache-hadoop-use-hive-ambari-view/user-defined-functions.png)
+![Apache Hive 查看 Udf 选项卡显示](./media/apache-hadoop-use-hive-ambari-view/user-defined-functions.png)
 
 将 UDF 添加到 Hive 视图后，“插入 UDF”按钮将显示在“查询编辑器”底部。 选择此项会显示 Hive 视图中定义的 UDF 的下拉列表。 选择 UDF 会将 HiveQL 语句添加到查询以启用 UDF。
 
@@ -165,12 +150,12 @@ add jar /myudfs.jar;
 create temporary function myawesomeudf as 'com.myudfs.Awesome';
 ```
 
-然后可在查询中使用 UDF。 例如，`SELECT myawesomeudf(name) FROM people;`。
+然后可在查询中使用 UDF。 例如， `SELECT myawesomeudf(name) FROM people;` 。
 
 有关如何在 HDInsight 中将 UDF 与 Hive 配合使用的详细信息，请参阅以下文章：
 
-* [在 HDInsight 中将 Python 与 Hive 和 Pig 配合使用](python-udf-hdinsight.md)
-* [如何将自定义 Hive UDF 添加到 HDInsight](http://blogs.msdn.com/b/bigdatasupport/archive/2014/01/14/how-to-add-custom-hive-udfs-to-hdinsight.aspx)
+* [在 HDInsight 中将 Python 与 Apache Hive 和 Apache Pig 配合使用](python-udf-hdinsight.md)
+* [如何将自定义 Apache Hive UDF 添加到 HDInsight](https://blogs.msdn.com/b/bigdatasupport/archive/2014/01/14/how-to-add-custom-hive-udfs-to-hdinsight.aspx)
 
 ## <a name="hive-settings"></a>Hive 设置
 
@@ -180,9 +165,9 @@ create temporary function myawesomeudf as 'com.myudfs.Awesome';
 
 有关 HDInsight 中 Hive 的常规信息：
 
-* [将 Hive 与 Hadoop on HDInsight 配合使用](hdinsight-use-hive.md)
+* [将 Apache Hive 与 Apache Hadoop on HDInsight 配合使用](hdinsight-use-hive.md)
 
 有关 HDInsight 上的 Hadoop 的其他使用方法的信息：
 
-* [将 Pig 与 Hadoop on HDInsight 配合使用](hdinsight-use-pig.md)
-* [将 MapReduce 与 HDInsight 上的 Hadoop 配合使用](hdinsight-use-mapreduce.md)
+* [将 Apache Pig 与 Apache Hadoop on HDInsight 配合使用](hdinsight-use-pig.md)
+* [将 MapReduce 与 HDInsight 上的 Apache Hadoop 配合使用](hdinsight-use-mapreduce.md)

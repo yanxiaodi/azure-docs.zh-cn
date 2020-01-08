@@ -1,11 +1,11 @@
 ---
-title: "Azure 中继异常以及解决方法 | Microsoft Docs"
-description: "Azure 中继异常以及解决这些异常应采取的建议操作的列表。"
+title: Azure 中继异常以及解决方法 | Microsoft Docs
+description: Azure 中继异常以及解决这些异常应采取的建议操作的列表。
 services: service-bus-relay
 documentationcenter: na
-author: sethmanheim
+author: spelluru
 manager: timlt
-editor: 
+editor: ''
 ms.assetid: 5f9dd02c-cce0-43b3-8eb8-744f0c27f38c
 ms.service: service-bus-relay
 ms.devlang: na
@@ -13,30 +13,31 @@ ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 12/20/2017
-ms.author: sethm
-ms.openlocfilehash: 1dbe73dac0d09db96ab902909125869959963e6f
-ms.sourcegitcommit: b5c6197f997aa6858f420302d375896360dd7ceb
-ms.translationtype: HT
+ms.author: spelluru
+ms.openlocfilehash: fe8f057443b978e70e7cdd2591affd455fefdca8
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/21/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60749030"
 ---
 # <a name="azure-relay-exceptions"></a>Azure 中继异常
 
-本文列出了可能由 Azure 中继 API 生成的一些异常。 这些参考信息可随时更改，请不时返回查看更新内容。
+本文列出了可能由 Azure 中继 API 生成的一些异常。 此参考信息随时更改，请不时返回查看更新内容。
 
 ## <a name="exception-categories"></a>异常类别
 
 中继 API 生成的异常可以分为以下类别。 此外还列出了解决这些异常应采取的建议操作。
 
-*   **用户编码错误**：[System.ArgumentException](https://msdn.microsoft.com/library/system.argumentexception.aspx)、[System.InvalidOperationException](https://msdn.microsoft.com/library/system.invalidoperationexception.aspx)、[System.OperationCanceledException](https://msdn.microsoft.com/library/system.operationcanceledexception.aspx)、[System.Runtime.Serialization.SerializationException](https://msdn.microsoft.com/library/system.runtime.serialization.serializationexception.aspx)。 
+*   **用户编码错误**：[System.ArgumentException](https://msdn.microsoft.com/library/system.argumentexception.aspx), [System.InvalidOperationException](https://msdn.microsoft.com/library/system.invalidoperationexception.aspx), [System.OperationCanceledException](https://msdn.microsoft.com/library/system.operationcanceledexception.aspx), [System.Runtime.Serialization.SerializationException](https://msdn.microsoft.com/library/system.runtime.serialization.serializationexception.aspx)。 
 
-    常规操作：继续之前尝试修复代码。
+    **常规操作**：继续之前尝试修复代码。
 *   **设置/配置错误**：[System.UnauthorizedAccessException](https://msdn.microsoft.com/library/system.unauthorizedaccessexception.aspx)。 
 
-    常规操作：检查配置。 必要时更改配置。
+    **常规操作**：查看配置。 必要时更改配置。
 *   **暂时性异常**：[Microsoft.ServiceBus.Messaging.MessagingException](/dotnet/api/microsoft.servicebus.messaging.messagingexception)、[Microsoft.ServiceBus.Messaging.ServerBusyException](/dotnet/api/microsoft.servicebus.messaging.serverbusyexception)、[Microsoft.ServiceBus.Messaging.MessagingCommunicationException](/dotnet/api/microsoft.servicebus.messaging.messagingcommunicationexception)。 
 
-    常规操作：重试操作或通知用户。
+    **常规操作**：重试操作或通知用户。
 *   **其他异常**：[System.Transactions.TransactionException](https://msdn.microsoft.com/library/system.transactions.transactionexception.aspx)、[System.TimeoutException](https://msdn.microsoft.com/library/system.timeoutexception.aspx)。 
 
     **常规操作**：特定于异常类型。 请参阅以下部分中的表。 

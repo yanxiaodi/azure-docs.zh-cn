@@ -1,20 +1,23 @@
 ---
-title: Azure Active Directory B2B 协作代码和 PowerShell 示例 | Microsoft 文档
+title: B2B 协作代码和 PowerShell 示例 - Azure Active Directory | Microsoft Docs
 description: 有关 Azure Active Directory B2B 协作的代码和 PowerShell 示例
 services: active-directory
 ms.service: active-directory
-ms.component: B2B
-ms.topic: article
+ms.subservice: B2B
+ms.topic: sample
 ms.date: 04/11/2017
-ms.author: twooley
-author: twooley
-manager: mtillman
-ms.reviewer: sasubram
-ms.openlocfilehash: d522649e9339611c56e9f2ae7e6feac067d2ab49
-ms.sourcegitcommit: 96089449d17548263691d40e4f1e8f9557561197
+ms.author: mimart
+author: msmimart
+manager: celestedg
+ms.reviewer: elisolMS
+ms.custom: it-pro, seo-update-azuread-jan
+ms.collection: M365-identity-device-management
+ms.openlocfilehash: 79352c2c82cae8fe77ef6313d74e60432c710ec0
+ms.sourcegitcommit: 36c50860e75d86f0d0e2be9e3213ffa9a06f4150
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/17/2018
+ms.lasthandoff: 05/16/2019
+ms.locfileid: "65812505"
 ---
 # <a name="azure-active-directory-b2b-collaboration-code-and-powershell-samples"></a>Azure Active Directory B2B 协作代码和 PowerShell 示例
 
@@ -23,29 +26,29 @@ ms.lasthandoff: 05/17/2018
 
 1. 准备 .CSV 文件：创建一个新的 CSV 文件，并将其命名为 invitations.csv。 在此示例中，该文件保存在 C:\data 中，并包含以下信息：
   
-  名称                  |  InvitedUserEmailAddress
-  --------------------- | --------------------------
-  Gmail B2B 被邀请者     | b2binvitee@gmail.com
-  Outlook B2B 被邀请者   | b2binvitee@outlook.com
+   名称                  |  InvitedUserEmailAddress
+   --------------------- | --------------------------
+   Gmail B2B 被邀请者     | b2binvitee@gmail.com
+   Outlook B2B 被邀请者   | b2binvitee@outlook.com
 
 
 2. 获取最新的 Azure AD PowerShell：若要使用新的 cmdlet，必须安装更新的 Azure AD PowerShell 模块，可以从 [Powershell 模块发布页](https://www.powershellgallery.com/packages/AzureADPreview)下载该模块
 
 3. 登录到租户
 
-    ```
+    ```powershell
     $cred = Get-Credential
     Connect-AzureAD -Credential $cred
     ```
 
 4. 运行 PowerShell cmdlet
 
-  ```
-  $invitations = import-csv C:\data\invitations.csv
-  $messageInfo = New-Object Microsoft.Open.MSGraph.Model.InvitedUserMessageInfo
-  $messageInfo.customizedMessageBody = "Hey there! Check this out. I created an invitation through PowerShell"
-  foreach ($email in $invitations) {New-AzureADMSInvitation -InvitedUserEmailAddress $email.InvitedUserEmailAddress -InvitedUserDisplayName $email.Name -InviteRedirectUrl https://wingtiptoysonline-dev-ed.my.salesforce.com -InvitedUserMessageInfo $messageInfo -SendInvitationMessage $true}
-  ```
+   ```powershell
+   $invitations = import-csv C:\data\invitations.csv
+   $messageInfo = New-Object Microsoft.Open.MSGraph.Model.InvitedUserMessageInfo
+   $messageInfo.customizedMessageBody = "Hey there! Check this out. I created an invitation through PowerShell"
+   foreach ($email in $invitations) {New-AzureADMSInvitation -InvitedUserEmailAddress $email.InvitedUserEmailAddress -InvitedUserDisplayName $email.Name -InviteRedirectUrl https://wingtiptoysonline-dev-ed.my.salesforce.com -InvitedUserMessageInfo $messageInfo -SendInvitationMessage $true}
+   ```
 
 此 cmdlet 会将邀请发送到 invitations.csv 中的电子邮件地址。 此 cmdlet 的其他功能包括：
 - 电子邮件中的自定义文本
@@ -55,7 +58,7 @@ ms.lasthandoff: 05/17/2018
 ## <a name="code-sample"></a>代码示例
 下面将演示如何调用邀请 API，在“仅应用”模式下，获取要邀请 B2B 用户加入的资源的兑换 URL。 目标是发送自定义邀请电子邮件。 可使用 HTTP 客户端撰写电子邮件，以便自定义其外观并通过图形 API 发送。
 
-```
+```csharp
 namespace SampleInviteApp
 {
     using System;
@@ -77,7 +80,7 @@ namespace SampleInviteApp
         static readonly string InviteEndPoint = "https://graph.microsoft.com/v1.0/invitations";
  
         /// <summary>
-        ///  Authentication endpoint to get token.
+        ///  Authentication endpoint to get token.
         /// </summary>
         static readonly string EstsLoginEndpoint = "https://login.microsoftonline.com";
  

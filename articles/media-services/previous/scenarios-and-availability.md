@@ -4,40 +4,44 @@ description: 本主题概述了 Microsoft Azure 媒体服务功能和服务的�
 services: media-services
 documentationcenter: ''
 author: Juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.service: media-services
 ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
-ms.topic: hero-article
-ms.date: 07/10/2017
-ms.author: juliako;anilmur
-ms.openlocfilehash: 777ba32a6c3ec7545c9911c820ceda7ac823096a
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 03/20/2019
+ms.author: juliako
+ms.openlocfilehash: 930420240d7b0f116f72056404e809ca94820f11
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "65991433"
 ---
 # <a name="scenarios-and-availability-of-media-services-features-across-datacenters"></a>媒体服务功能的跨数据中心方案和可用性
 
+> [!NOTE]
+> 不会向媒体服务 v2 添加任何新特性或新功能。 <br/>查看最新版本：[媒体服务 v3](https://docs.microsoft.com/azure/media-services/latest/)。 此外，请参阅[从 v2 到 v3 迁移指南](../latest/migrate-from-v2-to-v3.md)
+
 可以使用 Microsoft Azure 媒体服务 (AMS) 安全地上传、存储、编码和打包视频或音频内容，以便通过点播和实时流形式传送到各种客户端（例如，电视、电脑和移动设备）。
 
-AMS 在世界各地的多个数据中心运行。 这些数据中心分组到地理区域，让你可以灵活选择构建应用程序的位置。 可查看[区域及其位置的列表](https://azure.microsoft.com/regions/)。 
+AMS 在世界各地的多个数据中心运行。 这些数据中心分组到地理区域，让用户可灵活选择构建应用程序的位置。 可查看[区域及其位置的列表](https://azure.microsoft.com/regions/)。 
 
-本主题演示了[实时](#live_scenarios)交付内容或[点播](#vod_scenarios)交付内容的常见方案。 本主题还详细说明了媒体功能和服务的跨数据中心可用性。
+本主题展示了以[实时](#live_scenarios)方式或点播方式交付内容的常见方案。 本主题还详细说明了媒体功能和服务的跨数据中心可用性。
 
 ## <a name="overview"></a>概述
 
-### <a name="prerequisites"></a>先决条件
+### <a name="prerequisites"></a>必备组件
 
-要开始使用 Azure 媒体服务，应该具备以下条件：
+若要开始使用 Azure 媒体服务，应该具备以下条件：
 
 * 一个 Azure 帐户。 如果没有帐户，只需花费几分钟就能创建一个免费试用帐户。 有关详细信息，请参阅 [Azure 免费试用](https://azure.microsoft.com)。
 * Azure 媒体服务帐户。 有关详细信息，请参阅[创建帐户](media-services-portal-create-account.md)。
-* 要从中流式传输内容的流式处理终结点必须处于“正在运行”状态。
+* 要从中流式传输内容的流式处理终结点必须处于“正在运行”状态。 
 
-    创建 AMS 帐户后，系统会将一个处于“已停止”状态的默认流式处理终结点添加到帐户。 若要开始流式传输内容并利用动态打包和动态加密，流式处理终结点必须处于“正在运行”状态。
+    创建 AMS 帐户后，系统会将一个处于“已停止”状态的默认  流式处理终结点添加到帐户。  若要开始流式传输内容并利用动态打包和动态加密，流式处理终结点必须处于“正在运行”状态。 
 
 ### <a name="commonly-used-objects-when-developing-against-the-ams-odata-model"></a>针对 AMS OData 模型进行开发时的常用对象
 
@@ -67,7 +71,7 @@ AMS 在世界各地的多个数据中心运行。 这些数据中心分组到地
 
 若要了解此功能在数据中心的可用性，请参阅[可用性](#availability)部分。
 
-## <a name="protect-content-in-storage-deliver-dynamically-encrypted-streaming-media"></a>在存储中保护内容，并以动态方式传送加密的流媒体
+## <a name="protect-content-in-storage-deliver-dynamically-encrypted-streaming-media"></a>在存储中保护内容，并以动态方式交付加密的流媒体
 
 ![使用 PlayReady 进行保护](./media/media-services-content-protection-overview/media-services-content-protection-with-multi-drm.png)
 
@@ -87,7 +91,7 @@ AMS 在世界各地的多个数据中心运行。 这些数据中心分组到地
 
 1. 将优质媒体文件上传到资产中。
 2. 使用[媒体分析概述](media-services-analytics-overview.md)部分介绍的媒体分析服务之一来处理视频。
-3. 媒体分析媒体处理器会生成 MP4 文件或 JSON 文件。 如果媒体处理器生成了 MP4 文件，可以采用渐进方式下载该文件。 如果媒体处理器生成了 JSON 文件，可以从 Azure Blob 存储下载该文件。
+3. 媒体分析媒体处理器会生成 MP4 文件或 JSON 文件。 如果媒体处理器生成了 MP4 文件，可采用渐进方式下载该文件。 如果媒体处理器生成了 JSON 文件，可以从 Azure Blob 存储下载该文件。
 
 若要了解此功能在数据中心的可用性，请参阅[可用性](#availability)部分。
 
@@ -97,10 +101,10 @@ AMS 在世界各地的多个数据中心运行。 这些数据中心分组到地
 2. 编码为单个 MP4 文件。
 3. 通过创建 OnDemand 或 SAS 定位符来发布资产。
 
-    如果使用 SAS 定位符，将从 Azure blob 存储中下载内容。 在这种情况下，流式处理终结点不需要处于已启动状态。
+    如果使用 SAS 定位符，将从 Azure Blob 存储中下载内容。 在这种情况下，流式处理终结点不需要处于已启动状态。
 4. 渐进式下载内容。
 
-## <a id="live_scenarios"></a>传送实时流式处理事件 
+## <a id="live_scenarios"></a>传送实时传送视频流事件 
 
 1. 使用多种实时流式处理协议（例如 RTMP 或平滑流式处理）引入实时内容。
 2. （可选）将流编码为自适应比特率流。
@@ -133,31 +137,31 @@ AMS 在世界各地的多个数据中心运行。 这些数据中心分组到地
 
 ## <a name="consuming-content"></a>使用内容
 
-Azure 媒体服务提供所需的工具，以便用户创建适用于大多数平台的丰富、动态的客户端播放器应用程序，这些平台包括：iOS 设备、Android 设备、Windows、Windows Phone、Xbox 和机顶盒。 以下主题提供了可用来开发自己的客户端应用程序（这些应用程序使用媒体服务中的流媒体）的 SDK 和播放器框架的链接。 有关详细信息，请参阅[开发视频播放器应用程序](media-services-develop-video-players.md)
+Azure 媒体服务提供所需的工具，以便创建适用于大多数平台的丰富、动态的客户端播放器应用程序，这些平台包括：iOS 设备、Android 设备、Windows、Windows Phone、Xbox 和机顶盒。 以下主题提供了可用于开发客户端应用程序（这些应用程序使用媒体服务中的流媒体）的 SDK 和播放器框架的链接。 有关详细信息，请参阅[开发视频播放器应用程序](media-services-develop-video-players.md)
 
 ## <a name="enabling-azure-cdn"></a>启用 Azure CDN
 
-媒体服务支持与 Azure CDN 集成。 有关如何启用 Azure CDN 的信息，请参阅 [如何在媒体服务帐户中管理流式处理终结点](media-services-portal-manage-streaming-endpoints.md)。
+媒体服务支持与 Azure CDN 集成。 有关如何启用 Azure CDN 的信息，请参阅[如何在媒体服务帐户中管理流式处理终结点](media-services-portal-manage-streaming-endpoints.md)。
 
 ## <a id="scaling"></a>缩放媒体服务帐户
 
 AMS 客户可以缩放其 AMS 帐户中的流式处理终结点、媒体处理和存储。
 
-* 媒体服务客户可以选择“标准”或“高级”流式处理终结点。 “标准”流式处理终结点适用于大多数流式处理工作负荷。 它拥有与“高级”流式处理终结点相同的功能，且可以自动缩放出站带宽。 
+* 媒体服务客户可以选择“标准”  或“高级”  流式处理终结点。 “标准”流式处理终结点适用于大多数流式处理工作负荷。  它拥有与“高级”流式处理终结点相同的功能，且可以自动缩放出站带宽。  
 
-    “高级”流式处理终结点适用于高级工作负荷，可提供专用且可缩放的带宽容量。 默认情况下，使用高级流式处理终结点的客户会获得一个流式处理单位 (SU)。 可通过添加 SU 来缩放流式处理终结点。 每个 SU 为应用程序提供额外的带宽容量。 若要详细了解如何缩放“高级”流式处理终结点，请参阅[缩放流式处理终结点](media-services-portal-scale-streaming-endpoints.md)主题。
+    “高级”  流式处理终结点适用于高级工作负荷，可提供专用且可缩放的带宽容量。 默认情况下，使用高级  流式处理终结点的客户会获得一个流式处理单位 (SU)。 可通过添加 SU 来缩放流式处理终结点。 每个 SU 为应用程序提供额外的带宽容量。 若要详细了解如何缩放“高级”  流式处理终结点，请参阅[缩放流式处理终结点](media-services-portal-scale-streaming-endpoints.md)主题。
 
-* 媒体服务帐户与保留单位类型关联，后者决定了编码处理任务的处理速度。 可以在以下保留单位类型中进行选择：**S1**、**S2** 或 **S3**。 例如，与 **S1** 保留单位类型相比，使用 **S2** 保留单位类型时，同一编码作业运行速度更快。
+* 媒体服务帐户与预留单位类型关联，后者决定了编码处理任务的处理速度。 可以在以下预留单位类型中进行选择：**S1**、**S2** 或 **S3**。 例如，与 **S1** 预留单位类型相比，使用 **S2** 预留单位类型时，同一编码作业运行速度更快。
 
-    除了指定保留单位类型，还可以指定为帐户预配保留单位 (RU)。 预配的 RU 数决定了给定帐户中可并发处理的媒体任务数。
+    除了指定预留单位类型，还可以指定为帐户预配预留单位  (RU)。 预配的 RU 数决定了给定帐户中可并发处理的媒体任务数。
 
     >[!NOTE]
-    >RU 可用于并行化所有媒体处理，包括使用 Azure Media Indexer 为作业编制索引。 但是，与编码不同，索引作业使用更快的保留单位并不能更快地完成处理。
+    >RU 可用于并行化所有媒体处理，包括使用 Azure Media Indexer 为作业编制索引。 但是，与编码不同，索引作业使用更快的预留单位并不能更快地完成处理。
 
     有关详细信息，请参阅[缩放媒体处理](media-services-portal-scale-media-processing.md)。
 * 也可以通过向媒体服务帐户添加存储帐户来缩放该帐户。 每个存储帐户大小限制为 500 TB。 要在默认限制之外扩展存储，可选择将多个存储帐户附加到单个媒体服务帐户。 有关详细信息，请参阅[管理存储帐户](meda-services-managing-multiple-storage-accounts.md)。
 
-##<a id="availability"></a> 媒体服务功能的跨数据中心可用性
+## <a id="availability"></a>媒体服务功能的跨数据中心可用性
 
 本部分详细说明了媒体服务功能的跨数据中心可用性。
 
@@ -165,15 +169,15 @@ AMS 客户可以缩放其 AMS 帐户中的流式处理终结点、媒体处理�
 
 #### <a name="availability"></a>可用性
 
-若要确定数据中心是否提供 Azure 媒体服务，请浏览到 https://azure.microsoft.com/status/，并滚动到 MEDIA 表。
+若要确定数据中心是否提供媒体服务，请浏览到 https://azure.microsoft.com/status/ ，并滚动到 MEDIA 表。
 
 ### <a name="streaming-endpoints"></a>流式处理终结点 
 
-媒体服务客户可以选择“标准”或“高级”流式处理终结点。 有关详细信息，请参阅[缩放](#scaling)部分。
+媒体服务客户可以选择“标准”  或“高级”  流式处理终结点。 有关详细信息，请参阅[缩放](#scaling)部分。
 
 #### <a name="availability"></a>可用性
 
-|名称|状态|数据中心
+|Name|状态|数据中心
 |---|---|---|
 |标准|GA|全部|
 |高级|GA|全部|
@@ -182,11 +186,11 @@ AMS 客户可以缩放其 AMS 帐户中的流式处理终结点、媒体处理�
 
 #### <a name="availability"></a>可用性
 
-在以下区域之外的所有数据中心可用：德国、巴西南部、印度西部、印度南部和印度中部。 
+在所有数据中心内可用，但以下数据中心例外：德国、巴西南部、印度西部、印度南部和印度中部。 
 
 ### <a name="encoding-media-processors"></a>编码媒体处理器
 
-AMS 提供两个按需编码器：Media Encoder Standard 和 Media Encoder Premium Workflow。 有关详细信息，请参阅 [Azure 按需媒体编码器的概述和比较](media-services-encode-asset.md)。 
+AMS 提供两个按需编码器：  Media Encoder Standard 和  Media Encoder Premium Workflow。 有关详细信息，请参阅 [Azure 按需媒体编码器的概述和比较](media-services-encode-asset.md)。 
 
 #### <a name="availability"></a>可用性
 
@@ -204,7 +208,6 @@ AMS 提供两个按需编码器：Media Encoder Standard 和 Media Encoder Premi
 |媒体处理器名称|状态|数据中心
 |---|---|---|
 |Azure 媒体面部检测器|预览|全部|
-|Azure Media Hyperlapse|预览|全部|
 |Azure 媒体索引器|GA|全部|
 |Azure Media Motion Detector|预览|全部|
 |Azure 媒体 OCR|预览|全部|
@@ -227,9 +230,9 @@ AMS 提供两个按需编码器：Media Encoder Standard 和 Media Encoder Premi
 |PlayReady|GA|全部|
 |Widevine|GA|德国、美国联邦政府和中国除外。
 
-### <a name="reserved-units-rus"></a>保留单位 (RU)
+### <a name="reserved-units-rus"></a>预留单位 (RU)
 
-设置的保留单位数决定了给定帐户中可并发处理的媒体任务数。 
+设置的预留单位数决定了给定帐户中可并发处理的媒体任务数。 
 
 有关详细信息，请参阅[缩放](#scaling)部分。
 
@@ -237,9 +240,9 @@ AMS 提供两个按需编码器：Media Encoder Standard 和 Media Encoder Premi
 
 在所有数据中心可用。
 
-### <a name="reserved-unit-ru-type"></a>保留单位 (RU) 类型
+### <a name="reserved-unit-ru-type"></a>预留单位 (RU) 类型
 
-媒体服务帐户与保留单位类型关联，后者决定了处理媒体处理任务的速度。 可以在以下保留单位类型中进行选择：S1、S2 或 S3。
+媒体服务帐户与预留单位类型关联，后者决定了处理媒体处理任务的速度。 可以在以下预留单位类型中进行选择：S1、S2 或 S3。
 
 有关详细信息，请参阅[缩放](#scaling)部分。
 

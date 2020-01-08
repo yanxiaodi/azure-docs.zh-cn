@@ -4,7 +4,7 @@ description: 媒体分析公共预览版概述，其中集合了企业级的语�
 services: media-services
 documentationcenter: ''
 author: juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: c56e3781-8510-4f7f-b5ff-a218c1bb6f4c
 ms.service: media-services
@@ -12,15 +12,18 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: dotnet
 ms.topic: article
-ms.date: 06/29/2017
-ms.author: milanga;juliako;johndeu
-ms.openlocfilehash: 0ac8b9fad35267ceaec5b5acec4722b6005f68a9
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.date: 03/14/2019
+ms.author: juliako
+ms.reviewer: milanga; johndeu
+ms.openlocfilehash: d8470ad759d983f25f8f68b93d58f89f23eeb578
+ms.sourcegitcommit: de47a27defce58b10ef998e8991a2294175d2098
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/15/2019
+ms.locfileid: "69015395"
 ---
-# <a name="media-analytics-on-the-media-services-platform"></a>媒体服务平台上的媒体分析
+# <a name="media-analytics-on-the-media-services-platform"></a>媒体服务平台上的媒体分析 
+
 ## <a name="overview"></a>概述
 越来越多的组织将视频用作首选媒体来培训员工、与客户沟通以及规定业务职能。 云计算提供了一种方法来存储、流式传输和访问这些大型媒体文件。 但随着公司视频内容库的扩大，它需要在从内容中提取见解时具有同样有效的方式。 
 
@@ -38,8 +41,6 @@ ms.lasthandoff: 05/07/2018
 
 ### <a name="indexer"></a>索引器
 借助 Azure Media Indexer 可使内容可搜索并生成隐藏式字幕跟踪。 与以前的版本相比，Azure Media Indexer 2 预览版编制索引的速度更快，并且语言支持更广泛。 支持的语言包括英语、西班牙语、法语、德语、意大利语、中文、葡萄牙语和阿拉伯语。 有关详细信息和示例，请参阅[使用 Azure Media Indexer 2 处理视频](media-services-process-content-with-indexer2.md)。
-### <a name="hyperlapse"></a>Hyperlapse
-Microsoft Hyperlapse 结合了视频稳定化和慢镜头功能，可从长格式内容创建快速可用的视频。 除了创建慢镜头视频，还可以使用 Hyperlapse 将通过手机和摄影机拍摄的不稳定视频创建稳定的视频。 有关详细信息和示例，请参阅[使用 Azure Media Hyperlapse 创建 Hyperlapse 媒体文件](media-services-hyperlapse-content.md)。
 ### <a name="motion-detector"></a>动作检测器
 可以使用移动探测器来检测背景平稳的视频中的动作。 这样，便可以检查监控摄像机所检测到的动作事件是否存在误报。 有关详细信息和示例，请参阅 [Azure 媒体分析的动作检测](media-services-motion-detection.md)。
 ### <a name="face-detector"></a>面部检测器
@@ -58,7 +59,6 @@ Azure 媒体修订器是一种媒体分析媒体处理器，可用于在云中�
 
 * **呼叫中心**。 即使出现了社交媒体，客户呼叫中心仍能帮助解决大量的客户服务事务。 此音频数据中编码了大量客户信息，分析这些信息可实现更高的客户满意度。 通过使用媒体索引器，组织可以提取文本并生成搜索索引和仪表板。 然后，他们可以提取围绕常见的投诉、投诉原因以及其他相关数据的情报。
 * **用户生成的内容仲裁**。 从新闻媒体分支机构到公安部门，许多组织都设立了对外公开的门户，用于在其中接受用户生成的媒体，例如视频和图像。 内容的数量可能因意外事件而激增。 在这些情况下，仅凭人力几乎不可能有效地审查内容的适宜性。 客户可以依赖于内容仲裁服务，将工作重点放在适当的内容上。
-* **监控**。 由于 IP 相机使用量的增加，监控视频的数量呈爆炸式增长。 人工审查监控视频既耗时又容易发生人为错误。 媒体分析提供多项服务（例如动作检测、面部检测和 Hyperlapse），以简化审查、管理和创建衍生对象的过程。
 
 ## <a name="media-analytics-media-processors"></a>媒体分析媒体处理器
 本节列出媒体分析媒体处理器，并说明如何使用 .NET 或 REST 来获取媒体处理器 (MP) 对象。
@@ -66,7 +66,6 @@ Azure 媒体修订器是一种媒体分析媒体处理器，可用于在云中�
 ### <a name="mp-names"></a>MP 名称
 * Azure Media Indexer 2 Preview
 * Azure 媒体索引器
-* Azure Media Hyperlapse
 * Azure 媒体面部检测器
 * Azure Media Motion Detector
 * Azure 媒体视频缩略图
@@ -105,7 +104,7 @@ Azure 媒体修订器是一种媒体分析媒体处理器，可用于在云中�
     x-ms-version: 2.12
     Host: media.windows.net
 
-响应：
+响应:
 
     . . .
 
@@ -124,7 +123,7 @@ Azure 媒体修订器是一种媒体分析媒体处理器，可用于在云中�
     }
 
 ## <a name="demos"></a>演示
-请参阅 [Azure 媒体分析演示](http://azuremedialabs.azurewebsites.net/demos/Analytics.html)。
+请参阅 [Azure 媒体分析演示](https://azuremedialabs.azurewebsites.net/demos/Analytics.html)。
 
 ## <a name="provide-feedback"></a>提供反馈
 [!INCLUDE [media-services-user-voice-include](../../../includes/media-services-user-voice-include.md)]

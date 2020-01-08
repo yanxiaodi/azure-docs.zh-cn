@@ -3,7 +3,7 @@ title: Azure Cloud Shell 限制 | Microsoft Docs
 description: Azure Cloud Shell 的限制概述
 services: azure
 documentationcenter: ''
-author: jluk
+author: maertendMSFT
 manager: timlt
 tags: azure-resource-manager
 ms.assetid: ''
@@ -13,12 +13,13 @@ ms.tgt_pltfrm: vm-linux
 ms.devlang: na
 ms.topic: article
 ms.date: 02/15/2018
-ms.author: juluk
-ms.openlocfilehash: 15e3dd11c371e0b23d5b506da9d824e1409fd359
-ms.sourcegitcommit: 59914a06e1f337399e4db3c6f3bc15c573079832
-ms.translationtype: HT
+ms.author: damaerte
+ms.openlocfilehash: 8fd88221818d28c227c33719c03e522e815a408b
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/19/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "62097013"
 ---
 # <a name="limitations-of-azure-cloud-shell"></a>Azure Cloud Shell 的限制
 
@@ -30,7 +31,7 @@ Azure Cloud Shell 有以下已知限制：
 
 提供 Cloud Shell 会话的计算机是暂时性的，在会话处于非活动状态 20 分钟后会被回收。 Cloud Shell 需要装载 Azure 文件共享。 因此，订阅必须能够设置存储资源才能访问 Cloud Shell。 其他注意事项包括：
 
-* 使用装载的存储时，仅持久保存 `clouddrive` 目录中的修改。 在 Bash 中，`$Home` 目录也会持久保存。
+* 使用装载的存储时，仅持久保存 `$Home` 目录中的修改。
 * 仅可从[已分配区域](persisting-shell-storage.md#mount-a-new-clouddrive)内部装载 Azure 文件共享。
   * 在 Bash 中，运行 `env` 可以找到设置为 `ACC_LOCATION` 的区域。
 
@@ -44,7 +45,7 @@ Cloud Shell 支持最新版本的 Microsoft Edge、Microsoft Internet Explorer�
 
 ### <a name="for-a-given-user-only-one-shell-can-be-active"></a>对于一个给定的用户，只有一个 shell 可处于活动状态
 
-不管是在 **Bash** 还是 **PowerShell** 中，用户每次只能启动一种类型的 shell。 但是，每次可以运行 Bash 或 PowerShell 的多个实例。 在 Bash 和 PowerShell 之间切换会导致 Cloud Shell 重启，从而终止现有会话。
+不管是在 **Bash** 还是 **PowerShell** 中，用户每次只能启动一种类型的 shell。 但是，每次可以运行 Bash 或 PowerShell 的多个实例。 使用菜单 Bash 或 PowerShell 之间切换会导致 Cloud Shell 重启，从而终止现有会话。 或者，可以通过键入运行 PowerShell 中的 bash `bash`，并可在 bash 运行 PowerShell，通过键入`pwsh`。
 
 ### <a name="usage-limits"></a>使用限制
 
@@ -56,27 +57,31 @@ Cloud Shell 适用于交互式用例。 因此，任何长时间运行的非交�
 
 权限设置为普通用户，不具有 sudo 访问权限。 不会保留 `$Home` 目录外部的任何安装。
 
-### <a name="editing-bashrc"></a>编辑 .bashrc
+### <a name="editing-bashrc-or-profile"></a>编辑.bashrc 或 $PROFILE
 
-编辑 .bashr 时要小心，执行这一操作可能导致 Cloud Shell 出现意外错误。
+编辑.bashrc 或 PowerShell 的 $PROFILE 文件，这样可以在 Cloud Shell 中导致意外的错误时要注意。
 
 ## <a name="powershell-limitations"></a>PowerShell 限制
 
-### <a name="slow-startup-time"></a>启动速度缓慢
+### <a name="azuread-module-name"></a>`AzureAD` 模块名称
 
-PowerShell in Azure Cloud Shell（预览版）最长可能需要 60 秒才能完成初始化。
+`AzureAD` 模块名称当前为 `AzureAD.Standard.Preview`，该模块提供相同的功能。
 
-### <a name="no-home-directory-persistence"></a>$Home 目录没有持久性
+### <a name="sqlserver-module-functionality"></a>`SqlServer` 模块功能
 
-由任何应用程序（例如 git、vim，等等）写入 `$Home` 的数据不会在 PowerShell 会话之间持久保留。 有关解决方法，请[参阅此文](troubleshooting.md#powershell-troubleshooting)。
+Cloud Shell 中包含的 `SqlServer` 模块仅具有对 PowerShell Core 的预发布版本支持。 具体而言，`Invoke-SqlCmd` 尚不可用。
 
 ### <a name="default-file-location-when-created-from-azure-drive"></a>从 Azure 驱动器创建时的默认文件位置：
 
-使用 PowerShell cmdlet，用户无法在 Azure 驱动器下创建文件。 当用户使用其他工具（如 vim 或 nano）创建新文件时，文件将默认保存到 C:\Users 文件夹。 
+使用 PowerShell cmdlet，用户可以创建在 Azure 下的文件： 驱动器。 当用户使用其他工具（如 vim 或 nano）创建新文件时，文件将默认保存到 `$HOME`。 
 
 ### <a name="gui-applications-are-not-supported"></a>不支持 GUI 应用程序
 
-如果用户运行一条会创建 Windows 对话框的命令（例如 `Connect-AzureAD` 或 `Connect-AzureRmAccount`），将看到如下所示的错误消息：`Unable to load DLL 'IEFRAME.dll': The specified module could not be found. (Exception from HRESULT: 0x8007007E)`。
+如果用户在运行命令将创建一个 Windows 对话框，其中一个如会看到一条错误消息： `Unable to load DLL 'IEFRAME.dll': The specified module could not be found. (Exception from HRESULT: 0x8007007E)`。
+
+### <a name="large-gap-after-displaying-progress-bar"></a>在显示进度栏后出现大间距型
+
+如果用户执行显示进度栏的操作（例如，在 `Azure:` 驱动器中的 tab 自动补全），则光标可能设置不正确，且在以前的进度栏处出现间距。
 
 ## <a name="next-steps"></a>后续步骤
 

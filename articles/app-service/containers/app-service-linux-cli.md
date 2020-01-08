@@ -1,32 +1,33 @@
 ---
-title: "使用 Azure CLI 2.0 管理用于容器的 Web 应用 | Microsoft Docs"
-description: "使用 Azure CLI 管理用于容器的 Web 应用。"
-keywords: "azure app service、Web 应用、cli、linux、oss"
+title: 使用 Azure CLI 管理用于容器的 Web 应用 - Azure 应用服务 | Microsoft Docs
+description: 使用 Azure CLI 管理用于容器的 Web 应用。
+keywords: azure app service、Web 应用、cli、linux、oss
 services: app-service
-documentationCenter: 
+documentationCenter: ''
 author: ahmedelnably
 manager: cfowler
-editor: 
-ms.assetid: 
+editor: ''
+ms.assetid: ''
 ms.service: app-service
 ms.workload: na
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 08/22/2017
 ms.author: aelnably
-ms.openlocfilehash: 54c979313a6ffa43008aa9870332b92d2b2f182a
-ms.sourcegitcommit: bc8d39fa83b3c4a66457fba007d215bccd8be985
-ms.translationtype: HT
+ms.custom: seodec18
+ms.openlocfilehash: 5481e9f28d8fc47936ad62bd8d974beb5ca85fcd
+ms.sourcegitcommit: 82499878a3d2a33a02a751d6e6e3800adbfa8c13
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 11/10/2017
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70071315"
 ---
 # <a name="manage-web-app-for-containers-using-azure-cli"></a>使用 Azure CLI 管理用于容器的 Web 应用
 
-通过本文中的命令，能够使用 Azure CLI 2.0 创建和管理用于容器的 Web 应用。
+通过本文中的命令，能够使用 Azure CLI 创建和管理用于容器的 Web 应用。
 你可以通过两种方式开始使用 CLI 的新版本：
 
-* 在计算机上[安装 Azure CLI 2.0](https://docs.microsoft.com/cli/azure/install-azure-cli)。
+* 在计算机上[安装 Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli)。
 * 使用 [Azure Cloud Shell（预览版）](../../cloud-shell/overview.md)
 
 ## <a name="create-a-linux-app-service-plan"></a>创建 Linux 应用服务计划
@@ -104,7 +105,7 @@ az webapp deployment source config -n sname -g rgname --repo-url <gitrepo url> -
 ## <a name="next-steps"></a>后续步骤
 
 * [什么是 Linux 上的 Azure 应用服务？](app-service-linux-intro.md)
-* [安装 Azure CLI 2.0](https://docs.microsoft.com/cli/azure/install-azure-cli)
+* [安装 Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli)
 * [Azure Cloud Shell（预览版）](../../cloud-shell/overview.md)
-* [设置 Azure 应用服务中的过渡环境](../../app-service/web-sites-staged-publishing.md?toc=%2fazure%2fapp-service%2fcontainers%2ftoc.json)
+* [设置过渡环境，在 Azure 应用服务](../../app-service/deploy-staging-slots.md?toc=%2fazure%2fapp-service%2fcontainers%2ftoc.json)
 * [使用用于容器的 Web 应用进行持续部署](app-service-linux-ci-cd.md)

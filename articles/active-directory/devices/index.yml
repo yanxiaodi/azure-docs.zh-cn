@@ -1,0 +1,59 @@
+### YamlMime:Landing
+title: Azure AD 设备标识文档
+summary: 了解如何在 Azure AD 中配置和管理设备标识。
+metadata:
+  title: Azure AD 设备标识文档
+  description: 了解如何在 Azure AD 中配置和管理设备标识。
+  services: active-directory
+  ms.service: active-directory
+  ms.subservice: devices
+  ms.topic: landing-page
+  author: MicrosoftGuyJFlo
+  ms.author: joflore
+  ms.date: 08/20/2019
+  ms.collection: M365-identity-device-management
+  ms.openlocfilehash: e26be2206ba63fa4721ced7ed1a2f35ddc63a5fd
+  ms.sourcegitcommit: bb8e9f22db4b6f848c7db0ebdfc10e547779cccc
+  ms.translationtype: HT
+  ms.contentlocale: zh-CN
+  ms.lasthandoff: 08/20/2019
+  ms.locfileid: "69648923"
+landingContent:
+- title: 关于设备标识
+  linkLists:
+  - linkListType: overview
+    links:
+    - text: 什么是设备标识？
+      url: overview.md
+    - text: 什么是企业状态漫游？
+      url: enterprise-state-roaming-overview.md
+  - linkListType: concept
+    links:
+    - text: Azure AD 注册设备
+      url: concept-azure-ad-register.md
+    - text: Azure AD 加入设备
+      url: concept-azure-ad-join.md
+    - text: 混合 Azure AD 加入设备
+      url: concept-azure-ad-join-hybrid.md
+    - text: SSO 到本地资源
+      url: azuread-join-sso.md
+    - text: 主刷新令牌
+      url: concept-primary-refresh-token.md
+- title: 配置和管理已加入 Azure AD 的设备
+  linkLists:
+  - linkListType: how-to-guide
+    links:
+    - text: 计划 Azure AD 加入实现
+      url: azureadjoin-plan.md
+    - text: 管理已加入 Azure AD 的设备上的本地管理员组
+      url: assign-local-admin.md
+    - text: 在 Azure AD 中查找和管理陈旧的设备
+      url: manage-stale-devices.md
+- title: 配置和管理已加入混合 Azure AD 的设备
+  linkLists:
+  - linkListType: how-to-guide
+    links:
+    - text: 计划混合 Azure AD 加入实现
+      url: hybrid-azuread-join-plan.md
+    - text: 排查加入混合 Azure AD 的设备问题
+      url: troubleshoot-hybrid-join-windows-current.md

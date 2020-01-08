@@ -1,46 +1,43 @@
 ---
-title: Linux 应用服务简介 | Microsoft Docs
+title: Linux 应用服务简介 - Azure | Microsoft Docs
 description: 了解 Linux 上的 Azure 应用服务。
 keywords: azure 应用服务, linux, oss
 services: app-service
 documentationcenter: ''
-author: naziml
-manager: cfowler
+author: msangapu
+manager: jeconnoc
 editor: ''
 ms.assetid: bc85eff6-bbdf-410a-93dc-0f1222796676
 ms.service: app-service
 ms.workload: na
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: overview
-ms.date: 02/16/2017
-ms.author: wesmc
-ms.custom: mvc
-ms.openlocfilehash: c9c4cb42e6bf9f60c883242fad6963f72b772063
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.date: 1/11/2019
+ms.author: msangapu
+ms.custom: seodec18
+ms.openlocfilehash: 7c00946ed9de88df43a4435c23ebef27b5c64e5c
+ms.sourcegitcommit: 82499878a3d2a33a02a751d6e6e3800adbfa8c13
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70071328"
 ---
 # <a name="introduction-to-azure-app-service-on-linux"></a>Linux 上的 Azure 应用服务简介
 
-[Web 应用](../app-service-web-overview.md)是一个完全托管的计算平台，非常适合用来托管网站和 Web 应用程序。 客户可以使用 Linux 应用服务在 Linux 本地针对受支持的应用程序堆栈托管 Web 应用。 以下部分列出了目前受支持的应用程序堆栈。
+[Azure 应用服务](../overview.md)是一个完全托管的计算平台，非常适用于托管网站和 Web 应用程序。 客户可以使用 Linux 应用服务在 Linux 本地针对受支持的应用程序堆栈托管 Web 应用。 [语言](#languages)部分列出了目前受支持的应用程序堆栈。
 
-## <a name="languages"></a>语言
+## <a name="languages"></a>Languages
 
 Linux 应用服务支持大量内置映像，以便提高开发人员工作效率。 如果内置映像不支持应用程序所需的运行时，请按照[生成自己的 Docker 映像](tutorial-custom-docker-image.md)中的说明将其部署到用于容器的 Web 应用。
 
 | 语言 | 支持的版本 |
 |---|---|
-| Node.js | 4.4, 4.5, 4.8, 6.2, 6.6, 6.9, 6.10, 6.11, 8.0, 8.1, 8.2, 8.8, 8.9, 9.4 |
-| Java * | 8.0 |
-| PHP | 5.6, 7.0, 7.2 |
-| .NET Core | 1.0, 1.1, 2.0 |
-| Ruby | 2.3 |
-| Go | 1.0 |
-| Apache Tomcat | 8.5, 9.0 |
-
-如需更多详细信息，请参阅[在基于 Linux 的应用服务中创建 Java Web 应用](https://docs.microsoft.com/azure/app-service/containers/quickstart-java)。
+| Node.js | 4.4、4.5、4.8、6.2、6.6、6.9、6.10、6.11、8.0、8.1、8.2、8.8、8.9、8.11、8.12、9.4、10.1、10.10、10.14 |
+| Java * | Tomcat 8.5、9.0，Java SE，WildFly 14（全都运行 JRE 8） |
+| PHP | 5.6、7.0、7.2、7.3 |
+| Python | 2.7、3.6、3.7 |
+| .NET Core | 1.0、1.1、2.0、2.1、2.2 |
+| Ruby | 2.3、2.4、2.5、2.6 |
 
 ## <a name="deployments"></a>部署
 
@@ -63,7 +60,7 @@ Linux 应用服务支持大量内置映像，以便提高开发人员工作效�
 
 ## <a name="scaling"></a>扩展
 
-* 客户可以通过更改[应用服务计划](https://docs.microsoft.com/azure/app-service/azure-web-sites-web-hosting-plans-in-depth-overview?toc=%2fazure%2fapp-service-web%2ftoc.json)的层，增加或减少 Web 应用
+* 客户可以通过更改[应用服务计划](https://docs.microsoft.com/azure/app-service/overview-hosting-plans?toc=%2fazure%2fapp-service-web%2ftoc.json)的层，增加或减少 Web 应用
 
 ## <a name="locations"></a>位置
 
@@ -73,32 +70,39 @@ Linux 应用服务支持大量内置映像，以便提高开发人员工作效�
 
 Azure 门户仅显示当前对用于容器的 Web 应用有效的功能。 当我们启用更多功能时，会在门户中看到这些功能。
 
-某些功能（例如虚拟网络集成、Azure Active Directory/第三方身份验证或 Kudu 站点扩展）尚不可用。 这些功能可用后，我们将更新文档和博客，以反映所做更改。
+Linux 上的应用服务仅支持[免费、基本、标准和高级](https://azure.microsoft.com/pricing/details/app-service/plans/)应用服务计划，没有[共享](https://azure.microsoft.com/pricing/details/app-service/plans/)层。 不能在已经托管非 Linux Web 应用的应用服务计划中创建 Linux Web 应用。  
 
-Linux 应用服务仅支持[基本和标准](https://azure.microsoft.com/pricing/details/app-service/plans/)应用服务计划，没有[免费或共享](https://azure.microsoft.com/pricing/details/app-service/plans/)层。 不能在已经托管非 Linux Web 应用的应用服务计划中创建用于容器的 Web 应用。
+根据当前的限制，对于同一资源组，不能在同一区域中混合使用 Windows 和 Linux 应用。
 
 ## <a name="troubleshooting"></a>故障排除
 
-如果未能启动应用程序或希望检查应用中的日志记录，请查看 LogFiles 目录中的 Docker 日志。 可通过 SCM 站点或 FTP 访问此目录。
-若要从容器记录 `stdout` 和 `stderr`，需要在“诊断记录”下启用“Docker 容器记录”。
+如果未能启动应用程序或希望检查应用中的日志记录，请查看 LogFiles 目录中的 Docker 日志。 可通过 SCM 站点或 FTP 访问此目录。 若要从容器记录 `stdout` 和 `stderr`，需要在“应用服务日志”下启用“Docker 容器日志记录”。   设置立即生效。 应用服务会检测更改，并自动重启容器。
 
-![启用日志记录][2]
+可从“开发工具”  菜单中的“高级工具”  访问 SCM 站点。
 
 ![使用 Kudu 查看 Docker 日志][1]
 
-可从“开发工具”菜单中的“高级工具”访问 SCM 站点。
-
 ## <a name="next-steps"></a>后续步骤
 
-请参阅以下链接，开始使用 Linux 应用服务。 如有问题和疑问，请在[我们的论坛](https://social.msdn.microsoft.com/forums/azure/home?forum=windowsazurewebsitespreview)上发帖。
+以下文章将通过使用各种语言编写的 Web 应用让你开始使用 Linux 上的应用服务：
 
-* [如何对用于容器的 Web 应用使用自定义 Docker 映像](quickstart-docker-go.md)
-* [在 Linux 上的 Azure 应用服务中使用 .NET Core](quickstart-dotnetcore.md)
-* [在 Linux 上的 Azure 应用服务中使用 Ruby](quickstart-ruby.md)
-* [用于容器的 Azure 应用服务 Web 应用常见问题解答](app-service-linux-faq.md)
-* [对 Linux 上的 Azure 应用服务的 SSH 支持](app-service-linux-ssh-support.md)
-* [设置 Azure 应用服务中的过渡环境](../../app-service/web-sites-staged-publishing.md?toc=%2fazure%2fapp-service%2fcontainers%2ftoc.json)
-* [使用用于容器的 Web 应用进行 Docker 中心持续部署](./app-service-linux-ci-cd.md)
+* [.NET Core](quickstart-dotnetcore.md)
+* [PHP](https://docs.microsoft.com/azure/app-service/containers/quickstart-php)
+* [Node.js](quickstart-nodejs.md)
+* [Java](quickstart-java.md)
+* [Python](quickstart-python.md)
+* [Ruby](quickstart-ruby.md)
+* [Go](quickstart-docker-go.md)
+* [多容器应用](quickstart-multi-container.md)
+
+有关 Linux 上的应用服务的详细信息，请参阅：
+
+* [适用于 Linux 的应用服务常见问题解答](app-service-linux-faq.md)
+* [对 Linux 上的应用服务的 SSH 支持](app-service-linux-ssh-support.md)
+* [设置应用服务中的过渡环境](../../app-service/deploy-staging-slots.md?toc=%2fazure%2fapp-service%2fcontainers%2ftoc.json)
+* [Docker 中心持续部署](app-service-linux-ci-cd.md)
+
+如有问题和疑问，请在[我们的论坛](https://social.msdn.microsoft.com/forums/azure/home?forum=windowsazurewebsitespreview)上发帖。
 
 <!--Image references-->
 [1]: ./media/app-service-linux-intro/kudu-docker-logs.png

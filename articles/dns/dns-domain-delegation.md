@@ -1,23 +1,18 @@
 ---
-title: Azure DNS 委托概述 | Microsoft Docs
+title: Azure DNS 委托概述
 description: 了解如何更改域委托并使用 Azure DNS 名称服务器提供域托管。
 services: dns
-documentationcenter: na
-author: KumudD
-manager: jeconnoc
-ms.assetid: 257da6ec-d6e2-4b6f-ad76-ee2dde4efbcc
+author: vhorne
 ms.service: dns
-ms.devlang: na
-ms.topic: get-started-article
-ms.tgt_pltfrm: na
-ms.workload: infrastructure-services
-ms.date: 12/18/2017
-ms.author: kumud
-ms.openlocfilehash: fc79999d240baf18ccf5923908c98791c4e7e7bb
-ms.sourcegitcommit: d74657d1926467210454f58970c45b2fd3ca088d
-ms.translationtype: HT
+ms.date: 2/19/2019
+ms.author: victorh
+ms.topic: conceptual
+ms.openlocfilehash: 70c1c1ab0dd5d1998054cf0c68325022803dff06
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/28/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60563133"
 ---
 # <a name="delegation-of-dns-zones-with-azure-dns"></a>使用 Azure DNS 委托 DNS 区域
 
@@ -27,13 +22,13 @@ ms.lasthandoff: 03/28/2018
 
 ### <a name="domains-and-zones"></a>域和区域
 
-域名系统是域的层次结构。 该层次结构从名为“**.**”的“根”域开始。  根域的下面是顶级域，例如“com”、“net”、“org”、“uk”或“jp”。  这些顶级域的下面是二级域，例如“org.uk”或“co.jp”。  依此类推。 DNS 层次结构中的域托管在不同的 DNS 区域。 这些区域遍布全球，由世界各地的 DNS 名称服务器托管。
+域名系统是域的层次结构。 该层次结构从名为“ **.** ”的“根”域开始。  根域的下面是顶级域，例如“com”、“net”、“org”、“uk”或“jp”。  这些顶级域的下面是二级域，例如“org.uk”或“co.jp”。  依此类推。 DNS 层次结构中的域托管在不同的 DNS 区域。 这些区域遍布全球，由世界各地的 DNS 名称服务器托管。
 
 **DNS 区域** - 域在域名系统中具有一个唯一名称，例如“contoso.com”。 DNS 区域用来托管某个特定域的 DNS 记录。 例如，域“contoso.com”可能包含几条 DNS 记录，如“mail.contoso.com”（用于邮件服务器）和“www.contoso.com”（用于网站）。
 
 **域注册机构** - 域注册机构是可以提供 Internet 域名的公司。 它们会验证所要使用的 Internet 域是否可用，以及是否允许购买。 注册域名后，注册者即是该域名的合法所有者。 如果已有一个 Internet 域，将使用当前的域注册机构将该域委托给 Azure DNS。
 
-若要详细了解谁拥有指定的域名或如何购买域，请参阅 [Internet domain management in Azure AD](https://msdn.microsoft.com/library/azure/hh969248.aspx)（Azure AD 中的 Internet 域管理）。
+有关认证的域注册机构的详细信息，请参阅 [ICANN 认证的注册机构](https://www.icann.org/registrar-reports/accredited-list.html)。
 
 ### <a name="resolution-and-delegation"></a>解析和委托
 
@@ -57,13 +52,16 @@ Azure DNS 提供权威 DNS 服务。  它不提供递归 DNS 服务。 Azure 中
 ![Dns-nameserver](./media/dns-domain-delegation/image1.png)
 
 1. 客户端从其本地 DNS 服务器请求 `www.partners.contoso.net`。
-1. 本地 DNS 服务器没有记录，因此向其根名称服务器发出请求。
-1. 根名称服务器没有记录，但知道 `.net` 名称服务器的地址，于是将该地址提供给 DNS 服务器
-1. DNS 将请求发送到 `.net` 名称服务器，该服务器没有记录，但是知道 contoso.net 名称服务器的地址。 本示例中为托管在 Azure DNS 中的 DNS 区域。
-1. 区域 `contoso.net` 没有记录，但知道 `partners.contoso.net` 的名称服务器，于是用其进行响应。 本示例中为托管在 Azure DNS 中的 DNS 区域。
-1. DNS 服务器从 `partners.contoso.net` 区域请求 `partners.contoso.net` 的 IP 地址。 它包含 A 记录，并使用 IP 地址进行响应。
-1. DNS 服务器为客户端提供 IP 地址
-1. 客户端连接到网站 `www.partners.contoso.net`。
+2. 本地 DNS 服务器没有记录，因此向其根名称服务器发出请求。
+3. 根名称服务器没有记录，但知道 `.net` 名称服务器的地址，于是将该地址提供给 DNS 服务器
+4. 本地 DNS 服务器将请求发送到 `.net` 名称服务器。
+5. `.net` 名称服务器没有该记录，但知道 `contoso.net` 名称服务器的地址。 在这种情况下，它会响应 Azure DNS 中托管的 DNS 区域的名称服务器的地址。
+6. 本地 DNS 服务器将请求发送到 Azure DNS 中托管的 `contoso.net` 区域的名称服务器。
+7. 区域 `contoso.net` 没有记录，但知道 `partners.contoso.net` 的名称服务器，于是使用地址进行响应。 本示例中为托管在 Azure DNS 中的 DNS 区域。
+8. 本地 DNS 服务器将请求发送到 `partners.contoso.net` 区域的名称服务器。
+9. `partners.contoso.net` 区域具有 A 记录，并使用 IP 地址进行响应。
+10. 本地 DNS 服务器为客户端提供 IP 地址
+11. 客户端连接到网站 `www.partners.contoso.net`。
 
 每个委托实际上有两份 NS 记录：一份在父区域中指向子区域，另一份在子区域本身。 “contoso.net”区域包含“contoso.net”的 NS 记录（“net”中的 NS 记录除外）。 这些记录称为权威 NS 记录，位于子区域的顶点处。
 

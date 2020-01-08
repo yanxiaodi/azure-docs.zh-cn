@@ -1,24 +1,19 @@
 ---
-title: "设置 Azure 导入/导出工具 v1 | Microsoft Docs"
-description: "了解如何设置 Azure 导入/导出服务的驱动器准备和修复工具。 本文所述的导入/导出工具为 v1 版本。"
+title: 设置 Azure 导入/导出工具 v1 | Microsoft Docs
+description: 了解如何设置 Azure 导入/导出服务的驱动器准备和修复工具。 本文所述的导入/导出工具为 v1 版本。
 author: muralikk
-manager: syadav
-editor: tysonn
 services: storage
-documentationcenter: 
-ms.assetid: c312b1ab-5b9e-4d24-becd-790a88b3ba8d
 ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 01/15/2017
 ms.author: muralikk
-ms.openlocfilehash: 4fb4c7e39c0385cae7c7984eb774d6a468ee18e4
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.subservice: common
+ms.openlocfilehash: aafff208b9de2ae485fb84be428cf77f237e022e
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61477563"
 ---
 # <a name="setting-up-the-azure-importexport-tool"></a>设置 Azure 导入/导出工具
 Microsoft Azure 导入/导出工具是可与 Microsoft Azure 导入/导出服务配合使用的驱动器准备和修复工具。 可以使用该工具实现以下功能：  
@@ -29,7 +24,7 @@ Microsoft Azure 导入/导出工具是可与 Microsoft Azure 导入/导出服务
   
 -   通过某个已完成的导出作业收到驱动器后，可以使用此工具修复这些驱动器上已损坏或丢失的任何文件。  
   
-## <a name="prerequisites"></a>先决条件  
+## <a name="prerequisites"></a>必备组件  
 若要为导出作业准备驱动器，需要满足以下先决条件：  
   
 -   必须拥有一个有效的 Azure 订阅。  
@@ -50,36 +45,36 @@ Microsoft Azure 导入/导出工具是可与 Microsoft Azure 导入/导出服务
   
 若要尝试修复某个已部分失败的导入，需要：  
   
--   复制日志文件  
+- 复制日志文件  
   
--   存储帐户密钥  
+- 存储帐户密钥  
   
   若要尝试修复某个已部分失败的导出，需要：  
   
--   复制日志文件  
+- 复制日志文件  
   
--   清单文件（可选）  
+- 清单文件（可选）  
   
--   存储帐户密钥  
+- 存储帐户密钥  
   
 ## <a name="installing-the-azure-importexport-tool"></a>安装 Azure 导入/导出工具  
  Azure 导入/导出工具由以下文件组成：  
   
--   WAImportExport.exe  
+- WAImportExport.exe  
   
--   WAImportExport.exe.config  
+- WAImportExport.exe.config  
   
--   WAImportExportCore.dll  
+- WAImportExportCore.dll  
   
--   WAImportExportRepair.dll  
+- WAImportExportRepair.dll  
   
--   Microsoft.WindowsAzure.Storage.dll  
+- Microsoft.WindowsAzure.Storage.dll  
   
--   Hddid.dll  
+- Hddid.dll  
   
- 请将这些文件复制到某个工作目录，如 `c:\WAImportExport`。 接下来，在管理员模式下打开命令行窗口，将上述目录设为当前目录。  
+  请将这些文件复制到某个工作目录，如 `c:\WAImportExport`。 接下来，在管理员模式下打开命令行窗口，将上述目录设为当前目录。  
   
- 若要输出命令帮助，请不带参数运行该工具：  
+  若要输出命令帮助，请不带参数运行该工具：  
   
 ```  
 WAImportExport, a client tool for Microsoft Azure Import/Export service. Microsoft (c) 2013, 2014  

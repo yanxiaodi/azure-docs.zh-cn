@@ -1,32 +1,27 @@
 ---
-title: 在 YARN 中创建高可用性 Spark 流作业 - Azure HDInsight | Microsoft Docs
-description: 如何为高可用性方案设置 Spark 流。
-services: hdinsight
-documentationcenter: ''
-tags: azure-portal
-author: ramoha
-manager: jhubbard
-editor: cgronlun
-ms.assetid: ''
+title: 在 YARN 中创建高可用性 Spark 流作业 - Azure HDInsight
+description: 如何在 Azure HDInsight 中设置高可用性方案的 Apache Spark 流式处理
 ms.service: hdinsight
+author: hrasheed-msft
+ms.author: hrasheed
+ms.reviewer: jasonh
+ms.topic: conceptual
 ms.custom: hdinsightactive
-ms.devlang: na
-ms.topic: article
 ms.date: 01/26/2018
-ms.author: ramoha
-ms.openlocfilehash: bbb4da02cbe4b0685c715c4cd6bd7b15c6b5cce0
-ms.sourcegitcommit: d78bcecd983ca2a7473fff23371c8cfed0d89627
-ms.translationtype: HT
+ms.openlocfilehash: e4414a64b2ee34ec16fde56dd750f2faa26b2e09
+ms.sourcegitcommit: e97a0b4ffcb529691942fc75e7de919bc02b06ff
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/14/2018
+ms.lasthandoff: 09/15/2019
+ms.locfileid: "71002974"
 ---
-# <a name="create-high-availability-spark-streaming-jobs-with-yarn"></a>使用 YARN 创建高可用性 Spark 流作业
+# <a name="create-high-availability-apache-spark-streaming-jobs-with-yarn"></a>使用 YARN 创建高可用性 Apache Spark 流式处理作业
 
-使用 Spark 流可以实施可缩放、高吞吐量、容错的应用程序进行数据流处理。 可将 HDInsight Spark 群集上的 Spark 流应用程序连接到各种数据源，例如 Azure 事件中心、Azure IoT 中心、Kafka、Flume、Twitter、ZeroMQ、原始 TCP 套接字，或者通过这些应用程序监视 HDFS 文件系统中发生的更改。 Spark 流支持容错，可保证只会处理任意给定的事件一次，即使某个节点发生故障。
+使用 [Apache Spark](https://spark.apache.org/) 流式处理可以实现可缩放、高吞吐量、容错的应用程序进行数据流处理。 可将 HDInsight Spark 群集上的 Spark 流式处理应用程序连接到各种数据源，例如 Azure 事件中心、Azure IoT 中心、[Apache Kafka](https://kafka.apache.org/)、[Apache Flume](https://flume.apache.org/)、Twitter、[ZeroMQ](http://zeromq.org/)、原始 TCP 套接字，或者通过这些应用程序监视 [Apache Hadoop HDFS](https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html) 文件系统中发生的更改。 Spark 流支持容错，可保证只会处理任意给定的事件一次，即使某个节点发生故障。
 
 Spark 流创建长时间运行的作业，在此期间，你可以对数据应用转换，然后将结果推送到文件系统、数据库、仪表板和控制台。 Spark 流处理微批数据，它首先收集定义的时间间隔内的一批事件。 接下来，发送该批进行处理和输出。 批时间间隔通常以几分之一秒定义。
 
-![Spark Streaming](./media/apache-spark-streaming-high-availability/spark-streaming.png)
+![Spark Streaming](./media/apache-spark-streaming-high-availability/apache-spark-streaming.png)
 
 ## <a name="dstreams"></a>DStreams
 
@@ -34,7 +29,7 @@ Spark 流使用离散流 (DStream) 表示连续的数据流。 可以从事件�
 
 Spark 核心使用弹性分布式数据集 (RDD)。 RDD 将数据分布到群集中的多个节点，其中每个节点通常完全在内存中维护其自身的数据，以实现最佳性能。 每个 RDD 表示在某个批间隔内收集的事件。 批间隔时间过后，Spark 流会生成新的 RDD，其中包含该间隔内的所有数据。 此连续 RDD 集将收集到 DStream 中。 Spark 流应用程序处理每个批的 RDD 中存储的数据。
 
-![Spark DStream](./media/apache-spark-streaming-high-availability/DStream.png)
+![Spark DStream](./media/apache-spark-streaming-high-availability/apache-spark-dstream.png)
 
 ## <a name="spark-structured-streaming-jobs"></a>Spark 结构化流作业
 
@@ -58,11 +53,11 @@ RDD 包含多个属性，可帮助创建高可用性且容错的 Spark 流作业
 
 若要创建一个处理每个事件一次（且仅一次）的应用程序，请考虑所有系统故障点在出现问题后如何重启，以及如何避免数据丢失。 “恰好一次”语义要求数据在任何时间点都不会丢失，并且不管故障发生在哪个位置，消息处理都可重启。 请参阅[创建支持“恰好一次”事件处理的 Spark 流作业](apache-spark-streaming-exactly-once.md)。
 
-## <a name="spark-streaming-and-yarn"></a>Spark 流和 YARN
+## <a name="spark-streaming-and-apache-hadoop-yarn"></a>Spark 流式处理和 Apache Hadoop YARN
 
 在 HDInsight 中，群集工作由 *Yet Another Resource Negotiator* (YARN) 协调。 设计 Spark 流的高可用性涉及到 Spark 流和 YARN 组件方面的技术。  下面显示了使用 YARN 的示例配置。 
 
-![YARN 体系结构](./media/apache-spark-streaming-high-availability/yarn-arch.png)
+![YARN 体系结构](./media/apache-spark-streaming-high-availability/hdi-yarn-architecture.png)
 
 以下部分描述此配置的设计注意事项。
 
@@ -124,8 +119,8 @@ RDD 包含多个属性，可帮助创建高可用性且容错的 Spark 流作业
 
 ## <a name="next-steps"></a>后续步骤
 
-* [Spark 流概述](apache-spark-streaming-overview.md)
-* [创建支持“恰好一次”事件处理的 Spark 流作业](apache-spark-streaming-exactly-once.md)
-* [YARN 中长时间运行的 Spark 流作业](http://mkuthan.github.io/blog/2016/09/30/spark-streaming-on-yarn/) 
-* [结构化流：容错语义](http://spark.apache.org/docs/2.1.0/structured-streaming-programming-guide.html#fault-tolerance-semantics)
+* [Apache Spark 流式处理概述](apache-spark-streaming-overview.md)
+* [使用“恰好一次”事件处理创建 Apache Spark 流式处理作业](apache-spark-streaming-exactly-once.md)
+* [YARN 中长时间运行的 Apache Spark 流式处理作业](https://mkuthan.github.io/blog/2016/09/30/spark-streaming-on-yarn/) 
+* [结构化流：容错语义](https://spark.apache.org/docs/2.1.0/structured-streaming-programming-guide.html#fault-tolerance-semantics)
 * [离散流：可缩放流处理的容错模型](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2012/EECS-2012-259.pdf)

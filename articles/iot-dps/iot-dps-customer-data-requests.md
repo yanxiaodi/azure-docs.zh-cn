@@ -2,15 +2,17 @@
 title: 客户数据请求功能
 author: dominicbetts
 ms.author: dobett
+manager: timlt
 ms.date: 05/16/2018
 ms.topic: conceptual
 ms.service: iot-dps
-ms.openlocfilehash: 28cadac33c4e73e6158f878b3c79ff09b4765fff
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+services: iot-dps
+ms.openlocfilehash: 5dd027c886e8102e77ddefe93817daee0e1ec29b
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
-ms.locfileid: "34361641"
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60626428"
 ---
 # <a name="summary-of-customer-data-request-features"></a>客户数据请求功能摘要
 
@@ -37,9 +39,9 @@ Azure IoT 中心设备预配服务是一项基于 REST API 的云服务，其目
 
 也可使用 REST API 对登记和注册记录执行删除操作：
 
-* 若要删除单个设备的登记信息，可以使用[设备登记 - 删除](https://docs.microsoft.com/rest/api/iot-dps/deviceenrollment/delete)操作。
-* 若要删除一组设备的登记信息，可以使用[设备登记组 - 删除](https://docs.microsoft.com/rest/api/iot-dps/deviceenrollmentgroup/delete)操作。
-* 若要删除已预配的设备的相关信息，可以使用[注册状态 - 删除注册状态](https://docs.microsoft.com/rest/api/iot-dps/registrationstate/deleteregistrationstate)操作。
+* 若要删除单个设备的登记信息，可以使用[设备登记 - 删除](/rest/api/iot-dps/deleteindividualenrollment/deleteindividualenrollment)操作。
+* 若要删除一组设备的登记信息，可以使用[设备登记组 - 删除](/rest/api/iot-dps/deleteenrollmentgroup/deleteenrollmentgroup)操作。
+* 若要删除已预配的设备的相关信息，可以使用[注册状态 - 删除注册状态](/rest/api/iot-dps/deletedeviceregistrationstate/deletedeviceregistrationstate)操作。
 
 ## <a name="exporting-customer-data"></a>导出客户数据
 
@@ -51,12 +53,12 @@ Azure IoT 中心设备预配服务是一项基于 REST API 的云服务，其目
 
 也可使用 REST API 对登记和注册记录执行导出操作：
 
-* 若要导出单个设备的登记信息，可以使用[设备登记 - 获取](https://docs.microsoft.com/rest/api/iot-dps/deviceenrollment/get)操作。
-* 若要导出一组设备的登记信息，可以使用[设备登记组 - 获取](https://docs.microsoft.com/rest/api/iot-dps/deviceenrollmentgroup/get)操作。
-* 若要导出已预配的设备的相关信息，可以使用[注册状态 - 获取注册状态](https://docs.microsoft.com/rest/api/iot-dps/registrationstate/getregistrationstate)操作。
+* 若要导出单个设备的登记信息，可以使用[设备登记 - 获取](/rest/api/iot-dps/getindividualenrollment/getindividualenrollment)操作。
+* 若要导出一组设备的登记信息，可以使用[设备登记组 - 获取](/rest/api/iot-dps/getenrollmentgroup/getenrollmentgroup)操作。
+* 若要导出已预配的设备的相关信息，可以使用[注册状态 - 获取注册状态](/rest/api/iot-dps/getdeviceregistrationstate/getdeviceregistrationstate)操作。
 
 > [!NOTE]
-> 当你使用 Microsoft 的企业服务时，Microsoft 会生成一些信息，称为系统生成的日志。 租户管理员无法访问或导出设备预配服务的某些系统生成日志。 这些日志包含在服务中执行的实际操作以及与个人设备相关的诊断数据。
+> 当你使用 Microsoft 的企业服务时，Microsoft 会生成一些信息，称为系统生成的日志。 租户管理员无法访问或导出设备预配服务系统生成的某些日志。 这些日志包含在服务中执行的实际操作以及与个人设备相关的诊断数据。
 
 ## <a name="links-to-additional-documentation"></a>其他文档的链接
 

@@ -3,23 +3,23 @@ title: 在 Azure 中使用 Terraform 创建完整的 Linux VM | Microsoft Docs
 description: 了解如何在 Azure 中使用 Terraform 创建和管理完整的 Linux 虚拟机环境
 services: virtual-machines-linux
 documentationcenter: virtual-machines
-author: echuvyrov
-manager: jeconnoc
+author: tomarchermsft
+manager: gwallace
 editor: na
 tags: azure-resource-manager
 ms.assetid: ''
 ms.service: virtual-machines-linux
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-linux
 ms.workload: infrastructure
-ms.date: 09/14/2017
-ms.author: echuvyrov
-ms.openlocfilehash: 6b2dc2e8859efdcc57c45831381bc1870495ecf6
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.date: 09/20/2019
+ms.author: tarcher
+ms.openlocfilehash: b9e379907f28c0d8698eb11aacb88970cf8d6dc4
+ms.sourcegitcommit: f2771ec28b7d2d937eef81223980da8ea1a6a531
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 09/20/2019
+ms.locfileid: "71173848"
 ---
 # <a name="create-a-complete-linux-virtual-machine-infrastructure-in-azure-with-terraform"></a>在 Azure 中使用 Terraform 创建完整的 Linux 虚拟机基础结构
 
@@ -35,7 +35,7 @@ ms.lasthandoff: 05/03/2018
 > [!TIP]
 > 如果要为值创建环境变量，或要使用 [Azure Cloud Shell Bash 体验](/azure/cloud-shell/overview)，则无需在此节中包括变量声明。
 
-```tf
+```hcl
 provider "azurerm" {
     subscription_id = "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
     client_id       = "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -46,12 +46,12 @@ provider "azurerm" {
 
 以下部分在 `eastus` 位置创建名为 `myResourceGroup` 的资源组：
 
-```tf
+```hcl
 resource "azurerm_resource_group" "myterraformgroup" {
     name     = "myResourceGroup"
     location = "eastus"
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -62,21 +62,22 @@ resource "azurerm_resource_group" "myterraformgroup" {
 ## <a name="create-virtual-network"></a>创建虚拟网络
 以下部分在 10.0.0.0/16 地址空间中创建名为 myVnet 的虚拟网络：
 
-```tf
+```hcl
 resource "azurerm_virtual_network" "myterraformnetwork" {
     name                = "myVnet"
     address_space       = ["10.0.0.0/16"]
     location            = "eastus"
     resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
 ```
-：以下部分在 myVnet 虚拟网络中创建名为 mySubnet 的子网
 
-```tf
+以下部分在 myVnet 虚拟网络中创建名为 mySubnet 的子网：
+
+```hcl
 resource "azurerm_subnet" "myterraformsubnet" {
     name                 = "mySubnet"
     resource_group_name  = "${azurerm_resource_group.myterraformgroup.name}"
@@ -89,14 +90,14 @@ resource "azurerm_subnet" "myterraformsubnet" {
 ## <a name="create-public-ip-address"></a>创建公共 IP 地址
 若要通过 Internet 访问资源，请创建公共 IP 地址并将其分配到 VM。 以下部分创建名为 myPublicIP 的公共 IP 地址：
 
-```tf
+```hcl
 resource "azurerm_public_ip" "myterraformpublicip" {
     name                         = "myPublicIP"
     location                     = "eastus"
     resource_group_name          = "${azurerm_resource_group.myterraformgroup.name}"
-    public_ip_address_allocation = "dynamic"
+    allocation_method            = "Dynamic"
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -106,8 +107,8 @@ resource "azurerm_public_ip" "myterraformpublicip" {
 ## <a name="create-network-security-group"></a>创建网络安全组
 网络安全组控制传入和传出 VM 的网络流量。 以下部分创建名为 myNetworkSecurityGroup 的网络安全组并定义允许 TCP 端口 22 上的 SSH 流量的规则：
 
-```tf
-resource "azurerm_network_security_group" "temyterraformpublicipnsg" {
+```hcl
+resource "azurerm_network_security_group" "myterraformnsg" {
     name                = "myNetworkSecurityGroup"
     location            = "eastus"
     resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
@@ -124,7 +125,7 @@ resource "azurerm_network_security_group" "temyterraformpublicipnsg" {
         destination_address_prefix = "*"
     }
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -134,20 +135,21 @@ resource "azurerm_network_security_group" "temyterraformpublicipnsg" {
 ## <a name="create-virtual-network-interface-card"></a>创建虚拟网络接口卡
 虚拟网络接口卡 (NIC) 将 VM 连接到规定的虚拟网络、公共 IP 地址和网络安全组。 Terraform 模板的以下部分创建名为“myNIC”的虚拟 NIC，并连接到已创建的虚拟网络资源：
 
-```tf
+```hcl
 resource "azurerm_network_interface" "myterraformnic" {
     name                = "myNIC"
     location            = "eastus"
     resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
+    network_security_group_id = "${azurerm_network_security_group.myterraformnsg.id}"
 
     ip_configuration {
         name                          = "myNicConfiguration"
         subnet_id                     = "${azurerm_subnet.myterraformsubnet.id}"
-        private_ip_address_allocation = "dynamic"
+        private_ip_address_allocation = "Dynamic"
         public_ip_address_id          = "${azurerm_public_ip.myterraformpublicip.id}"
     }
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -157,7 +159,7 @@ resource "azurerm_network_interface" "myterraformnic" {
 ## <a name="create-storage-account-for-diagnostics"></a>创建存储帐户以进行诊断
 若要为 VM 存储启动诊断，需要一个存储帐户。 这些启动诊断可帮助你排查问题和监视 VM 状态。 你创建的存储帐户仅用于存储启动诊断数据。 由于每个存储帐户必须具有唯一名称，以下部分会生成一些随机文本：
 
-```tf
+```hcl
 resource "random_id" "randomId" {
     keepers = {
         # Generate a new ID only when a new resource group is defined
@@ -170,7 +172,7 @@ resource "random_id" "randomId" {
 
 现在可以创建存储帐户了。 以下部分创建一个存储帐户，其名称基于上一步中生成的随机文本：
 
-```tf
+```hcl
 resource "azurerm_storage_account" "mystorageaccount" {
     name                = "diag${random_id.randomId.hex}"
     resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
@@ -178,7 +180,7 @@ resource "azurerm_storage_account" "mystorageaccount" {
     account_replication_type = "LRS"
     account_tier = "Standard"
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -191,7 +193,7 @@ resource "azurerm_storage_account" "mystorageaccount" {
 
  ssh_keys 部分中提供了 SSH 密钥数据。 在 *key_data* 字段中提供有效的公共 SSH 密钥。
 
-```tf
+```hcl
 resource "azurerm_virtual_machine" "myterraformvm" {
     name                  = "myVM"
     location              = "eastus"
@@ -231,7 +233,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
         storage_uri = "${azurerm_storage_account.mystorageaccount.primary_blob_endpoint}"
     }
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -241,11 +243,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
 
 若要将所有这些部分组合在一起，并在操作中看到 Terraform，请创建名为 terraform_azure.tf 的文件并粘贴以下内容：
 
-```tf
-variable "resourcename" {
-  default = "myResourceGroup"
-}
-
+```hcl
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
     subscription_id = "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -259,7 +257,7 @@ resource "azurerm_resource_group" "myterraformgroup" {
     name     = "myResourceGroup"
     location = "eastus"
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -271,7 +269,7 @@ resource "azurerm_virtual_network" "myterraformnetwork" {
     location            = "eastus"
     resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -289,9 +287,9 @@ resource "azurerm_public_ip" "myterraformpublicip" {
     name                         = "myPublicIP"
     location                     = "eastus"
     resource_group_name          = "${azurerm_resource_group.myterraformgroup.name}"
-    public_ip_address_allocation = "dynamic"
+    allocation_method            = "Dynamic"
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -314,7 +312,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
         destination_address_prefix = "*"
     }
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -329,11 +327,11 @@ resource "azurerm_network_interface" "myterraformnic" {
     ip_configuration {
         name                          = "myNicConfiguration"
         subnet_id                     = "${azurerm_subnet.myterraformsubnet.id}"
-        private_ip_address_allocation = "dynamic"
+        private_ip_address_allocation = "Dynamic"
         public_ip_address_id          = "${azurerm_public_ip.myterraformpublicip.id}"
     }
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -356,7 +354,7 @@ resource "azurerm_storage_account" "mystorageaccount" {
     account_tier                = "Standard"
     account_replication_type    = "LRS"
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -401,7 +399,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
         storage_uri = "${azurerm_storage_account.mystorageaccount.primary_blob_endpoint}"
     }
 
-    tags {
+    tags = {
         environment = "Terraform Demo"
     }
 }
@@ -423,7 +421,7 @@ terraform plan
 
 执行上述命令后，应会出现类似于以下屏幕的内容：
 
-```bash
+```console
 Refreshing Terraform state in-memory prior to plan...
 The refreshed state will be used to calculate this plan, but will not be
 persisted to local or remote state storage.
@@ -456,9 +454,9 @@ Plan: 7 to add, 0 to change, 0 to destroy.
 terraform apply
 ```
 
-Terraform 完成后，VM 基础结构即已准备完毕。 可使用 [az vm show](/cli/azure/vm#az_vm_show) 获取 VM 的 公共 IP 地址：
+Terraform 完成后，VM 基础结构即已准备完毕。 可使用 [az vm show](/cli/azure/vm) 获取 VM 的 公共 IP 地址：
 
-```azurecli
+```azurecli-interactive
 az vm show --resource-group myResourceGroup --name myVM -d --query [publicIps] --o tsv
 ```
 

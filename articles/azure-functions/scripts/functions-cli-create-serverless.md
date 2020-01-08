@@ -1,26 +1,23 @@
 ---
-title: "Azure CLI 脚本示例 - 创建可无服务器执行的 Function App | Microsoft Docs"
-description: "Azure CLI 脚本示例 - 创建可无服务器执行的 Function App"
+title: Azure CLI 脚本示例 - 创建可无服务器执行的 Function App | Microsoft Docs
+description: Azure CLI 脚本示例 - 创建可无服务器执行的 Function App
 services: functions
 documentationcenter: functions
-author: syntaxc4
-manager: cfowler
-editor: 
-tags: azure-service-management
+author: ggailey777
+manager: jeconnoc
 ms.assetid: 0e221db6-ee2d-4e16-9bf6-a456cd05b6e7
-ms.service: functions
+ms.service: azure-functions
 ms.devlang: azurecli
 ms.topic: sample
-ms.tgt_pltfrm: na
-ms.workload: web
-ms.date: 10/04/2017
-ms.author: cfowler
+ms.date: 07/03/2018
+ms.author: glenga
 ms.custom: mvc
-ms.openlocfilehash: e868f07a8c24948655d81c7db1859d819b01c062
-ms.sourcegitcommit: 8c3267c34fc46c681ea476fee87f5fb0bf858f9e
+ms.openlocfilehash: 265c4fa3c28783f0d9e5d789348c3cd2e249eb29
+ms.sourcegitcommit: 3102f886aa962842303c8753fe8fa5324a52834a
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/09/2018
+ms.lasthandoff: 04/23/2019
+ms.locfileid: "60325708"
 ---
 # <a name="create-a-function-app-for-serverless-code-execution"></a>创建适合无服务器代码执行的函数应用
 
@@ -32,7 +29,7 @@ ms.lasthandoff: 03/09/2018
 
 [!INCLUDE [cloud-shell-try-it.md](../../../includes/cloud-shell-try-it.md)]
 
-如果选择在本地安装并使用 CLI，本文要求运行 Azure CLI 2.0 版或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。 
+如果选择在本地安装并使用 CLI，本文要求运行 Azure CLI 2.0 版或更高版本。 运行 `az --version` 即可查找版本。 如需进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。 
 
 ## <a name="sample-script"></a>示例脚本
 
@@ -48,12 +45,12 @@ ms.lasthandoff: 03/09/2018
 
 | 命令 | 说明 |
 |---|---|
-| [az group create](/cli/azure/group#az_group_create) | 创建用于存储所有资源的资源组。 |
-| [az storage account create](/cli/azure/storage/account#az_storage_account_create) | 创建 Azure 存储帐户。 |
-| [az functionapp create](/cli/azure/functionapp#az_functionapp_create) | 创建 Function App。 |
+| [az group create](/cli/azure/group#az-group-create) | 创建用于存储所有资源的资源组。 |
+| [az storage account create](/cli/azure/storage/account#az-storage-account-create) | 创建 Azure 存储帐户。 |
+| [az functionapp create](/cli/azure/functionapp#az-functionapp-create) | 创建 Function App。 |
 
 ## <a name="next-steps"></a>后续步骤
 
-有关 Azure CLI 的详细信息，请参阅 [Azure CLI 文档](/cli/azure)。
+有关 Azure CLI 的详细信息，请参阅 [Azure CLI 文档](https://docs.microsoft.com/cli/azure)。
 
 可以在 [Azure Functions 文档](../functions-cli-samples.md)中找到其他 Azure Functions CLI 脚本示例。

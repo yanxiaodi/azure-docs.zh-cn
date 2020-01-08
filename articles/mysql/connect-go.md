@@ -1,23 +1,21 @@
 ---
-title: "使用 Go 连接到 Azure Database for MySQL"
-description: "本快速入门提供了多个 Go 代码示例，你可以使用它来连接到 Azure Database for MySQL 并查询其中的数据。"
-services: mysql
-author: jasonwhowell
-ms.author: jasonh
-manager: kfile
-editor: jasonwhowell
-ms.service: mysql-database
+title: 使用 Go 连接到 Azure Database for MySQL
+description: 本快速入门提供了多个 Go 代码示例，你可以使用它来连接到 Azure Database for MySQL 并查询其中的数据。
+author: ajlam
+ms.author: andrela
+ms.service: mysql
 ms.custom: mvc
 ms.devlang: go
 ms.topic: quickstart
 ms.date: 02/28/2018
-ms.openlocfilehash: af4027835ca503c0875d098d0daf7a98bdef44fb
-ms.sourcegitcommit: c765cbd9c379ed00f1e2394374efa8e1915321b9
+ms.openlocfilehash: 3cd25f935a38f5192811d7f7886d3c6654d5d221
+ms.sourcegitcommit: 87bd7bf35c469f84d6ca6599ac3f5ea5545159c9
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/28/2018
+ms.lasthandoff: 03/22/2019
+ms.locfileid: "58351790"
 ---
-# <a name="azure-database-for-mysql-use-go-language-to-connect-and-query-data"></a>Azure Database for MySQL：使用 Go 语言进行连接并查询数据
+# <a name="azure-database-for-mysql-use-go-language-to-connect-and-query-data"></a>Azure Database for MySQL：使用 Go 语言连接和查询数据
 本快速入门演示如何在 Windows、Ubuntu Linux 和 Apple macOS 平台中使用以 [Go](https://golang.org/) 语言编写的代码连接到 Azure Database for MySQL。 同时还介绍了如何使用 SQL 语句在数据库中查询、插入、更新和删除数据。 本主题假设你熟悉如何使用 Go 进行开发，但不太熟悉 Azure Database for MySQL 的用法。
 
 ## <a name="prerequisites"></a>先决条件
@@ -88,7 +86,7 @@ ms.lasthandoff: 02/28/2018
    
 
 ## <a name="build-and-run-go-code"></a>生成和运行 Go 代码 
-1. 若要编写 Golang 代码，可以使用简单的文本编辑器，例如 Microsoft Windows 中的记事本、Ubuntu 中的 [vi](http://manpages.ubuntu.com/manpages/xenial/man1/nvi.1.html#contenttoc5) 或 [Nano](https://www.nano-editor.org/)，或者 macOS 中的 TextEdit。 如果偏好功能更丰富的交互式开发环境 (IDE)，可尝试 Jetbrains 推出的 [Gogland](https://www.jetbrains.com/go/)、Microsoft 推出的 [Visual Studio Code](https://code.visualstudio.com/)，或者 [Atom](https://atom.io/)。
+1. 若要编写 Golang 代码，可以使用简单的文本编辑器，例如 Microsoft Windows 中的记事本、Ubuntu 中的 [vi](https://manpages.ubuntu.com/manpages/xenial/man1/nvi.1.html#contenttoc5) 或 [Nano](https://www.nano-editor.org/)，或者 macOS 中的 TextEdit。 如果偏好功能更丰富的交互式开发环境 (IDE)，可尝试 Jetbrains 推出的 [Gogland](https://www.jetbrains.com/go/)、Microsoft 推出的 [Visual Studio Code](https://code.visualstudio.com/)，或者 [Atom](https://atom.io/)。
 2. 将以下部分中的 Go 代码粘贴到文本文件中，再使用文件扩展名 \*.go 将这些文件保存到项目文件夹中（例如 Windows 路径 `%USERPROFILE%\go\src\mysqlgo\createtable.go` 或 Linux 路径 `~/go/src/mysqlgo/createtable.go`）。
 3. 在代码中找到 `HOST`、`DATABASE`、`USER` 和 `PASSWORD` 常量，然后将示例值替换为自己的值。 
 4. 启动命令提示符或 Bash shell。 将目录转到项目文件夹。 例如，在 Windows 上使用 `cd %USERPROFILE%\go\src\mysqlgo\`。 在 Linux 上使用 `cd ~/go/src/mysqlgo/`。  提到的某些 IDE 编辑器提供不需 shell 命令的调试和运行时功能。

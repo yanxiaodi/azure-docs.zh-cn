@@ -2,25 +2,20 @@
 title: 什么是 Power BI 工作区集合？
 description: Power BI Embedded 使你可将 Power BI 报表集成到 Web 或移动应用程序中，因此无需构建自定义解决方案。
 services: power-bi-embedded
-documentationcenter: ''
-author: markingmyname
-manager: kfile
-editor: ''
-tags: ''
+author: rkarlin
 ROBOTS: NOINDEX
 ms.assetid: 03649b72-b7d7-40ca-b077-12356d72d4f3
 ms.service: power-bi-embedded
-ms.devlang: NA
 ms.topic: article
-ms.tgt_pltfrm: NA
 ms.workload: powerbi
 ms.date: 09/20/2017
-ms.author: maghan
-ms.openlocfilehash: 0bd6ba74d176ed1db1e8f1f1b38646182da2c379
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.author: rkarlin
+ms.openlocfilehash: 7f23856363b337a361f329ed54e2152842faf26e
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64705129"
 ---
 # <a name="what-are-power-bi-workspace-collections"></a>什么是 Power BI 工作区集合？
 
@@ -45,7 +40,7 @@ Power BI 工作区集合是一项 **Azure 服务**，使 ISV 和应用程序开�
 
 ## <a name="workspace-collection"></a>工作区集合
 
-**工作区集合**是一个顶级 Azure 资源容器，包含 0 个或多个**工作区**。  **工作区****集合**具有所有标准 Azure 属性和下列内容：
+**工作区集合**是一个顶级 Azure 资源容器，包含 0 个或多个**工作区**。  **工作区** **集合**具有所有标准 Azure 属性和下列内容：
 
 * **访问密钥** - 安全地调用 Power BI API 时使用的密钥（后面的部分中进行了介绍）。
 * **用户** - 具有管理员权限的 Azure Active Directory (AAD) 用户，通过 Azure 门户或 Azure 资源管理器 API 管理 Power BI 工作区集合。
@@ -53,7 +48,7 @@ Power BI 工作区集合是一项 **Azure 服务**，使 ISV 和应用程序开�
 
 ## <a name="workspace"></a>工作区
 
-**工作区**是一个包含 Power BI 内容的容器，该内容可以包括数据集和报表。 **工作区**在首次创建后为空。 将使用 Power BI Desktop 创作内容，然后使用 [Power BI Import API](https://msdn.microsoft.com/library/mt711504.aspx) 以编程方式将 PBIX 部署到工作区中。 还可以通过编程方式创建数据集，并在你的应用程序内而非使用 Power BI Desktop 创建报表。
+**工作区**是一个包含 Power BI 内容的容器，该内容可以包括数据集和报表。 **工作区**在首次创建后为空。 用户将使用 Power BI Desktop 创作内容，并使用 [Power BI Import API](https://msdn.microsoft.com/library/mt711504.aspx) 以编程方式将 PBIX 部署到工作区中。 还可以通过编程方式创建数据集，并在用户的应用程序内而非使用 Power BI Desktop 创建报表。
 
 ## <a name="using-workspace-collections-and-workspaces"></a>使用工作区集合和工作区
 
@@ -65,11 +60,11 @@ Power BI 工作区集合是一项 **Azure 服务**，使 ISV 和应用程序开�
 
 ## <a name="authentication-and-authorization-with-app-tokens"></a>使用应用令牌进行身份验证和授权
 
-**Microsoft Power BI 工作区集合**遵从应用程序来执行所有必要的用户身份验证和授权。 没有明确要求最终用户必须是 Azure Active directory (Azure AD) 的客户。  相反，应用程序通过使用**应用程序身份验证令牌（应用令牌）**向 **Microsoft Power BI 工作区集合**表明自己获得了呈现 Power BI 报表的授权。  希望应用呈现报表时，可以根据需要创建这些**应用令牌**。
+**Microsoft Power BI 工作区集合**遵从应用程序来执行所有必要的用户身份验证和授权。 没有明确要求最终用户必须是 Azure Active directory (Azure AD) 的客户。  相反，应用程序通过使用**应用程序身份验证令牌（应用令牌）** 向 **Microsoft Power BI 工作区集合**表明自己获得了呈现 Power BI 报表的授权。  希望应用呈现报表时，可以根据需要创建这些**应用令牌**。
 
 ![应用令牌使用情况图表](media/what-are-power-bi-workspace-collections/app-tokens.png)
 
-**应用程序身份验证令牌（应用令牌）**用于向 **Microsoft Power BI 工作区集合**表明身份。  有三种类型的**应用令牌**：
+**应用程序身份验证令牌（应用令牌）** 用于向 **Microsoft Power BI 工作区集合**表明身份。  有三种类型的**应用令牌**：
 
 1. 预配令牌 - 在**工作区集合**中预配新的**工作区**时使用
 2. 开发令牌 - 直接调用 **Power BI REST API** 时使用
@@ -92,4 +87,4 @@ Power BI 工作区集合是一项 **Azure 服务**，使 ISV 和应用程序开�
 [PowerBI-CSharp Git 存储库](https://github.com/Microsoft/PowerBI-CSharp)  
 [PowerBI-Node Git 存储库](https://github.com/Microsoft/PowerBI-Node)  
 
-有更多问题？ [尝试 Power BI 社区](http://community.powerbi.com/)
+有更多问题？ [试用 Power BI 社区](https://community.powerbi.com/)

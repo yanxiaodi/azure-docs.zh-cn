@@ -2,21 +2,22 @@
 title: Azure 服务总线文档 - 教程和 API 参考 | Microsoft 文档
 description: 了解如何设置消息传送，用于连接跨本地和云环境的应用程序与服务。  教程、视频、API 参考和其他资源。
 services: service-bus
-author: czeumault
-manager: carolz
+author: spelluru
+manager: carmonm
 layout: LandingPage
 ms.assetid: ''
 ms.service: service-bus
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: landing-page
-ms.date: 03/14/2017
-ms.author: carolz
-ms.openlocfilehash: 7ce116da6fe3651a4ed50805660ced2c2e5ac61d
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
+ms.date: 04/11/2019
+ms.author: spelluru
+ms.openlocfilehash: 32cdfabc894213c6c0d05f4b0ed7fdc31e5dc282
+ms.sourcegitcommit: 3102f886aa962842303c8753fe8fa5324a52834a
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 04/23/2019
+ms.locfileid: "60789941"
 ---
 # <a name="service-bus-documentation"></a>服务总线文档
 

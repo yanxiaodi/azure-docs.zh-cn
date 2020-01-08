@@ -1,23 +1,19 @@
 ---
 title: 使用诊断和消息分析器对 Azure 存储进行故障排除 | Microsoft Docs
 description: 本教程演示如何使用 Azure 存储分析、AzCopy 和 Microsoft Message Analyzer 进行点对点故障排除
-services: storage
-documentationcenter: dotnet
-author: tamram
-manager: timlt
-ms.assetid: 643372a3-1c07-4e88-b4ef-042512a43086
+author: normesta
 ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: dotnet
-ms.topic: article
+ms.topic: conceptual
 ms.date: 03/15/2017
-ms.author: tamram
-ms.openlocfilehash: 324370ae18627a1985e6a40aec11ee2fa871e93b
-ms.sourcegitcommit: 20d103fb8658b29b48115782fe01f76239b240aa
-ms.translationtype: HT
+ms.author: normesta
+ms.reviewer: cbrooks
+ms.subservice: common
+ms.openlocfilehash: 2ca81280bed52508c606a5a693fe0162837ac117
+ms.sourcegitcommit: 670c38d85ef97bf236b45850fd4750e3b98c8899
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/03/2018
+ms.lasthandoff: 08/08/2019
+ms.locfileid: "68854630"
 ---
 # <a name="end-to-end-troubleshooting-using-azure-storage-metrics-and-logging-azcopy-and-message-analyzer"></a>使用 Azure 存储指标和日志记录、AzCopy 及 Message Analyzer 进行端到端故障排除
 [!INCLUDE [storage-selector-portal-e2e-troubleshooting](../../../includes/storage-selector-portal-e2e-troubleshooting.md)]
@@ -32,15 +28,15 @@ ms.lasthandoff: 04/03/2018
 若要使用 Microsoft Azure 存储排查客户端应用程序问题，可以使用多种工具的组合来确定问题出现的时间以及可能的原因。 这些工具包括：
 
 * **Azure 存储分析**。 有关 Azure 存储的度量值和日志记录，请参阅 [Azure Storage Analytics](/rest/api/storageservices/Storage-Analytics)（Azure 存储分析）。
-  
+
   * **存储度量值**用于跟踪存储帐户的事务度量值和容量度量值。 使用度量值，可以确定应用程序如何根据各种不同的度量值执行。 若要深入了解存储分析跟踪的度量值类型，请参阅 [Storage Analytics Metrics Table Schema](/rest/api/storageservices/Storage-Analytics-Metrics-Table-Schema)（存储分析度量值表架构）。
-  * **存储日志记录**可在服务器端日志中记录发送到 Azure 存储服务的每个请求。 日志用于跟踪每个请求的详细数据，包括执行的操作、操作的状态和延迟信息。 若要深入了解存储分析写入日志的请求和响应数据，请参阅 [Storage Analytics Log Format](/rest/api/storageservices/Storage-Analytics-Log-Format)（存储分析日志格式）。
+  * **存储日志记录**可在服务器端日志中记录发送到 Azure 存储服务的每个请求。 日志用于跟踪每个请求的详细数据，包括执行的操作、操作的状态和延迟信息。 若要深入了解存储分析写入到日志的请求和响应数据，请参阅 [Storage Analytics Log Format](/rest/api/storageservices/Storage-Analytics-Log-Format)（存储分析日志格式）。
 
 * **Azure 门户**。 可以在 [Azure 门户](https://portal.azure.com)中配置存储帐户的指标和日志记录。 还可以查看显示应用程序在各时间段执行情况的图表和图形，以及配置警报，以便在应用程序的特定度量值不同于预期时接收通知。
-  
+
     请参阅[在 Azure 门户中监视存储帐户](storage-monitor-storage-account.md)，了解如何在 Azure 门户中配置监视功能。
 * **AzCopy**。 Azure 存储的服务器日志存储为 Blob，因此可以使用 AzCopy 将日志 Blob 复制到本地目录，以使用 Microsoft Message Analyzer 进行分析。 若要深入了解 AzCopy，请参阅[使用 AzCopy 命令行实用程序传输数据](storage-use-azcopy.md)。
-* **Microsoft Message Analyzer**。 Message Analyzer 是一个工具，它使用日志文件并以可视格式显示日志数据，方便你筛选、搜索日志数据，以及将日志数据组合成有用的集，用于分析错误和性能问题。 若要深入了解 Message Analyzer，请参阅 [Microsoft Message Analyzer Operating Guide](http://technet.microsoft.com/library/jj649776.aspx)（Microsoft Message Analyzer 操作指南）。
+* **Microsoft Message Analyzer**。 Message Analyzer 是一个工具，它使用日志文件并以可视格式显示日志数据，方便你筛选、搜索日志数据，以及将日志数据组合成有用的集，用于分析错误和性能问题。 若要深入了解 Message Analyzer，请参阅 [Microsoft Message Analyzer Operating Guide](https://technet.microsoft.com/library/jj649776.aspx)（Microsoft Message Analyzer 操作指南）。
 
 ## <a name="about-the-sample-scenario"></a>关于示例情景
 在本教程中，我们介绍 Azure 存储度量值指示调用 Azure 存储的应用程序成功率较低的情景。 低成功率指标（在 [Azure 门户](https://portal.azure.com)和指标表中显示为 **PercentSuccess**）用于跟踪已经成功，但返回的 HTTP 状态代码大于 299 的操作。 在服务器端存储日志文件中，这些操作将使用事务状态 **ClientOtherErrors** 进行记录。 若要深入了解低成功率度量值，请参阅[度量值显示低 PercentSuccess，或者分析日志项包含事务状态为 ClientOtherErrors 的操作](storage-monitoring-diagnosing-troubleshooting.md#metrics-show-low-percent-success)。
@@ -49,12 +45,12 @@ Azure 存储操作可能返回 HTTP 状态代码大于 299 作为其正常功能
 
 在此情况下，我们将低成功率视为低于 100% 的任何状态。 但是，可以根据自己的需求选择不同的度量值级别。 我们建议在测试期间，为关键性能度量值建立基线容差。 例如，可以根据测试，确定应用程序应该持续保持 90% 或 85% 的成功率。 如果度量值数据显示应用程序与该数字有偏差，则可以调查导致成功率上升的原因。
 
-对于我们的示例方案，一旦我们建立了成功率度量值低于 100%，我们会检查日志以查找与度量值相关的错误，并使用它们来找出导致较低成功率的原因。 我们将专门介绍 400 范围内的错误。 然后，我们将更细致地调查 404（未找到）错误。
+对于我们的示例方案，一旦我们确定了成功率指标低于 100%，我们会检查日志以查找与指标相关的错误，并使用它们来找出导致较低成功率的原因。 我们将专门介绍 400 范围内的错误。 然后，我们将更细致地调查 404（未找到）错误。
 
 ### <a name="some-causes-of-400-range-errors"></a>400 范围错误的某些原因
 以下示例中显示了对 Azure Blob 存储发出请求后返回的某些 400 范围错误示例和可能的原因。 其中的任何错误，以及 300 范围和 500 范围内的错误，可能会导致低成功率。
 
-请注意，以下列表远远算不上完整。 有关常见 Azure 存储错误以及特定于每个存储服务错误的详细信息，请参阅 MSDN 上的[状态和错误代码](http://msdn.microsoft.com/library/azure/dd179382.aspx)。
+请注意，以下列表远远算不上完整。 有关常见 Azure 存储错误以及特定于每个存储服务错误的详细信息，请参阅 MSDN 上的[状态和错误代码](https://msdn.microsoft.com/library/azure/dd179382.aspx)。
 
 **状态代码 404（找不到）示例**
 
@@ -82,61 +78,19 @@ Azure 存储操作可能返回 HTTP 状态代码大于 299 作为其正常功能
 * **HTTP 网络跟踪日志**，它收集有关 HTTP/HTTPS 请求的数据和响应数据，包括针对 Azure 存储的操作的数据。 在本教程中，我们将通过 Message Analyzer 生成网络跟踪。
 
 ### <a name="configure-server-side-logging-and-metrics"></a>配置服务器端日志记录和度量值
-首先，我们需要配置 Azure 存储日志记录和度量值，以便可以从客户端应用程序获取要分析的数据。 可通过不同的方式配置日志记录和指标：通过 [Azure 门户](https://portal.azure.com)、使用 PowerShell 或以编程方式。 有关配置日志记录和度量值的详细信息，请参阅 MSDN 上的 [Enabling Storage Metrics and Viewing Metrics Data](http://msdn.microsoft.com/library/azure/dn782843.aspx)（启用存储度量值和查看度量值数据）及 [Enabling Storage Logging and Accessing Log Data](http://msdn.microsoft.com/library/azure/dn782840.aspx)（启用存储日志记录和访问日志数据）。
-
-**通过 Azure 门户**
-
-若要使用 [Azure 门户](https://portal.azure.com)配置存储帐户的日志记录和指标，请遵循[在 Azure 门户中监视存储帐户](storage-monitor-storage-account.md)中的说明。
-
-> [!NOTE]
-> 无法使用 Azure 门户设置分钟指标。 但是，对于本教程，我们建议设置分钟度量值，它还可以调查应用程序的性能问题。 可以使用 PowerShell（如下所示）设置分钟度量值，也可以使用存储客户端库通过编程方式来进行。
-> 
-> 请注意，Azure 门户无法显示分钟指标，而只显示小时指标。
-> 
-> 
-
-**通过 PowerShell**
-
-若要开始使用 Azure 适用的 PowerShell，请参阅[如何安装和配置 Azure PowerShell](/powershell/azure/overview)。
-
-1. 通过 [Add-AzureAccount](/powershell/module/azure/add-azureaccount?view=azuresmps-3.7.0) cmdlet，将 Azure 用户帐户添加到 PowerShell 窗口中：
-   
-    ```powershell
-    Add-AzureAccount
-    ```
-
-2. 在“登录 Microsoft Azure”窗口中，键入与帐户关联的电子邮件地址和密码。 Azure 将对凭据信息进行身份验证和保存，然后关闭该窗口。
-3. 通过在 PowerShell 窗口中执行以下命令，将默认存储帐户设置为用于本教程的存储帐户：
-   
-    ```powershell
-    $SubscriptionName = 'Your subscription name'
-    $StorageAccountName = 'yourstorageaccount'
-    Set-AzureSubscription -CurrentStorageAccountName $StorageAccountName -SubscriptionName $SubscriptionName
-    ```
-
-4. 为 Blob 服务启用存储日志记录：
-   
-    ```powershell
-    Set-AzureStorageServiceLoggingProperty -ServiceType Blob -LoggingOperations Read,Write,Delete -PassThru -RetentionDays 7 -Version 1.0
-    ```
-
-5. 为 Blob 服务启用存储度量值，确保将 **-MetricsType** 设置为 `Minute`：
-   
-    ```powershell
-    Set-AzureStorageServiceMetricsProperty -ServiceType Blob -MetricsType Minute -MetricsLevel ServiceAndApi -PassThru -RetentionDays 7 -Version 1.0
-    ```
+首先，我们需要配置 Azure 存储日志记录和度量值，以便可以从服务端获取要分析的数据。 可通过不同的方式配置日志记录和指标：通过 [Azure 门户](https://portal.azure.com)、使用 PowerShell 或以编程方式。 请参阅[启用指标](storage-analytics-metrics.md#enable-metrics-using-the-azure-portal)和[启用日志记录](storage-analytics-logging.md#enable-storage-logging)，详细了解如何配置日志记录和指标。
 
 ### <a name="configure-net-client-side-logging"></a>配置 .NET 客户端日志记录
-若要为 .NET 应用程序配置客户端日志记录，请在应用程序的配置文件（web.config 或 app.config）中启用 .NET 诊断。 有关详细信息，请参阅 MSDN 上的 [Client-side Logging with the .NET Storage Client Library](http://msdn.microsoft.com/library/azure/dn782839.aspx)（使用 .NET 存储客户端库进行的客户端日志记录）和 [Client-side Logging with the Microsoft Azure Storage SDK for Java](http://msdn.microsoft.com/library/azure/dn782844.aspx)（通过用于 Java 的 Microsoft Azure 存储 SDK 进行的客户端日志记录）。
+若要为 .NET 应用程序配置客户端日志记录，请在应用程序的配置文件（web.config 或 app.config）中启用 .NET 诊断。 有关详细信息，请参阅 MSDN 上的 [Client-side Logging with the .NET Storage Client Library](https://msdn.microsoft.com/library/azure/dn782839.aspx)（使用 .NET 存储客户端库进行的客户端日志记录）和 [Client-side Logging with the Microsoft Azure Storage SDK for Java](https://msdn.microsoft.com/library/azure/dn782844.aspx)（通过用于 Java 的 Microsoft Azure 存储 SDK 进行的客户端日志记录）。
 
 客户端日志包括有关客户端准备请求以及接收和处理响应的详细信息。
 
 存储客户端库将客户端的日志数据存储在应用程序的配置文件（web.config 或 app.config）中的指定位置。
 
 ### <a name="collect-a-network-trace"></a>收集网络跟踪
-当客户端应用程序正在运行时，可以使用 Message Analyzer 来收集 HTTP/HTTPS 网络跟踪。 Message Analyzer 在后端使用 [Fiddler](http://www.telerik.com/fiddler)。 在收集网络跟踪之前，我们建议配置 Fiddler 来记录未加密的 HTTPS 通信：
+当客户端应用程序正在运行时，可以使用 Message Analyzer 来收集 HTTP/HTTPS 网络跟踪。 Message Analyzer 在后端使用 [Fiddler](https://www.telerik.com/fiddler)。 在收集网络跟踪之前，我们建议配置 Fiddler 来记录未加密的 HTTPS 通信：
 
-1. 安装 [Fiddler](http://www.telerik.com/download/fiddler)。
+1. 安装 [Fiddler](https://www.telerik.com/download/fiddler)。
 2. 启动 Fiddler。
 3. 选择“工具”|“Fiddler 选项”。
 4. 在“选项”对话框中，确保“捕获 HTTPS 连接”和“解密 HTTPS 通信”都已选中，如下所示。
@@ -160,24 +114,24 @@ Azure 存储操作可能返回 HTTP 状态代码大于 299 作为其正常功能
 
 > [!NOTE]
 > 在完成收集网络跟踪后，我们强烈建议还原 Fiddler 中为了解密 HTTPS 通信可能已更改的设置。 在“Fiddler 选项”对话框中，取消选中“捕获 HTTPS 连接”和“解密 HTTPS 通信”复选框。
-> 
-> 
+>
+>
 
-有关详细信息，请参阅 Technet 上的 [Using the Network Tracing Features](http://technet.microsoft.com/library/jj674819.aspx)（使用网络跟踪功能）。
+有关详细信息，请参阅 Technet 上的 [Using the Network Tracing Features](https://technet.microsoft.com/library/jj674819.aspx)（使用网络跟踪功能）。
 
 ## <a name="review-metrics-data-in-the-azure-portal"></a>在 Azure 门户中查看指标数据
 应用程序运行一段时间后，便可查看 [Azure 门户](https://portal.azure.com)中显示的指标图表，以观察服务的性能。
 
 首选，在 Azure 门户中导航到存储帐户。 默认情况下，包含“成功百分比”的监视图显示在帐户边栏选项卡上。 如果以前修改过此图表以显示不同指标，则请添加“成功百分比”指标。
 
-现在，监视图中会显示“成功百分比”，以及可能已添加的任何其他指标。 接下来要在 Message Analyzer 中通过分析日志进行调查，在此情况下，成功率百分比略低于 100%。
+现在，监视图中会显示“成功百分比”，以及可能已添加的任何其他指标。 接下来要通过在 Message Analyzer 中分析日志进行调查，在此情况下，成功率百分比略低于 100%。
 
 有关添加和自定义指标图表的更多详细信息，请参阅[自定义指标图表](storage-monitor-storage-account.md#customize-metrics-charts)。
 
 > [!NOTE]
 > 启用存储指标后，可能需要经过一段时间，指标数据才会显示在 Azure 门户中。 这是因为，只有在当前小时已过后，前一个小时的小时指标才会显示在 Azure 门户中。 此外，分钟指标当前不会显示在 Azure 门户中。 因此，根据启用度量值的时间，最多可能需要两个小时才能看到度量值数据。
-> 
-> 
+>
+>
 
 ## <a name="use-azcopy-to-copy-server-logs-to-a-local-directory"></a>使用 AzCopy 将服务器日志复制到本地目录
 Azure 存储将服务器日志数据写入 Blob，将度量值写入表。 存储帐户的已知的 `$logs` 容器中提供了日志 Blob。 日志 Blob 按年、月、日和小时的分层形式命名，因此，可以轻松地找到想要调查的时间范围。 例如，在 `storagesample` 帐户中，对应于 2015 年 1 月 2 日早晨 8-9 点的日志 blob 容器为 `https://storagesample.blob.core.windows.net/$logs/blob/2015/01/08/0800`。 此容器中的各个 blob 均按顺序命名，并以 `000000.log` 开头。
@@ -189,31 +143,31 @@ AzCopy.exe /Source:http://<storageaccountname>.blob.core.windows.net/$logs /Dest
 ```
 可以从 [Azure 下载](https://azure.microsoft.com/downloads/)页下载 AzCopy。 若要深入了解如何使用 AzCopy，请参阅[使用 AzCopy 命令行实用程序传输数据](storage-use-azcopy.md)。
 
-有关下载服务器端日志的其他信息，请参阅 [Download Storage Logging log data](http://msdn.microsoft.com/library/azure/dn782840.aspx#DownloadingStorageLogginglogdata)（下载存储日志记录日志数据）。
+有关下载服务器端日志的其他信息，请参阅 [Download Storage Logging log data](https://msdn.microsoft.com/library/azure/dn782840.aspx#DownloadingStorageLogginglogdata)（下载存储日志记录日志数据）。
 
 ## <a name="use-microsoft-message-analyzer-to-analyze-log-data"></a>使用 Microsoft Message Analyzer 分析日志数据
-Microsoft Message Analyzer 是在故障排除和诊断方案中用于捕获、显示和分析协议消息传递通信、事件和其他系统或应用程序消息的工具。 Message Analyzer 还允许加载、聚合和分析日志和保存的跟踪文件中的数据。 有关 Message Analyzer 的详细信息，请参阅 [Microsoft Message Analyzer Operating Guide](http://technet.microsoft.com/library/jj649776.aspx)（Microsoft Message Analyzer 操作指南）。
+Microsoft Message Analyzer 是在故障排除和诊断方案中用于捕获、显示和分析协议消息传递通信、事件和其他系统或应用程序消息的工具。 Message Analyzer 还允许加载、聚合和分析日志和保存的跟踪文件中的数据。 有关 Message Analyzer 的详细信息，请参阅 [Microsoft Message Analyzer Operating Guide](https://technet.microsoft.com/library/jj649776.aspx)（Microsoft Message Analyzer 操作指南）。
 
 Message Analyzer 包括 Azure 存储的资产，可帮助你分析服务器、客户端和网络日志。 在本部分中，我们将讨论如何使用这些工具来解决存储日志中成功百分比较低的问题。
 
 ### <a name="download-and-install-message-analyzer-and-the-azure-storage-assets"></a>下载并安装 Message Analyzer 和 Azure 存储资产
-1. 从 Microsoft 下载中心下载 [Message Analyzer](http://www.microsoft.com/download/details.aspx?id=44226)，并运行安装程序。
+1. 从 Microsoft 下载中心下载 [Message Analyzer](https://www.microsoft.com/download/details.aspx?id=44226)，并运行安装程序。
 2. 启动 Message Analyzer。
 3. 从“工具”菜单中选择“资产管理器”。 在“资产管理器”对话框中，选择“下载”，并筛选“Azure 存储”。 会看到 Azure 存储资产，如下图中所示。
 4. 单击“同步所有显示的项”以安装 Azure 存储资产。 可用的资产包括：
-   * **Azure 存储颜色规则：**可通过这些规则定义特殊筛选器，利用颜色、文本和字体样式突出显示跟踪中包含特定信息的消息。
-   * **Azure 存储图表：**Azure 存储图表是根据服务器日志数据绘制的预定义图表。 请注意，若在此时使用 Azure 存储图表，可以只将服务器日志加载到分析网格中。
-   * **Azure 存储分析程序：**该程序可分析 Azure 存储客户端、服务器和 HTTP 日志，将其显示在分析网格中。
-   * **Azure 存储筛选器：**它是可用于查询分析网格中的数据的预定义条件。
-   * **Azure 存储视图布局：**它是分析网格中的预定义列布局和分组。
+   * **Azure 存储颜色规则：** 可通过Azure 存储颜色规则定义特殊筛选器，利用颜色、文本和字体样式突出显示跟踪中包含特定信息的消息。
+   * **Azure 存储图表：** Azure 存储图表是根据服务器日志数据绘制的预定义图表。 请注意，若在此时使用 Azure 存储图表，可以只将服务器日志加载到分析网格中。
+   * **Azure 存储分析程序：** 该程序可分析 Azure 存储客户端、服务器和 HTTP 日志，将其显示在分析网格中。
+   * **Azure 存储筛选器：** Azure 存储筛选器是可用于查询分析网格中的数据的预定义条件。
+   * **Azure 存储视图布局：** Azure 存储视图布局是分析网格中的预定义列布局和分组。
 5. 安装资产后，请重新启动 Message Analyzer。
 
 ![Message Analyzer 资产管理器](./media/storage-e2e-troubleshooting/mma-start-page-1.png)
 
 > [!NOTE]
 > 对于本教程，请安装显示的所有 Azure 存储资产。
-> 
-> 
+>
+>
 
 ### <a name="import-your-log-files-into-message-analyzer"></a>将日志文件导入 Message Analyzer
 可以将所有已保存的日志文件（服务器端、客户端和网络）导入到 Microsoft Message Analyzer 的单个会话中以进行分析。
@@ -234,7 +188,7 @@ Message Analyzer 包括 Azure 存储的资产，可帮助你分析服务器、�
 
 如果仍有大量的日志数据，则可能需要在加载日志数据之前指定会话筛选器以筛选数据。 在“会话筛选器”框中，选择“库”按钮可以选择预定义的筛选器；例如，从 Azure 存储筛选器中选择“全局时间筛选器 I”可根据某个时间间隔进行筛选。 然后，可以编辑筛选条件，以指定要查看的时间间隔的起始和结束时间戳。 还可以根据特定的状态代码筛选；例如，可以选择仅加载状态代码为 404 的日志条目。
 
-要深入了解如何将日志数据导入 Microsoft Message Analyzer，请参阅 TechNet 上的 [Retrieving Message Data](http://technet.microsoft.com/library/dn772437.aspx)（检索消息数据）。
+有关如何将日志数据导入 Microsoft Message Analyzer 的详细信息，请参阅 TechNet 上的[检索消息数据](https://technet.microsoft.com/library/dn772437.aspx)。
 
 ### <a name="use-the-client-request-id-to-correlate-log-file-data"></a>使用客户端请求 ID 关联日志文件数据
 Azure 存储客户端库会自动为每个请求生成唯一的客户端请求 ID。 此值将写入客户端日志、服务器日志和网络跟踪，因此可以在 Message Analyzer 中使用它在所有三个日志之间关联数据。 有关客户端请求 ID 的其他信息，请参阅[客户端请求 ID](storage-monitoring-diagnosing-troubleshooting.md#client-request-id)。
@@ -256,13 +210,13 @@ Message Analyzer 的存储空间资产包括 Azure 存储视图布局，这是�
 
 > [!NOTE]
 > 不同的日志文件具有不同的列，因此，当分析网格中显示了多个日志文件中的数据时，某些列可能不包含某一给定行的任何数据。 例如，在上图中，客户端日志行未显示“时间戳”、“已用时间”、“源”和“目标”列的任何数据，因为这些列不在客户端日志中，而在网络跟踪中。 同样，“时间戳”列显示了服务器日志中的时间戳数据，但未显示“已用时间”、“源”和“目标”列的任何数据，因为这些数据不在服务器日志中。
-> 
-> 
+>
+>
 
 除了使用 Azure 存储视图布局以外，还可以定义并保存自己的视图布局。 可以选择其他所需字段来分组数据，并将分组保存为自定义布局的一部分。
 
 ### <a name="apply-color-rules-to-the-analysis-grid"></a>将颜色规则应用到分析网格
-存储空间资产还包括颜色规则，用于以直观方式在分析网格中标识不同类型的错误。 预定义的颜色规则将应用到 HTTP 错误，因此它们仅对服务器日志和网络跟踪显示。
+存储资产还包括颜色规则，用于以直观方式在分析网格中标识不同类型的错误。 预定义的颜色规则将应用到 HTTP 错误，因此它们仅对服务器日志和网络跟踪显示。
 
 若要应用颜色规则，请从工具栏功能区中选择“颜色规则”。 将在菜单中看到 Azure 存储颜色规则。 对于本教程，请选择“客户端错误(介于 400 和 499 之间的状态代码)”，如下图中所示。
 
@@ -286,16 +240,16 @@ Message Analyzer 的存储空间资产包括 Azure 存储视图布局，这是�
 
 ![Azure 存储视图布局](./media/storage-e2e-troubleshooting/400-range-errors1.png)
 
-应用此筛选器后，可看到已从客户端日志中排除的行，因为客户端日志不包含 **StatusCode** 列。 首先，我们会检查服务器和网络跟踪日志，以找到 404 错误，然后我们会返回到客户端日志以检查导致它们的客户端操作。
+应用此筛选器后，可看到已从客户端日志中排除的行，因为客户端日志不包含 **StatusCode** 列。 首先，将检查服务器和网络跟踪日志，以找到 404 错误，然后会返回到客户端日志以检查导致它们的客户端操作。
 
 > [!NOTE]
 > 可根据 **StatusCode** 列进行筛选；如果将表达式添加到包含状态代码为 null 的日志条目的筛选器，则仍可显示所有 3 个日志（包括客户端日志）中的数据。 若要构造此筛选器表达式，请使用：
-> 
+>
 > <code>&#42;StatusCode >= 400 or !&#42;StatusCode</code>
-> 
-> 此筛选器返回所有行从客户端日志和仅从服务器日志和 HTTP 日志的行的状态代码大于 400。 如果将其应用到客户端请求 ID 和模块按分组视图布局，可以搜索或向下滚动到日志条目，以查找与其中表示所有三个日志。   
-> 
-> 
+>
+> 此筛选器返回所有行从客户端日志和仅从服务器日志和 HTTP 日志的行的状态代码大于 400。 如果将其应用到按客户端请求 ID 和模块分组的视图布局，可以搜索日志条目或在日志条目中滚动，以查找显示了所有三个日志的客户端请求。   
+>
+>
 
 ### <a name="filter-log-data-to-find-404-errors"></a>筛选日志数据以查找 404 错误
 存储资产包括可用于缩小日志数据范围，以找到错误或查找趋势的预定义筛选器。 接下来，我们将要应用两个预定义的筛选器：一个用于筛选服务器和网络跟踪日志中的 404 错误，另一个用于筛选指定时间范围内的数据。
@@ -318,13 +272,13 @@ Message Analyzer 的存储空间资产包括 Azure 存储视图布局，这是�
 
 下图显示了由于 Get Blob 不存在，而导致 Get Blob 操作生成 404 的特定请求。 请注意，为了显示相关数据，某些列已从标准视图中删除。
 
-![筛选的服务器和网络跟踪日志](./media/storage-e2e-troubleshooting/server-filtered-404-error.png)
+![筛选的服务器日志和网络跟踪日志](./media/storage-e2e-troubleshooting/server-filtered-404-error.png)
 
 接下来，我们将与此客户端请求 ID 与客户端日志数据相关联，以查看发生错误时客户端正在执行哪些操作。 可以为此会话显示一个新的分析网格视图，以在另一个选项卡中查看客户端日志数据：
 
 1. 首先，将 **ClientRequestId** 字段的值复制到剪贴板。 为此，可选择其中任意一行，找到 **ClientRequestId** 字段，右键单击数据值，并选择“复制 'ClientRequestId'”。
 2. 在工具栏功能区中，选择“新建查看器”，并选择“分析网格”打开新的选项卡。新选项卡会显示日志文件中的所有数据，且未应用分组、筛选或颜色规则。
-3. 在工具栏功能区中，选择“视图布局”，并选择“Azure 存储”部分下的“所有 .NET 客户端列”。 此视图布局显示客户端日志以及服务器和网络跟踪日志中的数据。 这些数据默认按 **MessageNumber** 列排序。
+3. 在工具栏功能区中，选择“视图布局”，并选择“Azure 存储”部分下的“所有 .NET 客户端列”。 此视图布局显示客户端日志以及服务器日志和网络跟踪日志中的数据。 这些数据默认按 **MessageNumber** 列排序。
 4. 接下来，搜索客户端请求 ID 的客户端日志。 在工具栏功能区中，选择“查找消息”，并在“查找”字段中指定客户端请求 ID 上的自定义筛选器。 对于筛选器，请使用以下语法指定自己的客户端请求 ID：
 
     ```
@@ -340,15 +294,15 @@ Message Analyzer 将查找并选择搜索条件匹配客户端请求 ID 的第�
 在知道产生 404 错误 Blob 地址后，可以进一步展开调查。 通过搜索与同一 Blob 中的操作关联的其他消息的日志条目，可以检查客户端以前是否删除了实体。
 
 ## <a name="analyze-other-types-of-storage-errors"></a>分析其他类型的存储错误
-在熟悉如何使用 Message Analyzer 分析日志数据后，可以使用视图布局、颜色规则和搜索/筛选分析其他类型的错误。 下表列出了你可能会遇到的一些问题，以及可用于查找这些问题的筛选条件。 若要深入了解构造筛选器和 Message Analyzer 筛选语言，请参阅[筛选消息数据](http://technet.microsoft.com/library/jj819365.aspx)。
+在熟悉如何使用 Message Analyzer 分析日志数据后，可以使用视图布局、颜色规则和搜索/筛选分析其他类型的错误。 下表列出了你可能会遇到的一些问题，以及可用于查找这些问题的筛选条件。 若要深入了解构造筛选器和 Message Analyzer 筛选语言，请参阅[筛选消息数据](https://technet.microsoft.com/library/jj819365.aspx)。
 
 | 若要调查... | 使用筛选器表达式… | 将表达式应用到日志（客户端、服务器、网络、全部） |
 | --- | --- | --- |
-| 队列上的消息传递出现意外的延迟 |AzureStorageClientDotNetV4.Description   包含“正在重试失败的操作。” |Client |
+| 队列上的消息传递出现意外的延迟 |AzureStorageClientDotNetV4.Description   包含“正在重试失败的操作。” |客户端 |
 | PercentThrottlingError 的 HTTP 提升 |HTTP.Response.StatusCode == 500 &#124;&#124; HTTP.Response.StatusCode == 503 |网络 |
 | PercentTimeoutError 提升 |HTTP.Response.StatusCode == 500 |网络 |
 | PercentTimeoutError 提升（全部） |*StatusCode == 500 |全部 |
-| PercentNetworkError 提升 |AzureStorageClientDotNetV4.EventLogEntry.Level < 2 |Client |
+| PercentNetworkError 提升 |AzureStorageClientDotNetV4.EventLogEntry.Level < 2 |客户端 |
 | HTTP 403（禁止）消息 |HTTP.Response.StatusCode == 403 |网络 |
 | HTTP 404（未找到）消息 |HTTP.Response.StatusCode == 404 |网络 |
 | 404（全部） |*StatusCode == 404 |全部 |
@@ -357,14 +311,14 @@ Message Analyzer 将查找并选择搜索条件匹配客户端请求 ID 的第�
 | 409（全部） |*StatusCode == 409 |全部 |
 | 低 PercentSuccess 或分析日志项包含事务状态为 ClientOtherErrors 的操作 |AzureStorageLog.RequestStatus == "ClientOtherError" |服务器 |
 | Nagle 警告 |((AzureStorageLog.EndToEndLatencyMS - AzureStorageLog.ServerLatencyMS) > (AzureStorageLog.ServerLatencyMS * 1.5)) 和 (AzureStorageLog.RequestPacketSize <1460) 和 (AzureStorageLog.EndToEndLatencyMS - AzureStorageLog.ServerLatencyMS >= 200) |服务器 |
-| 服务器和网络日志中的时间范围 |#Timestamp >= 2014-10-20T16:36:38 和 #Timestamp <= 2014-10-20T16:36:39 |服务器、网络 |
+| 服务器日志和网络日志中的时间范围 |#Timestamp   >= 2014-10-20T16:36:38 and #Timestamp <= 2014-10-20T16:36:39 |服务器、网络 |
 | 服务器日志中的时间范围 |AzureStorageLog.Timestamp >= 2014-10-20T16:36:38 和 AzureStorageLog.Timestamp <= 2014-10-20T16:36:39 |服务器 |
 
 ## <a name="next-steps"></a>后续步骤
 有关在 Azure 存储中执行点对点故障排除方案的详细信息，请参阅以下资源：
 
 * [监视、诊断和排查 Microsoft Azure 存储问题](storage-monitoring-diagnosing-troubleshooting.md)
-* [存储分析](http://msdn.microsoft.com/library/azure/hh343270.aspx)
+* [存储分析](https://msdn.microsoft.com/library/azure/hh343270.aspx)
 * [在 Azure 门户中监视存储帐户](storage-monitor-storage-account.md)
-* [使用 AzCopy 命令行实用程序传输数据](storage-use-azcopy.md)
-* [Microsoft Message Analyzer Operating Guide](http://technet.microsoft.com/library/jj649776.aspx)（Microsoft Message Analyzer 操作指南）
+* [使用 AzCopy 命令行实用工具传输数据](storage-use-azcopy.md)
+* [Microsoft Message Analyzer Operating Guide](https://technet.microsoft.com/library/jj649776.aspx)（Microsoft Message Analyzer 操作指南）

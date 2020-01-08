@@ -1,240 +1,215 @@
 ---
-title: 使用自定义策略添加多租户 Azure AD 标识提供者 - Azure Active Directory B2C | Microsoft Docs
-description: 使用自定义策略添加多租户 Azure AD 标识提供者 - Azure Active Directory B2C
+title: 使用 Azure Active Directory B2C 中的自定义策略为多租户 Azure AD 标识提供者设置登录
+description: 使用自定义策略添加多租户 Azure AD 标识提供者 - Azure Active Directory B2C。
 services: active-directory-b2c
-documentationcenter: ''
-author: parakhj
-manager: alexsi
-editor: parakhj
-ms.assetid: 33c64001-5261-4ed9-8f46-b09839165250
-ms.service: active-directory-b2c
+author: mmacy
+manager: celestedg
+ms.service: active-directory
 ms.workload: identity
-ms.tgt_pltfrm: na
-ms.topic: article
-ms.devlang: na
-ms.date: 04/14/2018
-ms.author: parakhj
-ms.openlocfilehash: d5e5ab1262a9d33fcf34cce91113f39c8c8936f4
-ms.sourcegitcommit: c47ef7899572bf6441627f76eb4c4ac15e487aec
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 09/13/2019
+ms.author: marsma
+ms.subservice: B2C
+ms.openlocfilehash: fdad2f2dfec6f13fe4a40641db3417f29273349c
+ms.sourcegitcommit: 9fba13cdfce9d03d202ada4a764e574a51691dcd
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/04/2018
-ms.locfileid: "33200512"
+ms.lasthandoff: 09/26/2019
+ms.locfileid: "71315050"
 ---
-# <a name="azure-active-directory-b2c-allow-users-to-sign-in-to-a-multi-tenant-azure-ad-identity-provider-using-custom-policies"></a>Azure Active Directory B2C：让用户使用自定义策略登录到多租户 Azure AD 标识提供者
+# <a name="set-up-sign-in-for-multi-tenant-azure-active-directory-using-custom-policies-in-azure-active-directory-b2c"></a>在 Azure Active Directory B2C 中使用自定义策略为多租户 Azure Active Directory 设置登录
 
 [!INCLUDE [active-directory-b2c-advanced-audience-warning](../../includes/active-directory-b2c-advanced-audience-warning.md)]
 
-本文介绍如何让用户通过[自定义策略](active-directory-b2c-overview-custom.md)使用 Azure Active Directory (Azure AD) 的多租户终结点登录。 这将允许来自多个 Azure AD 租户的用户登录到 Azure AD B2C，而无需为每个租户配置技术提供商。 但是，任何这些租户中的来宾成员都将无法登录。 为此，必须[单独配置每个租户](active-directory-b2c-setup-aad-custom.md)。
-
->[!NOTE]
-> 我们在以下说明中将“contoso.com”用于组织 Azure AD 租户，并将“fabrikamb2c.onmicrosoft.com”用作 Azure AD B2C 租户。
+本文展示了如何在 Azure AD B2C 中通过使用[自定义策略](active-directory-b2c-overview-custom.md)为使用 Azure Active Directory (Azure AD) 的多租户终结点的用户实现登录。 这允许多个 Azure AD 租户中的用户使用 Azure AD B2C 登录，无需为每个租户配置标识提供者。 但是，任何这些租户中的来宾成员都将无法登录。 为此，你需要[单独配置每个租户](active-directory-b2c-setup-aad-custom.md)。
 
 ## <a name="prerequisites"></a>先决条件
 
-完成[自定义策略入门](active-directory-b2c-get-started-custom.md)一文中的步骤。
+完成 [Azure Active Directory B2C 中的自定义策略入门](active-directory-b2c-get-started-custom.md)中的步骤。
 
-这些步骤包括：
-     
-1. 创建 Azure Active Directory B2C (Azure AD B2C) 租户。
-1. 创建 Azure AD B2C 应用程序。    
-1. 注册两个策略引擎应用程序。  
-1. 设置密钥。 
-1. 设置初学者包。
+## <a name="register-an-application"></a>注册应用程序
 
-## <a name="step-1-create-a-multi-tenant-azure-ad-app"></a>步骤 1。 创建多租户 Azure AD 应用
-
-若要让用户使用多租户 Azure AD 终结点登录，需要在任一 Azure AD 租户中注册一个多租户应用程序。 本文将会演示如何在 Azure AD B2C 租户中创建多租户 Azure AD 应用程序。 然后，让用户使用该多租户 Azure AD 应用程序登录。
+若要让用户从特定的 Azure AD 组织登录，需要在组织 Azure AD 租户中注册一个应用程序。
 
 1. 登录到 [Azure 门户](https://portal.azure.com)。
-1. 在顶部栏中选择帐户。 在“目录”列表中，选择要将 Azure AD 应用程序 (fabrikamb2c.onmicrosoft.com) 注册到的 Azure AD B2C 租户。
-1. 在左侧窗格中选择“更多服务”，并搜索“应用注册”。
-1. 选择“新建应用程序注册”。
-1. 输入应用程序的名称（例如 `Azure AD B2C App`）。
-1. 选择“Web 应用/API”作为应用程序类型。
-1. 对于“登录 URL”，输入以下 URL，其中 `yourtenant` 替换为 Azure AD B2C 租户的名称 (`fabrikamb2c.onmicrosoft.com`)：
-
-    >[!NOTE]
-    >“登录 URL”中“yourtenant”的值必须全小写。
+1. 请确保使用的是包含组织 Azure AD 租户的目录（例如，contoso.com）。 在顶部菜单中选择 "**目录 + 订阅" 筛选器**，然后选择包含你的租户的目录。
+1. 选择 Azure 门户左上角的“所有服务”，然后搜索并选择“应用注册”。
+1. 选择“新注册”。
+1. 输入应用程序的**名称**。 例如， `Azure AD B2C App` 。
+1. 为此应用程序选择**任何组织目录中的帐户**。
+1. 对于“重定向 URI”，接受值 **Web**，并以全小写字母输入以下 URL，其中 `your-B2C-tenant-name` 将替换为 Azure AD B2C 租户的名称。
 
     ```
-    https://login.microsoftonline.com/te/yourtenant.onmicrosoft.com/oauth2/authresp
+    https://your-B2C-tenant-name.b2clogin.com/your-B2C-tenant-name.onmicrosoft.com/oauth2/authresp
     ```
 
-1. 保存应用程序 ID。
-1. 选择新建的应用程序。
-1. 在“设置”边栏选项卡下，选择“属性”。
-1. 将“多租户”设置为“是”。
-1. 在“设置”边栏选项卡下，选择“密钥”。
-1. 创建新密钥，然后保存。 在下一部分的步骤中将使用它。
+    例如， `https://contoso.b2clogin.com/contoso.onmicrosoft.com/oauth2/authresp` 。
 
-## <a name="step-2-add-the-azure-ad-key-to-azure-ad-b2c"></a>步骤 2. 将 Azure AD 密钥添加到 Azure AD B2C
+1. 选择“注册”。 记录**应用程序（客户端） ID** ，以便在后面的步骤中使用。
+1. 依次选择“证书和机密”、“新建客户端机密”。
+1. 输入机密的**说明**，选择过期时间，然后选择 "**添加**"。 记录机密**值**以便在后面的步骤中使用。
 
-需要在 Azure AD B2C 设置中注册应用程序密钥。 为此，请按以下步骤操作：
+## <a name="create-a-policy-key"></a>创建策略密钥
 
-1. 转到 Azure AD B2C 的设置菜单
-1. 单击“标识体验框架” > “策略密钥”。
-1. 选择“+添加”。
-1. 选择或输入这些选项：
-   * 选择“手动”。
-   * 对于“名称”，选择与 Azure AD 租户名称匹配的名称（例如 `AADAppSecret`）。  前缀 `B2C_1A_` 会自动添加到密钥名称。
-   * 将应用程序密钥粘贴到“机密”文本框中。
-   * 选择“签名”。
-1. 选择**创建**。
-1. 确认已创建密钥 `B2C_1A_AADAppSecret`。
+需将创建的应用程序密钥存储在 Azure AD B2C 租户中。
 
-## <a name="step-3-add-a-claims-provider-in-your-base-policy"></a>步骤 3. 在基本策略中添加声明提供程序
+1. 请确保使用的是包含 Azure AD B2C 租户的目录。 在顶部菜单中选择 "**目录 + 订阅" 筛选器**，然后选择包含 Azure AD B2C 租户的目录。
+1. 选择 Azure 门户左上角的“所有服务”，然后搜索并选择“Azure AD B2C”。
+1. 在 "**策略**" 下，选择 "**标识体验框架**"。
+1. 选择 "**策略密钥**"，然后选择 "**添加**"。
+1. 对于“选项”，请选择 `Manual`。
+1. 输入策略密钥的**名称**。 例如， `AADAppSecret` 。  创建前缀`B2C_1A_`后，会自动将其添加到密钥的名称，因此，其在以下部分中的 XML 引用为*B2C_1A_AADAppSecret*。
+1. 在 "**密钥**" 中，输入你之前记录的客户端密码。
+1. 在“密钥用法”处选择 `Signature`。
+1. 选择“创建”。
 
-如果要允许用户使用 Azure AD 登录，则需将 Azure AD 定义为声明提供程序。 换而言之，需指定要与 Azure AD B2C 通信的终结点。 该终结点将提供一组声明，Azure AD B2C 使用这些声明来验证特定的用户是否已完成身份验证。 
+## <a name="add-a-claims-provider"></a>添加声明提供程序
 
-可以通过在策略的扩展文件中将 Azure AD 添加到 `<ClaimsProvider>` 节点，将 Azure AD 定义为声明提供程序：
+如果希望用户使用 Azure AD 登录，则需将 Azure AD 定义为 Azure AD B2C 可通过终结点与其进行通信的声明提供程序。 该终结点将提供一组声明，Azure AD B2C 使用这些声明来验证特定的用户是否已完成身份验证。
 
-1. 从工作目录打开扩展文件 (TrustFrameworkExtensions.xml)。
-1. 找到 `<ClaimsProviders>` 节。 如果该节不存在，请在根节点的下面添加它。
-1. 按如下所示添加新 `<ClaimsProvider>` 节点：
+要将 Azure AD 定义为声明提供程序，可在策略的扩展文件中将 Azure AD 添加到 ClaimsProvider 元素。
 
-```XML
-<ClaimsProvider>
-  <Domain>commonaad</Domain>
-  <DisplayName>Common AAD</DisplayName>
-  <TechnicalProfiles>
-    <TechnicalProfile Id="Common-AAD">
-      <DisplayName>Multi-Tenant AAD</DisplayName>
-      <Protocol Name="OpenIdConnect" />
-      <Metadata>
-        <!-- Update the Client ID below to the Application ID -->
-        <Item Key="client_id">00000000-0000-0000-0000-000000000000</Item>
-        <Item Key="UsePolicyInRedirectUri">0</Item>
-        <Item Key="METADATA">https://login.microsoftonline.com/common/.well-known/openid-configuration</Item>
-        <Item Key="response_types">code</Item>
-        <Item Key="scope">openid</Item>
-        <Item Key="response_mode">form_post</Item>
-        <Item Key="HttpBinding">POST</Item>
-        <Item Key="DiscoverMetadataByTokenIssuer">true</Item>
-        
-        <!-- The key below allows you to specify each of the Azure AD tenants that can be used to sign in. Update the GUIDs below for each tenant. -->
-        <Item Key="ValidTokenIssuerPrefixes">https://sts.windows.net/00000000-0000-0000-0000-000000000000,https://sts.windows.net/11111111-1111-1111-1111-111111111111</Item>
+1. 打开 *TrustFrameworkExtensions.xml* 文件。
+1. 找到 **ClaimsProviders** 元素。 如果该元素不存在，请在根元素下添加它。
+1. 如下所示添加新的 **ClaimsProvider**：
 
-        <!-- The commented key below specifies that users from any tenant can sign-in. Uncomment if you would like anyone with an Azure AD account to be able to sign in. -->
-        <!-- <Item Key="ValidTokenIssuerPrefixes">https://sts.windows.net/</Item> -->
+    ```XML
+    <ClaimsProvider>
+      <Domain>commonaad</Domain>
+      <DisplayName>Common AAD</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Common-AAD">
+          <DisplayName>Multi-Tenant AAD</DisplayName>
+          <Description>Login with your Contoso account</Description>
+          <Protocol Name="OpenIdConnect"/>
+          <Metadata>
+            <Item Key="METADATA">https://login.windows.net/common/.well-known/openid-configuration</Item>
+            <!-- Update the Client ID below to the Application ID -->
+            <Item Key="client_id">00000000-0000-0000-0000-000000000000</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="scope">openid</Item>
+            <Item Key="response_mode">form_post</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="DiscoverMetadataByTokenIssuer">true</Item>
+            <!-- The key below allows you to specify each of the Azure AD tenants that can be used to sign in. Update the GUIDs below for each tenant. -->
+            <Item Key="ValidTokenIssuerPrefixes">https://sts.windows.net/00000000-0000-0000-0000-000000000000,https://sts.windows.net/11111111-1111-1111-1111-111111111111</Item>
+            <!-- The commented key below specifies that users from any tenant can sign-in. Uncomment if you would like anyone with an Azure AD account to be able to sign in. -->
+            <!-- <Item Key="ValidTokenIssuerPrefixes">https://sts.windows.net/</Item> -->
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_AADAppSecret"/>
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="oid"/>
+            <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid"/>
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName"/>
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName"/>
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId"/>
+            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId"/>
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin"/>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    ```
 
-      </Metadata>
-      <CryptographicKeys>
-      <!-- Make sure to update the reference ID of the client secret below you just created (B2C_1A_AADAppSecret) -->
-        <Key Id="client_secret" StorageReferenceId="B2C_1A_AADAppSecret" />
-      </CryptographicKeys>
-      <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" />
-        <OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" />
-        <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="sub" />
-        <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
-        <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
-        <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
-        <OutputClaim ClaimTypeReferenceId="email" />
-      </OutputClaims>
-      <OutputClaimsTransformations>
-        <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
-        <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
-        <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
-        <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" />
-      </OutputClaimsTransformations>
-      <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
-    </TechnicalProfile>
-  </TechnicalProfiles>
-</ClaimsProvider>
-```
+1. 在 ClaimsProvider 元素下，将 Domain 的值更新为可用于与其他标识提供者进行区分的唯一值。
+1. 在**技术配置文件**元素下，更新**DisplayName**的值，例如`Contoso Employee`。 此值会显示在登录页中的登录按钮上。
+1. 将**client_id**设置为之前注册 Azure AD 多租户应用程序的应用程序 id。
+1. 在**CryptographicKeys**下，将**StorageReferenceId**的值更新为之前创建的策略密钥的名称。 例如， `B2C_1A_AADAppSecret` 。
 
-1. 在 `<ClaimsProvider>` 节点下面，将 `<Domain>` 的值更新为可用于区分其他标识提供者的唯一值。
-1. 在 `<TechnicalProfile>` 节点下，更新 `<DisplayName>` 的值。 此值会显示在登录屏幕中的登录按钮上。
-1. 更新 `<Description>` 的值。
-1. 将 `<Item Key="client_id">` 设置为 Azure AD 多租户应用注册中的应用程序 ID。
-
-### <a name="step-31-restrict-access-to-a-specific-list-of-azure-ad-tenants"></a>步骤 3.1：限制对特定 Azure AD 租户列表的访问
+### <a name="restrict-access"></a>限制访问
 
 > [!NOTE]
-> 使用 `https://sts.windows.net` 作为 ValidTokenIssuerPrefixes 的值将允许所有 Azure AD 用户登录到你的应用。
+> 使用 `https://sts.windows.net` 作为 **ValidTokenIssuerPrefixes** 的值将允许所有 Azure AD 用户登录到你的应用程序。
 
-需要更新有效令牌颁发者列表，并限制访问用户可以登录到的特定 Azure AD 租户列表。 若要获取值，需要查看希望让用户从中登录的每个特定 Azure AD 租户的元数据。 数据格式如下所示：`https://login.windows.net/yourAzureADtenant/.well-known/openid-configuration`，其中，`yourAzureADtenant` 是 Azure AD 租户名称（contoso.com 或其他任何 Azure AD 租户）。
-1. 打开浏览器并转到元数据 URL。
-1. 在浏览器中，找到“issuer”对象并复制其值。 该对象应与下面类似：`https://sts.windows.net/{tenantId}/`。
-1. 粘贴 `ValidTokenIssuerPrefixes` 密钥的值。 可以添加多个值并使用逗号将其隔开。 上述示例 XML 中做了相关注释。
+你需要更新有效令牌颁发者列表，并且仅允许可以登录的一组特定 Azure AD 租户用户进行访问。
 
-## <a name="step-4-register-the-azure-ad-account-claims-provider"></a>步骤 4. 注册 Azure AD 帐户声明提供程序
+若要获取这些值，请查看要让用户登录的每个 Azure AD 租户的 OpenID Connect 发现元数据。 元数据 URL 的格式类似`https://login.windows.net/your-tenant/.well-known/openid-configuration`于，其中`your-tenant`是 Azure AD 租户名称。 例如：
 
-### <a name="step-41-make-a-copy-of-the-user-journey"></a>步骤 4.1：创建用户旅程的副本
+`https://login.windows.net/fabrikam.onmicrosoft.com/.well-known/openid-configuration`
 
-现在，需要将 Azure AD 标识提供者添加到用户旅程之一。 此时，标识提供者已设置，但不会出现在任何注册/登录屏幕中。
+针对应用于登录的每个 Azure AD 租户执行以下步骤：
 
-若要使其可用，我们需要创建现有模板用户旅程的副本，并对其进行修改，以便它也包含 Azure AD 标识提供者：
+1. 打开浏览器并中转到租户的 OpenID Connect 元数据 URL。 查找**颁发者**对象并记录其值。 其外观应类似`https://sts.windows.net/00000000-0000-0000-0000-000000000000/`于。
+1. 将值复制并粘贴到**ValidTokenIssuerPrefixes**项。 使用逗号分隔多个颁发者。 上面`ClaimsProvider`的 XML 示例中会显示一个包含两个颁发者的示例。
 
-1. 打开策略的基文件（例如 TrustFrameworkBase.xml）。
-1. 找到 `<UserJourneys>` 元素并复制包含 `Id="SignUpOrSignIn"` 的整个 `<UserJourney>`。
-1. 打开扩展文件（例如 TrustFrameworkExtensions.xml）并找到 `<UserJourneys>` 元素。 如果该元素不存在，请添加一个。
-1. 将复制的整个 `<UserJourney>` 节点粘贴为 `<UserJourneys>` 元素的子级。
-1. 重命名新用户旅程的 ID（例如，重命名为 `SignUpOrSignUsingAzureAD`）。 
+### <a name="upload-the-extension-file-for-verification"></a>上传扩展文件以进行验证
 
-### <a name="step-42-display-the-button"></a>步骤 4.2：显示“按钮”
+至此，已配置策略，以便 Azure AD B2C 知道如何与 Azure AD 目录进行通信。 请尝试上传该策略的扩展文件，这只是为了确认它到目前为止不会出现任何问题。
 
-`<ClaimsProviderSelection>` 元素类似于注册/登录屏幕上的标识提供者按钮。 如果为 Azure AD 添加 `<ClaimsProviderSelection>` 元素，则当用户进入页面时，会显示一个新按钮。 添加此元素：
+1. 在 Azure AD B2C 租户中的“自定义策略”页上，选择“上传策略”。
+2. 启用“覆盖策略(若存在)”，然后浏览到 *TrustFrameworkExtensions.xml* 文件并选中该文件。
+3. 选择“上传”。
 
-1. 在创建的用户旅程中找到包含 `Order="1"` 的 `<OrchestrationStep>` 节点。
-1. 添加以下内容：
+## <a name="register-the-claims-provider"></a>注册声明提供程序
+
+此时，标识提供者已设置，但不会出现在任何注册/登录屏幕中。 若要使其可用，需要创建现有模板用户旅程的副本，并对其进行修改，使其具有 Azure AD 标识提供者。
+
+1. 打开初学者包中的 *TrustFrameworkBase.xml* 文件。
+2. 找到并复制包含 `Id="SignUpOrSignIn"` 的 **UserJourney** 元素的完整内容。
+3. 打开 *TrustFrameworkExtensions.xml* 并找到 **UserJourneys** 元素。 如果该元素不存在，请添加一个。
+4. 将复制的 **UserJourney** 元素的完整内容粘贴为 **UserJourneys** 元素的子级。
+5. 重命名用户旅程的 ID。 例如， `SignUpSignInContoso` 。
+
+### <a name="display-the-button"></a>显示按钮
+
+**ClaimsProviderSelection** 元素类似于注册/登录屏幕上的标识提供者按钮。 如果为 Azure AD 添加 **ClaimsProviderSelection** 元素，则当用户进入页面时，会显示一个新按钮。
+
+1. 查找**OrchestrationStep**元素，该元素`Order="1"`包含在*trustframeworkextensions.xml*中创建的用户旅程中。
+1. 在 **ClaimsProviderSelects** 下，添加以下元素。 将 **TargetClaimsExchangeId** 设置为适当的值，例如 `AzureADExchange`：
 
     ```XML
     <ClaimsProviderSelection TargetClaimsExchangeId="AzureADExchange" />
     ```
 
-1. 将 `TargetClaimsExchangeId` 设置为相应的值。 我们建议遵循其他元素使用的相同约定 - \[ClaimProviderName\]Exchange。
+### <a name="link-the-button-to-an-action"></a>将按钮链接到操作
 
-### <a name="step-43-link-the-button-to-an-action"></a>步骤 4.3：将按钮链接到操作
+准备好按钮后，需将它链接到某个操作。 在本例中，Azure AD B2C 使用该操作来与 Azure AD 通信以接收令牌。 可通过链接 Azure AD 声明提供程序的技术配置文件来将按钮链接到操作。
 
-准备好按钮后，需将它链接到某个操作。 在本例中，Azure AD B2C 使用该操作来与 Azure AD 通信以接收令牌。 可通过链接 Azure AD 声明提供程序的技术配置文件来将按钮链接到操作：
-
-1. 在 `<UserJourney>` 节点中找到包含 `Order="2"` 的 `<OrchestrationStep>`。
-1. 添加以下内容：
+1. 在用户旅程中找到包含 `Order="2"` 的 **OrchestrationStep**。
+2. 添加以下 **ClaimsExchange** 元素，确保在 **Id** 和 **TargetClaimsExchangeId** 处使用相同的值：
 
     ```XML
     <ClaimsExchange Id="AzureADExchange" TechnicalProfileReferenceId="Common-AAD" />
     ```
 
-1. 将 `Id` 更新为与前一部分中的 `TargetClaimsExchangeId` 相同的值。
-1. 将 `TechnicalProfileReferenceId` 更新为前面创建的技术配置文件的 ID (Common-AAD)。
+    将 **TechnicalProfileReferenceId** 的值更新为先前创建的技术配置文件的 **Id**。 例如， `Common-AAD` 。
 
-## <a name="step-5-create-a-new-rp-policy"></a>步骤 5：创建新 RP 策略
+3. 保存 *TrustFrameworkExtensions.xml* 文件，并再次上传以进行验证。
 
-现在，需要更新用于启动刚刚创建的用户旅程的信赖方 (RP) 文件：
- 
-1. 在工作目录创建 SignUpOrSignIn.xml 的副本并将它重命名（例如，将它重命名为 SignUpOrSignInWithAAD.xml）。  
-1. 打开新文件，并使用唯一值（例如 SignUpOrSignInWithAAD）更新 `<TrustFrameworkPolicy>` 的 `PolicyId` 属性。 这会是策略的名称（例如 B2C\_1A\_SignUpOrSignInWithAAD）。 
-1. 修改 `<DefaultUserJourney>` 中的 `ReferenceId` 属性，使其与创建的新用户旅程的 ID 匹配 (SignUpOrSignUsingAzureAD)。 
-1. 保存更改，然后上传文件。 
+## <a name="create-an-azure-ad-b2c-application"></a>创建 Azure AD B2C 应用程序
 
-## <a name="step-6-upload-the-policy-to-your-tenant"></a>步骤 6：将策略上传到租户
+[!INCLUDE [active-directory-b2c-appreg-idp](../../includes/active-directory-b2c-appreg-idp.md)]
 
-1. 在 [Azure 门户](https://portal.azure.com)中，切换到[你的 Azure AD B2C 租户的上下文](active-directory-b2c-navigate-to-b2c-context.md)，然后选择“Azure AD B2C”。
-1. 选择“标识体验框架”。
-1. 选择“所有策略”。
-1. 选择“上传策略”。
-1. 选中“覆盖策略(如果存在)”复选框。
-1. 上传 `TrustFrameworkExtensions.xml` 文件和 RP 文件（例如 `SignUpOrSignInWithAAD.xml`），并确保它们通过验证。
+## <a name="update-and-test-the-relying-party-file"></a>更新和测试信赖方文件
 
-## <a name="step-7-test-the-custom-policy-by-using-run-now"></a>步骤 7：使用“立即运行”测试自定义策略
+更新启动已创建的用户旅程的信赖方（RP）文件：
 
-1. 选择“Azure AD B2C 设置”，然后选择“标识体验框架”。
-    > [!NOTE]
-    > “立即运行”需要在租户中至少预先注册一个应用程序。 在 Azure AD B2C [入门](active-directory-b2c-get-started.md)或[应用程序注册](active-directory-b2c-app-registration.md)文章中了解如何注册应用程序。
+1. 在工作目录中创建 *SignUpOrSignIn.xml* 的副本并将其重命名。 例如，将其重命名为 *SignUpSignContoso.xml*。
+1. 打开新文件，并将 **TrustFrameworkPolicy** 的 **PolicyId** 属性的值更新为唯一的值。 例如， `SignUpSignInContoso` 。
+1. 将 **PublicPolicyUri** 的值更新为策略的 URI。 例如， `http://contoso.com/B2C_1A_signup_signin_contoso` 。
+1. 更新**DefaultUserJourney**中的**ReferenceId**属性的值，使其与之前创建的用户旅程的 ID 匹配。 例如， *SignUpSignInContoso*。
+1. 保存更改并上传文件。
+1. 在 "**自定义策略**" 下，选择列表中的新策略。
+1. 在 "**选择应用程序**" 下拉菜单中，选择之前创建的 Azure AD B2C 应用程序。 例如， *testapp1-template.json*。
+1. 复制 "**立即运行" 终结点**并在专用浏览器窗口中打开它，例如，在 Google Chrome 中的 Incognito 模式或 Microsoft Edge 中的 InPrivate 窗口。 通过在专用浏览器窗口中打开，可以通过不使用任何当前缓存 Azure AD 凭据来测试整个用户旅程。
+1. 选择 Azure AD 登录 "按钮（例如*Contoso Employee*），然后输入某个 Azure AD 组织租户中用户的凭据。 系统会要求你对应用程序进行授权，然后为你的配置文件输入信息。
 
-1. 打开已上传的信赖方 (RP) 自定义策略 (*B2C\_1A\_SignUpOrSignInWithAAD*)，然后选择“立即运行”。
-1. 现在，应该能够使用 Azure AD 帐户登录。
+如果登录过程成功，浏览器将重定向到`https://jwt.ms`，后者显示 Azure AD B2C 返回的令牌的内容。
 
-## <a name="optional-step-8-register-the-azure-ad-account-claims-provider-to-the-profile-edit-user-journey"></a>（可选）步骤 8：将 Azure AD 帐户声明提供程序注册到 Profile-Edit 用户旅程
-
-可能还需要将 Azure AD 帐户标识提供者添加到 `ProfileEdit` 用户旅程。 若要使用户旅程可用，请重复步骤 4 至 6。 这次，请选择包含 `Id="ProfileEdit"` 的 `<UserJourney>` 节点。 保存、上传并测试策略。
-
-## <a name="troubleshooting"></a>故障排除
-
-若要诊断问题，请阅读[故障排除](active-directory-b2c-troubleshoot-custom.md)。
+若要测试多租户登录功能，请使用另一个 Azure AD 租户的用户的凭据执行最后两个步骤。
 
 ## <a name="next-steps"></a>后续步骤
 
-向 [AADB2CPreview@microsoft.com](mailto:AADB2CPreview@microsoft.com) 提供反馈。
+使用自定义策略时，有时可能需要在部署过程中对策略进行故障排除时提供其他信息。
+
+若要帮助诊断问题，可以暂时将策略置于 "开发人员模式" 中，并 Azure 应用程序 Insights 收集日志。 了解 Azure Active Directory B2C 中的[操作方法：正在收集](active-directory-b2c-troubleshoot-custom.md)日志。

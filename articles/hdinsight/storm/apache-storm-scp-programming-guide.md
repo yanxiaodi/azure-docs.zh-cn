@@ -1,26 +1,23 @@
 ---
-title: SCP.NET 编程指南 | Microsoft Docs
-description: 了解如何通过 SCP.NET 创建可在 Storm on HDInsight 中使用的基于 .NET 的 Storm 拓扑。
-services: hdinsight
-documentationcenter: ''
-author: raviperi
-manager: jhubbard
-editor: cgronlun
-ms.assetid: 34192ed0-b1d1-4cf7-a3d4-5466301cf307
+title: 适用于 Azure HDInsight 中 Storm 的 SCP.NET 编程指南
+description: 了解如何通过 SCP.NET 创建可在 Azure HDInsight 中运行的 Storm 中使用的基于 .NET 的 Storm 拓扑。
 ms.service: hdinsight
+author: hrasheed-msft
+ms.author: hrasheed
+ms.reviewer: jasonh
 ms.custom: hdinsightactive
-ms.devlang: dotnet
-ms.topic: article
+ms.topic: conceptual
 ms.date: 05/16/2016
-ms.author: raviperi
-ms.openlocfilehash: 0f4c021bc209c99e1b3f34b34bf5ba0549eb48f9
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: b7bb26cd35daf67a3337907aded18e3302b19d81
+ms.sourcegitcommit: fa4852cca8644b14ce935674861363613cf4bfdf
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 09/09/2019
+ms.locfileid: "70813877"
 ---
-# <a name="scp-programming-guide"></a>SCP 编程指南
-SCP 是一个用于构建实时、可靠、一致和高性能的数据处理应用程序的平台。 它在 [Apache Storm](http://storm.incubator.apache.org/) 的基础上构建而成 -- Storm 是开源软件 (OSS) 社区设计的一个流处理系统。 Storm 由 Nathan Marz 设计，在 Twitter 上进行开源。 其利用 [Apache ZooKeeper](http://zookeeper.apache.org/)（另一个 Apache 项目）来实现高可靠性的分布式协调和状态管理。 
+# <a name="scp-programming-guide-for-apache-storm-in-azure-hdinsight"></a>Azure HDInsight 中 Apache Storm 的 SCP 编程指南
+
+SCP 是一个用于构建实时、可靠、一致和高性能的数据处理应用程序的平台。 它在 [Apache Storm](https://storm.incubator.apache.org/) 的基础上构建而成 -- Storm 是开源软件 (OSS) 社区设计的一个流处理系统。 Storm 由 Nathan Marz 设计，在 Twitter 上进行开源。 其利用 [Apache ZooKeeper](https://zookeeper.apache.org/)（另一个 Apache 项目）来实现高可靠性的分布式协调和状态管理。 
 
 SCP 项目不仅已移植到 Windows 的 Storm 中，还为 Windows 生态系统增加了扩展和自定义。 扩展包括 .NET 开发人员经验和库，自定义包括基于 Windows 的部署。 
 
@@ -35,7 +32,7 @@ SCP 中的数据以连续的元组流形式建模。 一般情况下，元组首
 
 SCP 支持“尽力”、“至少一次”数据处理和“恰一次”数据处理。 在分布式流处理应用程序中，数据处理过程中可能会出现各种错误，例如，网络中断、机器故障、用户代码错误等等。“至少一次”处理会在出现错误时自动重新处理原来的数据，从而确保所有数据均至少被处理一次。 “至少一次”处理简单且可靠，适用于许多应用程序。 但是，当应用程序需要确切计数时，进行“至少一次”处理是不够的，因为相同的数据有可能用于应用程序拓扑中。 在此情况下，“恰一次”处理可确保即使数据被多次重复使用和处理，结果也是正确。
 
-通过 SCP，.NET 开发人员可以开发实时数据处理应用程序，同时在后台通过 Storm 利用 Java 虚拟机 (JVM)。 .NET 和 JVM 通过 TCP 本地套接字进行通信。 基本上，每个 Spout/Bolt 都是一个 .Net/Java 进程对，在这些进程对中，用户逻辑作为插件在 .Net 进程中运行。
+通过 SCP，.NET 开发人员可以开发实时数据处理应用程序，同时在后台通过 Storm 利用 Java 虚拟机 (JVM)。 .NET 和 JVM 通过 TCP 本地套接字进行通信。 基本上，每个 Spout/螺栓都是 .NET/Java 进程对，其中用户逻辑作为插件在 .NET 进程中运行。
 
 若要在 SCP 上开发数据处理应用程序，需要执行以下几个步骤：
 
@@ -72,7 +69,7 @@ ISCPSpout 是适用于非事务性 Spout 的接口。
          void Fail(long seqId, Dictionary<string, Object> parms);  
      }
 
-调用 `NextTuple()` 时，C\# 用户代码会发送一个或多个元组。 如果没有要发送的数据，此方法应返回而不发送任何信息。 请注意，如果 C\# 进程的单一线程出现紧凑循环，会调用 `NextTuple()`、`Ack()` 和 `Fail()`。 如果没有要发送的元组，最好短暂地将 NextTuple 置于休眠状态（例如 10 毫秒），以免浪费太多 CPU。
+调用 `NextTuple()` 时，C\# 用户代码会发送一个或多个元组。 如果没有要发送的数据，此方法应返回而不发送任何信息。 请注意，如果 C\# 进程的单一线程出现紧凑循环，将会调用 `NextTuple()`、`Ack()` 和 `Fail()`。 如果没有要发送的元组，最好短暂地将 NextTuple 置于休眠状态（例如 10 毫秒），以免浪费太多 CPU。
 
 仅在规范文件中启用了确认机制的情况下，才会调用 `Ack()` 和 `Fail()`。 `seqId` 用于识别已确认或失败的元组。 因此，如果在非事务性拓扑中启用了确认功能，应在 Spout 中使用以下 emit 函数：
 
@@ -102,7 +99,7 @@ ISCPTxSpout 是适用于事务性 Spout 的接口。
         void Fail(long seqId, Dictionary<string, Object> parms);        
     }
 
-与非事务性接口一样，如果 C\# 进程的单一线程出现紧凑循环，会调用 `NextTx()`、`Ack()` 和 `Fail()`。 如果没有要发送的数据，最好短暂地将 `NextTx` 置于休眠状态（例如 10 毫秒），以免浪费太多 CPU。
+与非事务性接口一样，如果 C\# 进程的单一线程出现紧凑循环，将会调用 `NextTx()`、`Ack()` 和 `Fail()`。 如果没有要发送的数据，最好短暂地将 `NextTx` 置于休眠状态（例如 10 毫秒），以免浪费太多 CPU。
 
 调用 `NextTx()` 可启动新的事务；输出参数 `seqId` 用于识别事务，该参数也用于 `Ack()` 和 `Fail()` 中。 在 `NextTx()` 中，用户可以将数据发送到 Java 端。 然后，数据会被存储在 ZooKeeper 中，以支持重用。 ZooKeeper 的容量有限，因此，用户应该只发送元数据，而不应该发送事务性 Spout 中的批量数据。
 
@@ -210,7 +207,7 @@ SCP.NET 还会提供可供开发人员用于编程的简单密钥对象集。 �
 ### <a name="statestore"></a>StateStore
 `StateStore` 提供元数据服务、单调序列生成和无等待协调。 可以在 `StateStore` 中构建高级分布式并发抽象，包括分布式锁、分布式队列、屏障和事务服务。
 
-SCP 可使用 `State` 对象在 ZooKeeper 中保留某些信息，尤其是适用于事务性拓扑的信息。 这样做时，如果事务性 Spout 崩溃并重新启动，它可以从 ZooKeeper 检索必要信息并重新开始数据传输。
+SCP 应用程序可使用 `State` 对象在 [Apache ZooKeeper](https://zookeeper.apache.org/) 中保留某些信息，尤其是适用于事务性拓扑的信息。 这样做时，如果事务性 Spout 崩溃并重新启动，它可以从 ZooKeeper 检索必要信息并重新开始数据传输。
 
 `StateStore` 对象主要提供以下方法：
 
@@ -231,7 +228,7 @@ SCP 可使用 `State` 对象在 ZooKeeper 中保留某些信息，尤其是适�
     /// <summary>
     /// Retrieve all states that were previously uncommitted, excluding all aborted states 
     /// </summary>
-    /// <returns>Uncommited States</returns>
+    /// <returns>Uncommitted States</returns>
     public IEnumerable<State> GetUnCommitted();
 
     /// <summary>
@@ -252,7 +249,7 @@ SCP 可使用 `State` 对象在 ZooKeeper 中保留某些信息，尤其是适�
     /// List all the committed states
     /// </summary>
     /// <returns>Registries contain the Committed State </returns> 
-    public IEnumerable<Registry> Commited();
+    public IEnumerable<Registry> Committed();
 
     /// <summary>
     /// List all the Aborted State in the StateStore
@@ -349,21 +346,21 @@ SCPRuntime 提供以下两种方法：
         }
 
 ## <a name="topology-specification-language"></a>拓扑规范语言
-SCP 拓扑规范是一种特定于域的语言，用于描述和配置 SCP 拓扑。 它基于 Storm 的 Clojure DSL (<http://storm.incubator.apache.org/documentation/Clojure-DSL.html>) 并通过 SCP 进行扩展。
+SCP 拓扑规范是一种特定于域的语言，用于描述和配置 SCP 拓扑。 它基于 Storm 的 Clojure DSL (<https://storm.incubator.apache.org/documentation/Clojure-DSL.html>) 并通过 SCP 进行扩展。
 
 拓扑规范可通过 ***runspec*** 命令直接提交到 Storm 群集进行执行。
 
 SCP.NET 添加了以下函数来定义事务性拓扑：
 
-| **新函数** | **参数** | **说明** |
+| **新函数** | **Parameters** | **说明** |
 | --- | --- | --- |
 | **tx-topolopy** |topology-name<br />spout-map<br />bolt-map |使用拓扑名称、Spout 定义图和 Bolt 定义图来定义事务性拓扑&nbsp; |
 | **scp-tx-spout** |exec-name<br />args<br />fields |定义事务性 Spout。 使用 args 运行带有 exec-name 的应用程序。<br /><br />***fields*** 是用于 Spout 的输出字段 |
 | **scp-tx-batch-bolt** |exec-name<br />args<br />fields |定义事务性批处理 Bolt。 使用 args 运行带有 exec-name 的应用程序。<br /><br />Fields 是用于 Bolt 的输出字段。 |
 | **scp-tx-commit-bolt** |exec-name<br />args<br />fields |定义事务性 Committer Bolt。 使用 args 运行带有 exec-name 的应用程序。<br /><br />***fields*** 是用于 Bolt 的输出字段 |
 | **nontx-topolopy** |topology-name<br />spout-map<br />bolt-map |使用拓扑名称、Spout 定义图和 Bolt 来定义非事务性拓扑&nbsp; |
-| **scp-spout** |exec-name<br />args<br />fields<br />parameters |定义非事务性 Spout。 使用 args 运行带有 exec-name 的应用程序。<br /><br />***fields*** 是用于 Spout 的输出字段<br /><br />parameters 为可选，可使用它指定某些参数，例如“nontransactional.ack.enabled”。 |
-| **scp-bolt** |exec-name<br />args<br />fields<br />parameters |定义非事务性 Bolt。 使用 args 运行带有 exec-name 的应用程序。<br /><br />***fields*** 是用于 Bolt 的输出字段<br /><br />parameters 为可选，可使用它指定某些参数，例如“nontransactional.ack.enabled”。 |
+| **scp-spout** |exec-name<br />args<br />fields<br />参数 |定义非事务性 Spout。 使用 args 运行带有 exec-name 的应用程序。<br /><br />***fields*** 是用于 Spout 的输出字段<br /><br />parameters 为可选，可使用它指定某些参数，例如“nontransactional.ack.enabled”。 |
+| **scp-bolt** |exec-name<br />args<br />fields<br />参数 |定义非事务性 Bolt。 使用 args 运行带有 exec-name 的应用程序。<br /><br />***fields*** 是用于 Bolt 的输出字段<br /><br />parameters 为可选，可使用它指定某些参数，例如“nontransactional.ack.enabled”。 |
 
 SCP.NET 定义了以下关键字：
 
@@ -453,7 +450,7 @@ SCP.NET 添加了一个自定义的分组方法，该方法会使用 byte[] 的�
 3. [0,1] 表示从 0 开始的字段 ID 的哈希集。
 
 ### <a name="hybrid-topology"></a>混合拓扑
-本机 Storm 是用 Java 编写的。 SCP.Net 已对其进行增强，使 C\# 开发者能够编写 C\# 代码来处理其业务逻辑。 但它也支持混合拓扑，这种拓扑不仅包含 C\# Spout/Bolt，还包含 Java Spout/Bolt。
+本机 Storm 是用 Java 编写的。 SCP.NET 增强了它，使 c\#开发人员能够编写 c\#代码来处理其业务逻辑。 但它也支持混合拓扑，这种拓扑不仅包含 C\# Spout/Bolt，还包含 Java Spout/Bolt。
 
 ### <a name="specify-java-spoutbolt-in-spec-file"></a>在规范文件中指定 Java Spout/Bolt
 在规范文件中，“scp-spout”和“scp-bolt”也可用于指定 Java Spout 和 Bolt；下面是一个示例：
@@ -565,7 +562,7 @@ SCP 组件包括 Java 端和 C\# 端。 若要与本机 Java Spout/Bolt 交互�
 
 ## <a name="scp-programming-examples"></a>SCP 编程示例
 ### <a name="helloworld"></a>HelloWorld
-HelloWorld 是一个简单的 SCP.Net 编程示例。 它使用非事务性拓扑，带有一个名为 **generator** 的 Spout，以及两个分别名为 **splitter** 和 **counter** 的 Bolt。 Spout 生成器会随机生成一些句子，然后将生成的句子发送到 拆分器。 Bolt 拆分器会将句子拆分为字词并将其发送到计数器 Bolt。 Bolt "counter" 使用字典记录每个字词出现的次数。
+**HelloWorld**是一个简单的示例，演示了 SCP.NET 的感受。 它使用非事务性拓扑，带有一个名为 **generator** 的 Spout，以及两个分别名为 **splitter** 和 **counter** 的 Bolt。 Spout 生成器会随机生成一些句子，然后将生成的句子发送到 拆分器。 Bolt 拆分器会将句子拆分为字词并将其发送到计数器 Bolt。 Bolt "counter" 使用字典记录每个字词出现的次数。
 
 在本示例中，有两个规范文件：**HelloWorld.spec** 和 **HelloWorld\_EnableAck.spec**。 在 C\# 代码中，可以通过从 Java 端获取 pluginConf 来确定是否已启用确认功能。
 
@@ -597,7 +594,7 @@ HelloWorld 是一个简单的 SCP.Net 编程示例。 它使用非事务性拓�
     }
 
 ### <a name="helloworldtx"></a>HelloWorldTx
-**HelloWorldTx** 示例展示如何实施事务性拓扑。 它有一个名为生成器的 Spout、一个名为 partial-count 的批处理 Bolt 以及一个名为 count-sum 的提交 Bolt。 还有三个预先创建的 txt 文件：DataSource0.txt、DataSource1.txt 和 DataSource2.txt。
+**HelloWorldTx** 示例展示如何实施事务性拓扑。 它有一个名为生成器的 Spout、一个名为 partial-count 的批处理 Bolt 以及一个名为 count-sum 的提交 Bolt。 还有三个预创建的 txt 文件：DataSource0.txt、DataSource1.txt 和 DataSource2.txt。
 
 在每个事务中，Spout 生成器从预先创建的三个文件中随机选择两个文件，并将那两个文件的名称发送给 partial-count Bolt。 Bolt partial-count 从接收到的元组获取文件名，然后打开文件并计算文件中的字词数量，最后将计算出的字词数量发送给 count-sum Bolt。 count-sum Bolt 对总计数进行汇总。
 
@@ -645,9 +642,9 @@ HelloWorld 是一个简单的 SCP.Net 编程示例。 它使用非事务性拓�
 本质上，本示例与 HelloWorld 相同。 唯一不同之处是，在本示例中，用户代码被编译为 DLL，而且使用 SCPHost.exe 提交拓扑。 有关更详细说明，请参阅“SCP 主机模式”部分。
 
 ## <a name="next-steps"></a>后续步骤
-有关使用 SCP 创建的 Storm 拓扑示例，请参阅以下文档：
+有关使用 SCP 创建的 Apache Storm 拓扑示例，请参阅以下文档：
 
 * [使用 Visual Studio 开发 Apache Storm on HDInsight 的 C# 拓扑](apache-storm-develop-csharp-visual-studio-topology.md)
-* [使用 Storm on HDInsight 从 Azure 事件中心处理事件](apache-storm-develop-csharp-event-hub-topology.md)
-* [使用 Storm on HDInsight 处理事件中心的汽车传感器数据](https://github.com/hdinsight/hdinsight-storm-examples/tree/master/IotExample)
-* [从 Azure 事件中心提取、转换和加载 (ETL) 到 HBase](https://github.com/hdinsight/hdinsight-storm-examples/blob/master/RealTimeETLExample)
+* [使用 Apache Storm on HDInsight 从 Azure 事件中心处理事件](apache-storm-develop-csharp-event-hub-topology.md)
+* [使用 Apache Storm on HDInsight 处理事件中心的车辆传感器数据](https://github.com/hdinsight/hdinsight-storm-examples/tree/master/IotExample)
+* [从 Azure 事件中心提取、转换和加载 (ETL) 到 Apache HBase](https://github.com/hdinsight/hdinsight-storm-examples/blob/master/RealTimeETLExample)

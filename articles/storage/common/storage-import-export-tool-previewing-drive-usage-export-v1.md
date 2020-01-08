@@ -1,24 +1,19 @@
 ---
-title: "预览 Azure 导入/导出的导出作业的驱动器使用情况 - v1 | Microsoft Docs"
-description: "了解如何预览针对 Azure 导入/导出服务中的导出作业选择的 blob 列表。"
+title: 预览 Azure 导入/导出的导出作业的驱动器使用情况 - v1 | Microsoft Docs
+description: 了解如何预览针对 Azure 导入/导出服务中的导出作业选择的 blob 列表。
 author: muralikk
-manager: syadav
-editor: tysonn
 services: storage
-documentationcenter: 
-ms.assetid: 7707d744-7ec7-4de8-ac9b-93a18608dc9a
 ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 01/15/2017
 ms.author: muralikk
-ms.openlocfilehash: 6ec74ae0b0931f3fed99a43f4f7e58f9d425b138
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.subservice: common
+ms.openlocfilehash: 53ab1e28c5864b403d52bf5e73f0c5c41b8f18a8
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61478447"
 ---
 # <a name="previewing-drive-usage-for-an-export-job"></a>预览导出作业的驱动器使用情况
 在创建导出作业之前，需要选择一组要导出的 blob。 Microsoft Azure 导入/导出服务允许使用一系列 blob 路径或 blob 前缀来表示选定的 blob。  
@@ -29,14 +24,14 @@ ms.lasthandoff: 10/11/2017
 
 使用导入/导出工具的 `PreviewExport` 命令时，可使用以下参数。
 
-|命令行参数|说明|  
+|命令行参数|描述|  
 |--------------------------|-----------------|  
-|**/logdir:**<LogDirectory\>|可选。 日志目录。 详细日志文件将写入此目录。 如果未指定任何日志目录，将使用当前目录作为日志目录。|  
-|**/sn:**<StorageAccountName\>|必需。 导出作业的存储帐户的名称。|  
-|**/sk:**<StorageAccountKey\>|当且仅当未指定容器 SAS 时才是必需的。 导出作业的存储帐户的帐户密钥。|  
-|**/csas:**<ContainerSas\>|当且仅当未指定存储帐户密钥时才是必需的。 用于列出要在导出作业中导出的 Blob 的容器 SAS。|  
-|**/ExportBlobListFile:**<ExportBlobListFile\>|必需。 包含要导出的 Blob 的 Blob 路径列表或 Blob 路径前缀的 XML 文件的路径。 导入/导出服务 REST API 的[放置作业](/rest/api/storageimportexport/jobs#Jobs_CreateOrUpdate)操作的 `BlobListBlobPath` 元素中使用的文件格式。|  
-|**/DriveSize:**<DriveSize\>|必需。 用于导出作业的驱动器大小，例如 500GB、1.5TB。|  
+|**/logdir:** <LogDirectory\>|可选。 日志目录。 详细日志文件将写入此目录。 如果未指定任何日志目录，将使用当前目录作为日志目录。|  
+|/sn:  <StorageAccountName\>|必需。 导出作业的存储帐户的名称。|  
+|**/sk:** <StorageAccountKey\>|当且仅当未指定容器 SAS 时才是必需的。 导出作业的存储帐户的帐户密钥。|  
+|**/csas:** <ContainerSas\>|当且仅当未指定存储帐户密钥时才是必需的。 用于列出要在导出作业中导出的 Blob 的容器 SAS。|  
+|**/ExportBlobListFile:** <ExportBlobListFile\>|必需。 包含要导出的 Blob 的 Blob 路径列表或 Blob 路径前缀的 XML 文件的路径。 导入/导出服务 REST API 的[放置作业](/rest/api/storageimportexport/jobs)操作的 `BlobListBlobPath` 元素中使用的文件格式。|  
+|**/DriveSize:** <DriveSize\>|必需。 用于导出作业的驱动器大小，例如  500GB、1.5TB。|  
 
 ## <a name="command-line-example"></a>命令行示例
 

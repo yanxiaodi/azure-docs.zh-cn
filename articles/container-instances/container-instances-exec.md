@@ -2,17 +2,18 @@
 title: 在 Azure 容器实例上运行的容器中执行命令
 description: 了解如何在 Azure 容器实例上当前正在运行的容器中执行命令
 services: container-instances
-author: mmacy
-manager: jeconnoc
+author: dlepow
+manager: gwallace
 ms.service: container-instances
 ms.topic: article
 ms.date: 03/30/2018
-ms.author: marsma
-ms.openlocfilehash: 43211f620efb16cbcd722d3d386b1bb862fc6280
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.author: danlep
+ms.openlocfilehash: a8583cf605891631a2bce6914b24525aebd59ea0
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68325985"
 ---
 # <a name="execute-a-command-in-a-running-azure-container-instance"></a>在运行的 Azure 容器实例中执行命令
 
@@ -20,7 +21,7 @@ Azure 容器实例支持在运行的容器中执行命令。 在应用程序开�
 
 ## <a name="run-a-command-with-azure-cli"></a>使用 Azure CLI 运行命令
 
-在 [Azure CLI][azure-cli] 中使用 [az container exec][az-container-exec] 在运行的容器中执行命令：
+在[Azure CLI][azure-cli]中使用[az container exec][az-container-exec]在正在运行的容器中执行命令:
 
 ```azurecli
 az container exec --resource-group <group-name> --name <container-group-name> --exec-command "<command>"
@@ -84,7 +85,7 @@ az container exec --resource-group myResourceGroup --name mynginx --container-na
 
 ## <a name="restrictions"></a>限制
 
-Azure 容器实例目前支持使用 [az container exec][az-container-exec] 启动单个进程；不能传递命令参数。 例如，不能像 `sh -c "echo FOO && echo BAR"` 一样串接命令，或执行 `echo FOO`。
+Azure 容器实例目前支持使用[az Container exec][az-container-exec]启动单个进程, 并且不能传递命令参数。 例如，不能像 `sh -c "echo FOO && echo BAR"` 一样串接命令，或执行 `echo FOO`。
 
 ## <a name="next-steps"></a>后续步骤
 

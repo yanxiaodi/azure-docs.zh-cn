@@ -2,17 +2,18 @@
 title: Azure 容器注册表中的最佳做法
 description: 通过遵循这些最佳做法，了解如何有效使用 Azure 容器注册表。
 services: container-registry
-author: mmacy
-manager: jeconnoc
+author: dlepow
+manager: gwallace
 ms.service: container-registry
-ms.topic: quickstart
-ms.date: 04/10/2018
-ms.author: marsma
-ms.openlocfilehash: 1272a4b547a4ba650678ce083a44bde3a5a3e583
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.topic: article
+ms.date: 09/27/2018
+ms.author: danlep
+ms.openlocfilehash: a1ab010300d3f7bec3aeb5969a9a09fa9ee9a6a5
+ms.sourcegitcommit: f5075cffb60128360a9e2e0a538a29652b409af9
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/18/2019
+ms.locfileid: "68309770"
 ---
 # <a name="best-practices-for-azure-container-registry"></a>Azure 容器注册表的最佳做法
 
@@ -46,7 +47,7 @@ contoso.azurecr.io/marketing/2017-fall/concertpromotions/campaign:218.42
 
 ## <a name="dedicated-resource-group"></a>专用资源组
 
-由于容器注册表是跨多个容器主机使用的资源，因此注册表应位于其自己的资源组中。
+由于容器注册表是跨多个容器主机使用的资源，注册表应位于其自己的资源组中。
 
 虽然可以试用特定的主机类型（如 Azure 容器实例），但完成操作后可能会删除容器实例。 但是，你可能还想保留推送到 Azure 容器注册表的映像集合。 通过将注册表置于其自己的资源组中，可以最小化删除容器实例资源组时在注册表中意外删除映像集合的风险。
 
@@ -54,42 +55,36 @@ contoso.azurecr.io/marketing/2017-fall/concertpromotions/campaign:218.42
 
 Azure 容器注册表的身份验证有两种主要方案：单个身份验证和服务（或“无外设”）身份验证。 下表提供了这两个方案的简要概述，以及每个方案的推荐身份验证方法。
 
-| Type | 示例方案 | 推荐的方法 |
+| 类型 | 示例方案 | 推荐的方法 |
 |---|---|---|
-| 单个标识 | 开发者从/向其开发计算机推送映像。 | [az acr login](/cli/azure/acr?view=azure-cli-latest#az_acr_login) |
+| 单个标识 | 开发者从/向其开发计算机推送映像。 | [az acr login](/cli/azure/acr?view=azure-cli-latest#az-acr-login) |
 | 无外设/服务标识 | 用户未直接参与的生成和部署管道。 | [服务主体](container-registry-authentication.md#service-principal) |
 
 有关 Azure 容器注册表身份验证的详细信息，请参阅 [Azure 容器注册表的身份验证](container-registry-authentication.md)。
 
 ## <a name="manage-registry-size"></a>管理注册表大小
 
-每个[容器注册表 SKU][container-registry-skus] 的存储约束旨在与典型方案保持一致，即基本 SKU 适用于入门，标准 SKU 适用于大部分生产应用程序，高级 SKU 适用于超大规模提升性能和[异地复制][container-registry-geo-replication]。 在注册表的整个生命周期中，应定期删除未使用的内容，管理注册表大小。
+每个[容器注册表 SKU][container-registry-skus]的存储约束旨在与典型方案保持一致:**基本** **入门, 适用**于大部分生产应用程序 **, 适用于**超大规模性能和[异地复制][container-registry-geo-replication]。 在注册表的整个生命周期中，应定期删除未使用的内容，管理注册表大小。
 
-在 Azure 门户的容器注册表“概述”中，可以查看注册表的当前使用情况：
+使用 Azure CLI 命令[az acr show][az-acr-show-usage] : 显示注册表的当前大小:
+
+```console
+$ az acr show-usage --resource-group myResourceGroup --name myregistry --output table
+NAME      LIMIT         CURRENT VALUE    UNIT
+--------  ------------  ---------------  ------
+Size      536870912000  185444288        Bytes
+Webhooks  100                            Count
+```
+
+此外，在 Azure 门户的注册表“概述”中，还可以找到当前已用存储： 
 
 ![Azure 门户中的注册表使用情况信息][registry-overview-quotas]
 
-可以使用 [Azure CLI][azure-cli] 或 [Azure 门户][azure-portal]管理注册表大小。 仅托管 SKU（基本、标准、高级）支持删除存储库和映像--不能在经典注册表中删除存储库、映像或标记。
+### <a name="delete-image-data"></a>删除映像数据
 
-### <a name="delete-in-azure-cli"></a>在 Azure CLI 中删除
+Azure 容器注册表支持多种从容器注册表中删除映像数据的方法。 可以按标记或程序清单摘要删除映像，也可以删除整个存储库。
 
-使用 [az acr repository delete][az-acr-repository-delete] 命令可删除存储库或其中的内容。
-
-若要删除存储库（包括存储库中的所有标记和映像层数据），请在执行 [az acr repository delete][az-acr-repository-delete] 命令时仅指定存储库名称。 在以下示例中，我们删除 *myapplication* 存储库以及该存储库中的所有标记和映像层数据。
-
-```azurecli
-az acr repository delete --name myregistry --repository myapplication
-```
-
-也可使用 `--tag` 和 `--manifest` 参数删除存储库中的映像数据。 有关这些参数的详细信息，请参阅 [az acr repository delete 命令参考][az-acr-repository-delete]。
-
-### <a name="delete-in-azure-portal"></a>在 Azure 门户中进行删除
-
-若要在 Azure 门户中删除注册表中的存储库，请首先导航到容器注册表。 然后在“服务”下选择“存储库”，右键单击要删除的存储库。 选择“删除”即可删除该存储库以及其所包含的 Docker 映像。
-
-![在 Azure 门户中删除存储库][delete-repository-portal]
-
-也可使用类似的方式删除存储库中的标记。 导航到存储库，在“标记”下右键单击要删除的标记，然后选择“删除”。
+有关从注册表中删除映像数据（包括无标记映像，有时称为“无关联”映像或“孤立”映像）的详细信息，请参阅[删除 Azure 容器注册表中的容器映像](container-registry-delete.md)。
 
 ## <a name="next-steps"></a>后续步骤
 
@@ -100,7 +95,8 @@ Azure 容器注册表可用于多层（称为 SKU），每层提供不同功能�
 [registry-overview-quotas]: ./media/container-registry-best-practices/registry-overview-quotas.png
 
 <!-- LINKS - Internal -->
-[az-acr-repository-delete]: /cli/azure/acr/repository#az_acr_repository_delete
+[az-acr-repository-delete]: /cli/azure/acr/repository#az-acr-repository-delete
+[az-acr-show-usage]: /cli/azure/acr#az-acr-show-usage
 [azure-cli]: /cli/azure
 [azure-portal]: https://portal.azure.com
 [container-registry-geo-replication]: container-registry-geo-replication.md

@@ -1,15 +1,22 @@
-## <a name="test"></a>测试函数
+---
+author: ggailey777
+ms.service: azure-functions
+ms.topic: include
+ms.date: 04/24/2019
+ms.author: glenga
+ms.openlocfilehash: 44eb25be12b908c8f951cb20948068da3bfc2928
+ms.sourcegitcommit: 8a717170b04df64bd1ddd521e899ac7749627350
+ms.translationtype: HT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 09/23/2019
+ms.locfileid: "71203122"
+---
+## <a name="test"></a>在 Azure 中验证函数
 
-在 Mac 或 Linux 计算机上使用 cURL 或者在 Windows 上使用 Bash 测试已部署的函数。 执行以下 cURL 命令（请将 `<app_name>` 占位符替换为 Function App 的名称）。 在 URL 的后面附加查询字符串 `&name=<yourname>`。
+使用 cURL 验证已部署的函数。 使用从上一步复制的 URL（包括功能键），将查询字符串 `&name=<yourname>` 追加到该 URL。
 
-```bash
-curl http://<app_name>.azurewebsites.net/api/HttpTriggerJS1?name=<yourname>
-```  
+![使用 cURL 在 Azure 中调用函数。](./media/functions-test-function-code/functions-azure-cli-function-test-curl.png) 
 
-![函数响应会显示在浏览器中。](./media/functions-test-function-code/functions-azure-cli-function-test-curl.png)  
+也可以将复制的 URL（包括功能键）粘贴到 Web 浏览器的地址栏中。 同样，在执行请求之前，先将查询字符串 `&name=<yourname>` 追加到该 URL。
 
-如果无法在命令行中使用 cURL，请在 Web 浏览器的地址栏中输入相同的 URL。 同样，请将 `<app_name>` 占位符替换为 Function App 的名称，在 URL 的后面附加查询字符串 `&name=<yourname>`，然后执行请求。 
-
-    http://<app_name>.azurewebsites.net/api/HttpTriggerJS1?name=<yourname>
-   
-![函数响应会显示在浏览器中。](./media/functions-test-function-code/functions-azure-cli-function-test-browser.png)  
+![使用 Web 浏览器调用函数。](./media/functions-test-function-code/functions-azure-cli-function-test-browser.png)  

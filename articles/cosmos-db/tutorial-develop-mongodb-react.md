@@ -1,31 +1,26 @@
 ---
-title: 适用于 Azure 的 MongoDB、React 和 Node.js 教程 | Microsoft Docs
+title: 适用于 Azure 的 MongoDB、React 和 Node.js 教程
 description: 了解如何通过 React 和 Node.js 在 Azure Cosmos DB 上创建 MongoDB 应用，所使用的 API 与本视频教程系列中用于 MongoDB 的 API 完全相同。
-services: cosmos-db
-documentationcenter: ''
-author: SnehaGunda
-manager: kfile
-editor: ''
-ms.assetid: ''
+author: johnpapa
 ms.service: cosmos-db
-ms.workload: ''
-ms.tgt_pltfrm: na
+ms.subservice: cosmosdb-mongo
 ms.devlang: nodejs
 ms.topic: tutorial
-ms.date: 09/05/2017
-ms.author: sngun
-ms.custom: mvc
-ms.openlocfilehash: c2cb4b30cb056303c07d5e82861e4022489c7072
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
+ms.date: 09/05/2018
+ms.author: jopapa
+ms.reviewer: sngun
+ms.openlocfilehash: 4efaa90281ddcebf1b800e1016578e38c24be651
+ms.sourcegitcommit: e42c778d38fd623f2ff8850bb6b1718cdb37309f
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 08/19/2019
+ms.locfileid: "69614111"
 ---
 # <a name="create-a-mongodb-app-with-react-and-azure-cosmos-db"></a>通过 React 和 Azure Cosmos DB 创建 MongoDB 应用  
 
-本视频教程包含多个部分，演示了如何使用 React 前端创建 hero 跟踪应用。 该应用使用适用于服务器的 Node 和 Express，通过 [MongoDB API](mongodb-introduction.md) 连接到 Azure Cosmos DB，然后将 React 前端连接到应用的服务器部分。 本教程还演示了如何在 Azure 门户中对 Azure Cosmos DB 进行点击缩放，以及如何将应用部署到 Internet，方便每个人跟踪其最喜欢的 hero。 
+本视频教程包含多个部分，演示了如何使用 React 前端创建 hero 跟踪应用。 该应用使用适用于服务器的 Node 和 Express，连接到使用 [Azure Cosmos DB 的 MongoDB API](mongodb-introduction.md) 配置的 Cosmos 数据库，然后将 React 前端连接到应用的服务器部分。 本教程还演示了如何在 Azure 门户中对 Cosmos DB 进行点击缩放，以及如何将应用部署到 Internet，方便每个人跟踪其最喜欢的 hero。 
 
-[Azure Cosmos DB](https://azure.microsoft.com/services/cosmos-db/) 支持 MongoDB 客户端连接，因此可以用 Azure Cosmos DB 来代替 MongoDB，所用代码与用于 MongoDB 应用的代码相同，而优势则会增强，例如简化云部署、缩放，大大加快读写速度。  
+[Azure Cosmos DB](https://azure.microsoft.com/services/cosmos-db/) 支持与 MongoDB 的有线协议兼容性，让客户能用 Azure Cosmos DB 代替 MongoDB。  
 
 本教程分为多个部分，涵盖以下任务：
 
@@ -74,7 +69,7 @@ ms.lasthandoff: 04/16/2018
 
 ## <a name="read-and-create-heroes-in-the-app"></a>在应用中读取和创建 hero
 
-此视频介绍如何在 Cosmos DB 数据库中读取 hero 和创建 hero，以及如何使用 Postman 和 React UI 测试这些方法。 
+此视频介绍如何在 Cosmos 数据库中读取 hero 和创建 hero，以及如何使用 Postman 和 React UI 测试这些方法。 
 
 > [!VIDEO https://www.youtube.com/embed/AQK9n_8fsQI] 
 
@@ -94,8 +89,8 @@ ms.lasthandoff: 04/16/2018
 
 如果不打算继续使用此应用，请使用以下步骤删除本教程在 Azure 门户中创建的所有资源。 
 
-1. 在 Azure 门户的左侧菜单中，单击“资源组”，并单击已创建资源的名称。 
-2. 在资源组页上单击“删除”，在文本框中键入要删除的资源的名称，并单击“删除”。
+1. 在 Azure 门户的左侧菜单中，单击“资源组”  ，并单击已创建资源的名称。 
+2. 在资源组页上单击“删除”，在文本框中键入要删除的资源的名称，并单击“删除”。  
 
 ## <a name="next-steps"></a>后续步骤
 
@@ -107,8 +102,6 @@ ms.lasthandoff: 04/16/2018
 > * 将应用连接到 Azure Cosmos DB 帐户
 > * 使用 Postman 测试应用
 > * 运行应用程序并向数据库添加 hero
-
-本教程系列会添加另一个视频，请返回观看，了解如何部署应用程序以及如何以全局方式复制数据。
 
 你可以继续学习下一教程，了解如何将 MongoDB 数据导入 Azure Cosmos DB 中。  
 

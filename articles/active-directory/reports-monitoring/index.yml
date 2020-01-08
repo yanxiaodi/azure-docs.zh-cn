@@ -1,0 +1,57 @@
+### YamlMime:Landing
+title: “Azure Active Directory 报表和监视”文档
+summary: 了解如何使用 Azure AD 中的报表。
+metadata:
+  title: “Azure Active Directory 报表和监视”文档
+  description: 了解如何使用 Azure AD 中的报表和监视功能。
+  services: active-directory
+  ms.service: active-directory
+  ms.subservice: devices
+  ms.topic: landing-page
+  author: MarkusVi
+  ms.author: markvi
+  ms.date: 08/29/2019
+  ms.collection: M365-identity-device-management
+  ms.openlocfilehash: 2b29aaf88f0a7659fd3ceb58ddf3b762ee7646d3
+  ms.sourcegitcommit: 19a821fc95da830437873d9d8e6626ffc5e0e9d6
+  ms.translationtype: HT
+  ms.contentlocale: zh-CN
+  ms.lasthandoff: 08/29/2019
+  ms.locfileid: "70162488"
+landingContent:
+- title: 关于 Azure Active Directory 报表和监视
+  linkLists:
+  - linkListType: overview
+    links:
+    - text: 什么是 Azure Active Directory 监视？
+      url: overview-monitoring.md
+  - linkListType: concept
+    links:
+    - text: 审核日志
+      url: concept-audit-logs.md
+    - text: 登录日志
+      url: concept-sign-ins.md
+    - text: “有风险的登录”日志
+      url: concept-risky-sign-ins.md
+    - text: “已标记为存在风险的用户”日志
+      url: concept-user-at-risk.md
+    - text: “预配”日志
+      url: concept-provisioning-logs.md
+- title: 使用 Azure AD 中的报表
+  linkLists:
+  - linkListType: how-to-guide
+    links:
+    - text: 查找活动报表
+      url: howto-find-activity-reports.md
+    - text: 修复已标记为存在风险的用户
+      url: howto-remediate-users-flagged-for-risk.md
+    - text: 使用 Azure AD 工作簿
+      url: howto-use-azure-monitor-workbooks.md
+- title: 使用 Azure AD 中的监视功能
+  linkLists:
+  - linkListType: how-to-guide
+    links:
+    - text: 在 Azure Monitor 日志中分析活动日志
+      url: howto-analyze-activity-logs-log-analytics.md
+    - text: 安装和使用用于 Azure AD 的日志分析视图
+      url: howto-install-use-log-analytics-views.md

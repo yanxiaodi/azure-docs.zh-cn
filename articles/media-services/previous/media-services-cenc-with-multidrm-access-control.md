@@ -1,33 +1,35 @@
 ---
-title: 使用多重 DRM 的 CENC 和访问控制：Azure 与 Azure 媒体服务的参考设计和实现 | Microsoft Docs
+title: 使用 Azure 媒体服务设计带访问控制的内容保护系统 | Microsoft Docs
 description: 了解如何为 Microsoft 平滑流式处理客户端移植工具包授权。
 services: media-services
 documentationcenter: ''
 author: willzhan
-manager: cfowler
+manager: femila
 editor: ''
-ms.assetid: 7814739b-cea9-4b9b-8370-538702e5c615
 ms.service: media-services
 ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 07/19/2017
-ms.author: willzhan;kilroyh;yanmf;juliako
-ms.openlocfilehash: 8f072f13909190eee194565673ccfa1f381f7503
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.date: 03/14/2019
+ms.author: willzhan
+ms.reviewer: kilroyh;yanmf;juliako
+ms.openlocfilehash: 6004e08f5f30c7f3c63bb87437147db15da5e335
+ms.sourcegitcommit: de47a27defce58b10ef998e8991a2294175d2098
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/15/2019
+ms.locfileid: "69016766"
 ---
-# <a name="cenc-with-multi-drm-and-access-control-a-reference-design-and-implementation-on-azure-and-azure-media-services"></a>使用多重 DRM 的 CENC 和访问控制：Azure 与 Azure 媒体服务的参考设计和实现
- 
-## <a name="introduction"></a>介绍
+# <a name="design-of-a-content-protection-system-with-access-control-using-azure-media-services"></a>使用 Azure 媒体服务设计带访问控制的内容保护系统 
+
+## <a name="overview"></a>概述
+
 针对 Over-The-Top (OTT) 或在线流解决方案设计和构建数字版权管理 (DRM) 子系统是相当复杂的任务。 运营商/在线视频提供商通常会将此任务外包给专门的 DRM 服务提供商。 本文档旨在陈述 OTT 或在线流解决方案中端到端 DRM 子系统的参考设计和实现。
 
 本文档的目标读者是使用 OTT 或在线流/多屏解决方案的 DRM 子系统的工程师，或对于 DRM 子系统有兴趣的读者。 假设读者熟悉市场上的至少一种 DRM 技术，例如 PlayReady、Widevine、FairPlay 或 Adobe Access。
 
-在 DRM 方面，本文还会介绍使用多重 DRM 的 CENC（通用加密）。 在线流和 OTT 行业中的主要趋势是在各种客户端平台上使用 CENC 与多重原生 DRM。 这是从以前对于各种客户端平台使用单个 DRM 及其客户端 SDK 的趋势变化而来的。 使用 CENC 与多重原生 DRM 时，PlayReady 和 Widevine 都按照[通用加密 (ISO/IEC 23001-7 CENC)](http://www.iso.org/iso/home/store/catalogue_ics/catalogue_detail_ics.htm?csnumber=65271/) 规范加密。
+在 DRM 方面，本文还会介绍使用多重 DRM 的 CENC（通用加密）。 在线流和 OTT 行业中的主要趋势是在各种客户端平台上使用 CENC 与多重原生 DRM。 这是从以前对于各种客户端平台使用单个 DRM 及其客户端 SDK 的趋势变化而来的。 使用 CENC 与多重原生 DRM 时，PlayReady 和 Widevine 都按照[通用加密 (ISO/IEC 23001-7 CENC)](https://www.iso.org/iso/home/store/catalogue_ics/catalogue_detail_ics.htm?csnumber=65271/) 规范加密。
 
 使用 CENC 与多重 DRM 的好处如下：
 
@@ -40,7 +42,8 @@ Microsoft 已成为 DASH 和 CENC 与其他一些主要行业播放器的积极�
 *  [特此宣布已在 Azure 媒体服务中推出 Google Widevine 许可证传送服务](https://azure.microsoft.com/blog/announcing-general-availability-of-google-widevine-license-services/)
 * [Azure 媒体服务已添加 Google Widevine 打包功能用于传送多重 DRM 流](https://azure.microsoft.com/blog/azure-media-services-adds-google-widevine-packaging-for-delivering-multi-drm-stream/)  
 
-### <a name="overview-of-this-article"></a>本文的概述
+### <a name="goals-of-the-article"></a>本文的目标
+
 本文的目标是：
 
 * 提供使用 CENC 与多重 DRM 的 DRM 子系统的参考设计。
@@ -58,10 +61,9 @@ Microsoft 已成为 DASH 和 CENC 与其他一些主要行业播放器的积极�
 | **客户端平台** | **原生 DRM 支持** | **浏览器/应用** | **流格式** |
 | --- | --- | --- | --- |
 | **智能电视、操作员 STB、OTT STB** |主要为 PlayReady，和/或 Widevine，和/或其他 DRM |Linux、Opera、WebKit 及其他 |各种格式 |
-| **Windows 10 设备（Windows 电脑、Windows 平板电脑、Windows Phone、Xbox）** |PlayReady |MS Edge/IE11/EME<br/><br/><br/>通用 Windows 平台 |DASH（对于 HLS，不支持 PlayReady）<br/><br/>DASH、平滑流式处理（对于 HLS，不支持 PlayReady） |
+| **Windows 10 设备（Windows 电脑、Windows 平板电脑、Windows Phone、Xbox）** |PlayReady |Microsoft Edge/IE11/EME<br/><br/><br/>通用 Windows 平台 |DASH（对于 HLS，不支持 PlayReady）<br/><br/>DASH、平滑流式处理（对于 HLS，不支持 PlayReady） |
 | **Android 设备（手机、平板电脑、电视）** |Widevine |Chrome/EME |DASH、HLS |
 | **iOS（iPhone、iPad）、OS X 客户端和 Apple 电视** |FairPlay |Safari 8+/EME |HLS |
-
 
 就目前每种 DRM 的部署状态而言，服务通常需要实现两到三个 DRM，以确保能以最佳方式处理所有类型的终结点。
 
@@ -129,11 +131,11 @@ DRM 子系统可能包含以下组件：
 
 如果针对许可证传送使用公有云，持久性和非持久性许可证对于许可证传送成本有直接影响。 下面演示了两种不同的设计方案：
 
-* 每月订阅：使用永久性许可证，以及一对多内容密钥到资产映射。 例如，对于所有儿童影片，使用单个内容密钥进行加密。 在这种情况下：
+* 月度订阅：使用永久性许可证，以及一对多内容密钥到资产映射。 例如，对于所有儿童影片，使用单个内容密钥进行加密。 在这种情况下：
 
     所有儿童影片/设备的许可证总数 = 1
 
-* 每月订阅：在内容密钥与资产之间使用非永久性许可证以及一对一映射。 在这种情况下：
+* 月度订阅：在内容密钥与资产之间使用非永久性许可证以及一对一映射。 在这种情况下：
 
     所有儿童影片/设备的许可证总数 = [观看影片数] x [会话数]
 
@@ -155,7 +157,7 @@ DRM 子系统可能包含以下组件：
 | **密钥管理** |不需要参考实现 |
 | **内容管理** |一个 C# 控制台应用程序 |
 
-换而言之，IDP 和 STS 都将与 Azure AD 配合使用。 [Azure 媒体播放器 API](http://amp.azure.net/libs/amp/latest/docs/) 用于播放器。 媒体服务和媒体播放器都支持具有多重 DRM 的 DASH 和 CENC。
+换而言之，IDP 和 STS 都将与 Azure AD 配合使用。 [Azure 媒体播放器 API](https://amp.azure.net/libs/amp/latest/docs/) 用于播放器。 媒体服务和媒体播放器都支持具有多重 DRM 的 DASH 和 CENC。
 
 下图显示了上述技术映射的整体结构与流程。
 
@@ -207,15 +209,16 @@ DRM 子系统可能包含以下组件：
    * Install-Package Microsoft.Owin.Host.SystemWeb
    * Install-Package Microsoft.IdentityModel.Clients.ActiveDirectory
 
-8. 使用 [Azure 媒体播放器 API](http://amp.azure.net/libs/amp/latest/docs/) 创建播放器。 通过 [Azure 媒体播放器的 ProtectionInfo API](http://amp.azure.net/libs/amp/latest/docs/) 指定要在不同的 DRM 平台上使用哪种 DRM 技术。
+8. 使用 [Azure 媒体播放器 API](https://amp.azure.net/libs/amp/latest/docs/) 创建播放器。 通过 [Azure 媒体播放器的 ProtectionInfo API](https://amp.azure.net/libs/amp/latest/docs/) 指定要在不同的 DRM 平台上使用哪种 DRM 技术。
 
 9. 下表显示了测试矩阵。
 
     | **DRM** | **浏览器** | **已获授权用户的结果** | **未获授权用户的结果** |
     | --- | --- | --- | --- |
     | **PlayReady** |Windows 10 上的 Microsoft Edge 或 Internet Explorer 11 |成功 |失败 |
-    | **Widevine** |Windows 10 上的 Chrome |成功 |失败 |
-    | **FairPlay** |TBD | | |
+    | **Widevine** |Chrome、Firefox、Opera |成功 |失败 |
+    | **FairPlay** |macOS 上的 Safari      |成功 |失败 |
+    | **AES-128** |大多数新式浏览器  |成功 |失败 |
 
 有关针对 ASP.NET MVC 播放器应用配置 Azure AD 的信息，请参阅[将基于 Azure 媒体服务 OWIN MVC 的应用与 Azure Active Directory 相集成，并基于 JWT 声明限制内容密钥传送](http://gtrifonov.com/2015/01/24/mvc-owin-azure-media-services-ad-integration/)。
 
@@ -223,8 +226,8 @@ DRM 子系统可能包含以下组件：
 
 有关 Azure AD 的信息：
 
-* 可以在 [Azure Active Directory 开发人员指南](../../active-directory/active-directory-developers-guide.md)中找到面向开发人员的信息。
-* 可以在[管理 Azure AD 租户目录](../../active-directory/active-directory-administer.md)中找到面向管理员的信息。
+* 可以在 [Azure Active Directory 开发人员指南](../../active-directory/develop/v1-overview.md)中找到面向开发人员的信息。
+* 可以在[管理 Azure AD 租户目录](../../active-directory/fundamentals/active-directory-administer.md)中找到面向管理员的信息。
 
 ### <a name="some-issues-in-implementation"></a>实现中的一些问题
 请使用以下故障排除信息来帮助解决实现问题。
@@ -254,7 +257,7 @@ DRM 子系统可能包含以下组件：
 
 * 授予组成员资格声明权限。 确保 Azure AD 应用程序清单文件中包含以下内容： 
 
-    "groupMembershipClaims": "All"（默认值为 null）
+    "groupMembershipClaims":"All"   （默认值为 null）
 
 * 创建限制要求时，请设置适当的 TokenType。
 
@@ -310,9 +313,9 @@ DRM 许可证传送服务始终会检查来自 Azure AD 的当前/有效公钥�
 由于密钥可能在任何时间滚动更新，联合元数据文档中始终有多个有效公钥可用。 媒体服务许可证传送可以使用文档中指定的任何密钥。 因为一个密钥可能很快就被轮换为另一个密钥。
 
 ### <a name="where-is-the-access-token"></a>访问令牌位于何处？
-如果在[带有 OAuth 2.0 客户端凭据授予的应用程序标识](../../active-directory/develop/active-directory-authentication-scenarios.md#web-application-to-web-api)下，Web 应用调用 API 应用，身份验证流如下：
+如果在[带有 OAuth 2.0 客户端凭据授予的应用程序标识](../../active-directory/develop/web-api.md)下，Web 应用调用 API 应用，身份验证流如下：
 
-* 用户在 Web 应用程序中登录到 Azure AD。 有关详细信息，请参阅 [Web 浏览器到 Web 应用程序](../../active-directory/develop/active-directory-authentication-scenarios.md#web-browser-to-web-application)。
+* 用户在 Web 应用程序中登录到 Azure AD。 有关详细信息，请参阅 [Web 浏览器到 Web 应用程序](../../active-directory/develop/web-app.md)。
 * Azure AD 许可证终结点使用授权代码将用户代理重定向回到客户端应用程序。 用户代理将授权代码返回给客户端应用程序的重定向 URI。
 * Web 应用程序需要获取访问令牌，以便通过 Web API 进行身份验证并检索所需的资源。 它向 Azure AD 的令牌终结点发出一个请求，在其中提供凭据、客户端 ID 以及 Web API 的应用程序 ID URI。 它将提供授权代码来证明已获得用户许可。
 * Azure AD 对应用程序进行身份验证并返回用来调用 Web API 的 JWT 访问令牌。
@@ -333,7 +336,7 @@ DRM 许可证传送服务始终会检查来自 Azure AD 的当前/有效公钥�
 
 2. 为资源应用添加新的密钥。
 
-3. 更新应用程序清单文件，使 groupMembershipClaims 属性具有值 "groupMembershipClaims": "All"。
+3. 更新应用程序清单文件，使 groupMembershipClaims 属性具有值 "groupMembershipClaims":"All"。
 
 4. 在指向播放器 Web 应用的 Azure AD 应用中，在“对其他应用程序的权限”部分添加步骤 1 中添加的资源应用。 在“委派权限”下面选择“访问 [资源名称]”。 此选项可授予 Web 应用创建访问令牌的权限以访问资源应用。 如果使用 Visual Studio 和 Azure Web 应用进行开发，请对本地版本和已部署版本的 Web 应用执行此操作。
 
@@ -370,8 +373,8 @@ Azure AD 颁发的 JWT 是用于访问此指针资源的访问令牌。
 
 > [!NOTE]
 > 如果使用 .NET Framework/C# 作为开发平台，用于非对称安全密钥的 X509 证书的密钥长度必须至少为 2048。 这是 .NET Framework 中 System.IdentityModel.Tokens.X509AsymmetricSecurityKey 类的要求。 否则，将引发以下异常：
-
-> IDX10630: 用于签名的 'System.IdentityModel.Tokens.X509AsymmetricSecurityKey' 不能小于 '2048' 位。
+> 
+> IDX10630:用于签名的 'System.IdentityModel.Tokens.X509AsymmetricSecurityKey' 不能小于 '2048' 位。
 
 ## <a name="the-completed-system-and-test"></a>完成的系统和测试
 本部分逐步讲解如何在完成的端到端系统中完成以下方案，让读者在获取登录帐户之前对该行为有个基本印象。
@@ -459,7 +462,7 @@ Widevine 不会阻止对受保护的视频进行屏幕截图。
 
 在上述两个方案中，用户身份验证相同。 身份验证是通过 Azure AD 发生的。 唯一的差别在于，JWT 由自定义 STS 而不是 Azure AD 颁发。 配置动态 CENC 保护时，许可证传送服务的限制将指定 JWT 的类型是对称还是非对称密钥。
 
-## <a name="summary"></a>摘要
+## <a name="summary"></a>总结
 本文档讨论了使用多重原生 DRM 的 CENC 以及通过令牌身份验证进行访问控制：它的设计和实现使用了 Azure、媒体服务和媒体播放器。
 
 * 文中提供了一个参考设计，其中包含 DRM/CENC 子系统中的所有必要组件。

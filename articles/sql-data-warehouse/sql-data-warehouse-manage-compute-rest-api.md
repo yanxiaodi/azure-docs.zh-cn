@@ -3,18 +3,19 @@ title: 在 Azure SQL 数据仓库中借助 REST 进行暂停、恢复、缩放 |
 description: 通过 REST API 管理 SQL 数据仓库中的计算能力。
 services: sql-data-warehouse
 author: kevinvngo
-manager: craigg-msft
+manager: craigg
 ms.service: sql-data-warehouse
 ms.topic: conceptual
-ms.component: implement
-ms.date: 04/17/2018
+ms.subservice: implement
+ms.date: 03/29/2019
 ms.author: kevin
 ms.reviewer: igorstan
-ms.openlocfilehash: 21423d69bf2cf06bcd208082ce492bf5dd038e29
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.openlocfilehash: 5b8652a0b08b426e708a909ff988e51eee9c0821
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66476075"
 ---
 # <a name="rest-apis-for-azure-sql-data-warehouse"></a>Azure SQL 数据仓库的 REST API
 用于管理 Azure SQL 数据仓库中的计算的 REST API。
@@ -51,8 +52,44 @@ POST https://management.azure.com/subscriptions/{subscription-id}/resourceGroups
 
 ## <a name="check-database-state"></a>检查数据库状态
 
+> [!NOTE]
+> 当前检查数据库状态可能会返回联机，而数据库正在完成联机工作流，从而导致连接错误。 您可能需要在应用程序代码中添加 2 到 3 分钟延迟，如果使用此 API 调用来触发的连接尝试。
+
 ```
 GET https://management.azure.com/subscriptions/{subscription-id}/resourceGroups/{resource-group-name}/providers/Microsoft.Sql/servers/{server-name}/databases/{database-name}?api-version=2014-04-01 HTTP/1.1
+```
+
+## <a name="get-maintenance-schedule"></a>获取维护日程安排
+检查已设置为数据仓库的维护计划。 
+
+```
+GET https://management.azure.com/subscriptions/{subscription-id}/resourceGroups/{resource-group-name}/providers/Microsoft.Sql/servers/{server-name}/databases/{database-name}/maintenanceWindows/current?maintenanceWindowName=current&api-version=2017-10-01-preview HTTP/1.1
+
+```
+
+## <a name="set-maintenance-schedule"></a>设置维护计划
+若要设置和更新 maintnenance 计划上的现有数据仓库。
+
+```
+PUT https://management.azure.com/subscriptions/{subscription-id}/resourceGroups/{resource-group-name}/providers/Microsoft.Sql/servers/{server-name}/databases/{database-name}/maintenanceWindows/current?maintenanceWindowName=current&api-version=2017-10-01-preview HTTP/1.1
+
+{
+    "properties": {
+        "timeRanges": [
+                {
+                                "dayOfWeek": Saturday,
+                                "startTime": 00:00,
+                                "duration": 08:00,
+                },
+                {
+                                "dayOfWeek": Wednesday
+                                "startTime": 00:00,
+                                "duration": 08:00,
+                }
+                ]
+    }
+}
+
 ```
 
 

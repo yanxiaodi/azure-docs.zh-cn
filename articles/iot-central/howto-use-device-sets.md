@@ -1,25 +1,27 @@
 ---
 title: 在 Azure IoT Central 应用程序中使用设备集 | Microsoft Docs
 description: 如何以操作员的身份在 Azure IoT Central 应用程序中使用设备集。
-services: iot-central
 author: ellenfosborne
 ms.author: elfarber
-ms.date: 01/21/2018
-ms.topic: article
-ms.prod: microsoft-iot-central
-manager: timlt
-ms.openlocfilehash: 932c8315b5af22c3adf18de50cf03deaf6b2a53e
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.date: 06/09/2019
+ms.topic: conceptual
+ms.service: iot-central
+services: iot-central
+manager: peterpfr
+ms.openlocfilehash: 9576711c33979cef7e043c18ac3b56251dd8a806
+ms.sourcegitcommit: b3bad696c2b776d018d9f06b6e27bffaa3c0d9c3
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
-ms.locfileid: "34201143"
+ms.lasthandoff: 08/21/2019
+ms.locfileid: "69877340"
 ---
 # <a name="use-device-sets-in-your-azure-iot-central-application"></a>在 Azure IoT Central 应用程序中使用设备集
 
-本文介绍如何以操作员的身份在 Microsoft Azure IoT Central 应用程序中使用设备集。
+[!INCLUDE [iot-central-original-pnp](../../includes/iot-central-original-pnp-note.md)]
 
-设备集是由于与某个指定的条件匹配，而全部分组到一起的一系列设备。 设备集通过将设备分组到较小的逻辑组，来帮助大规模管理、可视化和分析设备。 例如，可以针对西雅图的所有空调设备创建一个列表，使西雅图的技术人员能够找到他们所要负责的所有设备。 本文介绍如何创建和配置设备集。
+本文介绍如何以操作员的身份在 Azure IoT Central 应用程序中使用设备集。
+
+设备集是组合在一起的设备的列表, 因为它们符合某些指定的条件。 设备集通过将设备分组到较小的逻辑组，来帮助大规模管理、可视化和分析设备。 例如, 可以创建一个设备集来列出西雅图的所有 air 空调设备, 以使技术人员能够找到他们负责的设备。 本文介绍如何创建和配置设备集。
 
 ## <a name="create-a-device-set"></a>创建设备集
 
@@ -27,7 +29,7 @@ ms.locfileid: "34201143"
 
 1. 在左侧导航菜单中选择“设备集”。
 
-1. 单击“+ 新建”。
+1. 选择 " **+ 新建**"。
 
     ![新建设备集](media/howto-use-device-sets/image1.png)
 
@@ -42,15 +44,17 @@ ms.locfileid: "34201143"
 
 1. 选择“保存”。
 
-## <a name="configure-the-dashboard-for-your-device-set"></a>配置设备集的仪表板
+## <a name="configure-the-dashboard-for-your-device-set"></a>为设备集配置仪表板
 
-创建设备集后，可以配置其**仪表板**。 **仪表板**是一个主页，可在其中放置图像和链接。 还可以添加网格，用于列出设备集中的设备。
+创建设备集后，可以配置其**仪表板**。 **仪表板**是放置图像和链接的主页。 还可以添加网格，用于列出设备集中的设备。
 
 1. 在左侧导航菜单中选择“设备集”。
 
-1. 选择“仪表板”选项卡。
+1. 选择设备集。
 
-1. 打开“设计模式”。
+1. 选择“仪表板”选项卡 。
+
+1. 选择“编辑”。
 
     ![设计模式已打开](media/howto-use-device-sets/image3.png)
 
@@ -58,11 +62,8 @@ ms.locfileid: "34201143"
 
 1. 添加链接磁贴：
     1. 在右窗格中选择“链接”。
-
-        ![选择链接](media/howto-use-device-sets/image6.png)
-
     1. 为链接指定**标题**。
-    1. 选择单击该链接时要打开的 URL。
+    1. 选择要在选择链接时打开的 URL。
     1. 为链接提供说明，该说明将显示在**标题**下面。
     1. 选择“保存”。
 
@@ -72,11 +73,8 @@ ms.locfileid: "34201143"
 
 1. 添加网格。 网格是设备集中的设备表格，其中包含所选的列。
     1. 在右窗格中选择“网格”。
-
-        ![选择网格](media/howto-use-device-sets/image8.png)
-
     1. 为网格指定**标题**。
-    1. 选择按下设置按钮时要显示的列。 在弹出的面板中，选择要显示的列，并使用右箭头将其选中。
+    1. 选择按下“添加/删除”按钮时要显示的列。 在弹出的面板中，选择要显示的列，并使用右箭头将其选中。
     1. 选择“确定”。
     1. 选择“保存”。
 
@@ -84,12 +82,25 @@ ms.locfileid: "34201143"
 
     1. 将网格拖放到**仪表板**。
 
-    > [!NOTE]
-    > 可以添加多个图像、链接和网格。
+        > [!NOTE]
+        > 可以添加多个图像、链接和网格。
+  
+    1. 选择“完成”。
 
-1. 关闭“设计模式”。
+若要详细了解如何在 Azure IoT Central 中使用磁贴, 请参阅[使用仪表板磁贴](howto-use-tiles.md)。
 
-    ![设计模式已关闭](media/howto-use-device-sets/image10.png)
+### <a name="configure-a-location-map-in-your-device-sets-dashboard"></a>在设备集仪表板中配置位置映射
+
+你可以添加一个映射, 以直观显示设备集中设备的位置。
+
+若要将映射添加到设备集仪表板, 必须在设备模板中配置位置度量或位置属性。 若要了解详细信息, 请参阅[创建位置度量](howto-set-up-template.md)或[创建位置属性](howto-set-up-template.md)。
+
+1. 在设备的 "设置"**仪表板**上, 从库中选择 "**映射**"。
+2. 添加标题, 并选择先前配置的位置度量或属性。
+3. 选择 "**保存**", "地图" 磁贴显示设备集中的设备的最近已知位置。
+4. 当操作员查看 "设备集" 仪表板时, 操作员会看到所有已配置的磁贴, 包括位置地图。
+
+可以在仪表板上调整地图磁贴的大小。 选择地图上的 pin 会显示设备信息、名称和位置。 选择弹出窗口以切换到设备属性页。
 
 ## <a name="configure-the-list-for-your-device-set"></a>配置设备集的列表
 
@@ -111,7 +122,7 @@ ms.locfileid: "34201143"
 
 ## <a name="analytics"></a>分析
 
-设备集中的分析功能与左侧导航菜单中的主要分析选项卡相同。 可以在有关[如何创建分析](howto-create-analytics.md)的文章中详细了解分析。
+设备集中的分析功能与左侧导航菜单中的主要分析选项卡相同。 可以在有关[如何创建分析](howto-use-device-sets.md)的文章中详细了解分析。
 
 ## <a name="next-steps"></a>后续步骤
 

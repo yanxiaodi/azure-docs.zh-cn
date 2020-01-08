@@ -1,26 +1,19 @@
 ---
-title: 如何在 Azure Cosmos DB 中使用 SQL 进行查询？ | Microsoft Docs
+title: 如何在 Azure Cosmos DB 中使用 SQL 进行查询？
 description: 了解如何在 Azure Cosmos DB 中使用 SQL 进行查询
-services: cosmos-db
-documentationcenter: ''
-author: rafats
-manager: kfile
-editor: ''
-tags: ''
-ms.assetid: ''
+author: rimman
+ms.author: rimman
 ms.service: cosmos-db
 ms.custom: tutorial-develop, mvc
-ms.devlang: na
 ms.topic: tutorial
-ms.tgt_pltfrm: na
-ms.workload: ''
-ms.date: 05/10/2017
-ms.author: rafats
-ms.openlocfilehash: 131296d5219dffb2c4d7602b61b3c69b390e211e
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.date: 05/21/2019
+ms.reviewer: sngun
+ms.openlocfilehash: 7e57abcc3df17dadd2e607895a8de011761ed68c
+ms.sourcegitcommit: f3f4ec75b74124c2b4e827c29b49ae6b94adbbb7
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 09/12/2019
+ms.locfileid: "70932800"
 ---
 # <a name="tutorial-query-azure-cosmos-db-by-using-the-sql-api"></a>教程：使用 SQL API 查询 Azure Cosmos DB
 
@@ -68,7 +61,7 @@ Azure Cosmos DB [SQL API](documentdb-introduction.md) 支持使用 SQL 查询文
 通过 [REST API 和 SDK](sql-api-sdk-dotnet.md) 或[查询演练](https://www.documentdb.com/sql/demo)（它对现有示例数据集运行查询），可在 Azure 门户中使用数据资源管理器运行查询。
 
 有关 SQL 查询的详细信息，请参阅：
-* [SQL 查询和 SQL 语法](sql-api-sql-query.md)
+* [SQL 查询和 SQL 语法](sql-query-getting-started.md)
 
 ## <a name="prerequisites"></a>先决条件
 
@@ -125,14 +118,10 @@ Azure Cosmos DB [SQL API](documentdb-introduction.md) 支持使用 SQL 查询文
     FROM Families f 
     JOIN c IN f.children 
     WHERE f.id = 'WakefieldFamily'
-    ORDER BY f.children.grade ASC
 
 **结果**
 
-    [
-      { "givenName": "Jesse" }, 
-      { "givenName": "Lisa"}
-    ]
+[ { "givenName":"Jesse" }, { "givenName":"Lisa" } ]
 
 
 ## <a name="next-steps"></a>后续步骤

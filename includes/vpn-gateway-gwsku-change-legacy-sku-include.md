@@ -5,14 +5,15 @@ services: vpn-gateway
 author: cherylmc
 ms.service: vpn-gateway
 ms.topic: include
-ms.date: 03/21/2018
+ms.date: 03/15/2019
 ms.author: cherylmc
 ms.custom: include file
-ms.openlocfilehash: 2c1a4a1931bc2e38b0bee5f90518b01fdf4767a1
-ms.sourcegitcommit: 59914a06e1f337399e4db3c6f3bc15c573079832
-ms.translationtype: HT
+ms.openlocfilehash: 4c232e1ce183c6935d625b5bc9987a4981865ae4
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/20/2018
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67172830"
 ---
 如果使用的是资源管理器部署模型，则可更改到新式网关 SKU。 当从旧式网关 SKU 更改到新式 SKU 时，需删除现有 VPN 网关并创建新的 VPN 网关。
 

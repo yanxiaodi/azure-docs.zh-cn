@@ -2,23 +2,25 @@
 title: Intelligent Insights 性能诊断日志 - Azure SQL 数据库 | Microsoft Docs
 description: Intelligent Insights 提供 Azure SQL 数据库性能问题的诊断日志
 services: sql-database
-author: danimir
-manager: craigg
-ms.reviewer: carlrab
 ms.service: sql-database
-ms.custom: monitor & tune
-ms.topic: article
-ms.date: 04/04/2018
-ms.author: v-daljep
-ms.openlocfilehash: 5ce83198e1d2afb713044879724df88ad2696548
-ms.sourcegitcommit: 6fcd9e220b9cd4cb2d4365de0299bf48fbb18c17
-ms.translationtype: HT
+ms.subservice: performance
+ms.custom: ''
+ms.devlang: ''
+ms.topic: conceptual
+author: danimir
+ms.author: danil
+ms.reviewer: jrasnik, carlrab
+ms.date: 12/19/2018
+ms.openlocfilehash: c25d37a4d1695ab94cc0667a13e36e4da640e12a
+ms.sourcegitcommit: 55f7fc8fe5f6d874d5e886cb014e2070f49f3b94
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/05/2018
+ms.lasthandoff: 09/25/2019
+ms.locfileid: "71262152"
 ---
 # <a name="use-the-intelligent-insights-azure-sql-database-performance-diagnostics-log"></a>使用 Intelligent Insights Azure SQL 数据库性能诊断日志
 
-本页提供有关如何使用 [Intelligent Insights](sql-database-intelligent-insights.md) 生成的 Azure SQL 数据库性能诊断日志、它的格式和它为满足自定义开发需求所包含的数据的信息。 可将此诊断日志发送到 [Azure Log Analytics](../log-analytics/log-analytics-azure-sql.md)、[Azure 事件中心](../monitoring-and-diagnostics/monitoring-stream-diagnostic-logs-to-event-hubs.md)、[Azure 存储](sql-database-metrics-diag-logging.md#stream-into-storage)或第三方解决方案，以用于自定义 DevOps 警报和报告功能。
+本页提供有关如何使用 [Intelligent Insights](sql-database-intelligent-insights.md) 生成的 Azure SQL 数据库性能诊断日志、它的格式和它为满足自定义开发需求所包含的数据的信息。 可以将此诊断日志发送到[Azure Monitor 日志](../azure-monitor/insights/azure-sql.md)、 [azure 事件中心](../azure-monitor/platform/resource-logs-stream-event-hubs.md)、 [azure 存储](sql-database-metrics-diag-logging.md#stream-into-storage)或第三方解决方案，以用于自定义 DevOps 警报和报告功能。
 
 ## <a name="log-header"></a>日志标头
 
@@ -36,9 +38,7 @@ ms.lasthandoff: 04/05/2018
 
 ## <a name="issue-id-and-database-affected"></a>问题 ID 和受影响的数据库
 
-问题标识属性 (issueId_d) 提供一种跟踪性能问题直至解决的独特方法。 Intelligent Insights 将每个问题的生命周期显示为：“活动”、“正在验证”或“已完成”。 使用所有这些状态阶段，Intelligent Insights 可以在日志中记录多个事件记录。 对于每个条目，问题 ID 编号始终是唯一的。 Intelligent Insights 会在问题的整个生命周期中对它进行跟踪，并且每 15 分钟在诊断日志中生成一个见解。
-
-一旦检测到性能问题并且只要它还在持续发生，该问题在状态 (status_s) 属性下将报告为“活动”。 检测的问题得到缓解后，它将进行验证，并在状态 (status_s) 属性下报告为“正在验证”。 如果问题已不在，状态 (status_s) 属性会将此问题报告为“完成”。
+问题标识属性 (issueId_d) 提供一种跟踪性能问题直至解决的独特方法。 同一问题的日志报告状态中的多个事件记录将共享同一问题 ID。
 
 除问题 ID 外，诊断日志还会报告与在诊断日志中所报告问题相关的特定事件的开始 (intervalStartTime_t) 和结束 (intervalEndTme_t) 时间戳。
 
@@ -101,7 +101,7 @@ Intelligent Insights 性能日志的下一部分包括通过内置人工智能�
 
 Intelligent Insights 日志的下一部分提供关于受检测到的性能问题影响的特定查询信息。 此信息公开为嵌入 impact_s 属性的一组对象。 影响属性包含实体和指标。 实体引用特定查询（类型：Query）。 唯一的查询哈希值在值 (Value) 属性下公开。 此外，每个公开的查询后跟指标和值，指示检测到的性能问题。
 
-在以下日志示例中，使用哈希 0x9102EXZ4 的 查询被检测到其执行持续时间延长（指标：DurationIncreaseSeconds）。 值 110 秒表示此特定查询的执行时间延长 110 秒。 因为可以检测到多个查询，所以此特定日志部分可能包含多个查询条目。
+在以下日志示例中，使用哈希 0x9102EXZ4 的查询被检测到其执行持续时间延长（指标：DurationIncreaseSeconds）。 值 110 秒表示此特定查询的执行时间延长 110 秒。 因为可以检测到多个查询，所以此特定日志部分可能包含多个查询条目。
 
 ```json
 "impact" : [{
@@ -113,7 +113,7 @@ Intelligent Insights 日志的下一部分提供关于受检测到的性能问�
 }]
 ```
 
-### <a name="metrics"></a>度量值
+### <a name="metrics"></a>指标
 
 每个报告的指标的测量单位在指标 (metric) 属性下提供，可能的值有：秒、数字和百分比。 测量的指标值在值 (value) 属性中报告。
 
@@ -134,7 +134,7 @@ Intelligent Insights 性能日志的最后部分是对已确定的性能下降�
 "rootCauseAnalysis_s" : "High data IO caused performance to degrade. It seems that this database is missing some indexes that could help."
 ```
 
-Intelligent Insights 性能日志可与 [Azure Log Analytics]( https://docs.microsoft.com/azure/log-analytics/log-analytics-azure-sql) 或第三方解决方案结合使用，以用于自定义 DevOps 警报和报告功能。
+可以将智能见解性能日志与[Azure Monitor 日志]( https://docs.microsoft.com/azure/log-analytics/log-analytics-azure-sql)或第三方解决方案结合使用，以实现自定义 DevOps 警报和报告功能。
 
 ## <a name="next-steps"></a>后续步骤
 - 了解有关 [Intelligent Insights](sql-database-intelligent-insights.md) 的概念。

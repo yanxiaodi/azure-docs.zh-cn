@@ -1,4 +1,19 @@
-# <a name="securing-docker-containers-in-azure-container-service"></a>保护 Azure 容器服务中的 Docker 容器
+---
+author: dlepow
+ms.service: container-service
+ms.topic: include
+ms.date: 11/09/2018
+ms.author: danlep
+ms.openlocfilehash: c7b9e3a9eb5c906fa598da9c8c547cb542ecb719
+ms.sourcegitcommit: 94ee81a728f1d55d71827ea356ed9847943f7397
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 08/26/2019
+ms.locfileid: "70036664"
+---
+# <a name="deprecated-securing-docker-containers-in-azure-container-service"></a>（已弃用）保护 Azure 容器服务中的 Docker 容器
+
+[!INCLUDE [ACS deprecation](container-service-deprecation.md)]
 
 本文介绍有关保护 Azure 容器服务中部署的 Docker 容器的注意事项和建议。 其中的许多注意事项一般也适用于 Azure 或其他环境中部署的 Docker 容器。 
 
@@ -19,7 +34,7 @@
 
 即使使用专用注册表，也最好是使用映像扫描解决方案来增强安全验证。 容器映像中的每个软件层经常会出现容器映像中其他层所不存在的漏洞。 随着越来越多的公司开始基于容器技术部署生产工作负荷，映像扫描已变得非常重要，它可以确保在组织中防范安全威胁。 
 
-可以使用 [Twistlock](https://www.twistlock.com/2016/11/07/twistlock-supports-azure-container-registry)、[Aqua Security](http://blog.aquasec.com/image-vulnerability-scanning-in-azure-container-registry) 等安全监视和扫描解决方案来扫描专用注册表中的容器映像并识别潜在漏洞。 必须了解不同解决方案提供的扫描深度。 例如，某些解决方案可能只针对已知漏洞交叉验证映像层。 这些解决方案可能无法验证通过某些包管理器软件构建的映像层软件。 其他解决方案集成了更深入的扫描功能，可以查找任何打包软件中的漏洞。
+可以使用 [Twistlock](https://www.twistlock.com/2016/11/07/twistlock-supports-azure-container-registry)、[Aqua Security](https://blog.aquasec.com/image-vulnerability-scanning-in-azure-container-registry) 等安全监视和扫描解决方案来扫描专用注册表中的容器映像并识别潜在漏洞。 必须了解不同解决方案提供的扫描深度。 例如，某些解决方案可能只针对已知漏洞交叉验证映像层。 这些解决方案可能无法验证通过某些包管理器软件构建的映像层软件。 其他解决方案集成了更深入的扫描功能，可以查找任何打包软件中的漏洞。
 
 ### <a name="production-deployment-rules-and-audit"></a>生产部署规则和审核
 在生产环境中部署应用程序后，必须设置一些规则来确保生产环境中使用的映像安全且不包含任何漏洞。
@@ -43,9 +58,9 @@ Azure 容器服务中提供的每个协调器具有其自身的安全注意事�
 
 有关特定于协调器的其他安全信息，请参阅以下资源：
 
-* **Kubernetes**：[Kubernetes 部署的安全最佳做法](http://blog.kubernetes.io/2016/08/security-best-practices-kubernetes-deployment.html)
+* **Kubernetes**：[Kubernetes 部署的安全最佳做法](https://kubernetes.io/blog/2016/08/security-best-practices-kubernetes-deployment/)
 
-* **DC/OS**：[保护群集](https://dcos.io/docs/1.8/administration/securing-your-cluster/)
+* **DC/OS**：[保护群集](http://docs.mesosphere.com/1.12/administering-clusters/securing-your-cluster)
 
 * **Docker Swarm**：[Docker 安全性](https://www.docker.com/docker-security)
 

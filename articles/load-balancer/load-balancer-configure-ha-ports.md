@@ -1,25 +1,25 @@
 ---
-title: 为 Azure 负载均衡器配置高可用性端口 | Microsoft Docs
+title: 为 Azure 负载均衡器配置高可用性端口
+titlesuffix: Azure Load Balancer
 description: 了解如何使用高可用性端口对所有端口上的内部流量进行负载均衡
 services: load-balancer
 documentationcenter: na
 author: rdhillon
-manager: timlt
-editor: ''
-tags: azure-resource-manager
-ms.assetid: ''
+manager: narayan
 ms.service: load-balancer
 ms.devlang: na
 ms.topic: article
+ms.custom: seodec18
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
-ms.date: 03/21/20178
-ms.author: kumud
-ms.openlocfilehash: eb305986982432d7a432204e3fae8a1dff6a5d74
-ms.sourcegitcommit: 1362e3d6961bdeaebed7fb342c7b0b34f6f6417a
-ms.translationtype: HT
+ms.date: 03/21/2018
+ms.author: allensu
+ms.openlocfilehash: c0cf1eb62c8e01988c9014478ff72816e45ea64c
+ms.sourcegitcommit: 9a699d7408023d3736961745c753ca3cec708f23
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/18/2018
+ms.lasthandoff: 07/16/2019
+ms.locfileid: "68275617"
 ---
 # <a name="configure-high-availability-ports-for-an-internal-load-balancer"></a>为内部负载均衡器配置高可用性端口
 
@@ -38,20 +38,19 @@ ms.lasthandoff: 04/18/2018
 
 ![高可用性端口示例部署](./media/load-balancer-configure-ha-ports/haports.png)
 
-
-
 ## <a name="configure-high-availability-ports"></a>配置高可用性端口
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
 若要配置高可用性端口，请在后端池中使用 NVA 设置内部负载均衡器。 设置相应的负载均衡器运行状况探测配置，以便使用高可用性端口检测 NVA 运行状况和负载均衡器规则。 [入门](load-balancer-get-started-ilb-arm-portal.md)中介绍了常规的负载均衡器相关配置。 本文重点介绍高可用性端口配置。
 
-该配置实质上包括将前端端口和后端端口值设置为“0”。 将协议值设置为“All”。 本文介绍如何使用 Azure 门户、PowerShell 和 Azure CLI 2.0 配置高可用性端口。
+该配置实质上包括将前端端口和后端端口值设置为“0”  。 将协议值设置为“All”  。 本文介绍如何使用 Azure 门户、PowerShell 和 Azure CLI 配置高可用性端口。
 
 ### <a name="configure-a-high-availability-ports-load-balancer-rule-with-the-azure-portal"></a>使用 Azure 门户配置高可用性端口负载均衡器规则
 
-若要使用 Azure 门户配置高可用性端口，请选中“HA 端口”复选框。 选中时，会自动填充相关端口和协议配置。 
+若要使用 Azure 门户配置高可用性端口，请选中“HA 端口”复选框  。 选中时，会自动填充相关端口和协议配置。 
 
 ![通过 Azure 门户配置高可用性端口](./media/load-balancer-configure-ha-ports/haports-portal.png)
-
 
 ### <a name="configure-a-high-availability-ports-load-balancing-rule-via-the-resource-manager-template"></a>通过资源管理器模板配置高可用性端口负载均衡规则
 
@@ -91,10 +90,10 @@ ms.lasthandoff: 04/18/2018
 使用以下命令，在使用 PowerShell 创建内部负载均衡器时，创建高可用性端口负载均衡器规则：
 
 ```powershell
-lbrule = New-AzureRmLoadBalancerRuleConfig -Name "HAPortsRule" -FrontendIpConfiguration $frontendIP -BackendAddressPool $beAddressPool -Probe $healthProbe -Protocol "All" -FrontendPort 0 -BackendPort 0
+lbrule = New-AzLoadBalancerRuleConfig -Name "HAPortsRule" -FrontendIpConfiguration $frontendIP -BackendAddressPool $beAddressPool -Probe $healthProbe -Protocol "All" -FrontendPort 0 -BackendPort 0
 ```
 
-### <a name="configure-a-high-availability-ports-load-balancer-rule-with-azure-cli-20"></a>使用 Azure CLI 2.0 配置高可用性端口负载均衡器规则
+### <a name="configure-a-high-availability-ports-load-balancer-rule-with-azure-cli"></a>使用 Azure CLI 配置高可用性端口负载均衡器规则
 
 在[创建内部负载均衡器集](load-balancer-get-started-ilb-arm-cli.md)的步骤 4 中，使用以下命令创建高可用性端口负载均衡器规则：
 

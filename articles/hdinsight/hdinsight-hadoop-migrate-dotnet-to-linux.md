@@ -1,24 +1,19 @@
 ---
-title: 在基于 Linux 的 HDInsight 上将 .NET 与 Hadoop MapReduce 配合使用 - Azure | Microsoft Docs
+title: 在基于 Linux 的 HDInsight 上将 .NET 与 Hadoop MapReduce 配合使用 - Azure
 description: 了解如何在基于 Linux 的 HDInsight 上将 .NET 应用程序用于流式处理 MapReduce。
-services: hdinsight
-documentationCenter: ''
-author: Blackmist
-manager: jhubbard
-editor: cgronlun
-tags: azure-portal
-ms.assetid: ''
+author: hrasheed-msft
+ms.reviewer: jasonh
 ms.service: hdinsight
 ms.custom: hdinsightactive
-ms.devlang: dotnet
 ms.topic: conceptual
 ms.date: 02/27/2018
-ms.author: larryfr
-ms.openlocfilehash: 36b8f51122bad6614e63dfc58e09e5c1ca08f83d
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.author: hrasheed
+ms.openlocfilehash: a1d1488840ca2b17c83f380af4fa24105bb36202
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64729478"
 ---
 # <a name="migrate-net-solutions-for-windows-based-hdinsight-to-linux-based-hdinsight"></a>将基于 Windows 的 HDInsight 的 .NET 解决方案迁移到基于 Linux 的 HDInsight
 
@@ -26,11 +21,11 @@ ms.lasthandoff: 04/16/2018
 
 ## <a name="mono-compatibility-with-net"></a>Mono 与 .NET 的兼容性
 
-HDInsight 版本 3.6 附带了 Mono 版本 4.2.1。 有关包含在 HDInsight 中的 Mono 版本的详细信息，请参阅 [HDInsight 组件版本](hdinsight-component-versioning.md)。 若要安装 Mono 的特定版本，请参阅[安装或更新 Mono](hdinsight-hadoop-install-mono.md) 文档。
+HDInsight 版本 3.6 附带了 Mono 版本 4.2.1。 有关包含在 HDInsight 中的 Mono 版本的详细信息，请参阅 [HDInsight 组件版本](hdinsight-component-versioning.md)。
 
-有关 Mono 与 .NET 间兼容性的详细信息，请参阅 [Mono 兼容性 (http://www.mono-project.com/docs/about-mono/compatibility/)](http://www.mono-project.com/docs/about-mono/compatibility/) 文档。
+有关 Mono 与 .NET 间兼容性的详细信息，请参阅 [Mono 兼容性 (https://www.mono-project.com/docs/about-mono/compatibility/)](https://www.mono-project.com/docs/about-mono/compatibility/) 文档。
 
-> [!IMPORTANT]
+> [!IMPORTANT]  
 > SCP.NET 框架与 Mono 兼容。 有关将 SCP.NET 与 Mono 配合使用的详细信息，请参阅[使用 Visual Studio 为 HDInsight 上的 Apache Storm 开发 C# 拓扑](storm/apache-storm-develop-csharp-visual-studio-topology.md)。
 
 ## <a name="automated-portability-analysis"></a>自动可移植性分析
@@ -39,24 +34,24 @@ HDInsight 版本 3.6 附带了 Mono 版本 4.2.1。 有关包含在 HDInsight �
 
 1. 安装 [.NET Portability Analyzer](https://marketplace.visualstudio.com/items?itemName=ConnieYau.NETPortabilityAnalyzer)。 在安装期间，选择要使用的 Visual Studio 版本。
 
-2. 在 Visual Studio 2015 中，依次选择“分析” > “可移植性分析器设置”，并确保在“Mono”部分选中了“4.5”。
+2. 在 Visual Studio 2015 中，依次选择“分析”   > “可移植性分析器设置”  ，并确保在“Mono”  部分选中了“4.5”  。
 
     ![在分析器设置的 Mono 部分选中了 4.5](./media/hdinsight-hadoop-migrate-dotnet-to-linux/portability-analyzer-settings.png)
 
-    选择“确定”以保存配置。
+    选择“确定”  以保存配置。
 
-3. 依次选择“分析” > “分析程序集可移植性”。 选择包含解决方案的程序集，并选择“打开”以开始分析。
+3. 依次选择“分析”   > “分析程序集可移植性”  。 选择包含解决方案的程序集，并选择“打开”  以开始分析。
 
-4. 分析完成后，依次选择“分析” > “查看分析报表”。 在“可移植性分析结果”中，选择“打开报表”以打开某个报表。
+4. 分析完成后，依次选择“分析”   > “查看分析报表”  。 在“可移植性分析结果”  中，选择“打开报表”  以打开某个报表。
 
     ![可移植性分析器结果对话框](./media/hdinsight-hadoop-migrate-dotnet-to-linux/portability-analyzer-results.png)
 
-> [!IMPORTANT]
+> [!IMPORTANT]  
 > 分析器无法捕获解决方案的每个问题。 例如，如果 Mono 在 Windows 上运行，文件路径 `c:\temp\file.txt` 视为有效。 同一路径在 Linux 平台上无效。
 
 ## <a name="manual-portability-analysis"></a>手动可移植性分析
 
-使用[应用程序可移植性 (http://www.mono-project.com/docs/getting-started/application-portability/)](http://www.mono-project.com/docs/getting-started/application-portability/) 文档中的信息执行代码的手动审核。
+使用[应用程序可移植性 (https://www.mono-project.com/docs/getting-started/application-portability/)](https://www.mono-project.com/docs/getting-started/application-portability/) 文档中的信息执行代码的手动审核。
 
 ## <a name="modify-and-build"></a>修改和生成
 
@@ -68,12 +63,12 @@ HDInsight 版本 3.6 附带了 Mono 版本 4.2.1。 有关包含在 HDInsight �
 
 有关访问日志的详细信息，请参阅以下文档：
 
-* [在基于 Linux 的 HDInsight 上访问 YARN 应用程序日志](hdinsight-hadoop-access-yarn-app-logs-linux.md)
+* [在基于 Linux 的 HDInsight 上访问 Apache Hadoop YARN 应用程序日志](hdinsight-hadoop-access-yarn-app-logs-linux.md)
 
 ## <a name="next-steps"></a>后续步骤
 
 * [在 HDInsight 上将 C# 与 MapReduce 配合使用](hadoop/apache-hadoop-dotnet-csharp-mapreduce-streaming.md)
 
-* [将 C# 用户定义函数与 Hive 和 Pig 配合使用](hadoop/apache-hadoop-hive-pig-udf-dotnet-csharp.md)
+* [将 C# 用户定义函数与 Apache Hive 和 Apache Pig 配合使用](hadoop/apache-hadoop-hive-pig-udf-dotnet-csharp.md)
 
-* [为 HDInsight 上的 Storm 开发 C# 拓扑](storm/apache-storm-develop-csharp-visual-studio-topology.md)
+* [为 Apache Storm on HDInsight 开发 C# 拓扑](storm/apache-storm-develop-csharp-visual-studio-topology.md)

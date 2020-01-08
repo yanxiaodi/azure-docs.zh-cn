@@ -1,31 +1,27 @@
 ---
-title: "Azure 事件中心 .NET Standard API 概述 | Microsoft 文档"
-description: ".NET Standard API 概述"
+title: Azure 事件中心 .NET Standard API 概述 | Microsoft 文档
+description: .NET Standard API 概述
 services: event-hubs
 documentationcenter: na
-author: sethmanheim
+author: ShubhaVijayasarathy
 manager: timlt
-editor: 
-ms.assetid: a173f8e4-556c-42b8-b856-838189f7e636
 ms.service: event-hubs
-ms.devlang: na
 ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: na
-ms.date: 12/19/2017
-ms.author: sethm
-ms.openlocfilehash: 855f6e7f401621d7f923d68215ca880c05d38629
-ms.sourcegitcommit: f46cbcff710f590aebe437c6dd459452ddf0af09
-ms.translationtype: HT
+ms.date: 08/13/2018
+ms.author: shvija
+ms.openlocfilehash: b09f39f45936a7c43dbc1ef109780315d62c768f
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/20/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60821911"
 ---
 # <a name="event-hubs-net-standard-api-overview"></a>事件中心 .NET Standard API 概述
 
-本文汇总了一些重要的事件中心 .NET Standard 客户端 API。 目前，有两个 .NET Standard 客户端库：
+本文汇总了一些重要的 Azure 事件中心 [.NET Standard 客户端 API](https://www.nuget.org/packages/Microsoft.Azure.EventHubs/)。 目前有两个适用于事件中心的 .NET Standard 客户端库：
 
 * [Microsoft.Azure.EventHubs](/dotnet/api/microsoft.azure.eventhubs)：提供基本运行时的所有操作。
-* [Microsoft.Azure.EventHubs.Processor](/dotnet/api/microsoft.azure.eventhubs.processor)：添加了其他功能，该功能可以跟踪处理的事件，并且是从事件中心读取数据的最简单方法。
+* [Microsoft.Azure.EventHubs.Processor](/dotnet/api/microsoft.azure.eventhubs.processor)：添加了其他功能，可用于跟踪已处理的事件，并且是从事件中心读取数据的最简单方法。
 
 ## <a name="event-hubs-client"></a>事件中心客户端
 
@@ -36,13 +32,13 @@ ms.lasthandoff: 12/20/2017
 [EventHubClient](/dotnet/api/microsoft.azure.eventhubs.eventhubclient) 对象从连接字符串创建。 下面的示例显示了实例化新客户端的最简单方法：
 
 ```csharp
-var eventHubClient = EventHubClient.CreateFromConnectionString("{Event Hubs connection string}");
+var eventHubClient = EventHubClient.CreateFromConnectionString("Event Hubs connection string");
 ```
 
-要以编程方式编辑连接字符串，可以使用 [EventHubsConnectionStringBuilder](/dotnet/api/microsoft.azure.eventhubs.eventhubsconnectionstringbuilder) 类，并将连接字符串作为参数传递给 [EventHubClient.CreateFromConnectionString](/dotnet/api/microsoft.azure.eventhubs.eventhubclient#Microsoft_Azure_EventHubs_EventHubClient_CreateFromConnectionString_System_String_)。
+要以编程方式编辑连接字符串，可以使用 [EventHubsConnectionStringBuilder](/dotnet/api/microsoft.azure.eventhubs.eventhubsconnectionstringbuilder) 类，并将连接字符串作为参数传递给 [EventHubClient.CreateFromConnectionString](/dotnet/api/microsoft.azure.eventhubs.eventhubclient)。
 
 ```csharp
-var connectionStringBuilder = new EventHubsConnectionStringBuilder("{Event Hubs connection string}")
+var connectionStringBuilder = new EventHubsConnectionStringBuilder("Event Hubs connection string")
 {
     EntityPath = EhEntityPath
 };
@@ -69,7 +65,7 @@ await eventHubClient.SendAsync(data);
 
 #### <a name="create-a-receiver"></a>创建接收器
 
-接收器将绑定到特定分区，因此为了接收事件中心内的所有事件，必须创建多个实例。 好的做法是以编程方式获取分区信息，而不是对分区 ID 进行硬编码。 为此，可以使用 [GetRuntimeInformationAsync](/dotnet/api/microsoft.azure.eventhubs.eventhubclient#Microsoft_Azure_EventHubs_EventHubClient_GetRuntimeInformationAsync) 方法。
+接收器将绑定到特定分区，因此为了接收事件中心内的所有事件，必须创建多个实例。 好的做法是以编程方式获取分区信息，而不是对分区 ID 进行硬编码。 为此，可以使用 [GetRuntimeInformationAsync](/dotnet/api/microsoft.azure.eventhubs.eventhubclient) 方法。
 
 ```csharp
 // Create a list to keep track of the receivers
@@ -123,7 +119,7 @@ if (ehEvents != null)
 
 ## <a name="event-processor-host-apis"></a>事件处理程序主机 API
 
-这些 API 通过在可用工作进程之间分布分区，为可能变为不可用的工作进程提供复原能力。
+这些 API 通过在可用工作进程之间分布分区，为可能变得不可用的工作进程提供复原能力：
 
 ```csharp
 // Checkpointing is done within the SimpleEventProcessor and on a per-consumerGroup per-partition basis, workers resume from where they last left off.
@@ -148,7 +144,7 @@ await eventProcessorHost.RegisterEventProcessorAsync<SimpleEventProcessor>();
 await eventProcessorHost.UnregisterEventProcessorAsync();
 ```
 
-以下是 [IEventProcessor](/dotnet/api/microsoft.azure.eventhubs.processor.ieventprocessor) 的示例实现。
+下面是 [IEventProcessor](/dotnet/api/microsoft.azure.eventhubs.processor.ieventprocessor) 接口的示例实现：
 
 ```csharp
 public class SimpleEventProcessor : IEventProcessor
@@ -185,6 +181,7 @@ public class SimpleEventProcessor : IEventProcessor
 ```
 
 ## <a name="next-steps"></a>后续步骤
+
 若要了解有关事件中心方案的详细信息，请访问以下链接：
 
 * [什么是 Azure 事件中心？](event-hubs-what-is-event-hubs.md)

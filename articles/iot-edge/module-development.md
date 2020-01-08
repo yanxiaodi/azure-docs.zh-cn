@@ -1,58 +1,54 @@
 ---
-title: "开发 Azure IoT Edge 模块 | Microsoft Docs"
-description: "了解如何创建 Azure IoT Edge 的自定义模块"
-services: iot-edge
-keywords: 
+title: 开发 Azure IoT Edge 模块 | Microsoft Docs
+description: 为 Azure IoT Edge 开发可与运行时和 IoT 中心通信的自定义模块
 author: kgremban
-manager: timlt
+manager: philmea
 ms.author: kgremban
-ms.date: 10/05/2017
-ms.topic: article
+ms.date: 07/22/2019
+ms.topic: conceptual
 ms.service: iot-edge
-ms.openlocfilehash: 95b1d5d4e5e11f96b6abb17f0aeba935cc65512d
-ms.sourcegitcommit: 9a61faf3463003375a53279e3adce241b5700879
-ms.translationtype: HT
+services: iot-edge
+ms.custom: seodec18
+ms.openlocfilehash: 9d983dc4a2623e7f2a272ea2a320d2658d784dee
+ms.sourcegitcommit: e97a0b4ffcb529691942fc75e7de919bc02b06ff
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 11/15/2017
+ms.lasthandoff: 09/15/2019
+ms.locfileid: "71003584"
 ---
-# <a name="understand-the-requirements-and-tools-for-developing-iot-edge-modules---preview"></a>了解开发 IoT Edge 模块的要求和工具 - 预览
+# <a name="develop-your-own-iot-edge-modules"></a>开发你自己的 IoT Edge 模块
 
-本文介绍编写作为 IoT Edge 模块运行的应用程序时可用的功能，以及如何充分利用它们。
+Azure IoT Edge 模块可以与其他 Azure 服务连接，帮助你实现更大的云数据管道。 本文介绍如何开发模块以与 IoT Edge 运行时和 IoT 中心通信，并进而与 Azure 云的其他服务通信。 
 
 ## <a name="iot-edge-runtime-environment"></a>IoT Edge 运行时环境
 IoT Edge 运行时提供基础结构可集成多个 IoT Edge 模块的功能并将其部署到 IoT Edge 设备上。 概括而言，任意程序都可打包为 IoT Edge 模块。 但是，若要充分利用 IoT Edge 通信和管理功能，在模块中运行的程序需要连接到本地 IoT Edge 中心，集成在 IoT Edge 运行时中。
 
 ## <a name="using-the-iot-edge-hub"></a>使用 IoT Edge 中心
-IoT Edge 中心提供两种主要功能：连接到 IoT Edge 的代理和本地通信。
+IoT Edge 中心提供两种主要功能：连接到 IoT 中心的代理和本地通信。
 
 ### <a name="iot-hub-primitives"></a>IoT 中心基元
-IoT 中心将看到类似设备的模块实例，从某种意义上：
+IoT 中心在以下意义上将模块实例视为与设备类似：
 
-* 它拥有模块孪生，这与[设备孪生][lnk-devicetwin]和该设备的其他模块孪生不同且与相隔离；
-* 它可以发送[设备到云消息][lnk-iothub-messaging]；
-* 它可以接收专门针对其标识的[直接方法][lnk-methods]。
+* 它拥有模块孪生，这与[设备孪生](../iot-hub/iot-hub-devguide-device-twins.md)和该设备的其他模块孪生不同且相隔离；
+* 它可以发送[设备到云消息](../iot-hub/iot-hub-devguide-messaging.md)；
+* 它可以接收专门针对其标识的[直接方法](../iot-hub/iot-hub-devguide-direct-methods.md)。
 
 当前，模块不能接收云到设备消息，也不能使用文件上传功能。
 
-编写模块时，使用 [Azure IoT 设备 SDK][lnk-devicesdk] 即可连接到 IoT Edge 中心，使用上述将 IoT 中心用于设备应用程序时的功能，唯一的区别在于，需得从应用程序后端引用模块标识而非设备标识。
-
-若要了解发送设备到云消息和使用模块孪生的模块应用程序的示例，请参阅[开发 IoT Edge 模块并将其部署到模拟设备][lnk-tutorial2]。
+编写模块时，可使用 [Azure IoT 设备 SDK](../iot-hub/iot-hub-devguide-sdks.md) 连接到 IoT Edge 中心，使用上述将 IoT 中心用于设备应用程序时的功能，唯一的区别在于，需得从应用程序后端引用模块标识而非设备标识。
 
 ### <a name="device-to-cloud-messages"></a>设备到云的消息
-若要启用设备到云消息的复杂处理，IoT Edge 中心需要提供模块之间和模块与 IoT 中心之间消息的声明性路由。
-这允许模块拦截并处理其他模块发送的消息，并将它们传播到复杂管道。
-[模块组合][lnk-module-comp]一文介绍如何使用路由将模块组合到复杂管道。
+若要启用设备到云消息的复杂处理，IoT Edge 中心需要提供模块之间以及模块与 IoT 中心之间消息的声明性路由。 声明性路由允许模块拦截并处理其他模块发送的消息，并将它们传播到复杂管道。 有关详细信息，请参阅[在 IoT Edge 中部署模块和建立路由](module-composition.md)。
 
-不同于常规 IoT 中心设备应用程序，IoT Edge 模块可以接收其本地 IoT Edge 中心所代理的设备到云消息，以便进行处理。
+与常规 IoT 中心设备应用程序不同，IoT Edge 模块可以接收其本地 IoT Edge 中心所代理的设备到云消息，以便进行处理。
 
-IoT Edge 中心基于[模块组合][lnk-module-comp]一文中介绍的声明性路由将消息传播到模块。 开发 IoT Edge 模块时，可以通过设置消息处理程序来接收这些消息，如教程[开发 IoT Edge 模块并将其部署到模拟设备][lnk-tutorial2]中所示。
+IoT Edge 中心基于[部署清单](module-composition.md)中介绍的声明性路由将消息传播到模块。 开发 IoT Edge 模块时，可以通过设置消息处理程序来接收这些消息。
 
-若要简化路由的创建，IoT Edge 要添加模块输入和输出终结点的概念。 无需指定任意输入，模块即可接收所有路由给它的设备到云消息，并且无需指定任意输出，模块即可发送设备到云消息。
-然而使用显式输入和输出使得路由规则更容易理解。 若要详细了解路由规则和模块输入和输出终结点，请参阅[模块组合][lnk-module-comp]。
+若要简化路由的创建，IoT Edge 要添加模块*输入*和*输出*终结点的概念。 无需指定任意输入，模块即可接收所有路由给它的设备到云消息，并且无需指定任意输出，模块即可发送设备到云消息。 然而使用显式输入和输出使得路由规则更容易理解。 
 
 最后，Edge 中心处理的设备到云消息标有以下系统属性：
 
-| 属性 | 说明 |
+| 属性 | 描述 |
 | -------- | ----------- |
 | $connectionDeviceId | 发送消息的客户端的设备 ID |
 | $connectionModuleId | 发送消息的模块的模块 ID |
@@ -60,26 +56,46 @@ IoT Edge 中心基于[模块组合][lnk-module-comp]一文中介绍的声明性�
 | $outputName | 用来发送消息的输出。 可以为空。 |
 
 ### <a name="connecting-to-iot-edge-hub-from-a-module"></a>从模块连接到 IoT Edge 中心
-从模块连接到本地 IoT Edge 中心涉及两个步骤：模块启动时，使用 IoT Edge 运行时提供的连接字符串，并确保应用程序接受该设备 IoT Edge 中心提供的证书。
+从模块连接到本地 IoT Edge 中心涉及两个步骤： 
+1. 在应用程序中创建 ModuleClient 实例。
+2. 确保应用程序接受该设备上 IoT Edge 中心提供的证书。
 
-要使用的连接字符串由 IoT Edge 运行时注入环境变量 `EdgeHubConnectionString`。 这使得它对任意需要使用它的程序可用。
+创建一个 ModuleClient 实例，将模块连接到设备上运行的 IoT Edge 中心，其方式与 DeviceClient 实例将 IoT 设备连接到 IoT 中心类似。 有关 ModuleClient 类及其通信方法的更多信息，请参阅首选 SDK 语言的 API 参考：[C#](https://docs.microsoft.com/dotnet/api/microsoft.azure.devices.client.moduleclient?view=azure-dotnet)、 [C](https://docs.microsoft.com/azure/iot-hub/iot-c-sdk-ref/iothub-module-client-h)、 [Python](https://docs.microsoft.com/python/api/azure-iot-device/azure.iot.device.iothubmoduleclient?view=azure-python)、 [Java](https://docs.microsoft.com/java/api/com.microsoft.azure.sdk.iot.device.moduleclient?view=azure-java-stable)[或 node.js。](https://docs.microsoft.com/javascript/api/azure-iot-device/moduleclient?view=azure-node-latest)
 
-类似地，用以验证 IoT Edge 中心连接的证书由 IoT Edge 运行时注入其路径提供在环境变量 `EdgeModuleCACertificateFile` 中的文件。
+## <a name="language-and-architecture-support"></a>语言和体系结构支持
 
-[开发 IoT Edge 模块并将其部署到模拟设备][lnk-tutorial2]教程介绍如何确保证书位于模块应用程序的计算机存储中。 显然，任何其他信任使用该证书的连接的方法均有效。
+IoT Edge 支持多种操作系统、设备体系结构和开发语言，因此你可以构建满足你的需求的方案。 使用此部分来了解用于开发自定义 IoT Edge 模块的选项。 可以在[为 IoT Edge 准备开发和测试环境](development-environment.md)中详细了解每种语言的工具支持和要求。
 
-## <a name="packaging-as-an-image"></a>打包为映像
-IoT Edge 模块打包为 Docker 映像。
-可以直接使用 Docker 工具链，或者[开发 IoT Edge 模块并将其部署到模拟设备][lnk-tutorial2] 教程中的 Visual Studio Code。
+### <a name="linux"></a>Linux
+
+对于下表中的所有语言，IoT Edge 支持 AMD64 和 ARM32 Linux 设备的开发。 
+
+| 开发语言 | 开发工具 |
+| -------------------- | ----------------- |
+| C | Visual Studio Code<br>Visual Studio 2017/2019 |
+| C# | Visual Studio Code<br>Visual Studio 2017/2019 |
+| Java | Visual Studio Code |
+| Node.js | Visual Studio Code |
+| Python | Visual Studio Code |
+
+>[!NOTE]
+>[公共预览版](https://azure.microsoft.com/support/legal/preview-supplemental-terms/)中提供了对 ARM64 Linux 设备的开发和调试支持。 有关详细信息，请参阅[在 Visual Studio Code（预览版）中开发和调试 ARM64 IoT Edge 模块](https://devblogs.microsoft.com/iotdev/develop-and-debug-arm64-iot-edge-modules-in-visual-studio-code-preview)。
+
+### <a name="windows"></a>Windows
+
+对于下表中的所有语言，IoT Edge 支持 AMD64 Windows 设备的开发。
+
+| 开发语言 | 开发工具 |
+| -------------------- | ----------------- |
+| C | Visual Studio 2017/2019 |
+| C# | Visual Studio Code（无调试功能）<br>Visual Studio 2017/2019 |
 
 ## <a name="next-steps"></a>后续步骤
 
-开发模块后，了解如何[大规模部署和监视 IoT Edge 模块][lnk-howto-deploy]。
+[为 IoT Edge 准备开发和测试环境](development-environment.md)
 
-[lnk-devicesdk]: ../iot-hub/iot-hub-devguide-sdks.md
-[lnk-devicetwin]: ../iot-hub/iot-hub-devguide-device-twins.md
-[lnk-iothub-messaging]: ../iot-hub/iot-hub-devguide-messaging.md
-[lnk-methods]: ../iot-hub/iot-hub-devguide-direct-methods.md
-[lnk-tutorial2]: tutorial-csharp-module.md
-[lnk-module-comp]: module-composition.md
-[lnk-howto-deploy]: how-to-deploy-monitor.md
+[使用 Visual Studio 开发适用于 IoT Edge 的 C# 模块](how-to-visual-studio-develop-module.md)
+
+[使用 Visual Studio Code 开发适用于 IoT Edge 的模块](how-to-vs-code-develop-module.md)
+
+[了解和使用 Azure IoT 中心 SDK](../iot-hub/iot-hub-devguide-sdks.md)

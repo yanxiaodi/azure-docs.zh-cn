@@ -1,36 +1,39 @@
 ---
-title: 创建面向 Internet 的负载均衡器 - Azure CLI（经典）| Microsoft 文档
-description: 了解如何使用 Azure CLI 在经典部署模型中创建面向 Internet 的负载均衡器
+title: 创建面向 Internet 的负载均衡器 - Azure 经典 CLI
+titlesuffix: Azure Load Balancer
+description: 了解如何使用 Azure 经典 CLI 在经典部署模型中创建面向 Internet 的负载均衡器
 services: load-balancer
 documentationcenter: na
 author: genlin
-manager: cshepard
-tags: azure-service-management
-ms.assetid: e433a824-4a8a-44d2-8765-a74f52d4e584
+manager: dcscontentpm
 ms.service: load-balancer
 ms.devlang: na
-ms.topic: get-started-article
+ms.topic: article
+ms.custom: seodec18
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
-ms.date: 01/23/2017
+ms.date: 10/31/2018
 ms.author: genli
-ms.openlocfilehash: bacf135da25a5315e61922179db9a29fa8a152f1
-ms.sourcegitcommit: c52123364e2ba086722bc860f2972642115316ef
-ms.translationtype: HT
+ms.openlocfilehash: 2d7f1971c6aff446f9bf8f983bd7859e831c1213
+ms.sourcegitcommit: c79aa93d87d4db04ecc4e3eb68a75b349448cd17
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/11/2018
+ms.lasthandoff: 09/18/2019
+ms.locfileid: "71090929"
 ---
-# <a name="get-started-creating-an-internet-facing-load-balancer-classic-in-the-azure-cli"></a>开始在 Azure CLI 中创建面向 Internet 的负载均衡器（经典）
+# <a name="get-started-creating-an-internet-facing-load-balancer-classic-in-the-azure-classic-cli"></a>开始使用 Azure 经典 CLI 创建面向 Internet 的负载均衡器（经典）
 
 > [!div class="op_single_selector"]
 > * [PowerShell](../load-balancer/load-balancer-get-started-internet-classic-ps.md)
-> * [Azure CLI](../load-balancer/load-balancer-get-started-internet-classic-cli.md)
+> * [Azure 经典 CLI](../load-balancer/load-balancer-get-started-internet-classic-cli.md)
 > * [Azure 云服务](../load-balancer/load-balancer-get-started-internet-classic-cloud.md)
 
 [!INCLUDE [load-balancer-get-started-internet-intro-include.md](../../includes/load-balancer-get-started-internet-intro-include.md)]
 
 > [!IMPORTANT]
-> 在使用 Azure 资源之前，请务必了解 Azure 当前使用两种部署模型：Azure 资源管理器部署模型和经典部署模型。 在使用任何 Azure 资源之前，请确保了解 [部署模型和工具](../azure-classic-rm.md) 。 可以通过单击本文顶部的选项卡来查看不同工具的文档。 本文介绍经典部署模型。 还可以[了解如何使用 Azure 资源管理器创建面向 Internet 的负载均衡器](load-balancer-get-started-internet-arm-ps.md)。
+> 在使用 Azure 资源之前，请务必了解 Azure 当前具有的两种部署模型：Azure 资源管理器和经典。 在使用任何 Azure 资源之前，请确保了解 [部署模型和工具](../azure-classic-rm.md) 。 可以通过单击本文顶部的选项卡来查看不同工具的文档。 本文介绍经典部署模型。 还可以[了解如何使用 Azure 资源管理器创建面向 Internet 的负载均衡器](load-balancer-get-started-internet-arm-ps.md)。
+
+[!INCLUDE [requires-classic-cli](../../includes/contains-classic-cli-content.md)]
 
 [!INCLUDE [load-balancer-get-started-internet-scenario-include.md](../../includes/load-balancer-get-started-internet-scenario-include.md)]
 
@@ -38,7 +41,7 @@ ms.lasthandoff: 05/11/2018
 
 本指南演示如何基于上述方案创建 Internet 负载均衡器。
 
-1. 如果从未使用过 Azure CLI，请参阅[安装和配置 Azure CLI](../cli-install-nodejs.md)，并按照说明进行操作，直到选择 Azure 帐户和订阅。
+1. 如果从未使用过 Azure 经典 CLI，请参阅[安装和配置 Azure 经典 CLI](../cli-install-nodejs.md)，并按照说明操作，直到选择 Azure 帐户和订阅这一步。
 2. 运行 **azure config mode** 命令以切换到经典模式，如下所示。
 
     ```azurecli
@@ -52,7 +55,7 @@ ms.lasthandoff: 05/11/2018
 ## <a name="create-endpoint-and-load-balancer-set"></a>创建终结点和负载均衡器集
 
 此方案假定已创建虚拟机“web1”和“web2”。
-本指南将使用端口 80 作为公用端口和本地端口创建负载均衡器集。 还会在端口 80 上配置探测端口，并将负载均衡器集命名为“lbset”。
+本指南会使用端口 80 作为公用端口和本地端口创建负载均衡器集。 还会在端口 80 上配置探测端口，并将负载均衡器集命名为“lbset”。
 
 ### <a name="step-1"></a>步骤 1
 

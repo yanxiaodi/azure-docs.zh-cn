@@ -1,21 +1,22 @@
 ---
-title: Azure 消息服务对比
-description: 比较 Azure 事件网格、事件中心和服务总线。 推荐不同场景使用的服务。
+title: Azure 消息传递比较 - 事件网格、事件中心、服务总线
+description: 介绍三种 Azure 消息传递服务 - Azure 事件网格、事件中心和服务总线。 推荐不同场景使用的服务。
 services: event-grid
-author: tfitzmac
+author: spelluru
 manager: timlt
 ms.service: event-grid
 ms.topic: overview
-ms.date: 03/16/2018
-ms.author: tomfitz
-ms.openlocfilehash: 1437916e62e7c2987c0a1d8c3a5ac4a5f332134d
-ms.sourcegitcommit: 688a394c4901590bbcf5351f9afdf9e8f0c89505
+ms.date: 01/30/2019
+ms.author: spelluru
+ms.custom: seodec18
+ms.openlocfilehash: d2daa23a22fae6ba420a146599c0c0ba659a94f2
+ms.sourcegitcommit: bd15a37170e57b651c54d8b194e5a99b5bcfb58f
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/18/2018
-ms.locfileid: "34303549"
+ms.lasthandoff: 03/07/2019
+ms.locfileid: "57540799"
 ---
-# <a name="choose-between-azure-services-that-deliver-messages"></a>在传递消息的 Azure 服务之间进行选择
+# <a name="choose-between-azure-messaging-services---event-grid-event-hubs-and-service-bus"></a>在 Azure 消息传递服务之间进行选择 - 事件网格、事件中心和服务总线
 
 Azure 提供三种协助在整个解决方案中传递事件消息的服务。 这些服务分别为：
 
@@ -33,7 +34,7 @@ Azure 提供三种协助在整个解决方案中传递事件消息的服务。 �
 
 事件是条件或状态更改的轻量通知。 事件发布者对于如何处理事件没有期望。 事件使用者决定要对通知执行的操作。 事件可以是离散单元或一系列的一部分。
 
-离散事件报告状态更改，并可操作。 若要执行下一步，使用者只需知道发生了问题。 事件数据包含关于所发生事件的信息，但不包含触发事件的数据。 例如，事件会通知使用者文件已创建。 它可能包含文件的常规信息，但不包含文件本身。 离散事件非常适合于需要缩放的无服务器解决方案。
+离散事件报告状态更改，并可操作。 若要执行下一步，使用者只需知道发生了问题。 事件数据包含关于所发生事件的信息，但不包含触发事件的数据。 例如，事件会通知使用者文件已创建。 它可能包含文件的常规信息，但不包含文件本身。 离散事件非常适合于需要缩放的[无服务器](https://azure.com/serverless)解决方案。
 
 系列事件报告情况，并且可分析。 事件按时间排序并彼此相关。 使用者需要排序的一系列事件以分析发生的情况。
 
@@ -53,13 +54,16 @@ Azure 提供三种协助在整个解决方案中传递事件消息的服务。 �
 
 事件网格是启用事件驱动、反应编程的事件底板。 它使用发布-订阅模式。 发布服务器发出事件，但不知道处理哪些事件。 订阅服务器决定需要处理的事件。
 
-事件网格与 Azure 服务深度集成，并可与第三方服务集成。 它简化事件消耗，并通过消除不断的轮询需求降低成本。 事件网格高效可靠地路由来自 Azure 和非 Azure 资源的事件。 它将事件分布到注册的订阅服务器终结点。 事件消息包含你需要对服务和应用程序中的更改做出响应的信息。 事件网格不是数据管道，并且不提供已更新的实际对象。
+事件网格与 Azure 服务深度集成，并可与第三方服务集成。 它简化事件消耗，并通过消除不断的轮询需求降低成本。 事件网格高效可靠地路由来自 Azure 和非 Azure 资源的事件。 它将事件分布到注册的订阅服务器终结点。 事件消息包含对服务和应用程序中的更改做出响应所需的信息。 事件网格不是数据管道，并且不提供已更新的实际对象。
+
+对于不提交到终结点的事件，事件网格支持死信功能。
 
 它具有以下特征：
 
 * 动态可缩放
 * 低成本
 * 无服务器
+* “至少一次”交付
 
 ### <a name="event-hubs"></a>事件中心
 
@@ -69,10 +73,11 @@ Azure 事件中心是大数据管道。 它促进遥测数据和事件流数据�
 
 * 低延迟
 * 每秒可以接收和处理数百万的事件
+* “至少一次”交付
 
 ### <a name="service-bus"></a>服务总线
 
-服务总线适用于传统企业应用程序。 这些企业应用程序需要事务、排序、重复检测和即时一致性。 服务总线使得云本机应用程序能够为业务进程提供可靠的状态转换管理。 处理不能丢失或复制的高价值消息时，请使用 Azure 服务总线。 服务总线还利于跨混合云解决方案的高度安全通信，并且可以将现有本地系统连接到云解决方案。
+服务总线适用于传统企业应用程序。 这些企业应用程序需要事务、排序、重复检测和即时一致性。 服务总线使得[云原生](https://azure.microsoft.com/overview/cloudnative/)应用程序能够为业务进程提供可靠的状态转换管理。 处理不能丢失或复制的高价值消息时，请使用 Azure 服务总线。 服务总线还利于跨混合云解决方案的高度安全通信，并且可以将现有本地系统连接到云解决方案。
 
 服务总线是一个中转消息传送系统。 它将消息存储在“中转站”（例如队列）中，直到使用方准备好接收这些消息。
 
@@ -80,6 +85,8 @@ Azure 事件中心是大数据管道。 它促进遥测数据和事件流数据�
 
 * 需要轮询的可靠异步消息传递（企业消息传递作为服务）
 * 高级消息传递功能，例如，FIFO、批处理/会话、事务、死信、时态控制、路由和筛选以及重复检测
+* “至少一次”交付
+* 可选的按序交付
 
 ## <a name="use-the-services-together"></a>同时使用多种服务
 
@@ -90,9 +97,10 @@ Azure 事件中心是大数据管道。 它促进遥测数据和事件流数据�
 ![流数据概述](./media/compare-messaging-services/overview.png)
 
 ## <a name="next-steps"></a>后续步骤
+请参阅以下文章： 
 
-* 有关 Azure 消息传递服务的更多信息，请参阅博客文章 [Events, Data Points, and Messages - Choosing the right Azure messaging service for your data](https://azure.microsoft.com/blog/events-data-points-and-messages-choosing-the-right-azure-messaging-service-for-your-data/)（事件、数据点和消息 - 为数据选择合适的 Azure 消息传递服务）。
-* 有关事件网格的介绍，请参阅[关于事件网格](overview.md)。
-* 若要开始使用事件网格，请参阅[使用 Azure 事件网格创建和路由自定义事件](custom-event-quickstart.md)。
-* 若要开始使用事件中心，请参阅[使用 Azure 门户创建事件中心命名空间和事件中心](../event-hubs/event-hubs-create.md)。
-* 若要开始使用服务总线，请参阅[使用 Azure 门户创建服务总线命名空间](../service-bus-messaging/service-bus-create-namespace-portal.md)。
+- [Events, Data Points, and Messages - Choosing the right Azure messaging service for your data](https://azure.microsoft.com/blog/events-data-points-and-messages-choosing-the-right-azure-messaging-service-for-your-data/)（事件、数据点和消息 - 为数据选择合适的 Azure 消息传递服务）。
+- [存储队列和服务总线队列 - 比较与对照](../service-bus-messaging/service-bus-azure-and-service-bus-queues-compared-contrasted.md)
+- 若要开始使用事件网格，请参阅[使用 Azure 事件网格创建和路由自定义事件](custom-event-quickstart.md)。
+- 若要开始使用事件中心，请参阅[使用 Azure 门户创建事件中心命名空间和事件中心](../event-hubs/event-hubs-create.md)。
+- 若要开始使用服务总线，请参阅[使用 Azure 门户创建服务总线命名空间](../service-bus-messaging/service-bus-create-namespace-portal.md)。

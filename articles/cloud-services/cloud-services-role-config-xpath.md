@@ -1,29 +1,23 @@
 ---
-title: "云服务角色配置 XPath 速查表 | Microsoft Docs"
-description: "可在云服务角色配置中用来将设置公开为环境变量的各种 XPath 设置。"
+title: 云服务角色配置 XPath 速查表 | Microsoft Docs
+description: 可在云服务角色配置中用来将设置公开为环境变量的各种 XPath 设置。
 services: cloud-services
-documentationcenter: 
-author: Thraka
-manager: timlt
-editor: 
-ms.assetid: c51e4493-0643-4d05-bc44-06c76bcbf7d1
+author: georgewallace
 ms.service: cloud-services
-ms.devlang: na
 ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: na
 ms.date: 04/19/2017
-ms.author: adegeo
-ms.openlocfilehash: e71adbca34390bda3a7d4067742ffb3a28201449
-ms.sourcegitcommit: afc78e4fdef08e4ef75e3456fdfe3709d3c3680b
-ms.translationtype: HT
+ms.author: gwallace
+ms.openlocfilehash: cd2bdc4fc4b2a135907851ca4d3034430618e0cd
+ms.sourcegitcommit: 4b647be06d677151eb9db7dccc2bd7a8379e5871
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 11/16/2017
+ms.lasthandoff: 07/19/2019
+ms.locfileid: "68359003"
 ---
 # <a name="expose-role-configuration-settings-as-an-environment-variable-with-xpath"></a>使用 XPath 将角色配置设置公共为环境变量
 在云服务辅助角色或 Web 角色服务定义文件中，可以将运行时配置值公开为环境变量。 支持以下 XPath 值（分别对应于 API 值）。
 
-[Microsoft.WindowsAzure.ServiceRuntime](https://msdn.microsoft.com/library/microsoft.windowsazure.serviceruntime.roleenvironment.aspx) 库中也提供了这些 XPath 值。 
+[Microsoft.WindowsAzure.ServiceRuntime](/previous-versions/azure/reference/ee773173(v=azure.100)) 库中也提供了这些 XPath 值。 
 
 ## <a name="app-running-in-emulator"></a>应用在模拟器中运行
 指示应用正在模拟器中运行。
@@ -108,7 +102,7 @@ ms.lasthandoff: 11/16/2017
 ## <a name="endpoint-ip"></a>终结点 IP
 获取指定终结点的 IP 地址。
 
-| 类型 | 示例 |
+| type | 示例 |
 | --- | --- |
 | XPath |xpath="/RoleEnvironment/CurrentInstance/Endpoints/Endpoint[@name='Endpoint1']/@address" |
 | 代码 |var address = RoleEnvironment.CurrentRoleInstance.InstanceEndpoints["Endpoint1"].IPEndpoint.Address |

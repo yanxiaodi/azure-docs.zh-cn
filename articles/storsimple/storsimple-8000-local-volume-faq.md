@@ -1,12 +1,12 @@
 ---
-title: "StorSimple 本地固定卷的常见问题 | Microsoft 文档"
-description: "提供有关 StorSimple 本地固定卷常见问题的解答。"
+title: StorSimple 本地固定卷的常见问题 | Microsoft 文档
+description: 提供有关 StorSimple 本地固定卷常见问题的解答。
 services: storsimple
 documentationcenter: NA
 author: manuaery
 manager: syadav
-editor: 
-ms.assetid: 
+editor: ''
+ms.assetid: ''
 ms.service: storsimple
 ms.devlang: NA
 ms.topic: article
@@ -14,11 +14,12 @@ ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 06/26/2017
 ms.author: manuaery
-ms.openlocfilehash: 857647e89b7ac5d9bc72bc4b2ace0ea7279353f9
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.openlocfilehash: aa69d8b07d31b5cf0386e34c113475cbf4191891
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60319541"
 ---
 # <a name="storsimple-locally-pinned-volumes-frequently-asked-questions-faq"></a>StorSimple 本地固定卷：常见问题 (FAQ)
 ## <a name="overview"></a>概述
@@ -35,24 +36,25 @@ ms.lasthandoff: 10/11/2017
 ## <a name="questions-about-creating-a-locally-pinned-volume"></a>有关创建本地固定卷的问题
 **问：** 在 8000 系列设备上可以创建的本地固定卷的大小上限是什么？
 
-**答：**在运行 StorSimple 8000 系列 Update 3.0 的设备上可以预配高达 8.5 TB 的本地固定卷，或者在 8100 设备上预配高达 200 TB 的分层卷。 8600 设备更大，可以预配高达 22.5 TB 的本地固定卷，预配高达 500 TB 的固定卷。
+**答：** 在运行 StorSimple 8000 系列 Update 3.0 的设备上可以预配高达 8.5 TB 的本地固定卷，或者在 8100 设备上预配高达 200 TB 的分层卷。 8600 设备更大，可以预配高达 22.5 TB 的本地固定卷，预配高达 500 TB 的固定卷。
 
 **问：** 我最近将 8100 设备升级到 Update 3.0，在尝试创建本地固定卷时，可用大小上限只有 6 TB 而不是 8.5 TB。 为何无法创建 8.5 TB 的卷？
 
-**答：**如果设备运行的是 Update 3.0，则可以预配高达 8.5 TB 的本地固定卷，或者在 8100 设备上预配高达 200 TB 的分层卷。 如果设备中已有分层卷，可用于创建本地固定卷的空间将相应地低于此最大限制。 举例来说，如果已在 8100 设备上预配大约 106 TB 的分层卷（这是分层容量的一半），则可以在 8100 设备上创建的本地卷大小上限缩减为 4 TB（大约是本地固定卷容量上限的一半）。
+**答：** 如果设备运行的是 Update 3.0，则可以预配高达 8.5 TB 的本地固定卷，或者在 8100 设备上预配高达 200 TB 的分层卷。 如果设备中已有分层卷，可用于创建本地固定卷的空间将相应地低于此最大限制。 举例来说，如果已在 8100 设备上预配大约 106 TB 的分层卷（这是分层容量的一半），则可以在 8100 设备上创建的本地卷大小上限缩减为 4 TB（大约是本地固定卷容量上限的一半）。
 
 由于设备上的某些本地空间用于托管分层卷的工作集，因此如果设备有分层卷，可用于创建本地固定卷的空间就会减少。 相反，创建本地固定卷也会相应减少分层卷可用的空间。 下表汇总了创建本地固定卷时，8100 和 8600 设备上可用的分层容量。
 
 #### <a name="update-30"></a>Update 3.0 
+
 | 本地固定卷的预配容量 | 可为分层卷预配的容量 - 8100 | 可为分层卷预配的容量 - 8600 |
 | --- | --- | --- |
 | 0 |200 TB |500 TB |
 | 1 TB |176.5 TB |477.8 TB |
 | 4 TB |105.9 TB |411.1 TB |
 | 8.5 TB |0 TB |311.1 TB |
-| 10 TB |不可用 |277.8 TB |
-| 15 TB |不可用 |166.7 TB |
-| 22.5 TB |不可用 |0 TB |
+| 10 TB |NA |277.8 TB |
+| 15 TB |NA |166.7 TB |
+| 22.5 TB |NA |0 TB |
 
 **问：** 为何创建本地固定卷是长时间运行的操作？
 
@@ -81,7 +83,7 @@ ms.lasthandoff: 10/11/2017
 
 同样，如果正在扩展现有的本地卷或将分层卷转换为本地固定卷，则创建新本地固定卷的作业将排入队列，直到上一个作业完成为止。 扩展本地固定卷的大小涉及到扩展该卷的现有本地空间。 从分层卷转换为本地固定卷还涉及到为最终的本地固定卷创建本地空间。 在这两项操作中，创建或扩展本地空间都是长时间运行的作业。
 
-可以在 StorSimple 设备管理器服务的“作业”边栏选项卡中查看这些作业。 系统将持续更新当前正在积极处理的作业，反映空间预配的进度。 剩余的本地固定卷作业标记为正在运行，但其进度会停止，系统根据排队顺序选择作业。
+可以在 StorSimple 设备管理器服务的“作业”边栏选项卡中查看这些作业。  系统将持续更新当前正在积极处理的作业，反映空间预配的进度。 剩余的本地固定卷作业标记为正在运行，但其进度会停止，系统根据排队顺序选择作业。
 
 **问：** 我删除了一个本地固定卷。 尝试创建新卷时，为何可用空间中未反映回收的空间？
 
@@ -112,7 +114,7 @@ ms.lasthandoff: 10/11/2017
 
 该警报就是通知你可能会发生这种情况，请务必通过以下方式及时解决：查看本地快照计划，减少创建本地快照的频率，或删除不再需要的旧本地快照。
 
-如果本地快照失效，会收到信息警报，告知特定备份策略的本地快照已失效，此外还会提供已失效本地快照的时间戳列表。 这些快照会自动删除，不再可以通过 Azure 门户的“备份目录”边栏选项卡查看。
+如果本地快照失效，会收到信息警报，告知特定备份策略的本地快照已失效，此外还会提供已失效本地快照的时间戳列表。 这些快照会自动删除，不再可以通过 Azure 门户的“备份目录”边栏选项卡查看。 
 
 ## <a name="questions-about-converting-a-tiered-volume-to-a-locally-pinned-volume"></a>有关将分层卷转换为本地固定卷的问题
 **问：** 将分层卷转换为本地固定卷时，发现设备的速度很慢。 为何会发生这种情况？
@@ -161,7 +163,7 @@ ms.lasthandoff: 10/11/2017
 
 **问：** 是否可以在还原期间更改卷的类型？
 
-**答：**无法在还原期间更改卷类型。
+**答：** 否，不能在还原期间更改卷类型。
 
 * 已删除的卷还原为快照中存储的类型。
 * 无论快照中存储的类型为何，卷都根据其当前类型还原（请参考前两个问题）。
@@ -199,5 +201,5 @@ ms.lasthandoff: 10/11/2017
 
 **问：** 是否可以将包含本地固定卷的卷容器故障转移到云设备？
 
-**答：** 可以。 本地固定卷将作为分层卷故障转移。 有关[对跨版本地固定卷进行故障转移和灾难恢复](storsimple-8000-device-failover-disaster-recovery.md#common-considerations-for-device-failover)的详细信息
+**答：** 是的，你可以。 本地固定卷将作为分层卷故障转移。 有关[对跨版本地固定卷进行故障转移和灾难恢复](storsimple-8000-device-failover-disaster-recovery.md#common-considerations-for-device-failover)的详细信息
 

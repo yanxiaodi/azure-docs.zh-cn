@@ -1,45 +1,42 @@
 ---
-title: 通过 Azure ExpressRoute Microsoft 对等互连配置站点到站点的 VPN | Microsoft Docs
+title: 通过 Microsoft 对等互连配置站点到站点的 VPN - ExpressRoute - Azure | Microsoft Docs
 description: 使用站点到站点的 VPN 网关，通过 ExpressRoute Microsoft 对等互连线路配置到 Azure 的 IPsec/IKE 连接。
-documentationcenter: na
 services: expressroute
 author: cherylmc
-manager: timlt
-editor: ''
-ms.assetid: ''
 ms.service: expressroute
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: infrastructure-services
-ms.date: 12/06/2017
+ms.topic: conceptual
+ms.date: 02/25/2019
 ms.author: cherylmc
-ms.openlocfilehash: 64203e2cbac1206224f0e0ad8b7d364f19ad0332
-ms.sourcegitcommit: 4ac89872f4c86c612a71eb7ec30b755e7df89722
-ms.translationtype: HT
+ms.custom: seodec18
+ms.openlocfilehash: f35ed65b25d469b524e7174affecb45ad7c4735c
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/07/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66115788"
 ---
 # <a name="configure-a-site-to-site-vpn-over-expressroute-microsoft-peering"></a>通过 ExpressRoute Microsoft 对等互连配置站点到站点的 VPN
 
-本文帮助你通过 ExpressRoute 专用连接在本地网络与 Azure 虚拟网络 (VNet) 间配置安全的加密连接。 通过 ExpressRoute 配置安全隧道，即可机密、真实、完整地交换数据，不会出现重播。
-
-## <a name="architecture"></a>体系结构
-
-可利用 Microsoft 对等互连在所选本地网络和 Azure VNet 间建立站点到站点的 IPsec/IKE VPN 隧道。
-
-  ![连接概述](./media/site-to-site-vpn-over-microsoft-peering/IPsecER_Overview.png)
+本文帮助你通过 ExpressRoute 专用连接在本地网络与 Azure 虚拟网络 (VNet) 间配置安全的加密连接。 可使用 Microsoft 对等互连在所选本地网络和 Azure VNet 间建立站点到站点的 IPsec/IKE VPN 隧道。 通过 ExpressRoute 配置安全隧道，即可机密、真实、完整地交换数据，不会出现重播。
 
 >[!NOTE]
 >通过 Microsoft 对等互连设置站点到站点 VPN 时，需为 VPN 网关和 VPN 出口付费。 有关详细信息，请参阅 [VPN 网关定价](https://azure.microsoft.com/pricing/details/vpn-gateway)。
 >
 >
 
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
+
+## <a name="architecture"></a>体系结构
+
+
+  ![连接概述](./media/site-to-site-vpn-over-microsoft-peering/IPsecER_Overview.png)
+
+
 为获得高可用性和冗余，可通过 ExpressRoute 线路的两个 MSEE-PE 对配置多条隧道，并在隧道间启用负载均衡。
 
   ![高可用性选项](./media/site-to-site-vpn-over-microsoft-peering/HighAvailability.png)
 
-终止通过 Microsoft 对等互连配置的 VPN 隧道有两种方法：使用 VPN 网关；使用 Azure Marketplace 提供的合适的网络虚拟设备 (NVA)。 可通过加密隧道静态或动态地交换路由，无需向底层 Microsoft 对等互连公开路由交换。 在本文的示例中，BGP（与用于创建 Microsoft 对等互连的 BGP 会话不同）用于在加密隧道上动态交换前缀。
+终止通过 Microsoft 对等互连配置的 VPN 隧道有两种方法：使用 VPN 网关；使用 Azure 市场提供的合适的网络虚拟设备 (NVA)。 可通过加密隧道静态或动态地交换路由，无需向底层 Microsoft 对等互连公开路由交换。 在本文的示例中，BGP（与用于创建 Microsoft 对等互连的 BGP 会话不同）用于在加密隧道上动态交换前缀。
 
 >[!IMPORTANT]
 >对于本地端，通常会在 DMZ 上终止 Microsoft 对等互连，在核心网络区域终止专用对等互连。 两个区域使用防火墙分隔。 如果将 Microsoft 对等互连配置为专用于启用通过 ExpressRoute 配置的安全隧道，请记住只筛选相关的公共 IP，这些 IP 通过 Microsoft 对等互连播发。
@@ -64,7 +61,7 @@ ms.lasthandoff: 12/07/2017
 
 * 如果已有 ExpressRoute 线路，但未配置 Microsoft 对等互连，请查看[创建和修改 ExpressRoute 线路的对等互连](expressroute-howto-routing-arm.md#msft)一文，配置 Microsoft 对等互连。
 
-配置线路和 Microsoft 对等互连后，即可在 Azure 门户的“概述”页面中轻松查看。
+配置线路和 Microsoft 对等互连后，即可在 Azure 门户的“概述”页面中轻松查看  。
 
 ![线路](./media/site-to-site-vpn-over-microsoft-peering/ExpressRouteCkt.png)
 
@@ -74,9 +71,9 @@ ms.lasthandoff: 12/07/2017
 
 ![路由筛选器](./media/site-to-site-vpn-over-microsoft-peering/route-filter.png)
 
-在此示例中，部署仅位于 Azure 美国西部 2 区域。 添加路由筛选器规则，仅允许 Azure 美国西部 2 区域前缀的播发，其 BGP 社区值为 12076:51026。 可选择“管理规则”来指定要允许的区域前缀。
+在此示例中，部署仅位于 Azure 美国西部 2 区域  。 添加路由筛选器规则，仅允许 Azure 美国西部 2 区域前缀的播发，其 BGP 社区值为 12076:51026  。 可选择“管理规则”来指定要允许的区域前缀  。
 
-在路由筛选器中，还需选择路由筛选器适用的 ExpressRoute 线路。 可通过选择“添加线路”来选择 ExpressRoute 线路。 在上图中，路由筛选器与示例 ExpressRoute 线路相关联。
+在路由筛选器中，还需选择路由筛选器适用的 ExpressRoute 线路。 可通过选择“添加线路”来选择 ExpressRoute 线路  。 在上图中，路由筛选器与示例 ExpressRoute 线路相关联。
 
 ### <a name="configfilter"></a>2.1 配置路由筛选器
 
@@ -94,7 +91,7 @@ ms.lasthandoff: 12/07/2017
 show ip bgp vpnv4 vrf 10 summary
 ```
 
-以下部分输出显示，通过 ASN 12076 (MSEE) 从邻域 *.243.229.34 收到 68 个前缀：
+以下部分输出显示了 68 个前缀已从邻域收到\*.243.229.34 通过 ASN 12076 (MSEE):
 
 ```
 ...
@@ -111,8 +108,8 @@ sh ip bgp vpnv4 vrf 10 neighbors X.243.229.34 received-routes
 
 要确认正在接收的前缀集是否正确，可进行交叉验证。 以下 Azure PowerShell 命令输出列出了通过 Microsoft 对等互连播发的每个服务和每个 Azure 区域的前缀：
 
-```powershell
-Get-AzureRmBgpServiceCommunity
+```azurepowershell-interactive
+Get-AzBgpServiceCommunity
 ```
 
 ## <a name="vpngateway"></a>3.配置 VPN 网关和 IPsec 隧道
@@ -144,9 +141,9 @@ Get-AzureRmBgpServiceCommunity
 
 在此示例中，变量声明对应于示例网络。 声明变量时，请修改此部分以反映你的环境。
 
-* 变量 localAddressPrefix 是本地 IP 地址的数组，用于终止 IPsec 隧道。
-* gatewaySku 决定 VPN 吞吐量。 有关 gatewaySku 和 vpnType 的详细信息，请参阅 [VPN 网关配置设置](../vpn-gateway/vpn-gateway-about-vpn-gateway-settings.md#gwsku)。 有关定价问题，请参阅 [VPN 网关定价](https://azure.microsoft.com/pricing/details/vpn-gateway)。
-* 将 vpnType 设置为 RouteBased。
+* 变量 localAddressPrefix 是本地 IP 地址的数组，用于终止 IPsec 隧道  。
+* gatewaySku 决定 VPN 吞吐量  。 有关 gatewaySku 和 vpnType 的详细信息，请参阅 [VPN 网关配置设置](../vpn-gateway/vpn-gateway-about-vpn-gateway-settings.md#gwsku)。 有关定价问题，请参阅 [VPN 网关定价](https://azure.microsoft.com/pricing/details/vpn-gateway)。
+* 将 vpnType 设置为 RouteBased   。
 
 ```json
 "variables": {
@@ -166,7 +163,7 @@ Get-AzureRmBgpServiceCommunity
   "gatewayName": "vpnGw",                 // Name of the Azure VPN gateway
   "gatewaySku": "VpnGw1",                 // Azure VPN gateway SKU
   "vpnType": "RouteBased",                // type of VPN gateway
-  "sharedKey": "string",                  // shared secret needs to match with on-premise configuration
+  "sharedKey": "string",                  // shared secret needs to match with on-premises configuration
   "asnVpnGateway": 65000,                 // BGP Autonomous System number assigned to the VPN Gateway 
   "asnRemote": 65010,                     // BGP Autonmous Syste number assigned to the on-premises device
   "bgpPeeringAddress": "172.16.0.3",      // IP address of the remote BGP peer on-premises
@@ -242,7 +239,7 @@ Get-AzureRmBgpServiceCommunity
 
 ### <a name="termination"></a>3.4 指定本地 VPN 隧道终端（本地网关）
 
-本地 VPN 设备被称为本地网关。 以下 json 片段还指定了远程 BGP 对等节点的详细信息：
+本地 VPN 设备被称为本地网关  。 以下 json 片段还指定了远程 BGP 对等节点的详细信息：
 
 ```json
 {
@@ -269,8 +266,8 @@ Get-AzureRmBgpServiceCommunity
 
 模板的这一部分使用主动/主动配置所需的设置来配置 VPN 网关。 请注意以下几个要求：
 
-* 使用“RouteBased”VpnType 创建 VPN 网关。 若要启用 VPN 网关与本地 VPN 间的 BGP 路由，则此设置是必需的。
-* 为了在主动/主动模式下，在 VPN 网关的两个实例和给定在本地设备间建立 VPN 隧道，需将资源管理器模板中的“activeActive”参数设置为 true。 要详细了解高可用 VPN 网关，请参阅[高可用 VPN 网关连接](../vpn-gateway/vpn-gateway-highlyavailable.md)。
+* 使用“RouteBased”VpnType 创建 VPN 网关  。 若要启用 VPN 网关与本地 VPN 间的 BGP 路由，则此设置是必需的。
+* 为了在主动/主动模式下，在 VPN 网关的两个实例和给定在本地设备间建立 VPN 隧道，需将资源管理器模板中的“activeActive”参数设置为 true   。 要详细了解高可用 VPN 网关，请参阅[高可用 VPN 网关连接](../vpn-gateway/vpn-gateway-highlyavailable.md)。
 * 要在 VPN 隧道间配置 eBGP 会话，则必须在两端指定两个不同的 ASN。 最好指定专用 ASN 号码。 有关详细信息，请参阅[BGP 和 Azure VPN 网关概述](../vpn-gateway/vpn-gateway-bgp-overview.md)。
 
 ```json
@@ -366,7 +363,7 @@ Azure VPN 网关与许多来自不同供应商的 VPN 设备兼容。 要了解�
 * 共享密钥。 此共享密钥就是在创建站点到站点 VPN 连接时指定的共享密钥。 该示例使用基本的共享密钥。 建议生成更复杂的可用密钥。
 * VPN 网关的公共 IP 地址。 可以通过 Azure 门户、PowerShell 或 CLI 查看公共 IP 地址。 要使用 Azure 门户查找 VPN 网关的公共 IP 地址，请导航到“虚拟网关”，并单击网关的名称。
 
-通常，eBGP 对等节点会直接连接（通常是通过 WAN 连接）。 但在通过 ExpressRoute Microsoft 对等互连在 IPsec VPN 隧道上配置 eBGP 时，eBGP 对等节点间存在多个路由域。 使用 ebgp-multihop 命令在两个非直接连接的对等节点间建立 eBGP 邻域关系。 ebgp-multihop 命令后的整数指定 BGP 数据包中的 TTL 值。 maximum-paths eibgp 2 命令在两条 BGP 路径间启用流量负载均衡。
+通常，eBGP 对等节点会直接连接（通常是通过 WAN 连接）。 但在通过 ExpressRoute Microsoft 对等互连在 IPsec VPN 隧道上配置 eBGP 时，eBGP 对等节点间存在多个路由域。 使用 ebgp-multihop 命令在两个非直接连接的对等节点间建立 eBGP 邻域关系  。 ebgp-multihop 命令后的整数指定 BGP 数据包中的 TTL 值。 maximum-paths eibgp 2 命令在两条 BGP 路径间启用流量负载均衡  。
 
 ### <a name="cisco1"></a>Cisco CSR1000 示例
 
@@ -486,13 +483,13 @@ ip route 10.2.0.229 255.255.255.255 Tunnel1
 
 可使用 Powershell 命令在 Azure VPN 网关上验证 IPsec 隧道的状态：
 
-```powershell
-Get-AzureRmVirtualNetworkGatewayConnection -Name vpn2local1 -ResourceGroupName myRG | Select-Object  ConnectionStatus,EgressBytesTransferred,IngressBytesTransferred | fl
+```azurepowershell-interactive
+Get-AzVirtualNetworkGatewayConnection -Name vpn2local1 -ResourceGroupName myRG | Select-Object  ConnectionStatus,EgressBytesTransferred,IngressBytesTransferred | fl
 ```
 
 示例输出：
 
-```powershell
+```azurepowershell
 ConnectionStatus        : Connected
 EgressBytesTransferred  : 17734660
 IngressBytesTransferred : 10538211
@@ -500,13 +497,13 @@ IngressBytesTransferred : 10538211
 
 要单独检查 Azure VPN 网关实例上的隧道状态，请使用以下示例：
 
-```powershell
-Get-AzureRmVirtualNetworkGatewayConnection -Name vpn2local1 -ResourceGroupName myRG | Select-Object -ExpandProperty TunnelConnectionStatus
+```azurepowershell-interactive
+Get-AzVirtualNetworkGatewayConnection -Name vpn2local1 -ResourceGroupName myRG | Select-Object -ExpandProperty TunnelConnectionStatus
 ```
 
 示例输出：
 
-```powershell
+```azurepowershell
 Tunnel                           : vpn2local1_52.175.250.191
 ConnectionStatus                 : Connected
 IngressBytesTransferred          : 4877438
@@ -622,13 +619,13 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 4/5/6 ms
 
 在 Azure VPN 网关上，验证 BGP 对等节点的状态：
 
-```powershell
-Get-AzureRmVirtualNetworkGatewayBGPPeerStatus -VirtualNetworkGatewayName vpnGtw -ResourceGroupName SEA-C1-VPN-ER | ft
+```azurepowershell-interactive
+Get-AzVirtualNetworkGatewayBGPPeerStatus -VirtualNetworkGatewayName vpnGtw -ResourceGroupName SEA-C1-VPN-ER | ft
 ```
 
 示例输出：
 
-```powershell
+```azurepowershell
   Asn ConnectedDuration LocalAddress MessagesReceived MessagesSent Neighbor    RoutesReceived State    
   --- ----------------- ------------ ---------------- ------------ --------    -------------- -----    
 65010 00:57:19.9003584  10.2.0.228               68           72   172.16.0.10              2 Connected
@@ -638,13 +635,13 @@ Get-AzureRmVirtualNetworkGatewayBGPPeerStatus -VirtualNetworkGatewayName vpnGtw 
 
 要验证通过 eBGP 从本地 VPN 集中器收到的网络前缀列表，可按“源”属性进行筛选：
 
-```powershell
-Get-AzureRmVirtualNetworkGatewayLearnedRoute -VirtualNetworkGatewayName vpnGtw -ResourceGroupName myRG  | Where-Object Origin -eq "EBgp" |ft
+```azurepowershell-interactive
+Get-AzVirtualNetworkGatewayLearnedRoute -VirtualNetworkGatewayName vpnGtw -ResourceGroupName myRG  | Where-Object Origin -eq "EBgp" |ft
 ```
 
 在示例输出中，ASN 65010 是本地 VPN 中的 BGP 自治系统编号。
 
-```powershell
+```azurepowershell
 AsPath LocalAddress Network      NextHop     Origin SourcePeer  Weight
 ------ ------------ -------      -------     ------ ----------  ------
 65010  10.2.0.228   10.1.10.0/25 172.16.0.10 EBgp   172.16.0.10  32768
@@ -653,13 +650,13 @@ AsPath LocalAddress Network      NextHop     Origin SourcePeer  Weight
 
 查看播发的路由列表：
 
-```powershell
-Get-AzureRmVirtualNetworkGatewayAdvertisedRoute -VirtualNetworkGatewayName vpnGtw -ResourceGroupName myRG -Peer 10.2.0.228 | ft
+```azurepowershell-interactive
+Get-AzVirtualNetworkGatewayAdvertisedRoute -VirtualNetworkGatewayName vpnGtw -ResourceGroupName myRG -Peer 10.2.0.228 | ft
 ```
 
 示例输出：
 
-```powershell
+```azurepowershell
 AsPath LocalAddress Network        NextHop    Origin SourcePeer Weight
 ------ ------------ -------        -------    ------ ---------- ------
        10.2.0.229   10.2.0.0/24    10.2.0.229 Igp                  0
@@ -693,7 +690,7 @@ Total number of prefixes 4
 
 可使用以下命令列出从本地 Cisco CSR1000 向 Azure VPN 网关播发的网络列表：
 
-```powershell
+```
 csr1#show ip bgp neighbors 10.2.0.228 advertised-routes
 BGP table version is 7, local router ID is 172.16.0.10
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,

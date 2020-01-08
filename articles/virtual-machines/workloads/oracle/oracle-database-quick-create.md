@@ -1,39 +1,39 @@
 ---
-title: "在 Azure VM 上创建 Oracle 数据库 | Microsoft Docs"
-description: "在 Azure 环境中快速创建并运行 Oracle Database 12c 数据库。"
+title: 在 Azure VM 上创建 Oracle 数据库 | Microsoft Docs
+description: 在 Azure 环境中快速创建并运行 Oracle Database 12c 数据库。
 services: virtual-machines-linux
 documentationcenter: virtual-machines
-author: rickstercdn
-manager: timlt
-editor: 
+author: romitgirdhar
+manager: gwallace
+editor: ''
 tags: azure-resource-manager
-ms.assetid: 
+ms.assetid: ''
 ms.service: virtual-machines-linux
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-linux
 ms.workload: infrastructure
-ms.date: 07/17/2017
-ms.author: rclaus
-ms.openlocfilehash: 4f760165fa8a93bbb7646539af748b647fe63bba
-ms.sourcegitcommit: 059dae3d8a0e716adc95ad2296843a45745a415d
-ms.translationtype: HT
+ms.date: 08/02/2018
+ms.author: rogirdh
+ms.openlocfilehash: 6d43fa2621aa95bdcf18d5c033d1347e13dc3f67
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/09/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70101476"
 ---
 # <a name="create-an-oracle-database-in-an-azure-vm"></a>在 Azure VM 上创建 Oracle 数据库
 
-本指南详述了如何使用 Azure CLI 通过从 [Oracle 应用商店库映像](https://azuremarketplace.microsoft.com/marketplace/apps/Oracle.OracleDatabase12102EnterpriseEdition?tab=Overview)部署 Azure 虚拟机来创建 Oracle 12c 数据库。 部署服务器后，若要配置 Oracle 数据库，请先通过 SSH 进行连接。 
+本指南详述了如何使用 Azure CLI 通过从 [Oracle 市场库映像](https://azuremarketplace.microsoft.com/marketplace/apps/Oracle.OracleDatabase12102EnterpriseEdition?tab=Overview)部署 Azure 虚拟机来创建 Oracle 12c 数据库。 部署服务器后，若要配置 Oracle 数据库，请先通过 SSH 进行连接。 
 
-如果你还没有 Azure 订阅，可以在开始前创建一个 [免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
+如果没有 Azure 订阅，请在开始之前创建一个[免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
 
 [!INCLUDE [cloud-shell-try-it.md](../../../../includes/cloud-shell-try-it.md)]
 
-如果选择在本地安装并使用 CLI，此快速入门教程要求运行 Azure CLI 2.0.4 版或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。
+如果选择在本地安装并使用 CLI，此快速入门教程要求运行 Azure CLI 2.0.4 版或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。
 
 ## <a name="create-a-resource-group"></a>创建资源组
 
-使用 [az group create](/cli/azure/group#az_group_create) 命令创建资源组。 Azure 资源组是在其中部署和管理 Azure 资源的逻辑容器。 
+使用 [az group create](/cli/azure/group) 命令创建资源组。 Azure 资源组是在其中部署和管理 Azure 资源的逻辑容器。 
 
 以下示例在“eastus”位置创建名为“myResourceGroup”的资源组。
 
@@ -42,7 +42,7 @@ az group create --name myResourceGroup --location eastus
 ```
 ## <a name="create-virtual-machine"></a>创建虚拟机
 
-若要创建虚拟机 (VM)，请使用 [az vm create](/cli/azure/vm#az_vm_create) 命令。 
+若要创建虚拟机 (VM)，请使用 [az vm create](/cli/azure/vm) 命令。 
 
 以下示例创建一个名为 `myVM` 的 VM。 此外，它还在默认密钥位置中不存在 SSH 密钥时创建这些密钥。 若要使用特定的一组密钥，请使用 `--ssh-key-value` 选项。  
 
@@ -76,12 +76,12 @@ az vm create \
 若要与 VM 建立 SSH 会话，请使用以下命令。 请将 IP 地址替换为 VM 的 `publicIpAddress` 值。
 
 ```bash 
-ssh <publicIpAddress>
+ssh azureuser@<publicIpAddress>
 ```
 
 ## <a name="create-the-database"></a>创建数据库
 
-该 Oracle 软件已安装在 Marketplace 映像中。 如下所述创建一个示例数据库。 
+该 Oracle 软件已安装在市场映像中。 如下所述创建一个示例数据库。 
 
 1.  切换到 *oracle* 超级用户，然后初始化用于日志记录的侦听器：
 
@@ -144,7 +144,7 @@ ssh <publicIpAddress>
 
 3. 设置 Oracle 变量
 
-在连接之前，需要设置两个环境变量：*ORACLE_HOME* 和 *ORACLE_SID*。
+在连接之前，需要设置两个环境变量：ORACLE_HOME 和 ORACLE_SID。
 
 ```bash
 ORACLE_HOME=/u01/app/oracle/product/12.1.0/dbhome_1; export ORACLE_HOME
@@ -270,7 +270,7 @@ export ORACLE_SID=cdb1
 
 最后一个任务是配置一些外部终结点。 若要设置用于保护 VM 的 Azure 网络安全组，请首先在 VM 中退出 SSH 会话（在前面的步骤中重新引导时，应当已退出了 SSH）。 
 
-1.  若要打开用来远程访问 Oracle 数据库的终结点，请使用 [az network nsg rule create](/cli/azure/network/nsg/rule#az_network_nsg_rule_create) 创建一个网络安全组，如下所示： 
+1.  若要打开用来远程访问 Oracle 数据库的终结点，请使用 [az network nsg rule create](/cli/azure/network/nsg/rule) 创建一个网络安全组，如下所示： 
 
     ```azurecli-interactive
     az network nsg rule create \
@@ -282,7 +282,7 @@ export ORACLE_SID=cdb1
         --destination-port-range 1521
     ```
 
-2.  若要打开用来远程访问 Oracle EM Express 的终结点，请使用 [az network nsg rule create](/cli/azure/network/nsg/rule#az_network_nsg_rule_create) 创建一个网络安全组，如下所示：
+2.  若要打开用来远程访问 Oracle EM Express 的终结点，请使用 [az network nsg rule create](/cli/azure/network/nsg/rule) 创建一个网络安全组，如下所示：
 
     ```azurecli-interactive
     az network nsg rule create \
@@ -294,7 +294,7 @@ export ORACLE_SID=cdb1
         --destination-port-range 5502
     ```
 
-3. 如果需要，使用 [az network public-ip show](/cli/azure/network/public-ip#az_network_public_ip_show) 获取 VM 的公共 IP 地址，如下所示：
+3. 如果需要，使用 [az network public-ip show](/cli/azure/network/public-ip) 获取 VM 的公共 IP 地址，如下所示：
 
     ```azurecli-interactive
     az network public-ip show \
@@ -316,7 +316,7 @@ export ORACLE_SID=cdb1
 
 ## <a name="clean-up-resources"></a>清理资源
 
-当在 Azure 中了解完首个 Oracle 数据库，且不再需要 VM 时，可以使用 [az group delete](/cli/azure/group#az_group_delete) 命令来删除资源组、VM 和一切相关资源。
+当在 Azure 中了解完首个 Oracle 数据库，且不再需要 VM 时，可以使用 [az group delete](/cli/azure/group) 命令来删除资源组、VM 和一切相关资源。
 
 ```azurecli-interactive 
 az group delete --name myResourceGroup

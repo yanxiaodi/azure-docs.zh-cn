@@ -1,31 +1,31 @@
 ---
-title: "如何缩放 Azure 时序见解环境 | Microsoft Docs"
-description: "本文介绍如何缩放 Azure 时序见解环境。 使用 Azure 门户增加或减少定价 SKU 中的容量。"
-services: time-series-insights
+title: 如何缩放 Azure 时序见解环境 | Microsoft Docs
+description: 本文介绍如何缩放 Azure 时序见解环境。 使用 Azure 门户增加或减少定价 SKU 中的容量。
 ms.service: time-series-insights
-author: sandshadow
-ms.author: edett
-manager: jhubbard
-editor: MicrosoftDocs/tsidocs
-ms.reviewer: v-mamcge, jasonh, kfile, anshan
+services: time-series-insights
+author: ashannon7
+ms.author: dpalled
+manager: cshankar
+ms.reviewer: v-mamcge, jasonh, kfile
 ms.devlang: csharp
 ms.workload: big-data
-ms.topic: article
-ms.date: 11/15/2017
-ms.openlocfilehash: edcd9561778998c4df09cc5014f8b8ba81c0e369
-ms.sourcegitcommit: 7d107bb9768b7f32ec5d93ae6ede40899cbaa894
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 08/27/2019
+ms.custom: seodec18
+ms.openlocfilehash: 13fa2b892013cf4a3fb96220c901030c6b0aee0b
+ms.sourcegitcommit: 07700392dd52071f31f0571ec847925e467d6795
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 11/16/2017
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70129107"
 ---
 # <a name="how-to-scale-your-time-series-insights-environment"></a>如何缩放时序见解环境
 
-本文介绍如何使用 Azure 门户更改时序见解环境的容量。 容量是应用于入口速率、存储容量以及与所选 SKU 关联的成本的乘数。 
+本文介绍如何使用 Azure 门户更改时序见解环境的容量。 容量是应用于入口速率、存储容量以及与所选 SKU 关联的成本的乘数。
 
-可以使用 Azure 门户来增加或减少给定定价 SKU 中的容量。 
+可以使用 Azure 门户来增加或减少给定定价 SKU 中的容量。
 
-但是，不允许更改定价层 SKU。 例如，不能将定价 SKU 为 S1 的环境转换为 S2，反之亦然。 
-
+但是，不允许更改定价层 SKU。 例如，不能将定价 SKU 为 S1 的环境转换为 S2，反之亦然。
 
 ## <a name="s1-sku-ingress-rates-and-capacities"></a>S1 SKU 入口速率和容量
 
@@ -44,20 +44,21 @@ ms.lasthandoff: 11/16/2017
 容量呈线性增长，因此容量为 2 的 S1 SKU 每日入口速率支持 2 GB（2 百万）的事件，每月支持 60 GB（6 千万）的事件。
 
 ## <a name="change-the-capacity-of-your-environment"></a>更改环境容量
-1. 在 Azure 门户中，找到并选择自己的时序见解环境。 
 
-2. 在时序见解环境的菜单中，选择“配置”。
+1. 在 Azure 门户中，找到并选择自己的时序见解环境。
 
-   ![configure.png](media/scale-your-environment/configure.png)
+1. 在时序见解环境的菜单中，选择“配置”。
 
-3. 调整“容量”滑块来选择满足入口速率和存储容量需求的容量。 请注意，**入口速率**、**存储容量**和**估计成本**会动态更新，以显示更改产生的影响。 
+   [![configure.png](media/scale-your-environment/configure.png)](media/scale-your-environment/configure.png#lightbox)
 
-   ![滑块](media/scale-your-environment/slider.png)
+1. 调整“容量”滑块来选择满足入口速率和存储容量需求的容量。 请注意，**入口速率**、**存储容量**和**估计成本**会动态更新，以显示更改产生的影响。
 
-   或者，可以在滑块右侧的文本框中键入容量乘数的数字。 
+   [![滑块](media/scale-your-environment/slider.png)](media/scale-your-environment/slider.png#lightbox)
 
-4. 选择“保存”以缩放环境。 在提交更改之前，进度指示器会短暂显示。 
+   或者，可以在滑块右侧的文本框中键入容量乘数的数字。
+
+1. 选择“保存”以缩放环境。 在提交更改之前，进度指示器会短暂显示。
 
 ## <a name="next-steps"></a>后续步骤
-> [!div class="nextstepaction"]
-> [验证新容量是否足以防止出现限制情况](time-series-insights-diagnose-and-solve-problems.md)。
+
+- 检查新容量是否[足以防止出现限制情况](time-series-insights-diagnose-and-solve-problems.md)。

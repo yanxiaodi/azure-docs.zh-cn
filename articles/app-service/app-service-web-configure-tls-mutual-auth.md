@@ -1,65 +1,62 @@
 ---
-title: "如何为 Web 应用配置 TLS 相互身份验证"
-description: "了解如何将 Web 应用配置为使用 TLS 客户端证书身份验证。"
+title: 配置 TLS 相互身份验证 - Azure 应用服务
+description: 了解如何将应用配置为使用 TLS 客户端证书身份验证。
 services: app-service
-documentationcenter: 
-author: naziml
+documentationcenter: ''
+author: cephalin
 manager: erikre
 editor: jimbe
 ms.assetid: cd1d15d3-2d9e-4502-9f11-a306dac4453a
 ms.service: app-service
 ms.workload: na
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
-ms.date: 08/08/2016
-ms.author: naziml
-ms.openlocfilehash: db69852cffd1ff331ac4a640b04ea4360d00bf75
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.date: 10/01/2019
+ms.author: cephalin
+ms.custom: seodec18
+ms.openlocfilehash: d2823158192ae9fc9182f3f60f82d5bd9c050b09
+ms.sourcegitcommit: 80da36d4df7991628fd5a3df4b3aa92d55cc5ade
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 10/02/2019
+ms.locfileid: "71811628"
 ---
-# <a name="how-to-configure-tls-mutual-authentication-for-web-app"></a>如何为 Web 应用配置 TLS 相互身份验证
-## <a name="overview"></a>概述
-通过为 Azure Web 应用启用不同类型的身份验证可以限制对网站的访问。 执行此操作的方法之一是在通过 TLS/SSL 发送请求时使用客户端证书进行身份验证。 此机制称为 TLS 相互身份验证或客户端证书身份验证，本文将详细说明如何将 Web 应用设置为使用客户端证书身份验证。
+# <a name="configure-tls-mutual-authentication-for-azure-app-service"></a>为 Azure 应用服务配置 TLS 相互身份验证
 
-> **注意：**如果通过 HTTP 而不是 HTTPS 访问站点，不会收到任何客户端证书。 因此，如果应用程序需要客户端证书，则不应允许通过 HTTP 对应用程序发出请求。
-> 
-> 
+通过为 Azure 应用服务应用启用不同类型的身份验证可以限制对网站的访问。 若要实现此目的，一种方法是通过 TLS/SSL 发送客户端请求时请求客户端证书，然后验证该证书。 此机制称为 TLS 相互身份验证或客户端证书身份验证。 本文介绍如何将应用设置为使用客户端证书身份验证。
 
-[!INCLUDE [app-service-web-to-api-and-mobile](../../includes/app-service-web-to-api-and-mobile.md)]
+> [!NOTE]
+> 如果通过 HTTP 而不是 HTTPS 访问站点，不会收到任何客户端证书。 因此，如果应用程序需要客户端证书，则你不应允许通过 HTTP 对应用程序发出请求。
+>
 
-## <a name="configure-web-app-for-client-certificate-authentication"></a>将 Web 应用配置为使用客户端证书身份验证
-要将 Web 应用设置为要求使用客户端证书，需要为 Web 应用添加 clientCertEnabled 站点设置并将该设置指定为 true。 目前无法通过门户中的管理体验进行此设置，需要使用 REST API 来实现此目的。
+## <a name="enable-client-certificates"></a>启用客户端证书
 
-可以使用 [ARMClient 工具](https://github.com/projectkudu/ARMClient)轻松创建 REST API 调用。 使用该工具登录之后，需要发出以下命令：
+若要将应用设置为要求提供客户端证书，需要将应用的 `clientCertEnabled` 设置指定为 `true`。 若要设置此设置，请在[Cloud Shell](https://shell.azure.com)中运行以下命令。
 
-    ARMClient PUT subscriptions/{Subscription Id}/resourcegroups/{Resource Group Name}/providers/Microsoft.Web/sites/{Website Name}?api-version=2015-04-01 @enableclientcert.json -verbose
+```azurecli-interactive
+az webapp update --set clientCertEnabled=true --name <app_name> --resource-group <group_name>
+```
 
-将 {} 中的所有内容替换为 Web 应用的信息，并创建包含以下 JSON 内容的 enableclientcert.json 文件：
+## <a name="exclude-paths-from-requiring-authentication"></a>排除要求身份验证的路径
 
-    {
-        "location": "My Web App Location",
-        "properties": {
-            "clientCertEnabled": true
-        }
-    }
+为应用程序启用相互身份验证时，应用程序根目录下的所有路径都需要使用客户端证书进行访问。 若要允许某些路径保持打开状态以进行匿名访问，可以在应用程序配置中定义排除路径。
 
-确保将“location”的值更改为 Web 应用所在的位置，例如美国中北部、美国西部等。
+可以通过选择 "**配置** > " "**常规设置**" 并定义排除路径来配置排除路径。 在此示例中，应用程序 `/public` 路径下的任何内容都不会请求客户端证书。
 
-也可使用 https://resources.azure.com 将 `clientCertEnabled` 属性切换为 `true`。
+![证书排除路径][exclusion-paths]
 
-> **注意：**如果从 Powershell 运行 ARMClient，必须使用重音符 ` 为 JSON 文件转义 @ 符号。
-> 
-> 
 
-## <a name="accessing-the-client-certificate-from-your-web-app"></a>从 Web 应用访问客户端证书
-如果要使用 ASP.NET 并将应用配置为使用客户端证书身份验证，可通过 **HttpRequest.ClientCertificate** 属性使用证书。 对于其他应用程序堆栈，可以通过“X-ARR-ClientCert”请求标头中的 base64 编码值在应用中使用客户端证书。 应用程序可以基于此值创建证书，然后将它用于应用程序中的身份验证和授权。
+## <a name="access-client-certificate"></a>访问客户端证书
 
-## <a name="special-considerations-for-certificate-validation"></a>有关证书验证的特殊注意事项
-Azure Web 应用平台不会针对发送到应用程序的客户端证书进行任何验证。 验证此证书是 Web 应用的责任。 下面是为了进行身份验证而验证证书属性的示例 ASP.NET 代码。
+在应用服务中，请求的 SSL 终端是在前端负载均衡器上发生的。 在[已启用客户端证书](#enable-client-certificates)的情况下将请求转发到应用代码时，应用服务会注入包含客户端证书的 `X-ARR-ClientCert` 请求标头。 应用服务不会对此客户端证书执行任何操作，而只会将它转发到你的应用。 应用代码负责验证客户端证书。
 
+对于 ASP.NET，可以通过 **HttpRequest.ClientCertificate** 属性提供客户端证书。
+
+对于其他应用程序堆栈（Node.js、PHP 等），可以通过 `X-ARR-ClientCert` 请求标头中的 base64 编码值在应用中提供客户端证书。
+
+## <a name="aspnet-sample"></a>ASP.NET 示例
+
+```csharp
     using System;
     using System.Collections.Specialized;
     using System.Security.Cryptography.X509Certificates;
@@ -175,22 +172,55 @@ Azure Web 应用平台不会针对发送到应用程序的客户端证书进行�
                 // 4. Check thumprint of certificate
                 if (String.Compare(certificate.Thumbprint.Trim().ToUpper(), "30757A2E831977D8BD9C8496E4C99AB26CB9622B") != 0) return false;
 
-                // If you also want to test if the certificate chains to a Trusted Root Authority you can uncomment the code below
-                //
-                //X509Chain certChain = new X509Chain();
-                //certChain.Build(certificate);
-                //bool isValidCertChain = true;
-                //foreach (X509ChainElement chElement in certChain.ChainElements)
-                //{
-                //    if (!chElement.Certificate.Verify())
-                //    {
-                //        isValidCertChain = false;
-                //        break;
-                //    }
-                //}
-                //if (!isValidCertChain) return false;
-
                 return true;
             }
         }
     }
+```
+
+## <a name="nodejs-sample"></a>Node.js 示例
+
+以下 Node.js 示例代码获取 `X-ARR-ClientCert` 标头，并使用 [node-forge](https://github.com/digitalbazaar/forge) 将 base64 编码的 PEM 字符串转换为证书对象，然后验证该对象：
+
+```javascript
+import { NextFunction, Request, Response } from 'express';
+import { pki, md, asn1 } from 'node-forge';
+
+export class AuthorizationHandler {
+    public static authorizeClientCertificate(req: Request, res: Response, next: NextFunction): void {
+        try {
+            // Get header
+            const header = req.get('X-ARR-ClientCert');
+            if (!header) throw new Error('UNAUTHORIZED');
+
+            // Convert from PEM to pki.CERT
+            const pem = `-----BEGIN CERTIFICATE-----${header}-----END CERTIFICATE-----`;
+            const incomingCert: pki.Certificate = pki.certificateFromPem(pem);
+
+            // Validate certificate thumbprint
+            const fingerPrint = md.sha1.create().update(asn1.toDer(pki.certificateToAsn1(incomingCert)).getBytes()).digest().toHex();
+            if (fingerPrint.toLowerCase() !== 'abcdef1234567890abcdef1234567890abcdef12') throw new Error('UNAUTHORIZED');
+
+            // Validate time validity
+            const currentDate = new Date();
+            if (currentDate < incomingCert.validity.notBefore || currentDate > incomingCert.validity.notAfter) throw new Error('UNAUTHORIZED');
+
+            // Validate issuer
+            if (incomingCert.issuer.hash.toLowerCase() !== 'abcdef1234567890abcdef1234567890abcdef12') throw new Error('UNAUTHORIZED');
+
+            // Validate subject
+            if (incomingCert.subject.hash.toLowerCase() !== 'abcdef1234567890abcdef1234567890abcdef12') throw new Error('UNAUTHORIZED');
+
+            next();
+        } catch (e) {
+            if (e instanceof Error && e.message === 'UNAUTHORIZED') {
+                res.status(401).send();
+            } else {
+                next(e);
+            }
+        }
+    }
+}
+```
+
+[exclusion-paths]: ./media/app-service-web-configure-tls-mutual-auth/exclusion-paths.png

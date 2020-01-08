@@ -1,13 +1,11 @@
 ---
-title: 为 VM（经典）配置专用 IP 地址 - Azure CLI 1.0 | Microsoft 文档
-description: 了解如何使用 Azure 命令行接口 (CLI) 1.0 为虚拟机（经典）配置专用 IP 地址。
+title: 为 VM（经典）配置专用 IP 地址 - Azure 经典 CLI
+titlesuffix: Azure Virtual Network
+description: 了解如何使用 Azure 经典命令行接口 (CLI) 为虚拟机（经典）配置专用 IP 地址。
 services: virtual-network
 documentationcenter: na
 author: genlin
-manager: cshepard
-editor: tysonn
-tags: azure-service-management
-ms.assetid: 17386acf-c708-4103-9b22-ff9bf04b778d
+manager: dcscontentpm
 ms.service: virtual-network
 ms.devlang: na
 ms.topic: article
@@ -15,14 +13,14 @@ ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 03/15/2016
 ms.author: genli
-ms.custom: H1Hack27Feb2017
-ms.openlocfilehash: a18877167d04fdb039070d5315390a846925fd29
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.openlocfilehash: 64342c6dcf4c9a052442a6f4b0afb7a56994f496
+ms.sourcegitcommit: ca359c0c2dd7a0229f73ba11a690e3384d198f40
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71059221"
 ---
-# <a name="configure-private-ip-addresses-for-a-virtual-machine-classic-using-the-azure-cli-10"></a>使用 Azure CLI 1.0 为虚拟机（经典）配置专用 IP 地址
+# <a name="configure-private-ip-addresses-for-a-virtual-machine-classic-using-the-azure-classic-cli"></a>使用 Azure 经典 CLI 为虚拟机（经典）配置专用 IP 地址
 
 [!INCLUDE [virtual-networks-static-private-ip-selectors-classic-include](../../includes/virtual-networks-static-private-ip-selectors-classic-include.md)]
 
@@ -32,12 +30,12 @@ ms.lasthandoff: 04/23/2018
 
 本文介绍经典部署模型。 还可以[在 Resource Manager 部署模型中管理静态专用 IP 地址](virtual-networks-static-private-ip-arm-cli.md)。
 
-下面的示例 Azure CLI 命令需要已创建简单的环境。 若要运行本文档中所显示的命令，请首先构建[创建 VNet](virtual-networks-create-vnet-classic-cli.md) 中所述的测试环境。
+后面的示例 Azure 经典 CLI 命令需要一个已创建的简单环境。 若要运行本文档中所显示的命令，请首先构建[创建 VNet](virtual-networks-create-vnet-classic-cli.md) 中所述的测试环境。
 
 ## <a name="how-to-specify-a-static-private-ip-address-when-creating-a-vm"></a>如何在创建 VM 时指定静态专用 IP 地址
 若要根据上述方案在名为 *TestService* 的新云服务中创建名为 *DNS01* 的新 VM，请按照以下步骤进行操作：
 
-1. 如果从未使用过 Azure CLI，请参阅[安装和配置 Azure CLI](../cli-install-nodejs.md)，并按照说明进行操作，直到选择 Azure 帐户和订阅。
+1. 如果从未使用过 Azure CLI，请参阅[安装和配置 Azure CLI](/cli/azure/install-cli-version-1.0)，并按照说明进行操作，直到选择 Azure 帐户和订阅。
 2. 运行 **azure service create** 命令以创建云服务。
    
         azure service create TestService --location uscentral
@@ -67,14 +65,14 @@ ms.lasthandoff: 04/23/2018
         info:    OK
         info:    vm create command OK
    
-   * **-l（或 --location）**。 将在其中创建 VM 的 Azure 区域。 对于我们的方案，为 *centralus*。
+   * **-l（或 --location）** 。 将在其中创建 VM 的 Azure 区域。 对于我们的方案，为 *centralus*。
    * **-n（或 --vm-name）** 要创建的 VM 的名称。
-   * **-w（或 --virtual-network-name）**。 将在其中创建 VM 的 VNet 的名称。 
-   * **-S（或 --static-ip）**。 VM 的静态专用 IP 地址。
+   * **-w（或 --virtual-network-name）** 。 将在其中创建 VM 的 VNet 的名称。 
+   * **-S（或 --static-ip）** 。 VM 的静态专用 IP 地址。
    * **TestService**。 将在其中创建 VM 的云服务的名称。
    * **bd507d3a70934695bc2128e3e5a255ba__RightImage-Windows-2012R2-x64-v14.2**。 用于创建 VM 的映像。
    * **adminuser**。 Windows VM 的本地管理员。
-   * **AdminP@ssw0rd**： Windows VM 的本地管理员密码。
+   * <strong>AdminP@ssw0rd</strong>. Windows VM 的本地管理员密码。
 
 ## <a name="how-to-retrieve-static-private-ip-address-information-for-a-vm"></a>如何检索 VM 的静态专用 IP 地址信息
 若要查看使用上述脚本创建的 VM 的静态专用 IP 地址信息，请运行以下 Azure CLI 命令并观察 *Network StaticIP* 的值：
@@ -117,10 +115,9 @@ ms.lasthandoff: 04/23/2018
 
 ## <a name="set-ip-addresses-within-the-operating-system"></a>在操作系统中设置 IP 地址
 
-我们建议，除非有必要，否则不要以静态方式在 VM 的操作系统中分配已分配给 Azure 虚拟机的专用 IP。 如果确实需要在操作系统中手动设置该专用 IP 地址，请确保它是分配给 Azure VM 的同一专用 IP 地址，否则可能会丢失与虚拟机的连接。 切勿在虚拟机的操作系统中手动分配已分配给 Azure 虚拟机的公共 IP 地址。
+我们建议，除非有必要，否则不要以静态方式在 VM 的操作系统中分配已分配给 Azure 虚拟机的专用 IP。 如果确实需要在操作系统中手动设置该专用 IP 地址，请确保它是分配给 Azure VM 的同一专用 IP 地址，否则可能会丢失与虚拟机的连接。 请勿在虚拟机的操作系统中手动分配已分配给 Azure 虚拟机的公共 IP 地址。
 
 ## <a name="next-steps"></a>后续步骤
 * 了解[保留公共 IP](virtual-networks-reserved-public-ip.md) 地址。
 * 了解[实例层级公共 IP (ILPIP) 地址](virtual-networks-instance-level-public-ip.md)。
 * 查阅[保留 IP REST API](https://msdn.microsoft.com/library/azure/dn722420.aspx)。
-

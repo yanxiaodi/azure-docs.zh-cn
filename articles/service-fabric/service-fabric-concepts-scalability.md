@@ -4,7 +4,7 @@ description: 介绍如何缩放 Service Fabric 服务
 services: service-fabric
 documentationcenter: .net
 author: masnider
-manager: timlt
+manager: chackdan
 editor: ''
 ms.assetid: ed324f23-242f-47b7-af1a-e55c839e7d5d
 ms.service: service-fabric
@@ -12,13 +12,14 @@ ms.devlang: dotnet
 ms.topic: conceptual
 ms.tgt_pltfrm: NA
 ms.workload: NA
-ms.date: 08/18/2017
+ms.date: 08/26/2019
 ms.author: masnider
-ms.openlocfilehash: 88c563876940da14f75d7ab30aa3f79a8f6dd870
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: f44a44c0923374b2f6024903213305f1defb3b94
+ms.sourcegitcommit: 94ee81a728f1d55d71827ea356ed9847943f7397
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 08/26/2019
+ms.locfileid: "70035924"
 ---
 # <a name="scaling-in-service-fabric"></a>在 Service Fabric 中进行缩放
 Azure Service Fabric 通过管理服务、分区以及群集的节点上的副本，让生成可缩放的应用程序更简单。 在同一硬件上运行多个工作负荷不仅可实现最大资源使用率，还可提供在如何选择缩放工作负荷方面的灵活性。 此第 9 频道视频介绍了如何构建可缩放的微服务应用程序：
@@ -101,13 +102,15 @@ Service Fabric 支持分区。 分区可将服务拆分成若干逻辑和物理�
 请考虑使用具有低键 0、高键 99 和 4 个分区的范围分区方案的服务。 在包含三个节点的群集中，该服务可能如此处所示，按四个副本共享每个节点上的资源的方式进行布局：
 
 <center>
-![三节点式分区布局](./media/service-fabric-concepts-scalability/layout-three-nodes.png)
+
+![包含三个节点的分区布局](./media/service-fabric-concepts-scalability/layout-three-nodes.png)
 </center>
 
 如果增加节点数目，Service Fabric 将移动其中的一些现有副本。 例如，假设节点数增加到 4，且已重新分发副本。 现在，服务在每个节点上有 3 个正在运行的副本，每个副本均属于不同的分区。 这可以实现更高的资源利用率，因为新节点不冷。 通常情况下，这还可提高性能，因为每项服务均有更多可用资源。
 
 <center>
-![四节点式分区布局](./media/service-fabric-concepts-scalability/layout-four-nodes.png)
+
+![包含四个节点的分区布局](./media/service-fabric-concepts-scalability/layout-four-nodes.png)
 </center>
 
 ## <a name="scaling-by-using-the-service-fabric-cluster-resource-manager-and-metrics"></a>使用 Service Fabric 群集资源管理器和指标进行缩放
@@ -118,6 +121,10 @@ Service Fabric 支持分区。 分区可将服务拆分成若干逻辑和物理�
 使用 Service Fabric 进行缩放的另一种方法是更改群集大小。 更改群集的大小意味着添加或删除群集中的一个或多个节点类型的节点。 例如，想一想群集中的所有节点均为热的情况。 这意味着群集的资源几乎全部耗尽。 在这种情况下，缩放的最佳方法是将更多节点添加到群集中。 新节点联接群集后，Service Fabric 群集资源管理器将服务移到其中，导致现有节点上的总负载减少。 对于实例计数为 -1 的无状态服务，将自动创建更多服务实例。 这将使某些调用从现有节点移到新节点。 
 
 有关详细信息，请参阅[群集缩放](service-fabric-cluster-scaling.md)。
+
+## <a name="choosing-a-platform"></a>选择平台
+
+由于操作系统之间的实现差异, 选择使用 Windows 或 Linux Service Fabric 可能是缩放应用程序的重要部分。 一个潜在的障碍是如何执行暂存日志记录。 Windows 上的 Service Fabric 使用内核驱动程序进行一台每台计算机的日志, 在有状态服务副本之间共享。 此日志约为 8 GB。 另一方面, Linux 对每个副本使用 256 MB 暂存日志, 这使得对于想要最大程度地减少在给定节点上运行的轻型服务副本数量的应用程序而言, 这种情况并不理想。 临时存储要求的这些差异可能会通知所需的平台进行 Service Fabric 群集部署。
 
 ## <a name="putting-it-all-together"></a>汇总
 让我们汇总已在此文中讨论的所有观点，并讨论一个示例。 请考虑以下服务：你想要生成一个充当通讯簿的服务，其中保存名称和联系信息。 

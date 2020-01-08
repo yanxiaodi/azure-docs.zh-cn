@@ -4,22 +4,23 @@ description: 本文提供了用于 Azure 媒体服务 REST 调用的 Postman 环
 services: media-services
 documentationcenter: ''
 author: Juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.service: media-services
 ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 01/04/2018
+ms.date: 03/20/2019
 ms.author: juliako
-ms.openlocfilehash: aa3e1bb4c6ae53e24e3153dd55f6a6d07e29e091
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 6813dfca4a89263a10887ef4fa58c7403a9b1294
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60637550"
 ---
-# <a name="import-the-postman-environment"></a>导入 Postman 环境 
+# <a name="import-the-postman-environment"></a>导入 Postman 环境  
 
 本文包含 [Postman 集合](postman-collection.md)使用的 **Postman** 环境变量的定义，该集合包含调用媒体服务 REST API 的分组 HTTP 请求。 [配置 Postman 以便进行媒体服务 REST API 调用](media-rest-apis-with-postman.md)教程将使用这些环境和集合文件。
 

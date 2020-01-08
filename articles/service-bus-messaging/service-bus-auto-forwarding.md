@@ -1,30 +1,31 @@
 ---
-title: "自动转发 Azure 服务总线消息传送实体 | Microsoft Docs"
-description: "如何将服务总线队列或订阅链接到另一个队列或主题。"
+title: 自动转发 Azure 服务总线消息传送实体 | Microsoft Docs
+description: 如何将服务总线队列或订阅链接到另一个队列或主题。
 services: service-bus-messaging
 documentationcenter: na
-author: sethmanheim
+author: axisc
 manager: timlt
-editor: 
+editor: spelluru
 ms.assetid: f7060778-3421-402c-97c7-735dbf6a61e8
 ms.service: service-bus-messaging
 ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: na
-ms.date: 02/22/2018
-ms.author: sethm
-ms.openlocfilehash: be23d919b0c96d6c9b96ee328d1b18ad978a9dcc
-ms.sourcegitcommit: fbba5027fa76674b64294f47baef85b669de04b7
-ms.translationtype: HT
+ms.date: 01/23/2019
+ms.author: aschhab
+ms.openlocfilehash: 1d7b76a58a427b687d0dc36d13cfc00f32196853
+ms.sourcegitcommit: 88ae4396fec7ea56011f896a7c7c79af867c90a1
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/24/2018
+ms.lasthandoff: 09/06/2019
+ms.locfileid: "70390135"
 ---
-# <a name="chaining-service-bus-entities-with-auto-forwarding"></a>使用自动转发链接服务总线实体
+# <a name="chaining-service-bus-entities-with-autoforwarding"></a>使用自动转发链接服务总线实体
 
-通过服务总线自动转发功能可将队列或订阅链接到作为相同命名空间组成部分的另一个队列或主题。 启用自动转发时，服务总线会自动删除放置在第一个队列或订阅（源）中的消息，并将其放入第二个队列或主题（目标）中。 请注意，仍可将消息直接发送到目标实体。 此外，无法将子队列（例如死信队列）连接到另一个队列或主题。
+通过服务总线自动转发功能可将队列或订阅链接到作为相同命名空间组成部分的另一个队列或主题。 启用自动转发时，服务总线会自动删除放置在第一个队列或订阅（源）中的消息，并将其放入第二个队列或主题（目标）中。 仍可将消息直接发送到目标实体。
 
-## <a name="using-auto-forwarding"></a>使用自动转发
+## <a name="using-autoforwarding"></a>使用自动转发
 
 可通过在源的 [QueueDescription][QueueDescription] 或 [SubscriptionDescription][SubscriptionDescription] 对象上设置 [QueueDescription.ForwardTo][QueueDescription.ForwardTo] 或 [SubscriptionDescription.ForwardTo][SubscriptionDescription.ForwardTo] 属性来启用自动转发，如以下示例所示：
 
@@ -46,7 +47,13 @@ namespaceManager.CreateSubscription(srcSubscription));
 
 如果 Alice 处于度假期间，则其个人队列（而不是 ERP）会填满。 此方案中，由于销售代表未接收到任何消息，因此没有任何 ERP 主题会达到配额。
 
-## <a name="auto-forwarding-considerations"></a>自动转发注意事项
+> [!NOTE]
+> 设置自动转发时，**源和目标**上的 AutoDeleteOnIdle 的值自动设置为数据类型的最大值。
+> 
+>   - 在源端，自动转发充当接收操作。 因此，具有自动转发设置的源绝不会真正 "空闲"。
+>   - 在目标端，此操作可确保始终有要将消息转发到的目标。
+
+## <a name="autoforwarding-considerations"></a>自动转发注意事项
 
 如果目标实体累积了过多消息并超出配额，或禁用了目标实体，则源实体会将消息添加到其[死信队列](service-bus-dead-letter-queues.md)，直到目标中存在可用空间（或重新启用了该实体）。 这些消息将继续位于死信队列中，因此，必须从死信队列显式接收和处理它们。
 
@@ -67,7 +74,7 @@ namespaceManager.CreateSubscription(srcSubscription));
 若要深入了解服务总线性能提升，请参阅 
 
 * [使用服务总线消息传送改进性能的最佳做法](service-bus-performance-improvements.md)
-* [分区消息传送实体][Partitioned messaging entities]。
+* [分区消息实体][Partitioned messaging entities]。
 
 [QueueDescription.ForwardTo]: /dotnet/api/microsoft.servicebus.messaging.queuedescription.forwardto#Microsoft_ServiceBus_Messaging_QueueDescription_ForwardTo
 [SubscriptionDescription.ForwardTo]: /dotnet/api/microsoft.servicebus.messaging.subscriptiondescription.forwardto#Microsoft_ServiceBus_Messaging_SubscriptionDescription_ForwardTo

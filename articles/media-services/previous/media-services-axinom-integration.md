@@ -4,7 +4,7 @@ description: 本文介绍如何使用 Azure 媒体服务(AMS) 传送 AMS 使用 
 services: media-services
 documentationcenter: ''
 author: willzhan
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: 9c93fa4e-b4da-4774-ab6d-8b12b371631d
 ms.service: media-services
@@ -12,15 +12,17 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 07/19/2017
-ms.author: willzhan;Mingfeiy;rajputam;Juliako
-ms.openlocfilehash: 0aaf0eea0414d234c9a24f707df5eed491a61c08
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.date: 03/14/2019
+ms.author: willzhan
+ms.reviewer: Mingfeiy;rajputam;Juliako
+ms.openlocfilehash: 4d4823e8dcce0d1296ebe39a0b7a7c4bbc180317
+ms.sourcegitcommit: de47a27defce58b10ef998e8991a2294175d2098
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/15/2019
+ms.locfileid: "69015432"
 ---
-# <a name="using-axinom-to-deliver-widevine-licenses-to-azure-media-services"></a>使用 Axinom 将 Widevine 许可证传送到 Azure 媒体服务
+# <a name="using-axinom-to-deliver-widevine-licenses-to-azure-media-services"></a>使用 Axinom 将 Widevine 许可证传送到 Azure 媒体服务 
 > [!div class="op_single_selector"]
 > * [castLabs](media-services-castlabs-integration.md)
 > * [Axinom](media-services-axinom-integration.md)
@@ -28,9 +30,9 @@ ms.lasthandoff: 05/07/2018
 > 
 
 ## <a name="overview"></a>概述
-Azure 媒体服务 (AMS) 已添加 Google Widevine 动态保护（有关详细信息，请参阅 [Mingfei 的博客](https://azure.microsoft.com/blog/azure-media-services-adds-google-widevine-packaging-for-delivering-multi-drm-stream/)）。 此外，Azure 媒体播放器 (AMP) 还添加了 Widevine 支持（有关详细信息，请参阅 [AMP 文档](http://amp.azure.net/libs/amp/latest/docs/)）。 这是在配备了 MSE 和 EME 的现代浏览器上流式处理受 CENC 保护的 DASH 内容方面的一项重要成就，该保护是通过 multi-native-DRM（PlayReady 和 Widevine）来完成的。
+Azure 媒体服务 (AMS) 已添加 Google Widevine 动态保护（有关详细信息，请参阅 [Mingfei 的博客](https://azure.microsoft.com/blog/azure-media-services-adds-google-widevine-packaging-for-delivering-multi-drm-stream/)）。 此外，Azure 媒体播放器 (AMP) 还添加了 Widevine 支持（有关详细信息，请参阅 [AMP 文档](https://amp.azure.net/libs/amp/latest/docs/)）。 这是在配备了 MSE 和 EME 的现代浏览器上流式处理受 CENC 保护的 DASH 内容方面的一项重要成就，该保护是通过 multi-native-DRM（PlayReady 和 Widevine）来完成的。
 
-从媒体服务 .NET SDK 版本 3.5.2 开始，媒体服务允许配置 Widevine 许可证模板并获取 Widevine 许可证。 还可以通过以下 AMS 合作伙伴来交付 Widevine 许可证：[Axinom](http://www.axinom.com/press/ibc-axinom-drm-6/)、[EZDRM](http://ezdrm.com/)、[castLabs](http://castlabs.com/company/partners/azure/)。
+从媒体服务 .NET SDK 版本 3.5.2 开始，媒体服务允许配置 Widevine 许可证模板并获取 Widevine 许可证。 还可以通过以下 AMS 合作伙伴来帮助交付 Widevine 许可证：[Axinom](https://www.axinom.com/press/ibc-axinom-drm-6/)、[EZDRM](https://ezdrm.com/)、[castLabs](https://castlabs.com/company/partners/azure/)。
 
 本文介绍如何集成和测试由 Axinom 管理的 Widevine 许可证服务器。 具体而言，本文涵盖：  
 
@@ -43,11 +45,11 @@ Azure 媒体服务 (AMS) 已添加 Google Widevine 动态保护（有关详细�
 ![DASH 和 CENC](./media/media-services-axinom-integration/media-services-axinom1.png)
 
 ## <a name="content-protection"></a>内容保护
-若要了解如何配置动态保护和密钥传递策略，请查看 Mingfei 的博客：[如何通过 Azure 媒体服务配置 Widevine 打包](http://mingfeiy.com/how-to-configure-widevine-packaging-with-azure-media-services)。
+有关动态保护和密钥交付策略的配置，请参阅 Mingfei 的博客：[How to configure Widevine packaging with Azure Media Services](https://mingfeiy.com/how-to-configure-widevine-packaging-with-azure-media-services)（如何使用 Azure 媒体服务配置 Widevine 打包）。
 
 可以通过 multi-DRM 配置动态 CENC 保护，因为 DASH 流式处理具有下述两项特点：
 
-1. 适用于 MS Edge 和 IE11 的 PlayReady 保护，可能存在令牌授权限制。 令牌限制策略必须附带由 Azure Active Directory 之类的安全令牌服务 (STS) 颁发的令牌；
+1. 适用于 Microsoft Edge 和 IE11 的 PlayReady 保护，可能存在令牌授权限制。 令牌限制策略必须附带由 Azure Active Directory 之类的安全令牌服务 (STS) 颁发的令牌；
 2. 针对 Chrome 的 Widevine 保护，可能要求使用其他 STS 颁发的令牌进行令牌身份验证。 
 
 请参阅 [JWT 令牌生成](media-services-axinom-integration.md#jwt-token-generation)部分，了解为何不能将 Azure Active Directory 用作 Axinom 的 Widevine 许可证服务器的 STS。
@@ -58,12 +60,12 @@ Azure 媒体服务 (AMS) 已添加 Google Widevine 动态保护（有关详细�
 
 ## <a name="azure-media-player-preparation"></a>Azure Media Player 准备
 AMP v1.4.0 支持播放使用 PlayReady 和 Widevine DRM 进行动态打包的 AMS 内容。
-如果 Widevine 许可证服务器不需要令牌身份验证，则不需执行任何其他操作即可测试受 Widevine 保护的 DASH 内容。 例如，AMP 团队提供简单的[示例](http://amp.azure.net/libs/amp/latest/samples/dynamic_multiDRM_PlayReadyWidevine_notoken.html)，在该示例中可以看到它在使用 PlayReady 的 Edge 和 IE11 中以及使用 Widevine 的 Chrome 中运行。
+如果 Widevine 许可证服务器不需要令牌身份验证，则不需执行任何其他操作即可测试受 Widevine 保护的 DASH 内容。 例如，AMP 团队提供简单的[示例](https://amp.azure.net/libs/amp/latest/samples/dynamic_multiDRM_PlayReadyWidevineFairPlay_notoken.html)，在该示例中可以看到它在使用 PlayReady 的 Microsoft Edge 和 IE11 中以及使用 Widevine 的 Chrome 中运行。
 Axinom 提供的 Widevine 许可证服务器要求 JWT 令牌身份验证。 需要通过 HTTP 标头“X-AxDRM-Message”提交带许可证请求的 JWT 令牌。 为此，需要在设置源之前在承载 AMP 的 Web 页中添加以下 javascript：
 
     <script>AzureHtml5JS.KeySystem.WidevineCustomAuthorizationHeader = "X-AxDRM-Message"</script>
 
-AMP 代码的其余部分为标准 AMP API，如[此处](http://amp.azure.net/libs/amp/latest/docs/)的 AMP 文档所述。
+AMP 代码的其余部分为标准 AMP API，如[此处](https://amp.azure.net/libs/amp/latest/docs/)的 AMP 文档所述。
 
 在 AMP 中的正式长期方法发布之前，上述 javascript 仍是一个设置自定义授权标头的短期方法。
 
@@ -129,7 +131,7 @@ John Sheehan 的 [JWT NuGet 包](https://www.nuget.org/packages/JWT)符合要求
 
 Axinom Widevine 许可证服务器
 
-    <add key="ax:laurl" value="http://drm-widevine-licensing.axtest.net/AcquireLicense" />
+    <add key="ax:laurl" value="https://drm-widevine-licensing.axtest.net/AcquireLicense" />
     <add key="ax:com_key_id" value="69e54088-e9e0-4530-8c1a-1eb6dcd0d14e" />
     <add key="ax:com_key" value="4861292d027e269791093327e62ceefdbea489a4c7e5a4974cc904b840fd7c0f" />
     <add key="ax:keyseed" value="8888000000000000000000000000000000000000" />
@@ -159,7 +161,7 @@ Axinom Widevine 许可证服务器
         objXmlNamespaceManager.AddNamespace("cenc", "urn:mpeg:cenc:2013");
         objXmlNamespaceManager.AddNamespace("ms",   "urn:microsoft");
         objXmlNamespaceManager.AddNamespace("mspr", "urn:microsoft:playready");
-        objXmlNamespaceManager.AddNamespace("xsi",  "http://www.w3.org/2001/XMLSchema-instance");
+        objXmlNamespaceManager.AddNamespace("xsi",  "https://www.w3.org/2001/XMLSchema-instance");
         objXmlNamespaceManager.PushScope();
 
         XPathNodeIterator objXPathNodeIterator;
@@ -174,7 +176,7 @@ Axinom Widevine 许可证服务器
         return key_id;
     }
 
-## <a name="summary"></a>摘要
+## <a name="summary"></a>总结
 由于最近在 Azure 媒体服务内容保护和 Azure Media Player 中增加了 Widevine 支持，因此我们能够实现对 DASH + Multi-native-DRM (PlayReady + Widevine) 的流式处理，这既适用于 AMS 中的 PlayReady 许可证服务，也适用于 Axinom 提供的 Widevine 许可证服务器，面向以下现代浏览器：
 
 * Chrome
@@ -199,5 +201,5 @@ Axinom Widevine 许可证服务器
 [!INCLUDE [media-services-user-voice-include](../../../includes/media-services-user-voice-include.md)]
 
 ### <a name="acknowledgments"></a>致谢
-我们诚挚地向以下人员表达谢意，是他们协助完成了本文档的创作工作：Kristjan Jõgi of Axinom、Mingfei Yan 和 Amit Rajput。
+我们诚挚地向以下人员表达谢意，是他们协助完成了本文档的写作工作：Kristjan Jõgi（来自 Axinom）、Mingfei Yan、和 Amit Rajput。
 

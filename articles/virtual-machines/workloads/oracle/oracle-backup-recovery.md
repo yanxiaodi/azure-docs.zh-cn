@@ -3,28 +3,27 @@ title: 在 Azure Linux 虚拟机上备份和恢复 Oracle Database 12c 数据库
 description: 了解怎样在 Azure 环境中备份和恢复 Oracle Database 12c 数据库。
 services: virtual-machines-linux
 documentationcenter: virtual-machines
-author: v-shiuma
-manager: timlt
+author: romitgirdhar
+manager: gwallace
 editor: ''
 tags: azure-resource-manager
 ms.assetid: ''
 ms.service: virtual-machines-linux
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-linux
 ms.workload: infrastructure
-ms.date: 5/17/2017
-ms.author: rclaus
-ms.openlocfilehash: e804fd17c3dbe9df9e9dc258e67b8f9192c1f8ad
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.date: 08/02/2018
+ms.author: rogirdh
+ms.openlocfilehash: c493f79a066f872be6b38d127622cc757ab3c1cc
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
-ms.locfileid: "32193098"
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70100245"
 ---
 # <a name="back-up-and-recover-an-oracle-database-12c-database-on-an-azure-linux-virtual-machine"></a>在 Azure Linux 虚拟机上备份和恢复 Oracle Database 12c 数据库
 
-可从命令提示符使用 Azure CLI 或通过脚本来创建和管理 Azure 资源。 在本文中，我们使用 Azure CLI 脚本从 Azure Marketplace 库映像部署 Oracle Database 12c 数据库。
+可从命令提示符使用 Azure CLI 或通过脚本来创建和管理 Azure 资源。 在本文中，我们使用 Azure CLI 脚本从 Azure 市场库映像部署 Oracle Database 12c 数据库。
 
 在开始之前，请确保已安装 Azure CLI。 有关详细信息，请参阅 [Azure CLI 安装指南](https://docs.microsoft.com/cli/azure/install-azure-cli)。
 
@@ -32,7 +31,7 @@ ms.locfileid: "32193098"
 
 ### <a name="step-1-prerequisites"></a>步骤 1：先决条件
 
-*   要执行备份和恢复过程，首先必须创建已安装 Oracle Database 12c 实例的 Linux VM。 用来创建 VM 的 Marketplace 映像是“Oracle:Oracle-Database-Ee:12.1.0.2:latest”。
+*   要执行备份和恢复过程，首先必须创建已安装 Oracle Database 12c 实例的 Linux VM。 用来创建 VM 的市场映像是“Oracle:Oracle-Database-Ee:12.1.0.2:latest”。
 
     要了解如何创建 Oracle 数据库，请参阅 [Oracle 创建数据库快速入门](https://docs.microsoft.com/azure/virtual-machines/workloads/oracle/oracle-database-quick-create)。
 
@@ -133,7 +132,7 @@ ms.locfileid: "32193098"
     RMAN> backup database plus archivelog;
     ```
 
-### <a name="step-4-application-consistent-backup-for-linux-vms"></a>步骤 4：Linux VM 的应用程序一致性备份
+### <a name="step-4-application-consistent-backup-for-linux-vms"></a>步骤 4：适用于 Linux Vm 的应用程序一致性备份
 
 应用程序一致性备份是 Azure 备份中的一项新功能。 可以创建和选择要在 VM 快照前后执行的脚本（快照前和快照后）。
 
@@ -284,11 +283,11 @@ ms.locfileid: "32193098"
 
     ![恢复服务保管库“备份”页](./media/oracle-backup-recovery/recovery_service_04.png)
 
-5.  在“备份目标”边栏选项卡上，使用默认值“Azure”和“虚拟机”。 单击“确定”。
+5.  在“备份目标”边栏选项卡上，使用默认值“Azure”和“虚拟机”。 单击 **“确定”** 。
 
     ![恢复服务保管库“详细信息”页](./media/oracle-backup-recovery/recovery_service_05.png)
 
-6.  对于“备份策略”，使用“DefaultPolicy”或选择“创建新策略”。 单击“确定”。
+6.  对于“备份策略”，使用“DefaultPolicy”或选择“创建新策略”。 单击 **“确定”** 。
 
     ![恢复服务保管库“备份策略详细信息”页](./media/oracle-backup-recovery/recovery_service_06.png)
 
@@ -307,7 +306,7 @@ ms.locfileid: "32193098"
 
     ![恢复服务保管库“立即备份”命令](./media/oracle-backup-recovery/recovery_service_09.png)
 
-10. 单击“备份”按钮。 等待备份过程结束。 然后转到[步骤 6：删除数据库文件](#step-6-remove-the-database-files)。
+10. 单击“备份”按钮。 等待备份过程结束。 然后, 继续[执行步骤 6:删除数据库文件](#step-6-remove-the-database-files)。
 
     若要查看备份作业的状态，请单击“作业”。
 
@@ -527,7 +526,7 @@ ms.locfileid: "32193098"
     ssh <publicIpAddress>
     ```
 
-### <a name="step-5-test-whether-the-database-is-accessible"></a>步骤 5：测试该数据库是否可访问
+### <a name="step-5-test-whether-the-database-is-accessible"></a>步骤 5：测试数据库是否可访问
 *   要测试可访问性，请使用以下脚本：
 
     ```bash 
@@ -537,9 +536,9 @@ ms.locfileid: "32193098"
     ```
 
     > [!IMPORTANT]
-    > 如果数据库“启动”命令生成错误，请参阅[步骤 6：使用 RMAN 恢复数据库](#step-6-optional-use-rman-to-recover-the-database)，恢复数据库。
+    > 如果数据库**启动**命令生成错误, 若要恢复数据库, 请参阅[步骤 6:使用 RMAN 恢复数据库](#step-6-optional-use-rman-to-recover-the-database)。
 
-### <a name="step-6-optional-use-rman-to-recover-the-database"></a>步骤 6：（可选）使用 RMAN 恢复数据库
+### <a name="step-6-optional-use-rman-to-recover-the-database"></a>步骤 6：可有可无使用 RMAN 恢复数据库
 *   要恢复数据库，请使用以下脚本：
 
     ```bash
@@ -564,7 +563,7 @@ az group delete --name myResourceGroup
 
 ## <a name="next-steps"></a>后续步骤
 
-[教程：创建具有高可用性的 VM](../../linux/create-cli-complete.md)
+[教程：创建高度可用的 VM](../../linux/create-cli-complete.md)
 
 [浏览 VM 部署 Azure CLI 示例](../../linux/cli-samples.md)
 

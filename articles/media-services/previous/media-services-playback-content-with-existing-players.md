@@ -4,7 +4,7 @@ description: 本主题列出了可以用来播放内容的现有播放器。
 services: media-services
 documentationcenter: ''
 author: Juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: 7e9fcf89-0fb6-4fa4-96cb-666320684d69
 ms.service: media-services
@@ -12,16 +12,17 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 01/23/2017
+ms.date: 03/19/2019
 ms.author: juliako
-ms.openlocfilehash: a64d32747371aab2bd927e53c5d43e30de9108f9
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 0da8ce396ce07b7c9859fcfccb5cb524c0ce21c1
+ms.sourcegitcommit: 470041c681719df2d4ee9b81c9be6104befffcea
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/12/2019
+ms.locfileid: "69015295"
 ---
 # <a name="playing-your-content-with-existing-players"></a>使用现有播放器播放内容
-Azure 媒体服务支持多种常用的流式处理格式，如平滑流、HTTP 实时流和 MPEG-Dash。 本主题指出了可用来测试流的现有播放器。
+Azure 媒体服务支持多种常用的流式处理格式，如平滑流、HTTP 实时流和 MPEG-Dash。 本主题列出了可用于测试流的现有播放器。
 
 ### <a name="the-azure-portal-media-services-content-player"></a>Azure 门户媒体服务内容播放器
 **Azure** 门户提供可用于测试视频的内容播放器。
@@ -30,33 +31,34 @@ Azure 媒体服务支持多种常用的流式处理格式，如平滑流、HTTP 
 
 请注意以下事项：
 
-* **媒体服务内容播放器**从默认的流式处理终结点播放。 如果要从非默认流式处理终结点播放，请使用其他播放器。 例如 [Azure Media Player](http://amsplayer.azurewebsites.net/azuremediaplayer.html)。
+* **媒体服务内容播放器**从默认的流式处理终结点播放。 如果要从非默认流式处理终结点播放，请使用其他播放器。 例如 [Azure Media Player](https://aka.ms/azuremediaplayer)。
 
 ![AMSPlayer][AMSPlayer]
 
 ### <a name="azure-media-player"></a>Azure Media Player
-使用 [Azure Media Player](http://amsplayer.azurewebsites.net/azuremediaplayer.html)按以下列任意格式播放内容（清除或受保护）：
 
-* 平滑流
+使用 [Azure Media Player](https://aka.ms/azuremediaplayer)按以下列任意格式播放内容（清除或受保护）：
+
+* 平滑流式处理
 * MPEG DASH
 * HLS
 * 渐进式 MP4
 
 ### <a name="flash-player"></a>Flash Player
-#### <a name="aes-encrypted-with-token"></a>带令牌的 AES 加密
-[http://aestoken.azurewebsites.net](http://aestoken.azurewebsites.net)
 
-### <a name="silverlight-players"></a>Silverlight 播放器
-#### <a name="monitoring"></a>监视
-[http://smf.cloudapp.net/healthmonitor](http://smf.cloudapp.net/healthmonitor)
+#### <a name="aes-encrypted-with-token"></a>带令牌的 AES 加密
+
+[https://aestoken.azurewebsites.net](https://aestoken.azurewebsites.net)
 
 #### <a name="playready-with-token"></a>带令牌的 PlayReady
-[http://sltoken.azurewebsites.net](http://sltoken.azurewebsites.net)
+
+[https://sltoken.azurewebsites.net](https://sltoken.azurewebsites.net)
 
 ### <a name="dash-players"></a>DASH 播放器
-[http://dashplayer.azurewebsites.net](http://dashplayer.azurewebsites.net)
 
-[http://dashif.org](http://dashif.org)
+[https://dashplayer.azurewebsites.net](https://dashplayer.azurewebsites.net)
+
+[https://dashif.org](https://dashif.org)
 
 ### <a name="other"></a>其他
 若要测试 HLS URL，还可以使用：

@@ -3,22 +3,23 @@ title: 清除 Azure CDN 终结点 | Microsoft Docs
 description: 了解如何从 Azure CDN 终结点清除所有缓存的内容。
 services: cdn
 documentationcenter: ''
-author: zhangmanling
-manager: erikre
-editor: ''
+author: mdgattuso
+manager: danielgi
+editor: sohamnchatterjee
 ms.assetid: 0b50230b-fe82-4740-90aa-95d4dde8bd4f
-ms.service: cdn
+ms.service: azure-cdn
 ms.workload: tbd
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 01/23/2017
-ms.author: mazha
-ms.openlocfilehash: 262a8f7385ba5f74d21991772599540260a145fc
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.date: 05/17/2019
+ms.author: magattus
+ms.openlocfilehash: ff877810cb32d22cffd2af79880b6223c41d7d73
+ms.sourcegitcommit: ccb9a7b7da48473362266f20950af190ae88c09b
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/05/2019
+ms.locfileid: "67593531"
 ---
 # <a name="purge-an-azure-cdn-endpoint"></a>清除 Azure CDN 终结点
 ## <a name="overview"></a>概述
@@ -50,13 +51,13 @@ ms.lasthandoff: 05/07/2018
    > 也可以通过单击 CDN 终结点边栏选项卡上的**清除**按钮进入“清除”边栏选项卡。  在这种情况下，**URL** 字段将预填充该特定终结点的服务地址。
    > 
    > 
-4. 选择要从边缘节点清除的资产。  如果想清除所有资产，单击“**全部清除**”复选框。  否则，请在“路径”文本框中输入要清除的每个资产的路径。 路径支持以下格式。
-    1. **单个 URL 清除**：通过指定完整 URL 清除单个资产（包含或不包含文件扩展名，例如 `/pictures/strasbourg.png`；`/pictures/strasbourg`）
+4. 选择要从边缘节点清除的资产。  如果想清除所有资产，单击“**全部清除**”复选框。  否则，请在“路径”  文本框中输入要清除的每个资产的路径。 路径支持以下格式。
+    1. **单个 URL 清除**：通过使用或不带文件扩展名，例如，指定的完整 URL 清除单个资产`/pictures/strasbourg.png`; `/pictures/strasbourg`
     2. **通配符清除**：星号 (\*) 可用作通配符。 清除路径中含 `/*` 的终结点下的所有文件夹、子文件夹和文件，或通过指定后跟 `/*`（例如 `/pictures/*`）的文件夹来清除特定文件夹下的所有子文件夹和文件。  请注意，目前来自 Akamai 的 Azure CDN 不支持通配符清除。 
     3. **根域清除**：清除路径中具有“/”的终结点的根。
    
    > [!TIP]
-   > 必须指定用于清除的路径，且路径必须是符合以下[正则表达式](https://msdn.microsoft.com/library/az24scfc.aspx)的相对 URL。 目前**来自 Akamai 的 Azure CDN** 不支持**清除所有**和**通配符清除**。
+   > 必须指定用于清除的路径，且路径必须是符合以下[正则表达式](/dotnet/standard/base-types/regular-expression-language-quick-reference)的相对 URL。 目前**来自 Akamai 的 Azure CDN** 不支持**清除所有**和**通配符清除**。
    > > 单个 URL 清除 `@"^\/(?>(?:[a-zA-Z0-9-_.%=\(\)\u0020]+\/?)*)$";`  
    > > 查询字符串 `@"^(?:\?[-\@_a-zA-Z0-9\/%:;=!,.\+'&\(\)\u0020]*)?$";`  
    > > 通配符清除 `@"^\/(?:[a-zA-Z0-9-_.%=\(\)\u0020]+\/)*\*$";`。 
@@ -68,11 +69,11 @@ ms.lasthandoff: 05/07/2018
     ![“清除”按钮](./media/cdn-purge-endpoint/cdn-purge-button.png)
 
 > [!IMPORTANT]
-> 对于**来自 Verizon 的 Azure CDN**（标准和高级），清除请求需要大约 2-3 分钟的时间来处理；对于**来自 Akamai 的 Azure CDN** ，大约需要 7 分钟。  在任何给定时间，Azure CDN 在配置文件级别拥有最多 50 个并发清除请求的限制。 
+> 清除请求需要约 2 分钟处理的**来自 Microsoft 的 Azure CDN**并**来自 Verizon 的 Azure CDN** （标准和高级），并使用大约 10 秒**Azure CDN来自 Akamai**。  在任何给定时间，Azure CDN 在配置文件级别拥有最多 50 个并发清除请求的限制。 
 > 
 > 
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 * [在 Azure CDN 终结点上预加载资产](cdn-preload-endpoint.md)
-* [Azure CDN REST API 参考 - 清除或预加载终结点](https://msdn.microsoft.com/library/mt634451.aspx)
+* [Azure CDN REST API 参考 - 清除或预加载终结点](/rest/api/cdn/endpoints)
 

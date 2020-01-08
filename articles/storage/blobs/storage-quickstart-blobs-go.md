@@ -1,19 +1,18 @@
 ---
 title: Azure 快速入门 - 使用 Go 在对象存储中创建 blob | Microsoft Docs
 description: 本快速入门将在对象 (Blob) 存储中创建存储帐户和容器。 然后，使用适用于 Go 的存储客户端库将一个 Blob 上传到 Azure 存储，下载一个 Blob，然后列出容器中的 Blob。
-services: storage
-author: seguler
-manager: jeconnoc
-ms.custom: mvc
+author: mhopkins-msft
+ms.author: mhopkins
+ms.date: 11/14/2018
 ms.service: storage
+ms.subservice: blobs
 ms.topic: quickstart
-ms.date: 04/09/2018
-ms.author: seguler
-ms.openlocfilehash: 1ce3debd8b04cf6c799dd7d6a3c87f843f1e0338
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.openlocfilehash: f4016349e354c84e9e096ac6d5072a4870e9ef29
+ms.sourcegitcommit: 85b3973b104111f536dc5eccf8026749084d8789
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 08/01/2019
+ms.locfileid: "68726461"
 ---
 # <a name="quickstart-upload-download-and-list-blobs-using-go"></a>快速入门：使用 Go 上传、下载和列出 Blob
 
@@ -21,14 +20,20 @@ ms.lasthandoff: 04/28/2018
 
 ## <a name="prerequisites"></a>先决条件
 
-完成本快速入门教程： 
-* 安装 [Go 1.8 或更高版本](https://golang.org/dl/)
-* 使用 `go get -u github.com/azure/azure-storage-blob-go/2016-05-31/azblob` 下载和安装[用于 Go 的 Azure 存储 Blob SDK](https://github.com/azure/azure-storage-blob-go/)。 
+[!INCLUDE [storage-quickstart-prereq-include](../../../includes/storage-quickstart-prereq-include.md)]
 
-如果你还没有 Azure 订阅，可以在开始前创建一个 [免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
+请确保已安装下述额外的必备组件：
+ 
+* [Go 1.8 或更高版本](https://golang.org/dl/)
+* 使用以下命令安装[用于 Go 的 Azure 存储 Blob SDK](https://github.com/azure/azure-storage-blob-go/)：
 
-[!INCLUDE [storage-quickstart-tutorial-create-account-portal](../../../includes/storage-quickstart-tutorial-create-account-portal.md)]
+    ```
+    go get -u github.com/Azure/azure-storage-blob-go/azblob
+    ``` 
 
+    > [!NOTE]
+    > 确保将 URL 中的 `Azure` 大写，以免在使用该 SDK 时出现与大小写相关的导入问题。 另请在导入语句中将 `Azure` 大写。
+    
 ## <a name="download-the-sample-application"></a>下载示例应用程序
 本快速入门中使用的[示例应用程序](https://github.com/Azure-Samples/storage-blobs-go-quickstart.git)是基本的 Go 应用程序。  
 
@@ -45,14 +50,14 @@ git clone https://github.com/Azure-Samples/storage-blobs-go-quickstart
 ## <a name="configure-your-storage-connection-string"></a>配置存储连接字符串
 此解决方案要求将存储帐户名称和密钥安全地存储在运行示例的计算机的本地环境变量中。 根据操作系统按照下面的一个示例创建环境变量。
 
-# <a name="linuxtablinux"></a>[Linux](#tab/Linux)
+# <a name="linuxtablinux"></a>[Linux](#tab/linux)
 
 ```
 export AZURE_STORAGE_ACCOUNT="<youraccountname>"
 export AZURE_STORAGE_ACCESS_KEY="<youraccountkey>"
 ```
 
-# <a name="windowstabwindows"></a>[Windows](#tab/Windows)
+# <a name="windowstabwindows"></a>[Windows](#tab/windows)
 
 ```
 setx AZURE_STORAGE_ACCOUNT "<youraccountname>"
@@ -83,7 +88,7 @@ Press the enter key to delete the sample files, example container, and exit the 
 按键继续时，示例程序会删除存储容器和文件。 
 
 > [!TIP]
-> 还可以使用工具（如 [Azure 存储资源管理器](http://storageexplorer.com)）查看 Blob 存储中的文件。 Azure 存储资源管理器是免费的跨平台工具，可用于访问存储帐户信息。 
+> 还可以使用工具（如 [Azure 存储资源管理器](https://storageexplorer.com)）查看 Blob 存储中的文件。 Azure 存储资源管理器是免费的跨平台工具，可用于访问存储帐户信息。 
 >
 
 ## <a name="understand-the-sample-code"></a>了解示例代码
@@ -91,13 +96,13 @@ Press the enter key to delete the sample files, example container, and exit the 
 接下来逐步介绍示例代码，以便展示其工作方式。
 
 ### <a name="create-containerurl-and-bloburl-objects"></a>创建 ContainerURL 和 BlobURL 对象
-首先要做的是创建 ContainerURL 和 BlobURL 对象的引用，此类对象用于访问和管理 Blob 存储。 此类对象提供 Create、PutBlob 和 GetBlob 之类的低级 API，用于发出 REST API。
+首先要做的是创建 ContainerURL 和 BlobURL 对象的引用，此类对象用于访问和管理 Blob 存储。 此类对象提供 Create、Upload 和 Download 之类的低级 API，用于发出 REST API。
 
-* 使用 **SharedKeyCredential** 结构来存储凭据。 
+* 使用 [**SharedKeyCredential**](https://godoc.org/github.com/Azure/azure-storage-blob-go/azblob#SharedKeyCredential) 结构来存储凭据。 
 
-* 使用凭据和选项创建一个**管道**。 该管道用于指定重试策略、日志记录、HTTP 响应有效负载的反序列化等事项。  
+* 使用凭据和选项创建一个[**管道**](https://godoc.org/github.com/Azure/azure-storage-blob-go/azblob#NewPipeline)。 该管道用于指定重试策略、日志记录、HTTP 响应有效负载的反序列化等事项。  
 
-* 实例化一个新的 ContainerURL 和一个新的 BlobURL 对象，以便在容器上运行操作 (Create) 和在 Blob 上运行操作（PutBlob 和 GetBlob）。
+* 实例化一个新的 [**ContainerURL**](https://godoc.org/github.com/Azure/azure-storage-blob-go/azblob#ContainerURL) 和一个新的 [**BlobURL**](https://godoc.org/github.com/Azure/azure-storage-blob-go/azblob#BlobURL) 对象，以便在容器上运行操作 (Create) 和在 Blob 上运行操作（Upload 和 Download）。
 
 
 有了 ContainerURL 之后，即可实例化指向 Blob 的 **BlobURL** 对象，并执行上传、下载、复制之类的操作。
@@ -105,7 +110,7 @@ Press the enter key to delete the sample files, example container, and exit the 
 > [!IMPORTANT]
 > 容器名称必须为小写。 有关容器名称和 blob 名称的详细信息，请参阅[命名和引用容器、Blob 和元数据](https://docs.microsoft.com/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata)。
 
-本部分创建一个新的容器。 容器名为 **quickstartblobs-[随机字符串]**。 
+本部分创建一个新的容器。 容器名为 **quickstartblobs-[随机字符串]** 。 
 
 ```go 
 // From the Azure portal, get your storage account name and key and set environment variables.
@@ -115,7 +120,10 @@ if len(accountName) == 0 || len(accountKey) == 0 {
 }
 
 // Create a default request pipeline using your storage account name and account key.
-credential := azblob.NewSharedKeyCredential(accountName, accountKey)
+credential, err := azblob.NewSharedKeyCredential(accountName, accountKey)
+if err != nil {
+    log.Fatal("Invalid credentials with error: " + err.Error())
+}
 p := azblob.NewPipeline(credential, azblob.PipelineOptions{})
 
 // Create a random string for the quick start container
@@ -132,33 +140,41 @@ containerURL := azblob.NewContainerURL(*URL, p)
 // Create the container
 fmt.Printf("Creating a container named %s\n", containerName)
 ctx := context.Background() // This example uses a never-expiring context
-_, err := containerURL.Create(ctx, azblob.Metadata{}, azblob.PublicAccessNone)
+_, err = containerURL.Create(ctx, azblob.Metadata{}, azblob.PublicAccessNone)
 handleErrors(err)
 ```
 ### <a name="upload-blobs-to-the-container"></a>将 blob 上传到容器
 
 Blob 存储支持块 blob、追加 blob 和页 blob。 块 blob 是最常用的 blob，此快速入门中使用的便是它。  
 
-若要将文件上传到 Blob，请使用 **os.Open** 打开该文件。 然后即可使用一个 REST API（PutBlob、PutBlock 或 PutBlockList）将该文件上传到指定的路径。 
+若要将文件上传到 Blob，请使用 **os.Open** 打开该文件。 然后可以使用以下 REST API 之一将文件上传到指定的路径：Upload (PutBlob)、StageBlock/CommitBlockList (PutBlock/PutBlockList)。 
 
-另外，也可使用 SDK 提供的[高级 API](https://github.com/Azure/azure-storage-blob-go/blob/master/2016-05-31/azblob/highlevel.go)，这是在低级 REST API 的基础上生成的。 例如，***UploadFileToBlockBlob*** 函数使用 PutBlock 操作以区块方式同时上传一个文件，以便优化吞吐量。 如果文件小于 256 MB，则会改用 PutBlob 通过单个事务完成传输。
+另外，也可使用 SDK 提供的[高级 API](https://github.com/Azure/azure-storage-blob-go/blob/master/azblob/highlevel.go)，这是在低级 REST API 的基础上生成的。 例如，***UploadFileToBlockBlob*** 函数使用 StageBlock (PutBlock) 操作以区块方式同时上传一个文件，以便优化吞吐量。 如果文件小于 256 MB，则会改用 Upload (PutBlob) 通过单个事务完成传输。
 
 以下示例将文件上传到名为 **quickstartblobs-[randomstring]** 的容器。
 
 ```go
+// Create a file to test the upload and download.
+fmt.Printf("Creating a dummy file to test the upload and download\n")
+data := []byte("hello world this is a blob\n")
+fileName := randomString()
+err = ioutil.WriteFile(fileName, data, 0700)
+handleErrors(err)
+
 // Here's how to upload a blob.
 blobURL := containerURL.NewBlockBlobURL(fileName)
 file, err := os.Open(fileName)
 handleErrors(err)
 
-// You can use the low-level PutBlob API to upload files. Low-level APIs are simple wrappers for the Azure Storage REST APIs.
-// Note that PutBlob can upload up to 256MB data in one shot. Details: https://docs.microsoft.com/rest/api/storageservices/put-blob
+// You can use the low-level Upload (PutBlob) API to upload files. Low-level APIs are simple wrappers for the Azure Storage REST APIs.
+// Note that Upload can upload up to 256MB data in one shot. Details: https://docs.microsoft.com/rest/api/storageservices/put-blob
+// To upload more than 256MB, use StageBlock (PutBlock) and CommitBlockList (PutBlockList) functions. 
 // Following is commented out intentionally because we will instead use UploadFileToBlockBlob API to upload the blob
-// _, err = blobURL.PutBlob(ctx, file, azblob.BlobHTTPHeaders{}, azblob.Metadata{}, azblob.BlobAccessConditions{})
+// _, err = blobURL.Upload(ctx, file, azblob.BlobHTTPHeaders{ContentType: "text/plain"}, azblob.Metadata{}, azblob.BlobAccessConditions{})
 // handleErrors(err)
 
 // The high-level API UploadFileToBlockBlob function uploads blocks in parallel for optimal performance, and can handle large files as well.
-// This function calls PutBlock/PutBlockList for files larger 256 MBs, and calls PutBlob for any file smaller
+// This function calls StageBlock/CommitBlockList for files larger 256 MBs, and calls Upload for any file smaller
 fmt.Printf("Uploading the file with blob name: %s\n", fileName)
 _, err = azblob.UploadFileToBlockBlob(ctx, file, blobURL, azblob.UploadToBlockBlobOptions{
     BlockSize:   4 * 1024 * 1024,
@@ -171,10 +187,11 @@ handleErrors(err)
 可以使用基于 **ContainerURL** 的 **ListBlobs** 方法获取容器中文件的列表。 ListBlobs 返回单个 Blob 段（最多 5000 个 Blob，从指定的**标记**开始计算）。 使用空标记从头开始枚举。 Blob 名称按字典中的顺序返回。 获取一个段以后，对其进行处理，然后再次调用 ListBlobs，传递以前返回的标记。  
 
 ```go
-// List the blobs in the container
+// List the container that we have created above
+fmt.Println("Listing the blobs in the container:")
 for marker := (azblob.Marker{}); marker.NotDone(); {
     // Get a result segment starting with the blob indicated by the current Marker.
-    listBlob, err := containerURL.ListBlobs(ctx, marker, azblob.ListBlobsOptions{})
+    listBlob, err := containerURL.ListBlobsFlatSegment(ctx, marker, azblob.ListBlobsSegmentOptions{})
     handleErrors(err)
 
     // ListBlobs returns the start of the next segment; you MUST use this to get
@@ -182,22 +199,28 @@ for marker := (azblob.Marker{}); marker.NotDone(); {
     marker = listBlob.NextMarker
 
     // Process the blobs returned in this result segment (if the segment is empty, the loop body won't execute)
-    for _, blobInfo := range listBlob.Blobs.Blob {
-        fmt.Print("Blob name: " + blobInfo.Name + "\n")
+    for _, blobInfo := range listBlob.Segment.BlobItems {
+        fmt.Print(" Blob name: " + blobInfo.Name + "\n")
     }
 }
 ```
 
 ### <a name="download-the-blob"></a>下载 Blob
 
-使用基于 BlobURL 的 **GetBlob** 低级方法下载 Blob。 也可创建一个流，然后使用 [highlevel.go](https://github.com/Azure/azure-storage-blob-go/blob/master/2016-05-31/azblob/highlevel.go) 中提供的 **NewDownloadStream** 高级 API 从流中读取范围。 NewDownloadStream 函数在出现连接故障时重试，而 Get Blob API 则仅在出现特定的 HTTP 状态代码（例如“503 (服务器忙)”）时重试。 以下代码使用 **NewDownloadStream** 函数下载 Blob。 Blob 的内容写入到缓冲区中，显示在控制台上。
+使用基于 BlobURL 的 **Download** 低级函数下载 Blob。 这会返回一个 **DownloadResponse** 结构。 在结构上运行函数 **Body**，以便获取用于读取数据的 **RetryReader** 流。 如果某个连接在读取时失败，则会发出其他的请求来重建连接并继续读取。 如果在指定 RetryReaderOption 时将 MaxRetryRequests 设置为 0（默认设置），则会返回原始响应正文，不会进行重试。 另外，也可使用高级 API **DownloadBlobToBuffer** 或 **DownloadBlobToFile** 来简化代码。
+
+以下代码使用 **Download** 函数下载 Blob。 Blob 的内容写入到缓冲区中，显示在控制台上。
 
 ```go
-// Here's how to download the blob. NOTE: This method automatically retries if the connection fails
-// during download (the low-level GetBlob function does NOT retry errors when reading from its stream).
-stream := azblob.NewDownloadStream(ctx, blobURL.GetBlob, azblob.DownloadStreamOptions{})
-downloadedData := &bytes.Buffer{}
-_, err = downloadedData.ReadFrom(stream)
+// Here's how to download the blob
+downloadResponse, err := blobURL.Download(ctx, 0, azblob.CountToEnd, azblob.BlobAccessConditions{}, false)
+
+// NOTE: automatically retries are performed if the connection fails
+bodyStream := downloadResponse.Body(azblob.RetryReaderOptions{MaxRetryRequests: 20})
+
+// read the body into a buffer
+downloadedData := bytes.Buffer{}
+_, err = downloadedData.ReadFrom(bodyStream)
 handleErrors(err)
 ```
 
@@ -206,7 +229,7 @@ handleErrors(err)
 
 ```go
 // Cleaning up the quick start by deleting the container and the file created locally
-fmt.Printf("Press the enter key to delete the sample files, example container, and exit the application.\n")
+fmt.Printf("Press enter key to delete the sample files, example container, and exit the application.\n")
 bufio.NewReader(os.Stdin).ReadBytes('\n')
 fmt.Printf("Cleaning up.\n")
 containerURL.Delete(ctx, azblob.ContainerAccessConditions{})
@@ -219,8 +242,8 @@ os.Remove(fileName)
 查看以下附加资源，了解如何使用 Blob 存储进行 Go 开发：
 
 - 在 GitHub 上查看并安装 Azure 存储的 [Go 客户端库源代码](https://github.com/Azure/azure-storage-blob-go)。
-- 浏览使用 Go 客户端库编写的 [Blob 存储示例](https://godoc.org/github.com/Azure/azure-storage-blob-go/2016-05-31/azblob#pkg-examples)。
+- 浏览使用 Go 客户端库编写的 [Blob 存储示例](https://godoc.org/github.com/Azure/azure-storage-blob-go/azblob#pkg-examples)。
 
 ## <a name="next-steps"></a>后续步骤
  
-本快速入门介绍了如何使用 Go 在本地磁盘和 Azure Blob 存储之间转移文件。 有关 Azure 存储 Blob SDK 的详细信息，请查看[源代码](https://github.com/Azure/azure-storage-blob-go/)和 [API 参考](https://godoc.org/github.com/Azure/azure-storage-blob-go/2016-05-31/azblob)。
+本快速入门介绍了如何使用 Go 在本地磁盘和 Azure Blob 存储之间转移文件。 有关 Azure 存储 Blob SDK 的详细信息，请查看[源代码](https://github.com/Azure/azure-storage-blob-go/)和 [API 参考](https://godoc.org/github.com/Azure/azure-storage-blob-go/azblob)。

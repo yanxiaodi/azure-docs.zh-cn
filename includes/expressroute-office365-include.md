@@ -5,13 +5,14 @@ services: expressroute
 author: cherylmc
 ms.service: expressroute
 ms.topic: include
-ms.date: 03/22/2018
+ms.date: 08/29/2018
 ms.author: cherylmc
 ms.custom: include file
-ms.openlocfilehash: 880e9c8f7326c6b4c471e820266c144bbd9a000f
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
+ms.openlocfilehash: 12fc9da11469cd617154827232d430dc5cd4a94b
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67172688"
 ---
-软件即服务产品（例如 Office 365 和 Dynamics 365）在创建时已考虑到需要通过 Internet 进行安全且可靠的访问。 因此，我们建议只在特定的方案中为这些应用程序使用 ExpressRoute。 有关使用 ExpressRoute 访问 Office 365 的信息，请访问[适用于 Office 365 的 Azure ExpressRoute](http://aka.ms/ExpressRouteOffice365)。
+创建 Office 365 是为了通过 Internet 安全可靠地访问。 因此，我们建议将 ExpressRoute 用于特定方案。 有关使用 ExpressRoute 访问 Office 365 的信息，请访问[适用于 Office 365 的 Azure ExpressRoute](https://aka.ms/ExpressRouteOffice365)。

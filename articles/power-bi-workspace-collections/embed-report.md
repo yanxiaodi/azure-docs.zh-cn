@@ -1,26 +1,19 @@
 ---
 title: 嵌入 Azure Power BI 工作区集合中的报表 | Microsoft Docs
 description: 了解如何将 Azure Power BI 工作区集合中的报表嵌入到应用程序中。
-services: power-bi-embedded
-documentationcenter: ''
-author: markingmyname
-manager: kfile
-editor: ''
-tags: ''
-ROBOTS: NOINDEX
-ms.assetid: ''
+services: power-bi-workspace-collections
 ms.service: power-bi-embedded
-ms.devlang: NA
+author: rkarlin
+ms.author: rkarlin
 ms.topic: article
-ms.tgt_pltfrm: NA
 ms.workload: powerbi
 ms.date: 09/20/2017
-ms.author: maghan
-ms.openlocfilehash: b6fa46b1cf3a251d6116e7de6ef41a9e6d265c29
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: 4e125e57c290688d5a65f6d70143100cbd3462cb
+ms.sourcegitcommit: 2e4b99023ecaf2ea3d6d3604da068d04682a8c2d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 07/09/2019
+ms.locfileid: "67669053"
 ---
 # <a name="embed-a-report-in-power-bi-workspace-collections"></a>嵌入 Power BI 工作区集合中的报表
 
@@ -39,7 +32,7 @@ ms.lasthandoff: 04/16/2018
 
 ## <a name="get-a-report-id"></a>获取报表 ID
 
-每个访问令牌基于某个报表。 需要获取想要嵌入的报表的给定报表 ID。 可以通过调用[获取报表](https://msdn.microsoft.com/library/azure/mt711510.aspx)REST API 来实现此目的。 此操作将返回报表 ID 和嵌入 URL。 可以使用 Power BI .NET SDK 或通过直接调用 REST API 来实现此目的。
+每个访问令牌基于某个报表。 需要获取想要嵌入的报表的给定报表 ID。 可以通过调用[获取报表](https://msdn.microsoft.com/library/azure/mt711510.aspx) REST API 来实现此目的。 此操作将返回报表 ID 和嵌入 URL。 可以使用 Power BI .NET SDK 或通过直接调用 REST API 来实现此目的。
 
 ### <a name="using-the-power-bi-net-sdk"></a>使用 Power BI .NET SDK
 
@@ -47,13 +40,13 @@ ms.lasthandoff: 04/16/2018
 
 **安装 NuGet 包**
 
-```
+```powershell
 Install-Package Microsoft.PowerBI.Api
 ```
 
 **C# 代码**
 
-```
+```csharp
 using Microsoft.PowerBI.Api.V1;
 using Microsoft.Rest;
 
@@ -68,7 +61,7 @@ var reports = (IList<Report>)client.Reports.GetReports(workspaceCollectionName, 
 
 ### <a name="calling-the-rest-api-directly"></a>直接调用 REST API
 
-```
+```csharp
 System.Net.WebRequest request = System.Net.WebRequest.Create("https://api.powerbi.com/v1.0/collections/{collectionName}/workspaces/{workspaceId}/Reports") as System.Net.HttpWebRequest;
 
 request.Method = "GET";
@@ -89,19 +82,19 @@ using (var response = request.GetResponse() as System.Net.HttpWebResponse)
 
 Power BI 工作区集合使用嵌入标记，即 HMAC 签名的 JSON Web 令牌。 令牌已使用 Power BI 工作区集合中的访问密钥签名。 默认情况下，嵌入令牌用于提供对要嵌入到应用程序的报表的只读访问权限。 嵌入令牌是针对特定报表颁发的，应该与嵌入 URL 相关联。
 
-应在服务器上创建访问令牌，因为要使用访问密钥对令牌进行签名/加密。 有关如何创建访问令牌的信息，请参阅[通过 Power BI 工作区集合进行身份验证和授权](app-token-flow.md)。 此外，还可以查看 [CreateReportEmbedToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken?redirectedfrom=MSDN#methods_) 方法。 以下示例演示了如何使用用于 Power BI 的 .NET SDK。
+应在服务器上创建访问令牌，因为要使用访问密钥对令牌进行签名/加密。 有关如何创建访问令牌的信息，请参阅[通过 Power BI 工作区集合进行身份验证和授权](app-token-flow.md)。 此外，还可以查看 [CreateReportEmbedToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken?redirectedfrom=MSDN) 方法。 以下示例演示了如何使用用于 Power BI 的 .NET SDK。
 
 将使用前面检索到的报表 ID。 创建嵌入令牌后，将使用访问密钥来生成可从 JavaScript 的角度使用的令牌。 *PowerBIToken 类*要求安装 [Power BI Core NuGut 包](https://www.nuget.org/packages/Microsoft.PowerBI.Core/)。
 
 **安装 NuGet 包**
 
-```
+```powershell
 Install-Package Microsoft.PowerBI.Core
 ```
 
 **C# 代码**
 
-```
+```csharp
 using Microsoft.PowerBI.Security;
 
 // rlsUsername, roles and scopes are optional.
@@ -116,23 +109,24 @@ var token = embedToken.Generate("{access key}");
 
 ## <a name="embed-using-javascript"></a>使用 JavaScript 嵌入
 
-获取访问令牌和报表 ID 后，可以使用 JavaScript 来嵌入报表。 这就需要安装 NuGet [Power BI JavaScript 包](https://www.nuget.org/packages/Microsoft.PowerBI.JavaScript/)。 embedUrl 将只是 https://embedded.powerbi.com/appTokenReportEmbed。
+获取访问令牌和报表 ID 后，可以使用 JavaScript 来嵌入报表。 这就需要安装 NuGet [Power BI JavaScript 包](https://www.nuget.org/packages/Microsoft.PowerBI.JavaScript/)。 embedUrl 将只是 https://embedded.powerbi.com/appTokenReportEmbed 。
 
 > [!NOTE]
 > 可以使用 [JavaScript 报表嵌入示例](https://microsoft.github.io/PowerBI-JavaScript/demo/)测试功能。 我们还提供了适用于不同操作的代码示例。
 
 **安装 NuGet 包**
 
-```
+```powershell
 Install-Package Microsoft.PowerBI.JavaScript
 ```
 
 **JavaScript 代码**
 
-```
+```html
 <script src="/scripts/powerbi.js"></script>
 <div id="reportContainer"></div>
 
+<script>
 var embedConfiguration = {
     type: 'report',
     accessToken: 'eyJ0eXAiO...Qron7qYpY9MI',
@@ -142,17 +136,18 @@ var embedConfiguration = {
 
 var $reportContainer = $('#reportContainer');
 var report = powerbi.embed($reportContainer.get(0), embedConfiguration);
+</script>
 ```
 
 ### <a name="set-the-size-of-embedded-elements"></a>设置嵌入元素的大小
 
 报表会根据其容器大小自动嵌入。 若要重写默认的嵌入项大小，只需添加 CSS 类属性，或者宽度和高度的内联样式。
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 
 [示例入门](get-started-sample.md)  
 [在 Power BI 工作区集合中进行身份验证和授权](app-token-flow.md)  
-[CreateReportEmbedToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken?redirectedfrom=MSDN#methods_)  
+[CreateReportEmbedToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken?redirectedfrom=MSDN)  
 [JavaScript 嵌入示例](https://microsoft.github.io/PowerBI-JavaScript/demo/)  
 [Power BI JavaScript 包](https://www.nuget.org/packages/Microsoft.PowerBI.JavaScript/)  
 [Power BI API NuGet 包](https://www.nuget.org/profiles/powerbi)
@@ -160,4 +155,4 @@ var report = powerbi.embed($reportContainer.get(0), embedConfiguration);
 [PowerBI-CSharp Git 存储库](https://github.com/Microsoft/PowerBI-CSharp)  
 [PowerBI-Node Git 存储库](https://github.com/Microsoft/PowerBI-Node)  
 
-有更多问题？ [尝试 Power BI 社区](http://community.powerbi.com/)
+有更多问题？ [尝试 Power BI 社区](https://community.powerbi.com/)

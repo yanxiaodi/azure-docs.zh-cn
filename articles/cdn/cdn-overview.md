@@ -3,23 +3,24 @@ title: 什么是内容分发网络 (CDN)？ - Azure | Microsoft Docs
 description: 了解什么是 Azure 内容分发网络 (CDN)，以及如何使用它来分发高带宽内容。
 services: cdn
 documentationcenter: ''
-author: dksimpson
-manager: cfowler
+author: mdgattuso
+manager: danielgi
 editor: ''
 ms.assetid: 866e0c30-1f33-43a5-91f0-d22f033b16c6
-ms.service: cdn
+ms.service: azure-cdn
 ms.workload: tbd
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: overview
 ms.date: 05/09/2018
-ms.author: v-deasim
+ms.author: magattus
 ms.custom: mvc
-ms.openlocfilehash: 2f760c1b47da7273827ce2a980cdc9b4db943904
-ms.sourcegitcommit: d28bba5fd49049ec7492e88f2519d7f42184e3a8
+ms.openlocfilehash: 6aaa98bea5e6cf1bdffc3dbe28e42e9545a626ea
+ms.sourcegitcommit: ccb9a7b7da48473362266f20950af190ae88c09b
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/11/2018
+ms.lasthandoff: 07/05/2019
+ms.locfileid: "67593610"
 ---
 # <a name="what-is-a-content-delivery-network-on-azure"></a>什么是 Azure 上的内容分发网络？
 内容分发网络 (CDN) 是高效地向用户分发 Web 内容的分布式服务器网络。 CDN 将缓存的内容存储在 接入点 (POP) 位置（靠近最终用户的边缘服务器），以最大程度地降低延迟。 
@@ -37,7 +38,7 @@ Azure 内容分发网络 (CDN) 为开发人员提供了一个全局解决方案�
 ## <a name="how-it-works"></a>工作原理
 ![CDN 概述](./media/cdn-overview/cdn-overview.png)
 
-1. 用户 (Alice) 使用带有特殊域名（例如 _&lt;终结点名称&gt;_.azureedge.net）的 URL 来请求文件（也称资产）。 此名称可以是终结点主机名，也可以是自定义域。 DNS 将请求路由到性能最佳的 POP 位置，该位置通常是在地理上最靠近用户的 POP。
+1. 用户 (Alice) 使用带有特殊域名（例如 _&lt;终结点名称&gt;_ .azureedge.net）的 URL 来请求文件（也称资产）。 此名称可以是终结点主机名，也可以是自定义域。 DNS 将请求路由到性能最佳的 POP 位置，该位置通常是在地理上最靠近用户的 POP。
     
 2. 如果 POP 中的边缘服务器在其缓存中没有文件，则 POP 将从源服务器请求文件。 源服务器可以是 Azure Web 应用、Azure 云服务、Azure 存储帐户或任何公开可用的 Web 服务器。
    
@@ -58,7 +59,7 @@ Azure 内容分发网络 (CDN) 为开发人员提供了一个全局解决方案�
  - 可以在 CDN 配置文件中创建的终结点的数量。 
  - 可以映射到终结点的自定义域的数量。
 
-有关 CDN 订阅限制的详细信息，请参阅 [CDN 限制](https://docs.microsoft.com/azure/azure-subscription-service-limits#cdn-limits)。
+有关 CDN 订阅限制的详细信息，请参阅 [CDN 限制](https://docs.microsoft.com/azure/azure-subscription-service-limits)。
     
 ## <a name="azure-cdn-features"></a>Azure CDN 功能
 Azure CDN 提供以下重要功能：
@@ -78,4 +79,3 @@ Azure CDN 提供以下重要功能：
 - 了解如何通过 [.NET](cdn-app-dev-net.md) 或 [Node.js](cdn-app-dev-node.md) 实现 Azure CDN 的自动化。
 - 若要在操作中了解 Azure CDN，请观看 [Azure CDN 视频](https://azure.microsoft.com/resources/videos/index/?services=cdn&sort=newest)。
 - 有关最新 Azure CDN 功能的信息，请参阅 [Azure CDN 博客](https://azure.microsoft.com/blog/tag/azure-cdn/)。
-

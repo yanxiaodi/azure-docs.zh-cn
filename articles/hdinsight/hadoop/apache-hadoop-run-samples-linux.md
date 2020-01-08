@@ -1,40 +1,32 @@
 ---
-title: 在 HDInsight 上运行 Hadoop MapReduce 示例 — Azure | Microsoft Docs
+title: 在 HDInsight 上运行 Apache Hadoop MapReduce 示例 - Azure
 description: 开始使用 HDInsight 随附的 jar 文件中的 MapReduce 示例。 使用 SSH 连接到群集，然后使用 Hadoop 命令运行示例作业。
 keywords: hadoop 示例 jar,hadoop 示例 jar,hadoop mapreduce 示例,mapreduce 示例
-services: hdinsight
-documentationcenter: ''
-author: Blackmist
-manager: jhubbard
-editor: cgronlun
-tags: azure-portal
-ms.assetid: e1d2a0b9-1659-4fab-921e-4a8990cbb30a
+author: hrasheed-msft
+ms.reviewer: jasonh
 ms.service: hdinsight
 ms.custom: hdinsightactive,hdiseo17may2017
-ms.devlang: na
 ms.topic: conceptual
-ms.date: 05/16/2018
-ms.author: larryfr
-ms.openlocfilehash: 14f860d64c482ac7ef74512aea4850821d30132c
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.date: 04/25/2019
+ms.author: hrasheed
+ms.openlocfilehash: f0251e3926c569b45ebebcd18b98df5af4564443
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64706665"
 ---
 # <a name="run-the-mapreduce-examples-included-in-hdinsight"></a>运行 HDInsight 随附的 MapReduce 示例
 
 [!INCLUDE [samples-selector](../../../includes/hdinsight-run-samples-selector.md)]
 
-了解如何在 HDInsight 上运行 Hadoop 随附的 MapReduce 示例。
+了解如何在 HDInsight 上运行 Apache Hadoop 随附的 MapReduce 示例。
 
-## <a name="prerequisites"></a>先决条件
+## <a name="prerequisites"></a>必备组件
 
-* **HDInsight 群集**：请参阅[在 Linux 上的 HDInsight 中开始将 Hadoop 与 Hive 配合使用](apache-hadoop-linux-tutorial-get-started.md)
+* HDInsight 中的 Apache Hadoop 群集。 请参阅 [Linux 上的 HDInsight 入门](./apache-hadoop-linux-tutorial-get-started.md)。
 
-    > [!IMPORTANT]
-    > Linux 是 HDInsight 3.4 或更高版本上使用的唯一操作系统。 有关详细信息，请参阅 [HDInsight 在 Windows 上停用](../hdinsight-component-versioning.md#hdinsight-windows-retirement)。
-
-* **SSH 客户端**：有关详细信息，请参阅[将 SSH 与 HDInsight 配合使用](../hdinsight-hadoop-linux-use-ssh-unix.md)。
+* SSH 客户端。 有关详细信息，请参阅[使用 SSH 连接到 HDInsight (Apache Hadoop)](../hdinsight-hadoop-linux-use-ssh-unix.md)。
 
 ## <a name="the-mapreduce-examples"></a>MapReduce 示例
 
@@ -65,11 +57,15 @@ ms.lasthandoff: 05/16/2018
 * `wordmedian`：一种 MapReduce 程序，用于计算输入文件中单词的中间长度。
 * `wordstandarddeviation`：一种 MapReduce 程序，用于计算输入文件中单词长度的标准差。
 
-**Source code**：这些示例的源代码包含在 `/usr/hdp/current/hadoop-client/src/hadoop-mapreduce-project/hadoop-mapreduce-examples` 处的 HDInsight 群集上。
+**源代码**：这些示例的源代码包含在 `/usr/hdp/current/hadoop-client/src/hadoop-mapreduce-project/hadoop-mapreduce-examples` 处的 HDInsight 群集上。
 
 ## <a name="run-the-wordcount-example"></a>运行 wordcount 示例
 
-1. 使用 SSH 连接到 HDInsight。 有关详细信息，请参阅 [Use SSH with HDInsight](../hdinsight-hadoop-linux-use-ssh-unix.md)（对 HDInsight 使用 SSH）。
+1. 使用 SSH 连接到 HDInsight。 替换为`CLUSTER`与群集的名称，然后输入以下命令：
+
+    ```cmd
+    ssh sshuser@CLUSTER-ssh.azurehdinsight.net
+    ```
 
 2. 在 `username@#######:~$` 提示符下，使用以下命令列出示例：
 
@@ -91,7 +87,7 @@ ms.lasthandoff: 05/16/2018
 
     此消息表示可以为源文档提供多个输入路径。 最后的路径是存储输出（源文档中的单词计数）的位置。
 
-4. 使用以下语句来计算《达芬奇笔记》（已作为示例数据提供给群集）中所有单词的数目：
+4. 使用以下命令以便在笔记本的 Leonardo da Vinci 提供作为示例数据与你的群集中的所有单词进行计数：
 
     ```bash
     yarn jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar wordcount /example/data/gutenberg/davinci.txt /example/data/davinciwordcount
@@ -99,7 +95,7 @@ ms.lasthandoff: 05/16/2018
 
     将从 `/example/data/gutenberg/davinci.txt` 读取此作业的输入。 此示例的输出存储于 `/example/data/davinciwordcount` 中。 两个路径皆位于群集的默认存储，而不是本地文件系统。
 
-   > [!NOTE]
+   > [!NOTE]  
    > 如字数统计示例帮助中所述，还可以指定多个输入文件。 例如，`hadoop jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar wordcount /example/data/gutenberg/davinci.txt /example/data/gutenberg/ulysses.txt /example/data/twowordcount` 会计算 davinci.txt 和 ulysses.txt 中单词的数目。
 
 5. 作业完成后，使用以下命令查看输出：
@@ -167,17 +163,17 @@ yarn jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar 
 
 此命令返回的值类似于 **3.14159155000000000000**。 例如，pi 采用前 10 位小数时为 3.1415926535。
 
-## <a name="10-gb-greysort-example"></a>10 GB Greysort 示例
+## <a name="10-gb-graysort-example"></a>10GB GraySort 示例
 
 GraySort 是一种基准排序。 其指标为在给大量数据（通常至少 100 TB）排序时达到的排序速率（TB/分钟）。
 
-此示例使用适中的 10 GB 数据，这样它运行时能相对快一点。 它使用由 Owen O'Malley 和 Arun Murthy 开发的 MapReduce 应用程序。 这些应用程序以 0.578 TB/分钟（100 TB 用时 173 分钟）的速率赢得了 2009 年年度常用（“daytona”）TB 级排序基准。 有关这一排序基准和其他排序基准的详细信息，请参阅 [Sortbenchmark](http://sortbenchmark.org/) 站点。
+此示例使用适中的 10 GB 数据，这样它运行时能相对快一点。 它使用由 Owen O'Malley 和 Arun Murthy 开发的 MapReduce 应用程序。 这些应用程序在 2009 年，0.578 TB/分钟 (100 TB 用时 173 分钟） 的速率赢得年度的常规用途 ("Daytona") tb 级排序基准。 这和其他排序基准的详细信息，请参阅[排序基准](https://sortbenchmark.org/)站点。
 
 本示例使用三组 MapReduce 程序：
 
 * **TeraGen**：一种 MapReduce 程序，用于生成要进行排序的数据行
 
-* **TeraSort**：以输入数据为例，使用 MapReduce 将数据排序到总序中
+* **TeraSort**：对输入数据进行抽样，并使用 MapReduce 将数据排序到总序中
 
     TeraSort 是一种标准 MapReduce 排序，但自定义的分区程序除外。 此分区程序使用 N-1 个抽样键（用于定义每次化简的键范围）的已排序列表。 具体说来，sample[i-1] <= key < sample[i] 之类的所有键都将会发送到化简变量 i。 此分区程序可确保化简变量 i 的输出全都小于化简变量 i+1 的输出。
 
@@ -201,7 +197,7 @@ GraySort 是一种基准排序。 其指标为在给大量数据（通常至少 
     yarn jar /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-examples.jar terasort -Dmapred.map.tasks=50 -Dmapred.reduce.tasks=25 /example/data/10GB-sort-input /example/data/10GB-sort-output
     ```
 
-    `-Dmapred.reduce.tasks` 告诉 Hadoop 多少个化简任务用于此作业。 最后两个参数只是数据的输入和输出位置。
+    `-Dmapred.reduce.tasks` 告诉 Hadoop 多少个化简任务会用于此作业。 最后两个参数只是数据的输入和输出位置。
 
 3. 使用以下方法来验证排序所生成的数据：
 
@@ -213,16 +209,6 @@ GraySort 是一种基准排序。 其指标为在给大量数据（通常至少 
 
 在本文中，学习了如何运行基于 Linux 的 HDInsight 群集附带的示例。 有关 Pig、Hive 和 MapReduce 如何与 HDInsight 配合使用的教程，请参阅以下主题：
 
-* [将 Pig 与 Hadoop on HDInsight 配合使用](hdinsight-use-pig.md)
-* [将 Hive 与 Hadoop on HDInsight 配合使用](hdinsight-use-hive.md)
-* [将 MapReduce 与 HDInsight 上的 Hadoop 配合使用](hdinsight-use-mapreduce.md)
-
-[hdinsight-sdk-documentation]: https://msdn.microsoft.com/library/azure/dn479185.aspx
-
-[hdinsight-submit-jobs]:submit-apache-hadoop-jobs-programmatically.md
-[hdinsight-introduction]:apache-hadoop-introduction.md
-
-
-
-[hdinsight-samples]: hdinsight-run-samples.md
-
+* [将 Apache Pig 与 Apache Hadoop on HDInsight 配合使用](hdinsight-use-pig.md)
+* [将 Apache Hive 与 Apache Hadoop on HDInsight 配合使用](hdinsight-use-hive.md)
+* [将 MapReduce 与 HDInsight 上的 Apache Hadoop 配合使用](hdinsight-use-mapreduce.md)

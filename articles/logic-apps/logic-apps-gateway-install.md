@@ -1,353 +1,277 @@
 ---
-title: 安装本地数据网关 - Azure 逻辑应用 | Microsoft 文档
-description: 访问本地数据源之前，请在本地数据源与逻辑应用之间安装用于快速数据传输和加密的本地数据网关
-keywords: 访问数据, 本地, 数据传输, 加密, 数据源
+title: 安装本地数据网关 - Azure 逻辑应用
+description: 在从 Azure 逻辑应用访问本地数据之前，下载并安装本地数据网关
 services: logic-apps
-documentationcenter: ''
-author: jeffhollan
-manager: anneta
-editor: ''
-ms.assetid: 47e3024e-88a0-4017-8484-8f392faec89d
 ms.service: logic-apps
-ms.devlang: ''
+ms.suite: integration
+author: ecfan
+ms.author: estfan
+ms.reviewer: arthii, LADocs
 ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: integration
-ms.date: 09/14/2017
-ms.author: LADocs; millopis; estfan
-ms.openlocfilehash: 6c1c954209c08c4ce1262bdc1620755e4a3a6d7e
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.date: 09/01/2019
+ms.openlocfilehash: 7384f058c82699095e1209e677dc5c6f61b57178
+ms.sourcegitcommit: 0486aba120c284157dfebbdaf6e23e038c8a5a15
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
-ms.locfileid: "32179004"
+ms.lasthandoff: 09/26/2019
+ms.locfileid: "71309855"
 ---
-# <a name="install-the-on-premises-data-gateway-for-azure-logic-apps"></a>为 Azure 逻辑应用安装本地数据网关
+# <a name="install-on-premises-data-gateway-for-azure-logic-apps"></a>为 Azure 逻辑应用安装本地数据网关
 
-必须安装并设置本地数据网关，逻辑应用才能访问本地数据源。 该网关充当桥梁，在本地系统与逻辑应用之间提供快速数据传输和加密。 网关通过 Azure 服务总线中继来自加密频道上的本地源的数据。 所有流量最初都是网关代理的安全出站流量。 详细了解[数据网关的工作原理](#gateway-cloud-service)。
+在[从 Azure 逻辑应用连接到本地数据源](../logic-apps/logic-apps-gateway-connection.md)之前，请在本地计算机上下载并安装本地[数据网关](https://aka.ms/on-premises-data-gateway-installer)。 该网关充当桥，可在本地数据源和逻辑应用之间提供快速数据传输和加密。 可以将相同的网关安装与其他云服务（例如 Power BI、Microsoft Flow、PowerApps 和 Azure Analysis Services）结合使用。 有关如何使用这些服务的网关的信息，请参阅以下文章：
 
-网关支持连接到以下本地数据源：
+* [Microsoft Power BI 本地数据网关](https://powerbi.microsoft.com/documentation/powerbi-gateway-onprem/)
+* [Microsoft PowerApps 本地数据网关](https://powerapps.microsoft.com/tutorials/gateway-management/)
+* [Microsoft Flow 本地数据网关](https://flow.microsoft.com/documentation/gateway-manage/)
+* [Azure Analysis Services 本地数据网关](../analysis-services/analysis-services-gateway.md)
 
-*   BizTalk Server 2016
-*   DB2  
-*   文件系统
-*   Informix
-*   MQ
-*   MySQL
-*   Oracle Database
-*   PostgreSQL
-*   SAP Application Server 
-*   SAP Message Server
-*   SharePoint
-*   SQL Server
-*   Teradata
-
-这些步骤说明了[在网关与逻辑应用之间设置连接](./logic-apps-gateway-connection.md)之前，如何首次安装本地数据网关。 有关受支持连接器的详细信息，请参阅[适用于 Azure 逻辑应用的连接器](https://docs.microsoft.com/azure/connectors/apis-list)。 
-
-有关如何将网关用于其他服务的信息，请参阅以下文章：
-
-*   [Microsoft Power BI 本地数据网关](https://powerbi.microsoft.com/documentation/powerbi-gateway-onprem/)
-*   [Azure Analysis Services 本地数据网关](../analysis-services/analysis-services-gateway.md)
-*   [Microsoft Flow 本地数据网关](https://flow.microsoft.com/documentation/gateway-manage/)
-*   [Microsoft PowerApps 本地数据网关](https://powerapps.microsoft.com/tutorials/gateway-management/)
+本文介绍如何下载、安装和设置本地数据网关，以便可以从 Azure 逻辑应用访问本地数据源。 你还可以在本主题的后面部分了解有关[数据网关如何工作的](#gateway-cloud-service)详细信息。 有关网关的详细信息，请参阅[什么是本地网关](https://docs.microsoft.com/data-integration/gateway/service-gateway-onprem)？
 
 <a name="requirements"></a>
 
-## <a name="requirements"></a>要求
+## <a name="prerequisites"></a>先决条件
 
-**最低**
+* Azure 订阅。 如果没有 Azure 订阅，请[注册一个免费 Azure 帐户](https://azure.microsoft.com/free/)。
 
-* .NET 4.5 Framework
-* 64 位版本的 Windows 7 或 Windows Server 2008 R2（或更高版本）
+  * 必须使用相同的 Azure 帐户来安装和管理网关。 在安装过程中，你将使用此 Azure 帐户将你计算机上的网关与 Azure 订阅相关联。 稍后，在网关安装的 Azure 门户中创建 Azure 资源时，可以使用相同的 Azure 帐户。 
 
-**建议**
+  * 你必须使用工作帐户或学校帐户（也称为*组织*帐户）登录，该帐户类似于`username@contoso.com`。 不能使用 Azure B2B （来宾）帐户或个人 Microsoft 帐户，如@hotmail.com或。 @outlook.com
 
-* 8 核 CPU
-* 8 GB 内存
-* 64 位版本的 Windows 2012 R2（或更高版本）
+    > [!TIP]
+    > 如果注册了 Office 365 产品/服务，但未提供工作电子邮件地址，则地址可能类似于`username@domain.onmicrosoft.com`。 你的帐户存储在 Azure Active Directory （Azure AD）中的租户内。 大多数情况下，Azure AD 帐户的用户主体名称（UPN）与电子邮件地址相同。
+    >
+    > 若要使用与 Microsoft 帐户关联的[Visual Studio 标准订阅](https://visualstudio.microsoft.com/vs/pricing/)，请先[在 Azure AD 中创建租户](../active-directory/develop/quickstart-create-new-tenant.md)，或使用默认目录。 将具有密码的用户添加到该目录，然后向该用户提供对订阅的访问权限。 
+    > 然后在网关安装期间可以使用此用户名和密码登录。
 
-**重要注意事项**
+* 下面是本地计算机的要求：
 
-* 只能在本地计算机上安装本地数据网关。
-不能在域控制器上安装该网关。
+  **最低要求**
 
-   > [!TIP]
-   > 不一定要在数据源所在的同一台计算机上安装网关。 为了尽量降低延迟，可将网关安装在尽可能靠近数据源的位置或同一台计算机上（假设你有相应的权限）。
+  * .NET Framework 4.7。2
+  * 64 位版本的 Windows 7 或 Windows Server 2008 R2（或更高版本）
 
-* 不要在会关闭、休眠或未连接到 Internet 的计算机上安装该网关，因为网关在这种情况下无法运行。 此外，在通过无线网络工作时，网关性能可能会下降。
+  **建议的要求**
 
-* 安装期间，必须使用由 Azure Active Directory (Azure AD) 托管的[工作或学校帐户](https://docs.microsoft.com/azure/active-directory/sign-up-organization)（而不是 Microsoft 帐户）登录。
+  * 8 核 CPU
+  * 8 GB 内存
+  * 64位版本的 Windows Server 2012 R2 或更高版本
+  * 用于后台处理的固态硬盘（SSD）存储
 
-  > [!TIP]
-  > 如果要使用安装了包含 MSDN 订阅的 Visual Studio 的 Microsoft 帐户，请先使用 Microsoft 帐户[在 Azure Active Directory 中创建一个目录（租户）](../active-directory/develop/active-directory-howto-tenant.md)或使用默认目录。 将具有密码的用户添加到该目录，然后向该用户提供对订阅的访问权限。 然后在网关安装期间可以使用此用户名和密码登录。
+  > [!NOTE]
+  > 网关不支持 Windows Server Core。
 
-  后期在 Azure 门户中创建网关资源并将其与网关安装关联时，必须仍使用此工作或学校帐户。 在逻辑应用和本地数据源之间建立连接时，请选中此网关资源。 [为何必须使用 Azure AD 工作或学校帐户？](#why-azure-work-school-account)
+* **相关注意事项**
 
-  > [!TIP]
-  > 如果注册了 Office 365 产品但未提供实际工作电子邮件，登录地址可能类似于 jeff@contoso.onmicrosoft.com。 
+  * 只能在本地计算机上安装本地数据网关，而不能在域控制器上安装。 但是，不一定要在数据源所在的同一台计算机上安装网关。 对于所有数据源，只需一个网关，因此不需要为每个数据源安装网关。
 
-* 如果使用版本低于 14.16.6317.4 的安装程序安装了现有网关，则无法通过运行最新的安装程序更改网关位置。 但是，可以使用最新的安装程序来安装改用所需位置的新网关。
-  
-  如果网关安装程序的版本低于 14.16.6317.4，但尚未安装网关，则可以下载并使用最新的安装程序。
+    > [!TIP]
+    > 为了尽量降低延迟，可将网关安装在尽可能靠近数据源的位置或同一台计算机上（假设你有相应的权限）。
+
+  * 在有线网络上的计算机上安装网关，将其连接到 internet，始终开机并且不会进入睡眠状态。 否则，网关将无法运行，并且性能可能会受到无线网络的影响。
+
+  * 如果打算使用 Windows 身份验证，请确保在与数据源相同的 Active Directory 环境成员的计算机上安装网关。
+
+  * 你为网关安装选择的区域与你稍后为逻辑应用创建 Azure 网关资源时必须选择的位置相同。 默认情况下，此区域与管理 Azure 帐户的 Azure AD 租户位于同一位置。 但是，你可以在安装网关的过程中更改该位置。
+
+  * 网关有两种模式：标准模式和个人模式，仅适用于 Power BI。 在同一台计算机上, 不能有多个网关在同一模式下运行。
+
+  * Azure 逻辑应用支持通过网关执行的写入操作，包括插入和更新。 但是，这些操作会[限制其负载大小](https://docs.microsoft.com/data-integration/gateway/service-gateway-onprem#considerations)。
 
 <a name="install-gateway"></a>
 
-## <a name="install-the-data-gateway"></a>安装数据网关
+## <a name="install-data-gateway"></a>安装数据网关
 
-1. [在本地计算机上下载并运行网关安装程序](http://go.microsoft.com/fwlink/?LinkID=820931&clcid=0x409)。
+1. [在本地计算机上下载并运行网关安装程序](https://aka.ms/on-premises-data-gateway-installer)。
 
-2. 查看并接受使用条款和隐私声明。
+1. 安装程序打开后，选择 "**下一步**"。
 
-3. 在本地计算机上指定要将网关安装到的路径。
+   ![安装程序简介](./media/logic-apps-gateway-install/gateway-intro-screen.png)
 
-4. 出现提示时，请使用 Azure 工作或学校帐户而不是 Microsoft 帐户登录。
+1. 选择 **"本地数据网关（推荐）** "，这是标准模式，然后选择 "**下一步**"。
 
-   ![使用 Azure 工作或学校帐户登录](./media/logic-apps-gateway-install/sign-in-gateway-install.png)
+   ![选择网关模式](./media/logic-apps-gateway-install/select-gateway-mode.png)
 
-5. 现在，将安装的网关注册到[网关云服务](#gateway-cloud-service)。 选择“在此计算机上注册新网关”。
+1. 查看最低要求，保留默认的安装路径，接受使用条款，然后选择 "**安装**"。
 
-   网关云服务可加密和存储数据源凭据与网关详细信息。 
-   该服务还会在逻辑应用、本地数据网关与本地数据源之间路由查询及其结果。
+   ![查看要求并接受使用条款](./media/logic-apps-gateway-install/accept-terms.png)
 
-6. 为网关安装提供名称。 创建恢复密钥，然后确认恢复密钥。 
+1. 成功安装网关后，提供组织帐户的电子邮件地址，然后选择 "**登录**"，例如：
 
-   > [!IMPORTANT] 
-   > 恢复密钥必须至少包含八个字符。 请务必将该密钥保存在安全位置。 迁移、还原或接管现有网关时，也需要此密钥。
+   ![使用工作或学校帐户登录](./media/logic-apps-gateway-install/sign-in-gateway-install.png)
 
-   1. 若要更改网关云服务的默认区域和网关安装使用的 Azure 服务总线，请选择“更改区域”。
+   你现在已登录到你的帐户。
 
-      ![更改区域](./media/logic-apps-gateway-install/change-region-gateway-install.png)
+1.  > 选择 **"在此计算机上注册新网关"** **。** 此步骤将你的网关安装注册到[网关云服务](#gateway-cloud-service)。
 
-      默认区域是与 Azure AD 租户关联的区域。
+   ![注册网关](./media/logic-apps-gateway-install/register-gateway.png)
 
-   2. 在下一个窗格中，打开“选择区域”，选择其他区域。
+1. 提供网关安装的以下信息：
+
+   * 在 Azure AD 租户中唯一的网关名称
+   * 要使用的恢复密钥必须至少包含八个字符
+   * 确认恢复密钥
+
+   ![安装网关](./media/logic-apps-gateway-install/set-up-gateway.png)
+
+   > [!IMPORTANT]
+   > 请将恢复密钥保存在安全位置。 如果要更改位置、移动、恢复或接管网关安装，则需要此密钥。
+
+   请注意要**添加到现有网关群集**的选项，在为[高可用性方案](#high-availability)安装其他网关时选择此选项。
+
+1. 检查网关云服务和[Azure 服务总线](https://azure.microsoft.com/services/service-bus/)的区域，该区域用于网关安装。 默认情况下，此区域与你的 Azure 帐户的 Azure AD 租户位于同一位置。
+
+   ![检查区域](./media/logic-apps-gateway-install/check-region.png)
+
+1. 若要接受默认区域，请选择 "**配置**"。 但是，如果默认区域不是最接近你的区域，则可以更改区域。
+
+   *为何要更改网关安装的区域？*
+
+   例如，为了降低延迟，可将网关的区域更改为逻辑应用所在的同一区域。 或者，可以选择最靠近本地数据源的区域。 *Azure 中的网关资源*和逻辑应用可以有不同的位置。
+
+   1. 在当前区域的旁边，选择“更改区域”。
+
+      ![更改区域](./media/logic-apps-gateway-install/change-region.png)
+
+   1. 在下一页上，打开 "**选择区域**" 列表，选择所需的区域，然后选择 "**完成**"。
 
       ![选择其他区域](./media/logic-apps-gateway-install/select-region-gateway-install.png)
 
-      例如，可以选择逻辑应用所在的同一区域，或者选择离本地数据源最近的区域，以便降低延迟。 网关资源和逻辑应用可以有不同的位置。
+1. 查看最终确认窗口中的信息。 此示例对逻辑应用、Power BI、PowerApps 和 Microsoft Flow 使用同一帐户，因此该网关适用于所有这些服务。 准备就绪后，选择 "**关闭**"。
 
-      > [!IMPORTANT]
-      > 安装后无法更改此区域。 此区域还确定并限制可在其中为网关创建 Azure 资源的位置。 因此，在 Azure 中创建网关资源时，请确保资源位置与安装网关期间选择的区域匹配。
-      > 
-      > 如果以后想要为网关使用不同的区域，必须安装新网关。
+   ![已完成网关安装](./media/logic-apps-gateway-install/finished-gateway-default-location.png)
 
-   3. 准备就绪后，选择“完成”。
+1. 现在，请[为网关安装创建 Azure 资源](../logic-apps/logic-apps-gateway-connection.md)。
 
-7. 现在，请遵照 Azure 门户中的步骤，以便可以[为网关创建 Azure 资源](../logic-apps/logic-apps-gateway-connection.md)。 
+## <a name="check-or-adjust-communication-settings"></a>检查或调整通信设置
 
-详细了解[数据网关的工作原理](#gateway-cloud-service)。
+本地数据网关依赖于适用于云连接的[Azure 服务总线](../service-bus-messaging/service-bus-messaging-overview.md)，并为与网关关联的 azure 区域建立相应的出站连接。 如果你的工作环境要求流量通过代理或防火墙来访问 internet，则此限制可能会阻止本地数据网关连接到网关云服务和 Azure 服务总线。 网关具有多个通信设置，你可以调整这些设置。 有关详细信息，请参阅以下主题：
 
-## <a name="migrate-restore-or-take-over-an-existing-gateway"></a>迁移、还原或接管现有网关
+* [调整本地数据网关的通信设置](https://docs.microsoft.com/data-integration/gateway/service-gateway-communication)
+* [为本地数据网关配置代理设置](https://docs.microsoft.com/data-integration/gateway/service-gateway-proxy)
 
-若要执行这些任务，必须使用安装网关时指定的恢复密钥。
+<a name="high-availability"></a>
 
-1. 在计算机的“开始”菜单中，选择“本地数据网关”。
+## <a name="high-availability-support"></a>高可用性支持
 
-2. 安装程序打开后，使用之前用于安装网关的 Azure 工作或学校帐户登录。
+为了避免本地数据访问的单点故障，你可以在不同的计算机上安装多个网关（仅限标准模式），并将它们设置为群集或组。 这样一来，如果主网关不可用，数据请求将路由到第二个网关，依此类推。 因为你只能在计算机上安装一个标准网关，所以你必须在另一台计算机上安装群集中的每个其他网关。 使用本地数据网关的所有连接器都支持高可用性。
 
-3. 选择“迁移”、“还原”或“接管”现有网关。
+* 主网关所在的同一个 Azure 订阅中必须至少有一个网关安装，并且你能够提供该安装的恢复密钥。
 
-4. 提供要迁移、还原或接管的网关的名称和恢复密钥。
+* 主网关必须运行网关 2017 年 11 月更新版或更高版本。
 
-<a name="windows-service-account"></a>
+设置主网关后，当你开始安装其他网关时，请选择 "**添加到现有网关群集**"，选择主网关，即你安装的第一个网关，并为该网关提供恢复密钥。 有关详细信息，请参阅[本地数据网关的高可用性群集](https://docs.microsoft.com/data-integration/gateway/service-gateway-install#add-another-gateway-to-create-a-cluster)。
 
-## <a name="windows-service-account"></a>Windows 服务帐户
+<a name="update-gateway-installation"></a>
 
-本地数据网关以 Windows 服务的形式运行，并设置为使用 `NT SERVICE\PBIEgwService` 作为 Windows 服务登录凭据。 默认情况下，在安装网关的计算机中，网关拥有“作为服务登录”权限。 若要创建和维护 Azure 门户中的网关，Windows 服务帐户必须至少具有“参与者”权限。 
+## <a name="change-location-migrate-restore-or-take-over-existing-gateway"></a>更改位置或者迁移、还原或接管现有网关
 
-> [!NOTE]
-> Windows 服务帐户与用于连接到本地数据源的帐户或用于登录到云服务的 Azure 工作或学校帐户不同。
+如果必须更改网关的位置、将网关安装移到新计算机、恢复已损坏的网关，或接管现有网关的所有权，需要使用安装网关期间提供的恢复密钥。
+
+1. 在具有现有网关的计算机上运行网关安装程序。 如果没有最新的网关安装程序，请[下载最新的网关版本](https://aka.ms/on-premises-data-gateway-installer)。
+
+   > [!NOTE]
+   > 在安装了原始网关的计算机上还原网关之前，必须先卸载该计算机上的网关。 此操作会断开原来的网关。
+   > 如果删除或删除任何云服务的网关群集，则无法恢复该群集。
+
+1. 安装程序打开后，使用用于安装网关的同一 Azure 帐户登录。
+
+1. 依次选择 "**迁移"、"还原" 或 "接管现有网关** >  **"，** 例如：
+
+   ![选择“迁移、还原或接管现有网关”](./media/logic-apps-gateway-install/migrate-recover-take-over-gateway.png)
+
+1. 从可用群集和网关中选择，并输入所选网关的恢复密钥，例如：
+
+   ![选择网关](./media/logic-apps-gateway-install/select-existing-gateway.png)
+
+1. 若要更改区域，请选择 "**更改区域**"，然后选择新的区域。
+
+1. 准备就绪后，请选择 "**配置**"，以完成任务。
+
+## <a name="tenant-level-administration"></a>租户级别管理
+
+若要查看 Azure AD 租户中的所有本地数据网关，该租户中的全局管理员可以以租户管理员身份登录到[Power Platform 管理中心](https://powerplatform.microsoft.com)，然后选择 "**数据网关**" 选项。 有关详细信息，请参阅[本地数据网关的租户级管理](https://docs.microsoft.com/data-integration/gateway/service-gateway-tenant-level-admin)。
 
 <a name="restart-gateway"></a>
 
-## <a name="restart-the-gateway"></a>重新启动网关
+## <a name="restart-gateway"></a>重启网关
 
-与其他任何 Windows 服务一样，可以通过多种方式启动和停止该服务。 例如，可以在运行网关的计算机上使用提升的权限打开命令提示符，并运行以下任一命令：
-
-* 若要启动该服务，请运行以下命令：
-  
-    `net stop PBIEgwService`
-
-* 若要启动该服务，请运行以下命令：
-  
-    `net start PBIEgwService`
-
-## <a name="configure-a-firewall-or-proxy"></a>配置防火墙或代理
-
-网关会创建与 [Azure 服务总线](https://azure.microsoft.com/services/service-bus/)之间的出站连接。 若要提供网关的代理信息，请参阅[配置代理设置](https://powerbi.microsoft.com/documentation/powerbi-gateway-proxy/)。
-
-若要检查防火墙或代理是否阻止了连接，请确认计算机是否可以实际连接到 Internet 和 [Azure 服务总线](https://azure.microsoft.com/services/service-bus/)。 在 PowerShell 提示符下运行以下命令：
-
-`Test-NetConnection -ComputerName watchdog.servicebus.windows.net -Port 9350`
+默认情况下，本地计算机上的网关安装以名为 "本地数据网关服务" 的 Windows 服务帐户的形式运行。 但是，网关安装使用其`NT SERVICE\PBIEgwService` "作为服务登录" 帐户凭据的名称，并具有 "作为服务登录" 权限。
 
 > [!NOTE]
-> 该命令只测试网络连接以及与 Azure 服务总线之间的连接。 因此，该命令不会针对网关或者加密和存储凭据的网关云服务执行任何操作。 
->
-> 此外，该命令仅适用于 Windows Server 2012 R2 或更高版本，以及 Windows 8.1 或更高版本。 在早期的 OS 版本上，可以使用 Telnet 来测试连接。 详细了解 [Azure 服务总线和混合解决方案](../service-bus-messaging/service-bus-fundamentals-hybrid-solutions.md)。
+> Windows 服务帐户不同于用于连接到本地数据源的帐户，也不同于登录到云服务时使用的 Azure 帐户的帐户。
 
-结果应类似于以下示例：
-
-```text
-ComputerName           : watchdog.servicebus.windows.net
-RemoteAddress          : 70.37.104.240
-RemotePort             : 5672
-InterfaceAlias         : vEthernet (Broadcom NetXtreme Gigabit Ethernet - Virtual Switch)
-SourceAddress          : 10.120.60.105
-PingSucceeded          : False
-PingReplyDetails (RTT) : 0 ms
-TcpTestSucceeded       : True
-```
-
-如果 **TcpTestSucceeded** 未设置为 **true**，可能是防火墙阻止了连接。 如需详尽信息，请将 **ComputerName** 和 **Port** 值替换为本文中[配置端口](#configure-ports)下列出的值。
-
-防火墙可能也会阻止 Azure 服务总线向 Azure 数据中心发起的连接。 如果发生这种情况，请批准（取消阻止）区域中数据中心的所有 IP 地址。 对于这些 IP 地址，可[在此处获取 Azure IP 地址列表](https://www.microsoft.com/download/details.aspx?id=41653)。
-
-## <a name="configure-ports"></a>配置端口
-
-网关与 [Azure 服务总线](https://azure.microsoft.com/services/service-bus/)建立出站连接，并在出站端口上通信：TCP 443（默认值）、5671、5672、9350 到 9354。 网关不需要入站端口。 详细了解 [Azure 服务总线和混合解决方案](../service-bus-messaging/service-bus-fundamentals-hybrid-solutions.md)。
-
-| 域名 | 出站端口 | 说明 |
-| ------------ | -------------- | ----------- |
-| *.analysis.windows.net | 443 | HTTPS | 
-| *.login.windows.net | 443 | HTTPS | 
-| * .servicebus.windows.net | 5671-5672 | 高级消息队列协议 (AMQP) | 
-| * .servicebus.windows.net | 443, 9350-9354 | 通过 TCP 的服务总线中继上的侦听器（需要 443 来获取访问控制令牌） | 
-| *.frontend.clouddatahub.net | 443 | HTTPS | 
-| *.core.windows.net | 443 | HTTPS | 
-| login.microsoftonline.com | 443 | HTTPS | 
-| *.msftncsi.com | 443 | 在 Power BI 服务无法访问网关时用于测试 Internet 连接。 | 
-||||
-
-如果需要批准 IP 地址而不是域，可以下载并使用 [Microsoft Azure 数据中心 IP 范围列表](https://www.microsoft.com/download/details.aspx?id=41653)。 在某些情况下，Azure 服务总线连接是使用 IP 地址而不是完全限定的域名建立的。
+与任何其他 Windows 服务一样，您可以通过多种方式启动和停止该网关。 有关详细信息，请参阅[重启本地数据网关](https://docs.microsoft.com/data-integration/gateway/service-gateway-restart)。
 
 <a name="gateway-cloud-service"></a>
 
-## <a name="how-does-the-data-gateway-work"></a>数据网关的工作原理
+## <a name="how-the-gateway-works"></a>网关的工作原理
 
-数据网关可以加速和保护逻辑应用、网关云服务与本地数据源之间的通信。 
+你的组织中的用户可以访问他们已获得授权访问权限的本地数据。 但是，在这些用户可以连接到本地数据源之前，需要安装并设置本地数据网关。 通常，管理员是安装和设置网关的人员。 这些操作可能需要服务器管理员权限或有关本地服务器的特殊知识。
 
-![diagram-for-on-premises-data-gateway-flow](./media/logic-apps-gateway-install/how-on-premises-data-gateway-works-flow-diagram.png)
+网关有助于在幕后通信后进行快速安全的通信。 此通信在云中的用户、网关云服务和本地数据源之间流动。 网关云服务可加密和存储数据源凭据与网关详细信息。 该服务还在用户、网关和本地数据源之间路由查询及其结果。
 
-当云中的用户与连接到本地数据源的元素交互时：
+网关可与防火墙配合使用，只使用出站连接。 所有流量最初都是网关代理的安全出站流量。 网关通过[Azure 服务总线](../service-bus-messaging/service-bus-messaging-overview.md)中继加密通道上本地源中的数据。 此服务总线在网关与调用方服务之间创建通道，但不存储任何数据。 通过网关的所有数据经过加密。
 
-1. 网关云服务将创建一个查询以及用于数据源的加密凭据，并将该查询发送到队列以供网关进行处理。
+![本地数据网关体系结构](./media/logic-apps-gateway-install/how-on-premises-data-gateway-works-flow-diagram.png)
 
-2. 网关云服务分析该查询，并将请求推送到 Azure 服务总线。
+> [!NOTE]
+> 根据云服务，可能需要为网关设置数据源。
 
-3. 本地数据网关会针对挂起的请求轮询 Azure 服务总线。
+以下步骤描述与连接到本地数据源的元素交互时所发生的情况：
 
-4. 网关会获取查询，对凭据进行解密，并使用这些凭据连接到数据源。
+1. 云服务创建一个查询，以及数据源的加密凭据。 然后，该服务将查询和凭据发送到网关队列进行处理。
 
-5. 网关将查询发送到数据源以便执行。
+1. 网关云服务将分析该查询，并将请求推送到 Azure 服务总线。
 
-6. 结果将从数据源发回给网关，并发送到网关云服务。 网关云服务随后使用结果。
+1. Azure 服务总线会将挂起的请求发送到网关。
+
+1. 网关获取查询，对凭据进行解密，并连接到一个或多个具有这些凭据的数据源。
+
+1. 网关将查询发送到数据源以供运行。
+
+1. 结果将从数据源发回给网关，并发送到网关云服务。 网关云服务随后使用结果。
+
+### <a name="authentication-to-on-premises-data-sources"></a>对本地数据源进行身份验证
+
+存储的凭据用于从网关连接到本地数据源。 无论使用哪种用户，网关都将使用存储的凭据进行连接。 对于特定服务（如 DirectQuery 和 LiveConnect），可能存在针对 Power BI 中 Analysis Services 的身份验证例外。
+
+### <a name="azure-active-directory"></a>Azure Active Directory
+
+Microsoft 云服务使用[Azure Active Directory （Azure AD）](../active-directory/fundamentals/active-directory-whatis.md)对用户进行身份验证。 Azure AD 租户包含用户名和安全组。 通常，用于登录的电子邮件地址与帐户的用户主体名称（UPN）相同。
+
+### <a name="what-is-my-upn"></a>什么是 UPN？
+
+如果你不是域管理员，你可能不知道你的 UPN。 若要查找帐户的 UPN，请从工作站`whoami /upn`运行命令。 尽管结果类似于电子邮件地址，但结果是本地域帐户的 UPN。
+
+### <a name="synchronize-an-on-premises-active-directory-with-azure-active-directory"></a>使用 Azure Active Directory 同步本地 Active Directory
+
+本地 Active Directory 帐户和 Azure AD 帐户的 UPN 必须相同。 因此，请确保每个本地 Active Directory 帐户都与 Azure AD 帐户相匹配。 云服务仅了解 Azure AD 中的帐户。 因此，无需将帐户添加到本地 Active Directory。 如果 Azure AD 中不存在该帐户，则不能使用该帐户。 
+
+可以通过以下方式将本地 Active Directory 帐户与 Azure AD 相匹配。 
+
+* 手动将帐户添加到 Azure AD。
+
+  在 Azure 门户或 Microsoft 365 管理中心中创建帐户。 请确保帐户名称与本地 Active Directory 帐户的 UPN 匹配。
+
+* 使用 Azure Active Directory Connect 工具将本地帐户同步到 Azure AD 租户。
+
+  Azure AD Connect 工具提供目录同步和身份验证设置的选项。 这些选项包括密码哈希同步、传递身份验证和联合身份验证。 如果你不是租户管理员或本地域管理员，请联系你的 IT 管理员获取 Azure AD Connect 设置。 Azure AD Connect 确保 Azure AD UPN 与本地 Active Directory UPN 匹配。 如果你使用的是 Analysis Services 与 Power BI 或单一登录（SSO）功能之间的实时连接，则此匹配项将有所帮助。
+
+  > [!NOTE]
+  > 与 Azure AD Connect 工具同步帐户会在 Azure AD 租户中创建新帐户。
 
 <a name="faq"></a>
 
-## <a name="tenant-level-administration"></a>租户级管理 
+## <a name="faq-and-troubleshooting"></a>常见问题和故障排除
 
-目前没有单独的位置可让租户管理员管理其他用户安装和配置的所有网关。  如果你是租户管理员，建议要求组织中的用户将你以管理员身份添加到他们安装的每个网关。 这样，你可以通过“网关设置”页面或通过 [PowerShell 命令](https://docs.microsoft.com/power-bi/service-gateway-high-availability-clusters#powershell-support-for-gateway-clusters)来管理组织中的所有网关。 
+有关详细信息，请参阅以下主题：
 
-
-## <a name="frequently-asked-questions"></a>常见问题
-
-### <a name="general"></a>常规
-
-**问**：对于云中的数据源（如 SQL Azure），是否需要网关？ <br/>
-**答**：不需要。 网关只连接到本地数据源。
-
-**问**：网关是否必须安装在与数据源相同的计算机上？ <br/>
-**答**：不需要。 网关使用提供的连接信息连接到数据源。 从这种意义上讲，可将网关视为客户端应用程序。 网关只需能够连接到提供的服务器名称即可。
-
-<a name="why-azure-work-school-account"></a>
-
-**问**：为何必须使用 Azure 工作或学校帐户登录？ <br/>
-**答**：安装本地数据网关时只能使用 Azure 工作或学校帐户。 登录帐户存储在由 Azure Active Directory (Azure AD) 管理的租户中。 通常，Azure AD 帐户的用户主体名称 (UPN) 与电子邮件地址匹配。
-
-**问**：凭据存储在何处？ <br/>
-**答**：为数据源输入的凭据将会加密，并存储在网关云服务中。 凭据在本地数据网关中解密。
-
-**问**：对于网络带宽是否有要求？ <br/>
-**答**：建议为网络连接配置较高的吞吐量。 每个环境是不同的，所发送的数据量会影响效果。 使用 ExpressRoute 可以帮助保证本地与 Azure 数据中心之间的吞吐量级别。
-可以借助第三方工具 Azure Speed Test 应用来测量吞吐量。
-
-**问**：从网关运行对数据源的查询时的延迟是多少？ 最佳体系结构是什么？ <br/>
-**答**：若要减少网络延迟，请将网关安装在尽可能靠近数据源的位置。 如果可以在实际数据源上安装网关，这种距离可最大程度降低造成的延迟。 还需考虑数据中心。 例如，如果服务使用美国西部的数据中心，而你在 Azure VM 中托管了 SQL Server，则 Azure VM 也应该位于美国西部。 这种距离可最大程度降低延迟并避免 Azure VM 产生传出费用。
-
-**问**：如何将结果发送回云？ <br/>
-**答**：可通过 Azure 服务总线发送结果。
-
-**问**：是否存在从云到网关的入站连接？ <br/>
-**答**：不需要。 网关使用与 Azure 服务总线之间的出站连接。
-
-**问**：如果阻止出站连接，会发生什么情况？ 我需要打开什么？ <br/>
-**答**：查看网关使用的端口和主机。
-
-**问**：实际 Windows 服务的名称是什么？<br/>
-**答**：在“服务”中，网关名为“Power BI 企业网关服务”。
-
-**问**：是否可以使用 Azure Active Directory 帐户运行网关 Windows 服务？ <br/>
-**答**：不需要。 该 Windows 服务必须具有有效的 Windows 帐户。 默认情况下，服务使用服务 SID“NT SERVICE\PBIEgwService”来运行。
-
-### <a name="high-availability-and-disaster-recovery"></a>高可用性和灾难恢复
-
-**问**：有哪些选项可用于灾难恢复？ <br/>
-**答**：可以使用恢复密钥还原或移动网关。 安装网关时，指定恢复密钥。
-
-**问**：恢复密钥的好处是什么？ <br/>
-**答**：使用恢复密钥可在发生灾难后迁移或恢复网关设置。
-
-**问**：是否有使用网关实现高可用性方案的计划？ <br/>
-**答**：某些连接器支持高可用性方案，例如文件系统连接器和即将推出的其他连接器。 有关详细信息，请参阅[本地数据网关的高可用性群集](https://docs.microsoft.com/power-bi/service-gateway-high-availability-clusters)。
-
-## <a name="troubleshooting"></a>故障排除
-
-[!INCLUDE [existing-gateway-location-changed](../../includes/logic-apps-existing-gateway-location-changed.md)]
-
-**问**：如何查看正在发送到本地数据源的查询？ <br/>
-**答**：可以启用查询跟踪，包括要发送的查询。 请记得在完成故障排除后将查询跟踪改回原始值。 一直保持启用查询跟踪会创建大量的日志。
-
-还可以查看数据源用于跟踪查询的工具。 例如，可以使用 SQL Server 的扩展事件或 SQL 事件探查器以及 Analysis Services。
-
-**问**：网关日志在何处？ <br/>
-**答**：请参阅本文后面的“工具”。
-
-### <a name="update-to-the-latest-version"></a>更新到最新版本
-
-如果网关版本过时，可能会出现很多问题。 良好的常规做法是确保使用最新版本。 如果有一个月或更长时间未更新网关，可能要考虑安装最新版本的网关，并确定是否可以重现问题。
-
-### <a name="error-failed-to-add-user-to-group--2147463168-pbiegwservice-performance-log-users"></a>错误: 无法将用户添加到组。 (-2147463168 PBIEgwService Performance Log Users)
-
-如果尝试在不受支持的域控制器上安装网关，可能会收到此错误。 请确保将网关部署在不是域控制器的计算机上。
-
-## <a name="tools"></a>工具
-
-### <a name="collect-logs-from-the-gateway-configurer"></a>从网关配置器收集日志
-
-可以为网关收集多个日志。 始终从日志开始！
-
-#### <a name="installer-logs"></a>安装程序日志
-
-`%localappdata%\Temp\Power_BI_Gateway_–Enterprise.log`
-
-#### <a name="configuration-logs"></a>配置日志
-
-`%localappdata%\Microsoft\Power BI Enterprise Gateway\GatewayConfigurator.log`
-
-#### <a name="enterprise-gateway-service-logs"></a>企业网关服务日志
-
-`C:\Users\PBIEgwService\AppData\Local\Microsoft\Power BI Enterprise Gateway\EnterpriseGateway.log`
-
-#### <a name="event-logs"></a>事件日志
-
-可在“应用程序和服务日志”下找到数据管理网关和 PowerBIGateway 日志。
-
-### <a name="fiddler-trace"></a>Fiddler 跟踪
-
-[Fiddler](http://www.telerik.com/fiddler) 是 Telerik 提供的一种免费工具，可监视 HTTP 流量。 可在客户端计算机中查看 Power BI 服务发生的此流量。 此服务可能会显示错误和其他相关信息。
+* [本地数据网关常见问题解答](/data-integration/gateway/service-gateway-onprem-faq)
+* [本地数据网关故障排除](/data-integration/gateway/service-gateway-tshoot)
+* [监视和优化网关性能](/data-integration/gateway/service-gateway-performance)
 
 ## <a name="next-steps"></a>后续步骤
-    
+
 * [从逻辑应用连接到本地数据](../logic-apps/logic-apps-gateway-connection.md)
 * [企业集成功能](../logic-apps/logic-apps-enterprise-integration-overview.md)
 * [适用于 Azure 逻辑应用的连接器](../connectors/apis-list.md)

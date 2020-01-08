@@ -1,3 +1,16 @@
+---
+author: cynthn
+ms.service: virtual-machines-linux
+ms.topic: include
+ms.date: 10/26/2018
+ms.author: cynthn
+ms.openlocfilehash: 76a080d40721fa78ad703f77f6dbe7a3363ab77e
+ms.sourcegitcommit: 670c38d85ef97bf236b45850fd4750e3b98c8899
+ms.translationtype: HT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 08/08/2019
+ms.locfileid: "68857321"
+---
 ## <a name="install-wordpress"></a>安装 WordPress
 
 若要尝试堆栈，请安装示例应用。 例如，以下步骤安装用于创建网站和博客的开源 [WordPress](https://wordpress.org/) 平台。 其他可尝试的工作负荷包括 [Drupal](http://www.drupal.org) 和 [Moodle](https://moodle.org/)。 
@@ -32,7 +45,6 @@ GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER
 ON wordpress.*
 TO wordpress@localhost
 IDENTIFIED BY 'yourPassword';
-FLUSH PRIVILEGES;
 ```
 
 若要创建数据库，请运行以下命令：

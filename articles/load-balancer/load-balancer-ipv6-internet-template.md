@@ -1,26 +1,25 @@
 ---
-title: 使用 IPv6 部署面向 Internet 的负载均衡器 - Azure 模板 | Microsoft 文档
+title: 使用 IPv6 部署面向 Internet 的负载均衡器 - Azure 模板
+titlesuffix: Azure Load Balancer
 description: 如何为 Azure 负载均衡器和负载均衡的 VM 部署 IPv6 支持。
 services: load-balancer
 documentationcenter: na
-author: KumudD
-manager: timlt
-editor: ''
-tags: azure-resource-manager
+author: asudbring
 keywords: ipv6, azure 负载均衡器, 双堆栈, 公共 ip, 本机 ipv6, 移动, iot
-ms.assetid: 2998e943-13fc-4ea9-a68c-875e53a08db3
 ms.service: load-balancer
 ms.devlang: na
 ms.topic: article
+ms.custom: seodec18
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 09/25/2017
-ms.author: kumud
-ms.openlocfilehash: 431b43979ac364d943c58c40b4199b7f30f9acf6
-ms.sourcegitcommit: c3d53d8901622f93efcd13a31863161019325216
-ms.translationtype: HT
+ms.author: allensu
+ms.openlocfilehash: 4286879dc53cc835532c7a8243eaf88813545265
+ms.sourcegitcommit: 9a699d7408023d3736961745c753ca3cec708f23
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/29/2018
+ms.lasthandoff: 07/16/2019
+ms.locfileid: "68275003"
 ---
 # <a name="deploy-an-internet-facing-load-balancer-solution-with-ipv6-using-a-template"></a>使用模板部署分配了 IPv6 的面向 Internet 的负载均衡器解决方案
 
@@ -31,7 +30,7 @@ ms.lasthandoff: 03/29/2018
 
 
 
-Azure 负载均衡器是位于第 4 层 (TCP, UDP) 的负载均衡器。 该负载均衡器可以在云服务或负载均衡器集的虚拟机中运行状况良好的服务实例之间分配传入流量，从而提供高可用性。 Azure Load Balancer 还可以在多个端口和/或多个 IP 地址上显示这些服务。
+Azure 负载均衡器是位于第 4 层 (TCP, UDP) 的负载均衡器。 该负载均衡器可以在云服务或负载均衡器集的虚拟机中运行状况良好的服务实例之间分配传入流量，从而提供高可用性。 Azure 负载均衡器还可以在多个端口和/或多个 IP 地址上显示这些服务。
 
 ## <a name="example-deployment-scenario"></a>示例部署方案
 
@@ -71,13 +70,13 @@ Azure 负载均衡器是位于第 4 层 (TCP, UDP) 的负载均衡器。 该负�
 
     ![lb-ipv6-portal-step5](./media/load-balancer-ipv6-internet-template/lb-ipv6-portal-step5.png)
 
-6. 单击“编辑参数”。 在“参数”边栏选项卡中，根据指导在“模板参数”部分中指定值，并单击“保存”关闭“参数”边栏选项卡。 在“自定义部署”边栏选项卡中选择订阅、选择现有资源组或创建一个资源组。 如果要创建资源组，请选择资源组的位置。 接下来，单击“法律条款”，并单击法律条款后面的“购买”。 Azure 开始部署资源。 部署所有资源需要花费几分钟时间。
+6. 单击“编辑参数”。 在“参数”边栏选项卡中，根据指导在“模板参数”部分中指定值，并单击“保存”关闭“参数”边栏选项卡。 在“自定义部署”边栏选项卡中选择订阅、选择现有资源组或创建一个资源组。 如果要创建资源组，请选择资源组的位置。 接下来，单击“法律条款”  ，并单击法律条款后面的“购买”  。 Azure 开始部署资源。 部署所有资源需要花费几分钟时间。
 
     ![lb-ipv6-portal-step6](./media/load-balancer-ipv6-internet-template/lb-ipv6-portal-step6.png)
 
     有关这些参数的详细信息，请参阅本文后面的[模板参数和变量](#template-parameters-and-variables)部分。
 
-7. 要查看模板创建的资源，请单击“浏览”，向下滚动列表，直到看到“资源组”，并单击它。
+7. 如果要查看模板创建的资源，请单击“浏览”，向下滚动列表，直到看到“资源组”，并单击它。
 
     ![lb-ipv6-portal-step7](./media/load-balancer-ipv6-internet-template/lb-ipv6-portal-step7.png)
 
@@ -114,8 +113,8 @@ Azure 资源管理器模板包含可根据需要自定义的多个变量和参�
 | --- | --- |
 | adminUsername |指定用于登录到虚拟机的管理员帐户名。 |
 | adminPassword |指定用于登录到虚拟机的管理员帐户密码。 |
-| dnsNameforIPv4LbIP |指定想要分配为负载均衡器公共名称的 DNS 主机名。 此名称解析为负载均衡器的公共 IPv4 地址。 此名称必须是小写，并与正则表达式匹配：^[a-z][a-z0-9-]{1,61}[a-z0-9]$. |
-| dnsNameforIPv6LbIP |指定想要分配为负载均衡器公共名称的 DNS 主机名。 此名称解析为负载均衡器的公共 IPv6 地址。 此名称必须是小写，并与正则表达式匹配：^[a-z][a-z0-9-]{1,61}[a-z0-9]$. 此名称可与 IPv4 地址的名称相同。 当名称相同时，如果客户端针对此名称发出 DNS 查询，Azure 将返回 A 和 AAAA 记录。 |
+| dnsNameforIPv4LbIP |指定想要分配为负载均衡器公共名称的 DNS 主机名。 此名称解析为负载均衡器的公共 IPv4 地址。 此名称必须是小写，并与正则表达式匹配：^[a-z][a-z0-9-]{1,61}[a-z0-9]$。 |
+| dnsNameforIPv6LbIP |指定想要分配为负载均衡器公共名称的 DNS 主机名。 此名称解析为负载均衡器的公共 IPv6 地址。 此名称必须是小写，并与正则表达式匹配：^[a-z][a-z0-9-]{1,61}[a-z0-9]$。 此名称可与 IPv4 地址的名称相同。 当名称相同时，如果客户端针对此名称发出 DNS 查询，Azure 将返回 A 和 AAAA 记录。 |
 | vmNamePrefix |指定 VM 名称前缀。 创建 VM 时，模板会在名称后面追加一个编号（0、1 等等）。 |
 | nicNamePrefix |指定网络接口名称前缀。 创建网络接口时，模板会在名称后面追加一个编号（0、1 等等）。 |
 | storageAccountName |输入现有存储帐户的名称，或指定模板创建的新存储帐户的名称。 |
@@ -134,3 +133,7 @@ Azure 资源管理器模板包含可根据需要自定义的多个变量和参�
 | lbName |指定负载均衡器的名称。 此名称会显示在门户中，或者通过 CLI 或 PowerShell 命令引用它时会用到它。 |
 
 模板中的其余变量是 Azure 创建资源时分配的派生值。 请不要更改这些变量。
+
+## <a name="next-steps"></a>后续步骤
+
+有关模板中负载均衡器的 JSON 语法和属性，请参阅 [Microsoft.Network/loadBalancers](/azure/templates/microsoft.network/loadbalancers)。

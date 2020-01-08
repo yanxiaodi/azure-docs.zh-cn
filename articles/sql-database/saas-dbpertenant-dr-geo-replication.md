@@ -1,35 +1,37 @@
 ---
 title: 使用 Azure SQL 数据库异地复制实现 SaaS 应用的灾难恢复 | Microsoft Docs
 description: 了解在发生中断时，如何使用 Azure SQL 数据库异地复制来恢复多租户 SaaS 应用
-keywords: sql 数据库教程
 services: sql-database
-author: AyoOlubeko
-manager: craigg
 ms.service: sql-database
-ms.custom: saas apps
-ms.topic: article
-ms.date: 04/09/2018
-ms.author: ayolubek
-ms.openlocfilehash: 3b2b1b767b26d844046d545e3d587621c5d14995
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.subservice: scenario
+ms.custom: ''
+ms.devlang: ''
+ms.topic: conceptual
+author: AyoOlubeko
+ms.author: craigg
+ms.reviewer: sstein
+ms.date: 01/25/2019
+ms.openlocfilehash: bebbb3d053db37a9716230dfbb14372696dd4936
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68570524"
 ---
 # <a name="disaster-recovery-for-a-multi-tenant-saas-application-using-database-geo-replication"></a>使用数据库异地复制实现多租户 SaaS 应用程序的灾难恢复
 
-本教程探讨如何对使用“租户各有一个数据库”(database-per-tenant) 模型实施的多租户 SaaS 应用程序完全实现灾难恢复。 若要防止应用中断，可以使用[_异地复制_](https://docs.microsoft.com/azure/sql-database/sql-database-geo-replication-overview)在备用恢复区域中创建目录和租户数据库的副本。 如果发生中断，可以快速故障转移到这些副本，以恢复正常业务运营。 故障转移后，原始区域中的数据库将成为恢复区域中数据库的辅助副本。 这些副本重新联机后，会自动同步到恢复区域中数据库的状态。 解决中断后，故障回复到原始生产区域中的数据库。
+本教程探讨如何对使用“租户各有一个数据库”(database-per-tenant) 模型实施的多租户 SaaS 应用程序完全实现灾难恢复。 若要防止应用中断，可以使用[_异地复制_](sql-database-geo-replication-overview.md)在备用恢复区域中创建目录和租户数据库的副本。 如果发生中断，可以快速故障转移到这些副本，以恢复正常业务运营。 故障转移后，原始区域中的数据库将成为恢复区域中数据库的辅助副本。 这些副本重新联机后，会自动同步到恢复区域中数据库的状态。 解决中断后，故障回复到原始生产区域中的数据库。
 
 本教程探讨故障转移和故障回复工作流。 将了解如何执行以下操作：
-> [!div classs="checklist"]
-
->* 将数据库和弹性池配置信息同步到租户目录中
->* 在备用区域中设置由应用程序、服务器和池构成的恢复环境
->* 使用异地复制将目录和租户数据库复制到恢复区域
->* 将应用程序以及目录和租户数据库故障转移到恢复区域 
->* 稍后解决中断后，将应用程序以及目录和租户数据库故障转移回到原始区域
->* 故障转移每个租户数据库后，更新目录以跟踪每个租户的数据库的主要位置
->* 确保应用程序和主要租户数据库始终共置在同一 Azure 区域，以降低延迟  
+> [!div class="checklist"]
+> 
+> * 将数据库和弹性池配置信息同步到租户目录中
+> * 在备用区域中设置由应用程序、服务器和池构成的恢复环境
+> * 使用异地复制将目录和租户数据库复制到恢复区域
+> * 将应用程序以及目录和租户数据库故障转移到恢复区域 
+> * 稍后解决中断后，将应用程序以及目录和租户数据库故障转移回到原始区域
+> * 故障转移每个租户数据库后，更新目录以跟踪每个租户的数据库的主要位置
+> * 确保应用程序和主要租户数据库始终共置在同一 Azure 区域，以降低延迟  
  
 
 在开始学习本教程之前，请确保满足以下先决条件：
@@ -49,10 +51,10 @@ ms.lasthandoff: 04/28/2018
 
 必须仔细考虑所有组成部分，尤其是大规模操作时。 在总体上，该计划必须实现多个目标：
 
-* 设置
-    * 在恢复区域中建立和维护镜像映像环境。 在此恢复环境中创建弹性池和复制任何独立数据库可以在恢复区域中预留容量。 维护此环境的工作包括预配新租户数据库时复制这些数据库。  
+* 安装
+    * 在恢复区域中建立和维护镜像映像环境。 在此恢复环境中创建弹性池和复制任何数据库可以在恢复区域中保留容量。 维护此环境的工作包括预配新租户数据库时复制这些数据库。  
 * 恢复
-    * 必须使用缩减的恢复环境来尽量降到日常成本，则必须扩展池和独立数据库，以便在恢复区域中获得完整的操作容量
+    * 如果使用缩减的恢复环境来最大限度地降低日常成本，则必须扩大池和数据库，以在恢复区域中获得完全运转能力
     * 尽快在恢复区域中启用新租户预配  
     * 按优先顺序对租户还原进行优化
     * 优化为在可行的情况下同时执行多个步骤，以尽快让租户联机
@@ -64,10 +66,10 @@ ms.lasthandoff: 04/28/2018
 在本教程中，这些难题是使用 Azure SQL 数据库和 Azure 平台的功能解决的：
 
 * [Azure 资源管理器模板](https://docs.microsoft.com/azure/azure-resource-manager/resource-manager-create-first-template)：尽快预留全部所需容量。 Azure 资源管理器模板用于在恢复区域中预配生产服务器和弹性池的镜像映像。
-* [异地复制](https://docs.microsoft.com/azure/sql-database/sql-database-geo-replication-overview)：为所有数据库创建以异步方式复制的只读辅助副本。 在中断期间，故障转移到恢复区域中的副本。  解决中断后，故障回复到原始生产区域中的数据库，且不会丢失任何数据。
+* [异地复制](sql-database-geo-replication-overview.md)：为所有数据库创建以异步方式复制的只读辅助副本。 在中断期间，故障转移到恢复区域中的副本。  解决中断后，故障回复到原始生产区域中的数据库，且不会丢失任何数据。
 * [异步](https://docs.microsoft.com/azure/azure-resource-manager/resource-manager-async-operations)故障转移操作按租户的优先顺序，以最大程度地减少大量数据库的故障转移时间。
-* [分片管理恢复功能](https://docs.microsoft.com/azure/sql-database/sql-database-elastic-database-recovery-manager)：在恢复和遣返期间更改目录中的数据库条目。 无需重新配置应用，这些功能就能让应用连接到租户数据库，而不管位置如何。
-* [SQL Server DNS 别名](https://docs.microsoft.com/azure/sql-database/dns-alias-overview)：实现新租户的无缝预配，不管应用在哪个区域中运行。 使用 DNS 别名还能让目录同步进程连接到活动目录，而不管该目录位于哪个位置。
+* [分片管理恢复功能](sql-database-elastic-database-recovery-manager.md)：在恢复和遣返期间更改目录中的数据库条目。 无需重新配置应用，这些功能就能让应用连接到租户数据库，而不管位置如何。
+* [SQL Server DNS 别名](dns-alias-overview.md)：实现新租户的无缝预配，不管应用在哪个区域中运行。 使用 DNS 别名还能让目录同步进程连接到活动目录，而不管该目录位于哪个位置。
 
 ## <a name="get-the-disaster-recovery-scripts"></a>获取灾难恢复脚本 
 
@@ -87,10 +89,10 @@ ms.lasthandoff: 04/28/2018
 ## <a name="review-the-healthy-state-of-the-application"></a>查看应用程序的正常状态
 
 启动恢复进程前，请查看应用程序的健康状态。
-1. 在 Web 浏览器中打开 Wingtip Tickets 事件中心（http://events.wingtip-dpt.&lt;user&gt;.trafficmanager.net - 请将 &lt;user&gt; 替换为部署的用户值）。
+1. 在 Web 浏览器中打开 Wingtip Tickets 事件中心（ http://events.wingtip-dpt.&lt ;user&gt;.trafficmanager.net - 请将 &lt; user&gt; 替换为部署的用户值）。
     * 滚动到页面底部，注意页脚中的目录服务器名称和位置。 该位置是部署应用的区域。
-    *提示：将鼠标悬停在位置上可以放大显示内容。*
-    ![原始区域中的事件中心正常状态](media/saas-dbpertenant-dr-geo-replication/events-hub-original-region.png)
+    提示：将鼠标悬停在该位置上可以放大显示内容。
+    ![原始区域中的事件中心运行状况状态](media/saas-dbpertenant-dr-geo-replication/events-hub-original-region.png)
 
 2. 单击 Contoso Concert Hall 租户并打开其事件页。
     * 在页脚中，注意租户服务器名称。 位置与目录服务器的位置相同。
@@ -103,7 +105,7 @@ ms.lasthandoff: 04/28/2018
 此任务启动一个过程，将服务器、弹性池和数据库的配置同步到租户目录中。 该过程能在目录中使此信息保持最新。  该过程将处理原始区域或恢复区域中的活动目录。 恢复过程中将使用配置信息来确保恢复环境与原始环境保持一致，并且在稍后的遣返过程中，确保原始区域与恢复环境中所做的任何更改保持一致。 目录还可用于跟踪租户资源的恢复状态
 
 > [!IMPORTANT]
-> 为简单起见，同步过程以及其他长时间运行的恢复和遣返过程在这些教程中作为客户端用户登录后运行的本地 Powershell 作业或会话来实施。 在若干小时后，登录时颁发的身份验证令牌将会过期，因而作业将会失败。 在生产场景中，长时间运行的过程应该实施为某种以服务主体运行的可靠 Azure 服务。 请参阅[使用 Azure PowerShell 创建具有证书的服务主体](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-authenticate-service-principal)。
+> 为简单起见, 在这些教程中, 同步过程以及其他长时间运行的恢复和遣返进程都是在客户端用户登录下运行的本地 PowerShell 作业或会话来实现的。 在若干小时后，登录时颁发的身份验证令牌将会过期，因而作业将会失败。 在生产场景中，长时间运行的过程应该实施为某种以服务主体运行的可靠 Azure 服务。 请参阅[使用 Azure PowerShell 创建具有证书的服务主体](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-authenticate-service-principal)。
 
 1. 在 PowerShell ISE 中，打开 ...\Learning Modules\UserConfig.psm1 文件。 将第 10 行和第 11 行中的 `<resourcegroup>` 和 `<user>` 替换为部署应用时使用的值。  保存该文件！
 
@@ -123,7 +125,7 @@ ms.lasthandoff: 04/28/2018
 此任务启动一个过程来部署重复的应用实例，并将目录和所有租户数据库复制到恢复区域。
 
 > [!Note]
-> 本教程将在 Wingtip Tickets 示例应用程序中添加异地复制保护。 在生产场景中，对于使用异地复制的应用程序，每个租户从一开始就预配了异地复制的数据库。 请参阅[使用 Azure SQL 数据库设计高可用性服务](https://docs.microsoft.com/azure/sql-database/sql-database-designing-cloud-solutions-for-disaster-recovery#scenario-1-using-two-azure-regions-for-business-continuity-with-minimal-downtime)
+> 本教程将在 Wingtip Tickets 示例应用程序中添加异地复制保护。 在生产场景中，对于使用异地复制的应用程序，每个租户从一开始就预配了异地复制的数据库。 请参阅[使用 Azure SQL 数据库设计高可用性服务](sql-database-designing-cloud-solutions-for-disaster-recovery.md#scenario-1-using-two-azure-regions-for-business-continuity-with-minimal-downtime)
 
 1. 在 *PowerShell ISE* 中，打开 ...\Learning Modules\Business Continuity and Disaster Recovery\DR-FailoverToReplica\Demo-FailoverToReplica.ps1 脚本，并设置以下值：
     * **$DemoScenario = 2**：创建镜像映像恢复环境，并复制目录和租户数据库
@@ -132,12 +134,14 @@ ms.lasthandoff: 04/28/2018
 ![同步过程](media/saas-dbpertenant-dr-geo-replication/replication-process.png)  
 
 ## <a name="review-the-normal-application-state"></a>查看正常的应用程序状态
+
 此时，应用程序在原始区域中正常运行，并受异地复制的保护。  恢复区域中存在所有数据库的只读辅助副本。 
+
 1. 在 Azure 门户中查看资源组，可以看到，在恢复区域中创建的某个资源组带有-recovery 后缀。 
 
-1. 浏览恢复资源组中的资源。  
+2. 浏览恢复资源组中的资源。  
 
-1. 单击 _tenants1-dpt-&lt;user&gt;-recovery_ 服务器上的 Contoso Concert Hall 数据库。  单击左侧的“异地复制”。 
+3. 单击 _tenants1-dpt-&lt;user&gt;-recovery_ 服务器上的 Contoso Concert Hall 数据库。  单击左侧的“异地复制”。 
 
     ![Contoso Concert 异地复制链接](media/saas-dbpertenant-dr-geo-replication/contoso-geo-replication.png) 
 
@@ -157,7 +161,7 @@ ms.lasthandoff: 04/28/2018
 
 1. 将恢复目录中的所有现有租户标记为脱机，以防止在故障转移租户数据库之前对其进行访问。
 
-1. 在恢复区域中更新所有弹性池和复制的独立数据库的配置，以便在原始区域中镜像其配置。 （仅当在正常操作期间缩减了恢复环境中的池或复制的数据库以降低成本时，才需要执行此任务）。
+1. 在恢复区域中更新所有弹性池和复制的单一数据库的配置，以便在原始区域中镜像其配置。 （仅当在正常操作期间缩减了恢复环境中的池或复制的数据库以降低成本时，才需要执行此任务）。
 
 1. 为恢复区域中的 Web 应用启用流量管理器终结点。 启用此终结点可让应用程序预配新租户。 在此阶段，现有的租户仍处于脱机状态。
 
@@ -190,18 +194,19 @@ ms.lasthandoff: 04/28/2018
 > 若要浏览恢复作业的代码，请查看 ...\Learning Modules\Business Continuity and Disaster Recovery\DR-FailoverToReplica\RecoveryJobs 文件夹中的 PowerShell 脚本。
 
 ### <a name="review-the-application-state-during-recovery"></a>在恢复期间查看应用程序状态
+
 在流量管理器中禁用应用程序终结点时，应用程序不可用。 将目录故障转移到恢复区域并将所有租户标记为脱机后，应用程序会重新联机。 尽管应用程序可用，但在故障转移每个租户的数据库之前，这些租户在事件中心会显示脱机状态。 必须将应用程序设计为能够处理脱机租户数据库。
 
 1. 恢复目录数据库后的短时间内，请在 Web 浏览器中刷新 Wingtip Tickets 事件中心。
-    * 在页脚中，注意目录服务器名称现在带有 _-recovery_ 后缀，并且位于恢复区域中。
-    * 注意租户尚未还原，标记为脱机且不可选择。  
+   * 在页脚中，注意目录服务器名称现在带有 _-recovery_ 后缀，并且位于恢复区域中。
+   * 注意租户尚未还原，标记为脱机且不可选择。  
 
-    > [!Note]
-    > 如果只是恢复少量的几个数据库，则在完成恢复之前可能无法刷新浏览器，因此看不到脱机的租户。 
+     > [!Note]
+     > 如果只是恢复少量的几个数据库，则在完成恢复之前可能无法刷新浏览器，因此看不到脱机的租户。 
  
-    ![事件中心脱机](media/saas-dbpertenant-dr-geo-replication/events-hub-offlinemode.png) 
+     ![事件中心脱机](media/saas-dbpertenant-dr-geo-replication/events-hub-offlinemode.png) 
 
-    * 如果直接打开脱机租户的“事件”页，将会看到“租户脱机”通知。 例如，如果 Contoso Concert Hall 处于脱机状态，请尝试打开 http://events.wingtip-dpt.&lt;user&gt;.trafficmanager.net/contosoconcerthall ![Contoso 脱机页](media/saas-dbpertenant-dr-geo-replication/dr-in-progress-offline-contosoconcerthall.png) 
+   * 如果直接打开脱机租户的“事件”页，将会看到“租户脱机”通知。 例如，如果 Contoso Concert Hall 处于脱机状态，请尝试打开 http://events.wingtip-dpt.&lt ;user&gt;.trafficmanager.net/contosoconcerthall ![ Contoso 脱机页](media/saas-dbpertenant-dr-geo-replication/dr-in-progress-offline-contosoconcerthall.png) 
 
 ### <a name="provision-a-new-tenant-in-the-recovery-region"></a>在恢复区域中预配新租户
 即使是在故障转移所有现有的租户数据库之前，也可以在恢复区域中预配新租户。  
@@ -230,12 +235,12 @@ ms.lasthandoff: 04/28/2018
     * 注意已部署的资源组，以及带有 -recovery 后缀的恢复资源组。  恢复资源组包含恢复进程运行期间创建的所有资源，以及中断期间创建的新资源。  
 
 3. 打开恢复资源组，并注意以下各项：
-    * 目录和带有 -recovery 后缀的 tenants1 服务器的恢复版本。  这些服务器上的还原目录和租户数据库全部使用在原始区域中使用的名称。
+   * 目录和带有 -recovery 后缀的 tenants1 服务器的恢复版本。  这些服务器上的还原目录和租户数据库全部使用在原始区域中使用的名称。
 
-    * tenants2-dpt-&lt;user&gt;-recovery SQL 服务器。  此服务器用于在中断期间预配新租户。
-    *   名为 _events-wingtip-dpt-&lt;recoveryregion&gt;-&lt;user&gt_; 的应用服务，即“事件”应用的恢复实例。 
+   * tenants2-dpt-&lt;user&gt;-recovery SQL 服务器。  此服务器用于在中断期间预配新租户。
+   * 名为 _events-wingtip-dpt-&lt;recoveryregion&gt;-&lt;user&gt_; 的应用服务，即“事件”应用的恢复实例。 
 
-    ![Azure 恢复资源 ](media/saas-dbpertenant-dr-geo-replication/resources-in-recovery-region.png)    
+     ![Azure 恢复资源](media/saas-dbpertenant-dr-geo-replication/resources-in-recovery-region.png) 
     
 4. 打开 _tenants2-dpt-&lt;user&gt;-recovery_ SQL 服务器。  请注意，其中包含数据库 hawthornhall 和弹性池 Pool1。  _hawthornhall_ 数据库配置为 _Pool1_ 弹性池中的弹性数据库。
 
@@ -250,7 +255,7 @@ ms.lasthandoff: 04/28/2018
 2. 在 *PowerShell ISE* 中的 ...\Learning Modules\Business Continuity and Disaster Recovery\DR-FailoverToReplica\Demo-FailoverToReplica.ps1 脚本内设置以下值：
     * **$DemoScenario = 5**：从恢复区域中的某个租户删除事件
 3. 按 **F5** 执行脚本
-4. 刷新 Contoso Concert Hall 事件页（http://events.wingtip-dpt.&lt;user&gt;.trafficmanager.net/contosoconcerthall - 请将 &lt;user&gt; 替换为部署的用户值），注意最后一个事件已被删除。
+4. 刷新 Contoso Concert Hall 事件页（ http://events.wingtip-dpt.&lt ;user&gt;.trafficmanager.net/contosoconcerthall - 请将 &lt; user&gt; 替换为部署的用户值），注意最后一个事件已删除。
 
 ## <a name="repatriate-the-application-to-its-original-production-region"></a>将应用程序遣返到其原始生产区域
 
@@ -283,8 +288,8 @@ ms.lasthandoff: 04/28/2018
     * 按 **F5** 在新 PowerShell 窗口中运行恢复脚本。  遣返过程需要花费几分钟时间，可在 PowerShell 窗口中监视其进度。
     ![遣返过程](media/saas-dbpertenant-dr-geo-replication/repatriation-process.png)
 
-4. 运行脚本时，刷新事件中心页 (http://events.wingtip-dpt.&lt;user&gt;.trafficmanager.net)
-    * 请注意，所有租户都已联机，并且在整个遣返过程中都可供访问。
+4. 在脚本运行期间，刷新事件中心页 (http://events.wingtip-dpt.&lt ;user&gt;.trafficmanager.net)
+    * 请注意，所有租户都为联机状态，并且可通过此进程访问。
 
 5. 遣返完成后，刷新事件中心并打开 Hawthorn Hall 的事件页。 请注意，此数据库已遣返到原始区域。
     ![已遣返事件中心](media/saas-dbpertenant-dr-geo-replication/events-hub-repatriated.png)
@@ -298,16 +303,16 @@ ms.lasthandoff: 04/28/2018
 ## <a name="next-steps"></a>后续步骤
 
 本教程介绍了如何：
-> [!div classs="checklist"]
-
->* 将数据库和弹性池配置信息同步到租户目录中
->* 在备用区域中设置由应用程序、服务器和池构成的恢复环境
->* 使用异地复制将目录和租户数据库复制到恢复区域
->* 将应用程序以及目录和租户数据库故障转移到恢复区域 
->* 解决中断后，将应用程序、目录和租户数据库故障回复到原始区域
+> [!div class="checklist"]
+> 
+> * 将数据库和弹性池配置信息同步到租户目录中
+> * 在备用区域中设置由应用程序、服务器和池构成的恢复环境
+> * 使用异地复制将目录和租户数据库复制到恢复区域
+> * 将应用程序以及目录和租户数据库故障转移到恢复区域 
+> * 解决中断后，将应用程序、目录和租户数据库故障回复到原始区域
 
 可以在[业务连续性概述](sql-database-business-continuity.md)文档中详细了解 Azure SQL 数据库为实现业务连续性而提供的技术。
 
 ## <a name="additional-resources"></a>其他资源
 
-* [其他基于 Wingtip SaaS 应用程序编写的教程](https://docs.microsoft.com/azure/sql-database/sql-database-wtp-overview#sql-database-wingtip-saas-tutorials)
+* [其他基于 Wingtip SaaS 应用程序编写的教程](saas-dbpertenant-wingtip-app-overview.md#sql-database-wingtip-saas-tutorials)

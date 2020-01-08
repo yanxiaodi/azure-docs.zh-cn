@@ -1,27 +1,27 @@
 ---
-title: Azure Active Directory B2C：参考 - 信任框架 | Microsoft Docs
-description: 本主题介绍了 Azure Active Directory B2C 自定义策略和标识体验框架
+title: 参考 - Azure Active Directory B2C 中的信任框架 | Microsoft Docs
+description: 本主题介绍了 Azure Active Directory B2C 自定义策略和标识体验框架。
 services: active-directory-b2c
-documentationcenter: ''
-author: davidmu1
-manager: mtillman
-editor: ''
-ms.service: active-directory-b2c
+author: mmacy
+manager: celestedg
+ms.service: active-directory
 ms.workload: identity
-ms.topic: article
+ms.topic: conceptual
 ms.date: 08/04/2017
-ms.author: davidmu
-ms.openlocfilehash: 0cd64e90ac1b6c87008b2a16ca3afa273b9c9d56
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.author: marsma
+ms.subservice: B2C
+ms.openlocfilehash: e96ddcb904bbda6c3123ffc9d3da50ff80823689
+ms.sourcegitcommit: a0b37e18b8823025e64427c26fae9fb7a3fe355a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 07/25/2019
+ms.locfileid: "68500011"
 ---
 # <a name="define-trust-frameworks-with-azure-ad-b2c-identity-experience-framework"></a>使用 Azure AD B2C 标识体验框架定义信任框架
 
 利用标识体验框架的 Azure Active Directory B2C (Azure AD B2C) 自定义策略可以为组织提供集中式服务。 此服务降低了大型社区利益体中联合身份验证的复杂性。 复杂性会降低到单一信任关系和单个元数据交换。
 
-使用标识体验框架的 Azure AD B2C 自定义策略使你能够回答以下问题：
+Azure AD B2C 自定义策略使用标识体验框架使你能够回答以下问题:
 
 - 必须遵守哪些法律、安全、隐私和数据保护策略？
 - 谁是联系人，成为认可参与者的过程是什么？
@@ -52,10 +52,10 @@ TF 是开放标识交换 (OIX) 信任框架模型的关键，在这种模型中�
 - **参与者提供/所需的数字标识信息的说明**。
 
 - **有关生成和使用数字标识信息的技术策略，因而这些策略也与度量 LOA 和 LOP 有关。这些书面策略通常包括以下策略类别：**
-    - 标识证明策略，例如：个人标识信息的审查强度如何？
-    - 安全策略，例如：信息完整性和保密性的保护强度如何？
-    - 隐私策略，例如：用户对个人身份信息 (PII) 拥有哪些控制权？
-    - 留存性策略，例如：当提供者停止操作时 PII 的持续性和保护如何？
+    - 身份证明策略，例如：*个人身份信息的审查强度如何？*
+    - 安全策略，例如：*信息完整性和保密性的保护强度如何？*
+    - 隐私策略，例如：*用户对个人身份信息 (PII) 拥有哪些控制权？*
+    - 留存性策略，例如：*当提供者停止操作时 PII 的持续性和保护如何？*
 
 - **有关生成和使用数字标识信息的技术配置文件。这些配置文件包括：**
     - 为根据指定 LOA 提供数字标识信息界定了接口范围。
@@ -89,7 +89,7 @@ TF 规范是用于相关社区治理的一个或多个参考文档，让相关�
 
 - 用于在参与者之间建立网络通信的元数据。 在信赖方与其他社区参与者之间执行“在线”互操作性协调的事务过程中，将配合技术配置文件使用此元数据。
 
-- 任何协议转换（例如，SAML、OAuth2、WS-Federation 和 OpenID Connect）。
+- 任何协议转换（例如，SAML 2.0、OAuth2、WS-Federation 和 OpenID Connect）。
 
 - 身份验证要求。
 

@@ -12,15 +12,16 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: dotnet
 ms.topic: article
-ms.date: 02/06/2018
+ms.date: 03/14/2019
 ms.author: sajagtap
-ms.openlocfilehash: e44308f38a138c0e186e41fc8310f8b480cd4e09
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: eb16f5e1e72e5a9379ad530ab9677adba2ccbbcd
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61465671"
 ---
-# <a name="use-azure-media-content-moderator-to-detect-possible-adult-and-racy-content"></a>使用 Azure 媒体内容审查器检测可能的成人和猥亵内容
+# <a name="use-azure-media-content-moderator-to-detect-possible-adult-and-racy-content"></a>使用 Azure 媒体内容审查器检测可能的成人和猥亵内容 
 
 ## <a name="overview"></a>概述
 借助 **Azure 媒体内容审查器**媒体处理器 (MP)，你可以对视频使用机器辅助审查。 例如，你可能希望检测视频中可能存在的成人和猥亵内容，以及复查由人工审查团队标记出的内容。
@@ -43,9 +44,9 @@ ms.lasthandoff: 05/07/2018
 
 ### <a name="root-json-elements"></a>根 JSON 元素
 
-| 元素 | 说明 |
+| 元素 | 描述 |
 | --- | --- |
-| 版本 |内容审查器的版本。 |
+| version |内容审查器的版本。 |
 | 时间刻度 |视频每秒的“刻度”数。 |
 | offset |时间戳的时间偏移量。 在版本 1.0 的视频 API 中，此值将始终为 0。 此值在将来可能会更改。 |
 | 帧速率 |视频的每秒帧数。 |
@@ -56,7 +57,7 @@ ms.lasthandoff: 05/07/2018
 
 ### <a name="fragments-json-elements"></a>片段 JSON 元素
 
-|元素|说明|
+|元素|描述|
 |---|---|
 | start |第一个事件的开始时间（以“刻度”为单位）。 |
 | duration |片段的长度（以“刻度”为单位）。 |
@@ -65,7 +66,7 @@ ms.lasthandoff: 05/07/2018
 
 ### <a name="events-json-elements"></a>事件 JSON 元素
 
-|元素|说明|
+|元素|描述|
 |---|---|
 | reviewRecommended | `true` 或 `false`，具体取决于 **adultScore** 或 **racyScore** 是否超出了内部阈值。 |
 | adultScore | 可能的成人内容的可信度分数，范围为 0.00 到 0.99。 |
@@ -225,7 +226,7 @@ The following example of a Content Moderator JSON output was truncated.
 ## <a name="related-links"></a>相关链接
 [Azure 媒体服务分析概述](media-services-analytics-overview.md)
 
-[Azure 媒体分析演示](http://azuremedialabs.azurewebsites.net/demos/Analytics.html)
+[Azure 媒体分析演示](https://azuremedialabs.azurewebsites.net/demos/Analytics.html)
 
 ## <a name="next-steps"></a>后续步骤
 

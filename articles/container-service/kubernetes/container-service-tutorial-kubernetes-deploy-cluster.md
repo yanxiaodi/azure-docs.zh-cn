@@ -1,23 +1,27 @@
 ---
-title: Azure 容器服务教程 - 部署群集
+title: （已弃用）Azure 容器服务教程 - 部署群集
 description: Azure 容器服务教程 - 部署群集
 services: container-service
-author: neilpeterson
+author: iainfoulds
 manager: jeconnoc
 ms.service: container-service
 ms.topic: tutorial
 ms.date: 09/14/2017
-ms.author: nepeters
+ms.author: iainfou
 ms.custom: mvc
-ms.openlocfilehash: 762a659e588a9b26b98241fce4c46fb831d355aa
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.openlocfilehash: 58fef0357a903f2ab1d238bbab7b2d9dca673eb4
+ms.sourcegitcommit: de32e8825542b91f02da9e5d899d29bcc2c37f28
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 02/02/2019
+ms.locfileid: "55662051"
 ---
-# <a name="deploy-a-kubernetes-cluster-in-azure-container-service"></a>在 Azure 容器服务中部署 Kubernetes 群集
+# <a name="deprecated-deploy-a-kubernetes-cluster-in-azure-container-service"></a>（已弃用）在 Azure 容器服务中部署 Kubernetes 群集
 
-[!INCLUDE [aks-preview-redirect.md](../../../includes/aks-preview-redirect.md)]
+> [!TIP]
+> 有关使用 Azure Kubernetes 服务的此教程的更新版本，请参阅[教程：部署 Azure Kubernetes 服务 (AKS) 群集](../../aks/tutorial-kubernetes-deploy-cluster.md)。
+
+[!INCLUDE [ACS deprecation](../../../includes/container-service-kubernetes-deprecation.md)]
 
 Kubernetes 为容器化应用程序提供一个分布式平台。 通过 Azure 容器服务，使预配生产就绪的 Kubernetes 群集变得简单快捷。 在本教程的第 3 部分（共 7 部分），便成功部署了一个 Azure 容器服务 Kubernetes 群集。 已完成的步骤包括：
 
@@ -34,7 +38,7 @@ Kubernetes 为容器化应用程序提供一个分布式平台。 通过 Azure �
 
 ## <a name="create-kubernetes-cluster"></a>创建 Kubernetes 群集
 
-使用 [az acs create](/cli/azure/acs#az_acs_create) 命令在 Azure 容器服务中创建 Kubernetes 群集。 
+使用 [az acs create](/cli/azure/acs#az-acs-create) 命令在 Azure 容器服务中创建 Kubernetes 群集。 
 
 下面的示例在 `myResourceGroup` 资源组中创建 `myK8sCluster` 群集。 此资源组是在[上一教程](./container-service-tutorial-kubernetes-prepare-acr.md)中进行创建。
 
@@ -42,7 +46,7 @@ Kubernetes 为容器化应用程序提供一个分布式平台。 通过 Azure �
 az acs create --orchestrator-type kubernetes --resource-group myResourceGroup --name myK8SCluster --generate-ssh-keys 
 ```
 
-在某些情况下（如限时试用），Azure 订阅对 Azure 资源的访问受限。 如果由于可用核心有限而导致部署失败，请将 `--agent-count 1` 添加到 [az acs creat](/cli/azure/acs#az_acs_create) 命令中，以减少默认代理计数。 
+在某些情况下（如限时试用），Azure 订阅对 Azure 资源的访问受限。 如果由于可用核心有限而导致部署失败，请将 `--agent-count 1` 添加到 [az acs creat](/cli/azure/acs#az-acs-create) 命令中，以减少默认代理计数。 
 
 几分钟后，部署完成并返回有关 ACS 部署的 JSON 格式信息。
 
@@ -50,7 +54,7 @@ az acs create --orchestrator-type kubernetes --resource-group myResourceGroup --
 
 若要从客户端计算机连接到 Kubernetes 群集，请使用 [kubectl](https://kubernetes.io/docs/user-guide/kubectl/)（Kubernetes 命令行客户端）。 
 
-如果使用的是 Azure CloudShell，则 kubectl 已安装。 如果想在本地安装，请使用 [az acs kubernetes install-cli](/cli/azure/acs/kubernetes#install-cli) 命令。
+如果使用的是 Azure CloudShell，则 kubectl 已安装。 如果想在本地安装，请使用 [az acs kubernetes install-cli](/cli/azure/acs/kubernetes) 命令。
 
 如果在 Linux 或 macOS 中运行，则可能需要使用 sudo 进行运行。 在 Windows 上，确保以管理员身份运行 shell。
 
@@ -60,15 +64,15 @@ az acs kubernetes install-cli
 
 在 Windows 上，默认安装是 *c:\program files (x86)\kubectl.exe*。 可能需要将此文件添加到 Windows 路径。 
 
-## <a name="connect-with-kubectl"></a>连接 kubectl
+## <a name="connect-with-kubectl"></a>使用 kubectl 进行连接
 
-若要配置 kubectl 以连接到 Kubernetes 群集，请运行 [az acs kubernetes get-credentials](/cli/azure/acs/kubernetes#get-credentials) 命令。
+若要配置 kubectl 以连接到 Kubernetes 群集，请运行 [az acs kubernetes get-credentials](/cli/azure/acs/kubernetes) 命令。
 
 ```azurecli-interactive 
 az acs kubernetes get-credentials --resource-group myResourceGroup --name myK8SCluster
 ```
 
-若要验证与群集之间的连接，请运行 [kubectl get nodes](https://kubernetes.io/docs/user-guide/kubectl/v1.6/#get) 命令。
+若要验证与群集之间的连接，请运行 [kubectl get nodes](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get) 命令。
 
 ```azurecli-interactive
 kubectl get nodes
@@ -93,7 +97,7 @@ k8s-master-98dc3136-0   Ready,SchedulingDisabled   5m        v1.6.2
 > [!div class="checklist"]
 > * 部署 Kubernetes ACS 群集
 > * 安装 Kubernetes CLI (kubectl)
-> * 配置 kubectl
+> * 配置了 kubectl
 
 继续学习下一个教程，了解如何在群集上运行应用程序。
 

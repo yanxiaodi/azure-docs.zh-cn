@@ -1,36 +1,34 @@
 ---
-title: Azure 中的高可用性端口概述 | Microsoft Docs
+title: Azure 中的高可用性端口概述
+titlesuffix: Azure Load Balancer
 description: 了解在内部负载均衡器上进行负载均衡的高可用性端口。
 services: load-balancer
 documentationcenter: na
-author: KumudD
-manager: jeconnoc
-editor: ''
-tags: azure-resource-manager
-ms.assetid: 46b152c5-6a27-4bfc-bea3-05de9ce06a57
+author: asudbring
 ms.service: load-balancer
 ms.devlang: na
 ms.topic: article
+ms.custom: seodec18
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
-ms.date: 03/21/2017
-ms.author: kumud
-ms.openlocfilehash: 53e09498324f802ce1839d262999657d37ee973b
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.date: 09/19/2019
+ms.author: allensu
+ms.openlocfilehash: 350c6ae2e62a88477ce67132b56d9253166d13ec
+ms.sourcegitcommit: 2ed6e731ffc614f1691f1578ed26a67de46ed9c2
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
-ms.locfileid: "32169112"
+ms.lasthandoff: 09/19/2019
+ms.locfileid: "71130448"
 ---
 # <a name="high-availability-ports-overview"></a>高可用性端口概述
 
 使用内部负载均衡器时，Azure 标准负载均衡器可帮助同时对所有端口上的 TCP 和 UDP 流进行负载均衡。 
 
-高可用性 (HA) 端口规则是在内部标准负载均衡器中配置的负载均衡规则的变体。 可以通过提供单个规则对到达内部标准负载均衡器的所有端口的所有 TCP 和 UDP 流进行负载均衡，来简化负载均衡器的使用。 按流进行负载均衡决策。 此操作基于以下五元组连接：“源 IP 地址”、“源端口”、“目标 IP 地址”、“目标端口”和“协议”。
+高可用性（HA）端口负载均衡规则是负载均衡规则的变体，在内部标准负载均衡器上配置。 可以通过提供单个规则对到达内部标准负载均衡器的所有端口的所有 TCP 和 UDP 流进行负载均衡，来简化负载均衡器的使用。 按流进行负载均衡决策。 此操作基于以下五元组连接：“源 IP 地址”、“源端口”、“目标 IP 地址”、“目标端口”和“协议”
 
-HA 端口功能可帮助实现关键方案，如虚拟网络内部网络虚拟设备 (NVA) 的高可用性和缩放。 当大量端口必须进行负载均衡时，此功能也可以帮助完成。 
+HA 端口负载平衡规则有助于实现关键方案，如虚拟网络中的网络虚拟设备（Nva）的高可用性和规模。 当大量端口必须进行负载均衡时，此功能也可以帮助完成。 
 
-当将前端和后端端口设为“0”并将协议设为“All”时，即配置了 HA 端口功能。 然后，不管端口号是什么，内部负载均衡器资源都会均衡所有 TCP 和 UDP 流。
+将前端和后端端口设置为**0** ，并将协议设置为 "**所有**" 时，将配置 HA 端口负载均衡规则。 然后，不管端口号是什么，内部负载均衡器资源都会均衡所有 TCP 和 UDP 流
 
 ## <a name="why-use-ha-ports"></a>为何使用 HA 端口？
 
@@ -46,9 +44,10 @@ HA 端口功能可帮助实现关键方案，如虚拟网络内部网络虚拟�
 - 提供 n 个主动和主动-被动方案
 - 无需使用复杂解决方案，例如，使用 Apache ZooKeeper 节点来监视设备
 
-下图显示了中心辐射型虚拟网络部署。 在离开受信任空间之前，辐射使用强制隧道将其流量发送到中心虚拟网络并通过 NVA。 NVA 在采用 HA 端口配置的内部标准负载均衡器后面。 可以处理并相应地转发所有流量。
+下图显示了中心辐射型虚拟网络部署。 在离开受信任空间之前，辐射使用强制隧道将其流量发送到中心虚拟网络并通过 NVA。 NVA 在采用 HA 端口配置的内部标准负载均衡器后面。 可以处理并相应地转发所有流量。 当配置为下图中的 "显示" 时，HA 端口负载平衡规则还为入口和出口流量提供流对称。
 
-![包含以 HA 模式部署的 NVA 的中心辐射型虚拟网络的关系图](./media/load-balancer-ha-ports-overview/nvaha.png)
+<a node="diagram"></a>
+![包含以 HA 模式部署的 NVA 的中心辐射型虚拟网络的示意图](./media/load-balancer-ha-ports-overview/nvaha.png)
 
 >[!NOTE]
 > 如果使用 NVA，请咨询其提供商来了解如何最好地使用 HA 端口，以及支持哪些方案。
@@ -57,7 +56,7 @@ HA 端口功能可帮助实现关键方案，如虚拟网络内部网络虚拟�
 
 对于需要负载均衡大量端口的应用程序，也可以使用 HA 端口。 可以通过将内部[标准负载均衡器](load-balancer-standard-overview.md)与 HA 端口配合使用来简化这些方案。 单个负载均衡规则可替换多个单独的负载均衡规则（每个端口一个）。
 
-## <a name="region-availability"></a>上市区域
+## <a name="region-availability"></a>适用地区
 
 HA 端口功能在所有全局 Azure 区域中均可用。
 
@@ -95,13 +94,11 @@ HA 端口功能在所有全局 Azure 区域中均可用。
 
 ## <a name="limitations"></a>限制
 
-- 只有内部负载均衡器可以使用 HA 端口配置。 公共负载均衡器无法使用。
-
+- HA 端口负载平衡规则仅适用于内部标准负载均衡器。
 - 不支持将 HA 端口负载均衡规则与非 HA 端口负载均衡规则组合使用。
-
-- HA 端口功能不适用于 IPv6。
-
-- 仅单个 NIC 支持 NVA 方案的流对称性。 请参阅[网络虚拟设备](#nva)的说明和示意图。 但是，如果可以在方案中使用目标 NAT，则可以使用该功能确保内部负载均衡器将返回流量发送到同一 NVA。
+- 现有 IP 片段将由 HA 端口负载均衡规则转发到与第一个数据包相同的目标。  不支持 IP 分段 UDP 或 TCP 数据包。
+- HA 端口负载均衡规则不适用于 IPv6。
+- 仅当使用上图中所示并使用 HA 端口负载均衡规则时，才能使用后端实例和单个 NIC （和单个 IP 配置）来支持流对称（主要针对 NVA 方案）。 任何其他方案中都不提供此功能。 这意味着，两个或多个负载均衡器资源和及其各自的规则都独立做出决策，永远不会进行协调。 请参阅[网络虚拟设备](#nva)的说明和示意图。 如果使用多个 Nic 或夹在公共负载均衡器和内部负载均衡器之间进行 NVA，则流对称功能不可用。  通过对发往设备 IP 的传入流执行来源 NAT 操作以允许回复到达同一 NVA，也许能够解决此问题。  但是，强烈建议使用单一 NIC，并使用上方示意图中所示的参考体系结构。
 
 
 ## <a name="next-steps"></a>后续步骤

@@ -1,31 +1,26 @@
 ---
-title: "为 Azure 导入/导出服务的导入作业准备硬盘驱动器的示例工作流 - v1 | Microsoft Docs"
-description: "请参阅为 Azure 导入/导出服务中的导入作业准备驱动器的完整过程演练。"
+title: 为 Azure 导入/导出服务的导入作业准备硬盘驱动器的示例工作流 - v1 | Microsoft Docs
+description: 请参阅为 Azure 导入/导出服务中的导入作业准备驱动器的完整过程演练。
 author: muralikk
-manager: syadav
-editor: tysonn
 services: storage
-documentationcenter: 
-ms.assetid: 6eb1b1b7-c69f-4365-b5ef-3cd5e05eb72a
 ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 01/23/2017
 ms.author: muralikk
-ms.openlocfilehash: 66e85bd3e9e43ae360d0507f5bdf3596abbeb7d1
-ms.sourcegitcommit: fa28ca091317eba4e55cef17766e72475bdd4c96
-ms.translationtype: HT
+ms.subservice: common
+ms.openlocfilehash: b80ba1cbe168270ec591bdd38859408eae387bbf
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/14/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60320578"
 ---
 # <a name="sample-workflow-to-prepare-hard-drives-for-an-import-job"></a>为导入作业准备硬盘驱动器的示例工作流
 本主题讲解如何完成为导入作业准备驱动器的整个过程。  
   
 本示例将以下数据导入到名为 `mystorageaccount` 的 Microsoft Azure 存储帐户：  
   
-|位置|说明|  
+|Location|描述|  
 |--------------|-----------------|  
 |H:\Video|视频集合，总共 5 TB。|  
 |H:\Photo|照片集合，总共 30 GB。|  
@@ -34,14 +29,14 @@ ms.lasthandoff: 12/14/2017
   
 导入作业将这些数据导入到存储帐户中的以下目标：  
   
-|源|目标虚拟目录或 Blob|  
+|source|目标虚拟目录或 Blob|  
 |------------|-------------------------------------------|  
-|H:\Video|https://mystorageaccount.blob.core.windows.net/video|  
-|H:\Photo|https://mystorageaccount.blob.core.windows.net/photo|  
-|K:\Temp\FavoriteMovie.ISO|https://mystorageaccount.blob.core.windows.net/favorite/FavoriteMovies.ISO|  
-|\\\bigshare\john\music|https://mystorageaccount.blob.core.windows.net/music|  
+|H:\Video|https:\//mystorageaccount.blob.core.windows.net/video|  
+|H:\Photo|https:\//mystorageaccount.blob.core.windows.net/photo|  
+|K:\Temp\FavoriteMovie.ISO|https:\//mystorageaccount.blob.core.windows.net/favorite/FavoriteMovies.ISO|  
+|\\\bigshare\john\music|https:\//mystorageaccount.blob.core.windows.net/music|  
   
-借助此映射，可将文件 `H:\Video\Drama\GreatMovie.mov` 导入 Blob `https://mystorageaccount.blob.core.windows.net/video/Drama/GreatMovie.mov`。  
+借助此映射，将文件`H:\Video\Drama\GreatMovie.mov`导入到 blob https:\//mystorageaccount.blob.core.windows.net/video/Drama/GreatMovie.mov。  
   
 接下来，为了确定所需的硬盘驱动器数目，应计算数据大小：  
   
@@ -49,13 +44,13 @@ ms.lasthandoff: 12/14/2017
   
 对于本示例，两个 3-TB 硬盘驱动器应该足够。 但是，由于源目录 `H:\Video` 包含 5 TB 数据，而单个硬盘驱动器的容量仅为 3 TB，因此在运行 Microsoft Azure 导入/导出工具之前，需要将 `H:\Video` 分解为两个小目录：`H:\Video1` 和 `H:\Video2`。 此步骤将生成以下源目录：  
   
-|位置|大小|目标虚拟目录或 Blob|  
+|Location|大小|目标虚拟目录或 Blob|  
 |--------------|----------|-------------------------------------------|  
-|H:\Video1|2.5 TB|https://mystorageaccount.blob.core.windows.net/video|  
-|H:\Video2|2.5 TB|https://mystorageaccount.blob.core.windows.net/video|  
-|H:\Photo|30 GB|https://mystorageaccount.blob.core.windows.net/photo|  
-|K:\Temp\FavoriteMovies.ISO|25 GB|https://mystorageaccount.blob.core.windows.net/favorite/FavoriteMovies.ISO|  
-|\\\bigshare\john\music|10 GB|https://mystorageaccount.blob.core.windows.net/music|  
+|H:\Video1|2.5 TB|https:\//mystorageaccount.blob.core.windows.net/video|  
+|H:\Video2|2.5 TB|https:\//mystorageaccount.blob.core.windows.net/video|  
+|H:\Photo|30 GB|https:\//mystorageaccount.blob.core.windows.net/photo|  
+|K:\Temp\FavoriteMovies.ISO|25 GB|https:\//mystorageaccount.blob.core.windows.net/favorite/FavoriteMovies.ISO|  
+|\\\bigshare\john\music|10 GB|https:\//mystorageaccount.blob.core.windows.net/music|  
   
  即使已将 `H:\Video` 目录分解为两个目录，它们也会指向存储帐户中的同一目标虚拟目录。 这样，所有视频文件将保留在存储帐户中的单个 `video` 容器下。  
   
@@ -72,11 +67,11 @@ ms.lasthandoff: 12/14/2017
   
 此外，可为所有文件设置以下元数据：  
   
--   **UploadMethod：**Microsoft Azure 导入/导出服务  
+-   **UploadMethod：** Windows Azure 导入/导出服务  
   
--   **DataSetName：**SampleData  
+-   **DataSetName：** SampleData  
   
--   **CreationDate：**10/1/2013  
+-   **CreationDate：** 2013 年 10 月 1 日  
   
 若要为导入的文件设置元数据，请创建包含以下内容的文本文件 `c:\WAImportExport\SampleMetadata.txt`：  
   
@@ -91,11 +86,11 @@ ms.lasthandoff: 12/14/2017
   
 还可为 `FavoriteMovie.ISO` Blob 设置一些属性：  
   
--   **Content-Type：**application/octet-stream  
+-   **Content-Type：** application/octet-stream  
   
--   **Content-MD5：**Q2hlY2sgSW50ZWdyaXR5IQ==  
+-   **Content-MD5：** Q2hlY2sgSW50ZWdyaXR5IQ==  
   
--   **Cache-Control：**no-cache  
+-   **Cache-Control：** no-cache  
   
 若要设置这些属性，请创建文本文件 `c:\WAImportExport\SampleProperties.txt`：  
   
@@ -174,4 +169,4 @@ WAImportExport.exe PrepImport /j:SecondDrive.jrn /id:BlueRayIso /srcfile:K:\Temp
 ## <a name="next-steps"></a>后续步骤
 
 * [为导入作业准备硬盘驱动器](../storage-import-export-tool-preparing-hard-drives-import-v1.md)   
-* [常用命令快速参考](../storage-import-export-tool-quick-reference-v1.md) 
+* [常用命令快速参考](../storage-import-export-tool-quick-reference-v1.md) 

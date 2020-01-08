@@ -1,24 +1,22 @@
 ---
-title: 使用 U-SQL 的 Azure Data Lake 数据科学演练 | Microsoft Docs
+title: 在 Azure Data Lake 中使用 U-SQL 进行分析 - Team Data Science Process
 description: 演练如何在 Azure Data Lake 中使用 U-SQL 进行预测分析的示例。
 services: machine-learning
-documentationcenter: ''
-author: deguhath
-manager: jhubbard
+author: marktab
+manager: cgronlun
 editor: cgronlun
-ms.assetid: ''
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 09/04/2017
-ms.author: deguhath
-ms.openlocfilehash: c6d94f11134c582320269f60a148b02fe885e188
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: b0599317d09a1757b3c86372cb7ed8ea78d4cdd7
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60804698"
 ---
 # <a name="azure-data-lake-data-science-walkthroughs-using-u-sql"></a>使用 U-SQL 的 Azure Data Lake 数据科学演练
 

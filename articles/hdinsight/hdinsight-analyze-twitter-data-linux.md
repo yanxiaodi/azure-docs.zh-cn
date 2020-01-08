@@ -1,69 +1,62 @@
 ---
-title: 使用 Apache Hive 分析 Twitter 数据 - Azure HDInsight | Microsoft Docs
-description: 了解如何使用 HDInsight 中的 Hive 和 Hadoop 将原始 TWitter 数据转换为可搜索的 Hive 表。
-services: hdinsight
-documentationcenter: ''
-author: Blackmist
-manager: jhubbard
-editor: cgronlun
-tags: azure-portal
-ms.assetid: e1e249ed-5f57-40d6-b3bc-a1b4d9a871d3
+title: 使用 Apache Hive 分析 Twitter 数据 - Azure HDInsight
+description: 了解如何使用 HDInsight 中的 Apache Hive 和 Apache Hadoop 将原始 TWitter 数据转换为可搜索的 Hive 表。
+author: hrasheed-msft
+ms.reviewer: jasonh
 ms.service: hdinsight
-ms.devlang: na
 ms.topic: conceptual
-ms.date: 04/23/2018
-ms.author: larryfr
+ms.date: 06/26/2018
+ms.author: hrasheed
 ms.custom: H1Hack27Feb2017,hdinsightactive
-ms.openlocfilehash: 89c5ff86b6c59223e0580860e14fdffdaef2472c
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.openlocfilehash: 8c7f6695880cfdb0a350edc37d61e771d03b92df
+ms.sourcegitcommit: 5bdd50e769a4d50ccb89e135cfd38b788ade594d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 07/03/2019
+ms.locfileid: "67543721"
 ---
-# <a name="analyze-twitter-data-using-hive-and-hadoop-on-hdinsight"></a>使用 HDInsight 中的 Hive 和 Hadoop 分析 Twitter 数据
+# <a name="analyze-twitter-data-using-apache-hive-and-apache-hadoop-on-hdinsight"></a>使用 HDInsight 中的 Apache Hive 和 Apache Hadoop 分析 Twitter 数据
 
-了解如何使用 Apache Hive 处理 Twitter 数据。 结果是发送最多包含某个特定词的推文的 Twitter 用户列表。
+了解如何使用 [Apache Hive](https://hive.apache.org/) 处理 Twitter 数据。 结果是发送最多包含某个特定词的推文的 Twitter 用户列表。
 
-> [!IMPORTANT]
+> [!IMPORTANT]  
 > 本文档中的步骤已在 HDInsight 3.6 上进行测试。
->
-> Linux 是 HDInsight 3.4 或更高版本上使用的唯一操作系统。 有关详细信息，请参阅 [HDInsight 在 Windows 上停用](hdinsight-component-versioning.md#hdinsight-windows-retirement)。
 
 ## <a name="get-the-data"></a>获取数据
 
-Twitter 允许通过 REST API 检索[每个推文的数据](https://dev.twitter.com/docs/platform-objects/tweets)作为 JavaScript 对象表示法 (JSON) 文档。 要对 API 进行身份验证，需要 [OAuth](http://oauth.net)。
+Twitter 允许通过 REST API 检索每个推文的数据作为 JavaScript 对象表示法 (JSON) 文档。 要对 API 进行身份验证，需要 [OAuth](https://oauth.net)。
 
 ### <a name="create-a-twitter-application"></a>创建 Twitter 应用程序
 
-1. 在 Web 浏览器中登录到 [https://apps.twitter.com/](https://apps.twitter.com/)。 单击“立即注册”链接（如果没有 Twitter 帐户）。
+1. 在 Web 浏览器中登录到 [https://apps.twitter.com/](https://apps.twitter.com/)。 单击“立即注册”  链接（如果没有 Twitter 帐户）。
 
-2. 单击“创建新应用”。
+2. 单击“创建新应用”  。
 
-3. 输入“名称”、“说明”、“网站”。 可为“网站”字段补充 URL。 下表显示了一些要使用的示例值：
+3. 输入“名称”  、“说明”  、“网站”  。 可为“网站”  字段补充 URL。 下表显示了一些要使用的示例值：
 
    | 字段 | 值 |
    |:--- |:--- |
    | 名称 |MyHDInsightApp |
-   | 说明 |MyHDInsightApp |
-   | 网站 |http://www.myhdinsightapp.com |
+   | 描述 |MyHDInsightApp |
+   | 网站 |https:\//www.myhdinsightapp.com |
 
-4. 选中“是，我同意”，并单击“创建 Twitter 应用程序”。
+4. 选中“是，我同意”  ，并单击“创建 Twitter 应用程序”  。
 
-5. 单击“权限”选项卡。默认权限为“只读”。
+5. 单击“权限”  选项卡。默认权限为“只读”  。
 
-6. 单击“密钥和访问令牌”选项卡。
+6. 单击“密钥和访问令牌”  选项卡。
 
-7. 单击“创建我的访问令牌”。
+7. 单击“创建我的访问令牌”  。
 
-8. 在页面右上角单击“测试 OAuth”。
+8. 在页面右上角单击“测试 OAuth”  。
 
-9. 记下“使用者密钥”、“使用者机密”、“访问令牌”和“访问令牌机密”。
+9. 记下“使用者密钥”  、“使用者机密”  、“访问令牌”  和“访问令牌机密”  。
 
 ### <a name="download-tweets"></a>下载推文
 
 以下 Python 代码会从 Twitter 下载 10,000 篇推文并将其保存到一个名为 **tweets.txt** 的文件中。
 
-> [!NOTE]
+> [!NOTE]  
 > 由于已安装了 Python，请在 HDInsight 群集上执行以下步骤。
 
 1. 使用 SSH 连接到 HDInsight 群集：
@@ -74,7 +67,7 @@ Twitter 允许通过 REST API 检索[每个推文的数据](https://dev.twitter.
 
     有关详细信息，请参阅 [Use SSH with HDInsight](hdinsight-hadoop-linux-use-ssh-unix.md)（对 HDInsight 使用 SSH）。
 
-3. 使用以下命令安装 [Tweepy](http://www.tweepy.org/)、[Progressbar](https://pypi.python.org/pypi/progressbar/2.2) 和其他所需的程序包：
+3. 使用以下命令来安装[Tweepy](https://www.tweepy.org/)，[进度栏](https://pypi.python.org/pypi/progressbar/2.2)，和其他所需的包：
 
    ```bash
    sudo apt install python-dev libffi-dev libssl-dev
@@ -149,7 +142,7 @@ Twitter 允许通过 REST API 检索[每个推文的数据](https://dev.twitter.
    twitterStream.filter(track=["azure","cloud","hdinsight"])
    ```
 
-    > [!IMPORTANT]
+    > [!IMPORTANT]  
     > 将以下各项的占位符文本替换为来自 twitter 应用程序的信息：
     >
     > * `consumer_secret`
@@ -157,7 +150,7 @@ Twitter 允许通过 REST API 检索[每个推文的数据](https://dev.twitter.
     > * `access_token`
     > * `access_token_secret`
 
-    > [!TIP]
+    > [!TIP]  
     > 调整最后一行的主题筛选器以跟踪常用关键字。 运行脚本时，使用常用关键字可以更快捕获数据。
 
 6. 使用 **Ctrl+X**，并使用 **Y** 以保存该文件。
@@ -170,7 +163,7 @@ Twitter 允许通过 REST API 检索[每个推文的数据](https://dev.twitter.
 
     一个进度指示器会出现。 它会随着推文下载计数到 100%。
 
-   > [!NOTE]
+   > [!NOTE]  
    > 如果进度栏向前移动需要较长时间，则应更改筛选器以跟踪趋势主题。 当存在许多有关筛选器中的主题的推文时，可以快速获取所需的 10000 篇推文。
 
 ### <a name="upload-the-data"></a>上传数据
@@ -186,7 +179,7 @@ hdfs dfs -put tweets.txt /tutorials/twitter/data/tweets.txt
 
 ## <a name="run-the-hiveql-job"></a>运行 HiveQL 作业
 
-1. 使用以下命令来创建包含 HiveQL 语句的文件：
+1. 使用以下命令来创建包含 [HiveQL](https://cwiki.apache.org/confluence/display/Hive/LanguageManual) 语句的文件：
 
    ```bash
    nano twitter.hql
@@ -307,7 +300,7 @@ hdfs dfs -put tweets.txt /tutorials/twitter/data/tweets.txt
    beeline -u 'jdbc:hive2://headnodehost:10001/;transportMode=http' -i twitter.hql
    ```
 
-    此命令会运行 **twitter.hql** 文件。 查询完成之后，会看到 `jdbc:hive2//localhost:10001/>` 提示符。
+    此命令会运行 twitter.hql 文件  。 查询完成之后，会看到 `jdbc:hive2//localhost:10001/>` 提示符。
 
 4. 根据 beeline 提示，使用以下查询验证数据是否已导入：
 
@@ -321,20 +314,19 @@ hdfs dfs -put tweets.txt /tutorials/twitter/data/tweets.txt
 
     这会在消息文本中返回最多 10 篇包含 **Azure** 一词的推文。
 
-    > [!NOTE]
-    > 如果已更改 `gettweets.py` 脚本中的筛选器，请将 Azure 替换为用过的筛选器之一。
+    > [!NOTE]  
+    > 如果已更改 `gettweets.py` 脚本中的筛选器，请将 Azure 替换为用过的筛选器之一  。
 
 ## <a name="next-steps"></a>后续步骤
 
-你已了解如何将非结构化 JSON 数据集转换为结构化 Hive 表。 若要了解有关 HDInsight 上的 Hive 的详细信息，请参阅以下文档：
+你已了解如何将非结构化 JSON 数据集转换为结构化 [Apache Hive](https://hive.apache.org/) 表。 若要了解有关 HDInsight 上的 Hive 的详细信息，请参阅以下文档：
 
-* [HDInsight 入门](hadoop/apache-hadoop-linux-tutorial-get-started.md)
-* [使用 HDInsight 分析航班延误数据](hdinsight-analyze-flight-delay-data-linux.md)
+* [开始使用 HDInsight](hadoop/apache-hadoop-linux-tutorial-get-started.md)
+* [使用 HDInsight 分析航班延误数据](/azure/hdinsight/interactive-query/interactive-query-tutorial-analyze-flight-data)
 
-[curl]: http://curl.haxx.se
-[curl-download]: http://curl.haxx.se/download.html
+[curl]: https://curl.haxx.se
+[curl-download]: https://curl.haxx.se/download.html
 
 [apache-hive-tutorial]: https://cwiki.apache.org/confluence/display/Hive/Tutorial
 
-[twitter-streaming-api]: https://dev.twitter.com/docs/streaming-apis
 [twitter-statuses-filter]: https://dev.twitter.com/docs/api/1.1/post/statuses/filter

@@ -3,41 +3,46 @@ title: 许可证自助密码重置 - Azure Active Directory
 description: Azure AD 自助密码重置的授权要求
 services: active-directory
 ms.service: active-directory
-ms.component: authentication
-ms.topic: article
-ms.date: 01/11/2018
+ms.subservice: authentication
+ms.topic: conceptual
+ms.date: 08/19/2019
 ms.author: joflore
 author: MicrosoftGuyJFlo
-manager: mtillman
+manager: daveba
 ms.reviewer: sahenry
-ms.openlocfilehash: 78d4d721f2821a8365185c0bad6d795c67a75292
-ms.sourcegitcommit: 870d372785ffa8ca46346f4dfe215f245931dae1
-ms.translationtype: HT
+ms.collection: M365-identity-device-management
+ms.openlocfilehash: 4d7a23ed0a84ebd671c69744dfec145763ef6897
+ms.sourcegitcommit: 55e0c33b84f2579b7aad48a420a21141854bc9e3
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/08/2018
-ms.locfileid: "33864648"
+ms.lasthandoff: 08/19/2019
+ms.locfileid: "69622718"
 ---
 # <a name="licensing-requirements-for-azure-ad-self-service-password-reset"></a>Azure AD 自助密码重置的授权要求
 
-要使 Azure Active Directory (Azure AD) 密码重置正常工作，*必须在组织中至少分配一个许可证*。 我们不对密码重置体验强制实施每用户授权。 如果用户从该许可证覆盖的任意功能中受益（无论间接还是直接），都需要相应的许可证。
+Azure Active Directory (Azure AD) 有多种版本:免费、高级 P1 和高级 P2。 有几个不同的功能可以构成自助密码重置，包括更改、重置、解锁和写回，这些功能在 Azure AD 的不同版本中可用。 本文尝试说明这些差异。 可以在 [Azure Active Directory 定价页](https://azure.microsoft.com/pricing/details/active-directory/)上找到每个Azure AD 版本中包含的功能的更多详细信息。
 
-* **仅限云用户**：Office 365 任何付费 SKU 或 Azure AD Basic
-* **云**或**本地用户**：Azure AD Premium P1 或 P2、企业移动性 + 安全性 (EMS) 或 Microsoft 365
+## <a name="compare-editions-and-features"></a>比较版本和功能
 
-## <a name="licenses-required-for-password-writeback"></a>密码写回所需的许可证
+Azure AD 自助密码重置是按用户许可的，为了维护合规性，需要组织为其用户分配相应的许可证。
 
-若要使用密码写回，必须在租户中分配以下许可证之一：
+* 云用户的自助密码更改
+   * 我是**仅限云用户**并且知道我的密码。
+      * 我想要将我的密码**更改**为新密码。
+   * 此功能包含在 Azure AD 的所有版本中。
 
-* Azure AD Premium P1
-* Azure AD Premium P2
-* 企业移动性 + 安全性 E3
-* 企业移动性 + 安全性 E5
-* Microsoft 365 E3
-* Microsoft 365 E5
-* Microsoft 365 F1
+* 云用户的自助密码重置
+   * 我是**仅限云用户**并且忘记了密码。
+      * 我想要将我的密码**重置**为我知道的密码。
+   * 此功能包含在 Azure AD Premium P1 或 P2、Microsoft 365 商业版或 Office 365 中。
+
+* **通过本地写回**实现自助密码重置/更改/解锁
+   * 我是**混合用户**，我的本地 Active Directory 用户帐户已使用 Azure AD Connect 与我的 Azure AD 帐户同步。 我想要更改密码、已忘记密码或已被锁定。
+      * 我想要更改密码或将其重置为我知道的密码，或者解锁我的帐户，**并**将此更改同步回本地 Active Directory。
+   * 此功能包含在 Azure AD Premium P1 或 P2 版本，或 Microsoft 365 商业版中。
 
 > [!WARNING]
-> 独立 Office 365 许可计划*不支持密码写回*，要使此功能正常工作，需要使用上述计划之一。
+> 独立 Office 365 许可计划不支持“通过本地写回实现自助式密码重置/更改/解锁”，要使此功能正常工作，需要包含 Azure AD Premium P1 版本、Premium P2 版本，或 Microsoft 365 商业版的计划。
 >
 
 可在以下页上找到其他许可信息（包括成本）：
@@ -46,18 +51,19 @@ ms.locfileid: "33864648"
 * [Azure Active Directory 特性和功能](https://www.microsoft.com/cloud-platform/azure-active-directory-features)
 * [企业移动性 + 安全性](https://www.microsoft.com/cloud-platform/enterprise-mobility-security)
 * [Microsoft 365 企业版](https://www.microsoft.com/microsoft-365/enterprise)
+* [Microsoft 365 商业版服务说明](https://docs.microsoft.com/office365/servicedescriptions/microsoft-365-service-descriptions/microsoft-365-business-service-description)
 
 ## <a name="enable-group-or-user-based-licensing"></a>启用基于组或基于用户的许可
 
-Azure AD 现在支持基于组的许可。 管理员可以将许可证批量分配给一组用户，而不是一次一个用户地分配。 有关详细信息，请参阅[分配、验证许可证和解决许可证问题](../active-directory-licensing-group-assignment-azure-portal.md#step-1-assign-the-required-licenses)。
+Azure AD 现在支持基于组的许可。 管理员可以将许可证批量分配给一组用户，而不是一次一个用户地分配。 有关详细信息，请参阅[分配、验证许可证和解决许可证问题](../users-groups-roles/licensing-groups-assign.md#step-1-assign-the-required-licenses)。
 
 某些 Microsoft 服务不能在所有位置使用。 将许可证分配给用户之前，管理员必须为该用户指定“使用位置”属性。 可在 Azure 门户中的“用户” > “配置文件” > “设置”部分下完成分配许可证。 *使用组许可证分配时，任何没有指定使用位置的用户将继承该目录的位置。*
 
 ## <a name="next-steps"></a>后续步骤
 
 * [如何成功推出 SSPR？](howto-sspr-deployment.md)
-* [重置或更改密码](../active-directory-passwords-update-your-own-password.md)
-* [注册自助密码重置](../active-directory-passwords-reset-register.md)
+* [重置或更改密码](../user-help/active-directory-passwords-update-your-own-password.md)
+* [注册自助密码重置](../user-help/active-directory-passwords-reset-register.md)
 * [SSPR 使用哪些数据？应为用户填充哪些数据？](howto-sspr-authenticationdata.md)
 * [哪些身份验证方法可供用户使用？](concept-sspr-howitworks.md#authentication-methods)
 * [SSPR 有哪些策略选项？](concept-sspr-policy.md)

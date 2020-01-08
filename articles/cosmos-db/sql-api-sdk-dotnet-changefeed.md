@@ -1,27 +1,24 @@
 ---
-title: Azure Cosmos DB：.NET 更改源处理器 API、SDK 和资源 | Microsoft Docs
+title: Azure Cosmos DB：.NET 更改源处理器 API、SDK 和资源
 description: 了解有关更改源处理器 API 和 SDK 的全部信息，包括发布日期、停用日期和 .NET 更改源处理器 SDK 各版本之间所做的更改。
-services: cosmos-db
-documentationcenter: .net
 author: ealsur
-manager: kfile
-ms.assetid: f2dd9438-8879-4f74-bb6c-e1efc2cd0157
 ms.service: cosmos-db
-ms.workload: data-services
-ms.tgt_pltfrm: na
+ms.subservice: cosmosdb-sql
 ms.devlang: dotnet
-ms.topic: article
-ms.date: 04/19/2018
+ms.topic: reference
+ms.date: 01/30/2019
 ms.author: maquaran
-ms.openlocfilehash: 7ed5772df4d8677fe878d7ced831dc15bbe8cac0
-ms.sourcegitcommit: 870d372785ffa8ca46346f4dfe215f245931dae1
-ms.translationtype: HT
+ms.openlocfilehash: ea6de5f42910457efa5ca6c458d7af63faa38e18
+ms.sourcegitcommit: 3877b77e7daae26a5b367a5097b19934eb136350
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/08/2018
-ms.locfileid: "33885130"
+ms.lasthandoff: 07/30/2019
+ms.locfileid: "68637748"
 ---
 # <a name="net-change-feed-processor-sdk-download-and-release-notes"></a>.NET 更改源处理器 SDK：下载和发行说明
+
 > [!div class="op_single_selector"]
+>
 > * [.NET](sql-api-sdk-dotnet.md)
 > * [.NET 更改源](sql-api-sdk-dotnet-changefeed.md)
 > * [.NET Core](sql-api-sdk-dotnet-core.md)
@@ -31,9 +28,9 @@ ms.locfileid: "33885130"
 > * [Python](sql-api-sdk-python.md)
 > * [REST](https://docs.microsoft.com/rest/api/cosmos-db/)
 > * [REST 资源提供程序](https://docs.microsoft.com/rest/api/cosmos-db-resource-provider/)
-> * [SQL](https://msdn.microsoft.com/library/azure/dn782250.aspx)
-> * [BulkExecutor - .NET](sql-api-sdk-bulk-executor-dot-net.md)
-> * [BulkExecutor - Java](sql-api-sdk-bulk-executor-java.md)
+> * [SQL](sql-api-query-reference.md)
+> * [大容量执行程序-.NET](sql-api-sdk-bulk-executor-dot-net.md)
+> * [批量执行程序-Java](sql-api-sdk-bulk-executor-java.md)
 
 |   |   |
 |---|---|
@@ -44,14 +41,103 @@ ms.locfileid: "33885130"
 
 ## <a name="release-notes"></a>发行说明
 
-### <a name="stable-builds"></a>稳定版本
+### <a name="v2-builds"></a>v2 版本
+
+### <a name="a-name227227"></a><a name="2.2.7"/>2.2.7
+* 改进了负载均衡策略, 适用于获得所有租约所用时间超过租约过期时间间隔的情况, 例如, 由于网络问题:
+  * 在此方案中, 用于将租约视为过期的负载平衡算法将导致活动所有者盗取租约。 这可能导致不必要地重新平衡大量租约。
+  * 在此版本中, 此问题已修复, 方法是避免在获取过期租约时重试, 而不会更改所有者, 并 posponing 获取过期租约以进行下一次负载平衡迭代。
+
+### <a name="a-name226226"></a><a name="2.2.6"/>2.2.6
+* 改进了对观察者异常的处理。
+* 有关观察者错误的更丰富信息：
+  * 当观察者由于观察者的 ProcessChangesAsync 抛出异常而关闭时，CloseAsync 现在将接收设置为 ChangeFeedObserverCloseReason.ObserverError 的 reason 参数。
+  * 添加了跟踪以识别观察者的用户代码中的错误。
+
+### <a name="a-name225225"></a><a name="2.2.5"/>2.2.5
+* 添加了对使用共享数据库吞吐量的拆分集合的处理支持。
+  * 此版本修复了使用共享数据库吞吐量的拆分集合可能发生的问题，即在拆分导致分区重新平衡时仅创建一个子分区键范围，而不是两个。 发生这种情况时，更改源处理器可能会在删除旧分区键范围的租约时卡住，而无法创建新租约。 此版本中已修复了此问题。
+
+### <a name="a-name224224"></a><a name="2.2.4"/>2.2.4
+* 添加了新属性 ChangeFeedProcessorOptions.StartContinuation 来支持从请求继续标记开始更改源。 只有当租约集合为空或者租约未设置 ContinuationToken 时才使用此属性。 对于租约集合中设置了 ContinuationToken 的租约，将使用 ContinuationToken 并忽略 ChangeFeedProcessorOptions.StartContinuation。
+
+### <a name="a-name223223"></a><a name="2.2.3"/>2.2.3
+* 增加了对使用自定义存储的支持，用以按分区持久保存继续标记。
+  * 例如，自定义租约存储可以是以任何自定义方式分区的 Azure Cosmos DB 租约集合。
+  * 自定义租约存储可以使用新的扩展点 ChangeFeedProcessorBuilder.WithLeaseStoreManager(ILeaseStoreManager) 和 ILeaseStoreManager 公共接口。
+  * 将 ILeaseManager 接口重构到了多个角色接口中。
+* 次要重大更改：删除了扩展点 ChangeFeedProcessorBuilder.WithLeaseManager(ILeaseManager)，请改用 ChangeFeedProcessorBuilder.WithLeaseStoreManager(ILeaseStoreManager)。
+
+### <a name="a-name222222"></a><a name="2.2.2"/>2.2.2
+* 此版本修复了在处理受监视集合中的拆分和使用已分区租约集合期间发生的一个问题。 在处理拆分分区的租约时，可能不会删除对应于该分区的租约。 此版本中已修复了此问题。
+
+### <a name="a-name221221"></a><a name="2.2.1"/>2.2.1
+* 多主机帐户和新的会话令牌格式的固定估计器计算。
+
+### <a name="a-name220220"></a><a name="2.2.0"/>2.2.0
+* 添加了对已分区租用集合的支持。 分区键必须定义为 /id。
+* 次要重大更改：IChangeFeedDocumentClient 接口和 ChangeFeedDocumentClient 类的方法都已更改为包括 RequestOptions 和 CancellationToken 参数。 IChangeFeedDocumentClient 是一个高级的扩展点，通过它可以提供文档客户端自定义实现以与更改源处理器结合使用，例如修饰 DocumentClient 并截获对它的所有调用以进行额外跟踪和错误处理等等。利用此更新，实现 IChangeFeedDocumentClient 的代码将需要更改为在实现中包含新参数。
+* 次要诊断改进。
+
+### <a name="a-name210210"></a><a name="2.1.0"/>2.1.0
+* 添加了新的 API，Task&lt;IReadOnlyList&lt;RemainingPartitionWork&gt;&gt; IRemainingWorkEstimator.GetEstimatedRemainingWorkPerPartitionAsync()。 此 API 可用于获取每个分区估算的工作量。
+* 支持 Microsoft.Azure.DocumentDB SDK 2.0。 需要 Microsoft.Azure.DocumentDB 2.0 或更高版本。
+
+### <a name="a-name206206"></a><a name="2.0.6"/>2.0.6
+* 添加了 ChangeFeedEventHost.HostName 公共属性以与 v1 兼容。
+
+### <a name="a-name205205"></a><a name="2.0.5"/>2.0.5
+* 修复了在分区拆分期间发生的争用条件。 争用条件可能导致获得租用后，在分区拆分期间立即失去该租用，从而引起争用。 此版本修复了争用条件问题。
+
+### <a name="a-name204204"></a><a name="2.0.4"/>2.0.4
+* GA SDK
+
+### <a name="a-name203-prerelease203-prerelease"></a><a name="2.0.3-prerelease"/>2.0.3 预发布
+* 修复了以下问题：
+  * 拆分分区时，可能会重复处理拆分前修改的文档。
+  * 如果租用集合中没有租用，GetEstimatedRemainingWork API 返回的是 0。
+
+* 以下异常已公开。 实现 IPartitionProcessor 的扩展可能会抛出这些异常。
+  * Microsoft.Azure.Documents.ChangeFeedProcessor.Exceptions.LeaseLostException. 
+  * Microsoft.Azure.Documents.ChangeFeedProcessor.Exceptions.PartitionException. 
+  * Microsoft.Azure.Documents.ChangeFeedProcessor.Exceptions.PartitionNotFoundException.
+  * Microsoft.Azure.Documents.ChangeFeedProcessor.Exceptions.PartitionSplitException. 
+
+### <a name="a-name202-prerelease202-prerelease"></a><a name="2.0.2-prerelease"/>2.0.2-prerelease
+* 小的 API 更改：
+  * 删除了标记为过时的 ChangeFeedProcessorOptions.IsAutoCheckpointEnabled。
+
+### <a name="a-name201-prerelease201-prerelease"></a><a name="2.0.1-prerelease"/>2.0.1-prerelease
+* 稳定性改进：
+  * 更好地处理租用存储初始化。 当租用存储为空时，只有一个处理器实例可以对其进行初始化，其他处理器实例将等待。
+  * 更稳定/有效租用续订/发行版。 续订和释放一个分区的租用独立于续订其他租用。 在 v1 中，这是针对所有分区按顺序完成的。
+* 新 v2 API：
+  * 处理器的灵活构造生成器模式：ChangeFeedProcessorBuilder 类。
+    * 可以采用参数的任何组合。
+    * 可以采用用于监视的 DocumentClient 实例和/或租用集合（v1 中不可用）。
+  * IChangeFeedObserver.ProcessChangesAsync 现在采用 CancellationToken。
+  * IRemainingWorkEstimator - 剩余工作估计器可以与处理器分开使用。
+  * 新的扩展点：
+    * IPartitionLoadBalancingStrategy - 用于对处理器实例之间的分区进行自定义负载均衡。
+    * ILease、ILeaseManager - 用于自定义租用管理。
+    * IPartitionProcessor - 用于对分区进行自定义处理更改。
+* 日志记录 - 使用 [LibLog](https://github.com/damianh/LibLog) 库。
+* 与 v1 API 100% 向后兼容。
+* 新建代码库。
+* 兼容 [SQL .NET SDK](sql-api-sdk-dotnet.md) 1.21.1 及更高版本。
+
+### <a name="v1-builds"></a>v1 版本
+
+### <a name="a-name133133"></a><a name="1.3.3"/>1.3.3
+* 添加了更多日志记录。
+* 修复了多次调用待处理工作评估时出现的 DocumentClient 泄漏。
 
 ### <a name="a-name132132"></a><a name="1.3.2"/>1.3.2
 * 修复了待处理工作评估。
 
 ### <a name="a-name131131"></a><a name="1.3.1"/>1.3.1
 * 稳定性改进。
-  * 修复了处理取消的任务问题，该问题可能导致某些分区上的观察者停止。
+  * 修复了可能导致在某些分区上停止观察程序的已取消任务问题。
 * 支持手动检查点。
 * 兼容 [SQL .NET SDK](sql-api-sdk-dotnet.md) 1.21 及更高版本。
 
@@ -72,32 +158,8 @@ ms.locfileid: "33885130"
 * GA SDK
 * 兼容 [SQL .NET SDK](sql-api-sdk-dotnet.md) 1.14.1 及更低版本。
 
-### <a name="pre-release-builds"></a>预发布版本
-
-### <a name="a-name202-prerelease202-prerelease"></a><a name="2.0.2-prerelease"/>2.0.2-prerelease
-* 小的 API 更改：
-  * 删除了标记为过时的 ChangeFeedProcessorOptions.IsAutoCheckpointEnabled。
-
-### <a name="a-name201-prerelease201-prerelease"></a><a name="2.0.1-prerelease"/>2.0.1-prerelease
-* 稳定性改进：
-  * 更好地处理租用存储初始化。 当租用存储为空时，只有一个处理器实例可以对其进行初始化，其他处理器实例将等待。
-  * 更稳定/有效租用续订/发行版。 续订和释放一个分区的租用独立于续订其他租用。 在 v1 中，这是针对所有分区按顺序完成的。
-* 新 v2 API：
-  * 处理器的灵活构造生成器模式：ChangeFeedProcessorBuilder 类。
-    * 可以采用参数的任何组合。
-    * 可以采用用于监视的 DocumentClient 实例和/或租用集合（v1 中不可用）。
-  * IChangeFeedObserver.ProcessChangesAsync 现在采用 CancellationToken。
-  * IRemainingWorkEstimator - 剩余工作估计器可以与处理器分开使用。
-  * 新的扩展点：
-    * IParitionLoadBalancingStrategy - 用于对处理器实例之间的分区进行自定义负载均衡。
-    * ILease、ILeaseManager - 用于自定义租用管理。
-    * IPartitionProcessor - 用于对分区进行自定义处理更改。
-* 日志记录 - 使用 [LibLog](https://github.com/damianh/LibLog) 库。
-* 与 v1 API 100% 向后兼容。
-* 新建代码库。
-* 兼容 [SQL .NET SDK](sql-api-sdk-dotnet.md) 1.21.1 及更高版本。
-
 ## <a name="release--retirement-dates"></a>发布和停用日期
+
 Microsoft 至少会在停用 SDK 的 **12 个月**之前发出通知，以便顺利转换到更新的/受支持的版本。
 
 新特性和功能以及优化仅添加到当前 SDK，因此建议始终尽早升级到最新的 SDK 版本。 
@@ -106,8 +168,16 @@ Microsoft 至少会在停用 SDK 的 **12 个月**之前发出通知，以便顺
 
 <br/>
 
-| 版本 | 发布日期 | 停用日期 |
+| Version | 发布日期 | 停用日期 |
 | --- | --- | --- |
+| [2.2.7](#2.2.7) |2019 年 5 月 14 日 |--- |
+| [2.2.6](#2.2.6) |2019 年 1 月 29 日 |--- |
+| [2.2.5](#2.2.5) |2018 年 12 月 13 日 |--- |
+| [2.2.4](#2.2.4) |2018 年 11 月 29 日 |--- |
+| [2.2.3](#2.2.3) |2018 年 11 月 19 日 |--- |
+| [2.2.2](#2.2.2) |2018 年 10 月 31 日 |--- |
+| [2.2.1](#2.2.1) |2018 年 10 月 24 日 |--- |
+| [1.3.3](#1.3.3) |2018 年 5 月 8 日 |--- |
 | [1.3.2](#1.3.2) |2018 年 4 月 18 日 |--- |
 | [1.3.1](#1.3.1) |2018 年 3 月 13 日 |--- |
 | [1.2.0](#1.2.0) |2017 年 10 月 31 日 |--- |
@@ -115,10 +185,10 @@ Microsoft 至少会在停用 SDK 的 **12 个月**之前发出通知，以便顺
 | [1.1.0](#1.1.0) |2017 年 8 月 13 日 |--- |
 | [1.0.0](#1.0.0) |2017 年 7 月 7 日 |--- |
 
-
 ## <a name="faq"></a>常见问题
+
 [!INCLUDE [cosmos-db-sdk-faq](../../includes/cosmos-db-sdk-faq.md)]
 
-## <a name="see-also"></a>另请参阅
-若要了解有关 Cosmos DB 的详细信息，请参阅 [Microsoft Azure Cosmos DB](https://azure.microsoft.com/services/cosmos-db/) 服务页。 
+## <a name="see-also"></a>请参阅
 
+若要了解有关 Cosmos DB 的详细信息，请参阅 [Microsoft Azure Cosmos DB](https://azure.microsoft.com/services/cosmos-db/) 服务页。

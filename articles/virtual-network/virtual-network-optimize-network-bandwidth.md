@@ -1,12 +1,12 @@
 ---
-title: "优化 VM 网络吞吐量 | Microsoft 文档"
-description: "了解如何优化 Azure 虚拟机网络吞吐量。"
+title: 优化 VM 网络吞吐量 | Microsoft 文档
+description: 了解如何优化 Azure 虚拟机网络吞吐量。
 services: virtual-network
 documentationcenter: na
 author: steveesp
 manager: Gerald DeGrace
-editor: 
-ms.assetid: 
+editor: ''
+ms.assetid: ''
 ms.service: virtual-network
 ms.devlang: na
 ms.topic: article
@@ -14,11 +14,12 @@ ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 11/15/2017
 ms.author: steveesp
-ms.openlocfilehash: b604782f917584d1ecec432c20de75f427176ed1
-ms.sourcegitcommit: 059dae3d8a0e716adc95ad2296843a45745a415d
-ms.translationtype: HT
+ms.openlocfilehash: 50d7ca73e5e18f88f5d789e12fc7f26908e8b8f0
+ms.sourcegitcommit: b7a44709a0f82974578126f25abee27399f0887f
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/09/2018
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67202901"
 ---
 # <a name="optimize-network-throughput-for-azure-virtual-machines"></a>优化 Azure 虚拟机网络吞吐量
 
@@ -40,7 +41,7 @@ Azure 虚拟机 (VM) 的默认网络设置可以进一步针对网络吞吐量�
     ```powershell
     Get-NetAdapter | % {Enable-NetAdapterRss -Name $_.Name}
     ```
-    前一个命令没有输出。 该命令更改了 NIC 设置，导致暂时连接丢失大约一分钟。 在连接丢失期间显示“重新连接”对话框。 通常在第三次尝试后，连接会还原。
+    前一个命令没有输出。 该命令更改了 NIC 设置，导致暂时连接丢失大约一分钟。 连接断开期间会显示“重新连接”对话框。 通常在第三次尝试后，连接会还原。
 3. 再次输入 `Get-NetAdapterRss` 命令，确认 RSS 在 VM 中已启用。 如果成功，将返回以下示例输出：
 
     ```powershell
@@ -154,5 +155,5 @@ install.sh #or upgrade.sh if prior LIS was previously installed
 
 ## <a name="next-steps"></a>后续步骤
 * 请参阅[带宽/吞吐量测试 Azure VM](virtual-network-bandwidth-testing.md)，查阅方案的优化结果。
-* 阅读有关如何 [将带宽分配给虚拟机] (virtual-machine-network-throughput.md) 的信息
+* 阅读有关如何[为虚拟机分配带宽](virtual-machine-network-throughput.md)的信息
 * 通过 [Azure 虚拟网络常见问题解答 (FAQ)](virtual-networks-faq.md) 了解详细信息

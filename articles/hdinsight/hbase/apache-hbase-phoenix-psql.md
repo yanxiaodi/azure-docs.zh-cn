@@ -1,29 +1,25 @@
 ---
-title: 使用 psql 将数据批量载入 Phoenix - Azure HDInsight | Microsoft Docs
-description: 使用 psql 工具将数据批量载入 Phoenix 表。
-services: hdinsight
-documentationcenter: ''
+title: 使用 psql 将数据批量载入 Apache Phoenix - Azure HDInsight
+description: 使用 psql 工具将数据批量加载到 Azure HDInsight 中的 Apache Phoenix 表中
 author: ashishthaps
-manager: jhubbard
-editor: cgronlun
-ms.assetid: ''
+ms.reviewer: jasonh
 ms.service: hdinsight
 ms.custom: hdinsightactive
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 11/10/2017
 ms.author: ashishth
-ms.openlocfilehash: 54d3b7ae22162d84ef6287945d4ff95fa1274874
-ms.sourcegitcommit: d78bcecd983ca2a7473fff23371c8cfed0d89627
-ms.translationtype: HT
+ms.openlocfilehash: 43465a1c31b953620c45dfe759de7b6e1b4dc3c9
+ms.sourcegitcommit: 083aa7cc8fc958fc75365462aed542f1b5409623
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/14/2018
+ms.lasthandoff: 09/11/2019
+ms.locfileid: "70917270"
 ---
-# <a name="bulk-load-data-into-phoenix-using-psql"></a>使用 psql 将数据大容量加载到 Phoenix
+# <a name="bulk-load-data-into-apache-phoenix-using-psql"></a>使用 psql 将数据批量加载到 Apache Phoenix
 
-[Apache Phoenix](http://phoenix.apache.org/) 是构建在 [HBase](../hbase/apache-hbase-overview.md) 基础之上的开源大规模并行关系数据库。 Phoenix 通过 HBase 提供类似于 SQL 的查询。 Phoenix 使用 JDBC 驱动程序，可让用户创建、删除和更改 SQL 表、索引、视图与序列，以及单独或批量更新插入行。 Phoenix 使用 noSQL 本机编译而不是 MapReduce 来编译查询，以及在 HBase 的顶层创建低延迟的应用程序。 Phoenix 添加了协处理器，支持在服务器的地址空间中运行客户端提供的代码，执行与数据共置的代码。 这样可将客户端/服务器数据传输延迟降到最低。  若要在 HDInsight 中使用 Phoenix 处理数据，请先创建表，然后将数据载入这些表。
+[Apache Phoenix](https://phoenix.apache.org/) 是构建在 [Apache HBase](../hbase/apache-hbase-overview.md) 基础之上的开源大规模并行关系数据库。 Phoenix 通过 HBase 提供类似于 SQL 的查询。 Phoenix 使用 JDBC 驱动程序，可让用户创建、删除和更改 SQL 表、索引、视图与序列，以及单独或批量更新插入行。 Phoenix 使用 noSQL 本机编译而不是 MapReduce 来编译查询，以及在 HBase 的顶层创建低延迟的应用程序。 Phoenix 添加了协处理器，支持在服务器的地址空间中运行客户端提供的代码，执行与数据共置的代码。 这样可将客户端/服务器数据传输延迟降到最低。  若要在 HDInsight 中使用 Phoenix 处理数据，请先创建表，然后将数据载入这些表。
 
-## <a name="bulk-loading-with-phoenix"></a>使用 Phoenix 批量加载数据
+## <a name="bulk-loading-with-apache-phoenix"></a>使用 Apache Phoenix 大容量加载数据
 
 可通过多种方法将数据载入 HBase，包括使用客户端 API、结合 TableOutputFormat 的 MapReduce 作业，或使用 HBase  Shell 手动输入数据。 Phoenix 提供两种方法用于将 CSV 数据载入 Phoenix 表：一个名为 `psql` 的客户端加载工具，以及一个基于 MapReduce 的批量加载工具。
 
@@ -31,9 +27,9 @@ ms.lasthandoff: 05/14/2018
 
 由于 MapReduce 使用多个线程，对于极大型的数据卷（通常用于生产方案），可以使用 MapReduce 执行批量加载。
 
-在开始加载数据之前，请先确认是否已启用 Phoenix，并且查询超时设置是否符合预期。  请访问 HDInsight 群集的 Ambari 仪表板，然后依次选择“HBase”和“配置”选项卡。向下滚动，确认 Apache Phoenix 是否已设置为 `enabled`，如下所示：
+在开始加载数据之前，请先确认是否已启用 Phoenix，并且查询超时设置是否符合预期。  请访问 HDInsight 群集的 [Apache Ambari](https://ambari.apache.org/) 仪表板，然后依次选择“HBase”和“配置”选项卡。向下滚动，确认 Apache Phoenix 是否已设置为 `enabled`，如下所示：
 
-![Apache Phoenix HDInsight 群集设置](./media/apache-hbase-phoenix-psql/ambari-phoenix.png)
+![Apache Phoenix HDInsight 群集设置](./media/apache-hbase-phoenix-psql/apache-ambari-phoenix.png)
 
 ### <a name="use-psql-to-bulk-load-tables"></a>使用 `psql` 批量加载表
 
@@ -76,8 +72,8 @@ ms.lasthandoff: 05/14/2018
     python psql.py ZookeeperQuorum createCustomersTable.sql /tmp/customers.csv listCustomers.sql
     ```
 
-    > [!NOTE] 
-    > 若要确定 `ZookeeperQuorum` 名称，请在 `/etc/hbase/conf/hbase-site.xml` 文件中，使用属性名称 `hbase.zookeeper.quorum` 找到 Zookeeper 仲裁字符串。
+    > [!NOTE]   
+    > 若要确定 `ZookeeperQuorum` 名称，请在文件 `/etc/hbase/conf/hbase-site.xml` 中，使用属性名称 `hbase.zookeeper.quorum` 找到 [Apache ZooKeeper](https://zookeeper.apache.org/) 仲裁字符串。
 
 5. 完成 `psql` 操作后，命令窗口中应会显示一条消息：
 
@@ -118,7 +114,7 @@ ms.lasthandoff: 05/14/2018
     org.apache.phoenix.mapreduce.CsvBulkLoadTool --table Customers --input /inputFolderBulkLoad/customers.csv –zookeeper ZookeeperQuorum:2181:/hbase-unsecure
     ```
 
-8. 若要将 MapReduce 与 ADLS 配合使用，请找到 ADLS 根目录，即 `hbase-site.xml` 中的 `hbase.rootdir` 值。 在以下命令中，ADLS 根目录是 `adl://hdinsightconf1.azuredatalakestore.net:443/hbase1`。 在此命令中，指定 ADLS 输入和输出文件夹作为参数：
+8. 若要配合使用 MapReduce 和 Azure Data Lake Storage，请查找 Data Lake Storage 根目录，即 `hbase-site.xml` 中的 `hbase.rootdir` 值。 在以下命令中，Data Lake Storage 根目录是 `adl://hdinsightconf1.azuredatalakestore.net:443/hbase1`。 在此命令中，指定 Data Lake Storage 输入和输出文件夹作为参数：
 
     ```bash
     cd /usr/hdp/current/phoenix-client
@@ -130,7 +126,7 @@ ms.lasthandoff: 05/14/2018
 
 ## <a name="recommendations"></a>建议
 
-* 对于输入和输出文件夹，请使用相同的存储媒体（WASB 或 ADLS）。 若要将数据从 WASB 传输到 ADLS，可以使用 `distcp` 命令：
+* 对于输入和输出文件夹，请使用相同的存储媒体，Azure 存储 (WASB) 或者 Azure Data Lake Storage (ADL)。 若要将数据从 Azure 存储转移到 Data Lake Storage，可以使用 `distcp` 命令：
 
     ```bash
     hadoop distcp wasb://@.blob.core.windows.net/example/data/gutenberg adl://.azuredatalakestore.net:443/myfolder
@@ -144,7 +140,7 @@ ms.lasthandoff: 05/14/2018
 
 ## <a name="next-steps"></a>后续步骤
 
-* [使用 Apache Phoenix 进行批量数据加载](http://phoenix.apache.org/bulk_dataload.html)
-* [将 Apache Phoenix 与 HDInsight 中基于 Linux 的 HBase 群集配合使用](../hbase/apache-hbase-phoenix-squirrel-linux.md)
+* [使用 Apache Phoenix 进行批量数据加载](https://phoenix.apache.org/bulk_dataload.html)
+* [将 Apache Phoenix 与 HDInsight 中基于 Linux 的 Apache HBase 群集配合使用](../hbase/apache-hbase-phoenix-squirrel-linux.md)
 * [加盐表](https://phoenix.apache.org/salted.html)
-* [Phoenix 语法](http://phoenix.apache.org/language/index.html)
+* [Apache Phoenix 语法](https://phoenix.apache.org/language/index.html)

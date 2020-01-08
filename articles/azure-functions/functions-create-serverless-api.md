@@ -1,35 +1,33 @@
 ---
-title: "使用 Azure Functions 创建无服务器 API | Microsoft Docs"
-description: "如何使用 Azure Functions 创建无服务器 API"
-services: functions
+title: 在 Azure Functions 中自定义 HTTP 终结点
+description: 了解如何在中自定义 HTTP 触发器终结点 Azure Functions
 author: mattchenderson
-manager: cfowler
-ms.service: functions
-ms.tgt_pltfrm: na
-ms.devlang: multiple
-ms.topic: tutorial
+manager: gwallace
+ms.service: azure-functions
+ms.topic: conceptual
 ms.date: 05/04/2017
 ms.author: mahender
 ms.custom: mvc
-ms.openlocfilehash: 7c3933210c01c81077b594abb8c3183d6e3c58a0
-ms.sourcegitcommit: 9a61faf3463003375a53279e3adce241b5700879
-ms.translationtype: HT
+ms.openlocfilehash: f7729f5acb8b7b95004265f6802ba2feb1bc3cd7
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 11/15/2017
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70096761"
 ---
-# <a name="create-a-serverless-api-using-azure-functions"></a>使用 Azure Functions 创建无服务器 API
+# <a name="customize-an-http-endpoint-in-azure-functions"></a>在 Azure Functions 中自定义 HTTP 终结点
 
-本教程介绍如何使用 Azure Functions 构建高度可缩放的 API。 Azure Functions 附带了一系列内置 HTTP 触发器和绑定，方便使用各种语言（包括 Node.JS、C# 等等）创建终结点。 在本教程中，将自定义一个 HTTP 触发器来处理 API 设计中的特定操作。 此外，还要通过将 API 与 Azure Functions 代理集成并设置模拟 API，来准备扩展 API。 所有这些操作会在 Functions 无服务器计算环境的顶层完成，因此，不需要考虑如何缩放资源 - 只需专注于自己的 API 逻辑。
+本文介绍 Azure Functions 如何允许你构建高度可缩放的 Api。 Azure Functions 附带了一系列内置 HTTP 触发器和绑定，方便使用各种语言（包括 Node.JS、C# 等等）创建终结点。 在本文中, 将自定义 HTTP 触发器以处理 API 设计中的特定操作。 此外，还要通过将 API 与 Azure Functions 代理集成并设置模拟 API，来准备扩展 API。 所有这些操作会在 Functions 无服务器计算环境的顶层完成，因此，不需要考虑如何缩放资源 - 只需专注于自己的 API 逻辑。
 
 ## <a name="prerequisites"></a>先决条件 
 
 [!INCLUDE [Previous quickstart note](../../includes/functions-quickstart-previous-topics.md)]
 
-本教程的余下内容将使用生成的函数。
+生成的函数将用于本文的其余部分。
 
 ### <a name="sign-in-to-azure"></a>登录 Azure
 
-打开 Azure 门户。 为此，请使用 Azure 帐户登录到 [https://portal.azure.com](https://portal.azure.com)。
+打开 Azure 门户。 若要执行此操作，请使用 Azure 帐户登录到 [https://portal.azure.com](https://portal.azure.com)。
 
 ## <a name="customize-your-http-function"></a>自定义 HTTP 函数
 
@@ -41,7 +39,7 @@ ms.lasthandoff: 11/15/2017
 
 1. 使用表中指定的 HTTP 触发器设置。
 
-    | 字段 | 示例值 | 说明 |
+    | 字段 | 示例值 | 描述 |
     |---|---|---|
     | 允许的 HTTP 方法 | 选定的方法 | 确定可以使用哪些 HTTP 方法来调用此函数 |
     | 选定的 HTTP 方法 | GET | 只允许使用选定的 HTTP 方法来调用此函数 |
@@ -51,9 +49,9 @@ ms.lasthandoff: 11/15/2017
     > [!NOTE] 
     > 请注意，并未在路由模板中包含 `/api` 基路径前缀，因为此操作由某个全局设置处理。
 
-1. 单击“保存” 。
+1. 单击“保存”。
 
-可以在 [Azure Functions HTTP 和 Webhook 绑定](https://docs.microsoft.com/azure/azure-functions/functions-bindings-http-webhook#customizing-the-http-endpoint)中详细了解如何自定义 HTTP 函数。
+可以在 [Azure Functions HTTP 绑定](https://docs.microsoft.com/azure/azure-functions/functions-bindings-http-webhook)中详细了解如何自定义 HTTP 函数。
 
 ### <a name="test-your-api"></a>测试 API
 
@@ -71,7 +69,7 @@ ms.lasthandoff: 11/15/2017
 
 代理可以指向任何 HTTP 资源，例如：
 - Azure Functions 
-- [Azure 应用服务](https://docs.microsoft.com/azure/app-service/app-service-web-overview)中的 API 应用
+- [Azure 应用服务](https://docs.microsoft.com/azure/app-service/overview)中的 API 应用
 - [Linux 上的应用服务](https://docs.microsoft.com/azure/app-service/containers/app-service-linux-intro)中的 Docker 容器
 - 其他任何托管 API
 
@@ -92,7 +90,7 @@ ms.lasthandoff: 11/15/2017
     > [!NOTE] 
     > 建议在主机配置中使用应用设置，以防止对代理的环境依赖关系进行硬编码。 使用应用设置意味着可以在环境之间移动代理配置，并应用特定于环境的应用设置。
 
-1. 单击“保存” 。
+1. 单击“保存”。
 
 ### <a name="creating-a-proxy-on-the-frontend"></a>在前端上创建代理
 
@@ -101,20 +99,20 @@ ms.lasthandoff: 11/15/2017
     ![创建代理](./media/functions-create-serverless-api/creating-proxy.png)
 1. 使用表中指定的代理设置。 
 
-    | 字段 | 示例值 | 说明 |
+    | 字段 | 示例值 | 描述 |
     |---|---|---|
-    | 名称 | HelloProxy | 仅用于管理的友好名称 |
-    | 路由模板 | /api/hello | 确定可以使用哪个路由来调用此代理 |
+    | 姓名 | HelloProxy | 仅用于管理的友好名称 |
+    | 路由模板 | /api/remotehello | 确定可以使用哪个路由来调用此代理 |
     | 后端 URL | https://%HELLO_HOST%/api/hello | 指定请求应代理的终结点 |
     
 1. 请注意，代理不提供 `/api` 基路径前缀，必须在路由模板中包含此前缀。
 1. `%HELLO_HOST%` 语法将引用前面创建的应用设置。 解析的 URL 将指向原始函数。
-1. 单击“创建” 。
+1. 单击“创建”。
 1. 可以通过复制代理 URL 或使用偏好的 HTTP 客户端在浏览器中对其进行测试来试验新代理。
     1. 对于匿名函数，请使用：
-        1. `https://YOURPROXYAPP.azurewebsites.net/api/hello?name="Proxies"`
+        1. `https://YOURPROXYAPP.azurewebsites.net/api/remotehello?name="Proxies"`
     1. 对于具有授权的函数，请使用：
-        1. `https://YOURPROXYAPP.azurewebsites.net/api/hello?code=YOURCODE&name="Proxies"`
+        1. `https://YOURPROXYAPP.azurewebsites.net/api/remotehello?code=YOURCODE&name="Proxies"`
 
 ## <a name="create-a-mock-api"></a>创建模拟 API
 
@@ -132,7 +130,7 @@ ms.lasthandoff: 11/15/2017
     "proxies": {
         "HelloProxy": {
             "matchCondition": {
-                "route": "/api/hello"
+                "route": "/api/remotehello"
             },
             "backendUri": "https://%HELLO_HOST%/api/hello"
         }
@@ -148,7 +146,7 @@ ms.lasthandoff: 11/15/2017
     "proxies": {
         "HelloProxy": {
             "matchCondition": {
-                "route": "/api/hello"
+                "route": "/api/remotehello"
             },
             "backendUri": "https://%HELLO_HOST%/api/hello"
         },
@@ -176,17 +174,17 @@ ms.lasthandoff: 11/15/2017
 }
 ```
 
-这会添加一个不带 backendUri 属性的新代理“GetUserByName”。 此代理不会调用另一个资源，而是使用响应重写来修改代理的默认响应。 也可以将请求和响应重写与后端 URL 结合使用。 在代理需要修改标头、查询参数等元素的旧式系统时，这种做法特别有效。若要详细了解请求和响应重写，请参阅[修改代理中的请求和响应](https://docs.microsoft.com/azure/azure-functions/functions-proxies#a-namemodify-requests-responsesamodifying-requests-and-responses)。
+这会添加一个不带 backendUri 属性的新代理“GetUserByName”。 此代理不会调用另一个资源，而是使用响应重写来修改代理的默认响应。 也可以将请求和响应重写与后端 URL 结合使用。 在代理需要修改标头、查询参数等元素的旧式系统时，这种做法特别有效。若要详细了解请求和响应重写，请参阅[修改代理中的请求和响应](https://docs.microsoft.com/azure/azure-functions/functions-proxies)。
 
 通过使用浏览器或偏好的 REST 客户端调用 `<YourProxyApp>.azurewebsites.net/api/users/{username}` 终结点来测试模拟 API。 请务必将 _{username}_ 替换为表示用户名的字符串值。
 
 ## <a name="next-steps"></a>后续步骤
 
-本教程已介绍如何在 Azure Functions 中构建和自定义 API。 此外，还介绍了如何将多个 API（包括模拟 API）合并成统一的 API 图面。 可以使用这些方法构建具有不同复杂性的 API，所有这些 API 都可在 Azure Functions 提供的无服务器计算模型上运行。
+本文介绍了如何在 Azure Functions 上构建和自定义 API。 此外，还介绍了如何将多个 API（包括模拟 API）合并成统一的 API 图面。 可以使用这些方法构建具有不同复杂性的 API，所有这些 API 都可在 Azure Functions 提供的无服务器计算模型上运行。
 
 以下参考文档可以帮助进一步开发 API：
 
-- [Azure Functions HTTP 和 Webhook 绑定](https://docs.microsoft.com/azure/azure-functions/functions-bindings-http-webhook)
+- [Azure Functions HTTP 绑定](https://docs.microsoft.com/azure/azure-functions/functions-bindings-http-webhook)
 - [使用 Azure Functions 代理]
 - [记录 Azure Functions API（预览版）](https://docs.microsoft.com/azure/azure-functions/functions-api-definition-getting-started)
 

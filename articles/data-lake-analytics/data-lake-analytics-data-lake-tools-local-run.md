@@ -1,111 +1,112 @@
 ---
-title: "使用本地运行和 Azure Data Lake U-SQL SDK 来测试及调试 U-SQL 作业 | Microsoft 文档"
-description: "了解如何使用用于 Visual Studio 的 Azure Data Lake 工具和 Azure Data Lake U-SQL SDK 来测试及调试本地工作站上的 U-SQL 作业。"
+title: 在本地计算机上运行 Azure Data Lake U-SQL 脚本
+description: 了解如何使用针对 Visual Studio 的 Azure Data Lake 工具在本地计算机上运行 U-SQL 作业。
 services: data-lake-analytics
-documentationcenter: 
-author: mumian
-manager: jhubbard
-editor: cgronlun
+author: yanancai
+ms.author: yanacai
+ms.reviewer: jasonwhowell
 ms.assetid: 66dd58b1-0b28-46d1-aaae-43ee2739ae0a
 ms.service: data-lake-analytics
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
+ms.topic: conceptual
 ms.workload: big-data
-ms.date: 11/15/2016
-ms.author: yanacai
-ms.openlocfilehash: 771a96df5cc66bac46e7144785be8cc072b57b31
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.date: 07/03/2018
+ms.openlocfilehash: 42e58125fcbc3ab411c0d7503c42c14c28178428
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "62113929"
 ---
-# <a name="test-and-debug-u-sql-jobs-by-using-local-run-and-the-azure-data-lake-u-sql-sdk"></a>使用本地运行和 Azure Data Lake U-SQL SDK 来测试及调试 U-SQL 作业
+# <a name="run-u-sql-scripts-on-your-local-machine"></a>在本地计算机上运行 U-SQL 脚本
 
-与在 Azure Data Lake 服务中一样，可以使用用于 Visual Studio 的 Azure Data Lake 工具和 Azure Data Lake U-SQL SDK 在工作站上运行 U-SQL 作业。 这两个本地运行功能可节省测试和调试 U-SQL 作业的时间。
+开发 U-SQL 脚本时，我们通常会在本地运行 U-SQL 脚本，因为这可以节省时间和开支。 针对 Visual Studio 的 Azure Data Lake 工具支持在本地计算机上运行 U-SQL 脚本。 
 
-## <a name="understand-the-data-root-folder-and-the-file-path"></a>了解数据根文件夹和文件路径
+## <a name="basic-concepts-for-local-runs"></a>本地运行的基本概念
 
-本地运行和 U-SQL SDK 都需要数据根文件夹。 数据根文件夹是本地计算帐户的“本地存储”。 它相当于 Data Lake Analytics 帐户的 Azure Data Lake Store 帐户。 切换到不同数据根文件夹与切换到不同存储帐户的操作相同。 如果想要使用不同的数据根文件夹访问一般的共享数据，则必须在脚本中使用绝对路径。 或者，在数据根文件夹下创建指向共享数据的文件系统符号链接（例如，NTFS 上的 **mklink**）。
+以下图表显示用于本地运行的组件以及这些组件如何映射到云运行。
 
-数据根文件夹的用途：
+|组件|本地运行|云运行|
+|---------|---------|---------|
+|存储|本地数据根文件夹|默认 Azure Data Lake Store 帐户|
+|计算|U-SQL 本地运行引擎|Azure Data Lake Analytics 服务|
+|运行环境|本地计算机上的工作目录|Azure Data Lake Analytics 群集|
 
-- 存储元数据，包括数据库、表、表值函数 (TVF) 和程序集。
-- 查找在 U-SQL 中定义为相对路径的输入和输出路径。 使用相对路径可更轻松地将 U-SQL 项目部署到 Azure。
+以下部分提供有关本地运行组件的详细信息。
 
-可在 U-SQL 脚本中使用相对路径和本地绝对路径。 相对路径相对于指定的数据根文件夹路径。 建议使用“/”作为路径分隔符，使脚本与服务器端兼容。 下面是一些相对路径及其等效绝对路径的示例。 在这些示例中，C:\LocalRunDataRoot 是数据根文件夹。
+### <a name="local-data-root-folders"></a>本地数据根文件夹
 
-|相对路径|绝对路径|
-|-------------|-------------|
-|/abc/def/input.csv |C:\LocalRunDataRoot\abc\def\input.csv|
-|abc/def/input.csv  |C:\LocalRunDataRoot\abc\def\input.csv|
-|D:/abc/def/input.csv |D:\abc\def\input.csv|
+本地数据根文件夹是本地计算帐户的**本地存储**。 本地计算机上的本地文件系统中的任何文件夹都可以是本地数据根文件夹。 它等同于 Data Lake Analytics 帐户的默认 Azure Data Lake Store 帐户。 切换到不同数据根文件夹与切换到不同默认存储帐户的操作相同。 
 
-## <a name="use-local-run-from-visual-studio"></a>从 Visual Studio 使用本地运行
+数据根文件夹的用途如下：
+- 存储元数据。 示例包括数据库、表、表值函数和程序集。
+- 查找在 U-SQL 脚本中定义为相对路径的输入和输出路径。 使用相对路径可更轻松地将 U-SQL 脚本部署到 Azure。
 
-用于 Visual Studio 的 Data Lake 工具在 Visual Studio 中提供 U-SQL 本地运行体验。 使用此功能可以：
+### <a name="u-sql-local-run-engines"></a>U-SQL 本地运行引擎
 
-- 本地运行 U-SQL 脚本以及 C# 程序集。
-- 本地调试 C# 程序集。
-- 从服务器资源管理器创建、查看和删除 U-SQL 目录（本地数据库、程序集、架构和表）。 还可以通过服务器资源管理器查找本地目录。
+U-SQL 本地运行引擎是 U-SQL 作业的**本地计算帐户**。 用户可以通过针对 Visual Studio 的 Azure Data Lake 工具在本地运行 U-SQL 作业。 也支持通过 Azure Data Lake U-SQL SDK 命令行和编程接口在本地运行。 详细了解 [Azure Data Lake U-SQL SDK](https://www.nuget.org/packages/Microsoft.Azure.DataLake.USQL.SDK/)。
 
-    ![用于 Visual Studio 的 Data Lake 工具本地运行本地目录](./media/data-lake-analytics-data-lake-tools-local-run/data-lake-tools-for-visual-studio-local-run-local-catalog.png)
+### <a name="working-directories"></a>工作目录
 
-Data Lake 工具安装程序创建要用作默认数据根文件夹的 C:\LocalRunRoot 文件夹。 默认本地运行并行度为 1。
+运行 U-SQL 脚本时，需要使用工作目录文件夹来缓存编译结果、运行日志和执行其他函数。 在针对 Visual Studio 的 Azure Data Lake 工具中，工作目录是 U-SQL 项目的工作目录。 该目录位于 `<U-SQL project root path>/bin/debug>` 下。 工作目录将在每次触发新运行时清理。
 
-### <a name="to-configure-local-run-in-visual-studio"></a>在 Visual Studio 中配置本地运行
+## <a name="local-runs-in-microsoft-visual-studio"></a>Microsoft Visual Studio 中的本地运行
 
-1. 打开 Visual Studio。
-2. 打开“服务器资源管理器”。
-3. 展开“Azure” > “Data Lake Analytics”。
-4. 单击“Data Lake”菜单，并单击“选项和设置”。
-5. 在左侧树中，依次展开“Azure Data Lake”、“常规”。
+针对 Visual Studio 的 Azure Data Lake 工具具有内置的本地运行引擎。 这些工具将引擎展现为本地计算帐户。 若要在本地运行 U-SQL 脚本，请在脚本的编辑器边缘下拉菜单中选择“本地计算机”或“本地项目”帐户。   然后选择“提交”。 
 
-    ![用于 Visual Studio 的 Data Lake 工具本地运行配置设置](./media/data-lake-analytics-data-lake-tools-local-run/data-lake-tools-for-visual-studio-local-run-configure.png)
+![将 U-SQL 脚本提交到本地帐户](./media/data-lake-analytics-data-lake-tools-local-run/data-lake-tools-submit-script-to-local-account.png) 
+ 
+## <a name="local-runs-with-a-local-machine-account"></a>使用本地计算机帐户的本地运行
 
-执行本地运行需要一个 Visual Studio U-SQL 项目。 此部分不同于从 Azure 运行 U-SQL 脚本。
+**本地计算机**帐户是一个共享的本地计算帐户，它含有单个本地数据根文件夹，作为本地存储帐户。 数据根文件夹默认位于 **C:\Users\<username>\AppData\Local\USQLDataRoot**。 也可以通过“工具”   > “Data Lake”   > “选项和设置”  对其进行配置。
 
-### <a name="to-run-a-u-sql-script-locally"></a>本地运行 U-SQL 脚本
-1. 从 Visual Studio，打开 U-SQL 项目。   
-2. 在解决方案资源管理器中，右键单击 U-SQL 脚本，并单击“提交脚本”。
-3. 选择“(本地)”作为本地运行脚本的 Analytics 帐户。
-还可在脚本窗口顶部单击“(本地)”帐户，并单击“提交”（或使用 Ctrl + F5 快捷键）。
+![配置本地数据根文件夹](./media/data-lake-analytics-data-lake-tools-local-run/data-lake-tools-configure-local-data-root.png)
+  
+本地运行需要一个 U-SQL 项目。 U-SQL 项目的工作目录用于 U-SQL 本地运行工作目录。 在本地运行期间生成编译结果、运行日志和其他与作业运行相关的文件，并存储在工作目录文件夹下。 每次重新运行脚本时，工作目录中的所有这些文件都将被清理和重新生成。
 
-    ![用于 Visual Studio 的 Data Lake 工具本地运行提交作业](./media/data-lake-analytics-data-lake-tools-local-run/data-lake-tools-for-visual-studio-local-run-submit-job.png)
+## <a name="local-runs-with-a-local-project-account"></a>使用本地项目帐户的本地运行
 
-### <a name="debug-scripts-and-c-assemblies-locally"></a>在本地调试脚本和 C# 程序集
+**本地项目**帐户是针对每个项目独立于项目的本地计算帐户，具有独立的本地数据根文件夹。 在解决方案资源管理器中打开的每个活动 U-SQL 项目都具有相应的 `(Local-project: <project name>)` 帐户。 该帐户在服务器资源管理器和 U-SQL 脚本编辑器的边缘列出。  
 
-无需将 C# 程序集提交并注册到 Azure Data Lake Analytics 服务即可对其进行调试。 可以在两个代码隐藏文件和引用的 C# 项目中设置断点。
+**本地项目**帐户提供整洁和独立的开发环境。 **本地计算机**帐户具有一个共享的本地数据根文件夹，该文件夹为所有本地作业存储元数据和输入/输出数据。 但是，**本地项目**帐户在 U-SQL 脚本每次运行时，在 U-SQL 项目工作目录下创建一个临时的本地数据根文件夹。 此临时数据根文件夹将在重新生成或重新运行时被清理。 
 
-#### <a name="to-debug-local-code-in-code-behind-file"></a>在代码隐藏文件中调试本地代码
+U-SQL 项目通过项目引用和属性来管理独立的本地运行环境。 可以在项目和引用的数据库环境中配置 U-SQL 脚本的输入数据源。
 
-1. 在代码隐藏文件中设置断点。
-2. 按 F5 在本地调试脚本。
+### <a name="manage-the-input-data-source-for-a-local-project-account"></a>管理本地项目帐户的输入数据源 
 
-> [!NOTE]
-   > 以下过程仅适用于 Visual Studio 2015。 在旧版 Visual Studio 中，可能需要手动添加 pdb 文件。  
-   >
-   >
+U-SQL 项目为**本地项目**帐户创建本地数据根文件夹和设置数据。 每次重新生成和在本地运行时，将在 U-SQL 项目工作目录下清理并重新创建临时数据根文件夹。 由 U-SQL 项目配置的所有数据源将在本地作业运行之前复制到此临时本地数据根文件夹。 
 
-#### <a name="to-debug-local-code-in-a-referenced-c-project"></a>在引用的 C# 项目中调试本地代码
+可以配置数据源的根文件夹。 右键单击“U-SQL 项目”   > “属性”   > “测试数据源”  。 在**本地项目**帐户中运行 U-SQL 脚本时，“测试数据源”文件夹中的所有文件和子文件夹将复制到临时本地数据根文件夹。  包括子文件夹下的文件。 运行本地作业后，还可以在项目工作目录中的临时本地数据根文件夹下找到输出结果。 重新生成和清理项目时，将删除并清理所有这些输出。 
 
-1. 创建 C# 程序集项目，生成该项目以生成输出 dll。
-2. 使用 U-SQL 语句注册该 dll：
+![配置项目的测试数据源](./media/data-lake-analytics-data-lake-tools-local-run/data-lake-tools-configure-project-test-data-source.png)
 
-        CREATE ASSEMBLY assemblyname FROM @"..\..\path\to\output\.dll";
-        
-3. 在 C# 代码中设置断点。
-4. 按 F5，在本地调试引用 C# dll 的脚本。
+### <a name="manage-a-referenced-database-environment-for-a-local-project-account"></a>管理**本地项目**帐户的引用数据库环境 
 
-## <a name="use-local-run-from-the-data-lake-u-sql-sdk"></a>从 Data Lake U-SQL SDK 使用本地运行
+如果 U-SQL 使用 U-SQL 数据库对象或使用它来进行查询，则在本地运行此 U-SQL 脚本前，必须在本地准备好数据库环境。 对于**本地项目**帐户，U-SQL 数据库依赖关系可通过 U-SQL 项目引用进行管理。 可将 U-SQL 数据库项目引用添加到 U-SQL 项目。 在**本地项目**帐户中运行 U-SQL 脚本之前，所有引用的数据库将部署到临时本地数据根文件夹。 每次运行时，临时数据根文件夹将清理为全新的隔离环境。
 
-除使用 Visual Studio 本地运行 U-SQL 脚本外，还可使用 Azure Data Lake U-SQL SDK 通过命令行及编程接口本地运行 U-SQL 脚本。 使用这些方法还可以缩放 U-SQL 本地测试。
+请参阅以下相关文章：
+* 了解如何管理 [U-SQL 数据库项目](data-lake-analytics-data-lake-tools-develop-usql-database.md)中的 U-SQL 数据库定义和引用。
 
-深入了解 [Azure Data Lake U-SQL SDK](data-lake-analytics-u-sql-sdk.md)。
+## <a name="the-difference-between-local-machine-and-local-project-accounts"></a>**本地计算机**和**本地项目**帐户之间的差异
 
+**本地计算机**帐户在用户的本地计算机上模拟 Azure Data Lake Analytics 帐户。 它与 Azure Data Lake Analytics 帐户具有相同的体验。 **本地项目**帐户提供用户友好的本地开发环境。 此环境可帮助用户在本地运行脚本之前部署数据库引用和输入数据。 **本地计算机**帐户提供共享的永久环境，可通过所有项目来访问。 **本地项目**帐户为每个项目提供独立开发环境。 每次运行时都会刷新该环境。 **本地项目**帐户通过快速应用新更改来提供更快的开发体验。
+
+下表描述了**本地计算机**和**本地项目**帐户之间的其他差别：
+
+|差异角度|本地计算机|本地项目|
+|----------------|---------------|---------------|
+|本地访问|可由所有项目访问。|只有相应的项目能够访问此帐户。|
+|本地数据根文件夹|永久本地文件夹。 通过“工具”   > “Data Lake”   > “选项和设置”  进行配置。|为在 U-SQL 项目工作目录下的每个本地运行创建的临时文件夹。 重新生成或重新运行时会清理该文件夹。|
+|U-SQL 脚本的输入数据|永久本地数据根文件夹下的相对路径。|通过“U-SQL 项目属性”   >   “测试数据源”进行设置。 在本地运行之前，会将所有文件和子文件夹复制到临时数据根文件夹。|
+|U-SQL 脚本的输出数据|永久本地数据根文件夹下的相对路径。|输出到临时数据根文件夹。 在重新生成或重新运行时清理结果。|
+|引用的数据库部署|针对**本地计算机**帐户运行时，不会自动部署引用的数据库。 在提交到 Azure Data Lake Analytics 帐户时也是如此。|引用的数据库在本地运行之前自动部署到**本地项目**帐户。 重新生成或重新运行时，会清理和重新部署所有数据库环境。|
+
+## <a name="a-local-run-with-the-u-sql-sdk"></a>使用 U-SQL SDK 的本地运行
+
+可以在 Visual Studio 中本地运行 U-SQL 脚本，此外，还可以使用 Azure Data Lake U-SQL SDK 通过命令行及编程接口在本地运行 U-SQL 脚本。 通过这些接口，可以自动执行 U-SQL 本地运行和测试。
+
+详细了解 [Azure Data Lake U-SQL SDK](data-lake-analytics-u-sql-sdk.md)。
 
 ## <a name="next-steps"></a>后续步骤
 
-* 若要查看更复杂的查询，请参阅 [Analyze website logs using Azure Data Lake Analytics](data-lake-analytics-analyze-weblogs.md)（使用 Azure Data Lake Analytics 分析网站日志）。
-* 若要查看作业详细信息，请参阅 [Use Job Browser and Job View for Azure Data Lake Analytics jobs](data-lake-analytics-data-lake-tools-view-jobs.md)（对 Azure Data Lake Analytics 作业使用作业浏览器和作业视图）。
-* 若要使用顶点执行视图，请参阅 [Use the Vertex Execution View in Data Lake Tools for Visual Studio](data-lake-analytics-data-lake-tools-use-vertex-execution-view.md)（使用用于 Visual Studio 的 Data Lake 工具中的顶点执行视图）。
+- [如何为 Azure Data Lake Analytics 设置 CI/CD 管道](data-lake-analytics-cicd-overview.md)。
+- [如何测试 Azure Data Lake Analytics 代码](data-lake-analytics-cicd-test.md)。

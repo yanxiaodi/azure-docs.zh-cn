@@ -1,26 +1,19 @@
 ---
 title: 在 Power BI 工作区集合中基于数据集创建新报表 | Microsoft Docs
 description: 现在，可以基于自有应用程序中的数据集创建 Power BI 工作区集合报表。
-services: power-bi-embedded
-documentationcenter: ''
-author: markingmyname
-manager: kfile
-editor: ''
-tags: ''
-ROBOTS: NOINDEX
-ms.assetid: ''
+services: power-bi-workspace-collections
 ms.service: power-bi-embedded
-ms.devlang: NA
+author: rkarlin
+ms.author: rkarlin
 ms.topic: article
-ms.tgt_pltfrm: NA
 ms.workload: powerbi
 ms.date: 09/20/2017
-ms.author: maghan
-ms.openlocfilehash: 5c6a52edd708b6077820f2004e83ac7dee945610
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: 2034c62a17b71b92b43a7afd794c2c172288d58c
+ms.sourcegitcommit: 2e4b99023ecaf2ea3d6d3604da068d04682a8c2d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 07/09/2019
+ms.locfileid: "67672444"
 ---
 # <a name="create-a-new-report-from-a-dataset-in-power-bi-workspace-collections"></a>在 Power BI 工作区集合中基于数据集创建新报表
 
@@ -37,7 +30,7 @@ ms.lasthandoff: 04/16/2018
 
 Power BI 工作区集合使用一个嵌入令牌，这是一个 HMAC 已签名 JSON Web 令牌。 已使用 Power BI 工作区集合中的访问密钥对令牌进行了签名。 默认情况下，嵌入令牌用于提供对要嵌入到应用程序的报表的只读访问权限。 嵌入令牌是针对特定报表颁发的，应该与嵌入 URL 相关联。
 
-应在服务器上创建访问令牌，因为要使用访问密钥对令牌进行签名/加密。 有关如何创建访问令牌的信息，请参阅[通过 Power BI 工作区集合进行身份验证和授权](app-token-flow.md)。 此外，还可以查看 [CreateReportEmbedToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken?redirectedfrom=MSDN#methods_) 方法。 以下示例演示了如何使用用于 Power BI 的 .NET SDK。
+应在服务器上创建访问令牌，因为要使用访问密钥对令牌进行签名/加密。 有关如何创建访问令牌的信息，请参阅[通过 Power BI 工作区集合进行身份验证和授权](app-token-flow.md)。 此外，还可以查看 [CreateReportEmbedToken](https://docs.microsoft.com/dotnet/api/microsoft.powerbi.security.powerbitoken?redirectedfrom=MSDN) 方法。 以下示例演示了如何使用用于 Power BI 的 .NET SDK。
 
 在此示例中，我们已有要基于其创建新报表的数据集 ID。 还需要添加 *Dataset.Read 和 Workspace.Report.Create* 的作用域。
 
@@ -45,13 +38,13 @@ Power BI 工作区集合使用一个嵌入令牌，这是一个 HMAC 已签名 J
 
 **安装 NuGet 包**
 
-```
+```powershell
 Install-Package Microsoft.PowerBI.Core
 ```
 
 **C# 代码**
 
-```
+```csharp
 using Microsoft.PowerBI.Security;
 
 // rlsUsername and roles are optional
@@ -63,22 +56,23 @@ var token = embedToken.Generate("{access key}");
 
 ## <a name="create-a-new-blank-report"></a>创建新的空白报表
 
-若要创建新报表，应提供 create 配置。 此配置应包含访问令牌、embedURL，以及用于创建报表的 datasetID。 这就需要安装 [Power BI JavaScript NuGet 包](https://www.nuget.org/packages/Microsoft.PowerBI.JavaScript/)。 embedUrl 将只是 https://embedded.powerbi.com/appTokenReportEmbed。
+若要创建新报表，应提供 create 配置。 此配置应包含访问令牌、embedURL，以及用于创建报表的 datasetID。 这就需要安装 [Power BI JavaScript NuGet 包](https://www.nuget.org/packages/Microsoft.PowerBI.JavaScript/)。 embedUrl 将只是 https://embedded.powerbi.com/appTokenReportEmbed 。
 
 > [!NOTE]
 > 可以使用 [JavaScript 报表嵌入示例](https://microsoft.github.io/PowerBI-JavaScript/demo/)测试功能。 我们还提供了适用于不同操作的代码示例。
 
 **安装 NuGet 包**
 
-```
+```powershell
 Install-Package Microsoft.PowerBI.JavaScript
 ```
 
 **JavaScript 代码**
 
-```
+```html
 <div id="reportContainer"></div>
-  
+
+<script>
 var embedCreateConfiguration = {
         accessToken: 'eyJ0eXAiO...Qron7qYpY9MI',
         embedUrl: 'https://embedded.powerbi.com/appTokenReportEmbed',
@@ -90,6 +84,7 @@ var embedCreateConfiguration = {
 
     // Create report
     var report = powerbi.createReport(reportContainer, embedCreateConfiguration);
+</script>
 ```
 
 调用 *powerbi.createReport()* 会在 *div* 元素中创建一个以编辑模式显示的空白画布。
@@ -98,9 +93,9 @@ var embedCreateConfiguration = {
 
 ## <a name="save-new-reports"></a>保存新报表
 
-在调用“另存为”操作之前，不会创建报表。 可以通过文件菜单或 JavaScript 完成此操作。
+在调用“另存为”操作之前，不会创建报表。  可以通过文件菜单或 JavaScript 完成此操作。
 
-```
+```javascript
  // Get a reference to the embedded report.
     report = powerbi.get(reportContainer);
     
@@ -113,7 +108,7 @@ var embedCreateConfiguration = {
 ```
 
 > [!IMPORTANT]
-> 只有在调用“另存为”之后，才创建新报表。 保存后，画布仍以编辑模式而不是报表模式显示数据集。 需要重新加载新报表，就像使用其他任何报表时一样。
+> 只有在调用“另存为”之后，才创建新报表。  保存后，画布仍以编辑模式而不是报表模式显示数据集。 需要重新加载新报表，就像使用其他任何报表时一样。
 
 ![文件菜单 - 另存为](media/create-report-from-dataset/save-new-report.png)
 
@@ -121,9 +116,9 @@ var embedCreateConfiguration = {
 
 要与新报表交互，需要像应用程序嵌入常规报表一样来嵌入新报表，这意味着，必须专门针对新报表颁发新令牌，并调用 embed 方法。
 
-```
+```html
 <div id="reportContainer"></div>
-  
+<script>
 var embedConfiguration = {
         accessToken: 'eyJ0eXAiO...Qron7qYpY9MJ',
         embedUrl: 'https://embedded.powerbi.com/appTokenReportEmbed',
@@ -135,13 +130,14 @@ var embedConfiguration = {
 
     // Embed report
     var report = powerbi.embed(reportContainer, embedConfiguration);
+</script>
 ```
 
 ## <a name="automate-save-and-load-of-a-new-report-using-the-saved-event"></a>使用“saved”事件自动保存和加载新报表
 
 要自动执行“另存为”过程，并加载新报表，可以使用“saved”事件。 当保存操作已完成并返回包含新 reportId、报表名称、旧 reportId（如果有）的 Json 对象，并且操作是 saveAs 或 save 时，将激发此事件。
 
-```
+```json
 {
   "reportObjectId": "5dac7a4a-4452-46b3-99f6-a25915e0fe54",
   "reportName": "newReport",
@@ -152,9 +148,9 @@ var embedConfiguration = {
 
 要自动执行该过程，可以侦听“saved”事件，提取新的 reportId，创建新令牌，并使用新令牌嵌入新报表。
 
-```
+```html
 <div id="reportContainer"></div>
-  
+<script>
 var embedCreateConfiguration = {
         accessToken: 'eyJ0eXAiO...Qron7qYpY9MI',
         embedUrl: 'https://embedded.powerbi.com/appTokenReportEmbed',
@@ -197,9 +193,10 @@ var embedCreateConfiguration = {
    // report.off removes a given event handler if it exists.
    report.off("saved");
     });
+</script>
 ```
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 
 [示例入门](get-started-sample.md)  
 [保存报表](save-reports.md)  
@@ -210,4 +207,4 @@ var embedCreateConfiguration = {
 [Power BI Core NuGut 包](https://www.nuget.org/packages/Microsoft.PowerBI.Core/)  
 [Power BI JavaScript 包](https://www.nuget.org/packages/Microsoft.PowerBI.JavaScript/)  
 
-有更多问题？ [尝试 Power BI 社区](http://community.powerbi.com/)
+更多问题？ [尝试 Power BI 社区](https://community.powerbi.com/)

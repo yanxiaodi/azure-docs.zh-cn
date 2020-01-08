@@ -1,28 +1,26 @@
 ---
-title: "Azure Functions 运行时概述 | Microsoft Docs"
-description: "Azure Functions 运行时预览版概述"
+title: Azure Functions 运行时概述 | Microsoft Docs
+description: Azure Functions 运行时预览版概述
 services: functions
-documentationcenter: 
 author: apwestgarth
 manager: stefsch
-editor: 
-ms.assetid: 
-ms.service: functions
-ms.workload: na
-ms.tgt_pltfrm: na
-ms.devlang: multiple
-ms.topic: article
+ms.assetid: ''
+ms.service: azure-functions
+ms.topic: conceptual
 ms.date: 11/28/2017
 ms.author: anwestg
-ms.openlocfilehash: 557f071e2cd8d4f639c881274e6e74a8fb745859
-ms.sourcegitcommit: a48e503fce6d51c7915dd23b4de14a91dd0337d8
-ms.translationtype: HT
+ms.openlocfilehash: e67041ca78ba328fad132cc556b12d780eb9b318
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/05/2017
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70095977"
 ---
-# <a name="azure-functions-runtime-overview"></a>Azure Functions 运行时概述
+# <a name="azure-functions-runtime-overview-preview"></a>Azure Functions 运行时概述（预览版）
 
-Azure Functions 运行时提供了一种新方法供你用来在本地利用 Azure Functions 编程模型的简单性和灵活性。 Azure Functions 运行时基于与 Azure Functions 相同的开源代码根而构建，并且部署在本地来提供与云服务几乎完全相同的部署体验。
+[!INCLUDE [intro](../../includes/functions-runtime-preview-note.md)]
+
+Azure Functions 运行时（预览版）提供了一种新方法供你用来在本地利用 Azure Functions 编程模型的简单性和灵活性。 Azure Functions 运行时基于与 Azure Functions 相同的开源代码根而构建，并且部署在本地来提供与云服务几乎完全相同的部署体验。
 
 ![Azure Functions 运行时预览版门户][1]
 

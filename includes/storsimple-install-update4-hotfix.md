@@ -1,21 +1,32 @@
-<!--author=alkohli last changed: 01/23/18-->
-
+---
+author: alkohli
+ms.service: storsimple
+ms.topic: include
+ms.date: 10/26/2018
+ms.author: alkohli
+ms.openlocfilehash: 0755c01fe8e13e8e39c0b453198f2b67c51a2bc4
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67173149"
+---
 #### <a name="to-download-hotfixes"></a>下载修补程序
 
 执行以下步骤，从 Microsoft 更新目录下载软件更新。
 
-1. 启动 Internet Explorer 并导航到 [http://catalog.update.microsoft.com](http://catalog.update.microsoft.com)。
-2. 如果这是你在此计算机上首次使用 Microsoft 更新目录，请在系统提示是否安装 Microsoft 更新目录外接程序时单击“安装”。
+1. 启动 Internet Explorer，并转到 [http://catalog.update.microsoft.com](https://catalog.update.microsoft.com)。
+2. 如果这是你在此计算机上首次使用 Microsoft 更新目录，请在系统提示是否安装 Microsoft 更新目录外接程序时单击“安装”。 
 
     ![安装目录](./media/storsimple-install-update2-hotfix/HCS_InstallCatalog-include.png)
 
-3. 在 Microsoft 更新目录的搜索框中，输入要下载的修补程序的知识库 (KB) 编号（例如 **4011839**），并单击“搜索”。
+3. 在 Microsoft 更新目录的搜索框中，输入要下载的修补程序的知识库 (KB) 编号（例如 **4011839**），并单击“搜索”。 
    
-    随后会显示修补程序列表，例如“适用于 StorSimple 8000 系列的累积软件捆绑包更新 4.0”。
+    随后会显示修补程序列表，例如“适用于 StorSimple 8000 系列的累积软件捆绑包更新 4.0”。 
    
     ![搜索目录](./media/storsimple-install-update2-hotfix/HCS_SearchCatalog1-include.png)
 
-4. 单击“下载”。 指定或**浏览**到下载项要保存到的本地位置。 单击要下载到指定位置和文件夹的文件。 也可以将该文件夹复制到可通过设备访问的网络共享位置。
+4. 单击“下载”  。 指定或**浏览**到下载项要保存到的本地位置。 单击要下载到指定位置和文件夹的文件。 也可以将该文件夹复制到可通过设备访问的网络共享位置。
 5. 搜索上表中列出的任何其他修补程序 (**4011841**)，将相应的文件下载到上表中列出的特定文件夹。
 
 > [!NOTE]
@@ -28,7 +39,7 @@
 执行以下步骤安装和验证常规模式修补程序。 如果已使用 Azure 经典门户安装这些修补程序，请直接跳到[安装和验证维护模式修补程序](#to-install-and-verify-maintenance-mode-hotfixes)。
 
 1. 若要安装修补程序，请访问 StorSimple 设备串行控制台上的 Windows PowerShell 界面。 遵循 [Use PuTTy to connect to the serial console](../articles/storsimple/storsimple-8000-deployment-walkthrough-u2.md#use-putty-to-connect-to-the-device-serial-console)（使用 PuTTy 连接到串行控制台）中的详细说明。 在命令提示符下，按 **Enter**。
-2. 选择“选项 1”，以完全访问权限登录到设备。 建议先在被动控制器中安装修补程序。
+2. 选择选项 1“以完全访问权限登录”  。 建议先在被动控制器中安装修补程序。
 3. 若要安装修补程序，请在命令提示符下键入：
    
     `Start-HcsHotfix -Path <path to update file> -Credential <credentials in domain\username format>`
@@ -41,7 +52,7 @@
    
     安装第一级更新的示例输出显示在下面。 对于第一级更新，需要指向特定文件。
    
-        ````
+        ```
         Controller0>Start-HcsHotfix -Path \\10.100.100.100\share
         \FirstOrderUpdate\HcsSoftwareUpdate.exe -Credential contoso\John
    
@@ -52,7 +63,7 @@
         be disrupted. Are you sure you want to continue?
         [Y] Yes [N] No [?] Help (default is "Y"): Y
    
-        ````
+        ```
 4. 出现确认安装修补程序的提示时，请键入 **Y**。
 5. 使用 `Get-HcsUpdateStatus` 监视更新。 先在被动控制器上完成更新。 更新被动控制器之后，将发生故障转移，然后，更新将应用到另一个控制器。 两个控制器都更新后，更新即告完成。
    
@@ -88,12 +99,12 @@
     应该会看到以下版本：
    
    * `FriendlySoftwareVersion: StorSimple 8000 Series Update 4.0`
-   *  `HcsSoftwareVersion: 6.3.9600.17820`
+   * `HcsSoftwareVersion: 6.3.9600.17820`
    
-    如果在应用更新后版本号并未更改，则表示此修补程序未成功应用。 如果出现这种情况，请联系 [Microsoft 支持](../articles/storsimple/storsimple-contact-microsoft-support.md)获取进一步的帮助。
+     如果在应用更新后版本号并未更改，则表示此修补程序未成功应用。 如果出现这种情况，请联系 [Microsoft 支持](../articles/storsimple/storsimple-contact-microsoft-support.md)获取进一步的帮助。
      
-    > [!IMPORTANT]
-    > 必须先通过 `Restart-HcsController` cmdlet 重启主动控制器，然后应用下一更新。
+     > [!IMPORTANT]
+     > 必须先通过 `Restart-HcsController` cmdlet 重启主动控制器，然后应用下一更新。
      
 7. 重复步骤 3-5，安装下载到 _FirstOrderUpdate_ 文件夹的 Cis/MDS 代理。 
 8. 重复步骤 3-5，安装第二级更新。 **对于第二级更新，只需运行 `Start-HcsHotfix cmdlet` 并指向第二级更新所在的文件夹，即可安装多个更新。该 cmdlet 将执行此文件夹中所有可用的更新。** 如果更新已安装，则更新逻辑会删除该更新，不应用该更新。 
@@ -153,7 +164,7 @@
         [Y] Yes [N] No (Default is "Y"): Y
         WARNING: Installation is currently in progress. This operation can take several minutes to complete.
 3. 使用 `Get-HcsUpdateStatus` 命令监视安装进度。 当 `RunInProgress` 更改为 `False` 时，即表示更新完成。
-4. 安装完成后，安装维护模式修补程序的控制器将重新启动。 使用选项 1 以完全访问权限登录，并检查磁盘固件版本。 键入：
+4. 安装完成后，安装维护模式修补程序的控制器将重新启动。 使用选项 1“以完全访问权限登录”  登录，并验证磁盘固件版本。 键入：
    
    `Get-HcsFirmwareVersion`
    

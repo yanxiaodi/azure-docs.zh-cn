@@ -3,19 +3,21 @@ title: 开始使用表存储和 Visual Studio 连接服务（云服务）| Micro
 description: 在使用 Visual Studio 连接服务连接到存储帐户后，如何开始在 Visual Studio 的云服务项目中使用 Azure 表存储
 services: storage
 author: ghogen
-manager: douge
+manager: jillfra
 ms.assetid: a3a11ed8-ba7f-4193-912b-e555f5b72184
 ms.prod: visual-studio-dev15
 ms.technology: vs-azure
-ms.workload: azure
+ms.custom: vs-azure
+ms.workload: azure-vs
 ms.topic: conceptual
 ms.date: 12/02/2016
 ms.author: ghogen
-ms.openlocfilehash: d88e8e85613faa24213b6e12b5ba4f30e3d84f74
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.openlocfilehash: 5e8c1a92e79eea61e2807c7007ccaea5819e8529
+ms.sourcegitcommit: 0e59368513a495af0a93a5b8855fd65ef1c44aac
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 08/15/2019
+ms.locfileid: "69510717"
 ---
 # <a name="getting-started-with-azure-table-storage-and-visual-studio-connected-services-cloud-services-projects"></a>开始使用 Azure 表存储和 Visual Studio 连接服务（云服务项目）
 [!INCLUDE [storage-try-azure-tools-tables](../../includes/storage-try-azure-tools-tables.md)]
@@ -27,12 +29,12 @@ Azure 表存储服务使用户可以存储大量结构化数据。 该服务是�
 
 若要开始，首先需要在存储帐户中创建表。 我们将展示如何使用代码创建 Azure 表，以及如何执行基本的表和实体操作，例如添加、修改、读取和删除表实体。 示例是使用 C\# 代码编写的并使用了[适用于 .NET 的 Microsoft Azure 存储客户端库](https://msdn.microsoft.com/library/azure/dn261237.aspx)。
 
-**注意：**执行 Azure 存储调用的一些 API 是异步的。 有关详细信息，请参阅[使用 Async 和 Await 进行异步编程](http://msdn.microsoft.com/library/hh191443.aspx)。 下面的代码假定正在使用异步编程方法。
+**注意：** 执行 Azure 存储调用的一些 Api 是异步的。 有关详细信息，请参阅[使用 Async 和 Await 进行异步编程](https://msdn.microsoft.com/library/hh191443.aspx)。 下面的代码假定正在使用异步编程方法。
 
 * 有关以编程方式操作表的详细信息，请参阅 [Get started with Azure Table storage using .NET](../storage/storage-dotnet-how-to-use-tables.md)（通过 .NET 开始使用 Azure 表存储）。
 * 有关 Azure 存储的常规信息，请参阅[存储文档](https://azure.microsoft.com/documentation/services/storage/)。
 * 有关 Azure 云服务的常规信息，请参阅[云服务文档](https://azure.microsoft.com/documentation/services/cloud-services/)。
-* 有关编写 ASP.NET 应用程序的详细信息，请参阅 [ASP.NET](http://www.asp.net)。
+* 有关编写 ASP.NET 应用程序的详细信息，请参阅 [ASP.NET](https://www.asp.net)。
 
 ## <a name="access-tables-in-code"></a>使用代码访问表
 若要在云服务项目中访问表，需要在访问 Azure 表存储的任何 C# 源文件中包含以下项。
@@ -86,7 +88,7 @@ Azure 表存储服务使用户可以存储大量结构化数据。 该服务是�
         public string PhoneNumber { get; set; }
     }
 
-将使用之前在“使用代码访问表”中创建的 **CloudTable** 对象完成涉及实体的表操作。 **TableOperation** 对象表示将完成的操作。 以下代码示例演示如何创建 **CloudTable** 对象和 **CustomerEntity** 对象。 为准备此操作，会创建一个 **TableOperation** 以将客户实体插入该表中。 最后，将通过调用 **CloudTable.ExecuteAsync** 执行此操作。
+将使用之前在“使用代码访问表”中创建的 **CloudTable** 对象完成涉及实体的表操作。 **TableOperation** 对象表示将完成的操作。 以下代码示例演示如何创建 **CloudTable** 对象和 **CustomerEntity** 对象。 为准备此操作，会创建一个 **TableOperation** 以将客户实体插入该表中。 最后，通过调用 **CloudTable.ExecuteAsync**执行此操作。
 
     // Create a new customer entity.
     CustomerEntity customer1 = new CustomerEntity("Harp", "Walter");
@@ -101,7 +103,7 @@ Azure 表存储服务使用户可以存储大量结构化数据。 该服务是�
 
 
 ## <a name="insert-a-batch-of-entities"></a>插入一批实体
-可以通过单个写入操作将多个实体插入表中。 以下代码示例将创建两个实体对象（“Jeff Smith”和“Ben Smith”），使用 Insert 方法将它们添加到 **TableBatchOperation** 对象，并通过调用 **CloudTable.ExecuteBatchAsync** 启动操作。
+可以通过单个写入操作将多个实体插入表中。 以下代码示例将创建两个实体对象（“Jeff Smith”和“Ben Smith”），使用 Insert 方法将它们添加到 **TableBatchOperation** 对象，然后通过调用 **CloudTable.ExecuteBatchAsync** 启动操作。
 
     // Create the batch operation.
     TableBatchOperation batchOperation = new TableBatchOperation();

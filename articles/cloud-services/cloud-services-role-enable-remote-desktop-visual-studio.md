@@ -3,19 +3,21 @@ title: 为 Azure 云服务中的角色设置远程桌面连接
 description: 如何配置 Azure 云服务应用程序以允许远程桌面连接
 services: cloud-services
 author: ghogen
-manager: douge
+manager: jillfra
 ms.assetid: f5727ebe-9f57-4d7d-aff1-58761e8de8c1
 ms.prod: visual-studio-dev15
 ms.technology: vs-azure
+ms.custom: vs-azure
 ms.topic: conceptual
-ms.workload: azure
+ms.workload: azure-vs
 ms.date: 03/06/2018
 ms.author: ghogen
-ms.openlocfilehash: fe8b2b59616246743b38aa3b7a7972c092529b5d
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.openlocfilehash: 6a6d045513e3e91c5a8b2004e47378a097be8963
+ms.sourcegitcommit: 0e59368513a495af0a93a5b8855fd65ef1c44aac
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 08/15/2019
+ms.locfileid: "69515918"
 ---
 # <a name="enable-remote-desktop-connection-for-a-role-in-azure-cloud-services-using-visual-studio"></a>使用 Visual Studio 为 Azure 云服务中的角色启用远程桌面连接
 
@@ -28,7 +30,7 @@ ms.lasthandoff: 04/23/2018
 
 Visual Studio 为云服务提供的发布向导中包括一个选项，用于在发布过程中使用提供的凭据启用远程桌面。 使用 Visual Studio 2017 版本 15.4 和更低版本时，比较适合使用此选项。
 
-但是，使用 Visual Studio 2017 版本 15.5 和更高版本时，我们建议避免通过发布向导启用远程桌面，除非你是以独立的开发人员身份工作。 如果其他开发人员会打开你的项目，则应该通过 Azure 门户、PowerShell 或持续部署工作流中的发布定义启用远程桌面。 推出此建议的原因是 Visual Studio 与云服务 VM 中远程桌面的通信方式发生了变化，本文会对此做出解释。
+但是，使用 Visual Studio 2017 版本 15.5 和更高版本时，我们建议避免通过发布向导启用远程桌面，除非你是以独立的开发人员身份工作。 如果其他开发人员会打开你的项目，则应该通过 Azure 门户、PowerShell 或持续部署工作流中的发布管道启用远程桌面。 推出此建议的原因是 Visual Studio 与云服务 VM 中远程桌面的通信方式发生了变化，本文会对此做出解释。
 
 ## <a name="configure-remote-desktop-through-visual-studio-2017-version-154-and-earlier"></a>通过 Visual Studio 2017 版本 15.4 和更低版本配置远程桌面
 
@@ -80,9 +82,9 @@ Certificate with thumbprint [thumbprint] doesn't exist.
 
 ### <a name="deploying-from-a-build-server-with-visual-studio-2017-version-155-and-later"></a>使用 Visual Studio 2017 版本 15.5 和更高版本从生成服务器部署
 
-可以在生成代理中，从装有 Visual Studio 2017 版本 15.5 或更高版本的生成服务器（例如，使用 Visual Studio Team Services）部署云服务项目。 使用此方法时，部署将在可提供加密证书的同一台计算机上进行。
+可以在生成代理中，从装有 Visual Studio 2017 版本 15.5 或更高版本的生成服务器（例如，使用 Azure DevOps Services）部署云服务项目。 使用此方法时，部署将在可提供加密证书的同一台计算机上进行。
 
-若要使用 Visual Studio Team Services 中的 RDP 扩展，请在生成定义中包含以下详细信息：
+若要从 Azure DevOps Services 中使用 RDP 扩展，请在生成管道中包含以下详细信息：
 
 1. 在 MSBuild 参数中包含 `/p:ForceRDPExtensionOverPlugin=true`，确保部署使用 RDP 扩展而不是 RDP 插件。 例如：
 
@@ -93,7 +95,7 @@ Certificate with thumbprint [thumbprint] doesn't exist.
 
 1. 在生成步骤的后面，添加“Azure 云服务部署”步骤并设置其属性。
 
-1. 在部署步骤的后面，添加“Azure Powershell”步骤，将其“显示名称”属性设置为“Azure 部署: 启用 RDP 扩展”（或其他适当的名称），然后选择相应的 Azure订阅。
+1. 在部署步骤之后, 添加**Azure Powershell**步骤, 将其 "**显示名称**" 属性设置为 "Azure 部署:启用 RDP 扩展 "(或另一个合适的名称), 并选择相应的 Azure 订阅。
 
 1. 将“脚本类型”设置为“内联”，并在“内联脚本”字段中粘贴以下代码。 （也可以使用此脚本在项目中创建 `.ps1` 文件，将“脚本类型”设置为“脚本文件路径”，并将“脚本路径”设置为指向该文件。）
 

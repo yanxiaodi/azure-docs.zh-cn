@@ -1,26 +1,29 @@
 ---
-title: "StorSimple 云设备 Update 3 | Microsoft Docs"
-description: "了解如何在 Microsoft Azure 虚拟网络中创建、部署和管理 StorSimple 云设备。 （适用于 StorSimple Update 3 及更高版本）。"
+title: StorSimple 云设备 Update 3 | Microsoft Docs
+description: 了解如何在 Microsoft Azure 虚拟网络中创建、部署和管理 StorSimple 云设备。 （适用于 StorSimple Update 3 及更高版本）。
 services: storsimple
-documentationcenter: 
+documentationcenter: ''
 author: alkohli
 manager: timlt
-editor: 
-ms.assetid: 
+editor: ''
+ms.assetid: ''
 ms.service: storsimple
 ms.devlang: NA
-ms.topic: hero-article
+ms.topic: conceptual
 ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 11/08/2017
 ms.author: alkohli
-ms.openlocfilehash: 4d47b5426da5d857085991767faa5fb227476408
-ms.sourcegitcommit: 8c3267c34fc46c681ea476fee87f5fb0bf858f9e
-ms.translationtype: HT
+ms.openlocfilehash: 01ce952ea774ba852c83d0d6aa3fe38d5dfd677e
+ms.sourcegitcommit: 5d6c8231eba03b78277328619b027d6852d57520
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/09/2018
+ms.lasthandoff: 08/13/2019
+ms.locfileid: "68965726"
 ---
 # <a name="deploy-and-manage-a-storsimple-cloud-appliance-in-azure-update-3-and-later"></a>在 Azure 中部署和管理 StorSimple 云设备（Update 3 及更高版本）
+
+[!INCLUDE [storsimple-8000-eol-banner](../../includes/storsimple-8000-eol-banner.md)]
 
 ## <a name="overview"></a>概述
 
@@ -39,12 +42,12 @@ StorSimple 8000 系列云设备是 Microsoft Azure StorSimple 解决方案附带
 
 StorSimple 云设备以两种型号提供：标准 8010（前身为 1100）和高级 8020（在 Update 2 引入的）。 下表提供了这两种型号的对比。
 
-| 设备型号 | 8010<sup>1</sup> | 8020 |
+| 设备模型 | 8010<sup>1</sup> | 8020 |
 | --- | --- | --- |
 | **最大容量** |30 TB |64 TB |
 | **Azure VM** |Standard_A3（4 核，7 GB 内存）| Standard_DS3（4 核，14 GB 内存）|
 | **上市区域** |所有 Azure 区域 |支持高级存储和 DS3 Azure VM 的 Azure 区域<br></br>请使用[此列表](https://azure.microsoft.com/regions/services/)，看“虚拟机”>“DS 系列”和“存储”>“磁盘存储”在区域是否均可用。 |
-| **存储类型** |为本地磁盘使用 Azure 标准存储<br></br> 了解如何 [创建标准存储帐户](../storage/common/storage-create-storage-account.md) |为本地磁盘使用 Azure 高级存储<sup>2</sup> <br></br>了解如何[创建高级存储帐户](../virtual-machines/windows/premium-storage.md) |
+| **存储类型** |为本地磁盘使用 Azure 标准存储<br></br> 了解如何 [创建标准存储帐户](../storage/common/storage-create-storage-account.md) |为本地磁盘使用 Azure 高级存储<sup>2</sup> <br></br> |
 | **工作负荷指导** |在级别从备份中检索文件 |云开发和测试方案 <br></br>低延迟和更高性能工作负载<br></br>用于灾难恢复的辅助设备 |
 
 <sup>1</sup>*前身为 1100*。
@@ -61,7 +64,7 @@ StorSimple 云设备是软件形式的 StorSimple，在 Microsoft Azure 虚拟�
 
 |  | 物理设备 | 云设备 |
 | --- | --- | --- |
-| **位置** |驻留在数据中心。 |在 Azure 中运行。 |
+| **Location** |驻留在数据中心。 |在 Azure 中运行。 |
 | **网络接口** |有六个网络接口：DATA 0 到 DATA 5。 |只有一个网络接口：DATA 0。 |
 | **注册** |在初始配置步骤中注册的。 |注册是一个单独的任务。 |
 | **服务数据加密密钥** |在物理设备上重新生成，并使用新密钥更新云设备。 |无法从云设备重新生成。 |
@@ -93,7 +96,7 @@ StorSimple 云设备是软件形式的 StorSimple，在 Microsoft Azure 虚拟�
 创建云设备之前，请对 StorSimple Device Manager 服务进行以下更新：
 
 * 针对要用作云设备主机服务器的 VM 添加[访问控制记录](storsimple-8000-manage-acrs.md)。
-* 使用与云设备位于同一区域中的[存储帐户](storsimple-8000-manage-storage-accounts.md#add-a-storage-account)。 使用不同区域中的存储帐户可能导致性能不佳。 可以将标准或高级存储帐户用于云设备。 如何创建[标准存储帐户](../storage/common/storage-create-storage-account.md)或[高级存储帐户](../virtual-machines/windows/premium-storage.md)的详细信息
+* 使用与云设备位于同一区域中的[存储帐户](storsimple-8000-manage-storage-accounts.md#add-a-storage-account)。 使用不同区域中的存储帐户可能导致性能不佳。 可以将标准或高级存储帐户用于云设备。 有关如何创建[标准存储帐户](../storage/common/storage-create-storage-account.md)的详细信息。
 * 用于创建云设备的存储帐户应该与用于存储数据的存储帐户不同。 使用相同的存储帐户可能会导致性能不佳。
 
 在开始之前，请确保已准备好以下信息：
@@ -115,7 +118,7 @@ StorSimple 云设备是软件形式的 StorSimple，在 Microsoft Azure 虚拟�
 
 如果在此步骤中创建云设备失败，可能是因为没有连接到 Internet。 有关详细信息，请转到[排查创建云设备时遇到的 Internet 连接问题](#troubleshoot-internet-connectivity-errors)。
 
-### <a name="step-2-configure-and-register-the-cloud-appliance"></a>步骤 2：配置并注册云设备
+### <a name="step-2-configure-and-register-the-cloud-appliance"></a>步骤 2：配置和注册云设备
 
 开始此过程之前，请确保已获得服务数据加密密钥的副本。 服务数据加密密钥是在向 StorSimple Device Manager 服务注册第一台 StorSimple 物理设备时创建的。 创建时会指示将其保存在一个安全位置。 如果没有服务数据加密密钥的副本，则必须联系 Microsoft 支持部门获得帮助。
 
@@ -264,7 +267,7 @@ DR 的先决条件如下：
 ## <a name="troubleshoot-internet-connectivity-errors"></a>对 Internet 连接错误进行故障排除
 创建云设备时，如果没有 Internet 连接，则创建步骤会失败。 若要排查 Internet 连接故障，请在 Azure 门户中执行以下步骤：
 
-1. [在 Azure 中创建 Windows server 2012 虚拟机](/articles/virtual-machines/windows/quick-create-portal.md)。 此虚拟机应使用与云设备相同的存储帐户、VNet 和子网。 如果 Azure 中存在使用相同存储帐户、VNet 和子网的现有 Windows Server 主机，也可以使用它来排除 Internet 连接故障。
+1. [在 Azure 门户中创建 Windows 虚拟机](https://docs.microsoft.com/azure/virtual-machines/windows/quick-create-portal)。 此虚拟机应使用与云设备相同的存储帐户、VNet 和子网。 如果 Azure 中存在使用相同存储帐户、VNet 和子网的现有 Windows Server 主机，也可以使用它来排除 Internet 连接故障。
 2. 远程登录到上一步中创建的虚拟机。
 3. 打开虚拟机内的命令窗口（Win + R，并键入 `cmd`）。
 4. 在提示符处运行以下 cmd。

@@ -4,28 +4,31 @@ description: 如何在 Azure 虚拟机中启用嵌套虚拟化
 services: virtual-machines-windows
 documentationcenter: virtual-machines
 author: cynthn
-manager: jeconnoc
+manager: gwallace
 ms.author: cynthn
 ms.date: 10/09/2017
-ms.topic: howto
+ms.topic: conceptual
 ms.service: virtual-machines-windows
 ms.tgt_pltfrm: vm-windows
 ms.workload: infrastructure
-ms.openlocfilehash: 0648a7555cb94543dadf5d73e0187927a90f5b5a
-ms.sourcegitcommit: 1362e3d6961bdeaebed7fb342c7b0b34f6f6417a
-ms.translationtype: HT
+ms.openlocfilehash: 843dfa64cdf0af3ad6cfd3a9f83c16f0ce85fcd0
+ms.sourcegitcommit: dad277fbcfe0ed532b555298c9d6bc01fcaa94e2
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/18/2018
+ms.lasthandoff: 07/10/2019
+ms.locfileid: "67720211"
 ---
 # <a name="how-to-enable-nested-virtualization-in-an-azure-vm"></a>如何在 Azure VM 中启用嵌套虚拟化
 
-Azure 虚拟机的 Dv3 和 Ev3 系列支持嵌套虚拟化。 此功能可在支持开发、测试、培训和演示环境等方面提供极大的灵活性。 
+多个 Azure 虚拟机系列支持嵌套虚拟化。 此功能可在支持开发、测试、培训和演示环境等方面提供极大的灵活性。   
 
-本文逐步介绍如何在 Azure VM 上启用嵌套虚拟化，并配置到该来宾虚拟机的 Internet 连接。
+本文逐步介绍如何在 Azure VM 上启用 Hyper-V，并配置到该来宾虚拟机的 Internet 连接。
 
-## <a name="create-a-dv3-or-ev3-series-azure-vm"></a>创建 Dv3 或 Ev3 系列 Azure VM
+## <a name="create-a-nesting-capable-azure-vm"></a>创建一个支持嵌套的 Azure VM
 
-创建新的 Windows Server 2016 Azure VM 并从 Dv3 或 Ev3 系列中选择一个大小。 请确保选择的大小要足以能够支持来宾虚拟机的需求。 在此示例中，我们将使用 D3_v3 大小的 Azure VM。 
+创建新的 Windows Server 2016 Azure VM。  为了快速参考，所有 v3 虚拟机都支持嵌套虚拟化。 有关支持嵌套的虚拟机大小的完整列表，请参阅[Azure 计算单位](acu.md)一文。
+
+请记得选择足以支持来宾虚拟机需求的 VM 大小。 在此示例中，我们将使用 D3_v3 大小的 Azure VM。 
 
 可以在[此处](https://azure.microsoft.com/regions/services/)查看 Dv3 或 Ev3 系列虚拟机的区域可用性。
 
@@ -41,7 +44,7 @@ Azure 虚拟机的 Dv3 和 Ev3 系列支持嵌套虚拟化。 此功能可在支
 
 2. 若要连接到 VM，请打开下载的 RDP 文件。 出现提示时，请单击“连接”。 在 Mac 上，需要一个 RDP 客户端，例如 Mac 应用商店提供的这个[远程桌面客户端](https://itunes.apple.com/us/app/microsoft-remote-desktop/id715768417?mt=12)。
 
-3. 输入在创建虚拟机时指定的用户名和密码，单击“确定”。
+3. 输入在创建虚拟机时指定的用户名和密码，并单击“确定”。
 
 4. 你可能会在登录过程中收到证书警告。 单击“是”或“继续”继续进行连接。
 
@@ -49,7 +52,7 @@ Azure 虚拟机的 Dv3 和 Ev3 系列支持嵌套虚拟化。 此功能可在支
 你可以手动配置这些设置，或者使用我们提供的 PowerShell 脚本来自动完成配置。
 
 ### <a name="option-1-use-a-powershell-script-to-configure-nested-virtualization"></a>选项 1：使用 PowerShell 脚本配置嵌套虚拟化
-在 [GitHub](https://github.com/charlieding/Virtualization-Documentation/tree/live/hyperv-tools/Nested) 上提供了用于在 Windows Server 2016 主机上启用嵌套虚拟化的 PowerShell 脚本。 该脚本将首先检查先决条件，然后在 Azure VM 上配置嵌套虚拟化。 必须重启 Azure VM 才能完成配置。 此脚本在其他环境中也可以运行，但不能保证。 有关在 Azure 上运行嵌套虚拟化的现场视频演示，请查看 Azure 博客文章！ https://aka.ms/AzureNVblog。
+在 [GitHub](https://github.com/charlieding/Virtualization-Documentation/tree/live/hyperv-tools/Nested) 上提供了用于在 Windows Server 2016 主机上启用嵌套虚拟化的 PowerShell 脚本。 该脚本将首先检查先决条件，然后在 Azure VM 上配置嵌套虚拟化。 必须重启 Azure VM 才能完成配置。 此脚本在其他环境中也可以运行，但不能保证。 有关在 Azure 上运行嵌套虚拟化的现场视频演示，请查看 Azure 博客文章！ [https://aka.ms/AzureNVblog](https://aka.ms/AzureNVblog )。
 
 ### <a name="option-2-configure-nested-virtualization-manually"></a>选项 2：手动配置嵌套虚拟化
 
@@ -77,7 +80,7 @@ Azure 虚拟机的 Dv3 和 Ev3 系列支持嵌套虚拟化。 此功能可在支
 2. 创建内部交换机。
 
     ```powershell
-    New-VMSwitch -Name "InternalNATSwitch" -SwitchType Internal
+    New-VMSwitch -Name "InternalNAT" -SwitchType Internal
     ```
 
 3. 查看交换机的属性，并记下新适配器的 ifIndex。
@@ -117,6 +120,10 @@ New-NetNat -Name "InternalNat" -InternalIPInterfaceAddressPrefix 192.168.0.0/24
 
 ## <a name="create-the-guest-virtual-machine"></a>创建来宾虚拟机
 
+>[!IMPORTANT] 
+>
+>Azure 来宾代理不支持嵌套在 Vm 上，并可能导致上的主机和嵌套的 Vm 问题。 不要在嵌套 Vm 上安装 Azure 代理和不使用映像创建的嵌套的 Vm 已安装了 Azure 来宾代理。
+
 1. 打开 Hyper-V 管理器并创建新的虚拟机。 配置虚拟机以使用你创建的新内部网络。
     
     ![NetworkConfig](./media/virtual-machines-nested-virtualization/configure-networking.png)
@@ -154,7 +161,7 @@ New-NetNat -Name "InternalNat" -InternalIPInterfaceAddressPrefix 192.168.0.0/24
   
 4. 为你的 DCHP 服务器定义 IP 范围（例如，192.168.0.100 到 192.168.0.200）。
   
-5. 单击“下一步”直到出现“默认网关”页。 输入之前创建的 IP 地址（例如，192.168.0.1）作为默认网关。
+5. 单击“下一步”直到出现“默认网关”页。 输入之前创建的 IP 地址（例如，192.168.0.1）作为默认网关，然后单击“添加”。
   
 6. 单击“下一步”直到完成向导，保留所有默认值，然后单击“完成”。
     
@@ -177,3 +184,7 @@ New-NetNat -Name "InternalNat" -InternalIPInterfaceAddressPrefix 192.168.0.0/24
 
 在来宾虚拟机中，打开浏览器并导航到网页。
     ![GuestVM](./media/virtual-machines-nested-virtualization/guest-virtual-machine.png)
+
+## <a name="set-up-intranet-connectivity-for-the-guest-virtual-machine"></a>设置来宾虚拟机的 Intranet 连接
+
+有关如何在来宾 VM 和 Azure VM 之间启用透明连接的说明，请参阅[此文档](https://docs.microsoft.com/virtualization/hyper-v-on-windows/user-guide/nested-virtualization-azure-virtual-network)。

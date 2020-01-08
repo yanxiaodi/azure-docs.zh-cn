@@ -3,28 +3,28 @@ title: SQL Server FCI - Azure 虚拟机 | Microsoft 文档
 description: 本文介绍如何在 Azure 虚拟机上创建 SQL Server 故障转移群集实例。
 services: virtual-machines
 documentationCenter: na
-authors: MikeRayMSFT
+author: MikeRayMSFT
 manager: craigg
 editor: monicar
 tags: azure-service-management
 ms.assetid: 9fc761b1-21ad-4d79-bebc-a2f094ec214d
 ms.service: virtual-machines-sql
-ms.devlang: na
 ms.custom: na
 ms.topic: article
 ms.tgt_pltfrm: vm-windows-sql-server
 ms.workload: iaas-sql-server
-ms.date: 13/22/2018
+ms.date: 06/11/2018
 ms.author: mikeray
-ms.openlocfilehash: 425310f50cebc920a71090d2017dca2a6c135991
-ms.sourcegitcommit: 20d103fb8658b29b48115782fe01f76239b240aa
-ms.translationtype: HT
+ms.openlocfilehash: 3e954a6c714e525e5bbefe8f62c798cf8ac9a517
+ms.sourcegitcommit: 0fab4c4f2940e4c7b2ac5a93fcc52d2d5f7ff367
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/03/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71036389"
 ---
 # <a name="configure-sql-server-failover-cluster-instance-on-azure-virtual-machines"></a>在 Azure 虚拟机上配置 SQL Server 故障转移群集实例
 
-本文介绍如何在 Resource Manager 模型中的 Azure 虚拟机上创建 SQL Server 故障转移群集实例 (FCI)。 此解决方案使用 [Windows Server 2016 Datacenter Edition 存储空间直通 \(S2D\)](http://technet.microsoft.com/windows-server-docs/storage/storage-spaces/storage-spaces-direct-overview) 作为基于软件的虚拟 SAN，在 Windows 群集中的节点 (Azure VM) 之间同步存储（数据磁盘）。 S2D 是 Windows Server 2016 中的新增功能。
+本文介绍如何在 Resource Manager 模型中的 Azure 虚拟机上创建 SQL Server 故障转移群集实例 (FCI)。 此解决方案使用 [Windows Server 2016 Datacenter Edition 存储空间直通 \(S2D\)](https://technet.microsoft.com/windows-server-docs/storage/storage-spaces/storage-spaces-direct-overview) 作为基于软件的虚拟 SAN，在 Windows 群集中的节点 (Azure VM) 之间同步存储（数据磁盘）。 S2D 是 Windows Server 2016 中的新增功能。
 
 下图显示了 Azure 虚拟机上的完整解决方案：
 
@@ -43,21 +43,21 @@ ms.lasthandoff: 04/03/2018
    >[!NOTE]
    >图中的所有 Azure 资源位于同一资源组中。
 
-有关 S2D 的详细信息，请参阅 [Windows Server 2016 Datacenter Edition 存储空间直通 \(S2D\)](http://technet.microsoft.com/windows-server-docs/storage/storage-spaces/storage-spaces-direct-overview)。
+有关 S2D 的详细信息，请参阅 [Windows Server 2016 Datacenter Edition 存储空间直通 \(S2D\)](https://technet.microsoft.com/windows-server-docs/storage/storage-spaces/storage-spaces-direct-overview)。
 
-S2D 支持两种类型的体系结构 - 聚合与超聚合。 本文档中所述的体系结构为超聚合。 超聚合基础结构将存储放置在托管群集应用程序的相同服务器上。 在此体系结构中，存储位于每个 SQL Server FCI 节点上。
+S2D 支持两种类型的体系结构 - 聚合与超聚合。 本文档中所述的体系结构为超聚合。 超融合基础设施将存储放置在承载群集应用程序的相同服务器上。 在此体系结构中，存储位于每个 SQL Server FCI 节点上。
 
 ## <a name="licensing-and-pricing"></a>许可与定价
 
 在 Azure 虚拟机上，可按即付即用 (PAYG) 方式许可 SQL Server 或自带许可证 (BYOL) VM 映像。 选择的映像类型会影响收费方式。
 
-使用 PAYG 许可，Azure 虚拟机上的 SQL Server 的故障转移群集实例 (FCI) 会对 FCI 的所有节点（包括被动节点）收取费用。 有关详细信息，请参阅 [SQL Server Enterprise 虚拟机定价](http://azure.microsoft.com/pricing/details/virtual-machines/sql-server-enterprise/)。 
+使用 PAYG 许可，Azure 虚拟机上的 SQL Server 的故障转移群集实例 (FCI) 会对 FCI 的所有节点（包括被动节点）收取费用。 有关详细信息，请参阅 [SQL Server Enterprise 虚拟机定价](https://azure.microsoft.com/pricing/details/virtual-machines/sql-server-enterprise/)。 
 
-与软件保障达成企业协议的客户有权为每个活动节点使用一个免费的被动 FCI 节点。 要在 Azure 中利用此优势，请使用 BYOL VM 映像，然后在 FCI 的主动节点和被动节点上使用相同的许可证。 有关详细信息，请参阅[企业协议](http://www.microsoft.com/en-us/Licensing/licensing-programs/enterprise.aspx)。
+与软件保障达成企业协议的客户有权为每个活动节点使用一个免费的被动 FCI 节点。 要在 Azure 中利用此优势，请使用 BYOL VM 映像，然后在 FCI 的主动节点和被动节点上使用相同的许可证。 有关详细信息，请参阅[企业协议](https://www.microsoft.com/Licensing/licensing-programs/enterprise.aspx)。
 
 如需比较 Azure 虚拟机中 SQL Server 的 PAYG 和 BYOL 许可，请参阅 [SQL VM 入门](virtual-machines-windows-sql-server-iaas-overview.md#get-started-with-sql-vms)。
 
-有关许可 SQL Server 的完整信息，请参阅[定价](http://www.microsoft.com/sql-server/sql-server-2017-pricing)。
+有关许可 SQL Server 的完整信息，请参阅[定价](https://www.microsoft.com/sql-server/sql-server-2017-pricing)。
 
 ### <a name="example-azure-template"></a>示例 Azure 模板
 
@@ -70,13 +70,18 @@ S2D 支持两种类型的体系结构 - 聚合与超聚合。 本文档中所述
 ### <a name="what-to-know"></a>要了解的事项
 应该对以下技术有实际的了解：
 
-- [Windows 群集技术](http://technet.microsoft.com/library/hh831579.aspx)
--  [SQL Server 故障转移群集实例](http://msdn.microsoft.com/library/ms189134.aspx)
+- [Windows 群集技术](https://docs.microsoft.com/windows-server/failover-clustering/failover-clustering-overview)
+- [SQL Server 故障转移群集实例](https://docs.microsoft.com/sql/sql-server/failover-clusters/windows/always-on-failover-cluster-instances-sql-server)
+
+一个重要的差别在于，在 Azure IaaS VM 来宾故障转移群集上，我们建议每个服务器（群集节点）使用一个 NIC 和一个子网。 Azure 网络具有物理冗余，这使得在 Azure IaaS VM 来宾群集上不需要额外的 NIC 和子网。 虽然群集验证报告将发出警告，指出节点只能在单个网络上访问，但在 Azure IaaS VM 来宾故障转移群集上可以安全地忽略此警告。 
 
 另外，应该对以下技术有大致的了解：
 
-- [Windows Server 2016 中使用存储空间直通的超聚合解决方案](http://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct)
-- [Azure 资源组](../../../azure-resource-manager/resource-group-portal.md)
+- [Windows Server 2016 中使用存储空间直通的超聚合解决方案](https://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct)
+- [Azure 资源组](../../../azure-resource-manager/manage-resource-groups-portal.md)
+
+> [!IMPORTANT]
+> 目前，Azure 上的 SQL Server FCI 不支持 [SQL Server IaaS 代理扩展](virtual-machines-windows-sql-server-agent-extension.md)。 我们建议你从参与 FCI 的 VM 中卸载扩展。 此扩展支持自动备份和修补等功能，以及 SQL 的一些门户功能。 卸载代理后，这些功能对 SQL VM 不起作用。
 
 ### <a name="what-to-have"></a>准备工作
 
@@ -95,7 +100,7 @@ S2D 支持两种类型的体系结构 - 聚合与超聚合。 本文档中所述
 
 ## <a name="step-1-create-virtual-machines"></a>步骤 1：创建虚拟机
 
-1. 使用订阅登录到 [Azure 门户](http://portal.azure.com)。
+1. 使用订阅登录到 [Azure 门户](https://portal.azure.com)。
 
 1. [创建 Azure 可用性集](../tutorial-availability-sets.md)。
 
@@ -103,7 +108,7 @@ S2D 支持两种类型的体系结构 - 聚合与超聚合。 本文档中所述
 
    如果尚未为虚拟机创建资源组，请在创建 Azure 可用性集时执行该操作。 若要使用 Azure 门户创建可用性集，请执行以下步骤：
 
-   - 在 Azure 门户中，单击 **+** 打开 Azure Marketplace。 搜索“可用性集”。
+   - 在 Azure 门户中，单击 **+** 打开 Azure 市场。 搜索“可用性集”。
    - 单击“可用性集”。
    - 单击“创建”。
    - 在“创建可用性集”边栏选项卡中设置以下值：
@@ -129,7 +134,7 @@ S2D 支持两种类型的体系结构 - 聚合与超聚合。 本文档中所述
       >[!IMPORTANT]
       >创建虚拟机后无法设置或更改可用性集。
 
-   从 Azure Marketplace 中选择一个映像。 可以使用同时包含 Windows Server 和 SQL Server 或者只包含 Windows Server 的 Marketplace 映像。 有关详细信息，请参阅 [Azure 虚拟机上的 SQL Server 概述](virtual-machines-windows-sql-server-iaas-overview.md)
+   从 Azure 市场中选择一个映像。 可以使用同时包含 Windows Server 和 SQL Server 或者只包含 Windows Server 的市场映像。 有关详细信息，请参阅 [Azure 虚拟机上的 SQL Server 概述](virtual-machines-windows-sql-server-iaas-overview.md)
 
    Azure 库中的正式 SQL Server 映像包含已安装的 SQL Server 实例，以及 SQL Server 安装软件和所需的密钥。
 
@@ -148,11 +153,11 @@ S2D 支持两种类型的体系结构 - 聚合与超聚合。 本文档中所述
    >[!IMPORTANT]
    >创建虚拟机后，删除预装的独立 SQL Server 实例。 配置故障转移群集和 S2D 之后，将使用预装的 SQL Server 媒体创建 SQL Server FCI。
 
-   或者，可以使用只包含操作系统的 Azure Marketplace 映像。 选择一个 **Windows Server 2016 Datacenter** 映像，并在配置故障转移群集和 S2D 后安装 SQL Server FCI。 此映像不包含 SQL Server 安装媒体。 将安装媒体放在可以针对每个服务器运行 SQL Server 安装的位置。
+   或者，可以使用只包含操作系统的 Azure 市场映像。 选择一个 **Windows Server 2016 Datacenter** 映像，并在配置故障转移群集和 S2D 后安装 SQL Server FCI。 此映像不包含 SQL Server 安装媒体。 将安装媒体放在可以针对每个服务器运行 SQL Server 安装的位置。
 
 1. Azure 在创建虚拟机之后，将使用 RDP 连接到每个虚拟机。
 
-   首次使用 RDP 连接到虚拟机时，计算机将询问是否允许在网络上发现此 PC。 单击 **“是”**。
+   首次使用 RDP 连接到虚拟机时，计算机将询问是否允许在网络上发现此 PC。 单击 **“是”** 。
 
 1. 如果使用某个基于 SQL Server 的虚拟机映像，请删除 SQL Server 实例。
 
@@ -169,12 +174,12 @@ S2D 支持两种类型的体系结构 - 聚合与超聚合。 本文档中所述
 
    在每个虚拟机上的 Windows 防火墙中打开以下端口。
 
-   | 目的 | TCP 端口 | 说明
+   | 用途 | TCP 端口 | 说明
    | ------ | ------ | ------
    | SQL Server | 1433 | SQL Server 的默认实例正常使用的端口。 如果使用了库中的某个映像，此端口会自动打开。
    | 运行状况探测 | 59999 | 任何打开的 TCP 端口。 在后面的步骤中，需要将负载均衡器[运行状况探测](#probe)和群集配置为使用此端口。  
 
-1. 将存储添加到虚拟机。 有关详细信息，请参阅[添加存储](../premium-storage.md)。
+1. 将存储添加到虚拟机。 有关详细信息，请参阅[添加存储](../disks-types.md)。
 
    这两个虚拟机至少需要两个数据磁盘。
 
@@ -182,7 +187,7 @@ S2D 支持两种类型的体系结构 - 聚合与超聚合。 本文档中所述
       >[!NOTE]
       >如果附加 NTFS 格式化的磁盘，只能启用不带磁盘合格性检查的 S2D。  
 
-   将至少两个高级存储（SSD 磁盘）附加到每个 VM。 建议至少附加 P30 (1 TB) 磁盘。
+   将至少两个高级 SSD 附加到每个 VM。 建议至少附加 P30 (1 TB) 磁盘。
 
    将主机缓存设置为“只读”。
 
@@ -216,16 +221,16 @@ S2D 支持两种类型的体系结构 - 聚合与超聚合。 本文档中所述
 
    若要使用 PowerShell 安装故障转移群集功能，请在某个虚拟机上通过管理员 PowerShell 会话运行以下脚本。
 
-   ```PowerShell
+   ```powershell
    $nodes = ("<node1>","<node2>")
    Invoke-Command  $nodes {Install-WindowsFeature Failover-Clustering -IncludeAllSubFeature -IncludeManagementTools}
    ```
 
-特此指出，后续步骤遵循了[Windows Server 2016 中使用存储空间直通的超聚合解决方案](http://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct#step-3-configure-storage-spaces-direct)中“步骤 3”下面的说明。
+特此指出，后续步骤遵循了[Windows Server 2016 中使用存储空间直通的超聚合解决方案](https://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct#step-3-configure-storage-spaces-direct)中“步骤 3”下面的说明。
 
 ### <a name="validate-the-cluster"></a>验证群集
 
-本指南参考了[验证群集](http://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct#step-31-run-cluster-validation)中的说明。
+本指南参考了[验证群集](https://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct#step-31-run-cluster-validation)中的说明。
 
 使用 UI 或 PowerShell 验证群集。
 
@@ -233,21 +238,21 @@ S2D 支持两种类型的体系结构 - 聚合与超聚合。 本文档中所述
 
 1. 在“服务器管理器”中单击“工具”，并单击“故障转移群集管理器”。
 1. 在“故障转移群集管理器”中单击“操作”，并单击“验证配置...”。
-1. 单击“资源组名称” 的 Azure 数据工厂。
+1. 单击“资源组名称”的 Azure 数据工厂。
 1. 在“选择服务器或群集”中，键入两个虚拟机的名称。
-1. 在“测试选项”中，选择“仅运行选择的测试”。 单击“资源组名称” 的 Azure 数据工厂。
+1. 在“测试选项”中，选择“仅运行选择的测试”。 单击“下一步”。
 1. 在“测试选择”中，包含除“存储”以外的所有测试。 参阅下图：
 
    ![验证测试](./media/virtual-machines-windows-portal-sql-create-failover-cluster/10-validate-cluster-test.png)
 
-1. 单击“资源组名称” 的 Azure 数据工厂。
+1. 单击“下一步”。
 1. 在“确认”中，单击“下一步”。
 
 “验证配置向导”将运行验证测试。
 
 若要使用 PowerShell 验证群集，请在某个虚拟机上通过管理员 PowerShell 会话运行以下脚本。
 
-   ```PowerShell
+   ```powershell
    Test-Cluster –Node ("<node1>","<node2>") –Include "Storage Spaces Direct", "Inventory", "Network", "System Configuration"
    ```
 
@@ -255,50 +260,61 @@ S2D 支持两种类型的体系结构 - 聚合与超聚合。 本文档中所述
 
 ### <a name="create-the-failover-cluster"></a>创建故障转移群集
 
-本指南参考了[创建故障转移群集](http://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct#step-32-create-a-cluster)。
+本指南参考了[创建故障转移群集](https://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct#step-32-create-a-cluster)。
 
 若要创建故障转移群集，需要：
 - 成为群集节点的虚拟机的名称。
 - 故障转移群集的名称
 - 故障转移群集的 IP 地址。 可以使用群集节点所在的同一 Azure 虚拟网络和子网中未使用的 IP 地址。
 
-以下 PowerShell 可创建故障转移群集。 使用节点的名称（虚拟机名称）以及 Azure VNET 中可用的 IP 地址更新脚本：
+#### <a name="windows-server-2008-2016"></a>Windows Server 2008-2016
 
-```PowerShell
+以下 PowerShell 为**Windows Server 2008-2016**创建一个故障转移群集。 使用节点的名称（虚拟机名称）以及 Azure VNET 中可用的 IP 地址更新脚本：
+
+```powershell
 New-Cluster -Name <FailoverCluster-Name> -Node ("<node1>","<node2>") –StaticAddress <n.n.n.n> -NoStorage
 ```   
+
+#### <a name="windows-server-2019"></a>Windows Server 2019
+
+以下 PowerShell 为 Windows Server 2019 创建一个故障转移群集。  有关详细信息，请查看博客[故障转移群集：群集网络对象](https://blogs.windows.com/windowsexperience/2018/08/14/announcing-windows-server-2019-insider-preview-build-17733/#W0YAxO8BfwBRbkzG.97)。  使用节点的名称（虚拟机名称）以及 Azure VNET 中可用的 IP 地址更新脚本：
+
+```powershell
+New-Cluster -Name <FailoverCluster-Name> -Node ("<node1>","<node2>") –StaticAddress <n.n.n.n> -NoStorage -ManagementPointNetworkType Singleton 
+```
+
 
 ### <a name="create-a-cloud-witness"></a>创建云见证
 
 云见证是 Azure 存储 Blob 中存储的新型群集仲裁见证。 使用云见证就无需单独使用一个 VM 来托管见证共享。
 
-1. [为故障转移群集创建云见证](http://technet.microsoft.com/windows-server-docs/failover-clustering/deploy-cloud-witness)。
+1. [为故障转移群集创建云见证](https://technet.microsoft.com/windows-server-docs/failover-clustering/deploy-cloud-witness)。
 
 1. 创建 Blob 容器。
 
 1. 保存访问密钥和容器 URL。
 
-1. 配置故障转移群集仲裁见证。 请参阅 [在用户界面中配置仲裁见证] (http://technet.microsoft.com/windows-server-docs/failover-clustering/deploy-cloud-witness#to-configure-cloud-witness-as-a-quorum-witness)。
+1. 配置故障转移群集仲裁见证。 请参阅[在用户界面中配置仲裁见证](https://technet.microsoft.com/windows-server-docs/failover-clustering/deploy-cloud-witness#to-configure-cloud-witness-as-a-quorum-witness)。
 
 ### <a name="add-storage"></a>添加存储
 
-S2D 的磁盘需是空的，不包含分区或其他数据。 若要清除磁盘，请遵循[此指南中的步骤](http://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct#step-34-clean-disks)。
+S2D 的磁盘需是空的，不包含分区或其他数据。 若要清除磁盘，请遵循[此指南中的步骤](https://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct#step-34-clean-disks)。
 
-1. [启用存储空间直通 \(S2D\)](http://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct#step-35-enable-storage-spaces-direct)。
+1. [启用存储空间直通 \(S2D\)](https://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct#step-35-enable-storage-spaces-direct)。
 
    以下 PowerShell 可启用存储空间直通。  
 
-   ```PowerShell
+   ```powershell
    Enable-ClusterS2D
    ```
 
    现在，“故障转移群集管理器”中会显示存储池。
 
-1. [创建卷](http://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct#step-36-create-volumes)。
+1. [创建卷](https://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct#step-36-create-volumes)。
 
    S2D 中的某个功能可自动创建存储池（如果已启用此功能）。 接下来，可以创建卷。 PowerShell cmdlet `New-Volume` 可自动完成卷的创建过程，包括格式化、添加到群集，以及创建群集共享卷 (CSV)。 以下示例创建一个 800 千兆字节 (GB) 的 CSV。
 
-   ```PowerShell
+   ```powershell
    New-Volume -StoragePoolFriendlyName S2D* -FriendlyName VDisk01 -FileSystem CSVFS_REFS -Size 800GB
    ```   
 
@@ -320,7 +336,7 @@ S2D 的磁盘需是空的，不包含分区或其他数据。 若要清除磁盘
 
 1. 在“故障转移群集管理器”中，确保所有群集核心资源位于第一个虚拟机上。 如有必要，请将所有资源移到此虚拟机。
 
-1. 找到安装媒体。 如果虚拟机使用某个 Azure Marketplace 映像，该媒体将位于 `C:\SQLServer_<version number>_Full`。 单击“设置”。
+1. 找到安装媒体。 如果虚拟机使用某个 Azure 市场映像，该媒体将位于 `C:\SQLServer_<version number>_Full`。 单击“设置”。
 
 1. 在“SQL Server 安装中心”中单击“安装”。
 
@@ -339,7 +355,7 @@ S2D 的磁盘需是空的，不包含分区或其他数据。 若要清除磁盘
 1. 单击“将节点添加到 SQL Server 故障转移群集”。 遵照向导中的说明安装 SQL Server 并将此服务器添加到 FCI。
 
    >[!NOTE]
-   >如果使用了包含 SQL Server 的 Azure Marketplace 库映像，该映像已随附 SQL Server 工具。 如果未使用此映像，需单独安装 SQL Server 工具。 请参阅 [Download SQL Server Management Studio (SSMS)](http://msdn.microsoft.com/library/mt238290.aspx)（下载 SQL Server Management Studio (SSMS)）。
+   >如果使用了包含 SQL Server 的 Azure 市场库映像，该映像已随附 SQL Server 工具。 如果未使用此映像，需单独安装 SQL Server 工具。 请参阅 [Download SQL Server Management Studio (SSMS)](https://msdn.microsoft.com/library/mt238290.aspx)（下载 SQL Server Management Studio (SSMS)）。
 
 ## <a name="step-5-create-azure-load-balancer"></a>步骤 5：创建 Azure 负载均衡器
 
@@ -353,7 +369,7 @@ S2D 的磁盘需是空的，不包含分区或其他数据。 若要清除磁盘
 
 1. 在 Azure 门户中，转到虚拟机所在的资源组。
 
-1. 单击“+ 添加”。 在 Marketplace 中搜索“负载均衡器”。 单击“负载均衡器”。
+1. 单击“+ 添加”。 在市场中搜索“负载均衡器”。 单击“负载均衡器”。
 
 1. 单击“创建”。
 
@@ -393,8 +409,8 @@ S2D 的磁盘需是空的，不包含分区或其他数据。 若要清除磁盘
 
    - **名称**：运行状况探测的名称。
    - **协议**：TCP。
-   - **端口**：设置为可用的 TCP 端口。 此端口需是打开的防火墙端口。 使用在防火墙中为运行状况探测设置的[同一端口](#ports)。
-   - **间隔**：5 秒。
+   - **端口**：设置为你在[此步骤](#ports)中在防火墙中为运行状况探测创建的端口。 在本文中，示例使用了 TCP 端口 `59999`。
+   - **时间间隔**：5 秒。
    - **不正常阈值**：2 次连续失败。
 
 1. 单击“确定”。
@@ -414,10 +430,10 @@ S2D 的磁盘需是空的，不包含分区或其他数据。 若要清除磁盘
    - **后端池**：使用前面配置的后端池名称。
    - **运行状况探测**：使用前面配置的运行状况探测。
    - **会话持久性**：无。
-   - **空闲超时(分钟)**：4。
-   - **浮动 IP (直接服务器返回)**：已启用
+   - **空闲超时(分钟)** ：4.
+   - **浮动 IP (直接服务器返回)** ：Enabled
 
-1. 单击“确定”。
+1. 单击 **“确定”** 。
 
 ## <a name="step-6-configure-cluster-for-probe"></a>步骤 6：为探测配置群集
 
@@ -425,7 +441,7 @@ S2D 的磁盘需是空的，不包含分区或其他数据。 若要清除磁盘
 
 若要设置群集探测端口参数，请使用环境中的值更新以下脚本中的变量。 从脚本中删除尖括号 `<>`。 
 
-   ```PowerShell
+   ```powershell
    $ClusterNetworkName = "<Cluster Network Name>"
    $IPResourceName = "<SQL Server FCI IP Address Resource Name>" 
    $ILBIP = "<n.n.n.n>" 
@@ -451,7 +467,7 @@ S2D 的磁盘需是空的，不包含分区或其他数据。 若要清除磁盘
 
 设置群集探测后，可在 PowerShell 中看到所有群集参数。 运行以下脚本：
 
-   ```PowerShell
+   ```powershell
    Get-ClusterResource $IPResourceName | Get-ClusterParameter 
   ```
 
@@ -474,17 +490,23 @@ S2D 的磁盘需是空的，不包含分区或其他数据。 若要清除磁盘
 若要测试连接，请登录到同一虚拟网络中的另一个虚拟机。 打开“SQL Server Management Studio”并连接到 SQL Server FCI 名称。
 
 >[!NOTE]
->如果需要，可以[下载 SQL Server Management Studio](http://msdn.microsoft.com/library/mt238290.aspx)。
+>如果需要，可以[下载 SQL Server Management Studio](https://msdn.microsoft.com/library/mt238290.aspx)。
 
 ## <a name="limitations"></a>限制
-Azure 虚拟机上的 FCI 不支持 Microsoft 分布式事务处理协调器 (DTC)，因为负载均衡器不支持 RPC 端口。
 
-## <a name="see-also"></a>另请参阅
+Azure 虚拟机支持 Windows Server 2019 上的 Microsoft 分布式事务处理协调器 (MSDTC)，其中存储位于群集共享卷 (CSV) 和[标准负载均衡器](../../../load-balancer/load-balancer-standard-overview.md)上。
 
-[Setup S2D with remote desktop (Azure)](http://technet.microsoft.com/windows-server-docs/compute/remote-desktop-services/rds-storage-spaces-direct-deployment)（使用远程桌面设置 S2D (Azure)）
+在 Azure 虚拟机上，Windows Server 2016 及更早版本不支持 MSDTC，因为：
 
-[Hyper-converged solution with storage spaces direct](http://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct)（包含存储空间直通的超聚合解决方案）
+- 无法将群集 MSDTC 资源配置为使用共享存储。 对于 Windows Server 2016，如果创建 MSDTC 资源，即使存储存在，也不会显示任何可用的共享存储。 Windows Server 2019 中已修复此问题。
+- 基本负载均衡器不处理 RPC 端口。
 
-[Storage Space Direct Overview](http://technet.microsoft.com/windows-server-docs/storage/storage-spaces/storage-spaces-direct-overview)（存储空间直通概述）
+## <a name="see-also"></a>请参阅
+
+[Setup S2D with remote desktop (Azure)](https://technet.microsoft.com/windows-server-docs/compute/remote-desktop-services/rds-storage-spaces-direct-deployment)（使用远程桌面设置 S2D (Azure)）
+
+[Hyper-converged solution with storage spaces direct](https://technet.microsoft.com/windows-server-docs/storage/storage-spaces/hyper-converged-solution-using-storage-spaces-direct)（包含存储空间直通的超聚合解决方案）
+
+[Storage Space Direct Overview](https://technet.microsoft.com/windows-server-docs/storage/storage-spaces/storage-spaces-direct-overview)（存储空间直通概述）
 
 [SQL Server support for S2D](https://blogs.technet.microsoft.com/dataplatforminsider/2016/09/27/sql-server-2016-now-supports-windows-server-2016-storage-spaces-direct/)（S2D 的 SQL Server 支持）

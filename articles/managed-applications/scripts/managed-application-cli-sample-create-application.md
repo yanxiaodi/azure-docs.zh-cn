@@ -1,6 +1,6 @@
 ---
-title: "Azure CLI 脚本示例 - 部署托管应用程序 | Microsoft Docs"
-description: "Azure CLI 脚本示例 - 部署托管应用程序定义"
+title: Azure CLI 脚本示例 - 部署托管应用程序 | Microsoft Docs
+description: Azure CLI 脚本示例 - 部署托管应用程序定义
 services: managed-applications
 documentationcenter: na
 author: tfitzmac
@@ -12,11 +12,12 @@ ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 10/25/2017
 ms.author: tomfitz
-ms.openlocfilehash: 3090284a89cfeb1fe8b6446e55e2731e1155167f
-ms.sourcegitcommit: 8c3267c34fc46c681ea476fee87f5fb0bf858f9e
+ms.openlocfilehash: f09d9dcb60370c2cc51f5652def92e5ad9c9b512
+ms.sourcegitcommit: 3102f886aa962842303c8753fe8fa5324a52834a
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/09/2018
+ms.lasthandoff: 04/23/2019
+ms.locfileid: "61226355"
 ---
 # <a name="deploy-a-managed-application-for-service-catalog-with-azure-cli"></a>使用 Azure CLI 为服务目录部署托管应用程序
 
@@ -38,7 +39,7 @@ ms.lasthandoff: 03/09/2018
 
 | 命令 | 说明 |
 |---|---|
-| [az managedapp create](https://docs.microsoft.com/cli/azure/managedapp#az_managedapp_create) | 创建托管应用程序。 提供模板的定义 ID 和参数。 |
+| [az managedapp create](https://docs.microsoft.com/cli/azure/managedapp#az-managedapp-create) | 创建托管应用程序。 提供模板的定义 ID 和参数。 |
 
 
 ## <a name="next-steps"></a>后续步骤

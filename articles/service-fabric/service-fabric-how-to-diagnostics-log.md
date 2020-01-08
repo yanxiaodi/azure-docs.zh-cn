@@ -3,8 +3,8 @@ title: 从 Azure 或独立群集中的 .NET Service Fabric 应用生成日志事
 description: 了解如何向 Azure 群集或独立群集中托管的 .NET Service Fabric 应用程序添加日志记录。
 services: service-fabric
 documentationcenter: .net
-author: thraka
-manager: timlt
+author: srrengar
+manager: chackdan
 editor: ''
 ms.assetid: ''
 ms.service: service-fabric
@@ -13,12 +13,13 @@ ms.topic: conceptual
 ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 03/27/2018
-ms.author: adegeo
-ms.openlocfilehash: ed9aaf67b4f6749ea6d505a51fbc76e3d1cf0870
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.author: srrengar
+ms.openlocfilehash: d1b3dc25dd9bda9d7f9d9152c2a94cea8321f5cf
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60482601"
 ---
 # <a name="add-logging-to-your-service-fabric-application"></a>向 Service Fabric 应用程序添加日志记录
 
@@ -131,7 +132,7 @@ ASP.NET Core 日志记录（[Microsoft.Extensions.Logging NuGet 包](https://www
 
 ### <a name="using-other-logging-providers"></a>使用其他日志记录提供程序
 
-某些第三方提供程序（包括 [Serilog](https://serilog.net/)、[NLog](http://nlog-project.org/) 和 [Loggr](https://github.com/imobile3/Loggr.Extensions.Logging)）可以使用上一部分所述的方法。 可将其中的每个提供程序插入 ASP.NET Core 日志记录，也可以单独使用。 Serilog 中的某个功能可以扩充记录器发出的所有消息。 此功能对服务名称、类型和分区信息的输出可能很有作用。 若要在 ASP.NET Core 基础结构中使用此功能，请执行以下步骤：
+某些第三方提供程序（包括 [Serilog](https://serilog.net/)、[NLog](https://nlog-project.org/) 和 [Loggr](https://github.com/imobile3/Loggr.Extensions.Logging)）可以使用上一部分所述的方法。 可将其中的每个提供程序插入 ASP.NET Core 日志记录，也可以单独使用。 Serilog 中的某个功能可以扩充记录器发出的所有消息。 此功能对服务名称、类型和分区信息的输出可能很有作用。 若要在 ASP.NET Core 基础结构中使用此功能，请执行以下步骤：
 
 1. 将 **Serilog**、**Serilog.Extensions.Logging**、**Serilog.Sinks.Literate** 和 **Serilog.Sinks.Observable** NuGet 包添加到项目。 
 2. 创建 `LoggerConfiguration` 和记录器实例。
@@ -169,7 +170,7 @@ ASP.NET Core 日志记录（[Microsoft.Extensions.Logging NuGet 包](https://www
 5. 可以像在不使用 Serilog 的情况下运行 ASP.NET Core 一样检测代码。
 
    >[!NOTE]
-   >建议不要在前面的示例中使用静态 `Log.Logger`。 Service Fabric 可在单个进程中托管同一服务类型的多个实例。 如果使用静态 `Log.Logger`，属性扩充器的最后一个写入者会显示所有正在运行的实例的值。 这是 _logger 变量为何是服务类的专用成员变量的原因之一。 另外，必须将 `_logger` 提供给可跨服务使用的通用代码使用。
+   >建议不要在前面的示例中使用静态 `Log.Logger`  。 Service Fabric 可在单个进程中托管同一服务类型的多个实例。 如果使用静态 `Log.Logger`，属性扩充器的最后一个写入者会显示所有正在运行的实例的值。 这是 _logger 变量为何是服务类的专用成员变量的原因之一。 另外，必须将 `_logger` 提供给可跨服务使用的通用代码使用。
 
 ## <a name="next-steps"></a>后续步骤
 

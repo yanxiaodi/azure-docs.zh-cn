@@ -1,35 +1,30 @@
 ---
-title: 适用于 Azure 的 MongoDB、Angular 和 Node 教程 - 第 6 部分 | Microsoft Docs
+title: 使用 Azure Cosmos DB 的用于 MongoDB 的 API 创建 Angular 应用 - 将 CRUD 函数添加至应用
+titleSuffix: Azure Cosmos DB
 description: 本教程系列的第 6 部分，介绍如何通过 Angular 和 Node 在 Azure Cosmos DB 上创建 MongoDB 应用，所使用的 API 与用于 MongoDB 的 API 完全相同
-services: cosmos-db
-documentationcenter: ''
-author: SnehaGunda
-manager: kfile
-editor: ''
-ms.assetid: ''
+author: johnpapa
 ms.service: cosmos-db
-ms.workload: ''
-ms.tgt_pltfrm: na
+ms.subservice: cosmosdb-mongo
 ms.devlang: nodejs
 ms.topic: tutorial
-ms.date: 09/05/2017
-ms.author: sngun
-ms.custom: mvc
-ms.openlocfilehash: 00a8cfebbd995d9a1bb99a691fd84bd742855f78
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
+ms.date: 12/26/2018
+ms.author: jopapa
+ms.custom: seodec18
+ms.reviewer: sngun
+ms.openlocfilehash: 42015ca816f2744ef28660c5396db4cfd93a76f0
+ms.sourcegitcommit: 8330a262abaddaafd4acb04016b68486fba5835b
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 01/04/2019
+ms.locfileid: "54040551"
 ---
-# <a name="create-a-mongodb-app-with-angular-and-azure-cosmos-db---part-6-add-post-put-and-delete-functions-to-the-app"></a>通过 Angular 和 Azure Cosmos DB 创建 MongoDB 应用 - 第 6 部分：向应用添加 Post、Put 和 Delete 函数
+# <a name="create-an-angular-app-with-azure-cosmos-dbs-api-for-mongodb---add-crud-functions-to-the-app"></a>使用 Azure Cosmos DB 的用于 MongoDB 的 API 创建 Angular 应用 - 将 CRUD 函数添加至应用
 
-本教程包含多个部分，演示了如何通过 Express 和 Angular 创建以 Node.js 编写的新 [MongoDB API](mongodb-introduction.md) 应用，然后将其连接到 Azure Cosmos DB 数据库。
-
-本教程的第 6 部分基于[第 5 部分](tutorial-develop-mongodb-nodejs-part5.md)，涵盖以下任务：
+本教程包含多个部分，演示了如何通过 Express 和 Angular 创建以 Node.js 编写的新应用，然后将其连接到[使用 Cosmos DB 的用于 MongoDB 的 API 配置的 Cosmos 帐户](mongodb-introduction.md)。 本教程的第 6 部分基于[第 5 部分](tutorial-develop-mongodb-nodejs-part5.md)，涵盖以下任务：
 
 > [!div class="checklist"]
 > * 为 hero 服务创建 Post、Put 和 Delete 函数
-> * 运行应用程序
+> * 运行应用
 
 > [!VIDEO https://www.youtube.com/embed/Y5mdAlFGZjc]
 
@@ -56,7 +51,7 @@ ms.lasthandoff: 04/16/2018
 
    ```javascript
    function postHero(req, res) {
-     const originalHero = { id: req.body.id, name: req.body.name, saying: req.body.saying };
+     const originalHero = { uid: req.body.uid, name: req.body.name, saying: req.body.saying };
      const hero = new Hero(originalHero);
      hero.save(error => {
        if (checkServerError(res, error)) return;
@@ -90,13 +85,13 @@ ms.lasthandoff: 04/16/2018
     });
     ```
 
-5. 运行应用，看是否一切正常。 在 Visual Studio Code 中，保存所有更改，单击左侧的“调试”按钮 ![Visual Studio Code 中的“调试”图标](./media/tutorial-develop-mongodb-nodejs-part6/debug-button.png)，然后单击“开始调试”按钮 ![Visual Studio Code 中的“开始调试”图标](./media/tutorial-develop-mongodb-nodejs-part6/start-debugging-button.png)。
+5. 运行应用，看是否一切正常。 在 Visual Studio Code 中，保存所有更改，选择左侧的“调试”按钮 ![Visual Studio Code 中的“调试”图标](./media/tutorial-develop-mongodb-nodejs-part6/debug-button.png)，然后选择“开始调试”按钮 ![Visual Studio Code 中的“开始调试”图标](./media/tutorial-develop-mongodb-nodejs-part6/start-debugging-button.png)。
 
 6. 现在请返回到 Internet 浏览器，打开开发人员工具的“网络”选项卡（在大多数计算机上按 F12 即可）。 导航到 [http://localhost:3000](http://localhost:3000)，观察通过网络进行的调用。
 
     ![Chrome 中的“网络”选项卡，显示网络活动](./media/tutorial-develop-mongodb-nodejs-part6/add-new-hero.png)
 
-7. 通过单击“添加新 Hero”按钮添加新的 hero。 输入“999”作为 ID，“Fred”作为 name，“Hello”作为 saying，然后单击“保存”。 此时会在“网络”选项卡中看到为新的 hero 发送了 POST 请求。 
+7. 通过选择“添加新 Hero”按钮添加新的 hero。 输入“999”作为 ID，“Fred”作为 name，“Hello”作为 saying，然后选择“保存”。 此时会在“网络”选项卡中看到为新的 hero 发送了 POST 请求。 
 
     ![Chrome 中的“网络”选项卡，显示 Get 和 Post 函数的网络活动](./media/tutorial-develop-mongodb-nodejs-part6/post-new-hero.png)
 
@@ -107,11 +102,11 @@ ms.lasthandoff: 04/16/2018
 1. 在 routes.js 中的 post 路由器后添加 `put` 和 `delete` 路由器。
 
     ```javascript
-    router.put('/hero/:id', (req, res) => {
+    router.put('/hero/:uid', (req, res) => {
       heroService.putHero(req, res);
     });
 
-    router.delete('/hero/:id', (req, res) => {
+    router.delete('/hero/:uid', (req, res) => {
       heroService.deleteHero(req, res);
     });
     ```
@@ -124,11 +119,11 @@ ms.lasthandoff: 04/16/2018
    ```javascript
    function putHero(req, res) {
      const originalHero = {
-       id: parseInt(req.params.id, 10),
+       uid: parseInt(req.params.uid, 10),
        name: req.body.name,
        saying: req.body.saying
      };
-     Hero.findOne({ id: originalHero.id }, (error, hero) => {
+     Hero.findOne({ uid: originalHero.uid }, (error, hero) => {
        if (checkServerError(res, error)) return;
        if (!checkFound(res, hero)) return;
 
@@ -143,8 +138,8 @@ ms.lasthandoff: 04/16/2018
    }
 
    function deleteHero(req, res) {
-     const id = parseInt(req.params.id, 10);
-     Hero.findOneAndRemove({ id: id })
+     const uid = parseInt(req.params.uid, 10);
+     Hero.findOneAndRemove({ uid: uid })
        .then(hero => {
          if (!checkFound(res, hero)) return;
          res.status(200).json(hero);
@@ -175,17 +170,17 @@ ms.lasthandoff: 04/16/2018
     };
     ```
 
-4. 更新了代码后，请单击 Visual Studio Code 中的“重启”按钮 ![Visual Studio Code 中的“重启”按钮](./media/tutorial-develop-mongodb-nodejs-part6/restart-debugger-button.png)。
+4. 更新了代码后，请选择 Visual Studio Code 中的“重启”按钮 ![Visual Studio Code 中的“重启”按钮](./media/tutorial-develop-mongodb-nodejs-part6/restart-debugger-button.png)。
 
-5. 刷新 Internet 浏览器中的页面，单击“添加新 Hero”按钮。 添加 ID 为“9”、name 为“Starlord”、saying 为“Hi”的新 hero。 单击“保存”按钮保存新 hero。
+5. 刷新 Internet 浏览器中的页面，选择“添加新 Hero”按钮。 添加 ID 为“9”、name 为“Starlord”、saying 为“Hi”的新 hero。 选择“保存”按钮保存新 hero。
 
-6. 现在请选择 Starlord hero，将 saying 从“Hi”更改为“Bye”，然后单击“保存”按钮。 
+6. 现在请选择 Starlord hero，将 saying 从“Hi”更改为“Bye”，然后选择“保存”按钮。 
 
     现在可以在“网络”选项卡中选择 ID 来显示有效负载了。 可以在有效负载中看到，saying 现在已设置为“Bye”。
 
     ![Heroes 应用和“网络”选项卡，显示有效负载](./media/tutorial-develop-mongodb-nodejs-part6/put-hero-function.png) 
 
-    还可以在 UI 中删除某个 hero，看完成删除操作需要多少时间。 尝试时，可针对名为“Fred”的 hero 单击“删除”按钮。
+    还可以在 UI 中删除某个 hero，看完成删除操作需要多少时间。 尝试时，可针对名为“Fred”的 hero 选择“删除”按钮。
 
     ![Heroes 应用和“网络”选项卡，显示完成函数操作的时间](./media/tutorial-develop-mongodb-nodejs-part6/times.png) 
 

@@ -1,37 +1,32 @@
 ---
-title: 对 Azure Blob 容器、SQL Server 和 Hive 表中的数据采样 | Microsoft Docs
-description: 如何浏览存储在各个 Azure 环境中的数据。
+title: 不同 Azure 存储位置中的示例数据 - Team Data Science Process
+description: Azure blob 容器、SQL Server 和 Hive 表中的示例数据，可将其缩小为更小但更具代表性且更易于管理的大小。
 services: machine-learning
-documentationcenter: ''
-author: deguhath
+author: marktab
 manager: cgronlun
 editor: cgronlun
-ms.assetid: 80a9dfae-e3a6-4cfb-aecc-5701cfc7e39d
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/13/2017
-ms.author: deguhath
-ms.openlocfilehash: 73b0d3992627b7787ee46e61f62717a545c5b9e2
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: fc91aec80f74488125649cfe807757ba5ae49c9b
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60253094"
 ---
 # <a name="heading"></a>对 Azure Blob 容器、SQL Server 和 Hive 表中的数据采样
-本文档所链接到的文章介绍如何对存储在三个不同 Azure 位置之一的数据采样：
 
-* **Azure Blob 容器数据**的采样方法是先以编程方式下载该数据，并使用样本 Python 代码对其采样。
-* **SQL Server 数据**通过使用 SQL 和 Python 编程语言采样。 
-* **Hive 表数据**通过使用 Hive 查询采样。
+以下文章介绍了如何对存储在三个不同 Azure 位置之一的数据进行采样：
 
-以下**菜单**所链接到的主题介绍如何从这些 Azure 存储环境之一采样数据。 
+* [**Azure Blob 容器数据**](sample-data-blob.md)的采样方法是先以编程方式下载该数据，并使用样本 Python 代码对其采样。
+* [**SQL Server 数据**](sample-data-sql-server.md)是使用 SQL 和 Python 编程语言进行采样。 
+* [**Hive 表数据**](sample-data-hive.md)是使用 Hive 查询进行采样。
 
-[!INCLUDE [cap-sample-data-selector](../../../includes/cap-sample-data-selector.md)]
-
-此采样任务是[团队数据科学流程 (TDSP)](https://azure.microsoft.com/documentation/learning-paths/cortana-analytics-process/) 中的一个步骤。
+此采样任务是[团队数据科学流程 (TDSP)](https://docs.microsoft.com/azure/machine-learning/team-data-science-process/) 中的一个步骤。
 
 **为什么对数据采样？**
 

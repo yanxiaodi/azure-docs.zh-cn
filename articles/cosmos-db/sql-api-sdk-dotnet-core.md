@@ -1,59 +1,143 @@
 ---
-title: Azure Cosmos DB：SQL .NET Core API、SDK 和资源 | Microsoft Docs
+title: Azure Cosmos DB：SQL .NET Core API、SDK 和资源
 description: 了解有关 SQL .NET Core API 和 SDK 的所有信息，包括发布日期、停用日期和 Azure Cosmos DB .NET Core SDK 各版本之间所做的更改。
-services: cosmos-db
-documentationcenter: .net
-author: rnagpal
-manager: kfile
-editor: cgronlun
-ms.assetid: f899b314-26ac-4ddb-86b2-bfdf05c2abf2
+author: SnehaGunda
 ms.service: cosmos-db
-ms.workload: data-services
-ms.tgt_pltfrm: na
+ms.subservice: cosmosdb-sql
 ms.devlang: dotnet
-ms.topic: article
+ms.topic: reference
 ms.date: 03/22/2018
-ms.author: rnagpal
-ms.custom: H1Hack27Feb2017
-ms.openlocfilehash: 27e7d5e26cf1705383faf38c4837f6dec0ecd2fb
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.author: sngun
+ms.openlocfilehash: c39db870e44d4e810817b70e2793b8805088180e
+ms.sourcegitcommit: f3f4ec75b74124c2b4e827c29b49ae6b94adbbb7
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 09/12/2019
+ms.locfileid: "70932544"
 ---
-# <a name="azure-cosmos-db-net-core-sdk-for-sql-api-release-notes-and-resources"></a>用于 SQL API 的 Azure Cosmos DB .NET Core SDK：发行说明和资源
+# <a name="azure-cosmos-db-net-core-sdk-for-sql-api-release-notes-and-resources"></a>适用于 SQL API 的 Azure Cosmos DB .NET Core SDK：发行说明和资源
 > [!div class="op_single_selector"]
+> * [.NET Core](sql-api-sdk-dotnet-core.md)
+> * [.NET 标准](sql-api-sdk-dotnet-standard.md)
 > * [.NET](sql-api-sdk-dotnet.md)
 > * [.NET 更改源](sql-api-sdk-dotnet-changefeed.md)
-> * [.NET Core](sql-api-sdk-dotnet-core.md)
 > * [Node.js](sql-api-sdk-node.md)
 > * [异步 Java](sql-api-sdk-async-java.md)
 > * [Java](sql-api-sdk-java.md)
 > * [Python](sql-api-sdk-python.md)
 > * [REST](https://docs.microsoft.com/rest/api/cosmos-db/)
 > * [REST 资源提供程序](https://docs.microsoft.com/rest/api/cosmos-db-resource-provider/)
-> * [SQL](https://msdn.microsoft.com/library/azure/dn782250.aspx)
-> * [BulkExecutor - .NET](sql-api-sdk-bulk-executor-dot-net.md)
-> * [BulkExecutor - Java](sql-api-sdk-bulk-executor-java.md)
+> * [SQL](sql-api-query-reference.md)
+> * [批量执行程序 - .NET](sql-api-sdk-bulk-executor-dot-net.md)
+> * [批量执行程序 - Java](sql-api-sdk-bulk-executor-java.md)
 
-<table>
-
-<tr><td>**SDK 下载**</td><td>[NuGet](https://www.nuget.org/packages/Microsoft.Azure.DocumentDB.Core/)</td></tr>
-
-<tr><td>**API 文档**</td><td>[ 参考文档](/dotnet/api/overview/azure/cosmosdb?view=azure-dotnet)</td></tr>
-
-<tr><td>**示例**</td><td>[.NET代码示例](sql-api-dotnet-samples.md)</td></tr>
-
-<tr><td>**入门**</td><td>[Azure Cosmos DB .NET Core SDK 入门](sql-api-dotnetcore-get-started.md)</td></tr>
-
-<tr><td>**Web 应用教程**</td><td>[使用 Azure Cosmos DB 进行 Web 应用程序开发](sql-api-dotnet-application.md)</td></tr>
-
-<tr><td>**当前受支持的框架**</td><td>[.NET Standard 1.6 和 .NET Standard 1.5](https://www.nuget.org/packages/NETStandard.Library)</td></tr>
-</table></br>
+| |  |
+|---|---|
+|**SDK 下载**| [NuGet](https://www.nuget.org/packages/Microsoft.Azure.DocumentDB.Core/)|
+|**API 文档**|[ 参考文档](/dotnet/api/overview/azure/cosmosdb?view=azure-dotnet)|
+|**示例**|[.NET代码示例](sql-api-dotnet-samples.md)|
+|**入门**|[Azure Cosmos DB .NET 入门](sql-api-sdk-dotnet.md)|
+|**Web 应用教程**|[使用 Azure Cosmos DB 进行 Web 应用程序开发](sql-api-dotnet-application.md)|
+|**当前受支持的框架**|[.NET Standard 1.6 和 .NET Standard 1.5](https://www.nuget.org/packages/NETStandard.Library)|
 
 ## <a name="release-notes"></a>发行说明
 
-Azure Cosmos DB .NET Core SDK 具有与最新版 [Azure Cosmos DB .NET SDK](sql-api-sdk-dotnet.md) 相同的功能。
+> [!NOTE]
+> 如果你使用的是 .NET Core, 请参阅[.NET SDK](sql-api-sdk-dotnet-standard.md)的最新版本 1.x, 该版本面向 .NET Standard。 
+
+### <a name="a-name260260"></a><a name="2.6.0"/>2.6.0
+
+* 已将 PortReusePolicy 添加到 ConnectionPolicy
+* Fixed ntdll.dll！在 UWP 应用中使用 SDK 时出现 RtlGetVersion TypeLoadException 问题
+
+### <a name="a-name251251"></a><a name="2.5.1"/>2.5.1
+
+* SDK 的系统 .Net 版本现在与 NuGet 包中定义的版本匹配。
+* 如果原始的请求失败, 则允许写入请求回退到另一个区域。
+* 为写入请求添加会话重试策略。
+
+### <a name="a-name241241"></a><a name="2.4.1"/>2.4.1
+
+* 修复导致空页的查询的跟踪争用条件
+
+### <a name="a-name240240"></a><a name="2.4.0"/>2.4.0
+
+* 增加了 LINQ 查询的十进制精度大小。
+* 添加了新的类 CompositePath、CompositePathSortOrder、SpatialSpec、SpatialType 和 PartitionKeyDefinitionVersion
+* 已将 TimeToLivePropertyPath 添加到 DocumentCollection
+* 将 CompositeIndexes 和 SpatialIndexes 添加到 IndexPolicy
+* 向 PartitionKeyDefinition 添加了版本
+* 无添加到 PartitionKey
+
+### <a name="a-name230230"></a><a name="2.3.0"/>2.3.0
+
+ * 已将 IdleTcpConnectionTimeout、OpenTcpConnectionTimeout、MaxRequestsPerTcpConnection 和 MaxTcpConnectionsPerEndpoint 添加到 ConnectionPolicy。
+ 
+### <a name="a-name223223"></a><a name="2.2.3"/>2.2.3
+
+* 诊断改进
+
+### <a name="a-name222222"></a><a name="2.2.2"/>2.2.2
+
+* 添加了环境变量设置“POCOSerializationOnly”。
+
+* 删除了 DocumentDB.Spatial.Sql.dll，现在在 Microsoft.Azure.Documents.ServiceInterop.dll 中包含
+
+### <a name="a-name221221"></a><a name="2.2.1"/>2.2.1
+
+* 对 StoredProcedure 执行调用故障转移期间的重试逻辑进行了改进。
+
+* 将 DocumentClientEventSource 设为单一实例。 
+
+* 修复了 GatewayAddressCache 超时不遵守 ConnectionPolicy RequestTimeout 的问题。
+
+### <a name="a-name220220"></a><a name="2.2.0"/>2.2.0
+
+* 对于直接/TCP 传输诊断，添加了 TransportException，这是该 SDK 的一个内部异常类型。 出现在异常消息中时，此类型会输出附加信息，以便排查客户端连接问题。
+
+* 添加了新的构造函数重载，它采用 HttpMessageHandler，后者是用于发送 HttpClient 请求的 HTTP 处理程序堆栈（例如，HttpClientHandler）。
+
+* 修复了无法正确处理带有空值的标头的 bug。
+
+* 改进了集合缓存验证。
+
+### <a name="a-name213213"></a><a name="2.1.3"/>2.1.3
+
+* 更新到 4.3.2 版 System.Net.Security。
+
+### <a name="a-name212212"></a><a name="2.1.2"/>2.1.2
+
+* 诊断跟踪改进。
+
+### <a name="a-name211211"></a><a name="2.1.1"/>2.1.1
+
+* 为多区域请求暂时性故障添加了更多复原能力。
+
+### <a name="a-name210210"></a><a name="2.1.0"/>2.1.0
+
+* 添加了多区域写入支持。
+* 使用 TOP 和 MaxBufferedItemCount 改进跨分区查询性能。
+
+### <a name="a-name200200"></a><a name="2.0.0"/>2.0.0
+
+* 添加了请求取消支持。
+* 将 SetCurrentLocation 添加到 ConnectionPolicy，它会根据区域自动填充首选位置。
+* 修复了具有 Min/Max 以及在单个分区上没有文档匹配的筛选的跨分区查询中的 Bug。
+* DocumentClient 方法现在与 IDocumentClient 具有奇偶校验。
+* 更新了直接 TCP 传输堆栈以减少建立的连接数。
+* 为非 Windows 客户端添加了对 Direct Mode TCP 的支持。
+
+### <a name="a-name200-preview2200-preview2"></a><a name="2.0.0-preview2"/>2.0.0-preview2
+
+* 添加了请求取消支持。
+* 将 SetCurrentLocation 添加到 ConnectionPolicy，它会根据区域自动填充首选位置。
+* 修复了具有 Min/Max 以及在单个分区上没有文档匹配的筛选的跨分区查询中的 Bug。
+
+### <a name="a-name200-preview200-preview"></a><a name="2.0.0-preview"/>2.0.0-preview
+
+* DocumentClient 方法现在与 IDocumentClient 具有奇偶校验。
+* 更新了直接 TCP 传输堆栈以减少建立的连接数。
+* 为非 Windows 客户端添加了对 Direct Mode TCP 的支持。
 
 ### <a name="a-name11001100"></a><a name="1.10.0"/>1.10.0
 
@@ -64,11 +148,11 @@ Azure Cosmos DB .NET Core SDK 具有与最新版 [Azure Cosmos DB .NET SDK](sql-
 ### <a name="a-name191191"></a><a name="1.9.1"/>1.9.1
 
 * 修复了临界情况下跨分区 order by 查询出现的 KeyNotFoundException。
-* 修复了在 LINQ 查询的 select 子句中不接受 JsonPropery 属性的 bug。
+* 修复了在 LINQ 查询的 select 子句中不接受 JsonProperty 属性的 bug。
 
 ### <a name="a-name182182"></a><a name="1.8.2"/>1.8.2
 
-* 修复了在某些争用情况下出现的 bug，该 bug 导致在使用会话一致性级别时出现间歇性错误“Microsoft.Azure.Documents.NotFoundException: 读取会话不可用于输入会话令牌”。
+* 修复了在某些争用情况下出现的 bug，该 bug 在使用会话一致性级别时导致间歇性错误“Microsoft.Azure.Documents.NotFoundException: 读取会话不可用于输入会话令牌”。
 
 ### <a name="a-name181181"></a><a name="1.8.1"/>1.8.1
 
@@ -85,7 +169,7 @@ Azure Cosmos DB .NET Core SDK 具有与最新版 [Azure Cosmos DB .NET SDK](sql-
 
 ### <a name="a-name170170"></a><a name="1.7.0"/>1.7.0
  
- * 在 API 参考文档、程序集中的元数据信息和 NuGet 包中品牌从 Azure DocumentDB 更改为 Azure Cosmos DB。 
+ * 在 API 参考文档、程序集中的元数据信息和 NuGet 包中品牌从 Azure DocumentDB 更改为 Azure Cosmos DB。
  * 通过以直接连接模式发送的请求的响应公开诊断信息和延迟。 在 ResourceResponse 类中属性名称是 RequestDiagnosticsString 和 RequestLatency。
  * 此 SDK 版本需要最新版本的 Azure Cosmos DB 模拟器（可从 https://aka.ms/cosmosdb-emulator 下载）。
  
@@ -99,8 +183,8 @@ Azure Cosmos DB .NET Core SDK 具有与最新版 [Azure Cosmos DB .NET SDK](sql-
 
 ### <a name="a-name150150"></a><a name="1.5.0"/>1.5.0 
 
-* 添加了 PartitionKeyRangeId 的支持作为 FeedOption，将查询结果限定在某个特定分区键范围值。 
-* 添加了 StartTime 的支持作为 ChangeFeedOption，以开始查找该时间后的更改。 
+* 添加了 PartitionKeyRangeId 的支持作为 FeedOption，将查询结果限定在某个特定分区键范围值。
+* 添加了 StartTime 的支持作为 ChangeFeedOption，以开始查找该时间后的更改。
 
 ### <a name="a-name141141"></a><a name="1.4.1"/>1.4.1
 
@@ -141,7 +225,7 @@ Azure Cosmos DB .NET Core SDK 具有与最新版 [Azure Cosmos DB .NET SDK](sql-
 
 ### <a name="a-name112112"></a><a name="1.1.2"/>1.1.2
 
-* 修复偶尔导致 WebException 的问题：无法解析远程名称。
+* 修复程序，用于解决偶尔导致“WebException: 无法解析远程名称”的问题。
 * 通过向 ReadDocumentAsync API 添加新重载，添加了对直接读取类型化文档的支持。
 
 ### <a name="a-name111111"></a><a name="1.1.1"/>1.1.1
@@ -153,51 +237,77 @@ Azure Cosmos DB .NET Core SDK 具有与最新版 [Azure Cosmos DB .NET SDK](sql-
 
 ### <a name="a-name110110"></a><a name="1.1.0"/>1.1.0
 
-* 添加了对聚合查询（COUNT、MIN、MAX、SUM、AVG）的支持。 请参阅[聚合支持](sql-api-sql-query.md#Aggregates)。
+* 添加了对聚合查询（COUNT、MIN、MAX、SUM、AVG）的支持。 请参阅[聚合支持](sql-query-aggregates.md)。
 * 将分区集合上的最小吞吐量从 10,100 RU/s 降低到 2500 RU/s。
 
 ### <a name="a-name100100"></a><a name="1.0.0"/>1.0.0
 
-通过 Azure Cosmos DB .NET Core SDK，可构建能在 Windows、Mac 和 Linux 上快速运行的跨平台 [ASP.NET Core](https://www.asp.net/core) 和 [.NET Core](https://www.microsoft.com/net/core#windows) 应用。 Azure Cosmos DB .NET Core SDK 的最新版本完全兼容 [Xamarin](https://www.xamarin.com)，可用于生成面向 iOS、Android 和 Mono (Linux) 的应用程序。  
+通过 Azure Cosmos DB .NET Core SDK，可构建能在 Windows、Mac 和 Linux 上快速运行的跨平台 [ASP.NET Core](https://www.asp.net/core) 和 [.NET Core](https://www.microsoft.com/net/core#windows) 应用。 Azure Cosmos DB .NET Core SDK 的最新版本完全兼容 [Xamarin](https://www.xamarin.com)，可用于生成面向 iOS、Android 和 Mono (Linux) 的应用程序。  
 
 ### <a name="a-name010-preview010-preview"></a><a name="0.1.0-preview"/>0.1.0-preview
 
 通过 Azure Cosmos DB .NET Core Preview SDK，可构建能在 Windows、Mac 和 Linux 上快速运行的跨平台 [ASP.NET Core](https://www.asp.net/core) 和 [.NET Core](https://www.microsoft.com/net/core#windows) 应用。
 
 Azure Cosmos DB .NET Core 预览版 SDK 与最新版 [Azure Cosmos DB .NET SDK](sql-api-sdk-dotnet.md) 功能相同，并支持以下内容：
-* 所有[连接模式](performance-tips.md#networking)：网关模式、Direct TCP 和 Direct HTTP。 
+* 所有[连接模式](performance-tips.md#networking)：网关模式、Direct TCP 和 Direct HTTP。
 * 所有[一致性级别](consistency-levels.md)：强一致性、会话一致性、有限过期一致性和最终一致性。
-* [已分区集合](partition-data.md)。 
+* [已分区集合](partition-data.md)。
 * [多区域数据库帐户和异地复制](distribute-data-globally.md)。
 
-若有与此 SDK 相关的问题，请发布到 [StackOverflow](http://stackoverflow.com/questions/tagged/azure-documentdb)，或在 [github 存储库](https://github.com/Azure/azure-documentdb-dotnet/issues)中提出问题。 
+若有与此 SDK 相关的问题，请发布到 [StackOverflow](https://stackoverflow.com/questions/tagged/azure-documentdb)，或在 [GitHub 存储库](https://github.com/Azure/azure-documentdb-dotnet/issues)中提出问题。
 
 ## <a name="release--retirement-dates"></a>发布和停用日期
+Microsoft 至少会在停用 SDK 前提前 12 个月发出通知，以便顺利转换为更高版本/受支持版本。
 
-| 版本 | 发布日期 | 停用日期 |
+新特性和功能以及优化仅添加到当前 SDK，因此建议始终尽早升级到最新的 SDK 版本。 
+
+使用已停用的 SDK 对 Azure Cosmos DB 发出的任何请求都会遭服务拒绝。
+
+> [!WARNING]
+> SQL API**的 .NET Core SDK 的所有版本 1.x**将于**2020 年8月30日**停用。
+> 
+>
+<br/>
+
+
+| Version | 发布日期 | 停用日期 |
 | --- | --- | --- |
-| [1.9.1](#1.9.1) |2018 年 3 月 9 日 |--- |
-| [1.8.2](#1.8.2) |2018 年 2 月 21 日 |--- |
-| [1.8.1](#1.8.1) |2018 年 2 月 5 日 |--- |
-| [1.7.1](#1.7.1) |2017 年 11 月 16 日 |--- |
-| [1.7.0](#1.7.0) |2017 年 11 月 10 日 |--- |
-| [1.6.0](#1.6.0) |2017 年 10 月 17 日 |--- |
-| [1.5.1](#1.5.1) |2017 年 10 月 2日 |--- |
-| [1.5.0](#1.5.0) |2017 年 8 月 10 日 |--- | 
-| [1.4.1](#1.4.1) |2017 年 8 月 7 日 |--- |
-| [1.4.0](#1.4.0) |2017 年 8 月 2 日 |--- |
-| [1.3.2](#1.3.2) |2017 年 6 月 12 日 |--- |
-| [1.3.1](#1.3.1) |2017 年 5 月 23 日 |--- |
-| [1.3.0](#1.3.0) |2017 年 5 月 10 日 |--- |
-| [1.2.2](#1.2.2) |2017 年 4 月 19 日 |--- |
-| [1.2.1](#1.2.1) |2017 年 3 月 29 日 |--- |
-| [1.2.0](#1.2.0) |2017 年 3 月 25 日 |--- |
-| [1.1.2](#1.1.2) |2017 年 3 月 20 日 |--- |
-| [1.1.1](#1.1.1) |2017 年 3 月 14 日 |--- |
-| [1.1.0](#1.1.0) |2017 年 2 月 16 日 |--- |
-| [1.0.0](#1.0.0) |2016 年 12 月 21 日 |--- |
+| [2.6.0](#2.6.0) |2019年8月30日 |--- |
+| [2.5.1](#2.5.1) |2019年7月 |--- |
+| [2.4.1](#2.4.1) |2019年6月20日 |--- |
+| [2.4.0](#2.4.0) |5月5日, 2019 |--- |
+| [2.3.0](#2.3.0) |2019年4月 |--- |
+| [2.2.3](#2.2.3) |2019年3月11日 |--- |
+| [2.2.2](#2.2.2) |2019年2月6日 |--- |
+| [2.2.1](#2.2.1) |2018 年 12 月 24 日 |--- |
+| [2.2.0](#2.2.0) |2018 年 12 月 7 日 |--- |
+| [2.1.3](#2.1.3) |2018 年 10 月 15 日 |--- |
+| [2.1.2](#2.1.2) |2018 年 10 月 4 日 |--- |
+| [2.1.1](#2.1.1) |2018 年 9 月 27 日 |--- |
+| [2.1.0](#2.1.0) |2018 年 9 月 21 日 |--- |
+| [2.0.0](#2.0.0) |2018 年 9 月 7 日 |--- |
+| [1.9.1](#1.9.1) |2018 年 3 月 9 日 |2020年8月30日 |
+| [1.8.2](#1.8.2) |2018 年 2 月 21 日 |2020年8月30日 |
+| [1.8.1](#1.8.1) |2018 年 2 月 5 日 |2020年8月30日 |
+| [1.7.1](#1.7.1) |2017 年 11 月 16 日 |2020年8月30日 |
+| [1.7.0](#1.7.0) |2017 年 11 月 10 日 |2020年8月30日 |
+| [1.6.0](#1.6.0) |2017 年 10 月 17 日 |2020年8月30日 |
+| [1.5.1](#1.5.1) |2017 年 10 月 2日 |2020年8月30日 |
+| [1.5.0](#1.5.0) |2017 年 8 月 10 日 |2020年8月30日 | 
+| [1.4.1](#1.4.1) |2017 年 8 月 7 日 |2020年8月30日 |
+| [1.4.0](#1.4.0) |2017 年 8 月 2 日 |2020年8月30日 |
+| [1.3.2](#1.3.2) |2017 年 6 月 12 日 |2020年8月30日 |
+| [1.3.1](#1.3.1) |2017 年 5 月 23 日 |2020年8月30日 |
+| [1.3.0](#1.3.0) |2017 年 5 月 10 日 |2020年8月30日 |
+| [1.2.2](#1.2.2) |2017 年 4 月 19 日 |2020年8月30日 |
+| [1.2.1](#1.2.1) |2017 年 3 月 29 日 |2020年8月30日 |
+| [1.2.0](#1.2.0) |2017 年 3 月 25 日 |2020年8月30日 |
+| [1.1.2](#1.1.2) |2017 年 3 月 20 日 |2020年8月30日 |
+| [1.1.1](#1.1.1) |2017 年 3 月 14 日 |2020年8月30日 |
+| [1.1.0](#1.1.0) |2017 年 2 月 16 日 |2020年8月30日 |
+| [1.0.0](#1.0.0) |2016 年 12 月 21 日 |2020年8月30日 |
 | [0.1.0-preview](#0.1.0-preview) |2016 年 11 月 15 日 |2016 年 12 月 31 日 |
 
-## <a name="see-also"></a>另请参阅
-若要了解有关 Cosmos DB 的详细信息，请参阅 [Microsoft Azure Cosmos DB](https://azure.microsoft.com/services/cosmos-db/) 服务页。 
+## <a name="see-also"></a>请参阅
+若要了解有关 Cosmos DB 的详细信息，请参阅 [Microsoft Azure Cosmos DB](https://azure.microsoft.com/services/cosmos-db/) 服务页。
 

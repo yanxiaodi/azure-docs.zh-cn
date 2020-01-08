@@ -1,20 +1,22 @@
 ---
-title: 自助密码重置自定义 - Azure Active Directory
+title: 自定义 Azure AD 自助服务密码重置-Azure Active Directory
 description: 用于 Azure AD 自助服务密码重置的自定义选项
 services: active-directory
 ms.service: active-directory
-ms.component: authentication
-ms.topic: article
-ms.date: 01/11/2018
+ms.subservice: authentication
+ms.topic: conceptual
+ms.date: 07/30/2019
 ms.author: joflore
 author: MicrosoftGuyJFlo
-manager: mtillman
+manager: daveba
 ms.reviewer: sahenry
-ms.openlocfilehash: ffd12d03dffb5deafc8605cc7352bd71d588d235
-ms.sourcegitcommit: 870d372785ffa8ca46346f4dfe215f245931dae1
-ms.translationtype: HT
+ms.collection: M365-identity-device-management
+ms.openlocfilehash: 527dd99f122ec70cc47305947a5cbce3207b9664
+ms.sourcegitcommit: fecb6bae3f29633c222f0b2680475f8f7d7a8885
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/08/2018
+ms.lasthandoff: 07/30/2019
+ms.locfileid: "68666300"
 ---
 # <a name="customize-the-azure-ad-functionality-for-self-service-password-reset"></a>为自助密码重置自定义 Azure AD 功能
 
@@ -22,13 +24,22 @@ ms.lasthandoff: 05/08/2018
 
 ## <a name="customize-the-contact-your-administrator-link"></a>自定义“联系管理员”链接
 
-即使未启用 SSPR，用户在密码重置门户中也仍可找到“联系管理员”链接。 如果用户选择该链接，它将执行以下任务之一：
-   * 向管理员发送一封电子邮件，请求他们帮助更改用户的密码。 
-   * 将用户指引到指定的 URL 以获取帮助。 
+自助服务密码重置用户在密码重置门户中提供 "联系你的管理员" 链接。 如果用户选择此链接, 它将执行以下两个操作之一:
 
-建议将此联系人设置为用户已用来提问支持问题的电子邮件地址或网站等内容。
+* 如果处于默认状态:
+   * 电子邮件将发送给你的管理员, 并要求他们在更改用户密码时提供帮助。 请参阅下面的[示例电子邮件](#sample-email)。
+* 如果自定义:
+   * 将用户发送到管理员指定的网页或电子邮件地址以获得帮助。
 
-![联系人][Contact]
+> [!TIP]
+> 如果你自定义此功能, 我们建议将其设置为用户已熟悉支持的内容。
+
+> [!WARNING]
+> 如果你使用需要密码重置的电子邮件地址和帐户自定义此设置, 则用户可能无法请求协助。
+
+### <a name="sample-email"></a>示例电子邮件
+
+![用于重置发送到管理员的电子邮件的示例请求][Contact]
 
 此联系人电子邮件按以下顺序发送到以下收件人：
 
@@ -38,15 +49,13 @@ ms.lasthandoff: 05/08/2018
 
 在所有情况下，最多会向 100 个收件人发送通知。
 
-若要了解有关不同管理员角色以及如何分配它们的详细信息，请参阅[在 Azure Active Directory 中分配管理员角色](../active-directory-assign-admin-roles-azure-portal.md)。
+若要了解有关不同管理员角色以及如何分配它们的详细信息，请参阅[在 Azure Active Directory 中分配管理员角色](../users-groups-roles/directory-assign-admin-roles.md)。
 
 ### <a name="disable-contact-your-administrator-emails"></a>禁用“联系管理员”电子邮件
 
 如果组织不希望向管理员通知密码重置请求，可启用以下配置：
 
-* 为所有最终用户启用自助密码重置。 可在“密码重置” > “属性”下面找到此选项。
-  
-  如果不希望用户重置其自己的密码，可以将访问权限限制为某个空组。 我们不建议使用此选项。
+* 为所有最终用户启用自助密码重置。 可在“密码重置” > “属性”下面找到此选项。 如果不希望用户重置其自己的密码，可以将访问权限限制为某个空组。 我们不建议使用此选项。
 * 自定义帮助台链接，以提供可让用户获得帮助的 Web URL 或 mailto: 地址。 可在“密码重置” > “自定义” > “自定义支持人员电子邮件或 URL”下面找到此选项。
 
 ## <a name="customize-the-ad-fs-sign-in-page-for-sspr"></a>为 SSPR 自定义 AD FS 登录页
@@ -55,7 +64,9 @@ Active Directory 联合身份验证服务 (AD FS) 管理员可以使用[添加�
 
 若要将链接添加到 AD FS 登录页，请在 AD FS 服务器上使用以下命令。 用户可以使用此页输入 SSPR 工作流。
 
-``` Set-ADFSGlobalWebContent -SigninPageDescriptionText "<p><A href=’https://passwordreset.microsoftonline.com’>Can’t access your account?</A></p>" ```
+``` powershell
+Set-ADFSGlobalWebContent -SigninPageDescriptionText "<p><A href='https://passwordreset.microsoftonline.com' target='_blank'>Can’t access your account?</A></p>"
+```
 
 ## <a name="customize-the-sign-in-page-and-access-panel-look-and-feel"></a>自定义登录页和访问面板的外观
 
@@ -65,10 +76,10 @@ Active Directory 联合身份验证服务 (AD FS) 管理员可以使用[添加�
 
 * 用户输入其用户名后
 * 如果用户通过以下方式访问自定义的 URL：
-    * 通过将 whr 参数传递到密码重置页，如“https://login.microsoftonline.com/?whr=contoso.com”
-    * 通过将 username 参数传递到密码重置页，如“https://login.microsoftonline.com/?username=admin@contoso.com”
+   * 通过将`whr`参数传递到密码重置页, 如`https://login.microsoftonline.com/?whr=contoso.com`
+   * 通过将`username`参数传递到密码重置页, 如`https://login.microsoftonline.com/?username=admin@contoso.com`
 
-有关如何配置公司品牌的详细信息，请参阅[将公司品牌添加到 Azure AD 中的登录页](../customize-branding.md)一文。
+有关如何配置公司品牌的详细信息，请参阅[将公司品牌添加到 Azure AD 中的登录页](../fundamentals/customize-branding.md)一文。
 
 ### <a name="directory-name"></a>目录名称
 
@@ -80,8 +91,8 @@ Active Directory 联合身份验证服务 (AD FS) 管理员可以使用[添加�
 ## <a name="next-steps"></a>后续步骤
 
 * [如何成功推出 SSPR？](howto-sspr-deployment.md)
-* [重置或更改密码](../active-directory-passwords-update-your-own-password.md)
-* [注册自助密码重置](../active-directory-passwords-reset-register.md)
+* [重置或更改密码](../user-help/active-directory-passwords-update-your-own-password.md)
+* [注册自助密码重置](../user-help/active-directory-passwords-reset-register.md)
 * [是否有许可问题？](concept-sspr-licensing.md)
 * [SSPR 使用哪些数据？应为用户填充哪些数据？](howto-sspr-authenticationdata.md)
 * [哪些身份验证方法可供用户使用？](concept-sspr-howitworks.md#authentication-methods)
@@ -92,4 +103,4 @@ Active Directory 联合身份验证服务 (AD FS) 管理员可以使用[添加�
 * [我认为有些功能被破坏。如何对 SSPR 进行故障排除？](active-directory-passwords-troubleshoot.md)
 * [我有在别处未涵盖的问题](active-directory-passwords-faq.md)
 
-[Contact]: ./media/concept-sspr-customization/sspr-contact-admin.png "联系管理员请求帮忙重置密码的电子邮件示例"
+[Contact]: ./media/concept-sspr-customization/sspr-contact-admin.png "与管理员联系以获取有关重置密码电子邮件示例的帮助"

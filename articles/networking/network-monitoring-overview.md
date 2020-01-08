@@ -1,5 +1,5 @@
 ---
-title: 关于 Log Analytics 中的网络监视 | Microsoft Docs
+title: 有关 Azure Monitor 中的网络监视日志 |Microsoft Docs
 description: 概述了网络监视解决方案，包括 NPM，它们用来在云、本地和混合环境中管理网络。
 services: monitoring-and-diagnostics
 documentationcenter: na
@@ -8,18 +8,19 @@ manager: ''
 editor: ''
 tags: azure-resource-manager
 ms.assetid: ''
-ms.service: monitoring-and-diagnostics
+ms.service: virtual-network
 ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 02/22/2018
-ms.author: ajaycode
-ms.openlocfilehash: 306d0e57449de41080d5473034e585f772771d51
-ms.sourcegitcommit: 5b2ac9e6d8539c11ab0891b686b8afa12441a8f3
-ms.translationtype: HT
+ms.author: agummadi
+ms.openlocfilehash: 2912488286745bf8d2e567d09e445b0a44dc7c39
+ms.sourcegitcommit: 2e4b99023ecaf2ea3d6d3604da068d04682a8c2d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 07/09/2019
+ms.locfileid: "67672181"
 ---
 # <a name="network-monitoring-solutions"></a>网络监视解决方案 
 
@@ -34,7 +35,7 @@ Azure 提供了许多解决方案来监视网络资产。 Azure 具有相应的�
 * 任务关键型多层应用程序/微服务
 * 用户位置和基于 web 的应用程序 (HTTP/HTTPs) 
 
-性能监视器、ExpressRoute 监视器和服务终结点监视器用于监视 NPM 中的功能，如下所述。
+性能监视器、ExpressRoute 监视器和服务连接监视器是 NPM 中的监视功能，如下所述。
 
 ## <a name="performance-monitor"></a>性能监视
 
@@ -50,18 +51,21 @@ Azure 提供了许多解决方案来监视网络资产。 Azure 具有相应的�
 
 有关详细信息，请查看以下文章：
 
-* [配置 Log Analytics 中的网络性能监视器解决方案](../log-analytics/log-analytics-network-performance-monitor.md) 
+* [在 Azure Monitor 日志中配置网络性能监视器解决方案](../azure-monitor/insights/network-performance-monitor.md) 
 * [用例](https://blogs.technet.microsoft.com/msoms/2016/08/30/monitor-on-premises-cloud-iaas-and-hybrid-networks-using-oms-network-performance-monitor/)
-*  产品更新：[2017 年 2 月](https://blogs.technet.microsoft.com/msoms/2017/02/27/oms-network-performance-monitor-is-now-generally-available/)、[2017 年 8 月](https://blogs.technet.microsoft.com/msoms/2017/08/14/improvements-to-oms-network-performance-monitor/)
+* 产品更新：
+  * [2017 年 2 月](https://blogs.technet.microsoft.com/msoms/2017/02/27/oms-network-performance-monitor-is-now-generally-available/)
+  * [2017 年 8 月](https://blogs.technet.microsoft.com/msoms/2017/08/14/improvements-to-oms-network-performance-monitor/)
 
 ## <a name="expressroute-monitor"></a>ExpressRoute 监视器
 
-用于 ExpressRoute 的 NPM 针对专用的对等互连连接提供了全面的 ExpressRoute 监视。 可以通过 ExpressRoute 监视分支办事处与 Azure 之间的 E2E 连接和性能。 主要功能包括：
+用于 ExpressRoute 的 NPM 针对 Azure 专用对等互连和 Microsoft 对等互连连接提供了全面的 ExpressRoute 监视。 可以通过 ExpressRoute 监视分支办事处与 Azure 之间的 E2E 连接和性能。 主要功能包括：
 
 * 自动检测与你的订阅关联的 ER 线路
 * 检测从本地到你的云应用程序的网络拓扑
-* 每个虚拟网络的容量规划、利用率分析和带宽利用率
+* 容量规划、带宽利用率分析
 * 针对主要路径和辅助路径进行监视并发出警报
+* 通过 ExpressRoute 监视与 Azure 服务（如 Office 365、Dynamics 365 等）的连接情况
 * 检测与 VNet 的连接的降级
 
 ![显示各区域流量的地图](./media/network-monitoring-overview/expressroute-topology-map.png) 
@@ -71,9 +75,9 @@ Azure 提供了许多解决方案来监视网络资产。 Azure 具有相应的�
 * [为 ExpressRoute 配置网络性能监视器](../expressroute/how-to-npm.md)
 * [博客文章](https://aka.ms/NPMExRmonitorGA)
 
-## <a name="service-endpoint-monitor"></a>服务终结点监视器
+## <a name="service-connectivity-monitor"></a>服务连接监视器
 
-使用服务终结点监视功能，现在可以在本地、运营商网络和云/专用数据中心测试应用程序的可访问性并检测性能瓶颈。
+使用服务连接监视功能，现在可以在本地、运营商网络和云/专用数据中心测试应用程序的可访问性并检测性能瓶颈。
 
 * 监视到应用程序的端到端网络连接
 * 将应用程序传送与网络性能相关联，检测用户与应用程序之间的路径上准确的降级位置
@@ -84,7 +88,7 @@ Azure 提供了许多解决方案来监视网络资产。 Azure 具有相应的�
 
 有关详细信息，请参阅以下文章：
 
-* [配置用于监视服务终结点的网络性能监视器](https://aka.ms/applicationconnectivitymonitorguide)
+* [配置用于监视服务终结点的网络性能监视器](../azure-monitor/insights/network-performance-monitor-service-connectivity.md#configuration)
 * [博客文章](https://aka.ms/svcendptmonitor)
 
 ## <a name="traffic-analytics"></a>流量分析

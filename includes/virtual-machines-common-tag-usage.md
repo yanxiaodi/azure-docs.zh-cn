@@ -1,6 +1,16 @@
-
-
-
+---
+author: cynthn
+ms.service: virtual-machines
+ms.topic: include
+ms.date: 10/26/2018
+ms.author: cynthn
+ms.openlocfilehash: 17778b3edf1845d85302a0bcdf72a1ebc3919cea
+ms.sourcegitcommit: 0f54f1b067f588d50f787fbfac50854a3a64fff7
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 08/12/2019
+ms.locfileid: "67172888"
+---
 ## <a name="viewing-your-tags-in-the-usage-details"></a>在使用情况详细信息中查看标记
 通过 Resource Manager 部署模型放置在计算、网络和存储资源中的标记会在[计费门户](https://account.windowsazure.com/)上的使用情况详细信息中填充。
 

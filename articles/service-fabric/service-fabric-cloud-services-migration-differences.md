@@ -4,7 +4,7 @@ description: 有关将应用程序从云服务迁移到 Service Fabric 的概念
 services: service-fabric
 documentationcenter: .net
 author: vturecek
-manager: timlt
+manager: chackdan
 editor: ''
 ms.assetid: 0b87b1d3-88ad-4658-a465-9f05a3376dee
 ms.service: service-fabric
@@ -14,11 +14,12 @@ ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 11/02/2017
 ms.author: vturecek
-ms.openlocfilehash: 35ab4a9bdd66bf3571e7f189191550f88e17cee2
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: 8b486e617389e1611dfebf3d347d2d64df088593
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66258649"
 ---
 # <a name="learn-about-the-differences-between-cloud-services-and-service-fabric-before-migrating-applications"></a>迁移应用程序之前了解云服务与 Service Fabric 之间的差异。
 Microsoft Azure Service Fabric 是面向高度可缩放、高度可靠分布式应用程序的下一代云应用程序平台。 其中引入了许多用于打包、部署、更新和管理分布式云应用程序的新功能。 
@@ -49,7 +50,7 @@ Service Fabric 应用程序模型有许多优点：
 
 ![云服务体系结构][9]
 
-Service Fabric 应用程序还可以选择在整个应用程序中使用相同的外部服务。 在这个云服务基础结构示例中，从云服务迁移到 Service Fabric 的最简单路径是只将云服务部署替换为 Service Fabric 应用程序，并将整个基础结构保持相同。 只需进行少量的代码更改，即可将 Web 角色和辅助角色移植到 Service Fabric 无状态服务。
+Service Fabric 应用程序还可以选择在整个应用程序中使用相同的外部服务。 在此示例云服务体系结构中，从云服务迁移到 Service Fabric 的最简单路径是只将云服务部署替换为 Service Fabric 应用程序，并将整个体系结构保持相同。 只需进行少量的代码更改，即可将 Web 角色和辅助角色移植到 Service Fabric 无状态服务。
 
 ![简单迁移后的 Service Fabric 体系结构][10]
 
@@ -72,7 +73,7 @@ Service Fabric 应用程序还可以选择在整个应用程序中使用相同�
 
  直接通信是 Service Fabric 中常见的通信模型。 Service Fabric 和云服务的重要差别在于，在云服务中是连接到 VM，而在 Service Fabric 中是连接到服务。 这种差别之所以重要，其原因如下：
 
-* Service Fabric 中的服务不受限于托管它们的 VM。服务可以在群集中移动，且预期会因为多个原因而移动：资源平衡、故障转移、应用程序和基础结构更新，以及位置或负载约束。 这意味着服务实例的地址可随时更改。 
+* 在 Service Fabric 中的服务不受限于托管它们; 的 Vm服务可能在群集中四处移动，实际上，需出于各种原因而移动：资源平衡、 故障转移、 应用程序和基础结构升级和放置或负载约束。 这意味着服务实例的地址可随时更改。 
 * Service Fabric 中的一个 VM 可以托管多个服务，且每个服务有其独特的终结点。
 
 Service Fabric 提供服务发现机制（称为“命名服务”），用于解析服务的终结点地址。 
@@ -80,7 +81,7 @@ Service Fabric 提供服务发现机制（称为“命名服务”），用于�
 ![Service Fabric 直接通信][6]
 
 ### <a name="queues"></a>队列
-无状态环境（如云服务）中层之间的常见通信机制是使用外部存储队列将一个层的工作任务持久性存储到另一个层。 一种常见方案是 Web 层将作业发送到 Azure 队列或服务总线，辅助角色实例可在其中取消排队和处理作业。
+无状态环境（如云服务）中层之间的常见通信机制是使用外部存储队列将一个层的工作任务持久存储到另一个层。 一种常见方案是将作业发送到 Azure 队列或服务总线的 Web 层，辅助角色实例可在其中取消排队和处理作业。
 
 ![云服务队列通信][7]
 
@@ -88,10 +89,28 @@ Service Fabric 提供服务发现机制（称为“命名服务”），用于�
 
 ![Service Fabric 直接通信][8]
 
-## <a name="next-steps"></a>后续步骤
-从云服务迁移到 Service Fabric 的最简单路径是只将云服务部署替换为 Service Fabric 应用程序，并将应用程序的整个基础结构保持大致相同。 以下文章提供了帮助将 Web 角色和辅助角色迁移到 Service Fabric 无状态服务的指导。
+## <a name="parity"></a>奇偶校验
+[云服务是类似于 Service Fabric 中的控制和易用性程度，但它现在是旧版服务和 Service Fabric 建议用于新开发](https://docs.microsoft.com/azure/app-service/overview-compare); 下面是 API 比较：
 
-* [简单迁移：将 Web 角色或辅助角色转换为 Service Fabric 无状态服务](service-fabric-cloud-services-migration-worker-role-stateless-service.md)
+
+| **云服务 API** | **Service Fabric API** | **说明** |
+| --- | --- | --- |
+| RoleInstance.GetID | FabricRuntime.GetNodeContext.NodeId 或。节点名称 | ID 是节点名称的属性 |
+| RoleInstance.GetFaultDomain | FabricClient.QueryManager.GetNodeList | 对节点名称进行筛选，并使用 FD 属性 |
+| RoleInstance.GetUpgradeDomain | FabricClient.QueryManager.GetNodeList | 筛选节点名称，并使用升级属性 |
+| RoleInstance.GetInstanceEndpoints | FabricRuntime.GetActivationContext 或命名 (ResolveService) | CodePackageActivationContext FabricRuntime.GetActivationContext 和通过 ServiceInitializationParameters.CodePackageActivationContext 期间提供副本中提供。初始化 |
+| RoleEnvironment.GetRoles | FabricClient.QueryManager.GetNodeList | 如果你想要执行相同的筛选的类型可获取的列表按从群集的节点类型通过 FabricClient.ClusterManager.GetClusterManifest 清单并抓取从那里的角色/节点类型。 |
+| RoleEnvironment.GetIsAvailable | 连接 WindowsFabricCluster 或创建 fabricruntime 会指向一个特定的节点 | * |
+| RoleEnvironment.GetLocalResource | CodePackageActivationContext.Log/Temp/Work | * |
+| RoleEnvironment.GetCurrentRoleInstance | CodePackageActivationContext.Log/Temp/Work | * |
+| LocalResource.GetRootPath | CodePackageActivationContext.Log/Temp/Work | * |
+| Role.GetInstances | FabricClient.QueryManager.GetNodeList or ResolveService | * |
+| RoleInstanceEndpoint.GetIPEndpoint | FabricRuntime.GetActivationContext 或命名 (ResolveService) | * |
+
+## <a name="next-steps"></a>后续步骤
+从云服务迁移到 Service Fabric 的最简单路径是只将云服务部署替换为 Service Fabric 应用程序，并将应用程序的整个基础结构保持大致相同。 以下文章提供了帮助将 Web 角色或辅助角色转换为 Service Fabric 无状态服务的指南。
+
+* [Simple migration: convert a Web or Worker Role to a Service Fabric stateless service](service-fabric-cloud-services-migration-worker-role-stateless-service.md)（简单迁移：将 Web 角色或辅助角色转换为 Service Fabric 无状态服务）
 
 <!--Image references-->
 [1]: ./media/service-fabric-cloud-services-migration-differences/topology-cloud-services.png

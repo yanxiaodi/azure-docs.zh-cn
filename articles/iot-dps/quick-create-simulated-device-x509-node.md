@@ -1,22 +1,21 @@
 ---
 title: 使用 Node.js 将模拟的 X.509 设备预配到 Azure IoT 中心 | Microsoft Docs
-description: 使用适用于 Azure IoT 中心设备预配服务的 Node.js 设备 SDK 创建和预配模拟的 X.509 设备
-services: iot-dps
-keywords: ''
-author: bryanla
-ms.author: v-masebo;bryanla
+description: 使用适用于 Azure IoT 中心设备预配服务的 Node.js 设备 SDK 创建和预配模拟的 X.509 设备。本快速入门使用单个注册。
+author: wesmc7777
+ms.author: wesmc
 ms.date: 04/09/2018
-ms.topic: hero-article
+ms.topic: quickstart
 ms.service: iot-dps
-documentationcenter: ''
+services: iot-dps
 manager: timlt
-ms.devlang: na
+ms.devlang: nodejs
 ms.custom: mvc
-ms.openlocfilehash: 957a0e1561b384468ab22ccdb0a71aea7cbcf1c1
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.openlocfilehash: e0f7fa544efcdd20e9ed567c6de55a8b1aecfe41
+ms.sourcegitcommit: 61c8de2e95011c094af18fdf679d5efe5069197b
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 04/23/2019
+ms.locfileid: "62126505"
 ---
 # <a name="create-and-provision-an-x509-simulated-device-using-nodejs-device-sdk-for-iot-hub-device-provisioning-service"></a>使用适用于 IoT 中心设备预配服务的 Node.js 设备 SDK 创建和预配 X.509 模拟设备
 [!INCLUDE [iot-dps-selector-quick-create-simulated-device-x509](../../includes/iot-dps-selector-quick-create-simulated-device-x509.md)]
@@ -25,7 +24,13 @@ ms.lasthandoff: 04/28/2018
 
 如果不熟悉自动预配过程，还务必查看[自动预配概念](concepts-auto-provisioning.md)。 另外，在继续操作之前，请确保已完成[通过 Azure 门户设置 IoT 中心设备预配服务](./quick-setup-auto-provision.md)中的步骤。 
 
-[!INCLUDE [IoT DPS basic](../../includes/iot-dps-basic.md)]
+Azure IoT 设备预配服务支持两类注册：
+- [注册组](concepts-service.md#enrollment-group)：用于注册多个相关设备。
+- [单独注册](concepts-service.md#individual-enrollment)：用于注册单个设备。
+
+本文将演示单个注册。
+
+[!INCLUDE [IoT Device Provisioning Service basic](../../includes/iot-dps-basic.md)]
 
 ## <a name="prepare-the-environment"></a>准备环境 
 
@@ -43,6 +48,14 @@ ms.lasthandoff: 04/28/2018
 
 ## <a name="create-a-self-signed-x509-device-certificate-and-individual-enrollment-entry"></a>创建自签名的 X.509 设备证书和单个注册项
 
+在本部分，你将使用自签名的 X.509 证书。请务必记住以下事项：
+
+* 自签名证书仅用于测试，不应在生产环境中使用。
+* 自签名证书的默认过期日期为一年。
+
+你将使用来自 [Azure IoT SDK for Node.js](https://github.com/Azure/azure-iot-sdk-node.git) 的示例代码创建要与模拟设备的个体注册条目一起使用的证书。
+
+
 1. 打开命令提示符。 克隆代码示例的 GitHub 存储库：
     
     ```cmd/sh
@@ -56,7 +69,7 @@ ms.lasthandoff: 04/28/2018
     npm install
     ```
 
-3. 使用自己的 _certificate-name_ 运行脚本，创建_叶_ X.509 证书。 请注意，叶证书的公用名称会成为[注册 ID](https://docs.microsoft.com/azure/iot-dps/concepts-device#registration-id)，因此请确保只使用小写的字母数字和连字符。
+3. 使用自己的 _certificate-name_ 运行脚本，创建_叶_ X.509 证书。 叶证书的公用名称会成为[注册 ID](https://docs.microsoft.com/azure/iot-dps/concepts-device#registration-id)，因此请确保只使用小写的字母数字和连字符。
 
     ```cmd/sh
     node create_test_cert.js device {certificate-name}
@@ -64,20 +77,20 @@ ms.lasthandoff: 04/28/2018
 
 4. 登录到 [Azure 门户](https://portal.azure.com)，单击左侧菜单上的“所有资源”按钮，打开设备预配服务实例。
 
-5. 在“设备预配服务摘要”边栏选项卡上，选择“管理注册”。 选择“单个注册”选项卡，单击顶部的“添加”按钮。 
+5. 在“设备预配服务摘要”边栏选项卡上，选择“管理注册”。 选择“个人注册”选项卡，然后单击顶部的“添加个人注册”按钮。 
 
 6. 在“添加注册”面板下，输入以下信息：
-    - 选择“X.509”作为标识证明机制。
-    - 在“主要证书 .pem 或 .cer 文件”下，单击“选择文件”选择在前述步骤中创建的证书文件 {certificate-name}_cert.pem。  
-    - （可选）可以提供以下信息：
-      - 选择与预配服务链接的 IoT 中心。
-      - 输入唯一设备 ID。 为设备命名时，请确保避免使用敏感数据。 
-      - 使用设备所需的初始配置更新“初始设备孪生状态”。
-   - 完成后，单击“保存”按钮。 
+   - 选择“X.509”作为标识证明机制。
+   - 在“主要证书 .pem 或 .cer 文件”下，单击“选择文件”选择在前述步骤中创建的证书文件 {certificate-name}_cert.pem。  
+   - （可选）可以提供以下信息：
+     - 选择与预配服务链接的 IoT 中心。
+     - 输入唯一设备 ID。 为设备命名时，请确保避免使用敏感数据。 
+     - 使用设备所需的初始配置更新“初始设备孪生状态”。
+     - 完成后，单击“保存”按钮。 
 
-    [![在门户中为 X.509 证明添加单个注册](./media/quick-create-simulated-device-x509-node/individual-enrollment.png)](./media/quick-create-simulated-device-x509-node/individual-enrollment.png#lightbox)
+     [![在门户中为 X.509 证明添加单个注册](./media/quick-create-simulated-device-x509-node/device-enrollment.png)](./media/quick-create-simulated-device-x509-node/device-enrollment.png#lightbox)
 
-    成功注册以后，X.509 设备会在“单独注册”选项卡的“注册 ID”列下显示为 **{certificatename}**。记下此值以备将来使用。
+     成功注册以后，X.509 设备会在“单独注册”选项卡的“注册 ID”列下显示为 **{certificatename}**。记下此值以备将来使用。
 
 ## <a name="simulate-the-device"></a>模拟设备
 
@@ -85,7 +98,7 @@ ms.lasthandoff: 04/28/2018
 
 1. 在 Azure 门户中，选择设备预配服务的“概览”边栏选项卡，记下“全局设备终结点”和“ID 范围”的值。
 
-    ![从门户边栏选项卡提取 DPS 终结点信息](./media/quick-create-simulated-device-x509-node/extract-dps-endpoints.png) 
+    ![从门户边栏选项卡中提取设备预配服务终结点信息](./media/quick-create-simulated-device-x509-node/extract-dps-endpoints.png) 
 
 2. 将证书和密钥复制到示例文件夹。
 
@@ -104,7 +117,7 @@ ms.lasthandoff: 04/28/2018
 4. 编辑 **register\_x509.js** 文件。 进行下述更改，然后保存文件。
     - 将 `provisioning host` 替换为在上面的“步骤 1”中注明的“全局设备终结点”。
     - 将 `id scope` 替换为在上面的“步骤 1”中注明的“ID 范围”。 
-    - 将 `registration id` 替换为在上一部分中记下的**_注册 ID_**。
+    - 将 `registration id` 替换为在上一部分中记下的 **_注册 ID_** 。
     - 将 `cert filename` 和 `key filename` 替换为在上面的“步骤 2”中复制的文件。 
 
 5. 执行脚本，验证该设备是否已成功预配。
@@ -115,7 +128,7 @@ ms.lasthandoff: 04/28/2018
 
 6. 在门户中导航到已链接到预配服务的 IoT 中心，然后打开“IoT 设备”边栏选项卡。 将模拟的 X.509 设备成功预配到中心以后，设备 ID 会显示在“IoT 设备”边栏选项卡上，“状态”为“已启用”。 如果在运行示例设备应用程序之前已打开边栏选项卡，则可能需要单击顶部的“刷新”按钮。 
 
-    ![设备注册到 IoT 中心](./media/quick-create-simulated-device-x509-node/hub-registration.png) 
+    ![设备注册到 IoT 中心](./media/quick-create-simulated-device-x509-node/hubregistration.png) 
 
     如果从设备的注册项中的默认值更改了“初始设备孪生状态”，则它会从中心拉取所需的孪生状态，并执行相应的操作。 有关详细信息，请参阅[了解并在 IoT 中心内使用设备孪生](../iot-hub/iot-hub-devguide-device-twins.md)。
 

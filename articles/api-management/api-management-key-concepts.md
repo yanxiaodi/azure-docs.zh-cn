@@ -1,28 +1,30 @@
 ---
-title: "Azure API 管理概述和重要概念 | Microsoft 文档"
-description: "了解有关 API、产品、角色、组和其他 API 管理关键概念。"
+title: Azure API 管理概述和重要概念 | Microsoft 文档
+description: 了解有关 API、产品、角色、组和其他 API 管理关键概念。
 services: api-management
-documentationcenter: 
+documentationcenter: ''
 author: vladvino
 manager: erikre
-editor: 
+editor: ''
 ms.service: api-management
 ms.workload: mobile
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: overview
 ms.date: 11/15/2017
 ms.author: apimpm
 ms.custom: mvc
-ms.openlocfilehash: 0410e0176d5c853e1110fe3460c7d9314e7fd397
-ms.sourcegitcommit: 83ea7c4e12fc47b83978a1e9391f8bb808b41f97
+ms.openlocfilehash: 8d7fa8b8119ddf1769b36bcb55831047d6242470
+ms.sourcegitcommit: 82499878a3d2a33a02a751d6e6e3800adbfa8c13
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/28/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70073433"
 ---
-# <a name="what-is-api-management"></a>什么是 API 管理？
+# <a name="about-api-management"></a>关于 API 管理
 
-API 管理 (APIM) 可帮助组织将 API 发布给外部、合作伙伴和内部开发人员，以充分发挥其数据和服务的潜力。 所有企业都想要作为数字平台扩大其运营、创建新渠道、查找新客户和深化与现有的契合。 API 管理通过开发人员参与、商业洞察力、分析、安全性和保护提供了核心竞争力以确保成功的 API 程序。 可以使用 Azure API 管理处理任何后端，并基于它发布正式的 API 程序。
+API 管理 (APIM) 是一种为现有后端服务创建一致且现代化的 API 网关的方法。
+
+API 管理有助于组织将 API 发布给外部、合作伙伴和内部开发人员，以充分发挥其数据和服务的潜力。 所有企业都想要作为数字平台扩大其运营、创建新渠道、查找新客户和深化与现有的契合。 API 管理通过开发人员参与、商业洞察力、分析、安全性和保护提供了核心竞争力以确保成功的 API 程序。 可以使用 Azure API 管理处理任何后端，并基于它发布正式的 API 程序。
 
 本文概述了涉及 APIM 的常用方案，  并简单介绍了 APIM 系统的主要组件， 然后较详细地介绍了每个组件。
 
@@ -32,7 +34,7 @@ API 管理 (APIM) 可帮助组织将 API 发布给外部、合作伙伴和内部
 
 * **保护移动基础结构** 通过使用 API 密钥控制访问，使用限制或使用高级安全策略（如 JWT 令牌验证）阻止 DOS 攻击。
 * **启用 ISV 合作伙伴生态系统** 通过开发人员门户提供快速的合作伙伴加入，并构建 API 外观使其与未准备好供合作伙伴使用的内部实现分离。
-* **运行内部的 API 程序** 通过为组织提供一个集中位置来交流 API 的可用性和最新更改，基于组织帐户控制访问所有这一切都基于 API 网关与后端之间的安全通道。
+* **运行内部的 API 程序** 通过为组织提供一个集中位置来交流 API 的可用性和最新更改，基于组织帐户控制访问，所有这一切都基于 API 网关与后端之间的安全通道。
 
 系统由以下组件组成：
 
@@ -58,7 +60,7 @@ API 管理 (APIM) 可帮助组织将 API 发布给外部、合作伙伴和内部
   * 创建帐户并可以订阅以获取 API 密钥。
   * 访问他们自己的使用情况分析。
 
-有关详细信息，请参阅 PDF 版的 [基于云的 API 管理：利用 API 的强大功能](http://j.mp/ms-apim-whitepaper) 白皮书。 由 CITO Research 编撰的有关 API 管理的简介白皮书包括︰ 
+有关详细信息，请参阅[基于云的 API 管理：利用 API 的强大功能](https://j.mp/ms-apim-whitepaper) PDF 白皮书。 由 CITO Research 编撰的有关 API 管理的简介白皮书包括︰ 
  
  * 常见 API 需求和挑战
  * 分离 API 和呈现外观
@@ -91,7 +93,7 @@ API 是 API 管理服务实例的基础。 每个 API 表示一组可供开发�
 有关详细信息，请参阅[如何创建和使用组][How to create and use groups]。
 
 ## <a name="developers"> </a> 开发人员
-开发人员表示 API 管理服务实例中的用户帐户。 可以让管理员创建或邀请开发人员加入，也可以让开发人员从[开发人员门户][Developer portal]注册。 每个开发人员是一个或多个组的成员，并且可以订阅授予这些组的可见性的产品。
+开发人员表示 API 管理服务实例中的用户帐户。 管理员可以创建或邀请开发人员加入，或他们可以从“ [开发人员门户][Developer portal]”注册。 每个开发人员是一个或多个组的成员，并且可以订阅授予这些组的可见性的产品。
 
 当开发人员订阅某个产品时，会向其授予该产品的主密钥和辅助密钥。 在调用产品的 API 时使用此键。
 
@@ -100,10 +102,10 @@ API 是 API 管理服务实例的基础。 每个 API 表示一组可供开发�
 ## <a name="policies"></a> 策略
 策略是 API 管理的一项强大功能，允许 Azure 门户通过配置更改 API 的行为。 策略是一组语句，在请求或 API 的响应时按顺序执行。 流行的语句包含 XML 格式转换为 JSON 和调用速率限制，以限制从开发人员传入的呼叫数，还有许多其他策略可用。
 
-在任何 API 管理策略中，策略表达式可以用作属性值或文本值，除非该策略另外指定。 某些策略（如[控制流](https://msdn.microsoft.com/library/azure/dn894085.aspx#choose)和[设置变量](https://msdn.microsoft.com/library/azure/dn894085.aspx#set-variable)策略）基于策略表达式。 有关详细信息，请参阅[高级策略](https://msdn.microsoft.com/library/azure/dn894085.aspx#AdvancedPolicies)和[策略表达式](https://msdn.microsoft.com/library/azure/dn910913.aspx)。
+在任何 API 管理策略中，策略表达式可以用作属性值或文本值，除非该策略另外指定。 某些策略（如[控制流](/azure/api-management/api-management-advanced-policies#choose)和[设置变量](/azure/api-management/api-management-advanced-policies#set-variable)策略）基于策略表达式。 有关详细信息，请参阅[高级策略](/azure/api-management/api-management-advanced-policies#AdvancedPolicies)和[策略表达式](/azure/api-management/api-management-policy-expressions)。
 
 
-有关 API 管理策略的完整列表，请参阅[策略参考][Policy reference]。 有关使用和配置策略的详细信息，请参阅 [API 管理策略][API Management policies]。 有关使用速率限制和配额策略创建产品的教程，请参阅[如何创建和配置高级产品设置][How create and configure advanced product settings]。
+有关 API 管理策略的完整列表，请参阅 [策略参考][Policy reference]。 有关使用和配置策略的详细信息，请参阅 [API 管理策略][API Management policies]。 有关使用速率限制和配额策略创建产品的教程，请参阅 [如何创建和配置高级产品设置][How create and configure advanced product settings]。
 
 
 ## <a name="developer-portal"> </a> 开发人员门户

@@ -4,7 +4,7 @@ description: 了解如何排查 Azure VM 间的连接问题。
 services: virtual-network
 documentationcenter: na
 author: chadmath
-manager: cshepard
+manager: dcscontentpm
 editor: ''
 tags: azure-resource-manager
 ms.service: virtual-network
@@ -12,13 +12,14 @@ ms.devlang: na
 ms.topic: troubleshooting
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
-ms.date: 05/11/2018
+ms.date: 10/30/2018
 ms.author: genli
-ms.openlocfilehash: 6decb0e9188db00608be35d9ba4e84df92ceb671
-ms.sourcegitcommit: c52123364e2ba086722bc860f2972642115316ef
-ms.translationtype: HT
+ms.openlocfilehash: ab3ae45081ecc481cb90af8961174e23c86e84b5
+ms.sourcegitcommit: ca359c0c2dd7a0229f73ba11a690e3384d198f40
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/11/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71056820"
 ---
 # <a name="troubleshooting-connectivity-problems-between-azure-vms"></a>排查 Azure VM 间的连接问题
 
@@ -94,7 +95,7 @@ Azure 虚拟机 (VM) 间可能出现连接问题。 本文提供解决此问题�
 
 ### <a name="step-6-check-whether-traffic-is-blocked-by-acls-for-the-classic-vm"></a>步骤 6：检查 ACL 是否阻止了经典 VM 的流量
 
-利用访问控制列表 (ACL)，可以选择允许还是拒绝虚拟机终结点的流量。 有关详细信息，请参阅[管理终结点上的 ACL](../virtual-machines/windows/classic/setup-endpoints.md#manage-the-acl-on-an-endpoint)。
+利用访问控制列表 (ACL)，可以选择允许还是拒绝虚拟机终结点的流量。 有关详细信息，请参阅[管理终结点上的 ACL](/previous-versions/azure/virtual-machines/windows/classic/setup-endpoints#manage-the-acl-on-an-endpoint)。
 
 ### <a name="step-7-check-whether-the-endpoint-is-created-for-the-classic-vm"></a>步骤 7：检查是否为经典 VM 创建了终结点
 
@@ -102,7 +103,7 @@ Azure 虚拟机 (VM) 间可能出现连接问题。 本文提供解决此问题�
 
 ### <a name="step-8-try-to-connect-to-a-vm-network-share"></a>步骤 8：尝试连接到 VM 网络共享
 
-如果无法连接到 VM 网络共享，问题可能由 VM 中不可用的 NIC 引起。 要删除不可用的 NIC，请参阅[如何删除不可用的 NIC](../virtual-machines/windows/reset-network-interface.md#delete-the-unavailable-nics)
+如果无法连接到 VM 网络共享，问题可能由 VM 中不可用的 NIC 引起。 要删除不可用的 NIC，请参阅[如何删除不可用的 NIC](../virtual-machines/troubleshooting/reset-network-interface.md#delete-the-unavailable-nics)
 
 ### <a name="step-9-check-inter-vnet-connectivity"></a>步骤 9：检查 Vnet 间连接
 

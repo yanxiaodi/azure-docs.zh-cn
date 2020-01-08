@@ -1,18 +1,21 @@
 ---
-title: Azure 搜索中的语言筛选器 | Microsoft Docs
-description: 按用户安全标识、语言、地理位置或数字值进行条件筛选可以减少 Azure 搜索（Microsoft Azure 上的托管云搜索服务）中的查询返回的搜索结果。
+title: 用于搜索索引中多语言内容的语言筛选器 - Azure 搜索
+description: 支持多语言搜索的筛选条件，将查询执行范围限定为特定于语言的字段。
 author: HeidiSteen
-manager: cgronlun
+manager: nitinme
 services: search
 ms.service: search
 ms.workload: search
+ms.topic: conceptual
 ms.date: 10/23/2017
 ms.author: heidist
-ms.openlocfilehash: 6d7fa7ab6db1fe9f8e2d1530c2917f4716a38079
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.custom: seodec2018
+ms.openlocfilehash: 1eced868b180a916355d6f9fbfc8cd47a5d7d6e2
+ms.sourcegitcommit: bb8e9f22db4b6f848c7db0ebdfc10e547779cccc
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 08/20/2019
+ms.locfileid: "69649865"
 ---
 # <a name="how-to-filter-by-language-in-azure-search"></a>如何在 Azure 搜索中按语言筛选 
 
@@ -20,7 +23,7 @@ ms.lasthandoff: 04/23/2018
 
 请求中的查询参数用于限定搜索操作的范围，同时修剪无法提供与所需搜索体验兼容的内容的任何字段的结果。
 
-| parameters | 目的 |
+| Parameters | 用途 |
 |-----------|--------------|
 | **searchFields** | 将全文搜索限制为命名字段的列表。 |
 | **$select** | 修剪响应，以便只包含指定的字段。 默认情况下，会返回所有可检索字段。 使用 **$Select** 参数可以选择要返回哪些字段。 |
@@ -36,11 +39,11 @@ ms.lasthandoff: 04/23/2018
   ![](./media/search-filters-language/lang-fields.png)
 
 > [!Note]
-> 有关通过语言分析器显示字段定义的代码示例，请参阅[定义索引 (.NET)](https://docs.microsoft.com/azure/search/search-create-index-dotnet#define-your-azure-search-index) 和[定义索引 (REST)](https://docs.microsoft.com/azure/search/search-create-index-rest-api#define-your-azure-search-index-using-well-formed-json)。
+> 有关通过语言分析器显示字段定义的代码示例，请参阅[定义索引 (.NET)](https://docs.microsoft.com/azure/search/search-create-index-dotnet) 和[定义索引 (REST)](search-create-index-rest-api.md)。
 
 ## <a name="build-and-load-an-index"></a>生成和加载索引
 
-编写查询之前的一个中间步骤（也许是众所周知的步骤）是[生成并填充索引](https://docs.microsoft.com/azure/search/search-create-index-dotnet#create-the-index)。 为了保持内容完整，此处阐述了此步骤。 确定索引是否可用的一种方法是在[门户](https://portal.azure.com)中查看索引列表。
+编写查询之前的一个中间步骤（也许是众所周知的步骤）是[生成并填充索引](https://docs.microsoft.com/azure/search/search-create-index-dotnet)。 为了保持内容完整，此处阐述了此步骤。 确定索引是否可用的一种方法是在[门户](https://portal.azure.com)中查看索引列表。
 
 ## <a name="constrain-the-query-and-trim-results"></a>约束查询和修剪结果
 
@@ -59,7 +62,7 @@ parameters =
 > [!Note]
 > 尽管查询不包含 $filter 自变量，但此用例与筛选概念密切相关，因此我们将它作为筛选方案进行演示。
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 
 + [Azure 搜索中的筛选器](search-filters.md)
 + [语言分析器](https://docs.microsoft.com/rest/api/searchservice/language-support)

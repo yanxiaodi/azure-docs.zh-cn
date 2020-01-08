@@ -1,23 +1,21 @@
 ---
-title: "从 Python 连接到 Azure Database for PostgreSQL"
-description: "本快速入门提供了一个 Python 代码示例，你可以使用它来连接到 Azure Database for PostgreSQL 并查询其中的数据。"
-services: postgresql
+title: 使用 Python 连接到 Azure Database for PostgreSQL - 单一服务器
+description: 本快速入门提供了可用于从 Azure Database for PostgreSQL - 单一服务器连接和查询数据的 Python 代码示例。
 author: rachel-msft
 ms.author: raagyema
-manager: kfile
-editor: jasonwhowell
 ms.service: postgresql
 ms.custom: mvc, devcenter
 ms.devlang: python
 ms.topic: quickstart
-ms.date: 02/28/2018
-ms.openlocfilehash: 926b35f49169c5a87e82996ba714aad40ba5244c
-ms.sourcegitcommit: c765cbd9c379ed00f1e2394374efa8e1915321b9
+ms.date: 5/6/2019
+ms.openlocfilehash: 4d7988ad590e6d57d9da37f46557f99fccaad294
+ms.sourcegitcommit: 0ae3139c7e2f9d27e8200ae02e6eed6f52aca476
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/28/2018
+ms.lasthandoff: 05/06/2019
+ms.locfileid: "65067226"
 ---
-# <a name="azure-database-for-postgresql-use-python-to-connect-and-query-data"></a>Azure Database for PostgreSQL：使用 Python 进行连接并查询数据
+# <a name="azure-database-for-postgresql---single-server-use-python-to-connect-and-query-data"></a>Azure Database for PostgreSQL - 单一服务器：使用 Python 连接和查询数据
 本快速入门演示了如何使用 [Python](https://python.org) 连接到 Azure Database for PostgreSQL， 同时还演示了如何通过 macOS、Ubuntu Linux 和 Windows 平台，使用 SQL 语句在数据库中查询、插入、更新和删除数据。 本文中的步骤假定你熟悉如何使用 Python 进行开发，但不熟悉如何使用 Azure Database for PostgreSQL。
 
 ## <a name="prerequisites"></a>先决条件
@@ -30,7 +28,7 @@ ms.lasthandoff: 02/28/2018
 - 安装 [pip](https://pip.pypa.io/en/stable/installing/) 包（如果使用的是从 [python.org](https://python.org) 下载的 Python 2 >=2.7.9 或 Python 3 >=3.4 二进制文件，则 pip 已安装。）
 
 ## <a name="install-the-python-connection-libraries-for-postgresql"></a>安装适用于 PostgreSQL 的 Python 连接库
-安装 [psycopg2](http://initd.org/psycopg/docs/install.html) 包，以便连接和查询数据库。 psycopg2 [在 PyPI 上提供](https://pypi.python.org/pypi/psycopg2/)，其形式为 [wheel](http://pythonwheels.com/) 包，适用于大多数常见的平台（Linux、OSX、Windows）。 使用 pip 安装可获取二进制版本的模块，包括所有依赖项。
+安装 [psycopg2](http://initd.org/psycopg/docs/install.html) 包，以便连接和查询数据库。 psycopg2 [在 PyPI 上提供](https://pypi.python.org/pypi/psycopg2/)，其形式为 [wheel](https://pythonwheels.com/) 包，适用于大多数常见的平台（Linux、OSX、Windows）。 使用 pip 安装可获取二进制版本的模块，包括所有依赖项。
 
 1. 在自己的计算机上启动命令行界面：
     - 在 Linux 上启动 Bash Shell。
@@ -65,7 +63,7 @@ ms.lasthandoff: 02/28/2018
 -  若要运行代码，请键入后跟文件名的 Python 命令，例如 `Python postgres.py`。
 
 > [!NOTE]
-> 从 Python 版本 3 开始，运行以下代码块时可能会看到错误 `SyntaxError: Missing parentheses in call to 'print'`：如果出现这种情况，请使用括号（例如 `print("string")`）将对命令 `print "string"` 的每个调用替换为函数调用。
+> 从 Python 版本 3 开始，在运行以下代码块时，可能会出现错误 `SyntaxError: Missing parentheses in call to 'print'`：如果发生这种情况，请将对命令 `print "string"` 的每个调用替换为使用括号的函数调用，例如 `print("string")`。
 
 ## <a name="connect-create-table-and-insert-data"></a>进行连接，创建表，然后插入数据
 通过以下代码进行连接，然后使用 [psycopg2.connect](http://initd.org/psycopg/docs/connection.html) 函数和 **INSERT** SQL 语句加载数据。 [cursor.execute](http://initd.org/psycopg/docs/cursor.html#execute) 函数用来针对 PostgreSQL 数据库执行 SQL 查询。 将 host、dbname、user 和 password 参数替换为创建服务器和数据库时指定的值。

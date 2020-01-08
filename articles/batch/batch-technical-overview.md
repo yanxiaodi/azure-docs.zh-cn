@@ -4,22 +4,22 @@ description: 了解如何使用 Azure Batch 服务执行大规模并发工作负
 services: batch
 documentationcenter: ''
 author: mscurrell
-manager: jeconnoc
+manager: gwallace
 editor: ''
 ms.assetid: ''
 ms.service: batch
 ms.workload: big-compute
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: overview
 ms.date: 01/19/2018
-ms.author: mscurrell
+ms.author: markscu
 ms.custom: mvc
-ms.openlocfilehash: b784e64962569f22cba3bc52b6a4e9443a4587d5
-ms.sourcegitcommit: 20d103fb8658b29b48115782fe01f76239b240aa
+ms.openlocfilehash: ee61f0f550a09640469914d29bde175028b59142
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/03/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70094326"
 ---
 # <a name="what-is-azure-batch"></a>什么是 Azure Batch？
 
@@ -29,7 +29,7 @@ ms.lasthandoff: 04/03/2018
 
 使用 Batch 不会产生额外的费用。 仅针对所使用的基础资源（例如虚拟机、存储和网络）计费。
 
-有关 Batch 与 Azure 中其他 HPC 解决方案选项的比较，请参阅 [HPC、Batch 和 Big 计算解决方案](../virtual-machines/linux/high-performance-computing.md)。
+有关 Batch 与 Azure 中其他 HPC 解决方案选项的比较，请参阅 [Azure 上的高性能计算 (HPC)](https://docs.microsoft.com/azure/architecture/topics/high-performance-computing/)。
 
 ## <a name="run-parallel-workloads"></a>运行并行工作负荷
 Batch 很适合处理本质并行（也称为“易并行”）的工作负荷。 本质并行工作负荷是指应用程序可以在其中独立运行，每个实例都会完成一部分工作的工作负荷。 应用程序在执行时，可能会访问一些公共的数据，但不会与该应用程序的其他实例通信。 因此，本质并行工作负荷可以大规模运行，具体取决于可以用来同时运行应用程序的计算资源的量。
@@ -60,7 +60,7 @@ Batch 很适合处理本质并行（也称为“易并行”）的工作负荷�
 * Batch 支持大规模[渲染工作负荷](batch-rendering-service.md)，使用的渲染工具包括 Autodesk Maya、3ds Max、Arnold 和 V-Ray。 
 * R 用户可以安装 [doAzureParallel R 包](https://github.com/Azure/doAzureParallel)，在 Batch 池中轻松地横向扩展 R 算法的执行。
 
-还可以在更大型的 Azure 工作流中运行 Batch 作业，以便转换 [Azure 数据工厂](../data-factory/v1/data-factory-data-processing-using-batch.md)等工具管理的数据。
+还可以在更大型的 Azure 工作流中运行 Batch 作业，以便转换 [Azure 数据工厂](../data-factory/transform-data-using-dotnet-custom-activity.md)等工具管理的数据。
 
 
 ## <a name="how-it-works"></a>工作原理

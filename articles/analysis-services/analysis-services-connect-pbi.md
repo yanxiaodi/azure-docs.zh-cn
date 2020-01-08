@@ -3,16 +3,17 @@ title: 使用 Power BI 连接到 Azure Analysis Services | Microsoft Docs
 description: 了解如何使用 Power BI 连接到 Azure Analysis Services 服务器。
 author: minewiskan
 manager: kfile
-ms.service: analysis-services
+ms.service: azure-analysis-services
 ms.topic: conceptual
-ms.date: 04/12/2018
+ms.date: 07/29/2019
 ms.author: owend
 ms.reviewer: minewiskan
-ms.openlocfilehash: 03e654b3d03564d11db9156e6fd5793bbd78c85d
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: eadba5397655809dc4f3e6d5f9d6c79addde68a6
+ms.sourcegitcommit: 08d3a5827065d04a2dc62371e605d4d89cf6564f
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 07/29/2019
+ms.locfileid: "68619293"
 ---
 # <a name="connect-with-power-bi"></a>使用 Power BI 进行连接
 
@@ -44,11 +45,9 @@ ms.lasthandoff: 04/16/2018
 ## <a name="connect-in-power-bi-service"></a>在 Power BI（服务）中进行连接
 
 1. 在服务器上创建一个与模型具有实时连接的 Power BI Desktop 文件。
-2. 在 [Power BI](https://powerbi.microsoft.com) 中，单击“获取数据” > “文件”，然后找到并选择 .pbix 文件。
+2. 在 [Power BI](https://powerbi.microsoft.com) 中，单击“获取数据” > “文件”，然后找到 .pbix 文件并选择该文件。
 
-
-
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 [连接到 Azure Analysis Services](analysis-services-connect.md)   
 [客户端库](analysis-services-data-providers.md)
 

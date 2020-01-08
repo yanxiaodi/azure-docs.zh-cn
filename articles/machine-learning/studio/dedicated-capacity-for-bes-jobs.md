@@ -1,29 +1,30 @@
 ---
-title: 机器学习批处理执行服务作业的专用容量 | Microsoft Docs
-description: 适用于机器学习作业的 Azure Batch 服务概述。
+title: Azure 批处理服务作业
+titleSuffix: Azure Machine Learning Studio
+description: 机器学习工作室作业的 Azure Batch 服务概述。 可以通过批处理池处理创建池，在其中提交批处理作业。
 services: machine-learning
-documentationcenter: ''
-author: YasinMSFT
-ms.author: yahajiza
-manager: hjerez
-editor: cgronlun
 ms.service: machine-learning
-ms.workload: tbd
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.subservice: studio
+ms.topic: conceptual
+author: xiaoharper
+ms.author: amlstudiodocs
+ms.custom: seodec18, previous-title='Dedicated capacity for batch execution service jobs - Azure Machine Learning Studio | Microsoft Docs'
 ms.date: 04/19/2017
-ms.openlocfilehash: 5a3d2c976ca4deef093f2640e56634acf911f4c0
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: 24efa3caba3918a38c09b1c921c600b117dedbc1
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60751140"
 ---
-# <a name="azure-batch-service-for-machine-learning-jobs"></a>适用于机器学习作业的 Azure Batch 服务
+# <a name="azure-batch-service-for-azure-machine-learning-studio-jobs"></a>适用于 Azure 机器学习工作室作业的 Azure Batch 服务
 
 机器学习批处理池处理为 Azure 机器学习批处理执行服务提供客户管理的缩放。 适用于机器学习的经典批处理发生在多租户环境中，限制了可以提交的并发作业的数目，作业按先进先出的原则排队处理。 这种不确定性意味着无法准确地预测作业何时会运行。
 
 可以通过批处理池处理创建池，在其中提交批处理作业。 可以控制池的大小以及作业所提交到的具体池。 BES 作业在自己的处理空间运行，因此处理性能可以预测，并且可以创建与所提交的处理负载相对应的资源池。
+
+> [!NOTE]
+> 必须有基于新资源管理器的机器学习 Web 服务才能创建池。 创建池后，可以在池中运行任何 BES Web 服务，包括基于新资源管理器的服务和经典服务。
 
 ## <a name="how-to-use-batch-pool-processing"></a>如何使用批处理池处理
 
@@ -38,7 +39,7 @@ ms.lasthandoff: 03/23/2018
 
 ![批处理池服务体系结构。](./media/dedicated-capacity-for-bes-jobs/pool-architecture.png)
 
-可以针对 CSS 提供给池服务 URL 调用“创建池”操作来创建池。 创建池时，请指定 VM 的数目以及 swagger.json（属于基于新建 Resource Manager 的机器学习 Web 服务）的 URL。 提供此 Web 服务是为了进行计费关联。 批处理池服务使用 swagger.json 将池与计费计划相关联。 可以运行在池中选择的任何 BES Web 服务，包括基于新建 Resource Manager 的服务和经典服务。
+可以针对 CSS 提供给池服务 URL 调用“创建池”操作来创建池。 创建池时，请指定 VM 的数目以及 swagger.json（属于基于新建 Resource Manager 的机器学习 Web 服务）的 URL。 提供此 Web 服务是为了进行计费关联。 批处理池服务使用 swagger.json 将池与计费计划相关联。 可以在池中运行任何 BES Web 服务，包括基于新资源管理器的服务和经典服务。
 
 可以使用任何基于新建 Resource Manager 的 Web 服务，但请注意，作业的计费取决于与该服务关联的计费计划。 可能需要特意为运行批处理池作业而创建 Web 服务和新的计费计划。
 

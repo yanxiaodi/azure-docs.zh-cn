@@ -5,48 +5,49 @@ services: iot-suite
 author: dominicbetts
 ms.service: iot-suite
 ms.topic: include
-ms.date: 04/24/2018
+ms.date: 09/17/2018
 ms.author: dobett
 ms.custom: include file
-ms.openlocfilehash: 500e335d0b2eddc56cdfb9828236bc4676d9b6aa
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.openlocfilehash: ca4bd3d3b40934323bab8036f3ce72e9281f1de4
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
-ms.locfileid: "34371161"
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67173386"
 ---
 > [!div class="op_single_selector"]
 > * [Windows 上的 C](../articles/iot-accelerators/iot-accelerators-connecting-devices.md)
 > * [Linux 上的 C](../articles/iot-accelerators/iot-accelerators-connecting-devices-linux.md)
+> * [Raspberry Pi 上的 C](../articles/iot-accelerators/iot-accelerators-connecting-pi-c.md)
 > * [Node.js（通用）](../articles/iot-accelerators/iot-accelerators-connecting-devices-node.md)
 > * [Raspberry Pi 上的 Node.js](../articles/iot-accelerators/iot-accelerators-connecting-pi-node.md)
-> * [Raspberry Pi 上的 C](../articles/iot-accelerators/iot-accelerators-connecting-pi-c.md)
+> * [MXChip IoT DevKit](../articles/iot-accelerators/iot-accelerators-arduino-iot-devkit-az3166-devkit-remote-monitoringV2.md)
 
-本教程实施一个可将以下遥测数据发送到远程监视[解决方案加速器](../articles/iot-accelerators/iot-accelerators-what-are-solution-accelerators.md)的“冷却器”设备：
+本教程实施一个可将以下遥测数据发送到远程监视[解决方案加速器](../articles/iot-accelerators/about-iot-accelerators.md)的“冷却器”设备  ：
 
 * 温度
 * 压力
 * 湿度
 
-为简单起见，代码会生成**冷却器**的示例遥测值。 可以通过将真实的传感器连接到设备并发送真实的遥测数据，在本示例的基础上融会贯通。
+为简单起见，代码会生成冷却器的示例遥测值  。 可以通过将真实的传感器连接到设备并发送真实的遥测数据，在本示例的基础上融会贯通。
 
 示例设备还会：
 
 * 将元数据发送到解决方案，以描述设备的功能。
-* 针对通过解决方案中的“设备”页触发的操作做出响应。
-* 针对通过解决方案中的“设备”页发送的配置更改做出响应。
+* 针对通过解决方案中的“设备”页触发的操作做出响应。 
+* 针对通过解决方案中的“设备”页发送的配置更改做出响应。 
 
-要完成此教程，需要一个有效的 Azure 帐户。 如果没有帐户，只需花费几分钟就能创建一个免费试用帐户。 有关详细信息，请参阅 [Azure 免费试用](http://azure.microsoft.com/pricing/free-trial/)。
+要完成此教程，需要一个有效的 Azure 帐户。 如果没有帐户，只需花费几分钟就能创建一个免费试用帐户。 有关详细信息，请参阅 [Azure 免费试用](https://azure.microsoft.com/pricing/free-trial/)。
 
 ## <a name="before-you-start"></a>开始之前
 
-在为设备编写任何代码之前，部署远程监视解决方案加速器，并向该解决方案添加一个新的物理设备。
+在为设备编写任何代码之前，部署远程监视解决方案加速器，并向该解决方案添加一个真实的新设备。
 
 ### <a name="deploy-your-remote-monitoring-solution-accelerator"></a>部署远程监视解决方案加速器
 
-本教程中创建的“冷却器”设备会将数据发送到[远程监视](../articles/iot-suite/iot-suite-remote-monitoring-explore.md)解决方案加速器的实例中。 如果尚未在 Azure 帐户中预配远程监视解决方案加速器，请参阅[部署远程监视解决方案加速器](../articles/iot-accelerators/iot-accelerators-remote-monitoring-deploy.md)
+本教程中创建的“冷却器”设备会将数据发送到[远程监视](../articles/iot-accelerators/quickstart-remote-monitoring-deploy.md)解决方案加速器的实例中  。 如果尚未在 Azure 帐户中预配远程监视解决方案加速器，请参阅[部署远程监视解决方案加速器](../articles/iot-accelerators/quickstart-remote-monitoring-deploy.md)
 
-当远程监视解决方案的部署过程完成后，单击“启动”，以在浏览器中打开解决方案仪表板。
+当远程监视解决方案的部署过程完成后，单击“启动”，以在浏览器中打开解决方案仪表板  。
 
 ![解决方案仪表板](media/iot-suite-selector-connecting/dashboard.png)
 
@@ -57,24 +58,24 @@ ms.locfileid: "34371161"
 
 对于连接到解决方案加速器的设备，该设备必须使用有效的凭据将自身标识到 IoT 中心。 将设备添加到解决方案时，有机会保存包含这些凭据的设备连接字符串。 在本教程中，稍后会在客户端应用程序中添加设备连接字符串。
 
-若要在远程监视解决方案中添加设备，请在解决方案中的“设备”页上完成以下步骤：
+若要在远程监视解决方案中添加设备，请在解决方案中的 **Device Explorer** 页上完成以下步骤：
 
-1. 选择“+ 新建设备”，并选择“物理”作为**设备类型**：
+1. 选择“+ 新建设备”，并选择“真实”作为设备类型    ：
 
-    ![添加物理设备](media/iot-suite-selector-connecting/devicesprovision.png)
+    ![添加真实设备](media/iot-suite-selector-connecting/devicesprovision.png)
 
-1. 输入 **Physical-chiller** 作为设备 ID。 选择“对称密钥”和“自动生成密钥”选项：
+1. 输入 Physical-chiller 作为设备 ID  。 选择“对称密钥”和“自动生成密钥”选项：  
 
     ![选择设备选项](media/iot-suite-selector-connecting/devicesoptions.png)
 
-1. 选择“应用”。 然后记下**设备 ID**、**主密钥**和**连接字符串主密钥**值：
+1. 选择“应用”。  然后记下设备 ID、主密钥和连接字符串主密钥值    ：
 
     ![检索凭据](media/iot-suite-selector-connecting/credentials.png)
 
-现在，你已向远程监视解决方案加速器添加了物理设备，并记下了其设备连接字符串。 在以下各部分中，你将实现使用设备连接字符串连接到解决方案的客户端应用程序。
+现在，你已向远程监视解决方案加速器添加了一个真实设备，并记下了其设备连接字符串。 在以下各部分中，你将实现使用设备连接字符串连接到解决方案的客户端应用程序。
 
-客户端应用程序实现内置的**冷却器**设备模型。 解决方案加速器设备模型指定有关设备的以下信息：
+客户端应用程序实现内置的冷却器设备模型  。 解决方案加速器设备模型指定有关设备的以下信息：
 
-* 设备报告给解决方案的属性。 例如，**冷却器**设备报告有关其固件和位置的信息。
-* 由设备发送到解决方案的遥测数据类型。 例如，**冷却器**设备发送温度、湿度和压力值。
-* 可以在解决方案中计划的、要在设备上运行的方法。 例如，**冷却器**设备必须实现 **Reboot**、**FirmwareUpdate**、**EmergencyValveRelease** 和 **IncreasePressure** 方法。
+* 设备报告给解决方案的属性。 例如，冷却器设备报告有关其固件和位置的信息  。
+* 由设备发送到解决方案的遥测数据类型。 例如，冷却器设备发送温度、湿度和压力值  。
+* 从解决方案可计划的在设备上运行的方法。 例如，冷却器设备必须实现 Reboot、FirmwareUpdate、EmergencyValveRelease 和 IncreasePressure 方法      。

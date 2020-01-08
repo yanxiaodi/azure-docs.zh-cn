@@ -8,23 +8,19 @@ manager: craigg
 ms.reviewer: douglasl
 ms.service: data-factory
 ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: get-started-article
-ms.date: 01/22/2018
+ms.topic: tutorial
+ms.date: 02/20/2019
 ms.author: jingwang
-ms.openlocfilehash: bfbafa2edb1d9195760a99f63113d28d3a978a78
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
+ms.openlocfilehash: 49b5b03356790bd45b2ad29897a57b746af1abe1
+ms.sourcegitcommit: d200cd7f4de113291fbd57e573ada042a393e545
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70140689"
 ---
 # <a name="copy-data-from-azure-blob-to-azure-sql-database-using-azure-data-factory"></a>使用 Azure 数据工厂将数据从 Azure Blob 复制到 Azure SQL 数据库
+
 本教程介绍如何创建一个将数据从 Azure Blob 存储复制到 Azure SQL 数据库的数据工厂管道。 本教程中的配置模式适用于从基于文件的数据存储复制到关系数据存储。 如需支持作为源和接收器的数据存储的列表，请参阅[支持的数据存储](copy-activity-overview.md#supported-data-stores-and-formats)表。
-
-> [!NOTE]
-> 本文适用于目前处于预览状态的数据工厂版本 2。 如果使用数据工厂服务版本 1（即正式版 (GA)），请参阅[数据工厂版本 1 文档](v1/data-factory-copy-data-from-azure-blob-storage-to-sql-database.md)。
-
 
 在本教程中执行以下步骤：
 
@@ -38,15 +34,15 @@ ms.lasthandoff: 03/23/2018
 
 本教程使用 .NET SDK。 可以使用其他机制与 Azure 数据工厂交互，请参阅“快速入门”下的示例。
 
-如果你还没有 Azure 订阅，可以在开始前创建一个[免费](https://azure.microsoft.com/free/)帐户。
+如果没有 Azure 订阅，请在开始之前创建一个[免费](https://azure.microsoft.com/free/)帐户。
 
 ## <a name="prerequisites"></a>先决条件
 
-* **Azure 存储帐户**。 可将 Blob 存储用作**源**数据存储。 如果没有 Azure 存储帐户，请参阅[创建存储帐户](../storage/common/storage-create-storage-account.md#create-a-storage-account)一文获取创建步骤。
+* **Azure 存储帐户**。 可将 Blob 存储用作**源**数据存储。 如果没有 Azure 存储帐户，请参阅[创建存储帐户](../storage/common/storage-quickstart-create-account.md)一文获取创建步骤。
 * **Azure SQL 数据库**。 将数据库用作**接收器**数据存储。 如果没有 Azure SQL 数据库，请参阅[创建 Azure SQL 数据库](../sql-database/sql-database-get-started-portal.md)一文获取创建步骤。
 * **Visual Studio** 2015 或 2017。 本文中的演练使用 Visual Studio 2017。
-* **下载并安装 [Azure .NET SDK](http://azure.microsoft.com/downloads/)**。
-* 按照[此说明](../azure-resource-manager/resource-group-create-service-principal-portal.md#create-an-azure-active-directory-application)**在 Azure Active Directory 中创建应用程序**。 记下要在后续步骤中使用的以下值：**应用程序 ID**、**身份验证密钥**和**租户 ID**。 按照同一文章中的说明将应用程序分配到“参与者”角色。
+* **下载并安装 [Azure .NET SDK](https://azure.microsoft.com/downloads/)** 。
+* 按照[此说明](../active-directory/develop/howto-create-service-principal-portal.md#create-an-azure-active-directory-application)**在 Azure Active Directory 中创建应用程序**。 记下要在后续步骤中使用的以下值：**应用程序 ID**、**身份验证密钥**和**租户 ID**。 按照同一文章中的说明将应用程序分配到“参与者”角色。 
 
 ### <a name="create-a-blob-and-a-sql-table"></a>创建 blob 和 SQL 表
 
@@ -61,7 +57,7 @@ ms.lasthandoff: 03/23/2018
     Jane|Doe
     ```
 
-2. 使用 [Azure 存储资源管理器](http://storageexplorer.com/)等工具创建 **adfv2tutorial** 容器，并将 **inputEmp.txt** 文件上传到该容器。
+2. 使用 [Azure 存储资源管理器](https://storageexplorer.com/)等工具创建 **adfv2tutorial** 容器，并将 **inputEmp.txt** 文件上传到该容器。
 
 #### <a name="create-a-sink-sql-table"></a>创建接收器 SQL 表
 
@@ -79,11 +75,11 @@ ms.lasthandoff: 03/23/2018
     CREATE CLUSTERED INDEX IX_emp_ID ON dbo.emp (ID);
     ```
 
-2. 允许 Azure 服务访问 SQL Server。 确保 Azure SQL Server 的“允许访问 Azure 服务”设置处于“打开”状态，以便数据工厂服务可以将数据写入 Azure SQL Server。 若要验证并启用此设置，请执行以下步骤：
+2. 允许 Azure 服务访问 SQL Server。 确保 Azure SQL Server 的“允许访问 Azure 服务”  设置处于“打开”  状态，以便数据工厂服务可以将数据写入 Azure SQL Server。 若要验证并启用此设置，请执行以下步骤：
 
-    1. 单击左侧的“更多服务”中心，并单击“SQL Server”。
-    2. 选择服务器，并单击“设置”下的“防火墙”。
-    3. 在“防火墙设置”页中，单击“允许访问 Azure 服务”对应的“打开”。
+    1. 单击左侧的“更多服务”  中心，并单击“SQL Server”  。
+    2. 选择服务器，并单击“设置”  下的“防火墙”  。
+    3. 在“防火墙设置”页中，单击“允许访问 Azure 服务”对应的“打开”。   
 
 
 ## <a name="create-a-visual-studio-project"></a>创建 Visual Studio 项目
@@ -91,19 +87,19 @@ ms.lasthandoff: 03/23/2018
 使用 Visual Studio 2015/2017 创建 C# .NET 控制台应用程序。
 
 1. 启动 **Visual Studio**。
-2. 单击“文件”，指向“新建”并单击“项目”。
-3. 从右侧项目类型列表中选择“Visual C#” -> “控制台应用(.NET Framework)”。 需要 .NET 4.5.2 版或更高版本。
+2. 单击“文件”，指向“新建”并单击“项目”。   
+3. 从右侧项目类型列表中选择“Visual C#”   -> “控制台应用(.NET Framework)”  。 需要 .NET 4.5.2 版或更高版本。
 4. 输入 **ADFv2Tutorial** 作为名称。
 5. 单击“确定”以创建该项目  。
 
 ## <a name="install-nuget-packages"></a>安装 NuGet 包
 
-1. 单击“工具” -> “NuGet 包管理器” -> “包管理器控制台”。
-2. 在“包管理器控制台”中，运行以下命令来安装包：
+1. 单击“工具”   -> “NuGet 包管理器”   -> “包管理器控制台”  。
+2. 在“包管理器控制台”  中，运行以下命令来安装包。 有关详细信息，请参阅 [Microsoft.Azure.Management.DataFactory nuget 包](https://www.nuget.org/packages/Microsoft.Azure.Management.DataFactory/)。
 
-    ```
-    Install-Package Microsoft.Azure.Management.DataFactory -Prerelease
-    Install-Package Microsoft.Azure.Management.ResourceManager -Prerelease
+    ```powershell
+    Install-Package Microsoft.Azure.Management.DataFactory
+    Install-Package Microsoft.Azure.Management.ResourceManager
     Install-Package Microsoft.IdentityModel.Clients.ActiveDirectory
     ```
 
@@ -121,8 +117,9 @@ ms.lasthandoff: 03/23/2018
     using Microsoft.Azure.Management.DataFactory.Models;
     using Microsoft.IdentityModel.Clients.ActiveDirectory;
     ```
+
     
-2. 将以下代码添加到 **Main** 方法以设置变量。 将占位符替换为自己的值。 目前，数据工厂 V2 仅允许在“美国东部”、“美国东部 2”和“西欧”区域中创建数据工厂。 数据工厂使用的数据存储（Azure 存储、Azure SQL 数据库，等等）和计算资源（HDInsight 等）可以位于其他区域中。
+2. 将以下代码添加到 **Main** 方法以设置变量。 将占位符替换为自己的值。 若要查看目前提供数据工厂的 Azure 区域的列表，请在以下页面上选择感兴趣的区域，然后展开“分析”  以找到“数据工厂”  ：[各区域的产品可用性](https://azure.microsoft.com/global-infrastructure/services/)。 数据工厂使用的数据存储（Azure 存储、Azure SQL 数据库，等等）和计算资源（HDInsight 等）可以位于其他区域中。
 
     ```csharp
     // Set variables
@@ -235,12 +232,12 @@ Console.WriteLine(SafeJsonConvert.SerializeObject(sqlDbLinkedService, client.Ser
 
 在 Azure Blob 中定义表示源数据的数据集。 此 Blob 数据集引用在上一步中创建的 Azure 存储链接服务，并说明以下信息：
 
-- 要从中复制的 blob 的位置：**FolderPath** 和 **FileName**；
-- 指示分析内容方式的 blob 格式：**TextFormat** 及其设置（例如，列分隔符）。
+- 要从中复制的 Blob 的位置：**FolderPath** 和 **FileName**；
+- 指示如何分析内容的 blob 格式：**TextFormat** 及其设置（例如，列分隔符）。
 - 数据结构，包括列名称和数据类型（本示例中映射到接收器 SQL 表）。
 
 ```csharp
-// Create a Azure Blob dataset
+// Create an Azure Blob dataset
 Console.WriteLine("Creating dataset " + blobDatasetName + "...");
 DatasetResource blobDataset = new DatasetResource(
     new AzureBlobDataset
@@ -278,7 +275,7 @@ Console.WriteLine(SafeJsonConvert.SerializeObject(blobDataset, client.Serializat
 在 Azure SQL 数据库中定义表示接收器数据的数据集。 此数据集引用在上一步中创建的 Azure SQL 数据库链接服务。 它还指定用于保存所复制数据的 SQL 表。 
 
 ```csharp
-// Create a Azure SQL Database dataset
+// Create an Azure SQL Database dataset
 Console.WriteLine("Creating dataset " + sqlDatasetName + "...");
 DatasetResource sqlDataset = new DatasetResource(
     new AzureSqlTableDataset
@@ -508,7 +505,7 @@ Checking copy activity run details...
   "throughput": 0.01,
   "errors": [],
   "effectiveIntegrationRuntime": "DefaultIntegrationRuntime (East US)",
-  "usedCloudDataMovementUnits": 2,
+  "usedDataIntegrationUnits": 2,
   "billedDuration": 2
 }
 
@@ -517,6 +514,7 @@ Press any key to exit...
 
 
 ## <a name="next-steps"></a>后续步骤
+
 此示例中的管道将数据从 Azure Blob 存储中的一个位置复制到另一个位置。 你已了解如何： 
 
 > [!div class="checklist"]

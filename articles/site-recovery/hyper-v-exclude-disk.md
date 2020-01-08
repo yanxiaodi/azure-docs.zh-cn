@@ -1,23 +1,25 @@
 ---
-title: "使用 Azure Site Recovery 从保护项中排除磁盘 | Microsoft 文档"
-description: "介绍在从 Hyper-V 复制到 Azure 时，为何需要从复制中排除 VM 磁盘，以及如何这样做。"
-services: site-recovery
-author: nsoneji
-manager: garavd
+title: 使用 Azure Site Recovery 服务设置灾难恢复时，从复制中排除磁盘 | Microsoft Docs
+description: 介绍如何在灾难恢复到 Azure 期间将 VM 磁盘从复制中排除。
+author: mayurigupta13
+manager: rochakm
 ms.service: site-recovery
-ms.topic: article
-ms.date: 02/14/2018
-ms.author: nisoneji
-ms.openlocfilehash: 131c98c6772a68c8617df3160b159ece62bd1fc9
-ms.sourcegitcommit: d1f35f71e6b1cbeee79b06bfc3a7d0914ac57275
-ms.translationtype: HT
+services: site-recovery
+ms.topic: conceptual
+ms.date: 01/19/2019
+ms.author: mayg
+ms.openlocfilehash: f86ded99ef5280a4e6929c39a9fd323d1b61f6f0
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/22/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60773869"
 ---
 # <a name="exclude-disks-from-replication"></a>从复制中排除磁盘
 本文介绍如何从复制中排除磁盘。 这种排除可以优化消耗的复制带宽，或者优化此类磁盘利用的目标端资源。
 
 ## <a name="supported-scenarios"></a>支持的方案
+
 **功能** | **VMware 到 Azure** | **Hyper-V 到 Azure** | **Azure 到 Azure**| **Hyper-V 到 Hyper-V** 
 --|--|--|--|--
 排除磁盘 | 是 | 是 | 否 | 否
@@ -41,7 +43,7 @@ ms.lasthandoff: 02/22/2018
 2. 从复制中排除 tempdb 磁盘。
 
 ## <a name="how-to-exclude-disks"></a>如何排除磁盘
-按照[启用复制](site-recovery-hyper-v-site-to-azure.md)工作流，通过 Azure Site Recovery 门户保护虚拟机。 在工作流的第四步，使用“要复制的磁盘”列从复制中排除磁盘。 默认情况下，选择所有磁盘进行复制。 清除要从复制中排除的磁盘所对应的复选框，并完成启用复制的步骤。
+按照[启用复制](site-recovery-hyper-v-site-to-azure.md)工作流，通过 Azure Site Recovery 门户保护虚拟机。 在工作流的第四步，使用“要复制的磁盘”  列从复制中排除磁盘。 默认情况下，选择所有磁盘进行复制。 清除要从复制中排除的磁盘所对应的复选框，并完成启用复制的步骤。
 
 ![从复制中排除磁盘，并为 Hyper-V 启用到 Azure 故障回复的复制](./media/hyper-v-exclude-disk/enable-replication6-with-exclude-disk.png)
 
@@ -58,7 +60,7 @@ ms.lasthandoff: 02/22/2018
 - SQL Server tempdb 磁盘
 - 页面文件 (pagefile.sys) 磁盘
 
-## <a name="excample-1-exclude-the-sql-server-tempdb-disk"></a>示例 1：排除 SQL Server tempdb 磁盘
+## <a name="example-1-exclude-the-sql-server-tempdb-disk"></a>示例 1：排除 SQL Server tempdb 磁盘
 假设有一台拥有可被排除的 tempdb 的 SQL Server 虚拟机。
 
 虚拟磁盘的名称为 SalesDB。
@@ -71,7 +73,7 @@ ms.lasthandoff: 02/22/2018
 DB-Disk0-OS | DISK0 | C:\ | 操作系统磁盘
 DB-Disk1| Disk1 | D:\ | SQL 系统数据库和用户数据库 1
 DB-Disk2（已从保护中排除该磁盘） | Disk2 | E:\ | 临时文件
-DB-Disk3（已从保护中排除该磁盘） | Disk3 | F:\ | SQL tempdb 数据库（文件夹路径 (F:\MSSQL\Data\) </br /> </br />在故障转移前记下该文件夹路径。
+DB-Disk3（已从保护中排除该磁盘） | Disk3 | F:\ | SQL tempdb 数据库（文件夹路径 (F:\MSSQL\Data\)） <br /> <br />记下在故障转移之前的文件夹路径。
 DB-Disk4 | Disk4 |G:\ |用户数据库 2
 
 在虚拟机的两个磁盘上的数据改动是临时性的，因此在保护 SalesDB 虚拟机时，可以从复制中排除 Disk2 和 Disk3。 Azure Site Recovery 不会复制这些磁盘。 进行故障转移时，这些磁盘不会存在于 Azure 的故障转移虚拟机上。
@@ -81,7 +83,7 @@ DB-Disk4 | Disk4 |G:\ |用户数据库 2
 **来宾操作系统磁盘编号** | **驱动器号** | **磁盘上的数据类型**
 --- | --- | ---
 DISK0 | C:\ | 操作系统磁盘
-Disk1 | E:\ | 临时存储</br /> </br />Azure 添加此磁盘并分配第一个可用的驱动器号。
+Disk1 | E:\ | 临时存储<br /> <br />Azure 将添加此磁盘并分配第一个可用的驱动器号。
 Disk2 | D:\ | SQL 系统数据库和用户数据库 1
 Disk3 | G:\ | 用户数据库 2
 
@@ -145,7 +147,7 @@ Disk3 为 SQL tempdb 磁盘\)（tempdb 文件夹路径为 F:\MSSQL\Data），已
 **来宾操作系统磁盘编号** | **驱动器号** | **磁盘上的数据类型**
 --- | --- | ---
 DISK0 | C:\ | 操作系统磁盘
-Disk1 | E:\ | 临时存储</br /> </br />Azure 添加此磁盘并分配第一个可用的驱动器号。
+Disk1 | E:\ | 临时存储<br /> <br />Azure 将添加此磁盘并分配第一个可用的驱动器号。
 Disk2 | D:\ | SQL 系统数据库和用户数据库 1
 Disk3 | G:\ | 用户数据库 2
 
@@ -166,7 +168,7 @@ DB-Disk4 | Disk4 | G:\ | 用户数据库 2
 假设有一台虚拟机，其中的页面文件磁盘可以被排除。
 存在两种情况。
 
-### <a name="case-1-the-paging-file-is-configured-on-the-d-drive"></a>情况 1：在 D: 驱动器上配置页面文件
+### <a name="case-1-the-paging-file-is-configured-on-the-d-drive"></a>案例 1：在 D: 驱动器上配置页面文件
 以下为磁盘配置：
 
 **磁盘名称** | **来宾操作系统磁盘编号** | **驱动器号** | **磁盘上的数据类型**
@@ -185,7 +187,7 @@ DB-Disk3 | Disk3 | F:\ | 用户数据 2
 **磁盘名称** | **来宾操作系统磁盘编号** | **驱动器号** | **磁盘上的数据类型**
 --- | --- | --- | ---
 DB-Disk0-OS | DISK0 | C:\ | 操作系统磁盘
-DB-Disk1 | Disk1 | D:\ | 临时存储</br /> </br />pagefile.sys
+DB-Disk1 | Disk1 | D:\ | 临时存储<br /> <br />pagefile.sys
 DB-Disk2 | Disk2 | E:\ | 用户数据 1
 DB-Disk3 | Disk3 | F:\ | 用户数据 2
 
@@ -195,7 +197,7 @@ Disk1 (D:) 已排除，因此 D: 是可用列表中的首个驱动器号。 Azur
 
 ![Azure 虚拟机上的页面文件设置](./media/hyper-v-exclude-disk/pagefile-on-Azure-vm-after-failover.png)
 
-### <a name="case-2-the-paging-file-is-configured-on-another-drive-other-than-d-drive"></a>情况 2：在另一驱动器（D: 以外的驱动器）上配置页面文件
+### <a name="case-2-the-paging-file-is-configured-on-another-drive-other-than-d-drive"></a>案例 2：在另一驱动器（非 D: 驱动器）上配置页面文件
 
 以下为源虚拟机磁盘配置：
 
@@ -212,10 +214,10 @@ DB-Disk3 | Disk3 | F:\ | 用户数据 2
 
 将虚拟机从 Hyper-V 故障转移到 Azure 以后，Azure 虚拟机上的磁盘如下所示：
 
-**磁盘名称**| **来宾操作系统磁盘编号**| **驱动器号** | **磁盘上的数据类型**
+**磁盘名称** | **来宾操作系统磁盘编号** | **驱动器号** | **磁盘上的数据类型**
 --- | --- | --- | ---
 DB-Disk0-OS | DISK0  |C:\ |操作系统磁盘
-DB-Disk1 | Disk1 | D:\ | 临时存储</br /> </br />pagefile.sys
+DB-Disk1 | Disk1 | D:\ | 临时存储<br /> <br />pagefile.sys
 DB-Disk2 | Disk2 | E:\ | 用户数据 1
 DB-Disk3 | Disk3 | F:\ | 用户数据 2
 

@@ -1,22 +1,19 @@
 ---
 title: Azure IoT 中心设备预配服务中的服务概念 | Microsoft Docs
-description: 介绍服务预配概念，特定于使用 DPS 和 IoT 中心预配的设备
-services: iot-dps
-keywords: ''
+description: 介绍服务预配概念，特定于使用设备预配服务和 IoT 中心的设备
 author: nberdy
 ms.author: nberdy
-ms.date: 03/30/2018
-ms.topic: article
+ms.date: 09/18/2019
+ms.topic: conceptual
 ms.service: iot-dps
-documentationcenter: ''
-manager: timlt
-ms.devlang: na
-ms.custom: mvc
-ms.openlocfilehash: d2bc58514ea716954ec3ac96151549168fedc2ed
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+services: iot-dps
+manager: briz
+ms.openlocfilehash: 51486da6b34c0ff1e9b6d05558c2132a416913e9
+ms.sourcegitcommit: 1c9858eef5557a864a769c0a386d3c36ffc93ce4
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 09/18/2019
+ms.locfileid: "71104367"
 ---
 # <a name="iot-hub-device-provisioning-service-concepts"></a>IoT 中心设备预配服务概念
 
@@ -32,17 +29,20 @@ IoT 中心设备预配服务是一项 IoT 中心帮助程序服务，该服务�
 
 ## <a name="device-provisioning-endpoint"></a>设备预配终结点
 
-设备预配终结点是单一终结点，所有设备都使用它进行自动预配。 此 URL 对于所有预配服务实例都是相同 ，因而无需使用供应链方案中的新连接信息来刷新设备。 [ID 范围](#id-scope)确保租户隔离。
+设备预配终结点是单一终结点，所有设备都使用它进行自动预配。 此 URL 对于所有预配服务实例都是相同 ，因而无需使用供应链方案中的新连接信息来刷新设备。 ID 范围可确保租户隔离。
 
-## <a name="linked-iot-hubs"></a>链接 IoT 中心
+## <a name="linked-iot-hubs"></a>链接的 IoT 中心
 
-设备预配服务只能将设备预配到已链接到它的 IoT 中心。 将 IoT 中心链接到设备预配服务可以为 IoT 中心的设备注册表提供服务读/写权限；通过该链接，设备预配服务可以注册设备 ID 并在设备孪生中设置初始配置。 链接 IoT 中心可能位于任何 Azure 区域。 可将其他订阅中的中心链接到预配服务。
+设备预配服务只能将设备预配到已链接到它的 IoT 中心。 将 IoT 中心链接到设备预配服务实例可以为 IoT 中心的设备注册表提供服务读/写权限；通过该链接，设备预配服务可以注册设备 ID 并在设备孪生中设置初始配置。 链接 IoT 中心可能位于任何 Azure 区域。 可将其他订阅中的中心链接到预配服务。
 
 ## <a name="allocation-policy"></a>分配策略
 
 用于确定设备预配服务如何将设备分配给 IoT 中心的服务级别设置。 支持三种分配策略：
+
 * **均匀加权分发**：链接的 IoT 中心等可能地获得预配到它们的设备。 默认设置。 如果只将设备预配到一个 IoT 中心，则可以保留此设置。
+
 * **最低延迟**：将设备预配到具有最低延迟的 IoT 中心。 如果多个链接 IoT 中心提供相同的最低延迟，则预配服务将在这些中心上散列设备
+
 * **通过注册列表进行静态配置**：注册列表中所需 IoT 中心的规范优先于服务级别分配策略。
 
 ## <a name="enrollment"></a>注册
@@ -57,14 +57,14 @@ IoT 中心设备预配服务是一项 IoT 中心帮助程序服务，该服务�
 
 ### <a name="enrollment-group"></a>注册组
 
-注册组是一组共享特定证明机制的设备。 注册组中的所有设备都提供已由同一根或中间 CA 签名的 X.509 证书。 注册组只能使用 X.509 证明机制。 注册组名称和证书名称必须是小写的字母数字，并可包含连字符。
+注册组是一组共享特定证明机制的设备。 注册组支持 x.509 和对称。 X.509 注册组中的所有设备都提供已由同一根或中间证书颁发机构（CA）签名的 x.509 证书。 对称密钥注册组中的每个设备都提供派生自组对称密钥的 SAS 令牌。 注册组名称和证书名称必须是小写的字母数字，并可包含连字符。
 
 > [!TIP]
 > 建议对共享所需初始配置的大量设备，或者全部转到同一租户的设备使用注册组。
 
-### <a name="individual-enrollment"></a>个人注册
+### <a name="individual-enrollment"></a>单独注册
 
-个人注册是用于可注册的单一设备的条目。 个人注册可使用 X.509 叶证书或 SAS 令牌（来自物理或虚拟 TPM）作为证明机制。 个人注册中的注册 ID 是小写的字母数字，并且可包含连字符。 个人注册可能会指定所需 IoT 中心设备 ID。
+单独注册是用于可注册的单一设备的条目。 个人注册可使用 X.509 叶证书或 SAS 令牌（来自物理或虚拟 TPM）作为证明机制。 单独注册中的注册 ID 是小写的字母数字，并且可包含连字符。 单独注册可能会指定所需 IoT 中心设备 ID。
 
 > [!TIP]
 > 对于需要唯一初始配置的设备或仅能通过 TPM 证明使用 SAS 令牌进行身份验证的设备，建议为其使用个人注册。

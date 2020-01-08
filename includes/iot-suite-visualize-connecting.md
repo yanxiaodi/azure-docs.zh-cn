@@ -8,53 +8,49 @@ ms.topic: include
 ms.date: 04/24/2018
 ms.author: dobett
 ms.custom: include file
-ms.openlocfilehash: 5eca35141544e8ea451dfc7471a83e3e1e980360
-ms.sourcegitcommit: 688a394c4901590bbcf5351f9afdf9e8f0c89505
-ms.translationtype: HT
+ms.openlocfilehash: 9b9e28f18208674609d0842b0e3a54e3fc661c9f
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/18/2018
-ms.locfileid: "34307611"
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67173384"
 ---
 ## <a name="view-device-telemetry"></a>查看设备遥测数据
 
-可以在解决方案中的“设备”页上查看从设备发送的遥测数据。
+您可以查看从你的设备发送的遥测数据**Device Explorer**解决方案中的页。
 
-1. 在“设备”页上的设备列表中选择已预配的设备。 一个面板将显示有关设备的信息，其中包括设备遥测绘图：
+1. 选择的设备的设备列表中预配**Device Explorer**页。 一个面板将显示有关设备的信息，其中包括设备遥测绘图：
 
     ![查看设备详细信息](media/iot-suite-visualize-connecting/devicesdetail.png)
 
-1. 选择“压力”可更改遥测显示：
+1. 选择“压力”  可更改遥测显示：
 
     ![查看压力遥测](media/iot-suite-visualize-connecting/devicespressure.png)
 
-1. 若要查看有关设备的诊断信息，请向下滚动到“诊断”：
+1. 若要查看有关设备的诊断信息，请向下滚动到“诊断”  ：
 
     ![查看设备诊断](media/iot-suite-visualize-connecting/devicesdiagnostics.png)
 
 ## <a name="act-on-your-device"></a>对设备执行操作
 
-若要对设备调用方法，请使用远程监视解决方案中的“设备”页。 例如，在远程监视解决方案中，**冷却器**设备实现了 **FirmwareUpdate** 方法。
+若要调用设备上的方法，请使用**Device Explorer**远程监视解决方案中的页。 例如，在远程监视解决方案**冷却器**设备实现**重新启动**方法。
 
-1. 选择“设备”可导航到解决方案中的“设备”页。
+1. 选择**设备**以导航到**Device Explorer**解决方案中的页。
 
-1. 在“设备”页上的设备列表中选择已预配的设备：
+1. 选择的设备的设备列表中预配**Device Explorer**页：
 
-    ![选择物理设备](media/iot-suite-visualize-connecting/devicesselect.png)
+    ![选择真实设备](media/iot-suite-visualize-connecting/devicesselect.png)
 
-1. 若要显示可在设备上调用的方法列表，请选择“作业”，然后选择“运行方法”。 若要计划在多个设备上运行的作业，可以在列表中选择多个设备。 “作业”面板会显示普遍适用于所有选定设备的方法类型。
+1. 若要显示在设备可以调用的方法的列表，请选择**作业**，然后**方法**。 若要计划在多个设备上运行的作业，可以在列表中选择多个设备。 “作业”面板会显示普遍适用于所有选定设备的方法类型  。
 
-1. 选择 **FirmwareUpdate**，将作业名称设置为 **UpdatePhysicalChiller**。 将“固件版本”设置为 **2.0.0**，将“固件 URI”设置为 **http://contoso.com/updates/firmware.bin**，然后选择“应用”：
+1. 选择**重新启动**，将作业名称设置为**RebootPhysicalChiller** ，然后选择**应用**:
 
     ![计划固件更新](media/iot-suite-visualize-connecting/deviceschedule.png)
 
 1. 模拟设备处理该方法时，一系列消息将显示在运行设备代码的控制台中。
 
-1. 更新完成时，“设备”页上将显示新的固件版本：
-
-    ![更新已完成](media/iot-suite-visualize-connecting/complete.png)
-
 > [!NOTE]
-> 若要跟踪解决方案中作业的状态，请选择“查看”。
+> 若要跟踪解决方案中作业的状态，请选择**查看作业状态**。
 
 ## <a name="next-steps"></a>后续步骤
 

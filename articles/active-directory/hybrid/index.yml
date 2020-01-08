@@ -1,0 +1,81 @@
+### YamlMime:Landing
+title: 混合标识文档
+summary: Microsoft 的标识解决方案跨越本地和基于云的功能，创建单一用户标识对所有资源进行身份验证和授权，而不考虑其位置。 我们称此为混合标识。
+metadata:
+  author: billmath
+  description: Azure AD Connect 会将本地目录与 Azure Active Directory 集成。 这样，便可以为集成到 Azure AD 的 Office 365、Azure 和 SaaS 应用程序的用户提供一个通用标识。
+  manager: daveba
+  ms.author: billmath
+  ms.collection: na
+  ms.date: 08/15/2019
+  ms.service: active-directory
+  ms.subservice: na
+  ms.topic: landing-page
+  services: active-directory
+  ms.openlocfilehash: fa9007d0e9ad59ee0ffb29fe1c5c74c8530d84fa
+  ms.sourcegitcommit: 19a821fc95da830437873d9d8e6626ffc5e0e9d6
+  ms.translationtype: HT
+  ms.contentlocale: zh-CN
+  ms.lasthandoff: 08/29/2019
+  ms.locfileid: "70162199"
+landingContent:
+- title: 关于混合标识
+  linkLists:
+  - linkListType: overview
+    links:
+    - text: 什么是混合标识？
+      url: whatis-hybrid-identity.md
+- title: 确定用于管理用户和组生命周期的最佳解决方案
+  linkLists:
+  - linkListType: overview
+    links:
+    - text: 什么是 Azure AD Connect 和 Connect Health？
+      url: whatis-azure-ad-connect.md
+  - linkListType: tutorial
+    links:
+    - text: 使用密码哈希同步 (PHS) 集成单个 AD 林
+      url: tutorial-password-hash-sync.md
+    - text: 使用直通身份验证 (PTA) 集成单个 AD 林
+      url: tutorial-passthrough-authentication.md
+    - text: 使用联合身份验证集成单个 AD 林
+      url: tutorial-federation.md
+- title: 选择最适合组织的身份验证方法
+  linkLists:
+  - linkListType: overview
+    links:
+    - text: 什么是密码哈希同步？
+      url: whatis-phs.md
+    - text: 什么是直通身份验证？
+      url: how-to-connect-pta.md
+    - text: 什么是联合？
+      url: whatis-fed.md
+    - text: 什么是单一登录？
+      url: how-to-connect-sso.md
+  - linkListType: concept
+    links:
+    - text: 确定哪种身份验证方法适合你
+      url: /azure/security/fundamentals/choose-ad-authn
+- title: 混合标识入门
+  linkLists:
+  - linkListType: how-to-guide
+    links:
+    - text: 使用快速设置安装 Azure AD Connect
+      url: how-to-connect-install-express.md
+    - text: 使用自定义设置安装 Azure AD Connect
+      url: how-to-connect-install-custom.md
+    - text: 配置 AD DS 连接器帐户
+      url: how-to-connect-configure-ad-ds-connector-account.md
+    - text: 更改 ADSync 服务帐户密码
+      url: how-to-connect-sync-change-serviceacct-pass.md
+    - text: 更改 Azure AD 连接器帐户密码
+      url: how-to-connect-azureadaccount.md
+    - text: 更改 AD DS 帐户密码
+      url: how-to-connect-sync-change-addsacct-pass.md
+  - linkListType: reference
+    links:
+    - text: 所需的端口和协议
+      url: reference-connect-ports.md
+    - text: 帐户和权限
+      url: reference-connect-accounts-permissions.md
+    - text: Azure AD Connect 版本历史记录
+      url: reference-connect-version-history.md

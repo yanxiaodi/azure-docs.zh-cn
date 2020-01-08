@@ -1,23 +1,27 @@
 ---
-title: Azure 容器服务教程 - 准备 ACR
+title: （已弃用）Azure 容器服务教程 - 准备 ACR
 description: Azure 容器服务教程 - 准备 ACR
 services: container-service
-author: neilpeterson
+author: iainfoulds
 manager: jeconnoc
 ms.service: container-service
 ms.topic: tutorial
 ms.date: 02/26/2018
-ms.author: nepeters
+ms.author: iainfou
 ms.custom: mvc
-ms.openlocfilehash: f58a8d76cc46ac25474c7b91e464974612876a06
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.openlocfilehash: d0107e09bf8706ba7d4c813814103ca109262d8d
+ms.sourcegitcommit: de32e8825542b91f02da9e5d899d29bcc2c37f28
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 02/02/2019
+ms.locfileid: "55657393"
 ---
-# <a name="deploy-and-use-azure-container-registry"></a>部署并使用 Azure 容器注册表
+# <a name="deprecated-deploy-and-use-azure-container-registry"></a>（已弃用）部署和使用 Azure 容器注册表
 
-[!INCLUDE [aks-preview-redirect.md](../../../includes/aks-preview-redirect.md)]
+> [!TIP]
+> 有关使用 Azure Kubernetes 服务的此教程的更新版本，请参阅[教程：部署和使用 Azure 容器注册表](../../aks/tutorial-kubernetes-prepare-acr.md)。
+
+[!INCLUDE [ACS deprecation](../../../includes/container-service-kubernetes-deprecation.md)]
 
 Azure 容器注册表 (ACR) 是用于 Docker 容器映像的基于 Azure 的专用注册表。 本教程的第 2 部分（共 7 部分）演示了如何部署 Azure 容器注册表实例并向其推送容器映像。 已完成的步骤包括：
 
@@ -32,19 +36,19 @@ Azure 容器注册表 (ACR) 是用于 Docker 容器映像的基于 Azure 的专�
 
 在[上一教程](./container-service-tutorial-kubernetes-prepare-app.md)中，已经为一个 Azure Voting 应用程序示例创建了容器映像。 如果尚未创建 Azure Voting 应用映像，请返回到[教程 1：创建容器映像](./container-service-tutorial-kubernetes-prepare-app.md)。
 
-本教程需要运行 Azure CLI 2.0.4 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。 
+本教程需要运行 Azure CLI 2.0.4 或更高版本。 运行 `az --version` 即可查找版本。 如需进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。 
 
 ## <a name="deploy-azure-container-registry"></a>部署 Azure 容器注册表
 
 在部署 Azure 容器注册表时，首先需要一个资源组。 Azure 资源组是在其中部署和管理 Azure 资源的逻辑容器。
 
-使用 [az group create](/cli/azure/group#az_group_create) 命令创建资源组。 在此示例中，在 `westeurope` 区域中创建了名为 `myResourceGroup` 的资源组。
+使用 [az group create](/cli/azure/group#az-group-create) 命令创建资源组。 在此示例中，在 `westeurope` 区域中创建了名为 `myResourceGroup` 的资源组。
 
 ```azurecli
 az group create --name myResourceGroup --location westeurope
 ```
 
-使用 [az acr create](/cli/azure/acr#az_acr_create) 命令创建 Azure 容器注册表。 容器注册表的名称必须唯一。
+使用 [az acr create](/cli/azure/acr#az-acr-create) 命令创建 Azure 容器注册表。 容器注册表的名称必须唯一。
 
 ```azurecli
 az acr create --resource-group myResourceGroup --name <acrName> --sku Basic
@@ -54,7 +58,7 @@ az acr create --resource-group myResourceGroup --name <acrName> --sku Basic
 
 ## <a name="container-registry-login"></a>容器注册表登录
 
-运行 [az acr login](https://docs.microsoft.com/cli/azure/acr#az_acr_login) 命令，登录 ACR 实例。 需要提供创建容器注册表时所使用的唯一名称。
+运行 [az acr login](https://docs.microsoft.com/cli/azure/acr#az-acr-login) 命令，登录 ACR 实例。 需要提供创建容器注册表时所使用的唯一名称。
 
 ```azurecli
 az acr login --name <acrName>
@@ -93,7 +97,7 @@ az acr list --resource-group myResourceGroup --query "[].{acrLoginServer:loginSe
 docker tag azure-vote-front <acrLoginServer>/azure-vote-front:v1
 ```
 
-标记后，即可运行 [docker images] (https://docs.docker.com/engine/reference/commandline/images/) 验证操作。
+标记后，请运行 [docker images](https://docs.docker.com/engine/reference/commandline/images/) 来验证操作。
 
 ```bash
 docker images
@@ -123,7 +127,7 @@ docker push <acrLoginServer>/azure-vote-front:v1
 
 ## <a name="list-images-in-registry"></a>列出注册表中的映像
 
-若要返回已推送到 Azure 容器注册表的映像列表，请使用 [az acr repository list](/cli/azure/acr/repository#az_acr_repository_list) 命令。 使用 ACR 实例名称更新命令。
+若要返回已推送到 Azure 容器注册表的映像列表，请使用 [az acr repository list](/cli/azure/acr/repository#az-acr-repository-list) 命令。 使用 ACR 实例名称更新命令。
 
 ```azurecli
 az acr repository list --name <acrName> --output table
@@ -137,7 +141,7 @@ Result
 azure-vote-front
 ```
 
-然后，若要查看特定映像的标记，请使用 [az acr repository show-tags](/cli/azure/acr/repository#show-tags) 命令。
+然后，若要查看特定映像的标记，请使用 [az acr repository show-tags](/cli/azure/acr/repository) 命令。
 
 ```azurecli
 az acr repository show-tags --name <acrName> --repository azure-vote-front --output table

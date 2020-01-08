@@ -1,77 +1,111 @@
 ---
-title: 通过 PowerShell 自定义 Azure 事件网格的事件 | Microsoft Docs
-description: 使用 Azure 事件网格和 PowerShell 发布一个主题，然后订阅该事件。
+title: 将自定义事件发送到 Web 终结点 - 事件网格、PowerShell
+description: 使用 Azure 事件网格和 PowerShell 发布自定义主题，然后订阅该主题的事件。 事件由 Web 应用程序处理。
 services: event-grid
 keywords: ''
-author: tfitzmac
-ms.author: tomfitz
-ms.date: 03/20/2018
+author: spelluru
+ms.author: spelluru
+ms.date: 12/07/2018
 ms.topic: quickstart
 ms.service: event-grid
-ms.openlocfilehash: 695aa5c567882ef7742666146877e1fbc660492b
-ms.sourcegitcommit: 688a394c4901590bbcf5351f9afdf9e8f0c89505
+ms.custom: seodec18
+ms.openlocfilehash: fa703defdda17a69aec99d3fbe479e9867781d68
+ms.sourcegitcommit: 3102f886aa962842303c8753fe8fa5324a52834a
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/18/2018
-ms.locfileid: "34300945"
+ms.lasthandoff: 04/23/2019
+ms.locfileid: "66156030"
 ---
-# <a name="create-and-route-custom-events-with-azure-powershell-and-event-grid"></a>使用 Azure PowerShell 和事件网格创建和路由自定义事件
+# <a name="quickstart-route-custom-events-to-web-endpoint-with-powershell-and-event-grid"></a>快速入门：使用 PowerShell 和事件网格将自定义事件路由到 Web 终结点
 
-Azure 事件网格是针对云的事件处理服务。 在本文中，请使用 Azure PowerShell 创建一个自定义主题，然后订阅该主题，再触发可查看结果的事件。 通常将事件发送到与该事件对应的终结点，例如 webhook 或 Azure Function。 但在本文中，为简便起见，请将事件发送到仅收集消息的 URL。 可以使用 [Hookbin](https://hookbin.com/) 提供的第三方工具创建此 URL。
+Azure 事件网格是针对云的事件处理服务。 在本文中，请使用 Azure PowerShell 创建一个自定义主题，然后订阅该主题，再触发可查看结果的事件。 通常，你会将事件发送到处理事件数据并执行操作的终结点。 但是，为了简化本文，你将事件发送到收集并显示消息的 Web 应用。
 
->[!NOTE]
->**Hookbin** 并不适合在高吞吐量方案中使用。 使用此工具纯粹是为了演示。 如果一次推送多个事件，可能不会在工具中看到所有事件。
+完成后即可看到事件数据已发送到 Web 应用。
 
-完成后即可看到事件数据已发送到某个终结点。
+![查看结果](./media/custom-event-quickstart-powershell/view-result.png)
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
 [!INCLUDE [quickstarts-free-trial-note.md](../../includes/quickstarts-free-trial-note.md)]
 
-本文要求运行最新版本的 Azure PowerShell。 如需进行安装或升级，请参阅[安装和配置 Azure PowerShell](/powershell/azure/install-azurerm-ps)。
+本文要求运行最新版本的 Azure PowerShell。 如需进行安装或升级，请参阅[安装和配置 Azure PowerShell](/powershell/azure/install-Az-ps)。
 
 ## <a name="create-a-resource-group"></a>创建资源组
 
 事件网格主题是 Azure 资源，必须放置在 Azure 资源组中。 该资源组是在其中部署和管理 Azure 资源的逻辑集合。
 
-使用 [New-AzureRmResourceGroup](/powershell/module/azurerm.resources/new-azurermresourcegroup) 命令创建资源组。
+使用 [New-AzResourceGroup](/powershell/module/az.resources/new-azresourcegroup) 命令创建资源组。
 
 以下示例在“westus2”位置创建名为“gridResourceGroup”的资源组。
 
-```powershell
-New-AzureRmResourceGroup -Name gridResourceGroup -Location westus2
+```powershell-interactive
+New-AzResourceGroup -Name gridResourceGroup -Location westus2
 ```
+
+[!INCLUDE [event-grid-register-provider-powershell.md](../../includes/event-grid-register-provider-powershell.md)]
 
 ## <a name="create-a-custom-topic"></a>创建自定义主题
 
-事件网格主题提供用户定义的终结点，可向其发布事件。 以下示例在资源组中创建自定义主题。 用主题的唯一名称替换 `<topic_name>`。 主题名称必须唯一，因为它由 DNS 条目表示。
+事件网格主题提供用户定义的终结点，可向其发布事件。 以下示例在资源组中创建自定义主题。 用主题的唯一名称替换 `<your-topic-name>`。 主题名称必须唯一，因为它是 DNS 条目的一部分。 此外，它必须介于 3 到 50 个字符之间，并且只包含值 a-z、A-Z、0-9 和“-”
 
-```powershell
-New-AzureRmEventGridTopic -ResourceGroupName gridResourceGroup -Location westus2 -Name <topic_name>
+```powershell-interactive
+$topicname="<your-topic-name>"
+
+New-AzEventGridTopic -ResourceGroupName gridResourceGroup -Location westus2 -Name $topicname
 ```
 
 ## <a name="create-a-message-endpoint"></a>创建消息终结点
 
-在订阅自定义主题之前，让我们创建事件消息的终结点。 与其编写代码来响应事件，不如创建一个终结点来收集消息，方便你查看。 Hookbin 是第三方工具，用于创建终结点和查看发送到其中的请求。 转到 [Hookbin](https://hookbin.com/) 并单击“创建新终结点”。  复制 bin URL，因为在订阅主题时需要它。
+在订阅主题之前，让我们创建事件消息的终结点。 通常情况下，终结点基于事件数据执行操作。 为了简化此快速入门，将部署用于显示事件消息的[预建的 Web 应用](https://github.com/Azure-Samples/azure-event-grid-viewer)。 所部署的解决方案包括应用服务计划、应用服务 Web 应用和 GitHub 中的源代码。
+
+将 `<your-site-name>` 替换为 Web 应用的唯一名称。 Web 应用名称必须唯一，因为它是 DNS 条目的一部分。
+
+```powershell-interactive
+$sitename="<your-site-name>"
+
+New-AzResourceGroupDeployment `
+  -ResourceGroupName gridResourceGroup `
+  -TemplateUri "https://raw.githubusercontent.com/Azure-Samples/azure-event-grid-viewer/master/azuredeploy.json" `
+  -siteName $sitename `
+  -hostingPlanName viewerhost
+```
+
+部署可能需要几分钟才能完成。 部署成功后，请查看 Web 应用以确保它正在运行。 在 Web 浏览器中导航到 `https://<your-site-name>.azurewebsites.net`
+
+应会看到站点上当前未显示任何消息。
 
 ## <a name="subscribe-to-a-topic"></a>订阅主题
 
-订阅主题是为了告知事件网格要跟踪哪些事件。以下示例订阅所创建的自定义主题，并将 Hookbin 中的 URL 作为事件通知的终结点传递。 将 `<event_subscription_name>` 替换为订阅的唯一名称，将 `<endpoint_URL>` 替换为上一部分的值。 在订阅时指定终结点，然后事件网格就会负责将事件路由到该终结点。 对于 `<topic_name>`，请使用此前创建的值。
+订阅主题，以告知事件网格要跟踪哪些事件以及要将这些事件发送到哪个位置。 以下示例将订阅所创建的主题，并将 Web 应用中的 URL 作为事件通知的终结点传递。
 
-```powershell
-New-AzureRmEventGridSubscription -EventSubscriptionName <event_subscription_name> -Endpoint <endpoint_URL> -ResourceGroupName gridResourceGroup -TopicName <topic_name>
+Web 应用的终结点必须包括后缀 `/api/updates/`。
+
+```powershell-interactive
+$endpoint="https://$sitename.azurewebsites.net/api/updates"
+
+New-AzEventGridSubscription `
+  -EventSubscriptionName demoViewerSub `
+  -Endpoint $endpoint `
+  -ResourceGroupName gridResourceGroup `
+  -TopicName $topicname
 ```
+
+再次查看 Web 应用，并注意现已向该应用发送了订阅验证事件。 选择眼睛图标以展开事件数据。 事件网格发送验证事件，以便终结点可以验证它是否想要接收事件数据。 Web 应用包含用于验证订阅的代码。
+
+![查看订阅事件](./media/custom-event-quickstart-powershell/view-subscription-event.png)
 
 ## <a name="send-an-event-to-your-topic"></a>向主题发送事件
 
-让我们触发一个事件，看看事件网格如何将消息分发到终结点。 首先，让我们获取主题的 URL 和密钥。 同样，请将主题名称用于 `<topic_name>`。
+让我们触发一个事件，看看事件网格如何将消息分发到终结点。 首先，让我们获取主题的 URL 和密钥。
 
-```powershell
-$endpoint = (Get-AzureRmEventGridTopic -ResourceGroupName gridResourceGroup -Name <topic-name>).Endpoint
-$keys = Get-AzureRmEventGridTopicKey -ResourceGroupName gridResourceGroup -Name <topic-name>
+```powershell-interactive
+$endpoint = (Get-AzEventGridTopic -ResourceGroupName gridResourceGroup -Name $topicname).Endpoint
+$keys = Get-AzEventGridTopicKey -ResourceGroupName gridResourceGroup -Name $topicname
 ```
 
 在本文中，为简便起见，请将示例事件数据设置为发送到自定义主题。 通常情况下，应用程序或 Azure 服务会发送事件数据。 以下示例使用 Hashtable 来构造事件的数据 `htbody`，然后将其转换为正确格式的 JSON 有效负载对象 `$body`：
 
-```powershell
+```powershell-interactive
 $eventID = Get-Random 99999
 
 #Date format should be SortableDateTimePattern (ISO 8601)
@@ -99,11 +133,11 @@ $body = "["+(ConvertTo-Json $htbody)+"]"
 
 现在，请向主题发送事件。
 
-```powershell
+```powershell-interactive
 Invoke-WebRequest -Uri $endpoint -Method POST -Body $body -Headers @{"aeg-sas-key" = $keys.Key1}
 ```
 
-现已触发事件，并且事件网格已将消息发送到订阅时配置的终结点。 浏览到此前创建的终结点 URL。 或者，在打开的浏览器中单击“刷新”。 此时会看到刚发送的事件。
+现已触发事件，并且事件网格已将消息发送到订阅时配置的终结点。 查看 Web 应用以查看刚刚发送的事件。
 
 ```json
 [{
@@ -123,10 +157,10 @@ Invoke-WebRequest -Uri $endpoint -Method POST -Body $body -Headers @{"aeg-sas-ke
 
 ## <a name="clean-up-resources"></a>清理资源
 
-如果打算继续处理此事件，请不要清除本文中创建的资源。 否则，请使用以下命令删除本文中创建的资源。
+如果打算继续处理此事件或事件查看器应用，请不要清除本文中创建的资源。 否则，请使用以下命令删除本文中创建的资源。
 
 ```powershell
-Remove-AzureRmResourceGroup -Name gridResourceGroup
+Remove-AzResourceGroup -Name gridResourceGroup
 ```
 
 ## <a name="next-steps"></a>后续步骤

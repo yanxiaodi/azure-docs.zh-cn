@@ -8,12 +8,12 @@ ms.topic: include
 ms.date: 04/13/2018
 ms.author: genli
 ms.custom: include file
-ms.openlocfilehash: 61e4aa5670e458f5d8e2a89d0be6ba3c1a899af9
-ms.sourcegitcommit: 6116082991b98c8ee7a3ab0927cf588c3972eeaa
-ms.translationtype: HT
+ms.openlocfilehash: 3240c9e313034475bc59786f2163702b7d9f7f88
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 06/05/2018
-ms.locfileid: "31805095"
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67172877"
 ---
 > [!div class="op_single_selector"]
 > * [PowerShell](../articles/virtual-machines/windows/multiple-nics.md)

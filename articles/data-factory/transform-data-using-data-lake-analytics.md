@@ -9,25 +9,22 @@ ms.reviewer: douglasl
 ms.service: data-factory
 ms.workload: data-services
 ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
-ms.date: 01/29/2018
+ms.topic: conceptual
+ms.date: 08/01/2018
 ms.author: abnarain
-ms.openlocfilehash: 7e55249ed187ad9fa74a39634bbb254c9b0b8b8e
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: d5b074fcf182bcc9bf4dc17ba21215d27e13cbdd
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60888429"
 ---
 # <a name="transform-data-by-running-u-sql-scripts-on-azure-data-lake-analytics"></a>通过在 Azure Data Lake Analytics 上运行 U-SQL 脚本来转换数据 
-> [!div class="op_single_selector" title1="Select the version of Data Factory service you are using:"]
-> * [版本 1 - 正式版](v1/data-factory-usql-activity.md)
-> * [版本 2 - 预览版](transform-data-using-data-lake-analytics.md)
+> [!div class="op_single_selector" title1="选择在使用数据工厂服务版本："]
+> * [版本 1](v1/data-factory-usql-activity.md)
+> * [当前版本](transform-data-using-data-lake-analytics.md)
 
 Azure 数据工厂中的管道通过使用链接计算服务来处理链接存储服务中的数据。 它包含一系列活动，其中每个活动执行特定的处理操作。 本文介绍在 **Azure Data Lake Analytics** 计算链接服务上运行 **U-SQL** 脚本的 **Data Lake Analytics U-SQL 活动**。 
-
-> [!NOTE]
-> 本文适用于目前处于预览状态的数据工厂版本 2。 如果使用数据工厂服务版本 1（正式版 (GA)），请参阅 [V1 中的 USQL 活动](v1/data-factory-usql-activity.md)。
 
 在使用 Data Lake Analytics U-SQL 活动创建管道之前，先创建 Azure Data Lake Analytics 帐户。 若要了解 Azure Data Lake Analytics，请参阅 [Azure Data Lake Analytics 入门](../data-lake-analytics/data-lake-analytics-get-started-portal.md)。
 
@@ -37,13 +34,13 @@ Azure 数据工厂中的管道通过使用链接计算服务来处理链接存�
 
 下表介绍了 JSON 定义中使用的一般属性。 
 
-| 属性                 | 说明                              | 必选                                 |
+| 属性                 | 说明                              | 需要                                 |
 | ------------------------ | ---------------------------------------- | ---------------------------------------- |
-| **类型**                 | 类型属性应设置为 **AzureDataLakeAnalytics**。 | 是                                      |
+| **type**                 | 类型属性应设置为：  AzureDataLakeAnalytics。 | 是                                      |
 | **accountName**          | Azure Data Lake Analytics 帐户名。  | 是                                      |
 | **dataLakeAnalyticsUri** | Azure Data Lake Analytics URI。           | 否                                       |
-| **subscriptionId**       | Azure 订阅 ID                    | 否（如果未指定，则使用数据工厂的订阅）。 |
-| **resourceGroupName**    | Azure 资源组名称                | 否（如果未指定，则使用数据工厂的资源组）。 |
+| **subscriptionId**       | Azure 订阅 ID                    | 否                                       |
+| **resourceGroupName**    | Azure 资源组名称                | 否                                       |
 
 ### <a name="service-principal-authentication"></a>服务主体身份验证
 Azure Data Lake Analytics 链接服务需要进行服务主体身份验证，才能连接到 Azure Data Lake Analytics 服务。 若要使用服务主体身份验证，请在 Azure Active Directory (Azure AD) 中注册一个应用程序实体并授予其访问 Data Lake Analytics 和它使用的 Data Lake Store 的权限。 有关详细步骤，请参阅[服务到服务身份验证](../data-lake-store/data-lake-store-authenticate-using-active-directory.md)。 记下下面的值，这些值用于定义链接服务：
@@ -76,7 +73,7 @@ Azure Data Lake Analytics 链接服务需要进行服务主体身份验证，才
                 "value": "<service principal key>",
                 "type": "SecureString"
             },
-            "tenant": "<tenant ID>",
+            "tenant": "<tenant info, e.g. microsoft.onmicrosoft.com>",
             "subscriptionId": "<optional, subscription id of ADLA>",
             "resourceGroupName": "<optional, resource group name of ADLA>"
         },
@@ -120,7 +117,7 @@ Azure Data Lake Analytics 链接服务需要进行服务主体身份验证，才
 
 下表描述了此活动特有的属性的名称和描述。 
 
-| 属性            | 说明                              | 必选 |
+| 属性            | 说明                              | 需要 |
 | :------------------ | :--------------------------------------- | :------- |
 | 名称                | 管道中活动的名称     | 是      |
 | description         | 描述活动用途的文本。  | 否       |
@@ -132,9 +129,9 @@ Azure Data Lake Analytics 链接服务需要进行服务主体身份验证，才
 | priority            | 确定应在所有排队的作业中选择哪些作业首先运行。 编号越低，优先级越高。 | 否       |
 | parameters          | 要传入 U-SQL 脚本的参数。    | 否       |
 | runtimeVersion      | 要使用的 U-SQL 引擎的运行时版本。 | 否       |
-| compilationMode     | <p>U-SQL 编译模式。 必须是以下值之一：**Semantic：**只执行语义检查和必要的完整性检查；**Full：**执行完整的编译，包括语法检查、优化、代码生成，等等；**SingleBox：**通过将 TargetType 设置为 SingleBox，可执行完整编译。 如果该属性未指定值，则服务器将确定最佳编译模式。 | 否 |
+| compilationMode     | <p>U-SQL 编译模式。 必须是这些值之一：**Semantic：** 只执行语义检查和必要的健全性检查；**Full：** 执行完整编译，包括语法检查、优化、代码生成等；**SingleBox：** 执行完整编译，且 TargetType 设置为 SingleBox。 如果该属性未指定值，则服务器将确定最佳编译模式。 | 否 |
 
-数据工厂将提交脚本，请参阅 [SearchLogProcessing.txt 脚本定义](#sample-u-sql-script)了解有关脚本定义的信息。 
+请参阅 [SearchLogProcessing.txt](#sample-u-sql-script) 了解有关脚本定义的信息。 
 
 ## <a name="sample-u-sql-script"></a>示例 U-SQL 脚本
 
@@ -165,7 +162,7 @@ OUTPUT @rs1
       USING Outputters.Tsv(quoting:false, dateTimeFormat:null);
 ```
 
-在上面的脚本示例中，脚本的输入和输出分别在 **@in** 和 **@out** 参数中定义。 数据工厂使用“parameters”部分动态传递 U-SQL 脚本中 **@in** 和 **@out** 参数的值。 
+在上面的脚本示例的输入和输出到脚本中定义 **\@中**并 **\@出**参数。 值 **\@中**并 **\@出**参数在 U-SQL 脚本中的使用动态传递由数据工厂参数部分。 
 
 也可在 Azure Data Lake Analytics 服务上运行的作业的管道定义中指定其他属性，如 degreeOfParallelism 和 priority。
 

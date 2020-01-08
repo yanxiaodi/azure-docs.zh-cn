@@ -1,59 +1,51 @@
 ---
-title: Azure Active Directory B2C：Microsoft 帐户配置 | Microsoft Docs
-description: 在 Azure Active Directory B2C 保护的应用程序中向用户提供使用 Microsoft 帐户的注册和登录功能。
+title: 设置使用 Microsoft 帐户的注册和登录-Azure Active Directory B2C
+description: 使用 Azure Active Directory B2C 向客户提供应用程序中的 Microsoft 帐户的注册和登录。
 services: active-directory-b2c
-documentationcenter: ''
-author: davidmu1
-manager: mtillman
-editor: ''
-ms.service: active-directory-b2c
+author: mmacy
+manager: celestedg
+ms.service: active-directory
 ms.workload: identity
-ms.topic: article
-ms.date: 12/06/2016
-ms.author: davidmu
-ms.openlocfilehash: e167c8737bc600f52759f33456fec3bc6e0a3678
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 08/08/2019
+ms.author: marsma
+ms.subservice: B2C
+ms.openlocfilehash: 134ca92671a41eb53201101a3622215466a60c09
+ms.sourcegitcommit: f209d0dd13f533aadab8e15ac66389de802c581b
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71065097"
 ---
-# <a name="azure-active-directory-b2c-provide-sign-up-and-sign-in-to-consumers-with-microsoft-accounts"></a>Azure Active Directory B2C：向用户提供使用 Microsoft 帐户的注册和登录功能
+# <a name="set-up-sign-up-and-sign-in-with-a-microsoft-account-using-azure-active-directory-b2c"></a>使用 Azure Active Directory B2C 设置通过 Microsoft 帐户注册与登录
+
 ## <a name="create-a-microsoft-account-application"></a>创建 Microsoft 帐户应用程序
-要将 Microsoft 帐户用作 Azure Active Directory (Azure AD) B2C 中的标识提供者，需要创建 Microsoft 帐户应用程序并向其提供合适的参数。 需要使用 Microsoft 帐户来完成此操作。 如果没有账户，可在 [https://www.live.com/](https://www.live.com/) 处获取。
 
-1. 转到 [Microsoft 应用程序注册门户](https://apps.dev.microsoft.com/?referrer=https://azure.microsoft.com/documentation/articles&deeplink=/appList)，并使用 Microsoft 帐户凭据登录。
-2. 单击“添加应用程序”。
-   
-    ![Microsoft 帐户 — 添加新的应用程序](./media/active-directory-b2c-setup-msa-app/msa-add-new-app.png)
-3. 提供应用程序的“名称”，单击“创建应用程序”。
-   
-    ![Microsoft 帐户 — 应用程序名称](./media/active-directory-b2c-setup-msa-app/msa-app-name.png)
-4. 复制“应用程序 Id”的值。将 Microsoft 帐户配置为租户中的标识提供者时需要此项。
-   
-    ![Microsoft 帐户 — 应用程序 Id](./media/active-directory-b2c-setup-msa-app/msa-app-id.png)
-5. 单击“添加平台”，并选择“Web”。
-   
-    ![Microsoft 帐户 — 添加平台](./media/active-directory-b2c-setup-msa-app/msa-add-platform.png)
-   
-    ![Microsoft 帐户 — Web](./media/active-directory-b2c-setup-msa-app/msa-web.png)
-6. 在“重定向 URI”字段中输入 `https://login.microsoftonline.com/te/{tenant}/oauth2/authresp`。 将 **{tenant}** 替换为租户名称（例如 contosob2c.onmicrosoft.com）。
-   
-    ![Microsoft 帐户 — 重定向 URL](./media/active-directory-b2c-setup-msa-app/msa-redirect-url.png)
-7. 单击“应用程序密码”部分下的“生成新密码”。 复制屏幕上显示的新密码。 将 Microsoft 帐户配置为租户中的标识提供者时需要此项。 该密码是一个非常重要的安全凭据。
-   
-    ![Microsoft 帐户 — 生成新密码](./media/active-directory-b2c-setup-msa-app/msa-generate-new-password.png)
-   
-    ![Microsoft 帐户 — 新密码](./media/active-directory-b2c-setup-msa-app/msa-new-password.png)
-8. 选中“高级选项”部分下的“Live SDK 支持”复选框。 单击“ **保存**”。
-   
-    ![Microsoft 帐户 — Live SDK 支持](./media/active-directory-b2c-setup-msa-app/msa-live-sdk-support.png)
+若要将 Microsoft 帐户用作 Azure Active Directory B2C （Azure AD B2C）中的[标识提供者](active-directory-b2c-reference-oidc.md)，需要在 Azure AD 租户中创建应用程序。 Azure AD 租户与 Azure AD B2C 租户不同。 如果还没有 Microsoft 帐户，可以获取一个[https://www.live.com/](https://www.live.com/)。
 
-## <a name="configure-microsoft-account-as-an-identity-provider-in-your-tenant"></a>将 Microsoft 帐户配置为租户中的标识提供者
-1. 请按照以下步骤在 Azure 门户上[导航到 B2C 功能边栏选项卡](active-directory-b2c-app-registration.md#navigate-to-b2c-settings)。
-2. 在 B2C 功能边栏选项卡上，单击“标识提供者”。
-3. 单击边栏选项卡顶部的“ **+添加** ”。
-4. 为标识提供者配置提供一个友好**名称**。 例如，输入“MSA”。
-5. 单击“标识提供者类型”，选择“Microsoft 帐户”，并单击“确定”。
-6. 单击“设置此标识提供者”，输入之前创建的 Microsoft 帐户应用程序的应用程序 Id 和密码。
-7. 单击“确定”，并单击“创建”以保存 Microsoft 帐户配置。
+1. 登录到 [Azure 门户](https://portal.azure.com)。
+1. 在顶部菜单中选择 "**目录 + 订阅**" 筛选器并选择包含 Azure AD 租户的目录，确保使用的是包含 Azure AD 租户的目录。
+1. 选择 Azure 门户左上角的“所有服务”，然后搜索并选择“应用注册”。
+1. 选择“新注册”。
+1. 输入应用程序的**名称**。 例如，MSAapp1。
+1. 在 "**受支持的帐户类型**" 下，选择**任何组织目录中的帐户和个人 Microsoft 帐户（例如 Skype、Xbox、Outlook.com）** 。 此选项针对最广泛的 Microsoft 标识。
 
+   有关不同的帐户类型选择的详细信息，请[参阅快速入门：将应用程序注册到 Microsoft 标识平台](../active-directory/develop/quickstart-register-app.md)。
+1. 在 "**重定向 URI （可选）** " 下， `https://your-tenant-name.b2clogin.com/your-tenant-name.onmicrosoft.com/oauth2/authresp`选择 " **Web** "，并在文本框中输入。 将`your-tenant-name`替换为你的 Azure AD B2C 租户名称。
+1. 选择**注册**
+1. 记录应用程序概述页上显示的**应用程序（客户端） ID** 。 在下一部分中配置标识提供者时需要此项。
+1. 选择**证书 & 机密**
+1. 单击 "**新建客户端密码**"
+1. 输入机密的**说明**，例如 "*应用程序密码 1*"，然后单击 "**添加**"。
+1. 记录 "**值**" 列中显示的应用程序密码。 在下一部分中配置标识提供者时需要此项。
+
+## <a name="configure-a-microsoft-account-as-an-identity-provider"></a>将 Microsoft 帐户配置为标识提供者
+
+1. 以 Azure AD B2C 租户的全局管理员身份登录 [Azure 门户](https://portal.azure.com/)。
+1. 请确保使用包含 Azure AD B2C 租户的目录，方法是选择顶部菜单中的“目录 + 订阅”筛选器，然后选择包含租户的目录。
+1. 选择 Azure 门户左上角的“所有服务”，搜索并选择 **Azure AD B2C**。
+1. 选择 "**标识提供者**"，然后选择 " **Microsoft 帐户**"。
+1. 输入“名称”。 例如， *MSA*。
+1. 对于 "**客户端 ID**"，请输入之前创建的 Azure AD 应用程序的应用程序（客户端） id。
+1. 对于**客户端密码**，请输入你记录的客户端密码。
+1. 选择**保存**。

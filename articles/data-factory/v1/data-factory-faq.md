@@ -3,26 +3,26 @@ title: Azure 数据工厂 - 常见问题解答
 description: 有关 Azure 数据工厂的常见问题解答。
 services: data-factory
 documentationcenter: ''
-author: sharonlo101
-manager: craigg
-ms.assetid: 532dec5a-7261-4770-8f54-bfe527918058
+author: djpmsft
+ms.author: daperlov
+manager: jroth
+ms.reviewer: maghan
 ms.service: data-factory
 ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/10/2018
-ms.author: shlo
-robots: noindex
-ms.openlocfilehash: 387b5e944b0fd198e37a35d7bf1c54f7795c9f21
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: 7c0b5cbfe77a39cbc8ac660178a1c573d1fe8f7d
+ms.sourcegitcommit: d200cd7f4de113291fbd57e573ada042a393e545
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70139824"
 ---
 # <a name="azure-data-factory---frequently-asked-questions"></a>Azure 数据工厂 - 常见问题解答
 > [!NOTE]
-> 本文适用于数据工厂版本 1（正式版 (GA)）。 如果使用数据工厂服务版本 2（即预览版），请参阅[常见问题解答 - 数据工厂版本 2](../frequently-asked-questions.md)。
+> 本文适用于数据工厂版本 1。 如果使用当前版本数据工厂服务，请参阅[常见问题 - 数据工厂](../frequently-asked-questions.md)。
+
+[!INCLUDE [updated-for-az](../../../includes/updated-for-az.md)]
 
 ## <a name="general-questions"></a>一般问题
 ### <a name="what-is-azure-data-factory"></a>什么是 Azure 数据工厂？
@@ -33,7 +33,7 @@ ms.lasthandoff: 03/23/2018
 有关详细信息，请参阅[概述和关键概念](data-factory-introduction.md)。
 
 ### <a name="where-can-i-find-pricing-details-for-azure-data-factory"></a>在哪里可以找到 Azure 数据工厂的定价详细信息？
-有关 Azure 数据工厂的定价详细信息，请参阅[数据工厂定价详细信息页][adf-pricing-details]。  
+有关 Azure 数据工厂的定价详细信息, 请参阅[数据工厂定价详细信息页][adf-pricing-details]。  
 
 ### <a name="how-do-i-get-started-with-azure-data-factory"></a>如何使用 Azure 数据工厂？
 * 有关 Azure 数据工厂的概述，请参阅 [Azure 数据工厂简介](data-factory-introduction.md)。
@@ -49,15 +49,14 @@ ms.lasthandoff: 03/23/2018
 ### <a name="what-is-the-authoringdeveloper-experience-with-azure-data-factory-service"></a>Azure 数据工厂服务的创作/开发人员体验是什么？
 可以使用下列工具/SDK 之一创作/创建数据工厂：
 
-* **Azure 门户**：Azure 门户中的“数据工厂”边栏选项卡提供丰富的用户界面体验，可方便用户创建数据工厂和链接服务。 “数据工厂编辑器”也是该门户的一部分，可用于创建链接服务、表、数据集和管道并且操作简单，通过指定这些项目的 JSON 定义即可实现。 有关使用门户/编辑器创建和部署数据工厂的示例，请参阅[使用 Azure 门户构建第一个数据管道](data-factory-build-your-first-pipeline-using-editor.md)。
 * **Visual Studio**：可以使用 Visual Studio 创建 Azure 数据工厂。 有关详细信息，请参阅[使用 Visual Studio 构建第一个数据管道](data-factory-build-your-first-pipeline-using-vs.md)。
-* **Azure PowerShell**：有关使用 PowerShell 创建数据工厂的教程/演练，请参阅[使用 Azure PowerShell 创建和监视 Azure 数据工厂](data-factory-build-your-first-pipeline-using-powershell.md)。 有关数据工厂 cmdlet 的综合文档，请参阅 MSDN 库上的[数据工厂 Cmdlet 参考][adf-powershell-reference]内容。
-* **.NET 类库**：可以使用数据工厂 .NET SDK 以编程方式创建数据工厂。 有关使用 .NET SDK 创建数据工厂的演练，请参阅[使用 .NET SDK 创建、监视和管理数据工厂](data-factory-create-data-factories-programmatically.md)。 有关数据工厂 .NET SDK 的综合文档，请参阅[数据工厂类库参考][msdn-class-library-reference]。
-* **REST API**：还可以使用 Azure 数据工厂服务公开的 REST API 创建和部署数据工厂。 有关数据工厂 REST API 的综合文档，请参阅[数据工厂 REST API 参考][msdn-rest-api-reference]。
-* **Azure 资源管理器模板**：有关详细信息，请参阅[教程：使用 Azure 资源管理器模板构建第一个 Azure 数据工厂](data-factory-build-your-first-pipeline-using-arm.md)。
+* **Azure PowerShell**：有关使用 PowerShell 创建数据工厂的教程/演练，请参阅[使用 Azure PowerShell 创建和监视 Azure 数据工厂](data-factory-build-your-first-pipeline-using-powershell.md)。 有关数据工厂 cmdlet 的综合文档, 请参阅 MSDN 库上的[数据工厂 Cmdlet 参考][adf-powershell-reference]内容。
+* **.NET 类库**：可以使用数据工厂 .NET SDK 以编程方式创建数据工厂。 有关使用 .NET SDK 创建数据工厂的演练，请参阅[使用 .NET SDK 创建、监视和管理数据工厂](data-factory-create-data-factories-programmatically.md)。 有关数据工厂 .NET SDK 的综合文档, 请参阅[数据工厂类库参考][msdn-class-library-reference]。
+* **REST API**：还可以使用 Azure 数据工厂服务公开的 REST API 创建和部署数据工厂。 有关数据工厂 REST API 的综合文档, 请参阅[数据工厂 REST API 参考][msdn-rest-api-reference]。
+* **Azure 资源管理器模板** 有关详细信息，请参阅[教程：使用 Azure 资源管理器模板构建第一个 Azure 数据工厂](data-factory-build-your-first-pipeline-using-arm.md)。
 
 ### <a name="can-i-rename-a-data-factory"></a>是否可以重命名数据工厂？
-不会。 和其他 Azure 资源一样，不可以更改 Azure 数据工厂的名称。
+否。 和其他 Azure 资源一样，不可以更改 Azure 数据工厂的名称。
 
 ### <a name="can-i-move-a-data-factory-from-one-azure-subscription-to-another"></a>是否可以将数据工厂从一个 Azure 订阅移动到另一个？
 是的。 使用数据工厂边栏选项卡上的“移动”按钮，如下面的关系图所示：
@@ -76,7 +75,7 @@ ms.lasthandoff: 03/23/2018
 | [Azure SQL](data-factory-compute-linked-services.md#azure-sql-linked-service)、[Azure SQL 数据仓库](data-factory-compute-linked-services.md#azure-sql-data-warehouse-linked-service)、[SQL Server](data-factory-compute-linked-services.md#sql-server-linked-service) |[存储过程](data-factory-stored-proc-activity.md) |
 
 ### <a name="how-does-azure-data-factory-compare-with-sql-server-integration-services-ssis"></a>Azure 数据工厂与 SQL Server Integration Services (SSIS) 相比如何？ 
-请参阅 [Azure 数据工厂与 SSIS](http://www.sqlbits.com/Sessions/Event15/Azure_Data_Factory_vs_SSIS) 演示文稿，来自我们的 MVP（最有价值的专家）之一 Reza Rad。 幻灯片中可能未列出数据工厂中的一些最新更改。 我们将不断向 Azure 数据工厂添加更多的功能。 我们将不断向 Azure 数据工厂添加更多的功能。 我们会在今年晚些时候，将这些更新纳入 Microsoft 的数据集成技术的比较中。   
+请参阅 [Azure 数据工厂与 SSIS](https://www.sqlbits.com/Sessions/Event15/Azure_Data_Factory_vs_SSIS) 演示文稿，来自我们的 MVP（最有价值的专家）之一 Reza Rad。 幻灯片中可能未列出数据工厂中的一些最新更改。 我们将不断向 Azure 数据工厂添加更多的功能。 我们将不断向 Azure 数据工厂添加更多的功能。 我们会在今年晚些时候，将这些更新纳入 Microsoft 的数据集成技术的比较中。   
 
 ## <a name="activities---faq"></a>活动 - 常见问题解答
 ### <a name="what-are-the-different-types-of-activities-you-can-use-in-a-data-factory-pipeline"></a>在数据工厂管道中可以使用哪些不同的活动类型？
@@ -106,7 +105,7 @@ ms.lasthandoff: 03/23/2018
 
 ## <a name="hdinsight-activity---faq"></a>HDInsight 活动 - 常见问题解答
 ### <a name="what-regions-are-supported-by-hdinsight"></a>HDInsight 支持哪些区域？
-请参阅以下文章中的“上市地区”部分：或 [HDInsight 定价详细信息][hdinsight-supported-regions]。
+请参阅以下文章中的地理可用性部分: 或[HDInsight 定价详细信息][hdinsight-supported-regions]。
 
 ### <a name="what-region-is-used-by-an-on-demand-hdinsight-cluster"></a>按需 HDInsight 群集使用哪个区域？
 按需 HDInsight 群集的创建位置与你指定用于群集的存储位于同一区域。    
@@ -171,12 +170,12 @@ Pipeline 1: dataset4->activity4->dataset5
 
 * 使用“监视和管理应用”重新运行活动窗口或切片。 有关说明，请参阅[重新运行所选活动窗口](data-factory-monitor-manage-app.md#perform-batch-actions)。   
 * 在 Azure 门户中，在切片的“数据切片”边栏选项卡上，单击命令栏中的“运行”。
-* 对切片运行 **Set-AzureRmDataFactorySliceStatus** cmdlet，同时将状态设置为“等待”。   
+* 运行**AzDataFactorySliceStatus** cmdlet, 并将状态设置为 "**等待**切片"。   
 
-    ```PowerShell
-    Set-AzureRmDataFactorySliceStatus -Status Waiting -ResourceGroupName $ResourceGroup -DataFactoryName $df -TableName $table -StartDateTime "02/26/2015 19:00:00" -EndDateTime "02/26/2015 20:00:00"
+    ```powershell
+    Set-AzDataFactorySliceStatus -Status Waiting -ResourceGroupName $ResourceGroup -DataFactoryName $df -TableName $table -StartDateTime "02/26/2015 19:00:00" -EndDateTime "02/26/2015 20:00:00"
     ```
-有关该 cmdlet 的详细信息，请参阅 [Set-AzureRmDataFactorySliceStatus][set-azure-datafactory-slice-status]。
+  有关 cmdlet 的详细信息, 请参阅[AzDataFactorySliceStatus][set-azure-datafactory-slice-status] 。
 
 ### <a name="how-long-did-it-take-to-process-a-slice"></a>处理一个切片需要多长时间？
 请使用“监视和管理应用”中的活动窗口资源管理器来了解处理数据切片所花费的时间。 有关详细信息，请参阅[活动窗口资源管理器](data-factory-monitor-manage-app.md#activity-window-explorer)。
@@ -191,7 +190,7 @@ Pipeline 1: dataset4->activity4->dataset5
 6. 应该会看到“持续时间”字段包含一个值。 该值就是处理切片所花费的时间。   
 
 ### <a name="how-to-stop-a-running-slice"></a>如何停止正在运行的切片？
-如需停止执行管道，可以使用 [Suspend-AzureRmDataFactoryPipeline](/powershell/module/azurerm.datafactories/suspend-azurermdatafactorypipeline) cmdlet。 目前，挂起管道不会停止正在进行中的切片执行。 一旦完成正在进行中的执行，就不会再选取任何额外的切片。
+如果需要停止执行管道, 可以使用[AzDataFactoryPipeline](/powershell/module/az.datafactory/suspend-azdatafactorypipeline) cmdlet。 目前，挂起管道不会停止正在进行中的切片执行。 一旦完成正在进行中的执行，就不会再选取任何额外的切片。
 
 如果确实想要立即停止所有执行，唯一的方法就是删除管道，再重新创建。 如果选择删除管道，“不”需要删除该管道所使用的表和链接服务。
 
@@ -199,11 +198,11 @@ Pipeline 1: dataset4->activity4->dataset5
 [msdn-class-library-reference]: /dotnet/api/microsoft.azure.management.datafactories.models
 [msdn-rest-api-reference]: /rest/api/datafactory/
 
-[adf-powershell-reference]: /powershell/resourcemanager/azurerm.datafactories/v2.3.0/azurerm.datafactories
-[azure-portal]: http://portal.azure.com
-[set-azure-datafactory-slice-status]: /powershell/resourcemanager/azurerm.datafactories/v2.3.0/set-azurermdatafactoryslicestatus
+[adf-powershell-reference]: /powershell/module/az.datafactory/
+[azure-portal]: https://portal.azure.com
+[set-azure-datafactory-slice-status]: /powershell/module/az.datafactory/set-Azdatafactoryslicestatus
 
-[adf-pricing-details]: http://go.microsoft.com/fwlink/?LinkId=517777
-[hdinsight-supported-regions]: http://azure.microsoft.com/pricing/details/hdinsight/
-[hdinsight-alternate-storage]: http://social.technet.microsoft.com/wiki/contents/articles/23256.using-an-hdinsight-cluster-with-alternate-storage-accounts-and-metastores.aspx
-[hdinsight-alternate-storage-2]: http://blogs.msdn.com/b/cindygross/archive/2014/05/05/use-additional-storage-accounts-with-hdinsight-hive.aspx
+[adf-pricing-details]: https://go.microsoft.com/fwlink/?LinkId=517777
+[hdinsight-supported-regions]: https://azure.microsoft.com/pricing/details/hdinsight/
+[hdinsight-alternate-storage]: https://social.technet.microsoft.com/wiki/contents/articles/23256.using-an-hdinsight-cluster-with-alternate-storage-accounts-and-metastores.aspx
+[hdinsight-alternate-storage-2]: https://blogs.msdn.com/b/cindygross/archive/2014/05/05/use-additional-storage-accounts-with-hdinsight-hive.aspx

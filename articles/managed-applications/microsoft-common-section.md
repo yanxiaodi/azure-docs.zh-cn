@@ -11,13 +11,14 @@ ms.devlang: na
 ms.topic: reference
 ms.tgt_pltfrm: na
 ms.workload: na
-ms.date: 03/30/2018
+ms.date: 06/27/2018
 ms.author: tomfitz
-ms.openlocfilehash: e6d7d5d7b205d275c72e96df527a354b072a9dd3
-ms.sourcegitcommit: 96089449d17548263691d40e4f1e8f9557561197
-ms.translationtype: HT
+ms.openlocfilehash: c89b45dd4d8e6c2964f3d2bcbb6c3cef445c79e6
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/17/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64698895"
 ---
 # <a name="microsoftcommonsection-ui-element"></a>Microsoft.Common.Section UI 元素
 一个将一个或多个元素分组到同一标题下的控件。
@@ -30,17 +31,17 @@ ms.lasthandoff: 05/17/2018
 {
   "name": "section1",
   "type": "Microsoft.Common.Section",
-  "label": "Some section",
+  "label": "Example section",
   "elements": [
     {
-      "name": "element1",
+      "name": "text1",
       "type": "Microsoft.Common.TextBox",
-      "label": "Some text box 1"
+      "label": "Example text box 1"
     },
     {
-      "name": "element2",
+      "name": "text2",
       "type": "Microsoft.Common.TextBox",
-      "label": "Some text box 2"
+      "label": "Example text box 2"
     }
   ],
   "visible": true
@@ -48,14 +49,14 @@ ms.lasthandoff: 05/17/2018
 ```
 
 ## <a name="remarks"></a>备注
-- `elements` 必须至少包含一个元素，并且可以包含除了 `Microsoft.Common.Section` 之外的所有元素类型。
+- `elements` 必须至少具有一个元素，并且可以具有除 `Microsoft.Common.Section` 之外的所有元素类型。
 - 此元素不支持 `toolTip` 属性。
 
 ## <a name="sample-output"></a>示例输出
 若要访问 `elements` 中的元素的输出值，请使用 [basics()](create-uidefinition-functions.md#basics) 或 [steps()](create-uidefinition-functions.md#steps) 函数和点表示法：
 
 ```json
-basics('section1').element1
+steps('configuration').section1.text1
 ```
 
 `Microsoft.Common.Section` 类型的元素本身没有输出值。

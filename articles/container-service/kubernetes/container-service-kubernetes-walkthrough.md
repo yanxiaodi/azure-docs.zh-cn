@@ -1,23 +1,27 @@
 ---
-title: 快速入门 - 适用于 Linux 的 Azure Kubernetes 群集
+title: （已弃用）快速入门 - 适用于 Linux 的 Azure Kubernetes 群集
 description: 快速学习在 Azure 容器服务中使用 Azure CLI 为 Linux 容器创建 Kubernetes 群集。
 services: container-service
-author: neilpeterson
+author: iainfoulds
 manager: jeconnoc
 ms.service: container-service
 ms.topic: quickstart
 ms.date: 02/26/2018
-ms.author: nepeters
+ms.author: iainfou
 ms.custom: H1Hack27Feb2017, mvc, devcenter
-ms.openlocfilehash: c505f5c737b0e37e74bf136211aa0baca006658c
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.openlocfilehash: 70c9fec818147b76feb306cc47ba2e72cd865fe8
+ms.sourcegitcommit: de32e8825542b91f02da9e5d899d29bcc2c37f28
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 02/02/2019
+ms.locfileid: "55659603"
 ---
-# <a name="deploy-kubernetes-cluster-for-linux-containers"></a>为 Linux 容器部署 Kubernetes 群集
+# <a name="deprecated-deploy-kubernetes-cluster-for-linux-containers"></a>（已弃用）为 Linux 容器部署 Kubernetes 群集
 
-[!INCLUDE [aks-preview-redirect.md](../../../includes/aks-preview-redirect.md)]
+> [!TIP]
+> 有关使用 Azure Kubernetes 服务的本快速入门的更新版本，请参阅[快速入门：部署 Azure Kubernetes 服务 (AKS) 群集](../../aks/kubernetes-walkthrough.md)。
+
+[!INCLUDE [ACS deprecation](../../../includes/container-service-kubernetes-deprecation.md)]
 
 在本快速入门中，将使用 Azure CLI 部署 Kubernetes 群集。 然后，在群集上部署和运行包含 Web 前端和 Redis 实例的多容器应用程序。 完成后，即可通过 Internet 访问应用程序。 
 
@@ -27,15 +31,15 @@ ms.lasthandoff: 04/28/2018
 
 本快速入门假定你对 Kubernetes 概念有一个基本的了解。有关 Kubernetes 的详细信息，请参阅 [Kubernetes documentation]( https://kubernetes.io/docs/home/)（Kubernetes 文档）。
 
-如果你还没有 Azure 订阅，可以在开始前创建一个 [免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
+如果没有 Azure 订阅，请在开始之前创建一个[免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
 
 [!INCLUDE [cloud-shell-try-it.md](../../../includes/cloud-shell-try-it.md)]
 
-如果选择在本地安装并使用 CLI，此快速入门教程要求运行 Azure CLI 2.0.4 版或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。 
+如果选择在本地安装并使用 CLI，此快速入门教程要求运行 Azure CLI 2.0.4 版或更高版本。 运行 `az --version` 即可查找版本。 如需进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。 
 
 ## <a name="create-a-resource-group"></a>创建资源组
 
-使用 [az group create](/cli/azure/group#az_group_create) 命令创建资源组。 Azure 资源组是在其中部署和管理 Azure 资源的逻辑组。 
+使用 [az group create](/cli/azure/group#az-group-create) 命令创建资源组。 Azure 资源组是在其中部署和管理 Azure 资源的逻辑组。 
 
 以下示例在“westeurope”位置创建名为“myResourceGroup”的资源组。
 
@@ -60,13 +64,13 @@ az group create --name myResourceGroup --location westeurope
 
 ## <a name="create-kubernetes-cluster"></a>创建 Kubernetes 群集
 
-使用 [az acs create](/cli/azure/acs#az_acs_create) 命令在 Azure 容器服务中创建 Kubernetes 群集。 以下示例创建名为 myK8sCluster 的群集，其中包含一个 Linux 主节点和三个 Linux 代理节点。
+使用 [az acs create](/cli/azure/acs#az-acs-create) 命令在 Azure 容器服务中创建 Kubernetes 群集。 以下示例创建名为 myK8sCluster 的群集，其中包含一个 Linux 主节点和三个 Linux 代理节点。
 
 ```azurecli-interactive 
 az acs create --orchestrator-type kubernetes --resource-group myResourceGroup --name myK8sCluster --generate-ssh-keys
 ```
 
-在某些情况下（如限时试用），Azure 订阅对 Azure 资源的访问受限。 如果由于可用核心有限而导致部署失败，请将 `--agent-count 1` 添加到 [az acs creat](/cli/azure/acs#az_acs_create) 命令中，以减少默认代理计数。 
+在某些情况下（如限时试用），Azure 订阅对 Azure 资源的访问受限。 如果由于可用核心有限而导致部署失败，请将 `--agent-count 1` 添加到 [az acs creat](/cli/azure/acs#az-acs-create) 命令中，以减少默认代理计数。 
 
 几分钟后，该命令完成并返回有关群集的 JSON 格式信息。 
 
@@ -74,15 +78,15 @@ az acs create --orchestrator-type kubernetes --resource-group myResourceGroup --
 
 若要管理 Kubernetes 群集，请使用 Kubernetes 命令行客户端 [kubectl](https://kubernetes.io/docs/user-guide/kubectl/)。 
 
-如果使用的是 Azure CloudShell，则 kubectl 已安装。 如果想在本地安装，可以使用 [az acs kubernetes install-cli](/cli/azure/acs/kubernetes#install-cli) 命令。
+如果使用的是 Azure CloudShell，则 kubectl 已安装。 如果想在本地安装，可以使用 [az acs kubernetes install-cli](/cli/azure/acs/kubernetes) 命令。
 
-若要配置 kubectl 以连接到 Kubernetes 群集，请运行 [az acs kubernetes get-credentials](/cli/azure/acs/kubernetes#get-credentials) 命令。 此步骤下载凭据，并将 Kubernetes CLI 配置为使用这些凭据。
+若要配置 kubectl 以连接到 Kubernetes 群集，请运行 [az acs kubernetes get-credentials](/cli/azure/acs/kubernetes) 命令。 此步骤下载凭据，并将 Kubernetes CLI 配置为使用这些凭据。
 
 ```azurecli-interactive 
 az acs kubernetes get-credentials --resource-group=myResourceGroup --name=myK8sCluster
 ```
 
-若要验证到群集的连接，请使用 [kubectl get](https://kubernetes.io/docs/user-guide/kubectl/v1.6/#get) 命令返回群集节点的列表。
+若要验证到群集的连接，请使用 [kubectl get](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get) 命令返回群集节点的列表。
 
 ```azurecli-interactive
 kubectl get nodes
@@ -165,7 +169,7 @@ spec:
     app: azure-vote-front
 ```
 
-使用 [kubectl create](https://kubernetes.io/docs/user-guide/kubectl/v1.6/#create) 命令运行该应用程序。
+使用 [kubectl create](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#create) 命令运行该应用程序。
 
 ```azurecli-interactive
 kubectl create -f azure-vote.yml
@@ -184,7 +188,7 @@ service "azure-vote-front" created
 
 在应用程序运行以后，将创建 [Kubernetes 服务](https://kubernetes.io/docs/concepts/services-networking/service/)，向 Internet 公开应用程序前端。 此过程可能需要几分钟才能完成。 
 
-若要监视进度，请将 [kubectl get service](https://kubernetes.io/docs/user-guide/kubectl/v1.6/#get) 命令与 `--watch` 参数配合使用。
+若要监视进度，请将 [kubectl get service](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get) 命令与 `--watch` 参数配合使用。
 
 ```azurecli-interactive
 kubectl get service azure-vote-front --watch
@@ -202,7 +206,7 @@ azure-vote-front   10.0.34.242   52.179.23.131   80:30676/TCP   2m
 ![浏览到 Azure Vote 的图像](media/container-service-kubernetes-walkthrough/azure-vote.png)  
 
 ## <a name="delete-cluster"></a>删除群集
-如果不再需要群集，可以使用 [az group delete](/cli/azure/group#az_group_delete) 命令删除资源组、容器服务及所有相关资源。
+如果不再需要群集，可以使用 [az group delete](/cli/azure/group#az-group-delete) 命令删除资源组、容器服务及所有相关资源。
 
 ```azurecli-interactive 
 az group delete --name myResourceGroup --yes --no-wait

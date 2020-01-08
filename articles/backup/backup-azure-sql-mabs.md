@@ -1,24 +1,19 @@
 ---
-title: "使用 Azure 备份服务器为 SQL Server 工作负荷配置 Azure 备份 | Microsoft Docs"
-description: "使用 Azure 备份服务器备份 SQL Server 数据库简介"
-services: backup
-documentationcenter: 
-author: pvrk
-manager: Shivamg
-editor: 
-ms.assetid: c8b1f7ec-26b1-4ef0-a3f2-91aec959daea
+title: 使用 Azure 备份服务器为 SQL Server 工作负荷配置 Azure 备份
+description: 使用 Azure 备份服务器备份 SQL Server 数据库简介
+ms.reviewer: kasinh
+author: dcurwin
+manager: carmonm
 ms.service: backup
-ms.workload: storage-backup-recovery
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 03/24/2017
-ms.author: pullabhk
-ms.openlocfilehash: 2af9ebaa8f52690ed63406cbd85b77544d2d900d
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.author: dacurwin
+ms.openlocfilehash: 72de5857786f284bfc4afda1db093d5343bd7a43
+ms.sourcegitcommit: 0f54f1b067f588d50f787fbfac50854a3a64fff7
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 08/12/2019
+ms.locfileid: "68954476"
 ---
 # <a name="back-up-sql-server-to-azure-with-azure-backup-server"></a>使用 Azure 备份服务器将 SQL Server 备份到 Azure
 本文将引导使用 Microsoft Azure 备份服务器 (MABS) 来完成 SQL Server 数据库的备份配置步骤。
@@ -49,7 +44,7 @@ ms.lasthandoff: 10/11/2017
     ![数据保护方法 - 短期磁盘和在线 Azure](./media/backup-azure-backup-sql/pg-name.png)
 7. 在“**指定短期目标**”屏幕中，提供创建磁盘备份点所需的输入。
 
-    在这里我们可以看到，“**保留期**”设置为“*5 天*”，“**同步频率**”设置为“*每 15 分钟一次*”，这也是进行备份的频率。 “**快速完整备份**”设置为“*晚上 8:00*”。
+    在这里, 我们看到 "**保持期**" 设置为 " *5 天*", "**同步频率**" 设置为每*15 分钟*一次, 这是执行备份的频率。 “**快速完整备份**”设置为“*晚上 8:00*”。
 
     ![短期目标](./media/backup-azure-backup-sql/pg-shortterm.png)
 
@@ -58,7 +53,7 @@ ms.lasthandoff: 10/11/2017
    >
    >
 
-8. 单击“下一步”
+8. 点击“下一步”
 
     MABS 会显示可用的总存储空间以及能够使用的磁盘空间。
 
@@ -71,7 +66,7 @@ ms.lasthandoff: 10/11/2017
 
     ![初始复制方法](./media/backup-azure-backup-sql/pg-manual.png)
 
-    初始备份副本需要将整个数据源（SQL Server 数据库）从生产服务器（SQL Server 计算机）传输到 MABS。 此类数据可能会非常大，通过网络传输此类数据可能会超过带宽限制。 出于这个原因，管理员可以选择通过以下方式传输初始备份：“**手动**”（使用可移动媒体），以免网络出现带宽拥塞现象；或“**自动通过网络**”（于指定时间）。
+    初始备份副本需要将整个数据源（SQL Server 数据库）从生产服务器（SQL Server 计算机）传输到 MABS。 此类数据可能会非常大，通过网络传输此类数据可能会超过带宽限制。 因此，管理员可以选择通过以下方式传输初始备份：“手动”（使用可移动媒体），以免网络出现带宽拥塞现象；或“自动通过网络”（于指定时间）。
 
     初始备份完成后，其余的备份都是初始备份副本的增量备份。 增量备份往往比较小，能轻松地通过网络传输。
 10. 选择需要运行一致性检查的时间，并单击“**下一步**”。
@@ -93,7 +88,7 @@ ms.lasthandoff: 10/11/2017
     >
     >
 
-    **最佳实践**：确保在使用 DPM 完成本地磁盘备份后安排好 Azure 备份。 这样就可以将最新磁盘备份复制到 Azure。
+    **最佳做法**：确保在使用 DPM 完成本地磁盘备份后安排好 Azure 备份。 这样就可以将最新磁盘备份复制到 Azure。
 
 13. 选择保留策略计划。 有关保留策略工作原理的详细信息，请参阅[使用 Azure 备份来取代磁带基础结构文章](backup-azure-backup-cloud-as-tape.md)。
 
@@ -134,7 +129,7 @@ ms.lasthandoff: 10/11/2017
 ## <a name="recover-a-sql-server-database-from-azure"></a>从 Azure 恢复 SQL Server 数据库
 若要从 Azure 中恢复受保护的实体（SQL Server 数据库），必须执行以下步骤。
 
-1. 打开 DPM 服务器管理控制台。 导航到“**恢复**”工作区，可以在其中查看通过 DPM 备份的服务器。 浏览所需的数据库（在本示例中为 ReportServer$MSDPM2012）。 选择“**恢复方式**”，例如“**在线**”。
+1. 打开 DPM 服务器管理控制台。 导航到“**恢复**”工作区，可以在其中查看通过 DPM 备份的服务器。 浏览所需的数据库（在本示例中为 ReportServer$MSDPM2012）。 选择以**联机状态**结束的时间的**恢复**。
 
     ![选择恢复点](./media/backup-azure-backup-sql/sqlbackup-restorepoint.png)
 2. 右键单击数据库名称，并单击“**恢复**”。

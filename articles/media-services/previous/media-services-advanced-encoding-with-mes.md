@@ -4,7 +4,7 @@ description: 本主题说明如何通过自定义 Media Encoder Standard 任务�
 services: media-services
 documentationcenter: ''
 author: juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: 2a4ade25-e600-4bce-a66e-e29cf4a38369
 ms.service: media-services
@@ -12,13 +12,14 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 08/01/2017
+ms.date: 03/14/2019
 ms.author: juliako
-ms.openlocfilehash: 9480e6f3f651611e5281968d6d1651bd39dda44f
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: fadf1aa54f525fb3d4c414161583f8a89f2e4c05
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61230182"
 ---
 # <a name="perform-advanced-encoding-by-customizing-mes-presets"></a>通过自定义 MES 预设执行高级编码 
 
@@ -26,15 +27,14 @@ ms.lasthandoff: 05/07/2018
 
 本主题演示如何自定义 Media Encoder Standard 预设。 [通过使用自定义预设的 Media Encoder Standard 进行编码](media-services-custom-mes-presets-with-dotnet.md)主题演示如何使用 .NET 创建编码任务和执行此任务的作业。 自定义预设后，请将其提供给编码任务。 
 
->[!NOTE]
->如果使用的是 XML 预设，请务必保留元素顺序，如下面的 XML 示例所示（例如，KeyFrameInterval 应在 SceneChangeDetection 前面）。
->
+如果使用的是 XML 预设，请务必保留元素顺序，如下面的 XML 示例所示（例如，KeyFrameInterval 应在 SceneChangeDetection 前面）。
 
-本主题演示了执行以下编码任务的自定义预设。
+> [!NOTE] 
+> 许多 Media Encoder standard 的高级媒体服务 v2 功能目前不 v3 中。 有关详细信息，请参阅[功能差距](https://docs.microsoft.com/azure/media-services/latest/migrate-from-v2-to-v3#feature-gaps-with-respect-to-v2-apis)。
 
 ## <a name="support-for-relative-sizes"></a>支持相对大小
 
-生成缩略图时，不需始终以像素为单位指定输出宽度和高度。 可以以百分比的方式在 [1%, …, 100%] 范围内对其进行指定。
+生成缩略图时，不需始终以像素为单位指定输出宽度和高度。 你可以以百分比的方式在 [1%, …, 100%] 范围内对其进行指定。
 
 ### <a name="json-preset"></a>JSON 预设
     "Width": "100%",
@@ -46,7 +46,7 @@ ms.lasthandoff: 05/07/2018
 
 ## <a id="thumbnails"></a>生成缩略图
 
-本部分说明如何自定义生成缩略图的预设。 下面定义的预设包含有关如何将文件编码的信息，以及生成缩略图时所需的信息。 可使用[此部分](media-services-mes-presets-overview.md)所述的任何 MES 预设，并添加生成缩略图的代码。  
+本部分说明如何自定义生成缩略图的预设。 下面定义的预设包含有关如何对文件编码的信息，以及生成缩略图所需的信息。 可使用[此部分](media-services-mes-presets-overview.md)所述的任何 MES 预设，并添加生成缩略图的代码。  
 
 > [!NOTE]
 > 如果要编码为单比特率视频，以下预设中的 **SceneChangeDetection** 设置只能设置为 true。 如果要编码为多比特率视频并将 **SceneChangeDetection** 设置为 true，则编码器将返回错误。  
@@ -55,7 +55,7 @@ ms.lasthandoff: 05/07/2018
 
 有关架构的信息，请参阅[此](media-services-mes-schema.md)主题。
 
-请务必仔细阅读[注意事项](#considerations)部分。
+请务必仔细阅读 [注意事项](#considerations) 部分。
 
 ### <a id="json"></a>JSON 预设
     {
@@ -159,7 +159,7 @@ ms.lasthandoff: 05/07/2018
 
 ### <a id="xml"></a>XML 预设
     <?xml version="1.0" encoding="utf-16"?>
-    <Preset xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="1.0" xmlns="http://www.windowsazure.com/media/encoding/Preset/2014/03">
+    <Preset xmlns:xsd="https://www.w3.org/2001/XMLSchema" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" Version="1.0" xmlns="https://www.windowsazure.com/media/encoding/Preset/2014/03">
       <Encoding>
         <H264Video>
           <KeyFrameInterval>00:00:02</KeyFrameInterval>
@@ -237,13 +237,13 @@ ms.lasthandoff: 05/07/2018
 * 为 Start/Step/Range 使用的显式时间戳假设输入源的长度至少为 1 分钟。
 * Jpg/Png/BmpImage 元素包含 Start、Step 和 Range 字符串属性 – 这些属性解释如下：
 
-  * 帧数（如果为非负整数），例如："Start": "120"；
-  * 相对于源持续时间（如果以 % 为后缀表示），例如："Start": "15%"，或者
-  * 时间戳（如果以 HH:MM:SS... 格式表示），例如 "Start" : "00:01:00"
+  * 帧数（如果为非负整数），例如，"Start":"120"；
+  * 相对于源持续时间（如果以 % 为后缀表示），例如："Start":"15%"，或者
+  * 时间戳（如果以 HH:MM:SS... 格式表示），例如："Start":"00:01:00"
 
     可以随意混搭使用表示法。
 
-    此外，Start 还支持特殊的宏 {Best}，它会尝试判断第一个“有意义”的内容帧。注意：（Start 设置为 {Best} 时，将忽略 Step 与 Range）
+    此外，Start 还支持特殊的宏 {Best}，它会尝试判断第一个“有意义”的内容帧。请注意：（Start 设置为 {Best} 时，将忽略 Step 与 Range）
   * 默认值：Start:{Best}
 * 需要显式提供每个图像格式的输出格式：Jpg/Png/BmpFormat。 MES 会将 JpgVideo（如果已指定）与 JpgFormat 进行匹配，依此类推。 OutputFormat 引入了新的图像编解码器特定宏 {Index}，需要为图像输出格式提供该宏一次（且只需一次）。
 
@@ -375,7 +375,7 @@ ms.lasthandoff: 05/07/2018
 若要剪裁视频，可以使用[此处](media-services-mes-presets-overview.md)所述的任何 MES 预设，并修改 **Sources** 元素（如下所示）。
 
     <?xml version="1.0" encoding="utf-16"?>
-    <Preset xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="1.0" xmlns="http://www.windowsazure.com/media/encoding/Preset/2014/03">
+    <Preset xmlns:xsd="https://www.w3.org/2001/XMLSchema" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" Version="1.0" xmlns="https://www.windowsazure.com/media/encoding/Preset/2014/03">
       <Sources>
         <Source StartTime="PT4S" Duration="PT14S"/>
       </Sources>
@@ -495,7 +495,7 @@ Media Encoder Standard 允许在现有视频上覆盖图像。 目前支持以�
 
 除了定义预设文件外，还必须让媒体服务知道资产中的哪个文件是覆盖层图像，哪个文件是你要在其上覆盖图像的源视频。 视频文件必须是**主**文件。
 
-如果使用 .NET，请将以下两个函数添加到[此主题](media-services-custom-mes-presets-with-dotnet.md#encoding_with_dotnet)中定义的 .NET 示例。 **UploadMediaFilesFromFolder** 函数从文件夹上传文件（例如 BigBuckBunny.mp4 和 Image001.png），并将 mp4 文件设置为资产中的主文件。 **EncodeWithOverlay** 函数使用传递给它的自定义预设文件（例如，下面的预设）来创建编码任务。
+如果要使用 .NET，请将以下两个函数添加到[此主题](media-services-custom-mes-presets-with-dotnet.md#encoding_with_dotnet) 中定义的 .NET 示例。 **UploadMediaFilesFromFolder** 函数从文件夹上传文件（例如 BigBuckBunny.mp4 和 Image001.png），并将 mp4 文件设置为资产中的主文件。 **EncodeWithOverlay** 函数使用传递给它的自定义预设文件（例如，下面的预设）来创建编码任务。
 
 
     static public IAsset UploadMediaFilesFromFolder(string folderPath)
@@ -580,8 +580,7 @@ Media Encoder Standard 允许在现有视频上覆盖图像。 目前支持以�
                 },
                 {
                   "IsOverlay": true,
-                  "OverlayLoopCount": 1,
-                  "InputLoop": true
+                  "OverlayLoopCount": 1
                 }
               ],
               "Source": "Image001.png",
@@ -638,7 +637,7 @@ Media Encoder Standard 允许在现有视频上覆盖图像。 目前支持以�
 
 ### <a name="xml-preset"></a>XML 预设
     <?xml version="1.0" encoding="utf-16"?>
-    <Preset xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="1.0" xmlns="http://www.windowsazure.com/media/encoding/Preset/2014/03">
+    <Preset xmlns:xsd="https://www.w3.org/2001/XMLSchema" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" Version="1.0" xmlns="https://www.windowsazure.com/media/encoding/Preset/2014/03">
       <Sources>
         <Source>
           <Streams />
@@ -655,12 +654,10 @@ Media Encoder Standard 允许在现有视频上覆盖图像。 目前支持以�
                 <MediaParam>
                   <IsOverlay>false</IsOverlay>
                   <OverlayLoopCount>1</OverlayLoopCount>
-                  <InputLoop>false</InputLoop>
                 </MediaParam>
                 <MediaParam>
                   <IsOverlay>true</IsOverlay>
                   <OverlayLoopCount>1</OverlayLoopCount>
-                  <InputLoop>true</InputLoop>
                 </MediaParam>
               </MediaParams>
             </VideoOverlay>
@@ -704,7 +701,7 @@ Media Encoder Standard 允许在现有视频上覆盖图像。 目前支持以�
 
 若要强制编码器在输入不包含音频时生成包含静音曲目的资产，请指定“InsertSilenceIfNoAudio”值。
 
-可使用[此部分](media-services-mes-presets-overview.md)中所述的任何 MES 预设，并进行以下修改：
+可使用 [此部分](media-services-mes-presets-overview.md) 中所述的任何 MES 预设，并进行以下修改：
 
 ### <a name="json-preset"></a>JSON 预设
     {
@@ -723,9 +720,9 @@ Media Encoder Standard 允许在现有视频上覆盖图像。 目前支持以�
     </AACAudio>
 
 ## <a id="deinterlacing"></a>禁用自动取消隔行扫描
-如果客户想要将隔行扫描内容自动取消隔行扫描，不需要执行任何操作。 当自动取消隔行扫描打开（默认设置）时，MES 会自动检测隔行扫描帧，并且只将标记为隔行扫描的帧取消隔行扫描。
+如果客户想要将隔行扫描内容自动取消隔行扫描，不需要执行任何操作。 当自动取消隔行扫描打开（默认设置）时，MES 将自动检测隔行扫描帧，并且只将标记为隔行扫描的帧取消隔行扫描。
 
-可以关闭自动取消隔行扫描， 但不建议这样做。
+可以关闭自动取消隔行扫描。 但不建议这样做。
 
 ### <a name="json-preset"></a>JSON 预设
     "Sources": [
@@ -751,7 +748,7 @@ Media Encoder Standard 允许在现有视频上覆盖图像。 目前支持以�
 
 
 ## <a id="audio_only"></a>仅音频预设
-本部分介绍两个仅音频 MES 预设：AAC 音频和 AAC 优质音频。
+本节演示了两个仅用于音频的 MES 预设：AAC 音频和 AAC 优质音频。
 
 ### <a name="aac-audio"></a>AAC 音频
     {
@@ -797,9 +794,9 @@ Media Encoder Standard 允许在现有视频上覆盖图像。 目前支持以�
       ]
     }
 
-## <a id="concatenate"></a>连接两个或更多视频文件
+## <a id="concatenate"></a>连接两个或更多个视频文件
 
-以下示例演示如何生成预设来连接两个或更多个视频文件。 最常见的应用场景：希望在主视频中添加标题或预告片。 预期使用场合：当一起编辑的视频文件共享属性（视频分辨率、帧速率、音轨计数等）时。 务必注意不要混合使用不同帧速率或不同音轨数的视频。
+以下示例演示如何生成预设来连接两个或更多个视频文件。 最常见的应用场景：你想在主视频中添加标题或预告片。 预期使用场合：当一起编辑的视频文件共享属性（视频分辨率、帧速率、音轨计数等）时。 务必注意不要混合使用不同帧速率或不同音轨数的视频。
 
 >[!NOTE]
 >当前，串联功能设计要求各个输入视频剪辑在分辨率、帧速率等方面是一致的。 
@@ -910,9 +907,9 @@ Media Encoder Standard 允许在现有视频上覆盖图像。 目前支持以�
 ## <a id="crop"></a>使用 Media Encoder Standard 裁剪视频
 请参阅[使用 Media Encoder Standard 剪辑视频](media-services-crop-video.md)主题。
 
-## <a id="no_video"></a>在输入不包含视频时插入视频轨
+## <a id="no_video"></a>在输入不包含视频时插入视频轨迹
 
-默认情况下，如果要向编码器发送仅包含音频而不包含视频的输入，则输出资产将包含仅有音频数据的文件。 某些播放器（包括 Azure 媒体播放器）（请参阅[此处](https://feedback.azure.com/forums/169396-azure-media-services/suggestions/8082468-audio-only-scenarios)）可能无法处理这样的流。 对于这种方案，可使用此设置来强制编码器将单色视频轨迹添加到输出。
+默认情况下，如果要向编码器发送仅包含音频而不包含视频的输入，则输出资产包含仅有音频数据的文件。 某些播放器（包括 Azure 媒体播放器）（请参阅[此处](https://feedback.azure.com/forums/169396-azure-media-services/suggestions/8082468-audio-only-scenarios)）可能无法处理这样的流。 在该方案中，可使用此设置来强制编码器将单色视频轨道添加到输出。
 
 > [!NOTE]
 > 强制编码器插入输出视频轨迹会增加输出资产的大小，从而增加编码任务的相关成本。 应运行测试来验证此成本增加对每月费用的影响不大。
@@ -920,7 +917,7 @@ Media Encoder Standard 允许在现有视频上覆盖图像。 目前支持以�
 
 ### <a name="inserting-video-at-only-the-lowest-bitrate"></a>仅以最低比特率插入视频
 
-假设要使用多比特率编码预设（如[“H264 多比特率 720p”](media-services-mes-preset-h264-multiple-bitrate-720p.md)）对整个输入目录进行编码以实现流式处理，且输入目录中混合了视频文件和仅音频文件。 在此方案中，如果输入不包含视频，用户可能想要强制编码器仅以最低比特率插入单色视频轨迹，而不是按每个输出比特率插入视频。 为此，需要使用“InsertBlackIfNoVideoBottomLayerOnly”标志。
+假设要使用多比特率编码预设（如[“H264 多比特率 720p”](media-services-mes-preset-h264-multiple-bitrate-720p.md)）对整个输入目录进行编码以实现流式处理，且输入目录中混合了视频文件和仅音频文件。 在此方案中，如果输入不包含视频，用户可能想要强制编码器仅以最低比特率插入单色视频轨迹，而不是按每个输出比特率插入视频。 为此，需要使用“InsertBlackIfNoVideoBottomLayerOnly”  标志。
 
 可使用[此部分](media-services-mes-presets-overview.md)中所述的任何 MES 预设，并进行以下修改：
 
@@ -936,7 +933,7 @@ Media Encoder Standard 允许在现有视频上覆盖图像。 目前支持以�
 
 #### <a name="xml-preset"></a>XML 预设
 
-使用 XML 时，请使用 Condition="InsertBlackIfNoVideoBottomLayerOnly" 作为“H264Video”元素的属性，并使用 Condition="InsertSilenceIfNoAudio" 作为“AACAudio”的属性。
+使用 XML 时，请使用 Condition="InsertBlackIfNoVideoBottomLayerOnly" 作为“H264Video”  元素的属性，并使用 Condition="InsertSilenceIfNoAudio" 作为“AACAudio”  的属性。
 
 ```
 . . .
@@ -979,7 +976,7 @@ Media Encoder Standard 允许在现有视频上覆盖图像。 目前支持以�
 
 #### <a name="xml-preset"></a>XML 预设
 
-使用 XML 时，请使用 Condition="InsertBlackIfNoVideo" 作为“H264Video”元素的属性，并使用 Condition="InsertSilenceIfNoAudio" 作为“AACAudio”的属性。
+使用 XML 时，请使用 Condition="InsertBlackIfNoVideo" 作为“H264Video”  元素的属性，并使用 Condition="InsertSilenceIfNoAudio" 作为“AACAudio”  的属性。
 
 ```
 . . .

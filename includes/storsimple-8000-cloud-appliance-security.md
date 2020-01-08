@@ -1,5 +1,16 @@
-<!--alkohli 02/21/2017 cloud appliance security-->
-
+---
+author: alkohli
+ms.service: storsimple
+ms.topic: include
+ms.date: 10/26/2018
+ms.author: alkohli
+ms.openlocfilehash: 87e6c096c0ff0e58e8acebc13a62e44ea7d65c61
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67173009"
+---
 使用 StorSimple 云设备时，请注意以下安全注意事项：
 
 * 云设备是通过 Microsoft Azure 订阅保护的。 这意味着，如果使用云设备时 Azure 订阅遭到攻击，存储在该云设备上的数据也会受到影响。

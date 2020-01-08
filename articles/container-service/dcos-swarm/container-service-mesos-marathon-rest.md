@@ -1,26 +1,28 @@
 ---
-title: 使用 Marathon REST API 管理 Azure DC/OS 群集
+title: （已弃用）使用 Marathon REST API 管理 Azure DC/OS 群集
 description: 使用 Marathon REST API 将容器部署到 Azure 容器服务 DC/OS 群集。
 services: container-service
-author: dlepow
+author: iainfoulds
 manager: jeconnoc
 ms.service: container-service
 ms.topic: article
 ms.date: 04/04/2017
-ms.author: danlep
+ms.author: iainfou
 ms.custom: mvc
-ms.openlocfilehash: edd66be25bf2571a7315372898300476fec101ca
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.openlocfilehash: 73fa9c4433a2af780798f0439c0a119bc32a678f
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
-ms.locfileid: "32165599"
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64916687"
 ---
-# <a name="dcos-container-management-through-the-marathon-rest-api"></a>通过 Marathon REST API 管理 DC/OS 容器
+# <a name="deprecated-dcos-container-management-through-the-marathon-rest-api"></a>（已弃用）通过 Marathon REST API 管理 DC/OS 容器
+
+[!INCLUDE [ACS deprecation](../../../includes/container-service-deprecation.md)]
 
 DC/OS 提供了一种环境，可进行群集工作负荷的部署和缩放，以及底层硬件的抽象化。 DC/OS 上方是一种管理计划和执行计算工作负荷的框架。 尽管框架可用于许多常见的工作负荷，本文档逐步讲解如何使用 Marathon REST API 创建和缩放容器部署。 
 
-## <a name="prerequisites"></a>先决条件
+## <a name="prerequisites"></a>必备组件
 
 开始了解这些示例之前，需要一个在 Azure 容器服务中配置的 DC/OS 群集。 还需要具有到此群集的远程连接。 有关这些项目的详细信息，请参阅以下文章：
 
@@ -28,9 +30,9 @@ DC/OS 提供了一种环境，可进行群集工作负荷的部署和缩放，�
 * [连接到 Azure 容器服务群集](../container-service-connect.md)
 
 ## <a name="access-the-dcos-apis"></a>访问 DC/OS API
-连接到 Azure 容器服务群集后，可通过 http://localhost:local-port 访问 DC/OS 和相关 REST API。 本文档中的示例假定在端口 80 上实现隧道连接。 例如，可以在以 `http://localhost/marathon/v2/` 为开头的 URI 上访问 Marathon 终结点。 
+在连接到 Azure 容器服务群集后，您可以通过 http 访问 DC/OS 和相关的 REST Api:\//localhost:local 的端口。 本文档中的示例假定在端口 80 上实现隧道连接。 例如，Uri 上访问 Marathon 终结点从 http: \/ /localhost/marathon/v2 /。 
 
-有关 [Marathon API](https://mesosphere.github.io/marathon/docs/rest-api.html) 和 [Chronos API](https://mesos.github.io/chronos/docs/api.html) 的详细信息，请参阅 Mesosphere 文档；有关 [Mesos 计划程序 API](http://mesos.apache.org/documentation/latest/scheduler-http-api/) 的详细信息，请参阅 Apache 文档。
+有关 [Marathon API](https://mesosphere.github.io/marathon/docs/rest-api.html) 和 [Chronos API](https://mesos.github.io/chronos/docs/api.html) 的详细信息，请参阅 Mesosphere 文档；有关 [Mesos 计划程序 API](https://mesos.apache.org/documentation/latest/scheduler-http-api/) 的详细信息，请参阅 Apache 文档。
 
 ## <a name="gather-information-from-dcos-and-marathon"></a>从 DC/OS 和 Marathon 收集信息
 在将容器部署到 DC/OS 群集之前，收集一些有关 DC/OS 的信息，例如 DC/OS 代理的名称和状态。 为此，请查询 DC/OS REST API 的 `master/slaves` 终结点。 如果一切正常，则查询会返回 DC/OS 代理列表和每个代理的数个属性。
@@ -121,9 +123,7 @@ Nginx 服务器的输出与下面类似：
 从隧道连接运行以下命令来扩大应用程序。
 
 > [!NOTE]
-> URI 为 http://localhost/marathon/v2/apps/，后接要缩放的应用程序 ID。 如果使用此处提供的 Nginx 示例，URI 将为 http://localhost/marathon/v2/apps/nginx。
-> 
-> 
+> URI 为 http: \/ /localhost/marathon/v2/应用/跟要缩放的应用程序的 ID。 如果使用的 Nginx 示例，则提供在这里，则 URI 将为 http:\//localhost/marathon/v2/apps/nginx。
 
 ```bash
 curl http://localhost/marathon/v2/apps/nginx -H "Content-type: application/json" -X PUT -d @scale.json
@@ -180,15 +180,13 @@ Invoke-WebRequest -Method Post -Uri http://localhost/marathon/v2/apps -ContentTy
 运行以下命令来扩大应用程序：
 
 > [!NOTE]
-> URI 为 http://localhost/marathon/v2/apps/，后接要缩放的应用程序 ID。 如果使用此处提供的 Nginx 示例，URI 将为 http://localhost/marathon/v2/apps/nginx。
-> 
-> 
+> URI 为 http: \/ /localhost/marathon/v2/应用/跟要缩放的应用程序的 ID。 如果你在此处使用提供的 Nginx 示例，则 URI 将为 http:\//localhost/marathon/v2/apps/nginx。
 
 ```powershell
 Invoke-WebRequest -Method Put -Uri http://localhost/marathon/v2/apps/nginx -ContentType application/json -InFile 'c:\scale.json'
 ```
 
 ## <a name="next-steps"></a>后续步骤
-* [阅读有关 Mesos HTTP 终结点的详细信息](http://mesos.apache.org/documentation/latest/endpoints/)
+* [阅读有关 Mesos HTTP 终结点的详细信息](https://mesos.apache.org/documentation/latest/endpoints/)
 * [阅读有关 Marathon REST API 的详细信息](https://mesosphere.github.io/marathon/docs/rest-api.html)
 

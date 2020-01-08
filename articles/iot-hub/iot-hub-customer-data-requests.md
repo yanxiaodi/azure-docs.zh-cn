@@ -1,22 +1,25 @@
 ---
 title: 客户数据请求功能
-author: dominicbetts
-ms.author: dobett
+description: 客户数据请求功能摘要
+author: robinsh
+manager: philmea
+ms.author: robinsh
 ms.date: 05/16/2018
 ms.topic: conceptual
 ms.service: iot-hub
-ms.openlocfilehash: 3af76fe22e93b6c5d502733196994bda61b9a93e
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+services: iot-hub
+ms.openlocfilehash: 1519637eddf909040131a1efac5738fc7cc8e565
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
-ms.locfileid: "34361509"
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60845794"
 ---
 # <a name="summary-of-customer-data-request-features"></a>客户数据请求功能摘要
 
 Azure IoT 中心是一项基于 REST API 的云服务，其目标是企业客户，可以在数百万台设备和分区的 Azure 服务之间进行安全的双向通信。
 
-[!INCLUDE [gdpr-intro-sentence](../../includes/gdpr-intro-sentence.md)]
+[!INCLUDE [gdpr-related guidance](../../includes/gdpr-intro-sentence.md)]
 
 单台设备由租户管理员分配一个设备标识符（设备 ID）。 设备数据基于分配的设备 ID。 Microsoft 不保留任何信息，也无法访问将设备 ID 与用户相关联的数据。
 
@@ -34,17 +37,17 @@ Azure IoT 中心是一项基于 REST API 的云服务，其目标是企业客户
 
 租户管理员可以在 Azure 门户中使用 Azure IoT 中心扩展的 IoT 设备边栏选项卡来删除设备，而删除设备同时也会删除与该设备关联的数据。
 
-也可使用 REST API 对设备执行删除操作。 有关详细信息，请参阅 [Device Api - Delete Device](https://docs.microsoft.com/rest/api/iothub/deviceapi/deletedevice)（设备 API - 删除设备）。
+也可使用 REST API 对设备执行删除操作。 有关详细信息，请参阅[服务 - 删除设备](/rest/api/iothub/service/deletedevice)。
 
 ## <a name="exporting-customer-data"></a>导出客户数据
 
 在 Azure 门户中，租户管理员可以利用 Azure IoT 中心扩展的 IoT 设备边栏选项卡中的复制和粘贴功能来导出与设备关联的数据。
 
-也可使用 REST API 对设备执行导出操作。 有关详细信息，请参阅 [Device Api - Get Device](https://docs.microsoft.com/rest/api/iothub/deviceapi/getdevice)（设备 API - 获取设备）。
+也可使用 REST API 对设备执行导出操作。 有关详细信息，请参阅[服务 - 获取设备](/rest/api/iothub/service/getdevice)。
 
 > [!NOTE]
-> 当你使用 Microsoft 的企业服务时，Microsoft 会生成一些信息，称为系统生成的日志。 租户管理员无法访问或导出 Azure IoT 中心的某些系统生成日志。 这些日志包含在服务中执行的实际操作以及与个人设备相关的诊断数据。
+> 当你使用 Microsoft 的企业服务时，Microsoft 会生成一些信息，称为系统生成的日志。 租户管理员无法访问或导出 Azure IoT 中心系统生成的某些日志。 这些日志包含在服务中执行的实际操作以及与个人设备相关的诊断数据。
 
 ## <a name="links-to-additional-documentation"></a>其他文档的链接
 
-Azure IoT 中心设备 API 的完整文档位于 [https://docs.microsoft.com/rest/api/iothub/deviceapi](https://docs.microsoft.com/rest/api/iothub/deviceapi)。
+Azure IoT 中心服务 API 的完整文档位于 [IoT 中心服务 API](https://docs.microsoft.com/rest/api/iothub/service)。

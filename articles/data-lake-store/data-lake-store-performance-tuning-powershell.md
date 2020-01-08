@@ -1,25 +1,28 @@
 ---
-title: 将 Powershell 与 Data Lake Store 配合使用的性能优化指南 | Microsoft Docs
-description: 有关如何在将 Azure PowerShell 与 Data Lake Store 配合使用时提高性能的建议
+title: 将 PowerShell 与 Azure Data Lake Store Gen1 配合使用的性能优化指南 | Microsoft Docs
+description: 有关如何在将 Azure PowerShell 与 Azure Data Lake Storage Gen1 配合使用时提高性能的建议
 services: data-lake-store
 documentationcenter: ''
 author: stewu
-manager: jhubbard
+manager: mtillman
 editor: cgronlun
 ms.service: data-lake-store
 ms.devlang: na
 ms.topic: article
 ms.date: 01/09/2018
 ms.author: stewu
-ms.openlocfilehash: 7b19972ed4a75ac899a4b78b28ab36ba305a5a64
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: 1c554b0eee844a632e6412b6f8a285c7a2573326
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60195838"
 ---
-# <a name="performance-tuning-guidance-for-using-powershell-with-azure-data-lake-store"></a>将 PowerShell 与 Azure Data Lake Store 配合使用的性能优化指南
+# <a name="performance-tuning-guidance-for-using-powershell-with-azure-data-lake-storage-gen1"></a>将 PowerShell 与 Azure Data Lake Store Gen1 配合使用的性能优化指南
 
-本文列出一些可调整的属性，以便在使用 PowerShell 操作 Data Lake Store 时可获得更佳性能：
+本文列出一些可调整的属性，以便在使用 PowerShell 操作 Azure Data Lake Storage Gen1 时可获得更好的性能：
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
 ## <a name="performance-related-properties"></a>性能相关属性
 
@@ -30,9 +33,9 @@ ms.lasthandoff: 05/16/2018
 
 **示例**
 
-此命令针对每个文件使用 20 个线程以及 100 个并发文件，将 Azure Data Lake Store 中的文件下载到用户的本地驱动器。
+此命令针对每个文件使用 20 个线程以及 100 个并发文件，将 Data Lake Storage Gen1 中的文件下载到用户的本地驱动器。
 
-    Export-AzureRmDataLakeStoreItem -AccountName <Data Lake Store account name> -PerFileThreadCount 20-ConcurrentFileCount 100 -Path /Powershell/100GB/ -Destination C:\Performance\ -Force -Recurse
+    Export-AzDataLakeStoreItem -AccountName <Data Lake Storage Gen1 account name> -PerFileThreadCount 20-ConcurrentFileCount 100 -Path /Powershell/100GB/ -Destination C:\Performance\ -Force -Recurse
 
 ## <a name="how-do-i-determine-the-value-for-these-properties"></a>如何确定要为这些属性设置的值？
 
@@ -49,7 +52,7 @@ ms.lasthandoff: 05/16/2018
         Total thread count = 16 cores * 6 = 96 threads
 
 
-* **步骤 2：计算 PerFileThreadCount** - 根据文件的大小计算 PerFileThreadCount。 对于小于 2.5 GB 的文件，没有必要更改此参数，因为默认值 10 就已足够。 对于大于 2.5 GB 的文件，应该为前 2.5 GB 使用 10 个线程作为基础，文件大小每增加 256 MB，就多使用 1 个线程。 如果要复制文件大小有很大变化的文件夹，请考虑根据类似的文件大小将这些文件分组。 文件大小有差异可能会导致性能不佳。 如果无法将类似大小的文件分组，应该根据最大文件大小设置 PerFileThreadCount。
+* **步骤 2：计算 PerFileThreadCount** - 根据文件的大小计算 PerFileThreadCount。 对于小于 2.5 GB 的文件，没有必要更改此参数，因为默认值 10 就已足够。 对于大于 2.5 GB 的文件，应为前 2.5 GB 使用 10 个线程作为基础，文件大小每增加 256 MB，就多使用 1 个线程。 如果要复制文件大小有很大变化的文件夹，请考虑根据类似的文件大小将这些文件分组。 文件大小有差异可能会导致性能不佳。 如果无法将类似大小的文件分组，应根据最大文件大小设置 PerFileThreadCount。
 
         PerFileThreadCount = 10 threads for the first 2.5 GB + 1 thread for each additional 256 MB increase in file size
 
@@ -59,7 +62,7 @@ ms.lasthandoff: 05/16/2018
 
         PerFileThreadCount = 10 + ((10 GB - 2.5 GB) / 256 MB) = 40 threads
 
-* **步骤 3：计算 ConcurrentFilecount** - 根据以下公式，使用线程总数和 PerFileThreadCount 计算 ConcurrentFileCount：
+* **步骤 3：计算 ConcurrentFilecount** - 根据以下公式，使用线程计数和 PerFileThreadCount 计算 ConcurrentFileCount：
 
         Total thread count = PerFileThreadCount * ConcurrentFileCount
 
@@ -69,7 +72,7 @@ ms.lasthandoff: 05/16/2018
 
         96 = 40 * ConcurrentFileCount
 
-    **ConcurrentFileCount** 为 **2.4**，舍入为 **2**。
+    ConcurrentFileCount 为 2.4，舍入为 2    。
 
 ## <a name="further-tuning"></a>进一步调整
 
@@ -77,23 +80,23 @@ ms.lasthandoff: 05/16/2018
 
     PerFileThreadCount = 10 + ((5 GB - 2.5 GB) / 256 MB) = 20
 
-所以 ConcurrentFileCount 是 96/20，即 4.8，舍入为 4。
+所以 ConcurrentFileCount 是 96/20，即 4.8，舍入为 4   。
 
-可以根据文件大小的分布，通过调大或调小 **PerFileThreadCount** 来继续调整这些设置。
+可以根据文件大小的分布，通过调大或调小 PerFileThreadCount 来继续调整这些设置  。
 
 ### <a name="limitation"></a>限制
 
-* **文件数小于 ConcurrentFileCount**：如果要上传的文件数小于计算得出的 **ConcurrentFileCount** ，应该减小 **ConcurrentFileCount** ，使其等于文件数。 可以使用所有剩余线程来增大 **PerFileThreadCount**。
+* **文件数小于 ConcurrentFileCount**：如果要上传的文件数小于计算得出的 **ConcurrentFileCount**，应减小 **ConcurrentFileCount**，使其等于文件数。 可以使用所有剩余线程来增大 PerFileThreadCount  。
 
 * **线程过多**：如果在不增加群集大小的情况下大幅增加线程计数，会面临性能下降的风险。 在 CPU 上执行上下文切换时，可能会出现资源争用的问题。
 
 * **并发性不足**：如果并发性不足，可能表示群集太小。 可在群集中增加节点数目，这样可以提高并发性。
 
-* **限制错误**：并发性过高时，可能会出现限制错误。 如果看到限制错误，应该降低并发性，或者与我们联系。
+* **限制错误**：并发性过高时，可能会出现限制错误。 如果看到限制错误，应降低并发性，或者与我们联系。
 
 ## <a name="next-steps"></a>后续步骤
-* [使用 Azure Data Lake Store 满足大数据要求](data-lake-store-data-scenarios.md) 
-* [保护 Data Lake Store 中的数据](data-lake-store-secure-data.md)
-* [配合使用 Azure Data Lake Analytic 和 Data Lake Store](../data-lake-analytics/data-lake-analytics-get-started-portal.md)
-* [配合使用 Azure HDInsight 和 Data Lake Store](data-lake-store-hdinsight-hadoop-use-portal.md)
+* [使用 Azure Data Lake Storage Gen1 满足大数据要求](data-lake-store-data-scenarios.md) 
+* [保护 Data Lake Storage Gen1 中的数据](data-lake-store-secure-data.md)
+* [配合使用 Azure Data Lake Analytics 和 Data Lake Storage Gen1](../data-lake-analytics/data-lake-analytics-get-started-portal.md)
+* [将 Azure HDInsight 与 Data Lake Storage Gen1 配合使用](data-lake-store-hdinsight-hadoop-use-portal.md)
 

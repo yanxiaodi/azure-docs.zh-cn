@@ -3,31 +3,29 @@ title: 以编程方式监视 Azure 数据工厂 | Microsoft Docs
 description: 了解如何使用不同的软件开发工具包 (SDK) 监视数据工厂中的管道。
 services: data-factory
 documentationcenter: ''
-author: douglaslMS
-manager: craigg
-editor: ''
 ms.service: data-factory
 ms.workload: data-services
 ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/16/2018
-ms.author: douglasl
-ms.openlocfilehash: 87e69349245c5f67e23022e3a45ed798400e6a2c
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+author: djpmsft
+ms.author: daperlov
+manager: craigg
+ms.openlocfilehash: 5c1f64282f1e0b1f225bcad0935c4c9b9a0f96b4
+ms.sourcegitcommit: d200cd7f4de113291fbd57e573ada042a393e545
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70141037"
 ---
 # <a name="programmatically-monitor-an-azure-data-factory"></a>以编程方式监视 Azure 数据工厂
 本文介绍如何使用不同的软件开发工具包 (SDK) 监视数据工厂中的管道。 
 
-> [!NOTE]
-> 本文适用于目前处于预览状态的数据工厂版本 2。 如果使用数据工厂服务版本 1（即正式版 (GA)），请参阅[监视和管理数据工厂版本 1 中的管道](v1/data-factory-monitor-manage-pipelines.md)。
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
 ## <a name="data-range"></a>数据范围
 
-数据工厂仅将管道运行数据存储 45 天。 以编程方式查询有关数据工厂管道运行的数据时 - 比如使用 PowerShell 命令 `Get-AzureRmDataFactoryV2PipelineRun` 来查询，对于可选的 `LastUpdatedAfter` 和 `LastUpdatedBefore` 参数，无最大日期限制。 但是，如果查询过去一年（举例）的数据，查询不会返回错误，而仅返回最近 45 天的管道运行数据。
+数据工厂仅将管道运行数据存储 45 天。 以编程方式查询有关数据工厂管道运行的数据时 - 比如使用 PowerShell 命令 `Get-AzDataFactoryV2PipelineRun` 来查询，对于可选的 `LastUpdatedAfter` 和 `LastUpdatedBefore` 参数，无最大日期限制。 但是，如果查询过去一年（举例）的数据，查询不会返回错误，而仅返回最近 45 天的管道运行数据。
 
 如果要保留管道运行数据超过 45 天，可使用 [Azure Monitor](monitor-using-azure-monitor.md) 设置自己的诊断日志记录。
 
@@ -75,11 +73,13 @@ ms.lasthandoff: 03/23/2018
 要监视管道的运行，请添加以下代码：
 
 ```python
-#Monitor the pipeline run
+# Monitor the pipeline run
 time.sleep(30)
-pipeline_run = adf_client.pipeline_runs.get(rg_name, df_name, run_response.run_id)
+pipeline_run = adf_client.pipeline_runs.get(
+    rg_name, df_name, run_response.run_id)
 print("\n\tPipeline run status: {}".format(pipeline_run.status))
-activity_runs_paged = list(adf_client.activity_runs.list_by_pipeline_run(rg_name, df_name, pipeline_run.run_id, datetime.now() - timedelta(1),  datetime.now() + timedelta(1)))
+activity_runs_paged = list(adf_client.activity_runs.list_by_pipeline_run(
+    rg_name, df_name, pipeline_run.run_id, datetime.now() - timedelta(1),  datetime.now() + timedelta(1)))
 print_activity_run_details(activity_runs_paged[0])
 ```
 
@@ -107,7 +107,7 @@ print_activity_run_details(activity_runs_paged[0])
     ```
 2. 运行以下脚本来检索复制活动运行详细信息，例如，读取/写入的数据的大小。
 
-    ```PowerShell
+    ```powershell
     $request = "https://management.azure.com/subscriptions/${subsId}/resourceGroups/${resourceGroup}/providers/Microsoft.DataFactory/factories/${dataFactoryName}/pipelineruns/${runId}/activityruns?api-version=${apiVersion}&startTime="+(Get-Date).ToString('yyyy-MM-dd')+"&endTime="+(Get-Date).AddDays(1).ToString('yyyy-MM-dd')+"&pipelineName=Adfv2QuickStartPipeline"
     $response = Invoke-RestMethod -Method GET -Uri $request -Header $authHeader
     $response | ConvertTo-Json
@@ -122,7 +122,7 @@ print_activity_run_details(activity_runs_paged[0])
 
     ```powershell
     while ($True) {
-        $run = Get-AzureRmDataFactoryV2PipelineRun -ResourceGroupName $resourceGroupName -DataFactoryName $DataFactoryName -PipelineRunId $runId
+        $run = Get-AzDataFactoryV2PipelineRun -ResourceGroupName $resourceGroupName -DataFactoryName $DataFactoryName -PipelineRunId $runId
 
         if ($run) {
             if ($run.Status -ne 'InProgress') {
@@ -140,7 +140,7 @@ print_activity_run_details(activity_runs_paged[0])
 
     ```powershell
     Write-Host "Activity run details:" -foregroundcolor "Yellow"
-    $result = Get-AzureRmDataFactoryV2ActivityRun -DataFactoryName $dataFactoryName -ResourceGroupName $resourceGroupName -PipelineRunId $runId -RunStartedAfter (Get-Date).AddMinutes(-30) -RunStartedBefore (Get-Date).AddMinutes(30)
+    $result = Get-AzDataFactoryV2ActivityRun -DataFactoryName $dataFactoryName -ResourceGroupName $resourceGroupName -PipelineRunId $runId -RunStartedAfter (Get-Date).AddMinutes(-30) -RunStartedBefore (Get-Date).AddMinutes(30)
     $result
     
     Write-Host "Activity 'Output' section:" -foregroundcolor "Yellow"
@@ -150,7 +150,7 @@ print_activity_run_details(activity_runs_paged[0])
     $result.Error -join "`r`n"
     ```
 
-有关 PowerShell cmdlet 的完整文档，请参阅[数据工厂 PowerShell cmdlet 参考](/powershell/module/azurerm.datafactoryv2/?view=azurermps-4.4.1)。
+有关 PowerShell cmdlet 的完整文档，请参阅[数据工厂 PowerShell cmdlet 参考](/powershell/module/az.datafactory)。
 
 ## <a name="next-steps"></a>后续步骤
 若要了解如何使用 Azure Monitor 监视数据工厂管道，请参阅[使用 Azure Monitor 监视管道](monitor-using-azure-monitor.md)一文。 

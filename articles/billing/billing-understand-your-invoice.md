@@ -1,10 +1,10 @@
 ---
-title: 了解 Azure 发票
+title: 了解 Azure 发票 | Microsoft Docs
 description: 了解如何阅读并理解 Azure 订阅的使用情况和计费
 services: ''
 documentationcenter: ''
-author: tonguyen10
-manager: tonguyen
+author: bandersmsft
+manager: jureid
 editor: ''
 tags: billing
 ms.service: billing
@@ -13,12 +13,13 @@ ms.topic: conceptual
 ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 08/31/2017
-ms.author: tonguyen
-ms.openlocfilehash: 38126e4539719ba56e6e5eac5e860cea9b49d446
-ms.sourcegitcommit: c47ef7899572bf6441627f76eb4c4ac15e487aec
+ms.author: banders
+ms.openlocfilehash: 77c1a85136b2117af7396b8eec2d8b92b335d61d
+ms.sourcegitcommit: 3e7646d60e0f3d68e4eff246b3c17711fb41eeda
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/04/2018
+ms.lasthandoff: 09/11/2019
+ms.locfileid: "60369913"
 ---
 # <a name="understand-terms-on-your-microsoft-azure-invoice"></a>了解 Microsoft Azure 发票的条款
 
@@ -51,11 +52,11 @@ ms.lasthandoff: 05/04/2018
 | 发票日期 |生成发票的日期，通常是计费周期截止的后一天 |
 | 付款方式 |在帐户中使用的付款类型（“发票”或“信用卡”） |
 | 帐单邮寄地址 |列出的帐户的帐单地址 |
-| 订阅产品/服务（“即用即付”） |购买的订阅产品/服务的类型（即用即付、BizSpark Plus、Azure Pass 等）。 有关详细信息，请参阅 [Azure 产品/服务类型](https://azure.microsoft.com/support/legal/offer-details/)。 |
+| 订阅套餐（“即用即付”） |购买的订阅套餐的类型（即用即付、BizSpark Plus、Azure Pass 等）。 有关详细信息，请参阅 [Azure 套餐类型](https://azure.microsoft.com/support/legal/offer-details/)。 |
 | 帐户所有者电子邮件地址 | 注册 Microsoft Azure 帐户时使用的帐户电子邮件地址。 <br /><br />如何更改电子邮件地址，请参阅[如何更改联系人电子邮件、地址和电话号码等 Azure 帐户的个人资料信息](billing-how-to-change-azure-account-profile.md)。 |
 
 ### <a name="understand-the-invoice-summary"></a>了解发票汇总
-发票的“发票摘要”部分汇总了上次计费周期之后的总交易量，以及当前的使用费。
+发票的“发票摘要”部分汇总了上次计费周期之后的总交易量，以及当前的使用费  。
 
 ![发票摘要部分](./media/billing-understand-your-invoice/2.png)
 
@@ -77,7 +78,7 @@ ms.lasthandoff: 05/04/2018
 | --- | --- |
 | 使用费 |使用费是当前计费周期中，对订阅收取的每月总费用|
 | 折扣 |应用到当前计费周期的服务折扣|
-| 调整 |应用于当前计费周期的其他信用额度（免费使用、信用额度等）或未付费用。<br/><br/>例如，如果享有 Visual Studio Enterprise with MSDN 优惠，会看到每月信用额度。 如果取消订阅，会看到超出通过订阅产品/服务获得的每月信用额度的所有每月使用费用。 从当前计费周期的开始计费，直到订阅取消日期。 |
+| 调整 |应用于当前计费周期的其他信用额度（免费使用、信用额度等）或未付费用。<br/><br/>例如，如果你具有 Visual Studio Enterprise with MSDN 套餐，就会看到每月额度。 如果取消订阅，你会看到超出通过订阅套餐获得的每月信用额度的所有每月使用费用。 从当前计费周期的开始计费，直到订阅取消日期。 |
 
 #### <a name="sold-to-and-payment-instructions"></a>买方和付款说明
 
@@ -98,8 +99,8 @@ ms.lasthandoff: 05/04/2018
 
 | 术语 |说明 |
 | --- | --- |
-| 名称 |标识该次使用的最上层服务 |
-| Type |定义 Azure 服务类型，该类型可能会影响费率 |
+| Name |标识该次使用的最上层服务 |
+| 类型 |定义 Azure 服务类型，该类型可能会影响费率 |
 | 资源 |标识已使用计量的度量单位 |
 | 区域 |标识某些服务的数据中心的位置，这些服务根据数据中心位置进行定价 |
 | 已耗用 |计费周期期间使用的计量的量 |
@@ -113,5 +114,6 @@ ms.lasthandoff: 05/04/2018
 ## <a name="how-do-i-make-sure-that-the-charges-in-my-invoice-are-correct"></a>如何确定发票中的费用是正确的？
 如果想要更详细地了解发票上的费用，请参阅[了解你的 Microsoft Azure 帐单](billing-understand-your-bill.md)。
 
-## <a name="need-help-contact-support"></a>需要帮助？ 联系支持人员。
-如果仍需帮助，请[联系支持人员](https://portal.azure.com/?#blade/Microsoft_Azure_Support/HelpAndSupportBlade)以快速解决问题。
+## <a name="need-help-contact-us"></a>需要帮助？ 请联系我们。
+
+如有任何疑问或需要帮助，请[创建支持请求](https://go.microsoft.com/fwlink/?linkid=2083458)。

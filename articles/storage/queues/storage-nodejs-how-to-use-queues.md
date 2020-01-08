@@ -1,26 +1,22 @@
 ---
-title: 如何通过 Node.js 使用队列存储 | Microsoft Docs
+title: 通过 Node.js 使用 Azure 队列存储 - Azure 存储
 description: 了解如何使用 Azure 队列服务创建和删除队列，以及插入、获取和删除消息。 相关示例是使用 Node.js 编写的。
-services: storage
-documentationcenter: nodejs
-author: craigshoemaker
-manager: jeconnoc
-editor: tysonn
-ms.assetid: a8a92db0-4333-43dd-a116-28b3147ea401
+author: mhopkins-msft
 ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: nodejs
-ms.topic: article
+ms.author: mhopkins
 ms.date: 12/08/2016
-ms.author: cshoe
-ms.openlocfilehash: 2565f56324a070368c499a62ab54bb98830d8c20
-ms.sourcegitcommit: a0be2dc237d30b7f79914e8adfb85299571374ec
-ms.translationtype: HT
+ms.subservice: queues
+ms.topic: conceptual
+ms.reviewer: cbrooks
+ms.custom: seo-javascript-september2019
+ms.openlocfilehash: 9eee7f6b321a5ba660e1a0a5a48771c599746bcb
+ms.sourcegitcommit: 2d9a9079dd0a701b4bbe7289e8126a167cfcb450
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/12/2018
+ms.lasthandoff: 09/29/2019
+ms.locfileid: "71673082"
 ---
-# <a name="how-to-use-queue-storage-from-nodejs"></a>如何通过 Node.js 使用队列存储
+# <a name="use-azure-queue-service-to-create-and-delete-queues-from-nodejs"></a>使用 Azure 队列服务创建和删除 node.js 中的队列
 [!INCLUDE [storage-selector-queue-include](../../../includes/storage-selector-queue-include.md)]
 
 [!INCLUDE [storage-check-out-samples-all](../../../includes/storage-check-out-samples-all.md)]
@@ -67,8 +63,6 @@ var azure = require('azure-storage');
 ## <a name="setup-an-azure-storage-connection"></a>设置 Azure 存储连接
 Azure 模块将读取环境变量 AZURE\_STORAGE\_ACCOUNT 和 AZURE\_STORAGE\_ACCESS\_KEY，或 AZURE\_STORAGE\_CONNECTION\_STRING 以获取连接到 Azure 存储帐户所需的信息。 如果未设置这些环境变量，则必须在调用 **createQueueService** 时指定帐户信息。
 
-有关在 [Azure 门户](https://portal.azure.com)中为 Azure 网站设置环境变量的示例，请参阅[使用 Azure 表服务的 Node.js Web 应用](../../cosmos-db/table-storage-cloud-service-nodejs.md)。
-
 ## <a name="how-to-create-a-queue"></a>如何：创建队列
 以下代码将创建一个 **QueueService** 对象，可通过该对象来操作队列。
 
@@ -76,7 +70,7 @@ Azure 模块将读取环境变量 AZURE\_STORAGE\_ACCOUNT 和 AZURE\_STORAGE\_AC
 var queueSvc = azure.createQueueService();
 ```
 
-使用 **createQueueIfNotExists** 方法，该方法将返回指定的队列（如果已存在），或创建具有指定名称的新队列（如果尚不存在）。
+使用 **createQueueIfNotExists** 方法，该方法返回指定的队列（如果已存在），或创建具有指定名称的新队列（如果尚不存在）。
 
 ```javascript
 queueSvc.createQueueIfNotExists('myqueue', function(error, results, response){
@@ -139,7 +133,7 @@ queueSvc.peekMessages('myqueue', function(error, results, response){
 > 
 > 
 
-## <a name="how-to-dequeue-the-next-message"></a>如何：取消对下一条消息的排队
+## <a name="how-to-dequeue-the-next-message"></a>如何：取消下一条消息的排队
 处理消息是一个两阶段过程：
 
 1. 取消消息的排队。
@@ -162,7 +156,7 @@ queueSvc.getMessages('myqueue', function(error, results, response){
 ```
 
 > [!NOTE]
-> 默认情况下，一条消息只会隐藏 30 秒，其他客户端就可以看见它。 可将 `options.visibilityTimeout` 与 **getMessages** 配合使用，以指定其他值。
+> 默认情况下，一条消息只会隐藏 30 秒，其他客户端就可以看见它。 可以将 `options.visibilityTimeout` 与 **getMessages** 配合使用，以指定其他值。
 > 
 > [!NOTE]
 > 在队列中没有消息时使用 **getMessages** 不会返回错误，但也不会返回消息。
@@ -186,7 +180,7 @@ queueSvc.getMessages('myqueue', function(error, getResults, getResponse){
 });
 ```
 
-## <a name="how-to-additional-options-for-dequeuing-messages"></a>如何：用于对消息取消排队的其他选项
+## <a name="how-to-additional-options-for-dequeuing-messages"></a>如何：取消消息排队的其他选项
 可以通过两种方式自定义队列中的消息检索：
 
 * `options.numOfMessages` - 获取一批消息（最多 32 条）。
@@ -331,16 +325,16 @@ queueSAS = queueSvc.generateSharedAccessSignature('myqueue', { Id: 'user2' });
 ```
 
 ## <a name="next-steps"></a>后续步骤
-现在，已了解有关队列存储的基础知识，可单击下面的链接来了解更复杂的存储任务。
+在了解了有关队列存储的基础知识后，可使用以下链接来了解更复杂的存储任务。
 
 * 访问 [Azure 存储团队博客][Azure Storage Team Blog]。
-* 访问 GitHub 上[用于 Node 的 Azure 存储 SDK][Azure Storage SDK for Node] 存储库。
+* 访问 GitHub 上的 [Azure Storage SDK for Node][Azure Storage SDK for Node] 存储库。
 
 
 
 [Azure Storage SDK for Node]: https://github.com/Azure/azure-storage-node
 
-[using the REST API]: http://msdn.microsoft.com/library/azure/hh264518.aspx
+[using the REST API]: https://msdn.microsoft.com/library/azure/hh264518.aspx
 
 [Azure Portal]: https://portal.azure.com
 
@@ -348,6 +342,6 @@ queueSAS = queueSvc.generateSharedAccessSignature('myqueue', { Id: 'user2' });
 
 [生成 Node.js 应用程序并将其部署到 Azure 云服务](../../cloud-services/cloud-services-nodejs-develop-deploy-app.md)
 
-[Azure Storage Team Blog]: http://blogs.msdn.com/b/windowsazurestorage/
+[Azure Storage Team Blog]: https://blogs.msdn.com/b/windowsazurestorage/
 
 [Build and deploy a Node.js web app to Azure using Web Matrix]: https://www.microsoft.com/web/webmatrix/

@@ -1,30 +1,23 @@
 ---
-title: 如何查询 Azure Cosmos DB 中的图数据？ | Microsoft Docs
+title: 如何查询 Azure Cosmos DB 中的图数据？
 description: 学习如何查询 Azure Cosmos DB 中的图数据
-services: cosmos-db
-documentationcenter: ''
 author: luisbosquez
-manager: kfile
-editor: ''
-tags: ''
-ms.assetid: 8bde5c80-581c-4f70-acb4-9578873c92fa
-ms.service: cosmos-db
-ms.devlang: na
-ms.topic: tutorial
-ms.tgt_pltfrm: na
-ms.workload: ''
-ms.date: 01/02/2018
 ms.author: lbosq
-ms.custom: mvc
-ms.openlocfilehash: 449821d6121f8fec40b151ae06f687586133c3d1
-ms.sourcegitcommit: fc64acba9d9b9784e3662327414e5fe7bd3e972e
+ms.service: cosmos-db
+ms.subservice: cosmosdb-graph
+ms.topic: tutorial
+ms.date: 01/02/2018
+ms.reviewer: sngun
+ms.openlocfilehash: 2bc79801864481562967702a7c52a7670950199b
+ms.sourcegitcommit: 8330a262abaddaafd4acb04016b68486fba5835b
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/12/2018
+ms.lasthandoff: 01/04/2019
+ms.locfileid: "54043968"
 ---
-# <a name="tutorial-query-azure-cosmos-db-graph-api-by-using-gremlin"></a>教程：使用 Gremlin 查询 Azure Cosmos DB 图形 API
+# <a name="tutorial-query-azure-cosmos-db-gremlin-api-by-using-gremlin"></a>教程：使用 Gremlin 查询 Azure Cosmos DB Gremlin API
 
-Azure Cosmos DB [图形 API](graph-introduction.md) 支持 [Gremlin](https://github.com/tinkerpop/gremlin/wiki) 查询。 本文包含示例文档和查询，提供入门指导。 [Gremlin 支持](gremlin-support.md)一文提供了详细的 Gremlin 引用。
+Azure Cosmos DB [Gremlin API](graph-introduction.md) 支持 [Gremlin](https://github.com/tinkerpop/gremlin/wiki) 查询。 本文包含示例文档和查询，提供入门指导。 [Gremlin 支持](gremlin-support.md)一文提供了详细的 Gremlin 引用。
 
 本文涵盖以下任务： 
 
@@ -33,7 +26,7 @@ Azure Cosmos DB [图形 API](graph-introduction.md) 支持 [Gremlin](https://git
 
 ## <a name="prerequisites"></a>先决条件
 
-若要使这些查询生效，必须拥有 Azure Cosmos DB 帐户，且容器中必须包含图数据。 没有这些内容？ 请学习 [5 分钟快速入门](create-graph-dotnet.md)或[开发人员教程](tutorial-query-graph.md)，创建 帐户并填充数据库。 可使用 [Azure Cosmos DB .NET 图库](graph-sdk-dotnet.md)、[Gremlin 控制台](https://tinkerpop.apache.org/docs/current/reference/#gremlin-console)或喜爱的 Gremlin 驱动程序运行以下查询。
+若要使这些查询生效，必须拥有 Azure Cosmos DB 帐户，且容器中必须包含图数据。 没有这些内容？ 请学习 [5 分钟快速入门](create-graph-dotnet.md)或[开发人员教程](tutorial-query-graph.md)，创建 帐户并填充数据库。 可以使用 [Gremlin 控制台](https://tinkerpop.apache.org/docs/current/reference/#gremlin-console)或你最喜爱的 Gremlin 驱动程序运行以下查询。
 
 ## <a name="count-vertices-in-the-graph"></a>计算图中的顶点数量
 
@@ -82,7 +75,8 @@ g.V('thomas').outE('knows').inV().hasLabel('person').outE('knows').inV().hasLabe
 > [!div class="checklist"]
 > * 已了解如何使用 Graph 进行查询 
 
-现在可继续学习下一教程，了解如何全局发布数据。
+现在可以转到“概念”部分详细了解 Cosmos DB。
 
 > [!div class="nextstepaction"]
-> [全局分发数据](tutorial-global-distribution-graph.md)
+> [全局分发](distribute-data-globally.md) 
+

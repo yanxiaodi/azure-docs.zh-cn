@@ -1,30 +1,26 @@
 ---
-title: 使用 Spark 进行高级数据探索和建模 | Microsoft Docs
+title: 使用 Spark 进行高级数据探索和建模 - Team Data Science Process
 description: 使用 HDInsight Spark 进行数据探索，并使用交叉验证和超参数优化训练二元分类和回归模型。
 services: machine-learning
-documentationcenter: ''
-author: deguhath
-manager: jhubbard
+author: marktab
+manager: cgronlun
 editor: cgronlun
-ms.assetid: f90d9a80-4eaf-437b-a914-23514390cd60
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 02/15/2017
-ms.author: deguhath
-ms.openlocfilehash: 9f24d05a344e0042fa498b62c874617ba7466f8f
-ms.sourcegitcommit: 6116082991b98c8ee7a3ab0927cf588c3972eeaa
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: 5f6145e581393d874871d214515a660f987d1d7f
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 06/05/2018
-ms.locfileid: "32778336"
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60253428"
 ---
 # <a name="advanced-data-exploration-and-modeling-with-spark"></a>使用 Spark 进行高级数据探索和建模
-[!INCLUDE [machine-learning-spark-modeling](../../../includes/machine-learning-spark-modeling.md)]
 
-此演练对 NYC 出租车行程和车费 2013 数据的样本使用 HDInsight Spark 进行数据探索，并使用交叉验证和超参数优化训练二元分类和回归模型。 它端到端演练[数据科学过程](http://aka.ms/datascienceprocess)的步骤，使用 HDInsight Spark 群集进行处理并使用 Azure Blob 存储数据和模型。 此过程探索并可视化从 Azure 存储 Blob 引入的数据，并使数据为生成预测模型做好准备。 已使用 Python 编写解决方案并显示相关绘图。 这些模型使用 Spark MLlib 工具包生成，用于执行二元分类和回归建模任务。 
+此演练对 NYC 出租车行程和车费 2013 数据的样本使用 HDInsight Spark 进行数据探索，并使用交叉验证和超参数优化训练二元分类和回归模型。 它端到端演练[数据科学过程](https://docs.microsoft.com/azure/machine-learning/team-data-science-process/)的步骤，使用 HDInsight Spark 群集进行处理并使用 Azure Blob 存储数据和模型。 此过程探索并可视化从 Azure 存储 Blob 引入的数据，并使数据为生成预测模型做好准备。 已使用 Python 编写解决方案并显示相关绘图。 这些模型使用 Spark MLlib 工具包生成，用于执行二元分类和回归建模任务。 
 
 * **二元分类**任务用于预测某个行程是否会支付小费。 
 * **回归**任务用于根据其他小费特征预测小费的金额。 
@@ -41,8 +37,8 @@ ms.locfileid: "32778336"
 
 * [使用 SGD 的线性回归](https://spark.apache.org/docs/latest/api/python/pyspark.mllib.html#pyspark.mllib.regression.LinearRegressionWithSGD)是使用随机梯度下降 (SGD) 方法进行优化和特征缩放的线性回归模型，以预测支付的小费金额。 
 * [使用 LBFGS 的逻辑回归](https://spark.apache.org/docs/latest/api/python/pyspark.mllib.html#pyspark.mllib.classification.LogisticRegressionWithLBFGS)或“logit”回归，是可在因变量分类时用于执行数据分类的回归模型。 LBFGS 是拟牛顿优化算法，近似于使用有限计算机内存量的 Broyden–Fletcher–Goldfarb–Shanno (BFGS) 算法，在机器学习中广泛使用。
-* [随机林](http://spark.apache.org/docs/latest/mllib-ensembles.html#Random-Forests)是决策树的整体。  它们组合了许多决策树以降低过度拟合的风险。 随机林用于回归和分类，并且可处理分类特征，也可扩展到多类分类设置。 它们不需要特征缩放，并且能够捕获非线性和特征交互。 随机林是用于分类和回归的最成功的机器学习模型之一。
-* [梯度提升树](http://spark.apache.org/docs/latest/ml-classification-regression.html#gradient-boosted-trees-gbts) (GBT) 是决策树的整体。 GBT 以迭代方式训练决策树以最大程度减少损失函数。 GBT 用于回归和分类，并且可处理分类特征，不需要功能缩放，并且能够捕获非线性和特征交互。 它们还可以在多类分类设置中使用。
+* [随机林](https://spark.apache.org/docs/latest/mllib-ensembles.html#Random-Forests)是决策树的整体。  它们组合了许多决策树以降低过度拟合的风险。 随机林用于回归和分类，并且可处理分类特征，也可扩展到多类分类设置。 它们不需要特征缩放，并且能够捕获非线性和特征交互。 随机林是用于分类和回归的最成功的机器学习模型之一。
+* [梯度提升树](https://spark.apache.org/docs/latest/ml-classification-regression.html#gradient-boosted-trees-gbts) (GBT) 是决策树的整体。 GBT 以迭代方式训练决策树以最大程度减少损失函数。 GBT 用于回归和分类，并且可处理分类特征，不需要功能缩放，并且能够捕获非线性和特征交互。 它们还可以在多类分类设置中使用。
 
 为二元分类问题显示了使用 CV 和超参数扫描的建模示例。 回归任务的主要主题中显示了更简单的示例（不使用参数扫描）。 但是在附录中，还显示了为线性回归使用弹性网络的验证和为随机林回归使用参数扫描的 CV。 **弹性网络**是用于拟合线性回归模型的正则化回归方法，该方法将 L1 和 L2 指标组合起来，作为 [lasso](https://en.wikipedia.org/wiki/Lasso%20%28statistics%29) 和 [ridge](https://en.wikipedia.org/wiki/Tikhonov_regularization) 方法的惩罚。   
 
@@ -56,7 +52,7 @@ ms.locfileid: "32778336"
 
 ### <a name="spark-16-notebooks"></a>Spark 1.6 笔记本
 
-[pySpark-machine-learning-data-science-spark-advanced-data-exploration-modeling.ipynb](https://github.com/Azure/Azure-MachineLearning-DataScience/blob/master/Misc/Spark/pySpark/pySpark-machine-learning-data-science-spark-advanced-data-exploration-modeling.ipynb)：包含笔记本 #1 中的主题，以及使用超参数优化和交叉验证进行模型开发的说明。
+[pySpark-machine-learning-data-science-spark-advanced-data-exploration-modeling.ipynb](https://github.com/Azure/Azure-MachineLearning-DataScience/blob/master/Misc/Spark/pySpark/pySpark-machine-learning-data-science-spark-advanced-data-exploration-modeling.ipynb)：包括笔记本 #1 中的主题，以及使用超参数优化和交叉验证的模型开发。
 
 ### <a name="spark-20-notebooks"></a>Spark 2.0 笔记本
 
@@ -118,7 +114,7 @@ datetime.datetime(2016, 4, 18, 17, 36, 27, 832799)
 PySpark 内核提供一些预定义的“magic”，这是可以结合 %% 调用的特殊命令。 在这些代码示例中使用的此类命令有两个。
 
 * **%%local** 指定本地执行后续行中的代码。 代码必须是有效的 Python 代码。
-* **%%sql -o <variable name>** 针对 sqlContext 执行 Hive 查询。 如果传递了 -o 参数，则查询的结果以 Pandas 数据帧的形式保存在 %%local Python 上下文中。
+* **%%sql-o\<变量的名称 >** 执行针对 sqlContext 的 Hive 查询。 如果传递了 -o 参数，则查询的结果以 Pandas 数据帧的形式保存在 %%local Python 上下文中。
 
 有关 Jupyter 笔记本内核和它们提供的预定义“magic”的详细信息，请参阅[适用于装有 HDInsight 上的 HDInsight Spark Linux 群集的 Jupyter 笔记本的内核](../../hdinsight/spark/apache-spark-jupyter-notebook-kernels.md)。
 
@@ -245,7 +241,7 @@ PySpark 内核提供一些预定义的“magic”，这是可以结合 %% 调用
 
 ![按乘客数的行程频率](./media/spark-advanced-data-exploration-modeling/frequency-of-trips-by-passenger-count.png)
 
-可通过使用笔记本中的“类型”菜单按钮从多个不同类型的可视化（表、饼图、行、区域或栏）中选择。 此处显示了条形图。
+可通过使用笔记本中的“类型”  菜单按钮从多个不同类型的可视化（表、饼图、行、区域或栏）中选择。 此处显示了条形图。
 
 ### <a name="plot-a-histogram-of-tip-amounts-and-how-tip-amount-varies-by-passenger-count-and-fare-amounts"></a>绘制小费金额以及小费金额如何随乘客数和车费金额变化的直方图。
 使用 SQL 查询为数据采样。
@@ -341,7 +337,7 @@ PySpark 内核提供一些预定义的“magic”，这是可以结合 %% 调用
 ### <a name="index-and-one-hot-encode-categorical-features"></a>为分类特征编制索引并进行独热编码
 本部分介绍如何为分类特征编制索引或进行编码以输入到建模函数中。 MLlib 的建模和预测函数需要在使用前，对带有分类输入数据的特征进行索引或编码。 
 
-根据模型，需要以不同方式为它们编制索引或进行独热编码。 例如，逻辑和线性回归模型需要独热编码，举例来说，具有三个类别的特征可扩展为三个特征列，每个根据观察的类别包含 0 或 1。 MLlib 提供 [OneHotEncoder](http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder) 函数用于执行独热编码。 此编码器将标签索引列映射到二元向量列，该列最多只有单个值。 此编码允许将预期数值特征的算法（如逻辑回归）应用到分类特征。
+根据模型，需要以不同方式为它们编制索引或进行独热编码。 例如，逻辑和线性回归模型需要独热编码，举例来说，具有三个类别的特征可扩展为三个特征列，每个根据观察的类别包含 0 或 1。 MLlib 提供 [OneHotEncoder](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder) 函数用于执行独热编码。 此编码器将标签索引列映射到二元向量列，该列最多只有单个值。 此编码允许将预期数值特征的算法（如逻辑回归）应用到分类特征。
 
 下面是用于为分类特征编制索引和编码的代码：
 
@@ -407,7 +403,7 @@ PySpark 内核提供一些预定义的“magic”，这是可以结合 %% 调用
         labPt = LabeledPoint(line.tipped, features)
         return  labPt
 
-    # ONE-HOT ENCODING OF CATEGORICAL TEXT FEATURES FOR INPUT INTO LOGISTIC RERESSION MODELS
+    # ONE-HOT ENCODING OF CATEGORICAL TEXT FEATURES FOR INPUT INTO LOGISTIC REGRESSION MODELS
     def parseRowOneHotBinary(line):
         features = np.concatenate((np.array([line.pickup_hour, line.weekday, line.passenger_count,
                                             line.trip_time_in_secs, line.trip_distance, line.fare_amount]), 
@@ -1002,9 +998,9 @@ ROC = 0.985336538462 下的面积
 2. 测试数据集上的使用指标的**模型评估**
 3. 在 blob 中**保存模型**以供将来使用   
 
-> AZURE 备注：交叉验证在本部分中不与三个回归模型一起使用，因为已针对逻辑回归模型详细显示此操作。 本主题的附录中提供了显示如何将 CV 和弹性网络一起用于线性回归的示例。
+> Azure 备注：交叉验证在本部分中不与三个回归模型一起使用，因为已针对逻辑回归模型详细显示此操作。 本主题的附录中提供了显示如何将 CV 和弹性网络一起用于线性回归的示例。
 > 
-> AZURE 备注：在我们的经验中，LinearRegressionWithSGD 模型的收敛可能出现问题，需要仔细更改/优化参数以获取有效的模型。 变量的缩放对收敛帮助很大。 还可使用本主题的附录中显示的弹性网络回归代替 LinearRegressionWithSGD。
+> Azure 备注：根据我们的经验，LinearRegressionWithSGD 模型的收敛可能出现问题，需要仔细更改/优化参数以获取有效的模型。 变量的缩放对收敛帮助很大。 还可使用本主题的附录中显示的弹性网络回归代替 LinearRegressionWithSGD。
 > 
 > 
 
@@ -1125,7 +1121,7 @@ R-sqr = 0.733445485802
 ### <a name="gradient-boosting-trees-regression"></a>梯度提升树回归
 本部分中的代码显示如何训练、评估和保存梯度提升树模型，该模型预测 NYC 出租车行程数据的小费金额。
 
-**定型和评估**
+**训练和评估**
 
     #PREDICT TIP AMOUNTS USING GRADIENT BOOSTING TREES
 
@@ -1253,7 +1249,7 @@ R-sqr = 0.732680354389
     # cvModel uses the best model found (lrModel).
     predictionAndLabels = cv_model.transform(testDataFrame)
 
-    # CONVERT TO DF AND SAVE REGISER DF AS TABLE
+    # CONVERT TO DF AND SAVE REGISTER DF AS TABLE
     predictionAndLabels.registerTempTable("tmp_results");
 
     # PRINT ELAPSED TIME
@@ -1412,7 +1408,7 @@ R-sqr = 0.740751197012
 
 **输出**
 
-PythonRDD[122] at RDD at PythonRDD.scala: 43
+PythonRDD[122] at RDD at PythonRDD.scala:43
 
 **打印输出要在使用笔记本中使用的模型文件的路径。 **若要使用独立数据集和为其评分，则需要在“使用笔记本”中复制并粘贴这些文件名。
 
@@ -1442,5 +1438,5 @@ BoostedTreeRegressionFileLoc = modelDir + "GradientBoostingTreeRegression_2016-0
 ## <a name="whats-next"></a>后续步骤
 现在已使用 Spark MlLib 创建了回归和分类模型，可了解如何评分和评估这些模型。
 
-**模型使用：** 若要了解如何评分和评估在本主题中创建的分类和回归模型，请参阅[评分和评估 Spark 构建的机器学习模型](spark-model-consumption.md)。
+**使用模型：** 若要了解如何评分和评估在本主题中创建的分类和回归模型，请参阅[评分和评估 Spark 构建的机器学习模型](spark-model-consumption.md)。
 

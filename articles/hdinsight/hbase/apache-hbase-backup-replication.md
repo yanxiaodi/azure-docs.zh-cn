@@ -1,28 +1,23 @@
 ---
-title: 设置 HBase 和 Phoenix 的备份与复制 - Azure HDInsight | Microsoft Docs
-description: 为 HBase 和 Phoenix 设置备份与复制。
-services: hdinsight
-documentationcenter: ''
-tags: azure-portal
+title: Azure HDInsight 中 Apache HBase 和 Apache Phoenix 的备份和复制
+description: 在 Azure HDInsight 中设置 Apache HBase 和 Apache Phoenix 的备份和复制
 author: ashishthaps
-manager: jhubbard
-editor: cgronlun
-ms.assetid: ''
+ms.reviewer: jasonh
 ms.service: hdinsight
 ms.custom: hdinsightactive
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/22/2018
 ms.author: ashishth
-ms.openlocfilehash: f43edaf16784e5ba5cc3d2b39df285582954210b
-ms.sourcegitcommit: d78bcecd983ca2a7473fff23371c8cfed0d89627
-ms.translationtype: HT
+ms.openlocfilehash: 3674ce1a2882fb87b79f69a98c643c73653cddc4
+ms.sourcegitcommit: fa4852cca8644b14ce935674861363613cf4bfdf
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/14/2018
+ms.lasthandoff: 09/09/2019
+ms.locfileid: "70810460"
 ---
-# <a name="set-up-backup-and-replication-for-hbase-and-phoenix-on-hdinsight"></a>为 HDInsight 上的 HBase 和 Phoenix 设置备份与复制
+# <a name="set-up-backup-and-replication-for-apache-hbase-and-apache-phoenix-on-hdinsight"></a>在 HDInsight 上为 Apache HBase 和 Apache Phoenix 设置备份与复制
 
-HBase 支持通过多种方法来防范数据丢失：
+Apache HBase 支持通过多种方法来防范数据丢失：
 
 * 复制 `hbase` 文件夹
 * 导出再导入
@@ -30,7 +25,7 @@ HBase 支持通过多种方法来防范数据丢失：
 * 快照
 * 复制
 
-> [!NOTE]
+> [!NOTE]  
 > Apache Phoenix 将其元数据存储在 HBase 表中，因此，每当备份 HBase 系统目录表时，就会备份这些元数据。
 
 以下部分介绍上述每种方法的使用方案。
@@ -39,7 +34,7 @@ HBase 支持通过多种方法来防范数据丢失：
 
 使用此方法时，将会复制所有 HBase 数据，而无法选择表或列系列的子集。 后面所述的方法提供更高的控制度。
 
-HDInsight 中的 HBase 使用创建群集时选择的默认存储：Azure 存储 Blob 或 Azure Data Lake Store。 无论使用哪种存储，HBase 都会将其数据和元数据文件存储在以下路径：
+HDInsight 中的 HBase 使用创建群集时选择的默认存储：Azure 存储 blob 或 Azure Data Lake Storage。 无论使用哪种存储，HBase 都会将其数据和元数据文件存储在以下路径：
 
     /hbase
 
@@ -49,7 +44,7 @@ HDInsight 中的 HBase 使用创建群集时选择的默认存储：Azure 存储
     wasbs://<containername>@<accountname>.blob.core.windows.net/hbase
     ```
 
-* 在 Azure Data Lake Store 中，`hbase` 文件夹位于预配群集时指定的根路径下。 此根路径通常包含一个 `clusters` 文件夹，而该文件夹包含一个与 HDInsight 群集同名的子文件夹：
+* 在 Azure Data Lake Storage 中，`hbase` 文件夹位于预配群集时指定的根路径下。 此根路径通常包含一个 `clusters` 文件夹，而该文件夹包含一个与 HDInsight 群集同名的子文件夹：
 
     ```
     /clusters/<clusterName>/hbase
@@ -61,7 +56,7 @@ HDInsight 中的 HBase 使用创建群集时选择的默认存储：Azure 存储
 
 * 创建指向当前存储位置的新 HDInsight 实例。 新实例是使用所有现有数据创建的。
 
-* 将 `hbase` 文件夹复制到不同的 Azure 存储 Blob 容器或 Data Lake Store 位置，然后使用该数据启动新群集。 对于 Azure 存储，可以使用 [AzCopy](../../storage/common/storage-use-azcopy.md)；对于 Data Lake Store，可以使用 [AdlCopy](../../data-lake-store/data-lake-store-copy-data-azure-storage-blob.md)。
+* 将 `hbase` 文件夹复制到其他 Azure 存储 blob 容器或 Data Lake Storage 位置，然后使用该数据启动新群集。 对于 Azure 存储，可以使用 [AzCopy](../../storage/common/storage-use-azcopy.md)；对于 Data Lake Storage，可以使用 [AdlCopy](../../data-lake-store/data-lake-store-copy-data-azure-storage-blob.md)。
 
 ## <a name="export-then-import"></a>导出再导入
 
@@ -79,7 +74,11 @@ HDInsight 中的 HBase 使用创建群集时选择的默认存储：Azure 存储
 
     wasbs://<containername>@<accountname>.blob.core.windows.net/<path>
 
-在 Azure Data Lake Store 中，语法为：
+在 Azure Data Lake Storage Gen2 中，语法为：
+
+    abfs://<containername>@<accountname>.dfs.core.windows.net/<path>
+
+在 Azure Data Lake Storage Gen1 中，语法为：
 
     adl://<accountName>.azuredatalakestore.net:443/<path>
 
@@ -105,7 +104,7 @@ CopyTable 实用工具将数据从源表逐行复制到架构与源相同的现�
 
     <destinationAddress> = <ZooKeeperQuorum>:<Port>:<ZnodeParent>
 
-* `<ZooKeeperQuorum>` 是逗号分隔的 ZooKeeper 节点列表，例如：
+* `<ZooKeeperQuorum>` 是逗号分隔的 Apache ZooKeeper 节点列表，例如：
 
     zk0-hdizc2.54o2oqawzlwevlfxgay2500xtg.dx.internal.cloudapp.net,zk4-hdizc2.54o2oqawzlwevlfxgay2500xtg.dx.internal.cloudapp.net,zk3-hdizc2.54o2oqawzlwevlfxgay2500xtg.dx.internal.cloudapp.net
 
@@ -113,7 +112,7 @@ CopyTable 实用工具将数据从源表逐行复制到架构与源相同的现�
 
     zk0-hdizc2.54o2oqawzlwevlfxgay2500xtg.dx.internal.cloudapp.net,zk4-hdizc2.54o2oqawzlwevlfxgay2500xtg.dx.internal.cloudapp.net,zk3-hdizc2.54o2oqawzlwevlfxgay2500xtg.dx.internal.cloudapp.net:2181:/hbase-unsecure
 
-请参阅本文中的[手动收集 ZooKeeper 仲裁列表](#manually-collect-the-zookeeper-quorum-list)，详细了解如何检索 HDInsight 群集的这些值。
+请参阅本文中的[手动收集 Apache ZooKeeper 仲裁列表](#manually-collect-the-apache-zookeeper-quorum-list)，详细了解如何检索 HDInsight 群集的这些值。
 
 CopyTable 实用工具还支持使用参数来指定要复制的行的时间范围，以及指定要复制的表中的列系列子集。 若要查看 CopyTable 支持的参数的完整列表，请运行不带任何参数的 CopyTable：
 
@@ -121,10 +120,10 @@ CopyTable 实用工具还支持使用参数来指定要复制的行的时间范�
 
 CopyTable 将会扫描要复制到目标表的整个源表内容。 因此，在 CopyTable 执行时，这可能会降低 HBase 群集的性能。
 
-> [!NOTE]
+> [!NOTE]  
 > 若要在表之间自动复制数据，请参阅 GitHub 上 [Azure HBase 实用工具](https://github.com/Azure/hbase-utils/tree/master/replication)存储库中的 `hdi_copy_table.sh` 脚本。
 
-### <a name="manually-collect-the-zookeeper-quorum-list"></a>手动收集 ZooKeeper 仲裁列表
+### <a name="manually-collect-the-apache-zookeeper-quorum-list"></a>手动收集 Apache ZooKeeper 仲裁列表
 
 如果两个 HDInsight 群集位于同一个虚拟网络中，如前所述，内部主机名解析会自动进行。 若要对通过 VPN 网关连接的两个不同虚拟网络中的 HDInsight 群集使用 CopyTable，需要提供仲裁中 Zookeeper 节点的主机 IP 地址。
 
@@ -205,8 +204,8 @@ HBase 复制使用异步机制自动将事务从源群集推送到目标群集�
 5. 将源表中的现有数据复制到目标表。
 6. 复制功能会自动将源表中新数据的修改内容复制到目标表。
 
-若要在 HDInsight 上启用复制，请对运行中的源 HDInsight 群集应用脚本操作。 如需在群集中启用复制的演练，或要使用 Azure 资源管理模板对虚拟网络中创建的示例群集体验复制，请参阅[配置 HBase 复制](apache-hbase-replication.md)。 该文章还包含有关启用 Phoenix 元数据复制的说明。
+若要在 HDInsight 上启用复制，请对运行中的源 HDInsight 群集应用脚本操作。 如需在群集中启用复制的演练，或要使用 Azure 资源管理模板对虚拟网络中创建的示例群集体验复制，请参阅[配置 Apache HBase 复制](apache-hbase-replication.md)。 该文章还包含有关启用 Phoenix 元数据复制的说明。
 
 ## <a name="next-steps"></a>后续步骤
 
-* [配置 HBase 复制](apache-hbase-replication.md)
+* [配置 Apache HBase 复制](apache-hbase-replication.md)

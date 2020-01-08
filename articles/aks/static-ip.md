@@ -1,104 +1,146 @@
 ---
 title: 将静态 IP 地址用于 Azure Kubernetes 服务 (AKS) 负载均衡器
-description: 将静态 IP 地址用于 Azure Kubernetes 服务 (AKS) 负载均衡器。
+description: 了解如何创建静态 IP 地址并将其用于 Azure Kubernetes 服务 (AKS) 负载均衡器。
 services: container-service
-author: neilpeterson
-manager: jeconnoc
+author: mlearned
 ms.service: container-service
 ms.topic: article
-ms.date: 2/12/2018
-ms.author: nepeters
-ms.custom: mvc
-ms.openlocfilehash: c250ef3520079f58eea2362212d861fdb134e1af
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.date: 03/04/2019
+ms.author: mlearned
+ms.openlocfilehash: 9e32715766734bcbb150d70aeed2dc5b06a4bcbb
+ms.sourcegitcommit: 0f54f1b067f588d50f787fbfac50854a3a64fff7
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 08/12/2019
+ms.locfileid: "67614465"
 ---
-# <a name="use-a-static-ip-address-with-the-azure-kubernetes-service-aks-load-balancer"></a>将静态 IP 地址用于 Azure Kubernetes 服务 (AKS) 负载均衡器
+# <a name="use-a-static-public-ip-address-with-the-azure-kubernetes-service-aks-load-balancer"></a>将静态公用 IP 地址用于 Azure Kubernetes 服务 (AKS) 负载均衡器
 
-在某些情况下，例如重新创建 Azure Kubernetes 服务 (AKS) 负载均衡器时，或重新创建 LoadBalancer 类型的 Kubernetes 服务时，Kubernetes 服务的公共 IP 地址可能改变。 本文档详细介绍如何为 Kubernetes 服务配置静态 IP 地址。
+默认情况下，分配给 AKS 群集创建的负载均衡器资源的公用 IP 地址仅在该资源的保留期内有效。 如果删除 Kubernetes 服务，则会同时删除关联的负载均衡器和 IP 地址。 如果要分配特定 IP 地址或保留已重新部署的 Kubernetes 服务的 IP 地址，请创建并使用静态公用 IP 地址。
 
-## <a name="create-static-ip-address"></a>创建静态 IP 地址
+本文介绍如何创建静态公用 IP 地址并将其分配给 Kubernetes 服务。
 
-为 Kubernetes 服务创建静态公共 IP 地址。 需要在群集部署过程中自动创建的资源组内创建 IP 地址。 有关不同 AKS 资源组的信息及如何确定自动创建的资源组，请参阅 [AKS 常见问题解答][aks-faq-resource-group]。
+## <a name="before-you-begin"></a>开始之前
 
-使用 [az network public ip create][az-network-public-ip-create] 命令创建 IP 地址。
+本文假定你拥有现有的 AKS 群集。 如果需要 AKS 群集，请参阅 AKS 快速入门[使用 Azure CLI][aks-quickstart-cli] 或[使用 Azure 门户][aks-quickstart-portal]。
+
+还需安装并配置 Azure CLI 2.0.59 或更高版本。 运行  `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅 [安装 Azure CLI][install-azure-cli]。
+
+目前仅支持基本 IP SKU。 支持标准 IP 资源 SKU 的开发正在进行中。 有关详细信息，请参阅 [Azure 中的 IP 地址类型和分配方法][ip-sku]。
+
+## <a name="create-a-static-ip-address"></a>创建静态 IP 地址
+
+创建静态公共 IP 地址以用于 AKS 时，应在**节点**资源组中创建 IP 地址资源。 若要分隔资源，请参阅以下部分，以便[在节点资源组外部使用静态 IP 地址](#use-a-static-ip-address-outside-of-the-node-resource-group)。
+
+首先，请使用 [az aks show][az-aks-show] 命令并添加 `--query nodeResourceGroup` 查询参数获取节点资源组名称。 以下示例获取名为 myResourceGroup 的资源组中 AKS 群集名称 myAKSCluster 的节点资源组：
 
 ```azurecli-interactive
-az network public-ip create --resource-group MC_myResourceGRoup_myAKSCluster_eastus --name myAKSPublicIP --allocation-method static
+$ az aks show --resource-group myResourceGroup --name myAKSCluster --query nodeResourceGroup -o tsv
+
+MC_myResourceGroup_myAKSCluster_eastus
 ```
 
-记下该 IP 地址。
+现在，使用 [az network public ip create][az-network-public-ip-create] 命令创建静态公共 IP 地址。 指定上一命令中获取的节点资源组名称，然后指定 IP 地址资源的名称，如 myAKSPublicIP：
+
+```azurecli-interactive
+az network public-ip create \
+    --resource-group MC_myResourceGroup_myAKSCluster_eastus \
+    --name myAKSPublicIP \
+    --allocation-method static
+```
+
+将显示 IP 地址，如以下精简版示例输出中所示：
 
 ```json
 {
   "publicIp": {
     "dnsSettings": null,
     "etag": "W/\"6b6fb15c-5281-4f64-b332-8f68f46e1358\"",
-    "id": "/subscriptions/<SubscriptionID>/resourceGroups/myResourceGroup/providers/Microsoft.Network/publicIPAddresses/myAKSPublicIP",
+    "id": "/subscriptions/<SubscriptionID>/resourceGroups/MC_myResourceGroup_myAKSCluster_eastus/providers/Microsoft.Network/publicIPAddresses/myAKSPublicIP",
     "idleTimeoutInMinutes": 4,
     "ipAddress": "40.121.183.52",
-    "ipConfiguration": null,
-    "ipTags": [],
-    "location": "eastus",
-    "name": "myAKSPublicIP",
-    "provisioningState": "Succeeded",
-    "publicIpAddressVersion": "IPv4",
-    "publicIpAllocationMethod": "Static",
-    "resourceGroup": "myResourceGroup",
-    "resourceGuid": "56ec8760-a3b8-4aeb-a89d-42e68d2cbc8c",
-    "sku": {
-      "name": "Basic"
-    },
-    "tags": null,
-    "type": "Microsoft.Network/publicIPAddresses",
-    "zones": null
+    [...]
   }
-````
-
- 如果需要，可以使用 [az network public-ip list][az-network-public-ip-list] 命令检索地址。
-
-```azurecli-interactive
-az network public-ip list --resource-group MC_myResourceGRoup_myAKSCluster_eastus --query [0].ipAddress --output tsv
+}
 ```
 
-```console
+稍后可以使用 [az network public-ip list][az-network-public-ip-list] 命令获取公共 IP 地址。 指定节点资源组的名称和创建的公共 IP 地址，然后查询 ipAddress，如以下示例中所示：
+
+```azurecli-interactive
+$ az network public-ip show --resource-group MC_myResourceGroup_myAKSCluster_eastus --name myAKSPublicIP --query ipAddress --output tsv
+
 40.121.183.52
 ```
 
-## <a name="create-service-with-ip-address"></a>使用 IP 地址创建服务
+## <a name="create-a-service-using-the-static-ip-address"></a>使用静态 IP 地址创建服务
 
-设置静态 IP 地址后，可以使用 `loadBalancerIP` 属性和静态 IP 地址的值创建 Kubernetes 服务。
+若要使用静态公用 IP 地址创建服务，请将 `loadBalancerIP` 属性和静态公用 IP 地址的值添加到 YAML 清单。 创建名为 `load-balancer-service.yaml` 的文件，并将其复制到以下 YAML 中。 提供在前面的步骤中创建的你自己的公用 IP 地址。
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: azure-vote-front
+  name: azure-load-balancer
 spec:
   loadBalancerIP: 40.121.183.52
   type: LoadBalancer
   ports:
   - port: 80
   selector:
-    app: azure-vote-front
+    app: azure-load-balancer
 ```
 
-## <a name="troubleshooting"></a>故障排除
-
-如果尚未创建或在错误的资源组中创建了静态 IP 地址，服务创建将会失败。 若要排除此故障，请用 [kubectl describe][kubectl-describe] 命令返回服务创建事件。
-
-```azurecli-interactive
-kubectl describe service azure-vote-front
-```
+使用 `kubectl apply` 命令创建服务和部署。
 
 ```console
-Name:                     azure-vote-front
+kubectl apply -f load-balancer-service.yaml
+```
+
+## <a name="use-a-static-ip-address-outside-of-the-node-resource-group"></a>在节点资源组外部使用静态 IP 地址
+
+使用 Kubernetes 1.10 或更高版本，可以使用在节点资源组外部创建的静态 IP 地址。 AKS 群集使用的服务主体必须将权限委托给其他资源组，如下例所示：
+
+```azurecli-interactive
+az role assignment create\
+    --assignee <SP Client ID> \
+    --role "Network Contributor" \
+    --scope /subscriptions/<subscription id>/resourceGroups/<resource group name>
+```
+
+若要在节点资源组之外使用 IP 地址，请向服务定义添加注释。 以下示例将注释设置为名为 *myResourceGroup* 的资源组。 提供自己的资源组名称：
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: myResourceGroup
+  name: azure-load-balancer
+spec:
+  loadBalancerIP: 40.121.183.52
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: azure-load-balancer
+```
+
+## <a name="troubleshoot"></a>故障排除
+
+如果 Kubernetes 服务清单的 *loadBalancerIP* 属性中定义的静态 IP 地址不存在或尚未在节点资源组中创建，并且尚未配置其他托管，则负载均衡器服务创建将失败。 若要排除此故障，请用 [kubectl describe][kubectl-describe] 命令查看服务创建事件。 提供 YAML 清单中指定的服务的名称，如以下示例中所示：
+
+```console
+kubectl describe service azure-load-balancer
+```
+
+将显示有关 Kubernetes 服务资源的信息。 以下示例输出末尾的“事件”指示“找不到用户提供的 IP 地址”。 在这些情况下，请验证是否已在节点资源组中创建静态公用 IP 地址，以及在 Kubernetes 服务清单中指定的 IP 地址是否正确。
+
+```
+Name:                     azure-load-balancer
 Namespace:                default
 Labels:                   <none>
 Annotations:              <none>
-Selector:                 app=azure-vote-front
+Selector:                 app=azure-load-balancer
 Type:                     LoadBalancer
 IP:                       10.0.18.125
 IP:                       40.121.183.52
@@ -112,13 +154,24 @@ Events:
   Type     Reason                      Age               From                Message
   ----     ------                      ----              ----                -------
   Normal   CreatingLoadBalancer        7s (x2 over 22s)  service-controller  Creating load balancer
-  Warning  CreatingLoadBalancerFailed  6s (x2 over 12s)  service-controller  Error creating load balancer (will retry): Failed to create load balancer for service default/azure-vote-front: user supplied IP Address 40.121.183.52 was not found
+  Warning  CreatingLoadBalancerFailed  6s (x2 over 12s)  service-controller  Error creating load balancer (will retry): Failed to create load balancer for service default/azure-load-balancer: user supplied IP Address 40.121.183.52 was not found
 ```
 
+## <a name="next-steps"></a>后续步骤
+
+如需获得对流向应用程序的网络流量的额外控制，你需要改为[创建入口控制器][aks-ingress-basic]。 此外，还可以[使用静态公共 IP 地址创建入口控制器][aks-static-ingress]。
+
 <!-- LINKS - External -->
-[kubectl-describe]: https://kubernetes-v1-4.github.io/docs/user-guide/kubectl/kubectl_describe/
+[kubectl-describe]: https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#describe
 
 <!-- LINKS - Internal -->
 [aks-faq-resource-group]: faq.md#why-are-two-resource-groups-created-with-aks
-[az-network-public-ip-create]: /cli/azure/network/public-ip#az_network_public_ip_create
-[az-network-public-ip-list]: /cli/azure/network/public-ip#az_network_public_ip_list
+[az-network-public-ip-create]: /cli/azure/network/public-ip#az-network-public-ip-create
+[az-network-public-ip-list]: /cli/azure/network/public-ip#az-network-public-ip-list
+[az-aks-show]: /cli/azure/aks#az-aks-show
+[aks-ingress-basic]: ingress-basic.md
+[aks-static-ingress]: ingress-static-ip.md
+[aks-quickstart-cli]: kubernetes-walkthrough.md
+[aks-quickstart-portal]: kubernetes-walkthrough-portal.md
+[install-azure-cli]: /cli/azure/install-azure-cli
+[ip-sku]: ../virtual-network/virtual-network-ip-addresses-overview-arm.md#sku

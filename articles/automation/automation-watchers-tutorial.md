@@ -3,20 +3,21 @@ title: 在 Azure 自动化帐户中创建观察程序任务
 description: 了解如何在 Azure 自动化帐户中创建观察程序任务，以观察在文件夹中创建的新文件。
 services: automation
 ms.service: automation
-ms.component: process-automation
+ms.subservice: process-automation
 author: eamonoreilly
 ms.author: eamono
 ms.topic: conceptual
-ms.date: 03/19/2017
-ms.openlocfilehash: 0cc215d6643c86460a1d5471aa1eed8fdf18e028
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.date: 10/30/2018
+ms.openlocfilehash: 75341fa2df6972dbf05542577d56ab35315919e6
+ms.sourcegitcommit: 5b76581fa8b5eaebcb06d7604a40672e7b557348
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 08/13/2019
+ms.locfileid: "68989236"
 ---
 # <a name="create-an-azure-automation-watcher-tasks-to-track-file-changes-on-a-local-machine"></a>创建 Azure 自动化观察程序任务来跟踪本地计算机上的文件更改
 
-Azure 自动化使用观察程序任务监视事件并触发操作。 本教程引导你创建一个观察程序任务来监视何时向目录中添加了新文件。
+Azure 自动化通过 PowerShell Runbook 使用观察程序任务来监视事件并触发操作。 本教程引导你创建一个观察程序任务来监视何时向目录中添加了新文件。
 
 本教程介绍如何执行下列操作：
 
@@ -36,20 +37,30 @@ Azure 自动化使用观察程序任务监视事件并触发操作。 本教程�
 * [自动化帐户](automation-offering-get-started.md)，用于保存观察程序、操作 runbook 和观察程序任务。
 * 一个[混合 runbook 辅助角色](automation-hybrid-runbook-worker.md)，观察程序任务在其中运行。
 
+> [!NOTE]
+> Azure 中国区不支持观察程序任务。
+
 ## <a name="import-a-watcher-runbook"></a>导入观察程序 runbook
 
-本教程使用名为 **Watch-NewFile** 的观察程序 runbook 查找某个目录中的新文件。 该观察程序 runbook 检索文件夹中的文件的最后已知写入时间，并查找比该水印更新的任何文件。 在此步骤中，你将此 runbook 导入到你的自动化帐户中。
+本教程使用名为 **Watch-NewFile** 的观察程序 runbook 查找某个目录中的新文件。 该观察程序 runbook 检索文件夹中的文件的最后已知写入时间，并查找比该水印更新的任何文件。
+
+可以通过[PowerShell 库](https://www.powershellgallery.com)完成此导入过程。
+
+1. 导航到[Watch-NewFile](https://gallery.technet.microsoft.com/scriptcenter/Watcher-runbook-that-looks-36fc82cd)的库页面。
+2. 在 " **Azure 自动化**" 选项卡下, 单击 "**部署到 Azure 自动化**"。
+
+还可以使用以下步骤将此 runbook 从门户导入到自动化帐户中。
 
 1. 打开你的自动化帐户，然后单击“Runbook”页。
-1. 单击“浏览库”按钮。
-1. 搜索“Watcher runbook”，在目录中选择“Watcher runbook that looks for new files in a directory”，然后选择“导入”。
+2. 单击“浏览库”按钮。
+3. 搜索“Watcher runbook”，在目录中选择“Watcher runbook that looks for new files in a directory”，然后选择“导入”。
   ![从 UI 导入自动化 runbook](media/automation-watchers-tutorial/importsourcewatcher.png)
 1. 为该 runbook 提供名称和说明，然后选择“确定”以将该 runbook 导入到自动化帐户中。
 1. 选择“编辑”，然后单击“发布”。 出现提示时，选择“是”以发布该 runbook。
 
 ## <a name="create-an-automation-variable"></a>创建自动化变量
 
-使用一个[自动化变量](automation-variables.md)来存储前面的 runbook 从每个文件读取和存储的时间戳。 
+使用一个[自动化变量](automation-variables.md)来存储前面的 runbook 从每个文件读取和存储的时间戳。
 
 1. 在“共享资源”下选择“变量”，并选择“+ 添加变量”。
 1. 输入“Watch-NewFileTimestamp”作为名称
@@ -58,7 +69,14 @@ Azure 自动化使用观察程序任务监视事件并触发操作。 本教程�
 
 ## <a name="create-an-action-runbook"></a>创建操作 runbook
 
-在观察程序任务中，操作 runbook 用来对从观察程序 runbook 传递给它的数据执行操作。 在此步骤中，你将更新一个名为“Process-NewFile”的预定义的操作 runbook。
+在观察程序任务中，操作 runbook 用来对从观察程序 runbook 传递给它的数据执行操作。 观察程序任务不支持 PowerShell 工作流 Runbook，必须使用 PowerShell Runbook。 必须导入名为**Process-NewFile**的预定义操作 runbook。
+
+可以通过[PowerShell 库](https://www.powershellgallery.com)完成此导入过程。
+
+1. 导航到[Process-NewFile](https://gallery.technet.microsoft.com/scriptcenter/Watcher-action-that-b4ff7cdf)的库页面。
+2. 在 " **Azure 自动化**" 选项卡下, 单击 "**部署到 Azure 自动化**"。
+
+还可以使用以下步骤将此 runbook 从门户导入到自动化帐户中。
 
 1. 导航到你的自动化帐户，从“流程自动化”类别下选择“Runbook”。
 1. 单击“浏览库”按钮。
@@ -88,8 +106,8 @@ Azure 自动化使用观察程序任务监视事件并触发操作。 本教程�
 1. 选择“配置操作”，然后选择“Process-NewFile”runbook。
 1. 输入以下参数值：
 
-   *    **事件数据** - 保留为空。 从观察程序 runbook 传入数据。  
-   *    **运行设置** - 当此 runbook 在自动化服务中运行时保留为 Azure。
+   * **事件数据** - 保留为空。 从观察程序 runbook 传入数据。
+   * **运行设置** - 当此 runbook 在自动化服务中运行时保留为 Azure。
 
 1. 单击“确定”，然后选择返回到观察程序页。
 1. 单击“确定”创建观察程序任务。
@@ -101,14 +119,14 @@ Azure 自动化使用观察程序任务监视事件并触发操作。 本教程�
 若要测试观察程序是否按预期工作，需要创建一个测试文件。
 
 远程登录到混合辅助角色。 打开 **PowerShell** 并在文件夹中创建一个测试文件。
-  
-   ```PowerShell-interactive
-   New-Item -Name ExampleFile1.txt
-   ```
+
+```azurepowerShell-interactive
+New-Item -Name ExampleFile1.txt
+```
 
 以下示例显示了预期的输出。
 
-```
+```output
     Directory: D:\examplefiles
 
 
@@ -128,7 +146,7 @@ Mode                LastWriteTime         Length Name
 
 可以在下面的示例中看到当发现了新文件时的预期输出：
 
-```
+```output
 Message is Process new file...
 
 
@@ -138,7 +156,7 @@ Passed in data is @{FileName=D:\examplefiles\ExampleFile1.txt; Length=0}
 
 ## <a name="next-steps"></a>后续步骤
 
-本教程介绍了如何：
+在本教程中，你将了解：
 
 > [!div class="checklist"]
 > * 导入观察程序 runbook
@@ -152,3 +170,4 @@ Passed in data is @{FileName=D:\examplefiles\ExampleFile1.txt; Length=0}
 
 > [!div class="nextstepaction"]
 > [我的第一个 PowerShell Runbook](automation-first-runbook-textual-powershell.md)。
+

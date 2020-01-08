@@ -1,13 +1,13 @@
 ---
-title: "VPN 网关配置和连接疑难解答 | Microsoft Docs"
-description: "本文有助于将你链接到文章以对 VPN 网关配置、连接进行故障排除并验证吞吐量。"
+title: VPN 网关配置和连接疑难解答 | Microsoft Docs
+description: 本文有助于将你链接到文章以对 VPN 网关配置、连接进行故障排除并验证吞吐量。
 services: vpn-gateway
 documentationcenter: na
 author: cherylmc
 manager: timlt
-editor: 
+editor: ''
 tags: azure-resource-manager,azure-service-management
-ms.assetid: 
+ms.assetid: ''
 ms.service: vpn-gateway
 ms.devlang: na
 ms.topic: article
@@ -15,15 +15,16 @@ ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 01/31/2018
 ms.author: cherylmc
-ms.openlocfilehash: bb1074e361610cf3a8810aaeeb83717f791eb8bf
-ms.sourcegitcommit: 9d317dabf4a5cca13308c50a10349af0e72e1b7e
-ms.translationtype: HT
+ms.openlocfilehash: 263c1010ec6cf5f6140c4dc9323dd9bd149b2368
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/01/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64727279"
 ---
 # <a name="troubleshoot-vpn-gateway"></a>VPN 网关疑难解答
 
-VPN 网关连接可能会因多种原因而失败。 本文包含的链接有助于你开始进行疑难解答。 有关完整列表，请参阅本页左侧“疑难解答”下方的目录中包含的文章。
+VPN 网关连接可能会因多种原因而失败。 本文包含的链接有助于你开始进行疑难解答。 有关完整列表，请参阅本页左侧“疑难解答”下方的目录中包含的文章  。
 
 ## <a name="troubleshooting-scenarios-and-solutions"></a>方案和解决方案疑难解答
 

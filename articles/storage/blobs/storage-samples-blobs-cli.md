@@ -1,25 +1,18 @@
 ---
-title: "适用于 Blob 存储的 Azure CLI 示例 | Microsoft Docs"
-description: "适用于 Azure Blob 存储的 Azure CLI 示例"
-services: storage
-documentationcenter: na
-author: tamram
-manager: timlt
-editor: tysonn
-ms.assetid: 
-ms.custom: mvc
-ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: sample
+title: 适用于 Blob 存储的 Azure CLI 示例 | Microsoft Docs
+description: 适用于 Azure Blob 存储的 Azure CLI 示例
+author: mhopkins-msft
+ms.author: mhopkins
 ms.date: 06/13/2017
-ms.author: tamram
-ms.openlocfilehash: e247a788a593b2e8fe7be76c25b85cad3cef2291
-ms.sourcegitcommit: 5a6e943718a8d2bc5babea3cd624c0557ab67bd5
+ms.service: storage
+ms.subservice: blobs
+ms.topic: sample
+ms.openlocfilehash: 345710e1ade459d49602c18820d47826141e6f81
+ms.sourcegitcommit: 85b3973b104111f536dc5eccf8026749084d8789
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/01/2017
+ms.lasthandoff: 08/01/2019
+ms.locfileid: "68721946"
 ---
 # <a name="azure-cli-samples-for-azure-blob-storage"></a>适用于 Azure Blob 存储的 Azure CLI 示例
 

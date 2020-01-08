@@ -3,7 +3,7 @@ title: 教程 - 使用 Azure 模板自动缩放规模集 | Microsoft Docs
 description: 了解如何使用 Azure 资源管理器模板随 CPU 需求的增减自动缩放虚拟机规模集
 services: virtual-machine-scale-sets
 documentationcenter: ''
-author: iainfoulds
+author: cynthn
 manager: jeconnoc
 editor: ''
 tags: azure-resource-manager
@@ -14,13 +14,14 @@ ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: tutorial
 ms.date: 03/27/2018
-ms.author: iainfou
+ms.author: cynthn
 ms.custom: mvc
-ms.openlocfilehash: 7ca037a6aec8516d9656b3389da67b9b02a906d8
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
+ms.openlocfilehash: 5e02c88d894c01752965af77861d3e11e1bb101d
+ms.sourcegitcommit: 039263ff6271f318b471c4bf3dbc4b72659658ec
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 02/06/2019
+ms.locfileid: "55749187"
 ---
 # <a name="tutorial-automatically-scale-a-virtual-machine-scale-set-with-an-azure-template"></a>教程：使用 Azure 模板自动缩放虚拟机规模集
 创建规模集时，可定义想运行的 VM 实例数。 若应用程序需要更改，可自动增加或减少 VM 实例数。 通过自动缩放功能，可随客户需求的改变而进行调整，或在应用的整个生命周期内响应应用程序性能更改。 本教程介绍如何执行下列操作：
@@ -35,7 +36,7 @@ ms.lasthandoff: 04/16/2018
 
 [!INCLUDE [cloud-shell-try-it.md](../../includes/cloud-shell-try-it.md)]
 
-如果选择在本地安装和使用 CLI，本教程要求运行 Azure CLI 2.0.29 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。 
+如果选择在本地安装和使用 CLI，本教程要求运行 Azure CLI 2.0.29 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。 
 
 
 ## <a name="define-an-autoscale-profile"></a>定义自动缩放配置文件
@@ -45,7 +46,7 @@ ms.lasthandoff: 04/16/2018
 {
 "type": "Microsoft.insights/autoscalesettings",
 "name": "Autoscale",
-"apiVersion": "2014-04-01",
+"apiVersion": "2015-04-01",
 "location": "[variables('location')]",
 "scale": null,
 "properties": {
@@ -78,8 +79,8 @@ ms.lasthandoff: 04/16/2018
 | *timeWindow*      | 比较指标与阈值之前监视的时长。                                   | 5 分钟       |
 | *operator*        | 用于比较指标数据和阈值的运算符。                                                     | 大于    |
 | *threshold*       | 使自动缩放规则触发操作的值。                                                      | 70%             |
-| *direction*       | 定义在应用规则的情况下，规模集应横向缩减还是扩展。                                              | 增加        |
-| *类型*            | 表明 VM 实例数应该根据特定值进行更改。                                    | 更改计数    |
+| direction       | 定义在应用规则的情况下，规模集应横向缩减还是扩展。                                              | 增加        |
+| type            | 表明 VM 实例数应该根据特定值进行更改。                                    | 更改计数    |
 | *值*           | 应用规则时应减少或增加多少 VM 实例。                                             | 3               |
 | *cooldown*        | 为使自动缩放操作有时间生效，再次应用规则前需要等待的时间。 | 5 分钟       |
 
@@ -143,13 +144,13 @@ ms.lasthandoff: 04/16/2018
 ## <a name="create-an-autoscaling-scale-set"></a>创建自动缩放规模集
 让我们使用示例模板创建一个规模集并应用自动缩放规则。 可以[查看完整模板](https://raw.githubusercontent.com/Azure-Samples/compute-automation-configurations/master/scale_sets/autoscale.json)，或者[参阅模板的 *Microsoft.insights/autoscalesettings* 资源提供程序节](https://github.com/Azure-Samples/compute-automation-configurations/blob/master/scale_sets/autoscale.json#L220)。
 
-首先，使用 [az group create](/cli/azure/group#az_group_create) 创建资源组。 以下示例在 eastus 位置创建名为 myResourceGroup 的资源组：
+首先，使用 [az group create](/cli/azure/group) 创建资源组。 以下示例在 eastus 位置创建名为 myResourceGroup 的资源组：
 
 ```azurecli-interactive
 az group create --name myResourceGroup --location eastus
 ```
 
-现在，使用 [az group deployment create](/cli/azure/group/deployment#az_group_deployment_create) 创建虚拟机规模集。 出现提示时，请提供自己的、用作每个 VM 实例的凭据的用户名和密码，例如 *azureuser*：
+现在，使用 [az group deployment create](/cli/azure/group/deployment) 创建虚拟机规模集。 出现提示时，请提供自己的、用作每个 VM 实例的凭据的用户名和密码，例如 *azureuser*：
 
 ```azurecli-interactive
 az group deployment create \
@@ -163,7 +164,7 @@ az group deployment create \
 ## <a name="generate-cpu-load-on-scale-set"></a>在规模集上生成 CPU 负载
 若要测试自动缩放规则，请在规模集的 VM 实例上生成一些 CPU 负载。 这种模拟的 CPU 负载会导致自动缩放规则以横向扩展的方式增加 VM 实例数。 随着模拟的 CPU 负载下降，自动缩放规则会进行横向缩减，减少 VM 实例数。
 
-首先，请使用 [az vmss list-instance-connection-info](/cli/azure/vmss#az_vmss_list_instance_connection_info) 列出用于连接到规模集中的 VM 实例的地址和端口：
+首先，请使用 [az vmss list-instance-connection-info](/cli/azure/vmss) 列出用于连接到规模集中的 VM 实例的地址和端口：
 
 ```azurecli-interactive
 az vmss list-instance-connection-info \
@@ -193,11 +194,11 @@ sudo apt-get -y install stress
 sudo stress --cpu 10 --timeout 420 &
 ```
 
-当 **stress** 显示类似于 *stress: info: [2688] dispatching hogs: 10 cpu, 0 io, 0 vm, 0 hdd* 的输出时，按 *Enter* 键返回到提示符。
+当 **stress** 显示类似于 *stress: info: [2688] dispatching hogs:10 cpu, 0 io, 0 vm, 0 hdd* 的输出时，按 *Enter* 键返回到提示符。
 
 若要确认 **stress** 是否生成了 CPU 负载，请使用 **top** 实用工具检查活动的系统负载：
 
-```azuecli-interactive
+```azurecli-interactive
 top
 ```
 
@@ -208,7 +209,7 @@ Ctrl-c
 exit
 ```
 
-连接到第二个 VM 实例，所使用的端口号是前面的 [az vmss list-instance-connection-info](/cli/azure/vmss#az_vmss_list_instance_connection_info) 列出的：
+连接到第二个 VM 实例，所使用的端口号是前面的 [az vmss list-instance-connection-info](/cli/azure/vmss) 列出的：
 
 ```azurecli-interactive
 ssh azureuser@13.92.224.66 -p 50003
@@ -221,7 +222,7 @@ sudo apt-get -y install stress
 sudo stress --cpu 10 --timeout 420 &
 ```
 
-当 **stress** 再次显示类似于 *stress: info: [2713] dispatching hogs: 10 cpu, 0 io, 0 vm, 0 hdd* 的输出时，按 *Enter* 键返回到提示符。
+当 **stress** 再次显示类似于 *stress: info: [2713] dispatching hogs:10 cpu, 0 io, 0 vm, 0 hdd* 的输出时，按 *Enter* 键返回到提示符。
 
 关闭与第二个 VM 实例的连接。 **stress** 继续在 VM 实例上运行。
 
@@ -263,7 +264,7 @@ Every 2.0s: az vmss list-instances --resource-group myResourceGroup --name mySca
 
 
 ## <a name="clean-up-resources"></a>清理资源
-若要删除规模集和其他资源，请使用 [az group delete](/cli/azure/group#az_group_delete) 删除资源组及其所有资源：
+若要删除规模集和其他资源，请使用 [az group delete](/cli/azure/group) 删除资源组及其所有资源：
 
 ```azurecli-interactive
 az group delete --name myResourceGroup --yes --no-wait
@@ -271,7 +272,7 @@ az group delete --name myResourceGroup --yes --no-wait
 
 
 ## <a name="next-steps"></a>后续步骤
-本教程介绍了如何使用 Azure CLI 2.0 自动进行规模集的横向缩减或扩展：
+本教程介绍了如何使用 Azure CLI 自动进行规模集的横向缩减或扩展：
 
 > [!div class="checklist"]
 > * 对规模集使用自动缩放
@@ -279,7 +280,7 @@ az group delete --name myResourceGroup --yes --no-wait
 > * 对 VM 实例进行压力测试并触发自动缩放规则
 > * 在需求下降时自动横向缩减
 
-如需更多的虚拟机规模集操作示例，请参阅下面的 Azure CLI 2.0 示例脚本：
+如需更多的虚拟机规模集操作示例，请参阅下面的 Azure CLI 示例脚本：
 
 > [!div class="nextstepaction"]
-> [适用于 Azure CLI 2.0 的规模集脚本示例](cli-samples.md)
+> [适用于 Azure CLI 的规模集脚本示例](cli-samples.md)

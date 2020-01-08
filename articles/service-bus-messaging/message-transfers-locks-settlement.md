@@ -1,23 +1,24 @@
 ---
-title: "Azure 服务总线消息传输、锁定和处置 | Microsoft Docs"
-description: "服务总线消息传输和处置操作概述"
+title: Azure 服务总线消息传输、锁定和处置 | Microsoft Docs
+description: 服务总线消息传输和处置操作概述
 services: service-bus-messaging
-documentationcenter: 
-author: clemensv
+documentationcenter: ''
+author: axisc
 manager: timlt
-editor: 
+editor: spelluru
 ms.service: service-bus-messaging
 ms.workload: na
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 01/25/2018
-ms.author: sethm
-ms.openlocfilehash: 4789da3c84d52b2615bf4250a36093a74154e1d4
-ms.sourcegitcommit: ded74961ef7d1df2ef8ffbcd13eeea0f4aaa3219
-ms.translationtype: HT
+ms.date: 09/25/2018
+ms.author: aschhab
+ms.openlocfilehash: 9aaada1ede8912b8b70f37c628ec918eca9be9d2
+ms.sourcegitcommit: 5f0f1accf4b03629fcb5a371d9355a99d54c5a7e
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/29/2018
+ms.lasthandoff: 09/30/2019
+ms.locfileid: "71676268"
 ---
 # <a name="message-transfers-locks-and-settlement"></a>消息传输、锁定和处置
 
@@ -61,7 +62,7 @@ for (int i = 0; i < 100; i++)
 {
   tasks.Add(client.SendAsync(…));
 }
-await Task.WhenAll(tasks.ToArray());
+await Task.WhenAll(tasks);
 ```
 
 请务必注意，所有异步编程模型都使用某种形式的基于内存的隐藏工作队列来保存挂起的操作。 当 [SendAsync](/dotnet/api/microsoft.azure.servicebus.queueclient.sendasync#Microsoft_Azure_ServiceBus_QueueClient_SendAsync_Microsoft_Azure_ServiceBus_Message_) (C#) 或 **Send** (Java) 返回时，发送任务会在该工作队列中进行排队，但协议操作只会在轮到任务运行之后开始。 对于倾向于推送消息突发并且需要考虑可靠性的代码，应注意不要同时“发送”太多消息，因为所有发送的消息在实际置于线路上之前都会占用内存。
@@ -78,7 +79,7 @@ for (int i = 0; i < 100; i++)
 
   tasks.Add(client.SendAsync(…).ContinueWith((t)=>semaphore.Release()));
 }
-await Task.WhenAll(tasks.ToArray());
+await Task.WhenAll(tasks);
 ```
 
 应用程序**绝不**应采用“发后不理”方式启动异步发送操作，而不检索操作结果。 这样做可以加载内部和不可见任务队列，直到内存耗尽，并阻止应用程序检测发送错误：
@@ -95,11 +96,15 @@ for (int i = 0; i < 100; i++)
 
 ## <a name="settling-receive-operations"></a>处置接收操作
 
-对于接收操作，服务总线 API 客户端启用两种不同的显式模式：接收并删除和扫视锁定。
+对于接收操作，服务总线 API 客户端启用两种不同的显式模式：*Receive-and-Delete* 和 *Peek-Lock*。
+
+### <a name="receiveanddelete"></a>ReceiveAndDelete
 
 [接收并删除](/dotnet/api/microsoft.servicebus.messaging.receivemode)模式告知代理将它发送到接收客户端的所有消息都在发送时视为已处置。 这意味着在代理将消息置于线路上之后，它会立即被视为已使用。 如果消息传输失败，则消息会丢失。
 
 此模式的优点是接收方无需对消息执行进一步操作，也不会由于等待处置结果而减慢速度。 如果各个消息中包含的数据具有较低值并且/或者只在很短时间内才有意义，则此模式是合理选择。
+
+### <a name="peeklock"></a>PeekLock
 
 [扫视锁定](/dotnet/api/microsoft.servicebus.messaging.receivemode)模式告知代理接收客户端希望显式处置收到的消息。 消息可供接收方进行处理，同时在服务中保持在排他锁下，以便其他竞争接收方无法看到它。 该锁的持续时间最初在队列或订阅级别进行定义，可以由拥有该锁的客户端通过 [RenewLock](/dotnet/api/microsoft.azure.servicebus.core.messagereceiver.renewlockasync#Microsoft_Azure_ServiceBus_Core_MessageReceiver_RenewLockAsync_System_String_) 操作进行延长。
 
@@ -121,11 +126,18 @@ for (int i = 0; i < 100; i++)
 
 用于标识重复消息传递的典型机制是检查消息 ID，它可以并且应该由发送方设置为唯一值（可能与来自发起进程的标识符一致）。 作业计划程序可能会将消息 ID 设置为它尝试通过给定辅助进程分配给辅助进程的作业的标识符，并且该辅助进程会在作业已完成时忽略该作业的第二次出现。
 
+> [!IMPORTANT]
+> 请务必注意，PeekLock 获取的消息的锁是可变的，在下列情况下可能会丢失
+>   * 服务更新
+>   * OS 更新
+>   * 在持有锁的同时更改实体（队列、主题、订阅）上的属性。
+>
+> 当锁定丢失时，Azure 服务总线将生成一个 LockLostException，它将出现在客户端应用程序代码中。 在这种情况下，客户端的默认重试逻辑应自动启动，并重试该操作。
+
 ## <a name="next-steps"></a>后续步骤
 
 若要了解有关服务总线消息传送的详细信息，请参阅以下主题：
 
-* [服务总线基础知识](service-bus-fundamentals-hybrid-solutions.md)
 * [服务总线队列、主题和订阅](service-bus-queues-topics-subscriptions.md)
 * [服务总线队列入门](service-bus-dotnet-get-started-with-queues.md)
 * [如何使用服务总线主题和订阅](service-bus-dotnet-how-to-use-topics-subscriptions.md)

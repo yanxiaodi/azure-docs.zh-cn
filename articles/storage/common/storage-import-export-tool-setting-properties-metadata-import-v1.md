@@ -1,24 +1,19 @@
 ---
-title: "使用 Azure 导入/导出设置属性和元数据 - v1 | Microsoft Docs"
-description: "了解如何在运行 Azure 导入/导出工具准备驱动器时，指定要对目标 blob 设置的属性和元数据。 本文所述的导入/导出工具为 v1 版本。"
+title: 使用 Azure 导入/导出设置属性和元数据 - v1 | Microsoft Docs
+description: 了解如何在运行 Azure 导入/导出工具准备驱动器时，指定要对目标 blob 设置的属性和元数据。 本文所述的导入/导出工具为 v1 版本。
 author: muralikk
-manager: syadav
-editor: tysonn
 services: storage
-documentationcenter: 
-ms.assetid: e8541695-bcfb-4bf0-84d9-72c9de32a0a8
 ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 01/23/2017
 ms.author: muralikk
-ms.openlocfilehash: 77bdaa5559de86cd1de9f30e70656e47fd5719e2
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.subservice: common
+ms.openlocfilehash: 66ae7045cfb94ec70f3b14046af736f784b88ea6
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60320544"
 ---
 # <a name="setting-properties-and-metadata-during-the-import-process"></a>在导入过程中设置属性和元数据
 在运行 Microsoft Azure 导入/导出工具准备驱动器时，可以指定要对目标 blob 设置的属性和元数据。 执行以下步骤:  

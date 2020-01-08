@@ -9,24 +9,24 @@ ms.assetid: f54a26a4-baa4-4255-9791-5a8f935898e2
 ms.service: data-factory
 ms.workload: data-services
 ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/05/2018
 ms.author: jingwang
 robots: noindex
-ms.openlocfilehash: 8f35a2bec410eccc59a19e5b82b9e109b15f0738
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: 5b84e49bac35ef8fc9a6c8c7ca90bfd6048dc1c4
+ms.sourcegitcommit: 64798b4f722623ea2bb53b374fb95e8d2b679318
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 07/11/2019
+ms.locfileid: "67839593"
 ---
 # <a name="move-data-from-a-web-table-source-using-azure-data-factory"></a>使用 Azure 数据工厂从 Web 表源移动数据
-> [!div class="op_single_selector" title1="Select the version of Data Factory service you are using:"]
-> * [版本 1 - 正式版](data-factory-web-table-connector.md)
-> * [版本 2 - 预览版](../connector-web-table.md)
+> [!div class="op_single_selector" title1="选择所使用的数据工厂服务版本："]
+> * [版本 1](data-factory-web-table-connector.md)
+> * [版本 2（当前版本）](../connector-web-table.md)
 
 > [!NOTE]
-> 本文适用于数据工厂版本 1（正式版 (GA)）。 如果使用数据工厂服务版本 2（预览版），请参阅 [V2 中的 Web 表连接器](../connector-web-table.md)。
+> 本文适用于数据工厂版本 1。 如果正在使用当前版本数据工厂服务，请参阅 [V2 中的 Web 表连接器](../connector-web-table.md)。
 
 本文概述了如何使用 Azure 数据工厂中的复制活动，从网页中的表将数据移至受支持的接收器数据存储。 本文建立在 [数据移动活动](data-factory-data-movement-activities.md)一文的基础上，该文提供通过复制活动和一系列支持作为源/接收器的数据存储进行数据移动的一般概述。
 
@@ -35,7 +35,7 @@ ms.lasthandoff: 03/23/2018
 > [!IMPORTANT]
 > 此 Web 连接器目前仅支持从 HTML 页提取表内容。 若要从 HTTP/s 终结点中检索数据，请改用 [HTTP 连接器](data-factory-http-connector.md)。
 
-## <a name="prerequisites"></a>先决条件
+## <a name="prerequisites"></a>系统必备
 
 若要使用此 Web 表连接器，需要设置自托管集成运行时（又称数据管理网关）和配置接收器链接服务中的 `gatewayName` 属性。 例如，若要从 Web 表复制到 Azure Blob 存储，请按如下所示配置 Azure 存储链接服务：
 
@@ -55,14 +55,14 @@ ms.lasthandoff: 03/23/2018
 ## <a name="getting-started"></a>入门
 可以使用不同的工具/API 创建包含复制活动的管道，以从本地 Cassandra 数据存储移动数据。 
 
-- 创建管道的最简单方法是使用**复制向导**。 请参阅[教程：使用复制向导创建管道](data-factory-copy-data-wizard-tutorial.md)，以快速了解如何使用复制数据向导创建管道。 
-- 也可以使用以下工具创建管道：**Azure 门户**、**Visual Studio**、**Azure PowerShell**、**Azure 资源管理器模板**、**.NET API** 和 **REST API**。 有关创建包含复制活动的管道的分步说明，请参阅[复制活动教程](data-factory-copy-data-from-azure-blob-storage-to-sql-database.md)。 
+- 创建管道的最简单方法是使用  复制向导。 有关分步说明，请参阅[教程：使用复制向导创建管道](data-factory-copy-data-wizard-tutorial.md)，以快速了解如何使用复制数据向导创建管道。 
+- 还可以使用以下工具来创建管道：**Visual Studio**， **Azure PowerShell**， **Azure Resource Manager 模板**， **.NET API**，并且**REST API**。 有关创建包含复制活动的管道的分步说明，请参阅[复制活动教程](data-factory-copy-data-from-azure-blob-storage-to-sql-database.md)。 
 
 无论使用工具还是 API，执行以下步骤都可创建管道，以便将数据从源数据存储移到接收器数据存储：
 
-1. 创建**链接服务**可将输入和输出数据存储链接到数据工厂。
-2. 创建**数据集**以表示复制操作的输入和输出数据。 
-3. 创建包含复制活动的**管道**，该活动将一个数据集作为输入，将一个数据集作为输出。 
+1. 创建链接服务可将输入和输出数据存储链接到数据工厂  。
+2. 创建数据集以表示复制操作的输入和输出数据  。 
+3. 创建包含复制活动的管道，该活动将一个数据集作为输入，将一个数据集作为输出  。 
 
 使用向导时，会自动创建这些数据工厂实体（链接服务、数据集和管道）的 JSON 定义。 使用工具/API（.NET API 除外）时，使用 JSON 格式定义这些数据工厂实体。  有关用于从 Web 表复制数据的数据工厂实体的 JSON 定义示例，请参阅本文的 [JSON 示例：将数据从 Web 表复制到 Azure Blob](#json-example-copy-data-from-web-table-to-azure-blob) 部分。 
 
@@ -74,7 +74,7 @@ ms.lasthandoff: 03/23/2018
 | 属性 | 说明 | 必选 |
 | --- | --- | --- |
 | type |type 属性必须设置为：**Web** |是 |
-| URL |Web 源的 URL |是 |
+| url |Web 源的 URL |是 |
 | authenticationType |匿名。 |是 |
 
 ### <a name="using-anonymous-authentication"></a>使用匿名身份验证
@@ -95,14 +95,14 @@ ms.lasthandoff: 03/23/2018
 ```
 
 ## <a name="dataset-properties"></a>数据集属性
-有关可用于定义数据集的节和属性的完整列表，请参阅 [Creating datasets](data-factory-create-datasets.md)（创建数据集）一文。 对于所有数据集类型（Azure SQL、Azure Blob、Azure 表等），结构、可用性和数据集 JSON 的策略等部分均类似。
+有关可用于定义数据集的节和属性的完整列表，请参阅[创建数据集](data-factory-create-datasets.md)一文。 对于所有数据集类型（Azure SQL、Azure Blob、Azure 表等），结构、可用性和数据集 JSON 的策略等部分均类似。
 
-每种数据集的 **TypeProperties** 节有所不同，该部分提供有关数据在数据存储区中的位置信息。 **WebTable** 类型的数据集的 typeProperties 部分具有以下属性
+每种数据集的 typeProperties 部分有所不同，该部分提供有关数据在数据存储区中的位置信息  。 **WebTable** 类型的数据集的 typeProperties 部分具有以下属性
 
 | 属性 | 说明 | 必选 |
 |:--- |:--- |:--- |
 | type |数据集类型。 必须设置为 **WebTable** |是 |
-| 路径 |包含表的资源的相对 URL。 |不会。 未指定路径时，仅使用链接服务定义中指定的 URL。 |
+| path |包含表的资源的相对 URL。 |否。 未指定路径时，仅使用链接服务定义中指定的 URL。 |
 | index |资源中表的索引。 请参阅[获取 HTML 页中表的索引](#get-index-of-a-table-in-an-html-page)，了解获取 HTML 页中表的索引的步骤。 |是 |
 
 **示例：**
@@ -179,7 +179,7 @@ ms.lasthandoff: 03/23/2018
 }
 ```
 
-**WebTable 输入数据集** 将“external”设置为“true”会告知数据工厂服务数据集位于数据工厂外，且不由数据工厂中的活动生成。
+**WebTable 输入数据集** 将“external”  设置为“true”  会告知数据工厂服务数据集位于数据工厂外，且不由数据工厂中的活动生成。
 
 > [!NOTE]
 > 请参阅[获取 HTML 页中表的索引](#get-index-of-a-table-in-an-html-page)，了解获取 HTML 页中表的索引的步骤。  
@@ -208,7 +208,7 @@ ms.lasthandoff: 03/23/2018
 
 **Azure Blob 输出数据集**
 
-数据将写入到新 blob，每小时进行一次（频率：小时，间隔：1）。
+数据每小时向新的 blob 写入一次（frequency：hour，interval：1）。
 
 ```json
 {
@@ -236,7 +236,7 @@ ms.lasthandoff: 03/23/2018
 
 管道包含配置为使用输入和输出数据集、且计划每小时运行一次的复制活动。 在管道 JSON 定义中，将 **source** 类型设置为 **WebSource**，将 **sink** 类型设置为 **BlobSink**。
 
-有关 WebSource 支持的属性列表，请参阅 [WebSource 类型属性](#copy-activity-type-properties)。
+有关 WebSource 支持的属性列表，请参阅“WebSource 类型属性”。
 
 ```json
 {  
@@ -285,22 +285,22 @@ ms.lasthandoff: 03/23/2018
 ```
 
 ## <a name="get-index-of-a-table-in-an-html-page"></a>获取 HTML 页中表的索引
-1. 启动 **Excel 2016**，并切换到“数据”选项卡。  
-2. 单击工具栏中的“新建查询”，指向“从其他源”，并单击“从 Web”。
+1. 启动 **Excel 2016**，并切换到“数据”  选项卡。  
+2. 单击工具栏中的“新建查询”  ，指向“从其他源”  ，并单击“从 Web”  。
 
     ![Power Query 菜单](./media/data-factory-web-table-connector/PowerQuery-Menu.png)
-3. 在“从 Web”对话框中，输入要在链接服务 JSON 中使用的 URL（例如：https://en.wikipedia.org/wiki/)）以及要为数据集指定的路径（例如：AFI%27s_100_Years...100_Movies），并单击“确定”。
+3. 在“从 Web”对话框中，输入要在链接服务 JSON 中使用的 **URL**（例如： https://en.wikipedia.org/wiki/) ）以及要为数据集指定的路径（例如  ：AFI%27s_100_Years...100_Movies），并单击“确定”  。
 
     ![“从 Web”对话框](./media/data-factory-web-table-connector/FromWeb-DialogBox.png)
 
-    此示例中使用的 URL：https://en.wikipedia.org/wiki/AFI%27s_100_Years...100_Movies
-4. 如果出现“访问 Web 内容”对话框，请选择正确的 **URL** 和**身份验证**，并单击“连接”。
+    此示例中使用的 URL： https://en.wikipedia.org/wiki/AFI%27s_100_Years...100_Movies
+4. 如果出现“访问 Web 内容”  对话框，请选择正确的 **URL** 和**身份验证**，并单击“连接”  。
 
    ![“访问 Web 内容”对话框](./media/data-factory-web-table-connector/AccessWebContentDialog.png)
-5. 单击树视图中的“表”项，查看表中的内容，并单击底部的“编辑”按钮。  
+5. 单击树视图中的“表”  项，查看表中的内容，并单击底部的“编辑”  按钮。  
 
    ![“导航器”对话框](./media/data-factory-web-table-connector/Navigator-DialogBox.png)
-6. 在“查询编辑器”窗口中，单击工具栏上的“高级编辑器”按钮。
+6. 在“查询编辑器”  窗口中，单击工具栏上的“高级编辑器”  按钮。
 
     ![“高级编辑器”按钮](./media/data-factory-web-table-connector/QueryEditor-AdvancedEditorButton.png)
 7. 在“高级编辑器”对话框中，“源”旁边的编号为索引。
@@ -313,4 +313,4 @@ ms.lasthandoff: 03/23/2018
 > 要将源数据集中的列映射到接收器数据集中的列，请参阅[映射 Azure 数据工厂中的数据集列](data-factory-map-columns.md)。
 
 ## <a name="performance-and-tuning"></a>性能和优化
-请参阅[复制活动性能和优化指南](data-factory-copy-activity-performance.md)，了解影响 Azure 数据工厂中数据移动（复制活动）性能的关键因素及各种优化方法。
+若要了解影响 Azure 数据工厂中数据移动（复制活动）性能的关键因素及各种优化方法，请参阅[复制活动性能和优化指南](data-factory-copy-activity-performance.md)。

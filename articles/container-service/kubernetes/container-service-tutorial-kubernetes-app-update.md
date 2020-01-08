@@ -1,23 +1,27 @@
 ---
-title: Azure 容器服务教程 - 更新应用程序
+title: （已弃用）Azure 容器服务教程 - 更新应用程序
 description: Azure 容器服务教程 - 更新应用程序
 services: container-service
-author: neilpeterson
+author: iainfoulds
 manager: jeconnoc
 ms.service: container-service
 ms.topic: tutorial
 ms.date: 02/26/2018
-ms.author: nepeters
+ms.author: iainfou
 ms.custom: mvc
-ms.openlocfilehash: f54179329b521cc861e90f023ff0b010b7ce1f75
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.openlocfilehash: 3c0be935a4ffb51c03d2f63b14ab7c0c713dd2ae
+ms.sourcegitcommit: 5839af386c5a2ad46aaaeb90a13065ef94e61e74
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 03/19/2019
+ms.locfileid: "58006262"
 ---
-# <a name="update-an-application-in-kubernetes"></a>更新 Kubernetes 中的应用程序
+# <a name="deprecated-update-an-application-in-kubernetes"></a>（已弃用）在 Kubernetes 中更新应用程序
 
-[!INCLUDE [aks-preview-redirect.md](../../../includes/aks-preview-redirect.md)]
+> [!TIP]
+> 有关使用 Azure Kubernetes 服务的此教程的更新版本，请参阅[教程：在 Azure Kubernetes 服务 (AKS) 中更新应用程序](../../aks/tutorial-kubernetes-app-update.md)。
+
+[!INCLUDE [ACS deprecation](../../../includes/container-service-kubernetes-deprecation.md)]
 
 在 Kubernetes 中部署应用程序后，可以指定新的容器映像或映像版本，从而更新应用程序。 这样做时，更新会进行暂存，因此只有一部分部署会同时更新。 借助这种暂存更新，可以让应用程序在更新期间继续运行。 如果发生部署故障，还可以利用它的回滚机制。 
 
@@ -71,7 +75,7 @@ docker-compose up --build -d
 
 ## <a name="test-application-locally"></a>在本地测试应用程序
 
-浏览到 http://localhost:8080 查看更新的应用程序。
+浏览到 `http://localhost:8080` 查看更新的应用程序。
 
 ![Azure 上的 Kubernetes 群集映像](media/container-service-kubernetes-tutorials/vote-app-updated.png)
 
@@ -79,7 +83,7 @@ docker-compose up --build -d
 
 使用容器注册表的 loginServer 标记 `azure-vote-front` 映像。 
 
-运行 [az acr list](/cli/azure/acr#az_acr_list) 命令，获取登录服务器名称。
+运行 [az acr list](/cli/azure/acr#az-acr-list) 命令，获取登录服务器名称。
 
 ```azurecli
 az acr list --resource-group myResourceGroup --query "[].{acrLoginServer:loginServer}" --output table
@@ -99,7 +103,7 @@ docker push <acrLoginServer>/azure-vote-front:redis-v2
 
 ## <a name="deploy-update-application"></a>部署更新的应用程序
 
-为了确保最长运行时间，必须运行应用程序 Pod 的多个实例。 使用 [kubectl get pod](https://kubernetes.io/docs/user-guide/kubectl/v1.6/#get) 命令验证此配置。
+为了确保最长运行时间，必须运行应用程序 Pod 的多个实例。 使用 [kubectl get pod](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get) 命令验证此配置。
 
 ```bash
 kubectl get pod
@@ -122,13 +126,13 @@ azure-vote-front-233282510-pqbfk   1/1       Running   0          10m
 kubectl scale --replicas=3 deployment/azure-vote-front
 ```
 
-若要更新应用程序，请使用 [kubectl set](https://kubernetes.io/docs/user-guide/kubectl/v1.6/#set) 命令。 使用登录服务器或容器注册表的主机名更新 `<acrLoginServer>`。
+若要更新应用程序，请使用 [kubectl set](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#set) 命令。 使用登录服务器或容器注册表的主机名更新 `<acrLoginServer>`。
 
 ```azurecli-interactive
 kubectl set image deployment azure-vote-front azure-vote-front=<acrLoginServer>/azure-vote-front:redis-v2
 ```
 
-若要监视部署，请使用 [kubectl get pod](https://kubernetes.io/docs/user-guide/kubectl/v1.6/#get) 命令。 部署更新的应用程序时，Pod 终止运行并通过新容器映像重新创建。
+若要监视部署，请使用 [kubectl get pod](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get) 命令。 部署更新的应用程序时，Pod 终止运行并通过新容器映像重新创建。
 
 ```azurecli-interactive
 kubectl get pod

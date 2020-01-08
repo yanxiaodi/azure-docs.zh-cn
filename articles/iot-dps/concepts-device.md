@@ -1,28 +1,25 @@
 ---
 title: Azure 设备预配中的设备概念 | Microsoft Docs
 description: 介绍设备预配概念，特定于使用设备预配服务和 IoT 中心的设备
-services: iot-dps
-keywords: ''
 author: nberdy
 ms.author: nberdy
-ms.date: 09/05/2017
-ms.topic: article
+ms.date: 04/04/2019
+ms.topic: conceptual
 ms.service: iot-dps
-documentationcenter: ''
-manager: timlt
-ms.devlang: na
-ms.custom: mvc
-ms.openlocfilehash: 5482801461e2afea33d65d559723116f37a35d1f
-ms.sourcegitcommit: d74657d1926467210454f58970c45b2fd3ca088d
-ms.translationtype: HT
+services: iot-dps
+manager: briz
+ms.openlocfilehash: 2904da863707c5f653d774b0a480cc48c95c8d1c
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/28/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60745972"
 ---
 # <a name="iot-hub-device-provisioning-service-device-concepts"></a>IoT 中心设备预配服务设备概念
 
 IoT 中心设备预配服务是一项 IoT 中心帮助程序服务，该服务用于将零接触设备预配到指定 IoT 中心。 使用设备预配服务，可以通过安全且可缩放的方式预配数百万台设备。
 
-本文概述了设备预配中涉及的设备概念。 本文与设备部署准备工作的[制造步骤](about-iot-dps.md#manufacturing-step)中提及的角色最为相关。
+本文概述了设备预配中涉及的设备概念  。 本文与设备部署准备工作的[制造步骤](about-iot-dps.md#manufacturing-step)中提及的角色最为相关。
 
 ## <a name="attestation-mechanism"></a>证明机制
 
@@ -31,9 +28,10 @@ IoT 中心设备预配服务是一项 IoT 中心帮助程序服务，该服务�
 > [!NOTE]
 > IoT 中心将该服务中类似的概念称为“身份验证方案”。
 
-设备预配服务支持两种证明形式：
-* 基于标准 X.509 证书身份验证流的 X.509 证书。
-* 基于 nonce 质询的受信任平台模块 (TPM)，使用密钥的 TPM 标准显示已签名的共享访问签名 (SAS) 令牌。 这不需要设备上的物理 TPM，但是服务要求按照 [TPM 规范](https://trustedcomputinggroup.org/work-groups/trusted-platform-module/)使用认可密钥来证明。
+设备预配服务支持以下证明形式：
+* 基于标准 X.509 证书身份验证流的 X.509 证书  。
+* 基于 nonce 质询的受信任平台模块 (TPM)，使用密钥的 TPM 标准显示已签名的共享访问签名 (SAS) 令牌  。 这不需要设备上的物理 TPM，但是服务要求按照 [TPM 规范](https://trustedcomputinggroup.org/work-groups/trusted-platform-module/)使用认可密钥来证明。
+* 基于共享访问签名 (SAS) [安全令牌](../iot-hub/iot-hub-devguide-security.md#security-tokens)的“对称密钥”  ，包括哈希签名和嵌入的到期期限。 有关详细信息，请参阅[对称密钥证明](concepts-symmetric-key-attestation.md)。
 
 ## <a name="hardware-security-module"></a>硬件安全模块
 

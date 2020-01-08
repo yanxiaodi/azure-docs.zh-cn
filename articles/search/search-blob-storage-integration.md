@@ -1,18 +1,20 @@
 ---
-title: 为 Blob 存储添加 Azure 搜索 | Microsoft Docs
-description: 使用 Azure 搜索 HTTP REST API 在代码中创建索引。
+title: 将全文搜索添加到 Azure Blob 存储 - Azure 搜索
+description: 在代码中使用 HTTP REST API 抓取 Azure Blob 存储中用于 Azure 搜索索引的文本内容。
 services: search
 ms.service: search
 ms.topic: conceptual
-ms.date: 05/04/2017
-author: chaosrealm
-manager: jlembicz
-ms.author: eugenesh
-ms.openlocfilehash: 71e43920f0e6a64beb7cdb28d0707dd30502bf05
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.date: 03/01/2019
+author: mgottein
+manager: nitinme
+ms.author: magottei
+ms.custom: seodec2018
+ms.openlocfilehash: f0801931b57302ae1d627dab783a40d2407c19ac
+ms.sourcegitcommit: bb8e9f22db4b6f848c7db0ebdfc10e547779cccc
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 08/20/2019
+ms.locfileid: "69650086"
 ---
 # <a name="searching-blob-storage-with-azure-search"></a>使用 Azure 搜索来搜索 Blob 存储
 
@@ -36,7 +38,7 @@ ms.lasthandoff: 04/23/2018
 ## <a name="image-search"></a>图像搜索
 Azure 搜索的全文搜索、分面导航和排序功能现在可以应用于 blob 中存储的图像的元数据了。
 
-如果使用 Microsoft 认知服务中的 [Computer Vision API](https://www.microsoft.com/cognitive-services/computer-vision-api) 对这些图像进行了预先处理，则可以为在每个图像中找到的可视内容编制索引，包括 OCR 和手写识别。 我们正在致力于直接向 Azure 搜索中添加 OCR 和其他图像处理功能，如果对这些功能感兴趣，请在我们的 [UserVoice](https://aka.ms/azsuv) 上提交请求或者[给我们发电子邮件](mailto:azscustquestions@microsoft.com)。
+认知搜索包括图像处理技能，例如[光学字符识别 (OCR)](cognitive-search-skill-ocr.md) 和[可视特征](cognitive-search-skill-image-analysis.md)的标识，这些技能可以用于为每个图像中发现的可视内容编制索引。
 
 ## <a name="index-and-search-through-json-blobs"></a>在 JSON blob 中编制索引和执行搜索
 可以将 Azure 搜索配置为提取在包含 JSON 的 blob 中找到的结构化内容。 Azure 搜索可以读取 JSON blob 并将结构化内容解析为 Azure 搜索文档的合适字段。 Azure 搜索还可以获取包含 JSON 对象数组的 blob 并将每个元素映射到单独的 Azure 搜索文档。
@@ -50,5 +52,5 @@ JSON 解析当前不可通过门户进行配置。 [了解有关 Azure 搜索中
 
 单击“添加 Azure 搜索”将启动一个工作流，可以在其中选择现有 Azure 搜索服务或创建一个新服务。 如果创建新服务，则会离开存储帐户的门户。 可以导航回存储门户页并重新选择“添加 Azure 搜索”选项，然后可以选择现有服务。
 
-### <a name="next-steps"></a>后续步骤
+## <a name="next-steps"></a>后续步骤
 在完整[文档](https://aka.ms/azsblobindexer)中详细了解 Azure 搜索 Blob 索引器。

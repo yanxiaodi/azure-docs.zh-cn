@@ -4,22 +4,23 @@ description: 介绍如何将 Azure 网关 RADIUS 身份验证与 NPS 服务器�
 services: vpn-gateway
 documentationcenter: na
 author: ahmadnyasin
-manager: willchen
+manager: dcscontentpm
 editor: ''
 tags: azure-resource-manager
 ms.assetid: ''
 ms.service: vpn-gateway
 ms.devlang: na
-ms.topic: ''
+ms.topic: conceptual
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
-ms.date: 02/13/2018
+ms.date: 09/16/2019
 ms.author: genli
-ms.openlocfilehash: 665e1914f44d7c5e650a1b632d8b11c6d8a5931a
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.openlocfilehash: ab152cca1d809d92803a3e50ea83da1cbcd8243c
+ms.sourcegitcommit: ca359c0c2dd7a0229f73ba11a690e3384d198f40
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71058881"
 ---
 # <a name="integrate-azure-vpn-gateway-radius-authentication-with-nps-server-for-multi-factor-authentication"></a>将 Azure VPN 网关 RADIUS 身份验证与 NPS 服务器集成实现多重身份验证 
 
@@ -27,7 +28,7 @@ ms.lasthandoff: 04/23/2018
 
 ## <a name="prerequisite"></a>先决条件
 
-若要启用 MFA，用户必须位于 Azure Active Directory (Azure AD) 中，后者必须从本地或云环境进行同步。 此外，用户还必须已完成 MFA 的自动注册过程。  有关详细信息，请参阅[为帐户设置双重验证](../multi-factor-authentication/end-user/multi-factor-authentication-end-user-first-time.md)
+若要启用 MFA，用户必须位于 Azure Active Directory (Azure AD) 中，后者必须从本地或云环境进行同步。 此外，用户还必须已完成 MFA 的自动注册过程。  有关详细信息，请参阅[为帐户设置双重验证](../active-directory/user-help/multi-factor-authentication-end-user-first-time.md)
 
 ## <a name="detailed-steps"></a>详细步骤
 
@@ -51,18 +52,18 @@ ms.lasthandoff: 04/23/2018
 ### <a name="step-2-configure-the-nps-for-azure-mfa"></a>步骤 2：为 Azure MFA 配置 NPS
 
 1. 在 NPS 服务器上，[安装适用于 Azure MFA 的 NPS 扩展](../active-directory/authentication/howto-mfa-nps-extension.md#install-the-nps-extension)。
-2. 打开 NSP 控制台，右键单击“RADUIS 客户端”，然后选择“新建”。 通过指定以下设置创建 RADUIS 客户端：
+2. 打开 NPS 控制台，右键单击 " **RADIUS 客户端**"，然后选择 "**新建**"。 通过指定以下设置来创建 RADIUS 客户端：
 
     - **友好名称**：键入任何名称。
-    - **地址(IP 或 DNS)**：键入在步骤 1 中创建的网关子网。
+    - **地址（IP 或 DNS）** ：键入在步骤 1 中创建的网关子网。
     - **共享机密**：键入任何密钥，并记住它以供将来使用。
 
-    ![有关 RADUIS 客户端设置的图像](./media/vpn-gateway-radiuis-mfa-nsp/create-radius-client1.png)
+      ![有关 RADIUS 客户端设置的图像](./media/vpn-gateway-radiuis-mfa-nsp/create-radius-client1.png)
 
  
 3.  在“高级”选项卡上，将供应商名称设置为“RADIUS Standard”并确保未选中“其他选项”复选框。
 
-    ![有关 RADUIS 客户端高级设置的图像](./media/vpn-gateway-radiuis-mfa-nsp/create-radius-client2.png)
+    ![有关 RADIUS 客户端高级设置的图像](./media/vpn-gateway-radiuis-mfa-nsp/create-radius-client2.png)
 
 4. 转到“策略” > “网络策略”，双击“到 Microsoft 路由和远程访问服务器的连接”策略，选择“授予访问权限”，然后单击“确定”。
 
@@ -76,7 +77,7 @@ ms.lasthandoff: 04/23/2018
     - **身份验证类型**：选择“RADIUS 身份验证”。
     - **服务器 IP 地址**：键入 NPS 服务器的 IP 地址。
 
-    ![有关点到站点设置的图像](./media/vpn-gateway-radiuis-mfa-nsp/configure-p2s.png)
+      ![有关点到站点设置的图像](./media/vpn-gateway-radiuis-mfa-nsp/configure-p2s.png)
 
 ## <a name="next-steps"></a>后续步骤
 

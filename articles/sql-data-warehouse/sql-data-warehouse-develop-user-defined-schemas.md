@@ -2,19 +2,20 @@
 title: 在 SQL 数据仓库中使用用户定义架构 | Microsoft Docs
 description: 有关在 Azure SQL 数据仓库中使用 T-SQL 用户定义架构开发解决方案的技巧。
 services: sql-data-warehouse
-author: ronortloff
-manager: craigg-msft
+author: XiaoyuMSFT
+manager: craigg
 ms.service: sql-data-warehouse
 ms.topic: conceptual
-ms.component: implement
+ms.subservice: development
 ms.date: 04/17/2018
-ms.author: rortloff
+ms.author: xiaoyul
 ms.reviewer: igorstan
-ms.openlocfilehash: c18e6d34416390ae7e93b69b28d508a540f7b1ab
-ms.sourcegitcommit: 1362e3d6961bdeaebed7fb342c7b0b34f6f6417a
-ms.translationtype: HT
+ms.openlocfilehash: e0ae00e0fca5ed4c6fba04444e5c50424462d297
+ms.sourcegitcommit: 75a56915dce1c538dc7a921beb4a5305e79d3c7a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/18/2018
+ms.lasthandoff: 07/24/2019
+ms.locfileid: "68479569"
 ---
 # <a name="using-user-defined-schemas-in-sql-data-warehouse"></a>在 SQL 数据仓库中使用用户定义架构
 有关在 Azure SQL 数据仓库中使用 T-SQL 用户定义架构开发解决方案的技巧。
@@ -30,7 +31,7 @@ ms.lasthandoff: 04/18/2018
 > 
 > 
 
-## <a name="recommendations"></a>建议
+## <a name="recommendations"></a>推荐
 以下是针对使用用户定义的架构合并工作负荷、安全性、域和功能边界的一些建议
 
 1. 使用一个 SQL 数据仓库数据库来运行整个数据仓库工作负荷

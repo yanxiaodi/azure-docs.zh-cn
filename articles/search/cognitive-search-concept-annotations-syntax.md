@@ -1,21 +1,20 @@
 ---
-title: 在 Azure 搜索的认知搜索管道中引用输入和输出中的注释 | Microsoft Docs
+title: 认知搜索管道中的引用输入和输出 - Azure 搜索
 description: 说明了注释语法，以及如何在 Azure 搜索的认知搜索管道中引用技能集的输入和输出中的注释。
 services: search
-manager: pablocas
+manager: nitinme
 author: luiscabrer
 ms.service: search
-ms.devlang: NA
 ms.workload: search
 ms.topic: conceptual
-ms.date: 05/01/2018
+ms.date: 05/02/2019
 ms.author: luisca
-ms.openlocfilehash: 2e838e9c94d5b19565bea3d02890fe6164bb37d0
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 40559744f0650c64afb1dc63c38f56efaa0219d7
+ms.sourcegitcommit: 3f22ae300425fb30be47992c7e46f0abc2e68478
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
-ms.locfileid: "33786786"
+ms.lasthandoff: 09/25/2019
+ms.locfileid: "71265537"
 ---
 # <a name="how-to-reference-annotations-in-a-cognitive-search-skillset"></a>如何在认知搜索技能集中引用注释
 
@@ -27,7 +26,7 @@ ms.locfileid: "33786786"
 
 在复习语法之前，让我们回顾一些重要的概念，以便更好地理解本文后面提供的示例。
 
-| 术语 | 说明 |
+| 术语 | 描述 |
 |------|-------------|
 | 扩充文档 | 扩充文档是由管道创建和使用的内部结构，用来保存与文档相关的所有注释。 可以把扩充文档看作是注释树。 通常，从前一个注释创建的注释将成为前一个注释的子级。<p/>扩充文档仅在技能集执行期间存在。 内容映射到搜索索引后，就不再需要扩充文档了。 虽然不直接与扩充文档交互，但在创建技能集时，有一个文档的心理模型是很有用的。 |
 | 扩充上下文 | 扩充发生的上下文，即扩充的元素。 默认情况下，扩充上下文位于 `"/document"` 级别，作用域为单个文档。 当一个技能运行时，该技能的输出将成为[定义上下文的属性](#example-2)。|
@@ -35,13 +34,13 @@ ms.locfileid: "33786786"
 <a name="example-1"></a>
 ## <a name="example-1-simple-annotation-reference"></a>示例 1：简单注释引用
 
-在 Azure Blob 存储中，假设你有各种文件，其中包含你想要使用命名实体识别提取的人名的引用。 在下面的技能定义中，`"/document/content"` 是整个文档的文本表示，“people”是对标识为 persons 的实体的全名提取。
+在 Azure Blob 存储中，假设你有各种文件，其中包含你想要使用实体识别提取的人名的引用。 在下面的技能定义中，`"/document/content"` 是整个文档的文本表示，“people”是对标识为 persons 的实体的全名提取。
 
 因为默认上下文是 `"/document"`，所以现在可以将人员列表引用为 `"/document/people"`。 在此特定示例中 `"/document/people"` 是一个注释，它现在可以映射到索引中的一个字段，或者用在同一技能集的另一个技能中。
 
 ```json
   {
-    "@odata.type": "#Microsoft.Skills.Text.NamedEntityRecognitionSkill",
+    "@odata.type": "#Microsoft.Skills.Text.EntityRecognitionSkill",
     "categories": [ "Person"],
     "defaultLanguageCode": "en",
     "inputs": [
@@ -89,7 +88,7 @@ ms.locfileid: "33786786"
   }
 ```
 
-当注释是字符串的数组或集合时，你可能希望针对特定成员而不是整个数组。 上述示例在由上下文表示的每个节点下生成名为 `"last"` 的注释。 如果想要引用此系列的注释，可以使用语法 `"/document/people/*/last"`。 如果想要引用特定注释，可以使用显式索引：`"/document/people/1/last` 引用文档中标识的第一个人的姓氏。 请注意，在此语法中数组的“索引从 1 开始”。
+当注释是字符串的数组或集合时，你可能希望针对特定成员而不是整个数组。 上述示例在由上下文表示的每个节点下生成名为 `"last"` 的注释。 如果想要引用此系列的注释，可以使用语法 `"/document/people/*/last"`。 如果想要引用特定注释，可以使用显式索引：`"/document/people/1/last` 引用文档中标识的第一个人的姓氏。 请注意，在此语法中数组的“索引从 0 开始”。
 
 <a name="example-3"></a>
 
@@ -122,8 +121,8 @@ ms.locfileid: "33786786"
 
 
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 + [如何将自定义技能集成到扩充管道](cognitive-search-custom-skill-interface.md)
 + [如何定义技能集](cognitive-search-defining-skillset.md)
-+ [创建技能集 (REST)](ref-create-skillset.md)
++ [创建技能集 (REST)](https://docs.microsoft.com/rest/api/searchservice/create-skillset)
 + [如何将扩充字段映射到索引](cognitive-search-output-field-mapping.md)

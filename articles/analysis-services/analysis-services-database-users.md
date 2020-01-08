@@ -3,20 +3,21 @@ title: 管理 Azure Analysis Services 中的数据库角色和用户| Microsoft 
 description: 了解如何在 Azure 中管理 Analysis Services 服务器上的数据库角色和用户。
 author: minewiskan
 manager: kfile
-ms.service: analysis-services
+ms.service: azure-analysis-services
 ms.topic: conceptual
-ms.date: 04/12/2018
+ms.date: 07/29/2019
 ms.author: owend
 ms.reviewer: minewiskan
-ms.openlocfilehash: 3c35fb1ee70544b8b01bbadaf72ee38145179b27
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: 2a6c63c4ae58079c79a9d344f1e2550e4768088f
+ms.sourcegitcommit: 13a289ba57cfae728831e6d38b7f82dae165e59d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 08/09/2019
+ms.locfileid: "68932239"
 ---
 # <a name="manage-database-roles-and-users"></a>管理数据库角色和用户
 
-在模型数据库级别，所有用户都必须属于一个角色。 角色可针对模型数据库定义具有特定权限的用户。 添加到角色的任何用户或安全组都必须在与服务器相同的订阅的 Azure AD 租户中具有一个帐户。
+在模型数据库级别，所有用户都必须属于一个角色。 角色可针对模型数据库定义具有特定权限的用户。 添加到角色的任何用户或安全组都必须在与服务器相同的订阅的 Azure AD 租户中具有一个帐户。 
 
 定义角色的方式根据使用的工具有所差异，但效果却是相同的。
 
@@ -25,7 +26,10 @@ ms.lasthandoff: 04/16/2018
 *  进程 - 用户可以连接到数据库并对其执行处理操作，分析模型数据库数据。
 *  读取 - 用户可以使用客户端应用程序连接到模型数据库数据并进行分析。
 
-如果创建表格模型项目，请使用 SSDT 中的角色管理器创建角色并向这些角色添加用户或组。 如果向服务器部署，请使用 SSMS、[Analysis Services PowerShell cmdlet](https://msdn.microsoft.com/library/hh758425.aspx) 或 [表格模型脚本语言](https://msdn.microsoft.com/library/mt614797.aspx) \(TMSL) 添加或删除角色和用户成员。
+创建表格模型项目时, 可以使用中的角色管理器创建角色并向这些角色添加用户或组 SQL Server Data Tools (SSDT)。 部署到服务器时, 可以使用 SQL Server Management Studio (SSMS)、 [Analysis Services PowerShell cmdlet](https://docs.microsoft.com/analysis-services/powershell/analysis-services-powershell-reference)或[表格模型脚本语言](https://docs.microsoft.com/bi-reference/tmsl/tabular-model-scripting-language-tmsl-reference)(TMSL) 来添加或删除角色和用户成员。
+
+**安全组**必须[启用邮件](https://docs.microsoft.com/exchange/recipients-in-exchange-online/manage-mail-enabled-security-groups), 并`MailEnabled`将属性设置为。 `True` 通过电子邮件地址指定组时使用`obj:groupid@tenantid`。
+
 
 ## <a name="to-add-or-manage-roles-and-users-in-ssdt"></a>在 SSDT 中添加或管理角色和用户  
   
@@ -39,12 +43,12 @@ ms.lasthandoff: 04/16/2018
   
 4.  选择以下权限之一：  
   
-    |权限|说明|  
+    |权限|描述|  
     |----------------|-----------------|  
     |**无**|成员无法修改模型架构，也无法查询数据。|  
     |**读取**|成员可以（基于行筛选器）查询数据，但无法修改模型架构。|  
     |读取和处理|成员可以（基于行级筛选器）查询数据并运行“处理”和“全部处理”操作，但无法修改模型架构。|  
-    |**过程**|成员可以运行“处理”和“全部处理”操作。 无法修改模型架构，也无法查询数据。|  
+    |**处理**|成员可以运行“处理”和“全部处理”操作。 无法修改模型架构，也无法查询数据。|  
     |管理员|成员可以修改模型架构并查询所有数据。|   
   
 5.  如果正在创建的角色具有“读取”或“读取和处理”权限，可以使用 DAX 公式添加行筛选器。 单击“行筛选器”选项卡，选择表，再单击“DAX 筛选器”字段，然后键入一个 DAX 公式。
@@ -59,6 +63,7 @@ ms.lasthandoff: 04/16/2018
 
 
 ## <a name="to-add-or-manage-roles-and-users-in-ssms"></a>在 SSMS 中添加或管理角色和用户
+
 若要向部署模型数据库添加角色和用户，必须以服务器管理员身份连接到服务器，或已经是具有管理员权限的数据库角色的成员。
 
 1. 在对象资源管理器中，右击“角色” > “新建角色”。
@@ -66,7 +71,8 @@ ms.lasthandoff: 04/16/2018
 2. 在“创建角色”中，输入角色名称和描述。
 
 3. 选择权限。
-   |权限|说明|  
+
+   |权限|描述|  
    |----------------|-----------------|  
    |完全控制（管理员）|成员可以修改模型架构，处理并查询所有数据。| 
    |处理数据库|成员可以运行“处理”和“全部处理”操作。 无法修改模型架构，也无法查询数据。|  
@@ -79,7 +85,8 @@ ms.lasthandoff: 04/16/2018
 5. 如果正在创建的角色具有“读取”权限，可以使用 DAX 公式添加行筛选器。 单击“行筛选器”，选择表，然后在“DAX 筛选器”字段中输入 DAX 公式。 
 
 ## <a name="to-add-roles-and-users-by-using-a-tmsl-script"></a>使用 TMSL 脚本添加角色和用户
-可在 SSMS 中的 XMLA 窗口中运行 TMSL 脚本或使用 PowerShell。 使用 [CreateOrReplace](https://docs.microsoft.com/sql/analysis-services/tabular-models-scripting-language-commands/createorreplace-command-tmsl) 命令和 [Roles](https://docs.microsoft.com/sql/analysis-services/tabular-models-scripting-language-objects/roles-object-tmsl) 对象。
+
+可在 SSMS 中的 XMLA 窗口中运行 TMSL 脚本或使用 PowerShell。 使用 [CreateOrReplace](https://docs.microsoft.com/bi-reference/tmsl/createorreplace-command-tmsl) 命令和 [Roles](https://docs.microsoft.com/bi-reference/tmsl/roles-object-tmsl) 对象。
 
 **示例 TMSL 脚本**
 
@@ -112,15 +119,17 @@ ms.lasthandoff: 04/16/2018
 ```
 
 ## <a name="to-add-roles-and-users-by-using-powershell"></a>使用 PowerShell 添加角色和用户
-[SqlServer](https://msdn.microsoft.com/library/hh758425.aspx) 模块提供任务特定的数据库管理 cmdlet，以及接受表格模型脚本语言 (TMSL) 查询或脚本的通用 Invoke-ASCmd cmdlet。 以下 cmdlet 用于管理数据库角色和用户。
+
+[SqlServer](https://docs.microsoft.com/analysis-services/powershell/analysis-services-powershell-reference) 模块提供任务特定的数据库管理 cmdlet，以及接受表格模型脚本语言 (TMSL) 查询或脚本的通用 Invoke-ASCmd cmdlet。 以下 cmdlet 用于管理数据库角色和用户。
   
-|Cmdlet|说明|
+|Cmdlet|描述|
 |------------|-----------------| 
-|[Add-RoleMember](https://msdn.microsoft.com/library/hh510167.aspx)|向数据库角色添加成员。| 
-|[Remove-RoleMember](https://msdn.microsoft.com/library/hh510173.aspx)|从数据库角色删除成员。|   
-|[Invoke-ASCmd](https://msdn.microsoft.com/library/hh479579.aspx)|执行 TMSL 脚本。|
+|[Add-RoleMember](https://docs.microsoft.com/powershell/module/sqlserver/Add-RoleMember)|向数据库角色添加成员。| 
+|[Remove-RoleMember](https://docs.microsoft.com/powershell/module/sqlserver/remove-rolemember)|从数据库角色删除成员。|   
+|[Invoke-ASCmd](https://docs.microsoft.com/powershell/module/sqlserver/invoke-ascmd)|执行 TMSL 脚本。|
 
 ## <a name="row-filters"></a>行筛选器  
+
 行筛选器定义特定角色的成员可以查询表中的哪些行。 可使用 DAX 公式为模型中的每个表定义行筛选器。  
   
 可仅为具有“读取”和“读取和处理”权限的角色定义行筛选器。 默认情况下，如果没有为特定表定义行筛选器，除非交叉筛选其他表中的适用项，否则成员可以查询表中的所有行。
@@ -131,8 +140,8 @@ ms.lasthandoff: 04/16/2018
   
 |表|DAX 表达式|  
 |-----------|--------------------|  
-|区域|=Region[Country]=”USA”|  
-|ProductCategory|=ProductCategory[Name]=”Bicycles”|  
+|地区|=Region[Country]="USA"|  
+|ProductCategory|=ProductCategory[Name]="Bicycles"|  
 |事务|=Transactions[Year]=2016|  
   
  净效果是指成员可以查询若干行数据，其中客户位于美国，产品类别为自行车，年份是 2016 年。 用户无法查询美国之外的事务，不是自行车事务或非 2016 年的事务，除非它们属于授予这些权限的另一角色。
@@ -140,7 +149,8 @@ ms.lasthandoff: 04/16/2018
  可以使用筛选器 =FALSE() 拒绝访问整个表的所有行。
 
 ## <a name="next-steps"></a>后续步骤
+
   [管理服务器管理员](analysis-services-server-admins.md)   
   [使用 PowerShell 管理 Azure Analysis Services](analysis-services-powershell.md)  
-  [表格模型脚本语言 (TMSL) 参考](https://docs.microsoft.com/sql/analysis-services/tabular-model-scripting-language-tmsl-reference)
+  [表格模型脚本语言 (TMSL) 参考](https://docs.microsoft.com/bi-reference/tmsl/tabular-model-scripting-language-tmsl-reference)
 

@@ -1,24 +1,19 @@
 ---
-title: "Azure 导入/导出元数据和属性文件格式 | Microsoft Docs"
-description: "了解如何为导入或导出作业包含的一个或多个 Blob 指定元数据和属性。"
+title: Azure 导入/导出元数据和属性文件格式 | Microsoft Docs
+description: 了解如何为导入或导出作业包含的一个或多个 Blob 指定元数据和属性。
 author: muralikk
-manager: syadav
-editor: tysonn
 services: storage
-documentationcenter: 
-ms.assetid: 840364c6-d9a8-4b43-a9f3-f7441c625069
 ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 01/23/2017
 ms.author: muralikk
-ms.openlocfilehash: 3f728ad94cdcbd32092b677f11a737ae91376720
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.subservice: common
+ms.openlocfilehash: 2066d4a2ed6db97285d92d15e14dbd21629dbdfa
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61478549"
 ---
 # <a name="azure-importexport-service-metadata-and-properties-file-format"></a>Azure 导入/导出服务元数据和属性文件格式
 可将一个或多个 Blob 的元数据和属性指定为导入作业或导出作业的一部分。 要设置将创建为导入作业一部分的 Blob 的元数据或属性，应在包含所要导入数据的硬盘驱动器上提供一个元数据或属性文件。 对于导出作业，元数据和属性将写入到在返回的硬盘驱动器上包含的元数据或属性文件。  
@@ -35,7 +30,7 @@ ms.lasthandoff: 10/11/2017
 </Metadata>  
 ```
   
-|XML 元素|类型|说明|  
+|XML 元素|Type|描述|  
 |-----------------|----------|-----------------|  
 |`Metadata`|Root 元素|元数据文件的根元素。|  
 |`metadata-name`|String|可选。 XML 元素指定 Blob 的元数据名称，其值指定元数据设置值。|  
@@ -57,7 +52,7 @@ ms.lasthandoff: 10/11/2017
 </Properties>  
 ```
   
-|XML 元素|类型|说明|  
+|XML 元素|Type|描述|  
 |-----------------|----------|-----------------|  
 |`Properties`|Root 元素|属性文件的根元素。|  
 |`Last-Modified`|String|可选。 Blob 的上次修改时间。 仅适用于导出作业。|  

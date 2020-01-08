@@ -1,24 +1,19 @@
 ---
-title: "为 Azure 导入/导出服务的导入作业准备硬盘驱动器的示例工作流 | Microsoft Docs"
-description: "请参阅为 Azure 导入/导出服务中的导入作业准备驱动器的完整过程演练。"
+title: 为 Azure 导入/导出服务的导入作业准备硬盘驱动器的示例工作流 | Microsoft Docs
+description: 请参阅为 Azure 导入/导出服务中的导入作业准备驱动器的完整过程演练。
 author: muralikk
-manager: syadav
-editor: tysonn
 services: storage
-documentationcenter: 
-ms.assetid: 
 ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 04/07/2017
 ms.author: muralikk
-ms.openlocfilehash: 60139ff36b66432620591ceaf201e046ad30217f
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.subservice: common
+ms.openlocfilehash: 42da285fbb55df43959506996bcde9cf547c2a22
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60320561"
 ---
 # <a name="sample-workflow-to-prepare-hard-drives-for-an-import-job"></a>为导入作业准备硬盘驱动器的示例工作流
 
@@ -28,7 +23,7 @@ ms.lasthandoff: 10/11/2017
 
 本示例将以下数据导入到名为 `mystorageaccount` 的 Azure 存储帐户：
 
-|位置|说明|数据大小|
+|Location|描述|数据大小|
 |--------------|-----------------|-----|
 |H:\Video\ |视频集合|12 TB|
 |H:\Photo\ |照片集合|30 GB|
@@ -39,7 +34,7 @@ ms.lasthandoff: 10/11/2017
 
 导入作业将这些数据导入到存储帐户中的以下目标：
 
-|源|目标虚拟目录或 Blob|
+|source|目标虚拟目录或 Blob|
 |------------|-------------------------------------------|
 |H:\Video\ |video/|
 |H:\Photo\ |photo/|
@@ -75,9 +70,9 @@ K:\Temp\FavoriteVideo.ISO,favorite/FavoriteVideo.ISO,BlockBlob,rename,None,H:\my
 
 此外，可为所有文件设置以下元数据：
 
-* **UploadMethod：**Microsoft Azure 导入/导出服务
-* **DataSetName：**SampleData
-* **CreationDate：**10/1/2013
+* **UploadMethod：** Windows Azure 导入/导出服务
+* **DataSetName：** SampleData
+* **CreationDate：** 2013 年 10 月 1 日
 
 若要为导入的文件设置元数据，请创建包含以下内容的文本文件 `c:\WAImportExport\SampleMetadata.txt`：
 
@@ -92,9 +87,9 @@ K:\Temp\FavoriteVideo.ISO,favorite/FavoriteVideo.ISO,BlockBlob,rename,None,H:\my
 
 还可为 `FavoriteMovie.ISO` Blob 设置一些属性：
 
-* **Content-Type：**application/octet-stream
-* **Content-MD5：**Q2hlY2sgSW50ZWdyaXR5IQ==
-* **Cache-Control：**no-cache
+* **Content-Type：** application/octet-stream
+* **Content-MD5：** Q2hlY2sgSW50ZWdyaXR5IQ==
+* **Cache-Control：** no-cache
 
 若要设置这些属性，请创建文本文件 `c:\WAImportExport\SampleProperties.txt`：
 
@@ -117,7 +112,7 @@ K:\Temp\FavoriteVideo.ISO,favorite/FavoriteVideo.ISO,BlockBlob,rename,None,H:\my
 WAImportExport.exe PrepImport /j:JournalTest.jrn /id:session#1  /sk:************* /InitialDriveSet:driveset-1.csv /DataSet:dataset-1.csv /logdir:F:\logs
 ```
 
-如果需要添加更多数据，请创建另一个数据集文件（格式与 Initialdataset 相同）。
+如果需要添加更多数据，创建另一个数据集文件 （与初始数据集相同的格式）。
 
 **对于第二个会话：**
 

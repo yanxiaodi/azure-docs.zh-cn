@@ -1,34 +1,32 @@
 ---
-title: 了解 Hadoop 群集中的数据以及如何在 Azure 机器学习中创建模型 | Microsoft 文档
+title: 在 Hadoop 群集中浏览数据 - Team Data Science Process
 description: 对于采用 HDInsight Hadoop 群集的端到端方案，使用 Team Data Science Process 来构建和部署模型。
-services: machine-learning,hdinsight
-documentationcenter: ''
-author: deguhath
+services: machine-learning
+author: marktab
 manager: cgronlun
 editor: cgronlun
-ms.assetid: e9e76c91-d0f6-483d-bae7-2d3157b86aa0
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/29/2017
-ms.author: deguhath
-ms.openlocfilehash: 6f16b7524bc8c268ed3a2314b8b88d25eb2f4325
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: d26bc6044ca106b0f081cee5a39405b4b78ce7ac
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60303820"
 ---
-# <a name="the-team-data-science-process-in-action-use-azure-hdinsight-hadoop-clusters"></a>Team Data Science Process 的工作原理：使用 Azure HDInsight Hadoop 群集
-本演练在一个端到端方案中使用 [Team Data Science Process (TDSP)](overview.md)。 其中使用 [Azure HDInsight Hadoop 群集](http://www.andresmh.com/nyctaxitrips/)对公开发布的[纽约市出租车行程](https://azure.microsoft.com/services/hdinsight/)数据集中的数据进行存储、探索和实施特性工程，以及对该数据进行下采样。 为了处理二元分类、多类分类和回归预测任务，我们将使用 Azure 机器学习构建数据模型。 
+# <a name="the-team-data-science-process-in-action-use-azure-hdinsight-hadoop-clusters"></a>运行中的 Team Data Science Process：使用 Azure HDInsight Hadoop 群集
+本演练在一个端到端方案中使用 [Team Data Science Process (TDSP)](overview.md)。 其中使用 [Azure HDInsight Hadoop 群集](https://www.andresmh.com/nyctaxitrips/)对公开发布的[纽约市出租车行程](https://azure.microsoft.com/services/hdinsight/)数据集中的数据进行存储、探索和实施特性工程，以及对该数据进行下采样。 为了处理二元分类、多类分类和回归预测任务，我们将使用 Azure 机器学习构建数据模型。 
 
 有关介绍如何处理大型数据集的演练，请参阅 [Team Data Science Process - 使用 Azure HDInsight Hadoop 群集处理 1 TB 数据集](hive-criteo-walkthrough.md)。
 
 也可以通过 IPython Notebook 来完成使用 1 TB 数据集的演练中介绍的任务。 有关详细信息，请参阅[使用 Hive ODBC 连接的 Criteo 演练](https://github.com/Azure/Azure-MachineLearning-DataScience/blob/master/Misc/DataScienceProcess/iPythonNotebooks/machine-Learning-data-science-process-hive-walkthrough-criteo.ipynb)。
 
 ## <a name="dataset"></a>NYC 出租车行程数据集介绍
-NYC 出租车行程数据是大约 20 GB（未压缩时约为 48 GB）的压缩逗号分隔值 (CSV) 文件。 其中包含超过 1.73 亿个单独行程及每个行程支付的费用。 每个行程记录都包括上车和下车的位置和时间、匿名的出租车司机驾驶证编号和牌照编号（出租车的唯一 ID）。 数据涵盖 2013 年的所有行程，并在每个月的以下两个数据集中提供：
+NYC 出租车行程数据是大约 20 GB（未压缩时约为 48 GB）的压缩逗号分隔值 (CSV) 文件。 其中包含超过 1.73 亿个单独行程及每个行程支付的费用。 每个行程记录会包括上车和下车的位置和时间、匿名的出租车司机驾驶证编号和牌照编号（出租车的唯一 ID）。 数据涵盖 2013 年的所有行程，并在每个月的以下两个数据集中提供：
 
 - trip_data CSV 文件包含行程的详细信息。 这包括乘客数、上车和下车地点、行程持续时间和行程距离。 下面是一些示例记录：
    
@@ -73,12 +71,12 @@ NYC 出租车行程数据是大约 20 GB（未压缩时约为 48 GB）的压缩�
 
 可以通过三个步骤为使用 HDInsight 群集的高级分析设置 Azure 环境：
 
-1. [创建存储帐户](../../storage/common/storage-create-storage-account.md)：此存储帐户用于在 Azure Blob 存储中存储数据。 HDInsight 群集中使用的数据也驻留在此处。
+1. [创建存储帐户](../../storage/common/storage-quickstart-create-account.md)：此存储帐户用于在 Azure Blob 存储中存储数据。 HDInsight 群集中使用的数据也驻留在此处。
 2. [为高级分析过程和技术自定义 Azure HDInsight Hadoop 群集](customize-hadoop-cluster.md)。 此步骤将创建一个在所有节点上都安装有 64 位 Anaconda Python 2.7 的 HDInsight Hadoop 群集。 自定义 HDInsight 群集时需牢记两个重要步骤。
    
    * 创建 HDInsight 群集时，请记住将其与步骤 1 中创建的存储帐户相链接。 此存储帐户访问在该群集中处理的数据。
-   * 创建群集后，启用对其头节点的远程访问。 浏览到“配置”选项卡，并选择“启用远程”。 此步骤指定用于远程登录的用户凭据。
-3. [创建 Azure 机器学习工作区](../studio/create-workspace.md)：使用此工作区构建机器学习模型。 使用 HDInsight 群集完成初始数据探索并进行下采样后，此任务将得到解决。
+   * 创建群集后，启用对其头节点的远程访问。 浏览到“配置”  选项卡，并选择“启用远程”  。 此步骤指定用于远程登录的用户凭据。
+3. [创建 Azure 机器学习工作区](../studio/create-workspace.md)：此工作区用于生成机器学习模型。 使用 HDInsight 群集完成初始数据探索并进行下采样后，此任务将得到解决。
 
 ## <a name="getdata"></a>从公共源获取数据
 > [!NOTE]
@@ -86,15 +84,15 @@ NYC 出租车行程数据是大约 20 GB（未压缩时约为 48 GB）的压缩�
 > 
 > 
 
-若要将 [NYC 出租车行程](http://www.andresmh.com/nyctaxitrips/)数据集从其公共位置复制，可以使用[将数据从 Azure Blob 存储移入和移出](move-azure-blob.md)中所述的任意方法。
+若要将 [NYC 出租车行程](https://www.andresmh.com/nyctaxitrips/)数据集从其公共位置复制，可以使用[将数据从 Azure Blob 存储移入和移出](move-azure-blob.md)中所述的任意方法。
 
 此处介绍如何使用 AzCopy 传输包含数据的文件。 若要下载并安装 AzCopy，请按照 [AzCopy 命令行实用工具入门](../../storage/common/storage-use-azcopy.md)中的说明进行操作。
 
-1. 在“命令提示符”窗口中，运行以下 AzCopy 命令（请将 *<path_to_data_folder>* 替换为所需目标）：
+1. 从命令提示符窗口中，运行以下 AzCopy 命令，将 *\<path_to_data_folder >* 所需目标：
 
         "C:\Program Files (x86)\Microsoft SDKs\Azure\AzCopy\azcopy" /Source:https://nyctaxitrips.blob.core.windows.net/data /Dest:<path_to_data_folder> /S
 
-1. 复制完成后，所选数据文件夹中总共会出现 24 个压缩文件。 将下载的文件解压缩到本地计算机上的同一目录。 记下未压缩的文件所在的文件夹。 此文件夹称为 *<path\_to\_unzipped_data\_files\>*。
+1. 复制完成后，所选数据文件夹中总共会出现 24 个压缩文件。 将下载的文件解压缩到本地计算机上的同一目录。 记下未压缩的文件所在的文件夹。 此文件夹称为 *\<路径\_到\_unzipped_data\_文件\>* 在下文中。
 
 ## <a name="upload"></a>将数据上传到 HDInsight Hadoop 群集的默认容器
 > [!NOTE]
@@ -104,10 +102,10 @@ NYC 出租车行程数据是大约 20 GB（未压缩时约为 48 GB）的压缩�
 
 在以下 AzCopy 命令中，将以下参数替换为创建 Hadoop 群集和解压缩数据文件时所指定的实际值。
 
-* ***<path_to_data_folder>*** 计算机上包含解压缩数据文件的目录（与路径）。  
-* ***<storage account name of Hadoop cluster>*** 与 HDInsight 群集关联的存储帐户。
-* ***<default container of Hadoop cluster>*** 群集使用的默认容器。 注意，默认容器的名称通常与群集本身的名称相同。 例如，如果群集名为“abc123.azurehdinsight.net”，则默认容器为 abc123。
-* ***<storage account key>*** 群集使用的存储帐户密钥。
+* ***\<path_to_data_folder >*** 包含解压缩的数据文件在计算机上的目录 （与路径）。  
+* ***\<Hadoop 群集的存储帐户名称 >*** 与你的 HDInsight 群集关联的存储帐户。
+* ***\<Hadoop 群集的默认容器 >*** 群集使用的默认容器。 注意，默认容器的名称通常与群集本身的名称相同。 例如，如果群集名为“abc123.azurehdinsight.net”，则默认容器为 abc123。
+* ***\<存储帐户密钥 >*** 群集使用的存储帐户密钥。
 
 在命令提示符或 Windows PowerShell 窗口中，运行以下两个 AzCopy 命令。
 
@@ -288,7 +286,7 @@ NYC 出租车数据集具有按月划分的自然分区，用于加快处理和�
 * 根据小费金额生成二元和多元分类标签。
 * 通过计算直接行程距离生成特性。
 
-### <a name="exploration-view-the-top-10-records-in-table-trip"></a>探索：查看“行程”表中的前 10 条记录
+### <a name="exploration-view-the-top-10-records-in-table-trip"></a>浏览：查看行程表中的前 10 条记录
 > [!NOTE]
 > 这通常是数据科学家的任务。
 > 
@@ -308,7 +306,7 @@ NYC 出租车数据集具有按月划分的自然分区，用于加快处理和�
 
     hive -e "select * from nyctaxidb.fare where month=1 limit 10;" > C:\temp\testoutput
 
-### <a name="exploration-view-the-number-of-records-in-each-of-the-12-partitions"></a>探索：查看 12 个分区中每个分区的记录数
+### <a name="exploration-view-the-number-of-records-in-each-of-the-12-partitions"></a>浏览：查看 12 个分区中每个分区的记录数
 > [!NOTE]
 > 这通常是数据科学家的任务。
 > 
@@ -418,7 +416,7 @@ NYC 出租车数据集中的牌照标识一辆唯一的出租车。 通过询问
 > 
 > 
 
-探索数据集时，我们经常想要检查值组共同出现的次数。 本部分提供如何针对出租车和司机执行此操作的示例。
+浏览数据集时，我们经常想要检查值组共同出现的次数。 本部分提供如何针对出租车和司机执行此操作的示例。
 
 **sample\_hive\_trip\_count\_by\_medallion\_license.hql** 文件将 **medallion** 和 **hack_license** 上的费用数据集分组，并返回每个组合的计数。 以下是其内容：
 
@@ -437,7 +435,7 @@ NYC 出租车数据集中的牌照标识一辆唯一的出租车。 通过询问
 
 查询结果将写入本地文件 **C:\temp\queryoutput.tsv**。
 
-### <a name="exploration-assessing-data-quality-by-checking-for-invalid-longitude-or-latitude-records"></a>探索：通过检查无效的经度或纬度记录，评估数据质量
+### <a name="exploration-assessing-data-quality-by-checking-for-invalid-longitude-or-latitude-records"></a>浏览：通过检查无效的经度或纬度记录，评估数据质量
 > [!NOTE]
 > 这通常是数据科学家的任务。
 > 
@@ -461,7 +459,7 @@ NYC 出租车数据集中的牌照标识一辆唯一的出租车。 通过询问
 
 此命令中包含的 *-S* 参数阻止状态屏幕打印输出 Hive Map/Reduce 作业。 这非常有用，因为它使 Hive 查询输出的屏幕打印更加易读。
 
-### <a name="exploration-binary-class-distributions-of-trip-tips"></a>探索：行程小费的二元类分布
+### <a name="exploration-binary-class-distributions-of-trip-tips"></a>浏览：行程小费的二元类分布
 > [!NOTE]
 > 这通常是数据科学家的任务。
 > 
@@ -487,7 +485,7 @@ NYC 出租车数据集中的牌照标识一辆唯一的出租车。 通过询问
     hive -f "C:\temp\sample_hive_tipped_frequencies.hql"
 
 
-### <a name="exploration-class-distributions-in-the-multiclass-setting"></a>探索：多类设置中的类分布
+### <a name="exploration-class-distributions-in-the-multiclass-setting"></a>浏览：多类设置中的类分布
 > [!NOTE]
 > 这通常是数据科学家的任务。
 > 
@@ -510,7 +508,7 @@ NYC 出租车数据集中的牌照标识一辆唯一的出租车。 通过询问
 
     hive -f "C:\temp\sample_hive_tip_range_frequencies.hql"
 
-### <a name="exploration-compute-the-direct-distance-between-two-longitude-latitude-locations"></a>探索：计算两个经纬位置之间的直接距离
+### <a name="exploration-compute-the-direct-distance-between-two-longitude-latitude-locations"></a>浏览：计算两个经纬位置之间的直接距离
 > [!NOTE]
 > 这通常是数据科学家的任务。
 > 
@@ -518,7 +516,7 @@ NYC 出租车数据集中的牌照标识一辆唯一的出租车。 通过询问
 
 你可能想要知道两个位置之间的直接距离是否有差异，以及出租车的实际行程距离。 如果乘客发现司机故意绕远路，该乘客提供小费的可能性更低。
 
-为了查看实际行程距离与两个经纬点（“大圆”距离）之间的[半正矢距离](http://en.wikipedia.org/wiki/Haversine_formula)的比较结果，我们使用 Hive 中可用的三角函数：
+为了查看实际行程距离与两个经纬点（“大圆”距离）之间的[半正矢距离](https://en.wikipedia.org/wiki/Haversine_formula)的比较结果，我们使用 Hive 中可用的三角函数：
 
     set R=3959;
     set pi=radians(180);
@@ -723,17 +721,17 @@ NYC 出租车数据集中的牌照标识一辆唯一的出租车。 通过询问
 
 下面是有关[导入数据][import-data]模块的一些详细信息和要输入的参数：
 
-**HCatalog 服务器 URI**：如果群集名称为“abc123”，则其 URI 即为：https://abc123.azurehdinsight.net。
+**HCatalog 服务器 URI**：如果群集名称为“abc123”，则其 URI 即为： https://abc123.azurehdinsight.net  。
 
-**Hadoop 用户帐户名称**：为群集选择的用户名（不是远程访问用户名）。
+**Hadoop 用户帐户名**：为群集选择的用户名（不是远程访问用户名）。
 
 **Hadoop 用户帐户密码**：为群集选择的密码（不是远程访问密码）。
 
-输出数据的位置：为此选项选择 Azure。
+**输出数据的位置**：选择“Azure”。
 
-Azure 存储帐户名称：与群集关联的默认存储帐户的名称。
+**Azure 存储帐户名称**：与群集关联的默认存储帐户的名称。
 
-Azure 容器名称：这是群集的默认容器名称，通常与群集名称相同。 对于名为 **abc123** 的群集，默认容器名称为 abc123。
+**Azure 容器名称**：群集的默认容器名称，通常与群集名称相同。 对于名为 **abc123** 的群集，默认容器名称为 abc123。
 
 > [!IMPORTANT]
 > 我们希望使用机器学习中的[导入数据][import-data]模块查询的任何表都必须是内部表。
@@ -767,7 +765,7 @@ Azure 容器名称：这是群集的默认容器名称，通常与群集名称�
 
   下图显示预测给定行程是否支付小费的试验。
 
-  ![试验示意图](./media/hive-walkthrough/QGxRz5A.png)
+  ![示意图：预测是否支付小费试验](./media/hive-walkthrough/QGxRz5A.png)
 
   b. 对于此实验，我们的目标标签分布大约是 1:1。
 
@@ -787,7 +785,7 @@ Azure 容器名称：这是群集的默认容器名称，通常与群集名称�
 
   下图显示预测小费可能归属的 bin 的试验。 bin 为：类 0：小费 = $0，类 1：小费 > $0 且 <= $5，类 2：小费 > $5 且 <= $10，类 3：小费 > $10 且 <= $20，类 4：小费 > $20。
 
-  ![试验示意图](./media/hive-walkthrough/5ztv0n0.png)
+  ![示意图：预测小费的 bin 试验](./media/hive-walkthrough/5ztv0n0.png)
 
   现在，我们将展示实际测试类的分布情况。 类 0 和类 1 的情况很普遍，而其他类的情况很少。
 
@@ -799,7 +797,7 @@ Azure 容器名称：这是群集的默认容器名称，通常与群集名称�
 
   注意，虽然此模型对于普遍类的预测准确性很高，但对于较少情况的类，其并未做好“学习”工作。
 
-- **回归任务**：预测为行程支付的小费数量。
+- **回归任务**：预测为行程支付的小费金额。
 
   **使用的学习器：** 提升决策树
 
@@ -807,7 +805,7 @@ Azure 容器名称：这是群集的默认容器名称，通常与群集名称�
 
   下图显示预测支付的小费金额的试验。
 
-  ![试验示意图](./media/hive-walkthrough/11TZWgV.png)
+  ![示意图：预测小费金额的试验](./media/hive-walkthrough/11TZWgV.png)
 
   b. 对于回归问题，我们将通过查看预测中的平方误差和决定系数，测量预测准确性：
 
@@ -824,9 +822,9 @@ Azure 容器名称：这是群集的默认容器名称，通常与群集名称�
 此示例演练及其附带脚本在 MIT 许可证下由 Microsoft 共享。 有关更多详细信息，请查看 GitHub 上示例代码目录中的 **LICENSE.txt** 文件。
 
 ## <a name="references"></a>参考
-•   [Andrés Monroy NYC 出租车行程下载页面](http://www.andresmh.com/nyctaxitrips/)  
-•    [由 Chris Whong 提供的 FOILing NYC 出租车行程数据](http://chriswhong.com/open-data/foil_nyc_taxi/)   
-•   [NYC 出租车和礼车委员会研究和统计信息](https://www1.nyc.gov/html/tlc/html/about/statistics.shtml)
+•    [Andrés Monroy NYC 出租车行程下载页](https://www.andresmh.com/nyctaxitrips/)  
+•    [由 Chris Whong 提供的 FOILing NYC 出租车行程数据](https://chriswhong.com/open-data/foil_nyc_taxi/)   
+•   [NYC 出租车和礼车委员会研究和统计信息](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
 
 [2]: ./media/hive-walkthrough/output-hive-results-3.png
 [11]: ./media/hive-walkthrough/hive-reader-properties.png

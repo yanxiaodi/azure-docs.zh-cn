@@ -3,8 +3,8 @@ title: 准备与 cloud-init 配合使用的 Azure VM 映像 | Microsoft Docs
 description: 如何准备一个与 cloud-init 配合用来完成部署的现有 Azure VM 映像
 services: virtual-machines-linux
 documentationcenter: ''
-author: rickstercdn
-manager: jeconnoc
+author: danis
+manager: gwallace
 editor: ''
 tags: azure-resource-manager
 ms.service: virtual-machines-linux
@@ -12,13 +12,14 @@ ms.workload: infrastructure-services
 ms.tgt_pltfrm: vm-linux
 ms.devlang: azurecli
 ms.topic: article
-ms.date: 11/29/2017
-ms.author: rclaus
-ms.openlocfilehash: faa28a6b28c721e4088ccfbb00514be7f605f3e2
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.date: 06/24/2019
+ms.author: danis
+ms.openlocfilehash: 1f9f6042b52c722280a8227754960ffb270e94b8
+ms.sourcegitcommit: 2e4b99023ecaf2ea3d6d3604da068d04682a8c2d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 07/09/2019
+ms.locfileid: "67668249"
 ---
 # <a name="prepare-an-existing-linux-azure-vm-image-for-use-with-cloud-init"></a>准备与 cloud-init 配合使用的现有 Linux Azure VM 映像
 本文介绍如何选择一个现有的 Azure 虚拟机，使其准备好重新部署并可使用 cloud-init。 生成的映像可用于部署新的虚拟机或虚拟机规模集 - 然后，可以在部署时通过 cloud-init 进一步对其进行自定义。  Azure 预配资源后，这些 cloud-init 脚本即会在第一次启动时运行。 有关 cloud-init 如何在 Azure 以及受支持的 Linux 发行版中本机工作的详细信息，请参阅 [cloud-init 概述](using-cloud-init.md)
@@ -26,13 +27,13 @@ ms.lasthandoff: 05/10/2018
 ## <a name="prerequisites"></a>先决条件
 本文档假设已有一个运行受支持 Linux 操作系统版本的 Azure 虚拟机。 已根据需要配置该计算机，已安装所需的所有模块，已处理所需的所有更新并已对其进行测试，确保其满足要求。 
 
-## <a name="preparing-rhel-74--centos-74"></a>准备 RHEL 7.4/CentOS 7.4
+## <a name="preparing-rhel-76--centos-76"></a>准备 7.6 RHEL / CentOS 7.6
 需要通过 SSH 连接到 Linux VM，并运行以下命令安装 cloud-init。
 
 ```bash
-sudo yum install -y cloud-init gdisk
-sudo yum check-update cloud-init -y
-sudo yum install cloud-init -y
+sudo yum makecache fast
+sudo yum install -y gdisk cloud-utils-growpart
+sudo yum install - y cloud-init 
 ```
 
 更新 `/etc/cloud/cloud.cfg` 中的 `cloud_init_modules` 节以包含以下模块：
@@ -64,39 +65,19 @@ sed -i 's/Provisioning.Enabled=y/Provisioning.Enabled=n/g' /etc/waagent.conf
 sed -i 's/Provisioning.UseCloudInit=n/Provisioning.UseCloudInit=y/g' /etc/waagent.conf
 sed -i 's/ResourceDisk.Format=y/ResourceDisk.Format=n/g' /etc/waagent.conf
 sed -i 's/ResourceDisk.EnableSwap=y/ResourceDisk.EnableSwap=n/g' /etc/waagent.conf
+cloud-init clean
 ```
-使用所选的编辑器创建包含以下行的新文件 `/etc/cloud/cloud.cfg.d/91-azure_datasource.cfg`，以便只允许将 Azure 用作 Azure Linux 代理的数据源：
+
+允许仅 Azure 作为数据源的 Azure Linux 代理通过创建新文件`/etc/cloud/cloud.cfg.d/91-azure_datasource.cfg`所选的编辑器中使用以下行：
 
 ```bash
-# This configuration file is provided by the WALinuxAgent package.
+# Azure Data Source config
 datasource_list: [ Azure ]
-```
-
-添加配置来解决未修复的主机名注册 bug。
-```bash
-cat > /etc/cloud/hostnamectl-wrapper.sh <<\EOF
-#!/bin/bash -e
-if [[ -n $1 ]]; then
-  hostnamectl set-hostname $1
-else
-  hostname
-fi
-EOF
-
-chmod 0755 /etc/cloud/hostnamectl-wrapper.sh
-
-cat > /etc/cloud/cloud.cfg.d/90-hostnamectl-workaround-azure.cfg <<EOF
-# local fix to ensure hostname is registered
-datasource:
-  Azure:
-    hostname_bounce:
-      hostname_command: /etc/cloud/hostnamectl-wrapper.sh
-EOF
 ```
 
 如果现有 Azure 映像中配置了交换文件，而你想要使用 cloud-init 更改新映像的交换文件配置，则需要删除现有的交换文件。
 
-对于基于 RedHat 的映像，请遵照有关如何[删除交换文件](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/5/html/Deployment_Guide/s2-swap-removing-file.html)的 RedHat 文档中的说明。
+对于基于 RedHat 的映像，请遵照有关如何[删除交换文件](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/storage_administration_guide/swap-removing-file)的 RedHat 文档中的说明。
 
 对于已启用交换文件的 CentOS 映像，可运行以下命令来关闭交换文件：
 ```bash
@@ -124,8 +105,7 @@ rm /mnt/resource/swapfile
 仅当想要自定义为新专用源映像的 VM 事先已由 cloud-init 预配时，才需要使用以下三个命令。  如果映像是使用 Azure Linux 代理配置的，则不需要运行这些命令。
 
 ```bash
-sudo rm -rf /var/lib/cloud/instances/* 
-sudo rm -rf /var/log/cloud-init*
+sudo cloud-init clean --logs
 sudo waagent -deprovision+user -force
 ```
 

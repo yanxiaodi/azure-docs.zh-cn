@@ -1,11 +1,11 @@
 ---
-title: "使用服务管理 API (Python) - 功能指南"
-description: "了解如何以编程方式从 Python 执行常见服务管理任务。"
+title: 使用服务管理 API (Python) - 功能指南
+description: 了解如何以编程方式从 Python 执行常见服务管理任务。
 services: cloud-services
 documentationcenter: python
 author: lmazuel
 manager: wpickett
-editor: 
+editor: ''
 ms.assetid: 61538ec0-1536-4a7e-ae89-95967fe35d73
 ms.service: cloud-services
 ms.workload: tbd
@@ -14,28 +14,29 @@ ms.devlang: python
 ms.topic: article
 ms.date: 05/30/2017
 ms.author: lmazuel
-ms.openlocfilehash: b89f1aad46621d35728934ea068a5893ba674094
-ms.sourcegitcommit: 059dae3d8a0e716adc95ad2296843a45745a415d
-ms.translationtype: HT
+ms.openlocfilehash: 50501413a63921a9a34be1c04ed259990922b686
+ms.sourcegitcommit: d200cd7f4de113291fbd57e573ada042a393e545
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/09/2018
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70141463"
 ---
 # <a name="use-service-management-from-python"></a>从 Python 使用服务管理
-本指南说明如何以编程方式从 Python 执行常见服务管理任务。 [Azure SDK for Python](https://github.com/Azure/azure-sdk-for-python) 中的 ServiceManagementService 类支持以编程方式访问 [Azure 门户][management-portal]中提供的众多与服务管理相关的功能。 此功能可用于创建、更新和删除云服务、部署、数据管理服务和虚拟机。 此功能可用于构建需要以编程方式访问服务管理的应用程序。
+本指南说明如何以编程方式从 Python 执行常见服务管理任务。 [AZURE SDK For Python](https://github.com/Azure/azure-sdk-for-python)中的**ServiceManagementService**类支持以编程方式访问[Azure 门户][management-portal]中提供的很多与服务管理相关的功能。 此功能可用于创建、更新和删除云服务、部署、数据管理服务和虚拟机。 此功能可用于构建需要以编程方式访问服务管理的应用程序。
 
 ## <a name="WhatIs"> </a>什么是服务管理？
-利用 Azure 服务管理 API，可以编程方式访问通过 [Azure 门户][management-portal]提供的众多服务管理功能。 Azure SDK for Python 可用于管理云服务和存储帐户。
+使用 Azure 服务管理 API, 可以编程方式访问通过[Azure 门户][management-portal]提供的许多服务管理功能。 Azure SDK for Python 可用于管理云服务和存储帐户。
 
 若要使用服务管理 API，需要[创建 Azure 帐户](https://azure.microsoft.com/pricing/free-trial/)。
 
 ## <a name="Concepts"></a>概念
-Azure SDK for Python 可包装[服务管理 API][svc-mgmt-rest-api]，即 REST API。 所有 API 操作都是通过 SSL 执行的，并且通过使用 X.509 v3 证书互相进行身份验证。 可以从在 Azure 中运行的服务内访问管理服务。 还可以直接通过 Internet 从可发送 HTTPS 请求和接收 HTTPS 响应的任意应用程序访问管理服务。
+用于 Python 的 Azure SDK 包装[服务管理 API][svc-mgmt-rest-api], 这是一个 REST API。 所有 API 操作都是通过 SSL 执行的，并且通过使用 X.509 v3 证书互相进行身份验证。 可以从在 Azure 中运行的服务内访问管理服务。 还可以直接通过 Internet 从可发送 HTTPS 请求和接收 HTTPS 响应的任意应用程序访问管理服务。
 
 ## <a name="Installation"></a>安装
-`azure-servicemanagement-legacy` 包中提供了本文介绍的所有功能，可以通过使用 pip 安装该包。 有关安装的详细信息（例如，如果刚开始接触 Python），请参阅[安装 Python 和 Azure SDK](../python-how-to-install.md)。
+`azure-servicemanagement-legacy` 包中提供了本文介绍的所有功能，可以通过使用 pip 安装该包。 有关安装的详细信息（例如，如果刚开始接触 Python），请参阅[安装 Python 和 Azure SDK](/azure/python/python-sdk-azure-install)。
 
 ## <a name="Connect"> </a>连接到服务管理
-要连接到服务管理终结点，需要 Azure 订阅 ID 和有效管理证书。 可以通过 [Azure 门户][management-portal]获取订阅 ID。
+要连接到服务管理终结点，需要 Azure 订阅 ID 和有效管理证书。 可以通过[Azure 门户][management-portal]获取订阅 ID。
 
 > [!NOTE]
 > 现在可以在 Windows 上运行时使用通过 OpenSSL 创建的证书。 需要 Python 2.7.4 或更高版本。 我们建议使用 OpenSSL 而不是 .pfx，因为将来可能会取消对 .pfx 证书的支持。
@@ -43,7 +44,7 @@ Azure SDK for Python 可包装[服务管理 API][svc-mgmt-rest-api]，即 REST A
 >
 
 ### <a name="management-certificates-on-windowsmaclinux-openssl"></a>Windows/Mac/Linux 上的管理证书 (OpenSSL)
-可以使用 [OpenSSL](http://www.openssl.org/) 创建管理证书。 需要创建两个证书，一个用于服务器（`.cer` 文件），一个用于客户端（`.pem` 文件）。 若要创建 `.pem` 文件，请执行以下代码：
+可以使用 [OpenSSL](https://www.openssl.org/) 创建管理证书。 需要创建两个证书，一个用于服务器（`.cer` 文件），一个用于客户端（`.pem` 文件）。 若要创建 `.pem` 文件，请执行以下代码：
 
     openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout mycert.pem -out mycert.pem
 
@@ -51,9 +52,9 @@ Azure SDK for Python 可包装[服务管理 API][svc-mgmt-rest-api]，即 REST A
 
     openssl x509 -inform pem -in mycert.pem -outform der -out mycert.cer
 
-有关 Azure 证书的详细信息，请参阅 [Azure 云服务证书概述](cloud-services-certs-create.md)。 有关 OpenSSL 参数的完整说明，请参阅 [http://www.openssl.org/docs/apps/openssl.html](http://www.openssl.org/docs/apps/openssl.html) 上的文档。
+有关 Azure 证书的详细信息，请参阅 [Azure 云服务证书概述](cloud-services-certs-create.md)。 有关 OpenSSL 参数的完整说明，请参阅 [https://www.openssl.org/docs/apps/openssl.html](https://www.openssl.org/docs/apps/openssl.html) 上的文档。
 
-创建这些文件后，将 `.cer` 文件上传到 Azure。 在 [Azure 门户][management-portal]的“设置”选项卡上，选择“上传”。 请注意 `.pem` 文件的保存位置。
+创建这些文件后，将 `.cer` 文件上传到 Azure。 在[Azure 门户][management-portal]的 "**设置**" 选项卡上, 选择 "**上传**"。 请注意 `.pem` 文件的保存位置。
 
 获取订阅 ID 后，创建一个证书，将 `.cer` 文件上传到 Azure，然后连接到 Azure 管理终结点。 通过将订阅 ID 和 `.pem` 文件的路径传递给 **ServiceManagementService** 进行连接。
 
@@ -74,7 +75,7 @@ Azure SDK for Python 可包装[服务管理 API][svc-mgmt-rest-api]，即 REST A
 
 该命令创建 `.cer` 文件，然后将该文件安装到“个人”证书存储中。 有关详细信息，请参阅 [Azure 云服务证书概述](cloud-services-certs-create.md)。
 
-创建证书后，将 `.cer` 文件上传到 Azure。 在 [Azure 门户][management-portal]的“设置”选项卡上，选择“上传”。
+创建证书后，将 `.cer` 文件上传到 Azure。 在[Azure 门户][management-portal]的 "**设置**" 选项卡上, 选择 "**上传**"。
 
 获取订阅 ID 后，创建一个证书，将 `.cer` 文件上传到 Azure，然后连接到 Azure 管理终结点。 通过将订阅 ID 和“个人”证书存储中证书的位置传递给 ServiceManagementService 进行连接（同样，将 AzureCertificate 替换为证书名称）。
 
@@ -102,7 +103,7 @@ Azure SDK for Python 可包装[服务管理 API][svc-mgmt-rest-api]，即 REST A
 
 在创建云服务或存储服务时，需要提供有效位置。 **list\_locations** 方法将始终返回当前可用位置的最新列表。 截止到本文撰写时为止，可用位置为：
 
-* 欧洲西部
+* 西欧
 * 北欧
 * 东南亚
 * 东亚
@@ -110,7 +111,7 @@ Azure SDK for Python 可包装[服务管理 API][svc-mgmt-rest-api]，即 REST A
 * 美国中北部
 * 美国中南部
 * 美国西部
-* 美国东部
+* East US
 * 日本东部
 * 日本西部
 * 巴西南部
@@ -118,7 +119,7 @@ Azure SDK for Python 可包装[服务管理 API][svc-mgmt-rest-api]，即 REST A
 * 澳大利亚东南部
 
 ## <a name="CreateCloudService"> </a>创建云服务
-在 Azure 中创建应用程序并运行它时，相关代码和配置统称为 Azure [云服务][cloud service]。 （在早期版本的 Azure中，它称为“托管服务”。）可以使用 **create\_hosted\_service** 方法创建新的托管服务。 通过提供托管服务名称（它在 Azure 中必须是唯一的）、标签（自动编码为 base64）、说明和位置来创建服务。
+当你创建应用程序并在 Azure 中运行该应用程序时, 这些代码和配置统称为 Azure[云服务][cloud service]。 （在早期版本的 Azure中，它称为“托管服务”。）可以使用 **create\_hosted\_service** 方法创建新的托管服务。 通过提供托管服务名称（它在 Azure 中必须是唯一的）、标签（自动编码为 base64）、说明和位置来创建服务。
 
     from azure import *
     from azure.servicemanagement import *
@@ -399,9 +400,9 @@ Azure SDK for Python 可包装[服务管理 API][svc-mgmt-rest-api]，即 REST A
 要详细了解如何在经典部署模型中捕获 Windows 虚拟机，请参阅[捕获 Windows 虚拟机](../virtual-machines/windows/classic/capture-image-classic.md)。
 
 ## <a name="What's Next"></a>后续步骤
-现在，已学习了有关服务管理的基础知识，接下来可以访问 [Azure Python SDK 的完整 API 参考文档](http://azure-sdk-for-python.readthedocs.org/)，并轻松执行复杂的任务来管理 Python 应用程序。
+现在，已学习了有关服务管理的基础知识，接下来可以访问 [Azure Python SDK 的完整 API 参考文档](https://azure-sdk-for-python.readthedocs.org/)，并轻松执行复杂的任务来管理 Python 应用程序。
 
-有关详细信息，请参阅 [Python 开发人员中心](/develop/python/)。
+有关详细信息，请参阅 [Python 开发人员中心](https://azure.microsoft.com/develop/python/)。
 
 [What is service management?]: #WhatIs
 [Concepts]: #Concepts
@@ -422,7 +423,7 @@ Azure SDK for Python 可包装[服务管理 API][svc-mgmt-rest-api]，即 REST A
 [Delete a virtual machine]: #DeleteVM
 [Next steps]: #NextSteps
 [management-portal]: https://portal.azure.com/
-[svc-mgmt-rest-api]: http://msdn.microsoft.com/library/windowsazure/ee460799.aspx
+[svc-mgmt-rest-api]: https://msdn.microsoft.com/library/windowsazure/ee460799.aspx
 
 
-[cloud service]:/services/cloud-services/
+[cloud service]:/azure/cloud-services/

@@ -2,7 +2,7 @@
 title: 使用媒体服务 .NET SDK 管理资产和相关的实体
 description: 了解如何使用适用于 .NET 的媒体服务 SDK 管理资产和相关的实体。
 author: juliako
-manager: cfowler
+manager: femila
 editor: ''
 services: media-services
 documentationcenter: ''
@@ -12,13 +12,14 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 07/17/2017
+ms.date: 04/01/2019
 ms.author: juliako
-ms.openlocfilehash: af5baf3444196e5a0e8412d9ab4f019fdccb033e
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: a686465b0006c2e9aac6e06cb4ab12d30921e8c5
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61235419"
 ---
 # <a name="managing-assets-and-related-entities-with-media-services-net-sdk"></a>使用媒体服务 .NET SDK 管理资产和相关的实体
 > [!div class="op_single_selector"]
@@ -27,12 +28,14 @@ ms.lasthandoff: 05/07/2018
 > 
 > 
 
-本主题演示如何使用 .NET 管理 Azure 媒体服务实体。 
+> [!NOTE]
+> 不会向媒体服务 v2 添加任何新特性或新功能。 <br/>查看最新版本：[媒体服务 v3](https://docs.microsoft.com/azure/media-services/latest/)。 此外，请参阅[从 v2 到 v3 迁移指南](../latest/migrate-from-v2-to-v3.md)
 
->[!NOTE]
-> 自 2017 年 4 月 1 日起，即使记录总数低于最大配额，也会自动删除帐户中所有超过 90 天的作业记录，及其相关的任务记录。 例如，将于 2017 年 4 月 1 日自动删除帐户中 2016 年 12 月 31 日前的所有作业记录。 在需要时，可使用本主题中所述的代码存档作业/任务信息。
+本主题演示如何使用 .NET 管理 Azure 媒体服务实体。
 
-## <a name="prerequisites"></a>先决条件
+自 2017 年 4 月 1 日起，即使记录总数低于最大配额，也会自动删除帐户中所有超过 90 天的作业记录，及其相关的任务记录。 例如，将于 2017 年 4 月 1 日自动删除帐户中 2016 年 12 月 31 日前的所有作业记录。 在需要时，可使用本主题中所述的代码存档作业/任务信息。
+
+## <a name="prerequisites"></a>必备组件
 
 设置开发环境，并根据[使用 .NET 进行媒体服务开发](media-services-dotnet-how-to-use.md)中所述，在 app.config 文件中填充连接信息。 
 
@@ -292,7 +295,7 @@ ms.lasthandoff: 05/07/2018
 ## <a name="enumerating-through-large-collections-of-entities"></a>枚举大型实体集合
 查询实体时，一次返回的实体数限制为 1000 个，因为公共 REST v2 将查询结果数限制为 1000 个。 枚举大型实体集合时，需要使用 Skip 和 Take。 
 
-以下函数将循环访问所提供的媒体服务帐户中的所有作业。 媒体服务会在作业集合中返回 1000 个作业。 该函数使用 Skip 和 Take 来确保枚举所有作业（如果帐户中的作业超过 1000 个）。
+以下函数将循环访问所提供的媒体服务帐户中的所有作业。 媒体服务会在作业集合中返回 1000 个作业。 该函数使用 Skip 和 Take 来确保枚举所有作业（如果你帐户中的作业超过 1000 个）。
 
 ```csharp
     static void ProcessJobs()

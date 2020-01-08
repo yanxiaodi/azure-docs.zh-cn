@@ -4,21 +4,23 @@ description: 本教程指导使用 .NET SDK 完成创建频道的步骤，该频
 services: media-services
 documentationcenter: ''
 author: anilmur
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: 4df5e690-ff63-47cc-879b-9c57cb8ec240
 ms.service: media-services
 ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
-ms.topic: get-started-article
-ms.date: 12/09/2017
-ms.author: juliako;anilmur
-ms.openlocfilehash: 946de42c499182f8785866f362677779b105760d
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 03/18/2019
+ms.author: anilmur
+ms.reviewer: juliako
+ms.openlocfilehash: 37969986b1d015ed08113da42a309eef42df569c
+ms.sourcegitcommit: a8b638322d494739f7463db4f0ea465496c689c6
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 07/17/2019
+ms.locfileid: "69015509"
 ---
 # <a name="how-to-perform-live-streaming-using-azure-media-services-to-create-multi-bitrate-streams-with-net"></a>如何使用 Azure 媒体服务执行实时流式处理以通过 .NET 创建多比特率流
 > [!div class="op_single_selector"]
@@ -27,7 +29,7 @@ ms.lasthandoff: 05/10/2018
 > * [REST API](https://docs.microsoft.com/rest/api/media/operations/channel)
 > 
 > [!NOTE]
-> 要完成本教程，需要一个 Azure 帐户。 有关详细信息，请参阅 [Azure 免费试用](https://azure.microsoft.com/pricing/free-trial/?WT.mc_id=A261C142F)。
+> 要完成本教程，需要一个 Azure 帐户。 有关详细信息，请参阅[Azure 免费试用版](https://azure.microsoft.com/pricing/free-trial/?WT.mc_id=A261C142F)。
 > 
 > 
 
@@ -40,22 +42,20 @@ ms.lasthandoff: 05/10/2018
 以下步骤介绍创建常见的实时流式处理应用程序时涉及的任务。
 
 > [!NOTE]
-> 目前，实时事件的最大建议持续时间为 8 小时。 如果需要较长时间运行某个频道，请联系 amslived@microsoft.com。
-> 
-> 
+> 目前，直播活动的最大建议持续时间为 8 小时。 如果需要较长时间运行某个频道，请联系 amshelp@microsoft.com。
 
-1. 将视频摄像机连接到计算机。 启动并配置可以通过以下协议之一输出单比特率流的本地实时编码器：RTMP 或平滑流式处理。 有关详细信息，请参阅 [Azure 媒体服务 RTMP 支持和实时编码器](http://go.microsoft.com/fwlink/?LinkId=532824)。
+1. 将视频摄像机连接到计算机。 启动并配置一个可通过以下协议之一输出单比特率流的本地实时编码器：RTMP 或平滑流式处理。 有关详细信息，请参阅 [Azure 媒体服务 RTMP 支持和实时编码器](https://go.microsoft.com/fwlink/?LinkId=532824)。
 
     此步骤也可以在创建频道后执行。
 
 2. 创建并启动频道。
-3. 检索频道引入 URL。
+3. 检索通道引入 URL。
 
     实时编码器使用引入 URL 将流发送到频道。
 
 4. 检索频道预览 URL。
 
-    使用此 URL 来验证频道是否正常接收实时流。
+    使用此 URL 来验证通道是否正常接收实时流。
 
 5. 创建资源。
 6. 如果想让资源在播放期间进行动态加密，请执行以下操作：
@@ -90,14 +90,14 @@ ms.lasthandoff: 05/10/2018
 ## <a name="prerequisites"></a>先决条件
 以下是完成本教程所需具备的条件。
 
-* 一个 Azure 帐户。 如果没有帐户，只需花费几分钟就能创建一个免费试用帐户。 有关详细信息，请参阅 [Azure 免费试用](https://azure.microsoft.com/pricing/free-trial/?WT.mc_id=A261C142F)。 获取可用来尝试付费版 Azure 服务的信用额度。 即使在信用额度用完之后，也可以保留该帐户，使用免费的 Azure 服务和功能，例如 Azure 应用服务中的 Web 应用功能。
+* 一个 Azure 帐户。 如果没有帐户，只需花费几分钟就能创建一个免费试用帐户。 有关详细信息，请参阅[Azure 免费试用版](https://azure.microsoft.com/pricing/free-trial/?WT.mc_id=A261C142F)。 获取可用来尝试付费版 Azure 服务的信用额度。 即使在信用额度用完后，也可保留帐户并使用免费的 Azure 服务和功能，例如 Azure 应用服务中的 Web 应用功能。
 * 一个媒体服务帐户。 若要创建媒体服务帐户，请参阅[创建帐户](media-services-portal-create-account.md)。
 * Visual Studio 2010 SP1（Professional、Premium、Ultimate 或 Express）或更高版本。
 * 必须使用适用于 .NET 的媒体服务 SDK 版本 3.2.0.0 或更高版本。
 * 可以发送单比特率实时流的摄像头和编码器。
 
 ## <a name="considerations"></a>注意事项
-* 目前，实时事件的最大建议持续时间为 8 小时。 如果需要较长时间运行某个频道，请联系 amslived@Microsoft.com。
+* 目前，直播活动的最大建议持续时间为 8 小时。 如果需要较长时间运行某个频道，请联系 amshelp@microsoft.com。
 * 不同 AMS 策略的策略限制为 1,000,000 个（例如，对于定位器策略或 ContentKeyAuthorizationPolicy）。 如果始终使用相同的日期/访问权限，则应使用相同的策略 ID，例如，用于要长期就地保留的定位符的策略（非上传策略）。 有关详细信息，请参阅[此](media-services-dotnet-manage-entities.md#limit-access-policies)文章。
 
 ## <a name="download-sample"></a>下载示例
@@ -125,8 +125,8 @@ namespace EncodeLiveStreamWithAmsClear
     class Program
     {
         private const string ChannelName = "channel001";
-        private const string AssetlName = "asset001";
-        private const string ProgramlName = "program001";
+        private const string AssetName = "asset001";
+        private const string ProgramName = "program001";
 
         // Read values from the App.config file.
         private static readonly string _AADTenantDomain =
@@ -195,7 +195,7 @@ namespace EncodeLiveStreamWithAmsClear
         public static IChannel CreateAndStartChannel()
         {
             var channelInput = CreateChannelInput();
-            var channePreview = CreateChannelPreview();
+            var channelPreview = CreateChannelPreview();
             var channelEncoding = CreateChannelEncoding();
 
             ChannelCreationOptions options = new ChannelCreationOptions
@@ -203,7 +203,7 @@ namespace EncodeLiveStreamWithAmsClear
                 EncodingType = ChannelEncodingType.Standard,
                 Name = ChannelName,
                 Input = channelInput,
-                Preview = channePreview,
+                Preview = channelPreview,
                 Encoding = channelEncoding
             };
 
@@ -211,7 +211,7 @@ namespace EncodeLiveStreamWithAmsClear
             IOperation channelCreateOperation = _context.Channels.SendCreateOperation(options);
             string channelId = TrackOperation(channelCreateOperation, "Channel create");
 
-            IChannel channel = _context.Channels.Where(c => c.Id == channelId).FirstOrDefault();
+            IChannel channel = _context.Channels.FirstOrDefault(c => c.Id == channelId);
 
             Log("Starting channel");
             var channelStartOperation = channel.SendStartOperation();
@@ -226,6 +226,10 @@ namespace EncodeLiveStreamWithAmsClear
         /// <returns></returns>
         private static ChannelInput CreateChannelInput()
         {
+            // When creating a Channel, you can specify allowed IP addresses in one of the following formats: 
+            // IpV4 address with 4 numbers
+            // CIDR address range
+
             return new ChannelInput
             {
                 StreamingProtocol = StreamingProtocol.FragmentedMP4,
@@ -250,6 +254,10 @@ namespace EncodeLiveStreamWithAmsClear
         /// <returns></returns>
         private static ChannelPreview CreateChannelPreview()
         {
+            // When creating a Channel, you can specify allowed IP addresses in one of the following formats: 
+            // IpV4 address with 4 numbers
+            // CIDR address range
+
             return new ChannelPreview
             {
                 AccessControl = new ChannelAccessControl
@@ -287,7 +295,7 @@ namespace EncodeLiveStreamWithAmsClear
         /// <returns></returns>
         public static IAsset CreateAndConfigureAsset()
         {
-            IAsset asset = _context.Assets.Create(AssetlName, AssetCreationOptions.None);
+            IAsset asset = _context.Assets.Create(AssetName, AssetCreationOptions.None);
 
             IAssetDeliveryPolicy policy =
             _context.AssetDeliveryPolicies.Create("Clear Policy",
@@ -308,7 +316,7 @@ namespace EncodeLiveStreamWithAmsClear
         /// <returns></returns>
         public static IProgram CreateAndStartProgram(IChannel channel, IAsset asset)
         {
-            IProgram program = channel.Programs.Create(ProgramlName, TimeSpan.FromHours(3), asset.Id);
+            IProgram program = channel.Programs.Create(ProgramName, TimeSpan.FromHours(3), asset.Id);
             Log("Program created", program.Id);
 
             Log("Starting program");
@@ -362,8 +370,8 @@ namespace EncodeLiveStreamWithAmsClear
             assetFile.Update();
 
             Log("Showing slate");
-            var showSlateOpeartion = channel.SendShowSlateOperation(TimeSpan.FromMinutes(1), slateAsset.Id);
-            TrackOperation(showSlateOpeartion, "Show slate");
+            var showSlateOperation = channel.SendShowSlateOperation(TimeSpan.FromMinutes(1), slateAsset.Id);
+            TrackOperation(showSlateOperation, "Show slate");
 
             Log("Hiding slate");
             var hideSlateOperation = channel.SendHideSlateOperation();
@@ -392,8 +400,7 @@ namespace EncodeLiveStreamWithAmsClear
             {
                 foreach (var program in channel.Programs)
                 {
-                    asset = _context.Assets.Where(se => se.Id == program.AssetId)
-                                .FirstOrDefault();
+                    asset = _context.Assets.FirstOrDefault(se => se.Id == program.AssetId);
 
                     Log("Stopping program");
                     var programStopOperation = program.SendStopOperation();
@@ -453,7 +460,7 @@ namespace EncodeLiveStreamWithAmsClear
         /// <param name="operationId">The operation Id.</param> 
         /// <param name="channel">
         /// If the operation succeeded, 
-        /// the entity Id associated with the sucessful operation is returned in the out parameter.</param>
+        /// the entity Id associated with the successful operation is returned in the out parameter.</param>
         /// <returns>Returns false if the operation is still in progress; otherwise, true.</returns> 
         private static bool IsCompleted(IOperation operation, out string entityId)
         {

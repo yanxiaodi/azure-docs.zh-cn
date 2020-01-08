@@ -3,16 +3,17 @@ title: 创建 .odc 文件以连接到 Azure Analysis Services 服务器 | Micros
 description: 了解如何创建 Office 数据连接文件以连接到 Azure 中的 Analysis Services 服务器并从中获取数据。
 author: minewiskan
 manager: kfile
-ms.service: analysis-services
+ms.service: azure-analysis-services
 ms.topic: conceptual
-ms.date: 04/12/2018
+ms.date: 01/09/2018
 ms.author: owend
 ms.reviewer: minewiskan
-ms.openlocfilehash: 4cf7257f5eb51f82bb129aa57231339a28991193
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: 37f068be544f964f3aec63d85702098c8f382ab8
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60785704"
 ---
 # <a name="create-an-office-data-connection-file"></a>创建 Office 数据连接文件
 
@@ -31,14 +32,14 @@ ms.lasthandoff: 04/16/2018
 
 4. 将带有 `.odc` 扩展名的文件保存到 C:\Users\\*username*\Documents\My Data Sources 文件夹。
 
-5. 右键单击文件，并单击“在 Excel 中打开”。 或者在 Excel 的“数据”功能区上，单击“现有连接”、选择你的文件，并单击“打开”。
+5. 右键单击文件，并单击“在 Excel 中打开”  。 或者在 Excel 的“数据”  功能区上，单击“现有连接”  、选择你的文件，并单击“打开”  。
 
 
 
 **示例连接文件**
 ```
 <html xmlns:o="urn:schemas-microsoft-com:office:office"
-xmlns="http://www.w3.org/TR/REC-html40">
+xmlns="https://www.w3.org/TR/REC-html40">
 
 <head>
 <meta http-equiv=Content-Type content="text/x-ms-odc; charset=utf-8">
@@ -49,12 +50,12 @@ xmlns="http://www.w3.org/TR/REC-html40">
 <title>AzureAnalysisServicesConnection</title>
 <xml id=docprops><o:DocumentProperties
   xmlns:o="urn:schemas-microsoft-com:office:office"
-  xmlns="http://www.w3.org/TR/REC-html40">
+  xmlns="https://www.w3.org/TR/REC-html40">
   <o:Name>SampleAzureAnalysisServices</o:Name>
  </o:DocumentProperties>
 </xml><xml id=msodc><odc:OfficeDataConnection
   xmlns:odc="urn:schemas-microsoft-com:office:odc"
-  xmlns="http://www.w3.org/TR/REC-html40">
+  xmlns="https://www.w3.org/TR/REC-html40">
   <odc:Connection odc:Type="OLEDB">
    <odc:ConnectionString>Provider=MSOLAP.7;Data Source=asazure://<region>.asazure.windows.net/<servername>;Initial Catalog=<database>;</odc:ConnectionString>
    <odc:CommandType>Cube</odc:CommandType>

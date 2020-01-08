@@ -1,28 +1,26 @@
 ---
-title: 在 Azure 上执行 Team Data Science Process 的演练 | Microsoft Docs
+title: 在 Azure 上执行 Team Data Science Process 的演练
 description: 如何将云和本地工具以及服务结合到一个工作流或管道中，以创建智能应用程序。
 services: machine-learning
-documentationcenter: ''
-author: deguhath
-manager: jhubbard
+author: marktab
+manager: cgronlun
 editor: cgronlun
-ms.assetid: aa63d5a5-25ee-4c4b-9a4c-7553b98d7f6e
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 08/17/2017
-ms.author: deguhath
-ms.openlocfilehash: 6d8b8a3f5fd2d3cb0d4fcc9e17e4ec35450c1570
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: 98595ea0ef5b6d9d4cef0f239390b364fb1e4e75
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60589056"
 ---
 # <a name="walkthroughs-executing-the-team-data-science-process"></a>执行 Team Data Science Process 的演练
 
-这些**端到端演练**演示了特定方案的 Team Data Science Process 步骤。 具体展示了如何将云、本地工具以及服务结合到一个工作流或管道中，以创建智能应用程序。 这些演练按所使用的**平台**进行分组。
+这些**端到端演练**演示了特定方案的 Team Data Science Process 步骤。 具体展示了如何将云、本地工具以及服务结合到一个工作流或管道中，以创建智能应用程序  。 这些演练按所使用的**平台**进行分组。
 
 
 ## <a name="walkthrough-descriptions"></a>演练说明
@@ -30,7 +28,6 @@ ms.lasthandoff: 05/03/2018
 下面简要说明了这些演练示例在其各自的平台上提供的内容：
 
 
-- [Azure Machine Learning Workbench](walkthroughs-aml-with-tdsp.md) 这些演练教程和示例演示如何使用 Azure Machine Learning Workbench 创建团队数据科学结构化项目，执行自然语言处理和分类。
 - [使用 PySpark 和 Scala 的 HDInsight Spark 演练](walkthroughs-spark.md) 这些演练在 Azure Spark 群集上使用 PySpark 和 Scala 进行预测分析。
 - [使用 Hive 的 HDInsight Hadoop 演练](walkthroughs-hdinsight-hadoop.md) 这些演练在 HDInsight Hadoop 群集中使用 Hive 进行预测分析。
 - [使用 U-SQL 的 Azure Data Lake 演练](walkthroughs-azure-data-lake.md) 这些演练在 Azure Data Lake 中使用 U-SQL 进行预测分析。
@@ -45,5 +42,5 @@ ms.lasthandoff: 05/03/2018
 
 有关可用于构建数据科学项目的 Team Data Science Process 生命周期的讨论，请参阅 [Team Data Science Process 生命周期](lifecycle.md)。 生命周期概述了执行项目时，其从开始到结束所遵循的步骤。 
 
-获取主题概述，了解包含 Azure 中数据科学过程的任务，请参阅[数据科学过程](http://aka.ms/datascienceprocess)。 
+获取主题概述，了解包含 Azure 中数据科学过程的任务，请参阅[数据科学过程](https://docs.microsoft.com/azure/machine-learning/team-data-science-process/)。 
 

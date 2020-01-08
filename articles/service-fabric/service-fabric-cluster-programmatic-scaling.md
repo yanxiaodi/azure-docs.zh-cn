@@ -14,27 +14,31 @@ ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 01/23/2018
 ms.author: mikerou
-ms.openlocfilehash: dcf4721012fb8ec39bcd1de02c294747357b3539
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: 128f28d2a8b97feb3d20c34b7468b60c446a78a6
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66306935"
 ---
 # <a name="scale-a-service-fabric-cluster-programmatically"></a>以编程方式缩放 Service Fabric 群集 
 
 在 Azure 中运行的 Service Fabric 群集在虚拟机规模集的基础上构建。  [群集缩放](./service-fabric-cluster-scale-up-down.md)介绍如何手动缩放或使用自动缩放规则缩放 Service Fabric 群集。 本文介绍如何使用 fluent Azure 计算 SDK（更高级的方案）管理凭据和缩小或扩大群集。 有关概述，请阅读[以编程方式协调 Azure 缩放操作](service-fabric-cluster-scaling.md#programmatic-scaling)。 
 
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
+
 ## <a name="manage-credentials"></a>管理凭据
-编写服务来处理缩放的难题之一是，该服务必须能够在无需交互式登录的情况下访问虚拟机规模集资源。 如果缩放服务可修改自身的 Service Fabric 应用程序，则访问 Service Fabric 群集的过程就很轻松，但访问规模集则需要提供凭据。 若要登录，可以使用在 [Azure CLI 2.0](https://github.com/azure/azure-cli) 中创建的[服务主体](https://docs.microsoft.com/cli/azure/create-an-azure-service-principal-azure-cli)。
+编写服务来处理缩放的难题之一是，该服务必须能够在无需交互式登录的情况下访问虚拟机规模集资源。 如果缩放服务可修改自身的 Service Fabric 应用程序，则访问 Service Fabric 群集的过程就很轻松，但访问规模集则需要提供凭据。 若要登录，可以使用[服务主体](https://docs.microsoft.com/cli/azure/create-an-azure-service-principal-azure-cli)附带[Azure CLI](https://github.com/azure/azure-cli)。
 
 可以使用以下步骤创建服务主体：
 
-1. 以有权访问虚拟机规模集的用户身份登录到 Azure CLI (`az login`)
+1. 登录到 Azure CLI (`az login`) 作为用户有权访问虚拟机规模集
 2. 使用 `az ad sp create-for-rbac` 创建服务主体
     1. 记下 appId（在某些文档中称为“客户端 ID”）、名称、密码和租户供稍后使用。
     2. 还需要准备好订阅 ID（可使用 `az account list` 查看）
 
-Fluent 计算库可以使用这些凭据进行登录，如下所示（请注意，`IAzure` 等核心 Fluent Azure 类型位于 [Microsoft.Azure.Management.Fluent](https://www.nuget.org/packages/Microsoft.Azure.Management.Fluent/) 包中）：
+Fluent 计算库可以按如下所示使用这些凭据登录 (请注意，核心 fluent Azure 类型类似于`IAzure`位于[Microsoft.Azure.Management.Fluent](https://www.nuget.org/packages/Microsoft.Azure.Management.Fluent/)包):
 
 ```csharp
 var credentials = new AzureCredentials(new ServicePrincipalLoginInformation {
@@ -64,7 +68,7 @@ var newCapacity = (int)Math.Min(MaximumNodeCount, scaleSet.Capacity + 1);
 scaleSet.Update().WithCapacity(newCapacity).Apply(); 
 ``` 
 
-也可以使用 PowerShell cmdlet 管理虚拟机规模集大小。 [`Get-AzureRmVmss`](https://docs.microsoft.com/powershell/module/azurerm.compute/get-azurermvmss) 可以检索虚拟机规模集对象。 当前容量可通过 `.sku.capacity` 属性获得。 将容量更改为相应值后，可以使用 [`Update-AzureRmVmss`](https://docs.microsoft.com/powershell/module/azurerm.compute/update-azurermvmss) 命令更新 Azure 中的虚拟机规模集。
+也可以使用 PowerShell cmdlet 管理虚拟机规模集大小。 [`Get-AzVmss`](https://docs.microsoft.com/powershell/module/az.compute/get-azvmss) 可以检索虚拟机规模集对象。 当前容量可通过 `.sku.capacity` 属性获得。 将容量更改为相应值后，可以使用 [`Update-AzVmss`](https://docs.microsoft.com/powershell/module/az.compute/update-azvmss) 命令更新 Azure 中的虚拟机规模集。
 
 手动添加节点时，添加规模集实例应该就能启动新的 Service Fabric 节点，因为规模集模板包含相应的扩展，可将新实例自动加入 Service Fabric 群集。 
 

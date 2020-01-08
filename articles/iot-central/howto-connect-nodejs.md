@@ -1,101 +1,137 @@
 ---
 title: 将泛型 Node.js 客户端应用程序连接到 Azure IoT Central | Microsoft Docs
-description: 如何以设备开发人员的身份将泛型 Node.js 设备连接到 Azure IoT Central 应用程序。
+description: 作为设备开发人员，如何将通用 node.js 设备连接到 Azure IoT Central 应用程序。
+author: dominicbetts
+ms.author: dobett
+ms.date: 09/12/2019
+ms.topic: conceptual
+ms.service: iot-central
 services: iot-central
-author: tanmaybhagwat
-ms.author: tanmayb
-ms.date: 04/16/2018
-ms.topic: article
-ms.prod: microsoft-iot-central
-manager: timlt
-ms.openlocfilehash: 8666a2db051cbd4a93c3e587aeaef3e1722b1b83
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+manager: philmea
+ms.openlocfilehash: ccded68cfaa00e6e13e2bb32e114b81108742829
+ms.sourcegitcommit: 6013bacd83a4ac8a464de34ab3d1c976077425c7
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
-ms.locfileid: "34199589"
+ms.lasthandoff: 09/30/2019
+ms.locfileid: "71686670"
 ---
 # <a name="connect-a-generic-client-application-to-your-azure-iot-central-application-nodejs"></a>将泛型客户端应用程序连接到 Azure IoT Central 应用程序 (Node.js)
 
-本文介绍如何以设备开发人员的身份将代表物理设备的泛型 Node.js 应用程序连接到 Microsoft Azure IoT Central 应用程序。
+[!INCLUDE [iot-central-original-pnp](../../includes/iot-central-original-pnp-note.md)]
+
+本文介绍如何以设备开发人员的身份将代表真实设备的泛型 Node.js 应用程序连接到 Microsoft Azure IoT Central 应用程序。
 
 ## <a name="before-you-begin"></a>开始之前
 
 若要完成本文中的步骤，需要以下各项：
 
-1. Azure IoT Central 应用程序。 有关详细信息，请参阅[创建 Azure IoT Central 应用程序](howto-create-application.md)。
-1. 安装了 [Node.js](https://nodejs.org/) 4.0.0 或更高版本的开发计算机。 若要检查版本，可以在命令行中运行 `node --version`。 Node.js 适用于各种不同的操作系统。
+- Azure IoT Central 应用程序。 有关详细信息，请参阅[创建应用程序快速入门](quick-deploy-iot-central.md)。
+- 安装了 [Node.js](https://nodejs.org/) 4.0.0 或更高版本的开发计算机。 若要检查版本，可以在命令行中运行 `node --version`。 Node.js 适用于各种操作系统。
 
-在 Azure IoT Central 应用程序中，需要一个定义了以下度量和设备属性的设备模板：
+## <a name="create-a-device-template"></a>创建设备模板
 
-### <a name="telemetry-measurements"></a>遥测度量
+在 Azure IoT Central 应用程序中，需要具有以下度量、设备属性、设置和命令的设备模板：
 
-在“度量”页中添加以下遥测：
+### <a name="telemetry-measurements"></a>遥测数据度量
 
-| 显示名称 | 字段名称  | 单位 | Min | Max | 小数位数 |
+在 "**度量值**" 页上添加以下遥测数据：
+
+| 显示名 | 字段名  | 单位 | 最小值 | 最大 | 小数位数 |
 | ------------ | ----------- | ----- | --- | --- | -------------- |
-| 温度  | 温度 | F     | 60  | 110 | 0              |
+| 温度  | 温度 | 周五     | 60  | 110 | 0              |
 | 湿度     | 湿度    | %     | 0   | 100 | 0              |
-| 压力     | 压强    | kPa   | 80  | 110 | 0              |
+| 压力     | 压力    | kPa   | 80  | 110 | 0              |
 
 > [!NOTE]
-  遥测度量的数据类型为 double。
+> 遥测度量的数据类型是一个浮点数。
 
-将表中所示字段名称准确输入设备模板中。 如果字段名称不匹配，则遥测无法显示在应用程序中。
+将表中所示字段名称准确输入设备模板中。 如果字段名称与相应设备代码中的属性名称不匹配，则无法在应用程序中显示遥测数据。
 
 ### <a name="state-measurements"></a>状态度量
 
-在“度量”页中添加以下状态：
+在 "**度量值**" 页上添加以下状态：
 
-| 显示名称 | 字段名称  | 值 1 | 显示名称 | 值 2 | 显示名称 |
+| 显示名 | 字段名  | 值 1 | 显示名 | 值 2 | 显示名 |
 | ------------ | ----------- | --------| ------------ | ------- | ------------ | 
 | 风扇模式     | fanmode     | 1       | 正在运行      | 0       | 已停止      |
 
 > [!NOTE]
-  状态度量的数据类型为字符串。
+> 状态度量的数据类型为字符串。
 
-将表中所示字段名称准确输入设备模板中。 如果字段名称不匹配，则状态无法显示在应用程序中。
+将表中所示字段名称准确输入设备模板中。 如果字段名称与相应设备代码中的属性名称不匹配，则无法在应用程序中显示该状态。
 
 ### <a name="event-measurements"></a>事件度量
 
-在“度量”页中添加以下事件：
+在 "**度量值**" 页上添加以下事件：
 
-| 显示名称 | 字段名称  | Severity |
+| 显示名 | 字段名  | severity |
 | ------------ | ----------- | -------- |
-| 过热  | 过热    | 错误    |
+| 过热  | 过热    | Error    |
 
 > [!NOTE]
-  事件度量的数据类型为字符串。
+> 事件度量的数据类型为字符串。
+
+### <a name="location-measurements"></a>位置度量
+
+在 "**度量值**" 页上添加以下位置度量：
+
+| 显示名 | 字段名  |
+| ------------ | ----------- |
+| Location     | location    |
+
+位置度量数据类型由经度和纬度的两个浮点数组成，并具有一个高度的可选浮点数。
+
+将表中所示字段名称准确输入设备模板中。 如果字段名称与相应设备代码中的属性名称不匹配，则无法在应用程序中显示该位置。
 
 ### <a name="device-properties"></a>设备属性
 
-在**属性页**中添加以下设备属性：
+在 "**属性**" 页上添加以下设备属性：
 
-| 显示名称        | 字段名称        | 数据类型 |
+| 显示名        | 字段名        | 数据类型 |
 | ------------------- | ----------------- | --------- |
 | 序列号       | serialNumber      | text      |
 | 设备制造商 | 制造商      | text      |
 
-将表中所示字段名称准确输入设备模板中。 如果字段名称不匹配，则应用程序无法显示属性值。
+将表中所示字段名称准确输入设备模板中。 如果字段名称与相应设备代码中的属性名称不匹配，则无法在应用程序中显示这些属性。
 
 ### <a name="settings"></a>设置
 
-在**设置页**中添加以下**数字**设置：
+在 "**设置**" 页上添加以下**数字**设置：
 
-| 显示名称    | 字段名称     | 单位 | 小数 | Min | Max  | Initial |
+| 显示名    | 字段名     | 单位 | 小数 | 最小值 | 最大  | 初始 |
 | --------------- | -------------- | ----- | -------- | --- | ---- | ------- |
 | 风扇速度       | fanSpeed       | rpm   | 0        | 0   | 3000 | 0       |
-| 设置温度 | setTemperature | F     | 0        | 20  | 200  | 80      |
+| 设置温度 | setTemperature | 周五     | 0        | 20  | 200  | 80      |
 
-将表中所示字段名称准确输入设备模板中。 如果字段名称不匹配，则设备无法接收设置值。
+将表中所示字段名称准确输入设备模板中。 如果字段名称与相应设备代码中的属性名称不匹配，则设备无法接收设置值。
 
-### <a name="add-a-real-device"></a>添加真实设备
+### <a name="commands"></a>命令
 
-在 Azure IoT Central 应用程序中，从创建的设备模板添加真实设备，并记下设备连接字符串。 有关详细信息，请参阅[向 Azure IoT Central 应用程序添加真实设备](tutorial-add-device.md)
+在 "**命令**" 页上添加以下命令：
 
-## <a name="create-a-nodejs-application"></a>创建 Node.js 应用程序
+| 显示名    | 字段名     | 默认超时 | 数据类型 |
+| --------------- | -------------- | --------------- | --------- |
+| 倒       | 倒      | 30              | number    |
 
-以下步骤演示如何创建一个客户端应用程序，以便实现已添加到应用程序的真实设备。
+将以下输入字段添加到倒计时命令：
+
+| 显示名    | 字段名     | 数据类型 | ReplTest1 |
+| --------------- | -------------- | --------- | ----- |
+| 计数起始      | countFrom      | number    | 10    |
+
+输入与设备模板中的表中所示完全相同的字段名称。 如果字段名称与相应设备代码中的属性名称不匹配，则设备无法处理该命令。
+
+## <a name="add-a-real-device"></a>添加真实设备
+
+在 Azure IoT Central 应用程序中，将实际设备添加到在上一部分中创建的设备模板。
+
+记下 "**设备连接**" 页上的 "设备连接" 信息：**作用域 id**、**设备 id**和**主键**。 稍后在本操作方法指南中将这些值添加到设备代码中：
+
+![设备连接信息](./media/howto-connect-nodejs/device-connection.png)
+
+### <a name="create-a-nodejs-application"></a>创建 Node.js 应用程序
+
+以下步骤演示如何创建一个客户端应用程序，以便实现已添加到应用程序的真实设备。 此处，Node.js 应用程序代表真实设备。
 
 1. 在计算机上创建名为 `connected-air-conditioner-adv` 的文件夹。 导航到命令行环境中的该文件夹。
 
@@ -103,7 +139,7 @@ ms.locfileid: "34199589"
 
     ```cmd/sh
     npm init
-    npm install azure-iot-device azure-iot-device-mqtt --save
+    npm install azure-iot-device azure-iot-device-mqtt azure-iot-provisioning-device-mqtt azure-iot-security-symmetric-key --save
     ```
 
 1. 在 `connected-air-conditioner-adv` 文件夹中创建名为 **connectedAirConditionerAdv.js** 的文件。
@@ -114,22 +150,33 @@ ms.locfileid: "34199589"
     "use strict";
 
     // Use the Azure IoT device SDK for devices that connect to Azure IoT Central.
-    var clientFromConnectionString = require('azure-iot-device-mqtt').clientFromConnectionString;
+    var iotHubTransport = require('azure-iot-device-mqtt').Mqtt;
+    var Client = require('azure-iot-device').Client;
     var Message = require('azure-iot-device').Message;
-    var ConnectionString = require('azure-iot-device').ConnectionString;
+    var ProvisioningTransport = require('azure-iot-provisioning-device-mqtt').Mqtt;
+    var SymmetricKeySecurityClient = require('azure-iot-security-symmetric-key').SymmetricKeySecurityClient;
+    var ProvisioningDeviceClient = require('azure-iot-provisioning-device').ProvisioningDeviceClient;
     ```
 
-1. 向文件添加以下变量声明：
+1. 将以下变量声明添加到该文件：
 
     ```javascript
-    var connectionString = '{your device connection string}';
+    var provisioningHost = 'global.azure-devices-provisioning.net';
+    var idScope = '{your Scope ID}';
+    var registrationId = '{your Device ID}';
+    var symmetricKey = '{your Primary Key}';
+    var provisioningSecurityClient = new SymmetricKeySecurityClient(registrationId, symmetricKey);
+    var provisioningClient = ProvisioningDeviceClient.create(provisioningHost, idScope, new ProvisioningTransport(), provisioningSecurityClient);
+    var hubClient;
+
     var targetTemperature = 0;
-    var client = clientFromConnectionString(connectionString);
+    var locLong = -122.1215;
+    var locLat = 47.6740;
     ```
 
-    将占位符 `{your device connection string}` 更新为设备连接字符串。 已在添加真实设备时从连接详细信息页复制此值。 在此示例中，我们将 `targetTemperature` 初始化为零。你可以选择从设备获取当前的读取内容，也可以从设备孪生获取值。 
+    使用之前记`{your Scope ID}`下`{your Device ID}`的值`{your Primary Key}`更新占位符、和。 在此示例中，将`targetTemperature`初始化为零，可以使用来自设备的当前读取或设备克隆中的值。
 
-1. 若要向 Azure IoT Central 应用程序发送遥测、状态和事件度量，请将以下函数添加到文件：
+1. 若要将遥测、状态、事件和位置度量发送到 Azure IoT Central 应用程序，请将以下函数添加到文件：
 
     ```javascript
     // Send device measurements.
@@ -138,29 +185,31 @@ ms.locfileid: "34199589"
       var humidity = 70 + (Math.random() * 10);
       var pressure = 90 + (Math.random() * 5);
       var fanmode = 0;
-      var data = JSON.stringify({ 
-        temperature: temperature, 
-        humidity: humidity, 
+      var locationLong = locLong - (Math.random() / 100);
+      var locationLat = locLat - (Math.random() / 100);
+      var data = JSON.stringify({
+        temperature: temperature,
+        humidity: humidity,
         pressure: pressure,
         fanmode: (temperature > 25) ? "1" : "0",
-        overheat: (temperature > 35) ? "ER123" : undefined });
+        overheat: (temperature > 35) ? "ER123" : undefined,
+        location: {
+            lon: locationLong,
+            lat: locationLat }
+        });
       var message = new Message(data);
-      client.sendEvent(message, (err, res) => console.log(`Sent message: ${message.getData()}` +
+      hubClient.sendEvent(message, (err, res) => console.log(`Sent message: ${message.getData()}` +
         (err ? `; error: ${err.toString()}` : '') +
         (res ? `; status: ${res.constructor.name}` : '')));
     }
     ```
 
-    1. 若要向 Azure IoT Central 应用程序发送设备属性，请将以下函数添加到文件：
+1. 若要向 Azure IoT Central 应用程序发送设备属性，请将以下函数添加到文件：
 
     ```javascript
-    // Send device properties.
-    function sendDeviceProperties(twin) {
-      var properties = {
-        serialNumber: '123-ABC',
-        manufacturer: 'Contoso'
-      };
-      twin.properties.reported.update(properties, (err) => console.log(`Sent device properties; ` +
+    // Send device reported properties.
+    function sendDeviceProperties(twin, properties) {
+      twin.properties.reported.update(properties, (err) => console.log(`Sent device properties: ${JSON.stringify(properties)}; ` +
         (err ? `error: ${err.toString()}` : `status: success`)));
     }
     ```
@@ -218,7 +267,41 @@ ms.locfileid: "34199589"
     }
     ```
 
-1. 添加以下代码以完成到 Azure IoT Central 的连接，并将客户端代码中的函数挂钩：
+1. 添加以下代码以处理从 IoT Central 应用程序发送的倒计时命令：
+
+    ```javascript
+    // Handle countdown command
+    function onCountdown(request, response) {
+      console.log('Received call to countdown');
+    
+      var countFrom = (typeof(request.payload.countFrom) === 'number' && request.payload.countFrom < 100) ? request.payload.countFrom : 10;
+    
+      response.send(200, (err) => {
+        if (err) {
+          console.error('Unable to send method response: ' + err.toString());
+        } else {
+          hubClient.getTwin((err, twin) => {
+            function doCountdown(){
+              if ( countFrom >= 0 ) {
+                var patch = {
+                  countdown:{
+                    value: countFrom
+                  }
+                };
+                sendDeviceProperties(twin, patch);
+                countFrom--;
+                setTimeout(doCountdown, 2000 );
+              }
+            }
+    
+            doCountdown();
+          });
+        }
+      });
+    }
+    ```
+
+1. 添加以下代码以完成与 Azure IoT Central 的连接，并在客户端代码中挂接函数：
 
     ```javascript
     // Handle device connection to Azure IoT Central.
@@ -228,16 +311,24 @@ ms.locfileid: "34199589"
       } else {
         console.log('Device successfully connected to Azure IoT Central');
 
+        // Create handler for countdown command
+        hubClient.onDeviceMethod('countdown', onCountdown);
+
         // Send telemetry measurements to Azure IoT Central every 1 second.
         setInterval(sendTelemetry, 1000);
 
         // Get device twin from Azure IoT Central.
-        client.getTwin((err, twin) => {
+        hubClient.getTwin((err, twin) => {
           if (err) {
             console.log(`Error getting device twin: ${err.toString()}`);
           } else {
             // Send device properties once on device start up.
-            sendDeviceProperties(twin);
+            var properties = {
+              serialNumber: '123-ABC',
+              manufacturer: 'Contoso'
+            };
+            sendDeviceProperties(twin, properties);
+
             // Apply device settings and handle changes to device settings.
             handleSettings(twin);
           }
@@ -245,8 +336,20 @@ ms.locfileid: "34199589"
       }
     };
 
-    // Start the device (connect it to Azure IoT Central).
-    client.open(connectCallback);
+    // Start the device (register and connect to Azure IoT Central).
+    provisioningClient.register((err, result) => {
+      if (err) {
+        console.log('Error registering device: ' + err);
+      } else {
+        console.log('Registration succeeded');
+        console.log('Assigned hub=' + result.assignedHub);
+        console.log('DeviceId=' + result.deviceId);
+        var connectionString = 'HostName=' + result.assignedHub + ';DeviceId=' + result.deviceId + ';SharedAccessKey=' + symmetricKey;
+        hubClient = Client.fromConnectionString(connectionString, iotHubTransport);
+
+        hubClient.open(connectCallback);
+      }
+    });
     ```
 
 ## <a name="run-your-nodejs-application"></a>运行 Node.js 应用程序
@@ -263,16 +366,22 @@ node connectedAirConditionerAdv.js
 
     ![查看遥测数据](media/howto-connect-nodejs/viewtelemetry.png)
 
-* 在“属性”页上查看从设备发送的设备属性值。
+* 查看 "**度量值**" 页上的位置：
+
+    ![查看位置度量](media/howto-connect-nodejs/viewlocation.png)
+
+* 在“属性”页上查看从设备发送的设备属性值。 设备属性磁贴会在设备连接时更新：
 
     ![查看设备属性](media/howto-connect-nodejs/viewproperties.png)
 
-* 在“设置”页中设置风扇速度和目标温度。
+* 从 "**设置**" 页设置风扇速度和目标温度：
 
     ![设置风扇速度](media/howto-connect-nodejs/setfanspeed.png)
 
+* 从 "**命令**" 页调用倒数命令：
+
+    ![调用倒计时命令](media/howto-connect-nodejs/callcountdown.png)
+
 ## <a name="next-steps"></a>后续步骤
 
-了解如何将泛型 Node.js 客户端连接到 Azure IoT Central 应用程序后，建议接下来执行以下步骤：
-* [准备和连接 Raspberry Pi](howto-connect-raspberry-pi-python.md)
-<!-- Next how-tos in the sequence -->
+现在，你已了解如何将通用 node.js 客户端连接到 Azure IoT Central 应用程序，接下来建议的下一步是了解如何为你自己的 IoT 设备[设置自定义设备模板](howto-set-up-template.md)。

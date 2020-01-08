@@ -4,7 +4,7 @@ description: 了解如何使用 Azure Webhook 监视媒体服务作业通知。 
 services: media-services
 documentationcenter: ''
 author: juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: a61fe157-81b1-45c1-89f2-224b7ef55869
 ms.service: media-services
@@ -12,15 +12,20 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: dotnet
 ms.topic: article
-ms.date: 12/09/2017
+ms.date: 03/18/2019
 ms.author: juliako
-ms.openlocfilehash: 564fc25699c3ae627804d49bfdc40ae9dd559269
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: a29381bded4bb2562227bd5f23ccb59bb5add028
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "67059205"
 ---
-# <a name="use-azure-webhooks-to-monitor-media-services-job-notifications-with-net"></a>使用 Azure Webhook 通过 .NET 监视媒体服务作业通知
+# <a name="use-azure-webhooks-to-monitor-media-services-job-notifications-with-net"></a>使用 Azure Webhook 通过 .NET 监视媒体服务作业通知 
+
+> [!NOTE]
+> 不会向媒体服务 v2 添加任何新特性或新功能。 <br/>查看最新版本：[媒体服务 v3](https://docs.microsoft.com/azure/media-services/latest/)。 此外，请参阅[从 v2 到 v3 迁移指南](../latest/migrate-from-v2-to-v3.md)
+
 运行作业时，通常需要采用某种方式来跟踪作业进度。 可以使用 Azure Webhook 或 [Azure 队列存储](media-services-dotnet-check-job-progress-with-queues.md)监视媒体服务作业通知。 本文介绍如何使用 Webhook。
 
 本文介绍如何
@@ -29,7 +34,7 @@ ms.lasthandoff: 05/07/2018
     
     在此例中，webhook 由媒体服务在编码作业更改状态时触发。 函数侦听来自媒体服务通知的 webhook 回调，并在作业完成之后发布输出资产。 
     
-    >[!NOTE]
+    >[!TIP]
     >在继续之前，请确保了解 [Azure Functions HTTP 和 webhook 绑定](../../azure-functions/functions-bindings-http-webhook.md)的工作原理。
     >
     
@@ -37,7 +42,7 @@ ms.lasthandoff: 05/07/2018
 
 可在[此处](https://github.com/Azure-Samples/media-services-dotnet-functions-integration)找到各种媒体服务 .NET Azure Functions 的定义（包括本文中所示的定义）。
 
-## <a name="prerequisites"></a>先决条件
+## <a name="prerequisites"></a>必备组件
 
 以下是完成本教程所需具备的条件：
 
@@ -47,7 +52,7 @@ ms.lasthandoff: 05/07/2018
 
 ## <a name="create-a-function-app"></a>创建函数应用
 
-1. 转到 [Azure 门户](http://portal.azure.com)，并使用 Azure 帐户登录。
+1. 转到 [Azure 门户](https://portal.azure.com)，然后使用 Azure 帐户登录。
 2. 根据[此文](../../azure-functions/functions-create-function-app-portal.md)中所述创建 Function App。
 
 ## <a name="configure-function-app-settings"></a>配置 Function App 设置
@@ -59,22 +64,22 @@ ms.lasthandoff: 05/07/2018
 |名称|定义|示例| 
 |---|---|---|
 |SigningKey |签名密钥。| j0txf1f8msjytzvpe40nxbpxdcxtqcgxy0nt|
-|WebHookEndpoint | webhook 终结点地址。 Webhook 函数创建后即可从“获取函数 URL”链接中复制 URL。 | https://juliakofuncapp.azurewebsites.net/api/Notification_Webhook_Function?code=iN2phdrTnCxmvaKExFWOTulfnm4C71mMLIy8tzLr7Zvf6Z22HHIK5g==。|
+|WebHookEndpoint | webhook 终结点地址。 Webhook 函数创建后即可从“获取函数 URL”链接中复制 URL  。 | https:\//juliakofuncapp.azurewebsites.net/api/Notification_Webhook_Function?code=iN2phdrTnCxmvaKExFWOTulfnm4C71mMLIy8tzLr7Zvf6Z22HHIK5g==.|
 
 ## <a name="create-a-function"></a>创建函数
 
 部署 Function App 后，可在**应用服务** Azure Functions 中找到它。
 
-1. 选择 Function App，然后单击“新建函数”。
-2. 选择“C#”代码和“API 和 Webhook”方案。 
-3. 选择“通用 Webhook - C#”。
-4. 为 Webhook 命名，然后按“创建”。
+1. 选择 Function App，然后单击“新建函数”。 
+2. 选择“C#”代码和“API 和 Webhook”方案   。 
+3. 选择“通用 Webhook - C#”  。
+4. 为 Webhook 命名，然后按“创建”  。
 
 ### <a name="files"></a>文件
 
-Azure 函数与代码文件以及本部分所述的其他文件相关联。 默认情况下，函数与 **function.json** 和 **run.csx** (C#) 文件相关联。 需要添加 project.json 文件。 本部分的余下内容介绍这些文件的定义。
+Azure 函数与代码文件以及本部分所述的其他文件相关联。 默认情况下，函数与 **function.json** 和 **run.csx** (C#) 文件相关联。 需要添加 project.json  文件。 本部分的余下内容介绍这些文件的定义。
 
-![文件](./media/media-services-azure-functions/media-services-azure-functions003.png)
+![files](./media/media-services-azure-functions/media-services-azure-functions003.png)
 
 #### <a name="functionjson"></a>function.json
 
@@ -124,7 +129,7 @@ project.json 文件包含依赖项。
 
 Webhook 需要签名密钥（凭据）以匹配在配置通知终结点时传递的密钥。 签名密钥是 64 字节 Base64 编码值，用于保护来自 Azure 媒体服务的 WebHook 回调的安全。 
 
-在下面的 Webhook 定义代码中，VerifyWebHookRequestSignature 方法对通知消息执行验证。 此验证的用途是确保消息由 Azure 媒体服务发送并且未篡改。 签名对于 Azure Functions 是可选的，因为它将 Code 值作为传输层安全性 (TLS) 上的查询参数。 
+在下面的 Webhook 定义代码中，VerifyWebHookRequestSignature 方法对通知消息执行验证  。 此验证的用途是确保消息由 Azure 媒体服务发送并且未篡改。 签名对于 Azure Functions 是可选的，因为它将 Code 值作为传输层安全性 (TLS) 上的查询参数  。 
 
 >[!NOTE]
 >不同 AMS 策略的策略限制为 1,000,000 个（例如，对于定位器策略或 ContentKeyAuthorizationPolicy）。 如果始终使用相同的日期/访问权限，则应使用相同的策略 ID，例如，用于要长期就地保留的定位符的策略（非上传策略）。 有关详细信息，请参阅[此](media-services-dotnet-manage-entities.md#limit-access-policies)主题。
@@ -240,7 +245,7 @@ private static string PublishAndBuildStreamingURLs(String jobID)
 
     // Get a reference to the streaming manifest file from the  
     // collection of files in the asset. 
-    var manifestFile = asset.AssetFiles.Where(f => f.Name.ToLower().
+    var manifestFile = asset.AssetFiles.ToList().Where(f => f.Name.ToLower().
                 EndsWith(".ism")).
                 FirstOrDefault();
 
@@ -377,22 +382,22 @@ Webhook 触发后，上述示例会生成以下输出，值会有所变化。
 2. 使用 [NuGet](https://www.nuget.org/packages/windowsazure.mediaservices) 安装 Azure 媒体服务。
 3. 使用适当的值更新 App.config 文件： 
     
-    * Azure 媒体服务连接信息， 
-    * 需要获取通知的 webhook URL， 
-    * 与 webhook 需要的密钥匹配的签名密钥。 签名密钥是 64 字节 Base64 编码值，用于保护来自 Azure 媒体服务的 Webhook 回调的安全。 
+   * Azure 媒体服务连接信息， 
+   * 需要获取通知的 webhook URL， 
+   * 与 webhook 需要的密钥匹配的签名密钥。 签名密钥是 64 字节 Base64 编码值，用于保护来自 Azure 媒体服务的 Webhook 回调的安全。 
 
-    ```xml
-            <appSettings>
-                <add key="AMSAADTenantDomain" value="domain" />
-                <add key="AMSRESTAPIEndpoint" value="endpoint" />
+     ```xml
+           <appSettings>
+               <add key="AMSAADTenantDomain" value="domain" />
+               <add key="AMSRESTAPIEndpoint" value="endpoint" />
 
-                <add key="AMSClientId" value="clinet id" />
-                <add key="AMSClientSecret" value="client secret" />
+               <add key="AMSClientId" value="clinet id" />
+               <add key="AMSClientSecret" value="client secret" />
 
-                <add key="WebhookURL" value="https://yourapp.azurewebsites.net/api/functionname?code=ApiKey" />
-                <add key="WebhookSigningKey" value="j0txf1f8msjytzvpe40nxbpxdcxtqcgxy0nt" />
-            </appSettings>
-    ```
+               <add key="WebhookURL" value="https://yourapp.azurewebsites.net/api/functionname?code=ApiKey" />
+               <add key="WebhookSigningKey" value="j0txf1f8msjytzvpe40nxbpxdcxtqcgxy0nt" />
+           </appSettings>
+     ```
 
 4. 使用以下代码更新 Program.cs 文件：
 

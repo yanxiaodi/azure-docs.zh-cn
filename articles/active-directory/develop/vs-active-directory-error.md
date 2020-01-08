@@ -1,28 +1,29 @@
 ---
 title: 如何使用 Azure Active Directory 连接服务诊断错误
 description: Active Directory 连接服务可检测到不兼容的身份验证类型
-services: active-directory
 author: ghogen
-manager: douge
+manager: jillfra
 ms.assetid: dd89ea63-4e45-4da1-9642-645b9309670a
-ms.prod: visual-studio-dev15
+ms.prod: visual-studio-windows
 ms.technology: vs-azure
-ms.workload: azure
+ms.workload: azure-vs
 ms.topic: conceptual
 ms.date: 03/12/2018
 ms.author: ghogen
-ms.custom: aaddev
-ms.openlocfilehash: 8cd15c59bbe536dba9adb6f44c07844eaf030b55
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.custom: aaddev, vs-azure
+ms.collection: M365-identity-device-management
+ms.openlocfilehash: 3e544942029532fdbe998c36917e688d70ce4ed5
+ms.sourcegitcommit: 670c38d85ef97bf236b45850fd4750e3b98c8899
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 08/08/2019
+ms.locfileid: "68851993"
 ---
 # <a name="diagnosing-errors-with-the-azure-active-directory-connected-service"></a>使用 Azure Active Directory 连接服务诊断错误
 
 检测以前的身份验证代码时，Azure Active Directory 连接服务器检测到不兼容的身份验证类型。
 
-若要正确检测某个项目中以前的身份验证代码，必须生成该项目。  如果遇到此错误，并且项目中不存在以前的身份验证代码，请重新生成项目并重试。
+若要正确检测某个项目中以前的身份验证代码，必须生成该项目。  如果看到此错误，并且项目中不存在以前的身份验证代码，请重新生成项目并重试。
 
 ## <a name="project-types"></a>项目类型
 
@@ -30,7 +31,7 @@ ms.lasthandoff: 04/23/2018
 
 ## <a name="compatible-authentication-code"></a>兼容的身份验证代码
 
-连接服务还会检查是否存在以前配置的身份验证设置或与该服务兼容的身份验证设置。 如果所有这些设置都存在，则将视为可重入情况，连接服务将打开并显示这些设置。  如果只存在某些设置，则将视为错误情况。
+连接服务还会检查是否存在以前配置的身份验证设置或与该服务兼容的身份验证设置。 如果所有设置都存在，则会将其视为可重入情况，连接服务将打开并显示这些设置。  如果只存在某些设置，则会将其视为错误情况。
 
 在 MVC 项目中，连接服务会检查是否存在以下任何设置（这些设置是以前使用该服务生成的）：
 
@@ -39,7 +40,7 @@ ms.lasthandoff: 04/23/2018
     <add key="ida:AADInstance" value="" />
     <add key="ida:PostLogoutRedirectUri" value="" />
 
-此外，连接服务还会在 Web API 项目中检查是否存在以下任何设置（这些设置是以前使用该服务生成的）：
+此外，连接服务还会在 Web API 项目中检查是否存在以下任何设置（这些设置是以前使用该服务时生成的）：
 
     <add key="ida:ClientId" value="" />
     <add key="ida:Tenant" value="" />
@@ -58,7 +59,7 @@ ms.lasthandoff: 04/23/2018
 ```xml
 <configuration>
     <system.web>
-        <span style="background-color: yellow"><authentication mode="Windows" /></span>
+        <authentication mode="Windows" />
     </system.web>
 </configuration>
 ```
@@ -68,7 +69,7 @@ ms.lasthandoff: 04/23/2018
 ```xml
 <Project>
     <PropertyGroup>
-        <span style="background-color: yellow"><IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication></span>
+        <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     </PropertyGroup>
 </Project>
 ```
@@ -77,7 +78,7 @@ ms.lasthandoff: 04/23/2018
 
 ```xml
 <packages>
-    <span style="background-color: yellow"><package id="Microsoft.AspNet.Identity.EntityFramework" version="2.1.0" targetFramework="net45" /></span>
+    <package id="Microsoft.AspNet.Identity.EntityFramework" version="2.1.0" targetFramework="net45" />
 </packages>
 ```
 
@@ -86,11 +87,11 @@ ms.lasthandoff: 04/23/2018
 ```xml
 <configuration>
     <appSettings>
-        <span style="background-color: yellow"><add key="ida:Realm" value="***" /></span>
+        <add key="ida:Realm" value="***" />
     </appSettings>
 </configuration>
 ```
 
 若要更改身份验证类型，请删除不兼容的身份验证类型，并尝试重新添加连接服务。
 
-有关详细信息，请参阅 [Azure AD 的身份验证方案](active-directory-authentication-scenarios.md)。
+有关详细信息，请参阅 [Azure AD 的身份验证方案](authentication-scenarios.md)。

@@ -2,24 +2,28 @@
 title: 部署拆分 / 合并服务 | Microsoft 文档
 description: 可使用拆分/合并工具在分片数据库之间移动数据。
 services: sql-database
-author: stevestein
-manager: craigg
 ms.service: sql-database
-ms.custom: scale out apps
-ms.topic: article
-ms.date: 04/01/2018
+ms.subservice: scale-out
+ms.custom: ''
+ms.devlang: ''
+ms.topic: conceptual
+author: stevestein
 ms.author: sstein
-ms.openlocfilehash: 90f758bf5bc979dc4bc173b08dadaceeaa077317
-ms.sourcegitcommit: 3a4ebcb58192f5bf7969482393090cb356294399
-ms.translationtype: HT
+ms.reviewer: ''
+ms.date: 12/04/2018
+ms.openlocfilehash: a8c50f492c28bf1e009d15d6332e939959190a49
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68568500"
 ---
-# <a name="deploy-a-split-merge-service"></a>部署拆分/合并服务
+# <a name="deploy-a-split-merge-service-to-move-data-between-sharded-databases"></a>部署拆分/合并服务以在分片数据库之间移动数据
+
 可使用拆分/合并工具在分片数据库之间移动数据。 请参阅[在扩展云数据库之间移动数据](sql-database-elastic-scale-overview-split-and-merge.md)
 
 ## <a name="download-the-split-merge-packages"></a>下载拆分/合并包
-1. 从 [NuGet](http://docs.nuget.org/docs/start-here/installing-nuget) 下载最新的 NuGet 版本。
+1. 从 [NuGet](https://docs.nuget.org/docs/start-here/installing-nuget) 下载最新的 NuGet 版本。
 2. 打开命令提示符，并导航到下载 nuget.exe 的目录。 此下载包括 PowerShell 命令。
 3. 使用以下命令将最新的拆分/合并包下载到当前目录中：
    ```
@@ -31,10 +35,8 @@ ms.lasthandoff: 04/06/2018
 ## <a name="prerequisites"></a>先决条件
 1. 创建将用作拆分/合并状态数据库的 Azure SQL DB。 转到 [Azure 门户](https://portal.azure.com)。 创建新的 **SQL** 数据库。 为数据库指定一个名称，并创建一个新的管理员和密码。 确保记录该名称和密码以供日后使用。
 2. 确保 Azure SQL DB 服务器允许 Azure 服务与其连接。 在门户上的“防火墙设置”中，确保“允许访问 Azure 服务”设置设为“打开”。 单击“保存”图标。
-   
-   ![允许的服务][1]
-3. 创建用于诊断输出的 Azure 存储帐户。 转到 Azure 门户。 在左侧栏中，依次单击“创建资源”、“数据 + 存储”、“存储”。
-4. 创建将包含拆分/合并服务的 Azure 云服务。  转到 Azure 门户。 在左侧栏中，依次单击“创建资源”、“计算”、“云服务”和“创建”。 
+3. 创建用于诊断输出的 Azure 存储帐户。
+4. 创建用于拆分/合并服务的 Azure 云服务。
 
 ## <a name="configure-your-split-merge-service"></a>配置拆分/合并服务
 ### <a name="split-merge-service-configuration"></a>拆分/合并服务配置
@@ -60,13 +62,13 @@ ms.lasthandoff: 04/06/2018
 为了针对本教程创建一个简单的测试部署，我们将执行少量的配置步骤来使服务正常运行。 仅一个计算机/帐户可以执行这些步骤，以便与服务进行通信。
 
 ### <a name="create-a-self-signed-certificate"></a>创建自签名证书
-创建新的目录并使用 [Visual Studio 的开发人员命令提示符](http://msdn.microsoft.com/library/ms229859.aspx)窗口从该目录执行以下命令：
+创建新的目录并使用 [Visual Studio 的开发人员命令提示符](https://msdn.microsoft.com/library/ms229859.aspx)窗口从该目录执行以下命令：
 
    ```
     makecert ^
     -n "CN=*.cloudapp.net" ^
     -r -cy end -sky exchange -eku "1.3.6.1.5.5.7.3.1,1.3.6.1.5.5.7.3.2" ^
-    -a sha1 -len 2048 ^
+    -a sha256 -len 2048 ^
     -sr currentuser -ss root ^
     -sv MyCert.pvk MyCert.cer
    ```
@@ -117,17 +119,14 @@ ms.lasthandoff: 04/06/2018
 请注意，对于生产部署，应针对用于加密的 CA 使用单独的证书（服务器证书和客户端证书）。 有关此内容的详细说明，请参阅[安全配置](sql-database-elastic-scale-split-merge-security-configuration.md)。
 
 ## <a name="deploy-your-service"></a>部署服务
-1. 转到 [Azure 门户](https://manage.windowsazure.com)。
-2. 单击左侧的“云服务”选项卡，并选择之前创建的云服务。
-3. 单击“仪表板”。
-4. 选择过渡环境，并单击“上载新的过渡部署”。
-   
-   ![过渡][3]
+1. 转到 [Azure 门户](https://portal.azure.com)
+2. 选择先前创建的云服务。
+3. 单击“概览”。
+4. 选择过渡环境，并单击“上传”。
 5. 在对话框中，输入一个部署标签。 对于“程序包”和“配置”，单击“从本地”，并选择 **SplitMergeService.cspkg** 文件和之前配置的 cscfg 文件。
 6. 确保选中标记为“即使一个或多个角色包含单个实例也部署”的复选框。
 7. 点击右下角的勾选按钮以开始部署。 它预计需要几分钟的时间才能完成。
 
-   ![上载][4]
 
 ## <a name="troubleshoot-the-deployment"></a>排查部署问题
 如果 Web 角色无法联机，可能是安全配置出了问题。 检查 SSL 是否按照上面的描述进行了配置。
@@ -143,11 +142,11 @@ ms.lasthandoff: 04/06/2018
    ```
 
 * 确保服务器名称不以 **https://** 开头。
-* 确保 Azure SQL DB 服务器允许 Azure 服务与其连接。 为此，请打开 https://manage.windowsazure.com，依次单击左侧的“SQL 数据库”和顶部的“服务器”，并选择你的服务器。 在顶部单击“配置”并确保将“Azure 服务”设置为“是”。 （请参阅此文章顶部的“先决条件”部分）。
+* 确保 Azure SQL DB 服务器允许 Azure 服务与其连接。 为此，请在门户中打开数据库，并确保“允许访问 Azure 服务”设置设为“启用”。
 
 ## <a name="test-the-service-deployment"></a>测试服务部署
 ### <a name="connect-with-a-web-browser"></a>使用 Web 浏览器建立连接
-确定拆分/合并服务的 Web 终结点。 可以在 Azure 经典门户中找到此终结点，方法是转到云服务的“仪表板”并在右侧的“站点 URL”下查找。 由于默认的安全设置将禁用 HTTP 终结点，因此请将 **http://** 替换为 **https://**。 将此 URL 的页面加载到浏览器中。
+确定拆分/合并服务的 Web 终结点。 可以在门户中找到此终结点，方法是转到云服务的“概述”并在右侧的“站点 URL”下查找。 由于默认的安全设置将禁用 HTTP 终结点，因此请将 **http://** 替换为 **https://** 。 将此 URL 的页面加载到浏览器中。
 
 ### <a name="test-with-powershell-scripts"></a>使用 PowerShell 脚本进行测试
 可以通过运行包含的示例 PowerShell 脚本测试部署和环境。
@@ -204,7 +203,7 @@ ms.lasthandoff: 04/06/2018
    
 ## <a name="use-powershell-to-verify-your-deployment"></a>使用 PowerShell 验证部署
 1. 打开新的 PowerShell 窗口并导航到下载拆分/合并包的目录，并导航到“powershell”目录中。
-2. 创建会在其中创建分片映射管理器和分片的 Azure SQL 数据库服务器（或选择现有服务器）。
+2. 创建一个将要在其中创建分片映射管理器和分片的 Azure SQL 数据库服务器（或选择现有服务器）。
    
    > [!NOTE]
    > 在默认情况下，SetupSampleSplitMergeEnvironment.ps1 脚本会在相同的服务器上创建所有这些数据库以简化脚本。 这并不表示拆分/合并服务本身存在限制。
@@ -311,7 +310,7 @@ ms.lasthandoff: 04/06/2018
 
 拆分/合并服务不会为用户创建目标数据库（或为数据库中的任何表创建架构）。 在将请求发送到服务之前，必须预先创建它们。
 
-## <a name="troubleshooting"></a>故障排除
+## <a name="troubleshooting"></a>疑难解答
 在运行示例 powershell 脚本时，可能会看到下面的消息：
 
    ```
@@ -326,7 +325,7 @@ ms.lasthandoff: 04/06/2018
 [Exception] System.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'dbo.InsertRequest'. 
 ```
 
-在这种情况下，请检查配置文件，尤其是 **WorkerRoleSynchronizationStorageAccountConnectionString** 的设置。 此错误通常表示辅助角色无法成功初始化首次使用的元数据数据库。 
+在这种情况下，请检查配置文件，尤其是 **WorkerRoleSynchronizationStorageAccountConnectionString**的设置。 此错误通常表示辅助角色无法成功初始化首次使用的元数据数据库。 
 
 [!INCLUDE [elastic-scale-include](../../includes/elastic-scale-include.md)]
 

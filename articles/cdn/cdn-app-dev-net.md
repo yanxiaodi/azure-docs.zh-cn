@@ -1,24 +1,25 @@
 ---
-title: "适用于 .NET 的 Azure CDN 库入门 | Microsoft Docs"
-description: "了解如何编写 .NET 应用程序以使用 Visual Studio 管理 Azure CDN。"
+title: 适用于 .NET 的 Azure CDN 库入门 | Microsoft Docs
+description: 了解如何编写 .NET 应用程序以使用 Visual Studio 管理 Azure CDN。
 services: cdn
 documentationcenter: .net
 author: zhangmanling
 manager: erikre
-editor: 
+editor: ''
 ms.assetid: 63cf4101-92e7-49dd-a155-a90e54a792ca
-ms.service: cdn
+ms.service: azure-cdn
 ms.workload: tbd
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
 ms.date: 01/23/2017
 ms.author: mazha
-ms.openlocfilehash: 5379586355ece98af6295236d6cbd09cb31c742b
-ms.sourcegitcommit: b5c6197f997aa6858f420302d375896360dd7ceb
-ms.translationtype: HT
+ms.openlocfilehash: 7e3ad3a5928b36c221bb83b1c4012c3c9e14f35d
+ms.sourcegitcommit: ccb9a7b7da48473362266f20950af190ae88c09b
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/21/2017
+ms.lasthandoff: 07/05/2019
+ms.locfileid: "67594181"
 ---
 # <a name="get-started-with-azure-cdn-development"></a>Azure CDN 开发入门
 > [!div class="op_single_selector"]
@@ -27,7 +28,7 @@ ms.lasthandoff: 12/21/2017
 > 
 > 
 
-可以使用[适用于 .NET 的 Azure CDN 库](https://msdn.microsoft.com/library/mt657769.aspx)来自动创建和管理 CDN 配置文件和终结点。  本教程介绍一个简单的 .NET 控制台应用程序的创建示例，演示几个可用的操作。  本教程不打算详细描述适用于 .NET 的 Azure CDN 库的所有方面。
+可以使用[适用于 .NET 的 Azure CDN 库](/dotnet/api/overview/azure/cdn)来自动创建和管理 CDN 配置文件和终结点。  本教程介绍一个简单的 .NET 控制台应用程序的创建示例，演示几个可用的操作。  本教程不打算详细描述适用于 .NET 的 Azure CDN 库的所有方面。
 
 需要 Visual Studio 2015 来完成本教程。  可免费下载 [Visual Studio Community 2015](https://www.visualstudio.com/products/visual-studio-community-vs.aspx)。
 
@@ -41,7 +42,7 @@ ms.lasthandoff: 12/21/2017
 ## <a name="create-your-project-and-add-nuget-packages"></a>创建项目并添加 Nuget 包
 现在我们已经为 CDN 配置文件创建了一个资源组，并已将管理该组中的 CDN 配置文件和终结点的权限授予 Azure AD 应用程序，我们可以开始创建我们的应用程序。
 
-在 Visual Studio 2015 中依次单击“**文件**”、“**新建**”和“**项目...**”以打开新项目对话框。  展开“**Visual C#**”，并在左侧窗格中选择“**Windows**”。  在中心窗格中单击“**控制台应用程序**”。  命名项目，然后单击“**确定**”。  
+在 Visual Studio 2015 中依次单击“**文件**”、“**新建**”和“**项目...** ”以打开新项目对话框。  展开“**Visual C#** ”，并在左侧窗格中选择“**Windows**”。  在中心窗格中单击“**控制台应用程序**”。  命名项目，然后单击“**确定**”。  
 
 ![新建项目](./media/cdn-app-dev-net/cdn-new-project.png)
 
@@ -50,7 +51,7 @@ ms.lasthandoff: 12/21/2017
 1. 依次单击“**工具**”菜单、“**Nuget 包管理器**”和“**包管理器控制台**”。
    
     ![管理 NuGet 包](./media/cdn-app-dev-net/cdn-manage-nuget.png)
-2. 在“包管理器控制台”中，执行以下命令以安装 **Active Directory 验证库 (ADAL)**：
+2. 在“包管理器控制台”中，执行以下命令以安装 **Active Directory 验证库 (ADAL)** ：
    
     `Install-Package Microsoft.IdentityModel.Clients.ActiveDirectory`
 3. 执行以下命令来安装 **Azure CDN 管理库**:
@@ -72,7 +73,7 @@ ms.lasthandoff: 12/21/2017
     using Microsoft.IdentityModel.Clients.ActiveDirectory;
     using Microsoft.Rest;
     ```
-2. 我们需要定义我们的方法将使用的一些常量。  在 `Program` 类中，但在 `Main` 方法之前，添加以下内容。  请务必根据需要使用值替换占位符，包括**&lt;尖括号&gt;**。
+2. 我们需要定义我们的方法将使用的一些常量。  在 `Program` 类中，但在 `Main` 方法之前，添加以下内容。  请务必根据需要使用值替换占位符，包括 **&lt;尖括号&gt;** 。
    
     ```csharp
     //Tenant app constants
@@ -337,7 +338,7 @@ private static void PromptDeleteCdnProfile(CdnManagementClient cdn)
 ## <a name="next-steps"></a>后续步骤
 要从本演练中查看完成的项目，请[下载示例](https://code.msdn.microsoft.com/Azure-CDN-Management-1f2fba2c)。
 
-要查找与适用于 .NET 的 Azure CDN 管理库有关的其他文档，请查看 [MSDN 参考](https://msdn.microsoft.com/library/mt657769.aspx)。
+要查找与适用于 .NET 的 Azure CDN 管理库有关的其他文档，请查看 [MSDN 参考](/dotnet/api/overview/azure/cdn)。
 
 使用 [PowerShell](cdn-manage-powershell.md) 管理 CDN 资源。
 

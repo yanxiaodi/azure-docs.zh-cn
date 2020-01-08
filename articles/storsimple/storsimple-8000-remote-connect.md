@@ -1,12 +1,12 @@
 ---
-title: "远程连接到 StorSimple 设备 | Microsoft Docs"
-description: "介绍如何配置设备进行远程管理，以及如何通过 HTTP 或 HTTPS 连接到 Windows PowerShell for StorSimple。"
+title: 远程连接到 StorSimple 设备 | Microsoft Docs
+description: 介绍如何配置设备进行远程管理，以及如何通过 HTTP 或 HTTPS 连接到 Windows PowerShell for StorSimple。
 services: storsimple
-documentationcenter: 
+documentationcenter: ''
 author: alkohli
 manager: jeconnoc
-editor: 
-ms.assetid: 
+editor: ''
+ms.assetid: ''
 ms.service: storsimple
 ms.devlang: NA
 ms.topic: article
@@ -15,11 +15,12 @@ ms.workload: NA
 ms.date: 01/02/2018
 ms.author: alkohli
 ms.custom: H1Hack27Feb2017
-ms.openlocfilehash: 9414d9c93fe463910ffa6fce72aada6a0d720464
-ms.sourcegitcommit: 79683e67911c3ab14bcae668f7551e57f3095425
-ms.translationtype: HT
+ms.openlocfilehash: 05bec60f4c56c98e9b910b50e858656a2e5554b2
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/25/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60631734"
 ---
 # <a name="connect-remotely-to-your-storsimple-8000-series-device"></a>远程连接到 StorSimple 8000 系列设备
 
@@ -45,7 +46,7 @@ ms.lasthandoff: 01/25/2018
 
 可以使用 Azure 门户或串行控制台来配置远程管理。 在下列过程中选择：
 
-* [使用 Azure 门户通过 HTTP 启用远程管理](#use-the-azure-classic-portal-to-enable-remote-management-over-http)
+* 使用 Azure 门户通过 HTTP 启用远程管理
 * [使用串行控制台通过 HTTP 启用远程管理](#use-the-serial-console-to-enable-remote-management-over-http)
 
 启用远程管理后，使用以下过程为远程连接准备客户端。
@@ -58,15 +59,15 @@ ms.lasthandoff: 01/25/2018
 
 #### <a name="to-enable-remote-management-through-the-azure-portal"></a>通过 Azure 门户启用远程管理
 
-1. 转到 StorSimple Device Manager 服务。 选择“设备”，选择并单击要为其配置远程管理的设备。 转到“设备设置”>“安全性”。
-2. 在“安全设置”边栏选项卡中，单击“远程管理”。
-3. 在“远程管理”边栏选项卡中，将“启用远程管理”设置为“是”。
+1. 转到 StorSimple Device Manager 服务。 选择“设备”，选择并单击要为其配置远程管理的设备。  转到“设备设置”>“安全性”  。
+2. 在“安全设置”  边栏选项卡中，单击“远程管理”  。
+3. 在“远程管理”边栏选项卡中，将“启用远程管理”设置为“是”。   
 4. 现在可选择使用 HTTP 进行连接。 （默认为通过 HTTPS 连接。）请确保已选中 HTTP。
    
    > [!NOTE]
    > 只有受信任的网络才支持通过 HTTP 连接。
    
-5. 单击“保存”，出现确认提示时，选择“是”。
+5. 单击“保存”，出现确认提示时，选择“是”。  
 
 ### <a name="use-the-serial-console-to-enable-remote-management-over-http"></a>使用串行控制台通过 HTTP 启用远程管理
 在设备串行控制台上执行以下步骤以启用远程管理。
@@ -76,7 +77,7 @@ ms.lasthandoff: 01/25/2018
 2. 在提示符下键入：`Enable-HcsRemoteManagement –AllowHttp`
 3. 会收到使用 HTTP 连接到设备的安全漏洞的相关通知。 出现提示时，键入 **Y** 以确认。
 4. 键入以下内容来验证是否启用了 HTTP：`Get-HcsSystem`
-5. 验证“RemoteManagementMode”字段是否显示为“HttpsAndHttpEnabled”。下图显示了 PuTTY 中的这些设置。
+5. 验证“RemoteManagementMode”  字段是否显示为“HttpsAndHttpEnabled”  。下图显示了 PuTTY 中的这些设置。
    
      ![已启用串行 HTTPS 和 HTTP](./media/storsimple-remote-connect/HCS_SerialHttpsAndHttpEnabled.png)
 
@@ -123,7 +124,7 @@ ms.lasthandoff: 01/25/2018
 
 可以使用 Azure 门户或串行控制台来配置远程管理。 在下列过程中选择：
 
-* [使用 Azure 门户通过 HTTPS 启用远程管理](#use-the-azure-classic-portal-to-enable-remote-management-over-https)
+* 使用 Azure 门户通过 HTTPS 启用远程管理
 * [使用串行控制台通过 HTTPS 启用远程管理](#use-the-serial-console-to-enable-remote-management-over-https)
 
 启用远程管理后，使用以下过程为远程管理准备主机，以及从远程主机连接到设备。
@@ -137,12 +138,12 @@ ms.lasthandoff: 01/25/2018
 
 #### <a name="to-enable-remote-management-over-https-from-the-azure-portal"></a>在 Azure 门户中通过 HTTPS 启用远程管理
 
-1. 转到 StorSimple Device Manager 服务。 选择“设备”，选择并单击要为其配置远程管理的设备。 转到“设备设置”>“安全性”。
-2. 在“安全设置”边栏选项卡中，单击“远程管理”。
-3. 将“启用远程管理”设置为“是”。
+1. 转到 StorSimple Device Manager 服务。 选择“设备”，选择并单击要为其配置远程管理的设备。  转到“设备设置”>“安全性”  。
+2. 在“安全设置”  边栏选项卡中，单击“远程管理”  。
+3. 将“启用远程管理”  设置为“是”  。
 4. 现在可以选择使用 HTTPS 进行连接。 （默认为通过 HTTPS 连接。）请确保已选中 HTTPS。
-5. 依次单击“...”、“下载远程管理证书”。 指定保存此文件的位置。 需要在用于连接到设备的客户端或主机计算机上安装此证书。
-6. 单击“保存”，出现确认提示时，单击“是”。
+5. 依次单击“...”、“下载远程管理证书”  。 指定保存此文件的位置。 需要在用于连接到设备的客户端或主机计算机上安装此证书。
+6. 单击“保存”，出现确认提示时，单击“是”。  
 
 ### <a name="use-the-serial-console-to-enable-remote-management-over-https"></a>使用串行控制台通过 HTTPS 启用远程管理
 
@@ -159,7 +160,7 @@ ms.lasthandoff: 01/25/2018
    
      `Get-HcsSystem`
    
-    请确保“RemoteManagementMode”字段显示为“HttpsEnabled”。下图显示了 PuTTY 中的这些设置。
+    请确保“RemoteManagementMode”  字段显示为“HttpsEnabled”  。下图显示了 PuTTY 中的这些设置。
    
      ![已启用串行 HTTPS](./media/storsimple-remote-connect/HCS_SerialHttpsEnabled.png)
 4. 从 `Get-HcsSystem` 的输出中，复制设备的序列号，并将其保存供稍后使用。
@@ -189,20 +190,20 @@ ms.lasthandoff: 01/25/2018
 下面描述了上述每个过程。
 
 #### <a name="to-import-the-certificate-on-the-remote-host"></a>在远程主机上导入证书
-1. 右键单击 .cer 文件并选择“安装证书”。 这会启动证书导入向导。
+1. 右键单击 .cer 文件并选择“安装证书”  。 这会启动证书导入向导。
    
     ![证书导入向导 1](./media/storsimple-remote-connect/HCS_CertificateImportWizard1.png)
-2. 对于“存储位置”，选择“本地计算机”，并单击“下一步”。
-3. 选择“将所有证书放入下列存储”，并单击“浏览”。 导航到远程主机的根存储，并单击“下一步”。
+2. 对于“存储位置”  ，选择“本地计算机”  ，并单击“下一步”  。
+3. 选择“将所有证书放入下列存储”  ，并单击“浏览”  。 导航到远程主机的根存储，并单击“下一步”  。
    
     ![证书导入向导 2](./media/storsimple-remote-connect/HCS_CertificateImportWizard2.png)
-4. 单击“完成” 。 将显示一条提示已成功导入的消息。
+4. 单击 **“完成”** 。 将显示一条提示已成功导入的消息。
    
     ![证书导入向导 3](./media/storsimple-remote-connect/HCS_CertificateImportWizard3.png)
 
 #### <a name="to-add-device-serial-numbers-to-the-remote-host"></a>将设备序列号添加到远程主机
 1. 以管理员身份启动记事本，并打开位于 \Windows\System32\Drivers\etc 的主机文件。
-2. 将以下三项添加到主机文件中：**DATA 0 IP 地址**、**控制器 0 固定 IP 地址**和**控制器 1 固定 IP 地址**。
+2. 将以下条目添加到主机文件中：DATA 0 IP 地址、控制器 0 固定 IP 地址和控制器 1 固定 IP 地址    。
 3. 输入之前保存的设备序列号。 将此设备序列号映射到 IP 地址，如下图所示。 对于控制器 0 和控制器 1，请在序列号末尾追加 **Controller0** 和 **Controller1**（CN 名）。
    
     ![将 CN 名添加到主机文件中](./media/storsimple-remote-connect/HCS_AddingCNNameToHostsFile.png)

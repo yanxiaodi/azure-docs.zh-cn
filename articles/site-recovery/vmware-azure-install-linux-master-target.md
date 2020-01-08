@@ -1,28 +1,28 @@
 ---
-title: 安装 Linux 主目标服务器用于从 Azure 故障转移到本地 | Microsoft Docs
-description: 在重新保护 Linux 虚拟机之前，需要一个 Linux 主目标服务器。 本文介绍如何安装该服务器。
+title: 安装 Linux 主目标服务器以便故障回复到本地站点 | Microsoft Docs
+description: 了解如何设置 Linux 主目标服务器，以便在使用 Azure Site Recovery 将 VMware VM 灾难恢复到 Azure 期间故障回复到本地站点。
+author: mayurigupta13
 services: site-recovery
-documentationcenter: ''
-author: nsoneji
-manager: gauravd
+manager: rochakm
 ms.service: site-recovery
-ms.topic: article
-ms.date: 05/08/2018
-ms.author: nisoneji
-ms.openlocfilehash: a18bc242d10c9eb287d0f3645490acb9ca9fec2a
-ms.sourcegitcommit: c52123364e2ba086722bc860f2972642115316ef
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 03/06/2019
+ms.author: mayg
+ms.openlocfilehash: 5b4b3f5025edef242b87215665fd65f131157943
+ms.sourcegitcommit: beb34addde46583b6d30c2872478872552af30a1
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/11/2018
-ms.locfileid: "34072430"
+ms.lasthandoff: 08/22/2019
+ms.locfileid: "69904403"
 ---
-# <a name="install-a-linux-master-target-server"></a>安装 Linux 主目标服务器
+# <a name="install-a-linux-master-target-server-for-failback"></a>安装用于故障回复的 Linux 主目标服务器
 将虚拟机故障转移到 Azure 后，可将虚拟机故障回复到本地站点。 若要故障回复，需要在本地站点中重新保护 Azure 中的虚拟机。 对于此过程，需要安装一个本地主目标服务器用于接收流量。 
 
 如果受保护的虚拟机是 Windows 虚拟机，则需要安装 Windows 主目标。 对于 Linux 虚拟机，需要安装 Linux 主目标。 请阅读以下步骤，了解如何创建和安装 Linux 主目标。
 
 > [!IMPORTANT]
 > 从主目标服务器版本 9.10.0 开始，只能在 Ubuntu 16.04 服务器上安装最新的主目标服务器。 CentOS6.6 服务器不支持新安装。 但是，可继续使用 9.10.0 版本升级旧版主目标服务器。
+> 不支持 LVM 上的主目标服务器。
 
 ## <a name="overview"></a>概述
 本文提供 Linux 主目标的相关安装说明。
@@ -41,12 +41,12 @@ ms.locfileid: "34072430"
 ## <a name="sizing-guidelines-for-creating-master-target-server"></a>创建主目标服务器时的大小调整准则
 
 根据下列大小调整准则创建主目标：
-- RAM：6GB 或更多
+- **RAM**：6 GB 或更多
 - **OS 磁盘大小**：100 GB 或更多（用于安装 OS）
-- 保留驱动器的附加磁盘大小：1TB
-- CPU 内核数：4 个内核或更多
+- **保留驱动器的附加磁盘大小**：1 TB
+- **CPU 核心数**：4 个核心或更多
 
-支持以下受支持的 Ubuntu 内核。
+支持以下 Ubuntu 内核:
 
 
 |内核系列  |最高支持  |
@@ -62,12 +62,12 @@ ms.locfileid: "34072430"
 
 按下列步骤安装 Ubuntu 16.04.2 64 位操作系统。
 
-1.   转至[下载链接](https://www.ubuntu.com/download/server/thank-you?version=16.04.2&architecture=amd64)，并选择最接近的镜像，从中下载 Ubuntu 16.04.2 最简版 64 位 ISO。
+1.   转至[下载链接](http://old-releases.ubuntu.com/releases/16.04.2/ubuntu-16.04.2-server-amd64.iso)，选择最接近的镜像，从中下载 Ubuntu 16.04.2 最简版 64 位 ISO。
 将 Ubuntu 16.04.2 最简版 64 位 ISO 保存在 DVD 驱动器中，并启动系统。
 
 1.  选择“英语”作为首选语言，再按 Enter。
     
-    ![选择一种语言](./media/vmware-azure-install-linux-master-target/image1.png)
+    ![选择语言](./media/vmware-azure-install-linux-master-target/image1.png)
 1. 选择“安装 Ubuntu 服务器”，再按 Enter。
 
     ![选择“安装 Ubuntu 服务器”](./media/vmware-azure-install-linux-master-target/image2.png)
@@ -83,7 +83,7 @@ ms.locfileid: "34072430"
 1. 选择“否”（默认选项），然后按 Enter。
 
      ![配置键盘](./media/vmware-azure-install-linux-master-target/image5.png)
-1. 选择“英语(美国)”作为键盘原产地语言，再按 Enter。
+1. 选择 "**英语 (美国)** " 作为键盘的源国家/地区, 然后选择**Enter**。
 
 1. 选择“英语(美国)”作为键盘布局，再按 Enter。
 
@@ -130,7 +130,7 @@ ms.locfileid: "34072430"
 
     ![选择软件](./media/vmware-azure-install-linux-master-target/image19-ubuntu.png)
 
-1. 在安装 GRUB 启动加载程序的选项中，选择“是”，再按 Enter。
+1. 在选择是否安装 GRUB 启动加载程序时，选择“是”，再按 Enter。
      
     ![GRUB 启动安装程序](./media/vmware-azure-install-linux-master-target/image20.png)
 
@@ -168,15 +168,15 @@ ms.locfileid: "34072430"
 
 5. 查看是否存在包含 **disk.EnableUUID** 的行。
 
-    - 如果该值存在且设置为 False，请将它更改为 True。 （值不区分大小写。）
+   - 如果该值存在且设置为 False，请将它更改为 True。 （值不区分大小写。）
 
-    - 如果该值存在且设置为 True，请选择“取消”。
+   - 如果该值存在且设置为 True，请选择“取消”。
 
-    - 如果该值不存在，请选择“添加行”。
+   - 如果该值不存在，请选择“添加行”。
 
-    - 在名称列中，添加“disk.EnableUUID”，然后将值设置为 TRUE。
+   - 在名称列中，添加“disk.EnableUUID”，然后将值设置为 TRUE。
 
-    ![检查 disk.EnableUUID 是否存在](./media/vmware-azure-install-linux-master-target/image25.png)
+     ![检查 disk.EnableUUID 是否存在](./media/vmware-azure-install-linux-master-target/image25.png)
 
 #### <a name="disable-kernel-upgrades"></a>禁用内核升级
 
@@ -185,7 +185,7 @@ Azure Site Recovery 主目标服务器需要特定版本的 Ubuntu，请确保�
 #### <a name="download-and-install-additional-packages"></a>下载并安装其他包
 
 > [!NOTE]
-> 在下载并安装其他包之前，请确保已建立 Internet 连接。 如果没有 Internet 连接，需手动找到并安装这些 RPM 包。
+> 在下载并安装其他包之前，请确保已建立 Internet 连接。 如果没有 Internet 连接，需手动找到并安装这些 Deb 包。
 
  `apt-get install -y multipath-tools lsscsi python-pyasn1 lvm2 kpartx`
 
@@ -214,12 +214,11 @@ Azure Site Recovery 主目标服务器需要特定版本的 Ubuntu，请确保�
 
 ### <a name="apply-custom-configuration-changes"></a>应用自定义配置更改
 
-若要应用自定义配置更改，请使用以下步骤：
-
+若要应用自定义配置更改, 请使用以下步骤作为根用户:
 
 1. 运行以下命令解压缩二进制文件。
 
-    `tar -zxvf latestlinuxmobsvc.tar.gz`
+    `tar -xvf latestlinuxmobsvc.tar.gz`
 
     ![要运行的命令的屏幕截图](./media/vmware-azure-install-linux-master-target/image16.png)
 
@@ -243,9 +242,9 @@ Azure Site Recovery 主目标服务器需要特定版本的 Ubuntu，请确保�
 
 2. 通过 multipath -ll 命令了解保留磁盘的多路径 I：multipath -ll
 
-    ![多路径 ID](./media/vmware-azure-install-linux-master-target/image22.png)
+    ![多路径 ID](./media/vmware-azure-install-linux-master-target/image27.png)
 
-3. 格式化驱动器，然后在新驱动器上创建文件系统：mkfs.ext4 /dev/mapper/<保留磁盘的多路径 id>。
+3. 格式化驱动器, 然后在新驱动器上创建文件系统: **mkfs\<. ext4/dev/mapper/保留磁盘的多路径 id >** 。
     
     ![文件系统](./media/vmware-azure-install-linux-master-target/image23-centos.png)
 
@@ -262,7 +261,7 @@ Azure Site Recovery 主目标服务器需要特定版本的 Ubuntu，请确保�
     
     按 Insert 开始编辑文件。 创建新行并插入以下文本。 根据前一命令中突出显示的多路径 ID 编辑磁盘多路径 ID。
 
-    **/dev/mapper/<Retention disks multipath id> /mnt/retention ext4 rw 0 0**
+    **/dev/mapper/\<保留磁盘多路径 ID> /mnt/retention ext4 rw 0 0**
 
     按 Esc，键入 :wq（写入并退出）来关闭编辑器窗口。
 
@@ -279,7 +278,7 @@ Azure Site Recovery 主目标服务器需要特定版本的 Ubuntu，请确保�
 
     `echo <passphrase> >passphrase.txt`
 
-    示例： 
+    例如： 
 
        `echo itUx70I47uxDuUVY >passphrase.txt`
     
@@ -287,11 +286,10 @@ Azure Site Recovery 主目标服务器需要特定版本的 Ubuntu，请确保�
 2. 记下配置服务器的 IP 地址， 运行以下命令安装主目标服务器并将它注册到配置服务器。
 
     ```
-    ./install -q -d /usr/local/ASR -r MT -v VmWare
     /usr/local/ASR/Vx/bin/UnifiedAgentConfigurator.sh -i <ConfigurationServer IP Address> -P passphrase.txt
     ```
 
-    示例： 
+    例如： 
     
     ```
     /usr/local/ASR/Vx/bin/UnifiedAgentConfigurator.sh -i 104.40.75.37 -P passphrase.txt
@@ -322,7 +320,7 @@ Azure Site Recovery 主目标服务器需要特定版本的 Ubuntu，请确保�
     ./install -q -d /usr/local/ASR -r MT -v VmWare
     /usr/local/ASR/Vx/bin/UnifiedAgentConfigurator.sh -i <ConfigurationServer IP Address> -P passphrase.txt
     ```
-    示例： 
+    例如： 
 
     ```
     /usr/local/ASR/Vx/bin/UnifiedAgentConfigurator.sh -i 104.40.75.37 -P passphrase.txt

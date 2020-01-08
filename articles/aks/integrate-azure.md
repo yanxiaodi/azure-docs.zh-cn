@@ -2,17 +2,18 @@
 title: 使用 Open Service Broker for Azure (OSBA) 与 Azure 托管服务进行集成
 description: 使用 Open Service Broker for Azure (OSBA) 与 Azure 托管服务进行集成
 services: container-service
-author: sozercan
-manager: timlt
+author: zr-msft
+manager: jeconnoc
 ms.service: container-service
 ms.topic: overview
 ms.date: 12/05/2017
-ms.author: seozerca
-ms.openlocfilehash: bdc97e9e28dd2af090c82378457b3c93b276cc58
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
+ms.author: zarhoads
+ms.openlocfilehash: 7a887905bcb4b09c1b4ae179116b3f08c75caabd
+ms.sourcegitcommit: 563f8240f045620b13f9a9a3ebfe0ff10d6787a2
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 04/01/2019
+ms.locfileid: "58758288"
 ---
 # <a name="integrate-with-azure-managed-services-using-open-service-broker-for-azure-osba"></a>使用 Open Service Broker for Azure (OSBA) 与 Azure 托管服务进行集成
 
@@ -21,7 +22,7 @@ ms.lasthandoff: 05/07/2018
 ## <a name="prerequisites"></a>先决条件
 * Azure 订阅
 
-* Azure CLI 2.0：可[在本地安装][azure-cli-install]，或在 [Azure Cloud Shell][azure-cloud-shell] 中使用。
+* Azure CLI：可[在本地安装][azure-cli-install]，或在 [Azure Cloud Shell][azure-cloud-shell] 中使用。
 
 * Helm CLI 2.7+：可[在本地安装][helm-cli-install]，或在 [Azure Cloud Shell][azure-cloud-shell] 中使用。
 
@@ -43,10 +44,16 @@ helm init --upgrade
 helm repo add svc-cat https://svc-catalog-charts.storage.googleapis.com
 ```
 
-最后，使用 Helm 图表安装服务目录：
+最后，使用 Helm Chart 安装服务目录。 如果群集启用了 RBAC，请运行此命令。
 
 ```azurecli-interactive
-helm install svc-cat/catalog --name catalog --namespace catalog --set rbacEnable=false
+helm install svc-cat/catalog --name catalog --namespace catalog --set apiserver.storage.etcd.persistence.enabled=true --set apiserver.healthcheck.enabled=false --set controllerManager.healthcheck.enabled=false --set apiserver.verbosity=2 --set controllerManager.verbosity=2
+```
+
+如果群集未启用 RBAC，请运行以下命令。
+
+```azurecli-interactive
+helm install svc-cat/catalog --name catalog --namespace catalog --set rbacEnable=false --set apiserver.storage.etcd.persistence.enabled=true --set apiserver.healthcheck.enabled=false --set controllerManager.healthcheck.enabled=false --set apiserver.verbosity=2 --set controllerManager.verbosity=2
 ```
 
 运行 Helm 图表后，验证 `servicecatalog` 是否出现在以下命令的输出中：
@@ -68,7 +75,7 @@ v1beta1.storage.k8s.io               10
 
 ## <a name="install-open-service-broker-for-azure"></a>安装 Open Service Broker for Azure
 
-下一步是安装 [Open Service Broker for Azure][open-service-broker-azure]，其中包括 Azure 托管服务目录。 可用 Azure 服务的示例包括：Azure Database for PostgreSQL、Azure Redis 缓存、Azure Database for MySQL，Azure Cosmos DB、Azure SQL 数据库等。
+下一步是安装 [Open Service Broker for Azure][open-service-broker-azure]，其中包括 Azure 托管服务目录。 可用的 Azure 服务示例包括 Azure Database for PostgreSQL、Azure Database for MySQL 和 Azure SQL 数据库。
 
 首先添加 Open Service Broker for Azure Helm 存储库：
 
@@ -153,7 +160,7 @@ chmod +x ./svcat
 ./svcat get classes
 ```
 
-最后，列出所有可用的服务计划。 服务计划是 Azure 托管服务的服务层。 例如，对于 Azure Database for MySQL，计划范围为 `basic50`（具有 50 个数据传输单位 (DTU) 的基本层）到 `standard800`（具有 800 个 DTU 的标准层）。
+最后，列出所有可用的服务计划。 服务计划是 Azure 托管服务的服务层级。 例如，对于 Azure Database for MySQL，计划范围为 `basic50`（具有 50 个数据传输单位 (DTU) 的基本层）到 `standard800`（具有 800 个 DTU 的标准层）。
 
 ```azurecli-interactive
 ./svcat get plans
@@ -164,7 +171,7 @@ chmod +x ./svcat
 在此步骤中，使用 Helm 为 WordPress 安装更新的 Helm 图表。 该图表预配 WordPress 可以使用的外部 Azure Database for MySQL 实例。 此过程可能需要几分钟。
 
 ```azurecli-interactive
-helm install azure/wordpress --name wordpress --namespace wordpress --set resources.requests.cpu=0
+helm install azure/wordpress --name wordpress --namespace wordpress --set resources.requests.cpu=0 --set replicaCount=1
 ```
 
 为了验证安装是否已预配适当的资源，请列出已安装的服务实例和绑定：
@@ -188,7 +195,7 @@ kubectl get secrets -n wordpress -o yaml
 
 <!-- LINKS - external -->
 [helm-charts]: https://github.com/Azure/helm-charts
-[helm-cli-install]: kubernetes-helm.md#install-helm-cli
+[helm-cli-install]: https://docs.helm.sh/helm/#helm-install
 [helm-create-new-chart]: https://github.com/Azure/helm-charts#creating-a-new-chart
 [kubernetes-service-catalog]: https://github.com/kubernetes-incubator/service-catalog
 [open-service-broker-azure]: https://github.com/Azure/open-service-broker-azure

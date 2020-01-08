@@ -1,38 +1,41 @@
 ---
-title: 快速入门 - 适用于 Linux 的 Azure Docker CE 群集
+title: （已弃用）快速入门 - 适用于 Linux 的 Azure Docker CE 群集
 description: 快速学习在 Azure 容器服务中使用 Azure CLI 为 Linux 容器创建 Docker CE 群集。
 services: container-service
-author: neilpeterson
+author: iainfoulds
 manager: jeconnoc
 ms.service: container-service
 ms.topic: article
-ms.date: 02/26/2018
-ms.author: nepeters
+ms.date: 07/16/2018
+ms.author: iainfou
 ms.custom: ''
-ms.openlocfilehash: cd52982fc650d5fd3b4edd8513946a721306a451
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.openlocfilehash: a7a7455ce9167a9c480d317d50fdce49e2ef06a9
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60721772"
 ---
-# <a name="deploy-docker-ce-cluster"></a>部署 Docker CE 群集
+# <a name="deprecated-deploy-docker-ce-cluster"></a>（已弃用）部署 Docker CE 群集
+
+[!INCLUDE [ACS deprecation](../../../includes/container-service-deprecation.md)]
 
 在本快速入门中，将使用 Azure CLI 部署 Docker CE 群集。 然后，在群集上部署和运行包含 Web 前端和 Redis 实例的多容器应用程序。 完成后，即可通过 Internet 访问应用程序。
 
-Azure 容器服务上的 Docker CE 为预览版，不应用于生产工作负荷。
+Azure 容器服务上的 Docker CE 为预览版，不应用于生产工作负荷  。
 
-如果你还没有 Azure 订阅，可以在开始前创建一个 [免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
+如果没有 Azure 订阅，请在开始之前创建一个[免费帐户](https://azure.microsoft.com/free/?WT.mc_id=A261C142F)。
 
-如果选择在本地安装并使用 CLI，此快速入门教程要求运行 Azure CLI 2.0.4 版或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。
+如果选择在本地安装并使用 CLI，此快速入门教程要求运行 Azure CLI 2.0.4 版或更高版本。 运行 `az --version` 即可查找版本。 如需进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。
 
 ## <a name="create-a-resource-group"></a>创建资源组
 
-使用 [az group create](/cli/azure/group#az_group_create) 命令创建资源组。 Azure 资源组是在其中部署和管理 Azure 资源的逻辑组。
+使用 [az group create](/cli/azure/group#az-group-create) 命令创建资源组。 Azure 资源组是在其中部署和管理 Azure 资源的逻辑组。
 
-以下示例在“ukwest”位置创建名为“myResourceGroup”的资源组。
+以下示例在 westus2 位置创建名为 myResourceGroup 的资源组。  
 
 ```azurecli-interactive
-az group create --name myResourceGroup --location ukwest
+az group create --name myResourceGroup --location westus2
 ```
 
 输出：
@@ -40,7 +43,7 @@ az group create --name myResourceGroup --location ukwest
 ```json
 {
   "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup",
-  "location": "ukwest",
+  "location": "westus2",
   "managedBy": null,
   "name": "myResourceGroup",
   "properties": {
@@ -52,15 +55,15 @@ az group create --name myResourceGroup --location ukwest
 
 ## <a name="create-docker-swarm-cluster"></a>创建 Docker Swarm 群集
 
-使用 [az acs create](/cli/azure/acs#az_acs_create) 命令在 Azure 容器服务中创建 Docker CE 群集。 
+使用 [az acs create](/cli/azure/acs#az-acs-create) 命令在 Azure 容器服务中创建 Docker CE 群集。 有关 Docker CE 区域可用性的信息，请访问 [Docker CE 的 ACS 区域](https://github.com/Azure/ACS/blob/master/announcements/2017-08-04_additional_regions.md)
 
-以下示例创建名为 mySwarmCluster 的群集，其中包含一个 Linux 主节点和三个 Linux 代理节点。
+以下示例创建名为 mySwarmCluster  的群集，其中包含一个 Linux 主节点和三个 Linux 代理节点。
 
 ```azurecli-interactive
 az acs create --name mySwarmCluster --orchestrator-type dockerce --resource-group myResourceGroup --generate-ssh-keys
 ```
 
-在某些情况下（如限时试用），Azure 订阅对 Azure 资源的访问受限。 如果由于可用核心有限而导致部署失败，请将 `--agent-count 1` 添加到 [az acs creat](/cli/azure/acs#az_acs_create) 命令中，以减少默认代理计数。 
+在某些情况下（如限时试用），Azure 订阅对 Azure 资源的访问受限。 如果由于可用核心有限而导致部署失败，请将 `--agent-count 1` 添加到 [az acs creat](/cli/azure/acs#az-acs-create) 命令中，以减少默认代理计数。 
 
 几分钟后，该命令完成并返回有关群集的 JSON 格式信息。
 
@@ -152,7 +155,7 @@ lg99i4hy68r9        azure-vote_azure-vote-back.1    redis:latest                
 ![浏览到 Azure Vote 的图像](media/container-service-docker-swarm-mode-walkthrough/azure-vote.png)
 
 ## <a name="delete-cluster"></a>删除群集
-如果不再需要群集，可以使用 [az group delete](/cli/azure/group#az_group_delete) 命令删除资源组、容器服务及所有相关资源。
+如果不再需要群集，可以使用 [az group delete](/cli/azure/group#az-group-delete) 命令删除资源组、容器服务及所有相关资源。
 
 ```azurecli-interactive
 az group delete --name myResourceGroup --yes --no-wait
@@ -168,7 +171,7 @@ az group delete --name myResourceGroup --yes --no-wait
 
 在本快速入门中，你部署了 Docker Swarm 群集，并向该群集部署了多容器应用程序。
 
-若要了解如何将 Docker Swarm 与 Visual Studio Team Services 集成，请继续学习“将 CI/CD 用于 Docker Swarm 和 VSTS”。
+若要了解如何将 Docker Swarm 与 Azure DevOps 集成，请继续学习“将 CI/CD 与 Docker Swarm 和 Azure DevOps 配合使用”。
 
 > [!div class="nextstepaction"]
-> [将 CI/CD 用于 Docker Swarm 和 VSTS](./container-service-docker-swarm-setup-ci-cd.md)
+> [将 CI/CD 与 Docker Swarm 和 Azure DevOps 配合使用](./container-service-docker-swarm-setup-ci-cd.md)

@@ -1,30 +1,25 @@
 ---
-title: "异常处理和错误日志记录方案 — Azure 逻辑应用 | Microsoft Docs"
-description: "介绍 Azure 逻辑应用的高级异常处理和错误日志记录的实际用例"
-keywords: 
+title: 异常处理和错误日志记录方案 — Azure 逻辑应用 | Microsoft Docs
+description: 下面是一个关于 Azure 逻辑应用中高级异常处理和错误日志记录的实际用例
 services: logic-apps
-author: hedidin
-manager: anneta
-editor: 
-documentationcenter: 
-ms.assetid: 63b0b843-f6b0-4d9a-98d0-17500be17385
 ms.service: logic-apps
-ms.workload: na
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.suite: integration
+author: hedidin
+ms.author: estfan
+ms.reviewer: LADocs
+ms.assetid: 63b0b843-f6b0-4d9a-98d0-17500be17385
 ms.topic: article
-ms.custom: H1Hack27Feb2017
 ms.date: 07/29/2016
-ms.author: LADocs; b-hoedid
-ms.openlocfilehash: a8bae22b28b7de2f2579f310c8bd4b0e43885a0d
-ms.sourcegitcommit: a5f16c1e2e0573204581c072cf7d237745ff98dc
-ms.translationtype: HT
+ms.openlocfilehash: ec01f738ee4943659de1b49ab8d52218e6a8fb79
+ms.sourcegitcommit: 04ec7b5fa7a92a4eb72fca6c6cb617be35d30d0c
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/11/2017
+ms.lasthandoff: 07/22/2019
+ms.locfileid: "68385455"
 ---
-# <a name="scenario-exception-handling-and-error-logging-for-logic-apps"></a>方案：逻辑应用的异常处理和错误日志记录
+# <a name="scenario-exception-handling-and-error-logging-for-logic-apps"></a>方案:逻辑应用的异常处理和错误日志记录
 
-本方案介绍如何扩展逻辑应用以更好地支持异常处理。 我们已经通过一个实际用例回答了“Azure 逻辑应用是否支持异常和错误处理？”的问题
+本方案介绍如何扩展逻辑应用以更好地支持异常处理。 我们已使用实际的用例回答了以下问题：“Azure 逻辑应用是否支持异常和错误处理？”
 
 > [!NOTE]
 > 当前的 Azure 逻辑应用架构提供操作响应的标准模板。 此模板包括内部验证以及从 API 应用返回的错误响应。
@@ -62,7 +57,7 @@ ms.lasthandoff: 12/11/2017
 
 我们使用如下面示例中所示的“Request”触发器。
 
-```` json
+``` json
 "triggers": {
         "request": {
           "type": "request",
@@ -95,7 +90,7 @@ ms.lasthandoff: 12/11/2017
         }
       },
 
-````
+```
 
 
 ## <a name="steps"></a>步骤
@@ -439,7 +434,7 @@ ms.lasthandoff: 12/11/2017
 
 Azure Cosmos DB 中的每个文档都必须具有唯一 ID。 我们使用 `PatientId` 并添加戳转换为 Unix 时间戳值（双精度型）的时间戳。 将该值截断以删除小数值。
 
-可以[从 GitHub](https://github.com/HEDIDIN/LogicAppsExceptionManagementApi/blob/master/Logic App Exception Management API/Controllers/ErrorController.cs) 查看我们的错误控制器 API 的源代码。
+可以从 [GitHub](https://github.com/HEDIDIN/LogicAppsExceptionManagementApi/blob/master/LogicAppsExceptionManagementApi/Controllers/LogController.cs) 查看我们的错误控制器 API 的源代码。
 
 使用以下语法从逻辑应用调用该 API：
 
@@ -476,7 +471,7 @@ Azure Cosmos DB 中的每个文档都必须具有唯一 ID。 我们使用 `Pati
 
 前面代码示例中的表达式检查“Create_NewPatientRecord”的状态是否为“Failed”。
 
-## <a name="summary"></a>摘要
+## <a name="summary"></a>总结
 
 * 可以在逻辑应用中轻松实现日志记录和错误处理。
 * 可以使用 Azure Cosmos DB 作为日志和错误记录的存储库（文档）。
@@ -490,4 +485,4 @@ Azure Cosmos DB 中的每个文档都必须具有唯一 ID。 我们使用 `Pati
 
 * [查看更多逻辑应用示例和方案](../logic-apps/logic-apps-examples-and-scenarios.md)
 * [了解如何监视逻辑应用](../logic-apps/logic-apps-monitor-your-logic-apps.md)
-* [为逻辑应用创建自动部署模板](../logic-apps/logic-apps-create-deploy-template.md)
+* [自动部署逻辑应用](../logic-apps/logic-apps-azure-resource-manager-templates-overview.md)

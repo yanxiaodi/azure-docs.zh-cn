@@ -1,27 +1,21 @@
 ---
-title: "什么是云服务模型和包 | Microsoft Docs"
-description: "描述 Azure 中的云服务模型（.csdef、.cscfg）和包 (.cspkg)"
+title: 什么是云服务模型和包 | Microsoft Docs
+description: 描述 Azure 中的云服务模型（.csdef、.cscfg）和包 (.cspkg)
 services: cloud-services
-documentationcenter: 
-author: Thraka
-manager: timlt
-editor: 
-ms.assetid: 4ce2feb5-0437-496c-98da-1fb6dcb7f59e
+author: georgewallace
 ms.service: cloud-services
-ms.workload: tbd
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 07/05/2017
-ms.author: adegeo
-ms.openlocfilehash: 0589f2efeaaafc35bcb9d869c391a0533fe6e502
-ms.sourcegitcommit: a0be2dc237d30b7f79914e8adfb85299571374ec
-ms.translationtype: HT
+ms.author: gwallace
+ms.openlocfilehash: 47d031e339b3677e0bf6ddcbad9456041c53c6e2
+ms.sourcegitcommit: 4b647be06d677151eb9db7dccc2bd7a8379e5871
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/12/2018
+ms.lasthandoff: 07/19/2019
+ms.locfileid: "68359556"
 ---
 # <a name="what-is-the-cloud-service-model-and-how-do-i-package-it"></a>什么是云服务模型以及如何将其打包？
-云服务由以下三个组件创建：服务定义 *(.csdef)*、服务配置 *(.cscfg)* 和服务包 *(.cspkg)*。 **ServiceDefinition.csdef** 和 **ServiceConfig.cscfg** 文件都基于 XML，同时介绍云服务的结构及其配置方式；统称为模型。 **ServicePackage.cspkg** 是基于 **ServiceDefinition.csdef** 和其他文件生成的 zip 文件，它包含所有必需的基于二进制的依赖项。 Azure 可从 **ServicePackage.cspkg** 和 **ServiceConfig.cscfg** 两者创建云服务。
+云服务由以下三个组件创建：服务定义 *(.csdef)* 、服务配置 *(.cscfg)* 和服务包 *(.cspkg)* 。 **ServiceDefinition.csdef** 和 **ServiceConfig.cscfg** 文件都基于 XML，同时介绍云服务的结构及其配置方式；统称为模型。 **ServicePackage.cspkg** 是基于 **ServiceDefinition.csdef** 和其他文件生成的 zip 文件，它包含所有必需的基于二进制的依赖项。 Azure 可从 **ServicePackage.cspkg** 和 **ServiceConfig.cscfg** 两者创建云服务。
 
 云服务在 Azure 中开始运行后，可以通 **ServiceConfig.cscfg** 文件重新进行配置，但不能更改定义。
 
@@ -33,12 +27,12 @@ ms.lasthandoff: 03/12/2018
   * [创建云服务][vs_create]
   * [重新配置现有云服务][vs_reconfigure]
   * [部署云服务项目][vs_deploy]
-  * [通过远程桌面连接到云服务实例][remotedesktop]
+  * [远程桌面登录到云服务实例][remotedesktop]
 
 <a name="csdef"></a>
 
 ## <a name="servicedefinitioncsdef"></a>ServiceDefinition.csdef
-**ServiceDefinition.csdef** 文件指定 Azure 用于配置云服务的设置。 [Azure 服务定义架构（.csdef 文件）](https://msdn.microsoft.com/library/azure/ee758711.aspx)为服务定义文件提供允许的格式。 以下示例显示了可为 Web 角色和辅助角色定义的设置：
+**ServiceDefinition.csdef** 文件指定 Azure 用于配置云服务的设置。 [Azure 服务定义架构（.csdef 文件）](/previous-versions/azure/reference/ee758711(v=azure.100))为服务定义文件提供允许的格式。 以下示例显示了可为 Web 角色和辅助角色定义的设置：
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -89,9 +83,9 @@ ms.lasthandoff: 03/12/2018
 </ServiceDefinition>
 ```
 
-可以参阅[服务定义架构](https://msdn.microsoft.com/library/azure/ee758711.aspx)以更好地了解此处使用的 XML 架构，而以下是某些元素的快速说明：
+可以参阅[服务定义架构](/previous-versions/azure/reference/ee758711(v=azure.100))以更好地了解此处使用的 XML 架构，而以下是某些元素的快速说明：
 
-**站点**  
+**Sites**  
 包含 IIS7 中承载的网站或 Web 应用程序的定义。
 
 **InputEndpoints**  
@@ -103,7 +97,7 @@ ms.lasthandoff: 03/12/2018
 **ConfigurationSettings**  
 包含特定角色功能的设置定义。
 
-**证书**  
+**Certificates**  
 包含角色所需的证书的定义。 前面的代码示例显示了用于 Azure Connect 的配置的证书。
 
 **LocalResources**  
@@ -118,7 +112,7 @@ ms.lasthandoff: 03/12/2018
 <a name="cscfg"></a>
 
 ## <a name="serviceconfigurationcscfg"></a>ServiceConfiguration.cscfg
-云服务设置的配置由 **ServiceConfiguration.cscfg** 文件中的值确定。 指定要为此文件中每个角色部署的实例数。 在服务定义文件中定义的配置设置值已添加到服务配置文件中。 与云服务相关联的所有管理证书的指纹也会添加到该文件中。 [Azure 服务配置架构（.cscfg 文件）](https://msdn.microsoft.com/library/azure/ee758710.aspx)为服务配置文件提供允许的格式。
+云服务设置的配置由 **ServiceConfiguration.cscfg** 文件中的值确定。 指定要为此文件中每个角色部署的实例数。 在服务定义文件中定义的配置设置值已添加到服务配置文件中。 与云服务相关联的所有管理证书的指纹也会添加到该文件中。 [Azure 服务配置架构（.cscfg 文件）](/previous-versions/azure/reference/ee758710(v=azure.100))为服务配置文件提供允许的格式。
 
 服务配置文件不与该应用程序一起打包，但将作为一个单独的文件上传到 Azure 中并用于配置云服务。 无需重新部署云服务即可上传新的服务配置文件。 云服务正在运行时可以更改云服务的配置值。 以下示例显示了可为 Web 角色和辅助角色定义的配置设置：
 
@@ -140,10 +134,10 @@ ms.lasthandoff: 03/12/2018
 </ServiceConfiguration>
 ```
 
-可以参考[服务配置架构](https://msdn.microsoft.com/library/azure/ee758710.aspx)更好了解此处使用的 XML 架构，不过以下是元素的快速说明：
+可以参考 [服务配置架构](/previous-versions/azure/reference/ee758710(v=azure.100)) 以更好了解此处使用的 XML 架构，而以下是元素的快速说明：
 
 **实例**  
-为角色配置运行实例的数目。 若要防止云服务在升级期间可能变得不可用，建议部署面向 web 角色的多个实例。 部署多个实例即表示遵守 [Azure 计算服务级别协议 (SLA)](http://azure.microsoft.com/support/legal/sla/) 中的准则，此协议可以保证在为一个服务部署了两个或多个角色实例时，面向 Internet 的角色拥有 99.95% 的外部连接。
+为角色配置运行角色实例数。 若要防止云服务在升级期间可能变得不可用，建议部署面向 web 角色的多个实例。 部署多个实例即表示遵守 [Azure 计算服务级别协议 (SLA)](https://azure.microsoft.com/support/legal/sla/) 中的准则，此协议可以保证在为一个服务部署了两个或多个角色实例时，面向 Internet 的角色拥有 99.95% 的外部连接。
 
 **ConfigurationSettings**  
 为角色配置运行实例的设置。 `<Setting>` 元素的名称必须与服务定义文件中的设置定义匹配。
@@ -185,7 +179,7 @@ Azure 仅允许 Web 角色有一个入口点。 即所有通信都通过一个 I
   </Site>
   <Site name="MailSite" packageDir="MailSite">
     <Bindings>
-      <Binding name="mail" endpointName="HttpIn" hostheader="mail.mysite.cloudapp.net" />
+      <Binding name="mail" endpointName="HttpIn" hostHeader="mail.mysite.cloudapp.net" />
     </Bindings>
     <VirtualDirectory name="artifacts" />
     <VirtualApplication name="storageproxy">
@@ -207,11 +201,11 @@ Azure 仅允许 Web 角色有一个入口点。 即所有通信都通过一个 I
   仅可在角色实例处于脱机状态时更新证书。 如果在角色实例处于联机状态时添加、删除或更改了某个证书，则 Azure 会使实例脱机以更新证书，并在更改完成后使其重新联机。
 
 ### <a name="handling-configuration-changes-with-service-runtime-events"></a>使用服务运行时事件处理配置更改
-[Azure 运行时库](https://msdn.microsoft.com/library/azure/mt419365.aspx)包括 [Microsoft.WindowsAzure.ServiceRuntime](https://msdn.microsoft.com/library/azure/microsoft.windowsazure.serviceruntime.aspx) 命名空间，它提供类用于与来自角色的 Azure 环境进行交互。 [RoleEnvironment](https://msdn.microsoft.com/library/azure/microsoft.windowsazure.serviceruntime.roleenvironment.aspx) 类定义在配置更改前后引发的以下事件：
+[Azure 运行时库](/previous-versions/azure/reference/mt419365(v=azure.100))包括 [Microsoft.WindowsAzure.ServiceRuntime](/previous-versions/azure/reference/ee741722(v=azure.100)) 命名空间，它提供类用于与来自角色的 Azure 环境进行交互。 [RoleEnvironment](/previous-versions/azure/reference/ee773173(v=azure.100)) 类定义在配置更改前后引发的以下事件：
 
-* **[Changing](https://msdn.microsoft.com/library/azure/microsoft.windowsazure.serviceruntime.roleenvironment.changing.aspx) 事件**  
+* **[Changing](/previous-versions/azure/reference/ee758134(v=azure.100)) 事件**  
   此事件发生在配置更改应用于某个角色的指定实例之前，使你有机会记下角色实例（如有必要）。
-* **[Changed](https://msdn.microsoft.com/library/azure/microsoft.windowsazure.serviceruntime.roleenvironment.changed.aspx) 事件**  
+* **[Changed](/previous-versions/azure/reference/ee758129(v=azure.100)) 事件**  
   发生在配置更改已应用于某个角色的指定实例之后。
 
 > [!NOTE]
@@ -265,7 +259,7 @@ cspack [DirectoryName]\[ServiceDefinition]
 
 其中变量如下所示定义：
 
-| 变量 | 值 |
+| 变量 | ReplTest1 |
 | --- | --- |
 | \[DirectoryName\] |包含 Azure 项目 .csdef 文件的根项目目录下的子目录。 |
 | \[ServiceDefinition\] |服务定义文件的名称。 默认情况下，此文件名为 ServiceDefinition.csdef。 |

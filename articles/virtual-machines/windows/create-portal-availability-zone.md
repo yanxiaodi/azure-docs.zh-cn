@@ -3,32 +3,32 @@ title: 使用 Azure 门户创建分区的 Windows VM | Microsoft Docs
 description: 使用 Azure 门户在可用性区域中创建 Windows VM
 services: virtual-machines-windows
 documentationcenter: virtual-machines
-author: dlepow
-manager: jeconnoc
+author: cynthn
+manager: gwallace
 editor: ''
 tags: azure-resource-manager
 ms.assetid: ''
 ms.service: virtual-machines-windows
-ms.devlang: na
-ms.topic: ''
+ms.topic: conceptual
 ms.tgt_pltfrm: vm-windows
 ms.workload: infrastructure
 ms.date: 03/27/2018
-ms.author: danlep
+ms.author: cynthn
 ms.custom: ''
-ms.openlocfilehash: 3d3561cf1ad760930821fabeef9839c25d55f2a9
-ms.sourcegitcommit: 20d103fb8658b29b48115782fe01f76239b240aa
-ms.translationtype: HT
+ms.openlocfilehash: 90c6f7106cbc885c513d47bf80a7b1ec218d8c6c
+ms.sourcegitcommit: f2771ec28b7d2d937eef81223980da8ea1a6a531
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/03/2018
+ms.lasthandoff: 09/20/2019
+ms.locfileid: "71168553"
 ---
 # <a name="create-a-windows-virtual-machine-in-an-availability-zone-with-the-azure-portal"></a>使用 Azure 门户在可用性区域中创建 Windows 虚拟机
 
 本文逐步说明如何使用 Azure 门户在 Azure 可用性区域中创建虚拟机。 [可用性区域](../../availability-zones/az-overview.md)是 Azure 区域中物理上独立的区域。 使用可用性区域可以在整个数据中心发生故障或服务中断（这种情况很少见）时保护应用和数据。
 
-若要使用可用性区域，请在[受支持的 Azure 区域](../../availability-zones/az-overview.md#regions-that-support-availability-zones)中创建虚拟机。
+若要使用可用性区域，请在[受支持的 Azure 区域](../../availability-zones/az-overview.md#services-support-by-region)中创建虚拟机。
 
-## <a name="log-in-to-azure"></a>登录 Azure 
+## <a name="sign-in-to-azure"></a>登录 Azure 
 
 通过 https://portal.azure.com 登录到 Azure 门户。
 
@@ -74,4 +74,4 @@ ms.lasthandoff: 04/03/2018
 
 ## <a name="next-steps"></a>后续步骤
 
-在本文中，你已学习了如何在可用性区域中创建 VM。 详细了解 Azure VM 的[区域和可用性](regions-and-availability.md)。
+本文介绍了如何在可用性区域中创建 VM。 详细了解 Azure Vm 的[可用性](availability.md)。

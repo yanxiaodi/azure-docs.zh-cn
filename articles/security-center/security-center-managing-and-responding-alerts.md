@@ -3,95 +3,87 @@ title: 在 Azure 安全中心管理安全警报 | Microsoft 文档
 description: 本文档旨在帮助使用 Azure 安全中心功能来管理和响应安全警报。
 services: security-center
 documentationcenter: na
-author: terrylan
-manager: mbaldwin
-editor: ''
+author: memildin
+manager: rkarlin
 ms.assetid: b88a8df7-6979-479b-8039-04da1b8737a7
 ms.service: security-center
-ms.topic: hero-article
+ms.topic: conceptual
 ms.devlang: na
 ms.tgt_pltfrm: na
 ms.workload: na
-ms.date: 11/30/2017
-ms.author: yurid
-ms.openlocfilehash: d088223aa2ea40d5bb9cf0e492e87ef054d86348
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.date: 08/27/2019
+ms.author: memildin
+ms.openlocfilehash: c3134988452efe16044ab7b7740cafd02e8cf27a
+ms.sourcegitcommit: 8a717170b04df64bd1ddd521e899ac7749627350
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
-ms.locfileid: "34365350"
+ms.lasthandoff: 09/23/2019
+ms.locfileid: "71201918"
 ---
-# <a name="managing-and-responding-to-security-alerts-in-azure-security-center"></a>管理和响应 Azure 安全中心的安全警报
-本文档旨在帮助使用 Azure 安全中心来管理和响应安全警报。
+# <a name="manage-and-respond-to-security-alerts-in-azure-security-center"></a>管理和响应 Azure 安全中心的安全警报
+
+本主题说明如何查看和处理你收到的警报，以便保护你的资源。 
+
+* 若要了解不同类型的警报，请参阅[安全警报类型](security-center-alerts-overview.md#security-alert-types)。
+* 有关安全中心如何生成警报的概述，请参阅[Azure 安全中心如何检测和响应威胁](security-center-alerts-overview.md#detect-threats)。
 
 > [!NOTE]
-> 若要启用高级检测，请升级到 Azure 安全中心标准版。 可免费试用 60 天。 要升级，请选择 [安全策略](security-center-policies.md)中的“定价层”。 请参阅 [Azure 安全中心定价](security-center-pricing.md)，了解详细信息。
->
->
+> 若要启用高级检测，请升级到 Azure 安全中心标准版。 免费试用版已提供。 要升级，请选择 [安全策略](tutorial-security-policy.md)中的“定价层”。 请参阅 [Azure 安全中心定价](security-center-pricing.md)，了解详细信息。
 
 ## <a name="what-are-security-alerts"></a>什么是安全警报？
 安全中心会自动收集、分析以及整合 Azure 资源、网络和所连合作伙伴解决方案（如，防火墙和终结点保护解决方案）的日志数据，检测真正的威胁并减少误报。 安全中心显示了一系列安全警报（按严重程度排序），并显示了快速调查问题所需的信息以及修复攻击的建议。
 
-
 > [!NOTE]
-> 有关安全中心检测功能工作原理的详细信息，请参阅 [Azure 安全中心检测功能](security-center-detection-capabilities.md)。
->
->
+> 有关安全中心检测功能的工作原理的详细信息，请参阅[Azure 安全中心如何检测和响应威胁](security-center-alerts-overview.md#detect-threats)。
 
-## <a name="managing-security-alerts"></a>管理安全警报
-可以通过查看“安全警报”  磁贴查看当前警报。 按照以下步骤查看每个警报的更多详细信息：
+## <a name="manage-your-security-alerts"></a>管理安全警报
 
-1. 在安全中心仪表板中，可以看到“安全警报”磁贴。
+1. 在安全中心仪表板中，查看 "**威胁防护**" 磁贴以查看并概述警报。
 
-    ![安全中心的“安全警报”磁贴](./media/security-center-managing-and-responding-alerts/security-center-managing-and-responding-alerts-fig1-ga.png)
+    ![安全中心的“安全警报”磁贴](./media/security-center-managing-and-responding-alerts/security-center-dashboard-alert.png)
 
-2. 单击该磁贴打开“安全警报”，查看有关警报的更多详细信息。
+1. 若要查看有关警报的更多详细信息，请单击该磁贴。
 
-   ![安全中心的“安全警报”](./media/security-center-managing-and-responding-alerts/security-center-managing-and-responding-alerts-fig2-ga.png)
+   ![安全中心的“安全警报”](./media/security-center-managing-and-responding-alerts/security-center-manage-alerts.png)
 
-此页底部是每个警报的详细信息。 要进行排序，请单击按其排序的列。 下面给出了每个列的定义：
+1. 要筛选显示的警报，请单击 "**筛选**器"，并从打开的 "**筛选器**" 边栏选项卡中选择要应用的筛选器选项。 列表会根据所选筛选器进行更新。 筛选可能非常有用。 例如，假设正在调查系统中的潜在危害，需要处理过去 24 小时内发生的安全警报。
 
-* **说明**：警报的简要说明。
-* **计数**：在特定日期检测到的此特定类型的所有警报的列表。
-* **检测程序**：负责触发警报的服务。
-* **日期**：事件发生的日期。
-* **状态**：该警报的当前状态。 状态有两种：
-  * **活动**：已检测到安全警报。
-* **严重性**：严重性级别，分为高、中和低。
+    ![筛选安全中心的警报](./media/security-center-managing-and-responding-alerts/security-center-filter-alerts.png)
 
-> [!NOTE]
-> 安全中心生成的安全警报也会显示在“Azure 活动日志”下。 若要深入了解如何访问 Azure 活动日志，请阅读[查看活动日志以审核对资源的操作](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-audit)。
->
+## <a name="respond-to-security-alerts"></a>响应安全警报
 
-### <a name="filtering-alerts"></a>筛选警报
-可以根据日期、状态和严重性筛选警报。 对于需要缩小安全警报显示范围的情况，筛选警报非常有用。 例如，假设正在调查系统中的潜在危害，需要处理过去 24 小时内发生的安全警报。
+1. 在 "**安全警报**" 列表中，单击 "安全警报"。 其中显示了所涉及的资源以及修正攻击所需采取的步骤。
 
-1. 单击“安全警报”上的“筛选器”。 此时会打开“筛选器”，请选择要查看的日期、状态和严重性值。
+    ![响应安全警报](./media/security-center-managing-and-responding-alerts/security-center-alert.png)
 
-    ![筛选安全中心的警报](./media/security-center-managing-and-responding-alerts/security-center-managing-and-responding-alerts-fig3-2017.png)
+1. 查看信息后，单击被攻击的资源。
 
-### <a name="respond-to-security-alerts"></a>响应安全警报
-选择某个安全警报，了解触发该警报的事件详细信息以及修复攻击所需的步骤（如有）。 安全警报按类型和日期进行分组。 单击某个安全警报会打开一个页面，其中包含一个分组警报列表。
+    ![有关如何处理安全警报的建议](./media/security-center-managing-and-responding-alerts/security-center-alert-remediate.png)
 
-![响应 Azure 安全中心的安全警报](./media/security-center-managing-and-responding-alerts/security-center-managing-and-responding-alerts-fig5-ga.png)
+    "**常规信息**" 一节可以深入了解触发安全警报的内容。 如果警报仍处于活动状态，则它会显示目标资源、源 IP 地址（如果适用），以及有关如何修正的建议等信息。  
 
-在这种情况下，触发的警报指的是可疑的远程桌面协议 (RDP) 活动。 第一列显示受到攻击的资源；第二列显示该资源受到攻击的次数；第三列显示攻击的时间；第四列显示警报的状态；第五列显示攻击的严重性。 查看此信息后，请单击受攻击的资源。
+    > [!NOTE]
+    >在某些情况下，源 IP 地址不可用，某些 Windows 安全事件日志不包含 IP 地址。
 
-![关于如何处理 Azure 安全中心安全警报的建议](./media/security-center-managing-and-responding-alerts/security-center-managing-and-responding-alerts-fig6-ga.png)
+1. 安全中心建议的补救步骤根据安全警报而有所不同。 对于每个警报，请遵循它们。 在某些情况下，若要缓解威胁检测警报，可能需要使用其他 Azure 控件或服务来实施建议的修正。 
 
-在“说明”字段可以找到此事件的更多详细信息。 通过这些额外的详细信息，可深入了解是什么触发了该安全警报、其目标资源、源 IP 地址（如果适用）以及修复建议。  在某些情况下，源 IP 地址为空（不可用），因为并不是所有 Windows 安全事件日志都包含 IP 地址。
+    以下主题将指导你根据资源类型来完成不同的警报：
+    
+    * [IaaS Vm 和服务器警报](security-center-alerts-iaas.md)
+    * [本机计算警报](security-center-alerts-compute.md)
+    * [数据服务警报](security-center-alerts-data-services.md)
+    
+    以下主题介绍安全中心如何使用它从与 Azure 基础结构集成所收集的不同遥测，以便为 Azure 上部署的资源应用其他保护层：
+    
+    * [服务层警报](security-center-alerts-service-layer.md)
+    * [与 Azure 安全产品集成](security-center-alerts-integration.md)
+    
+## <a name="see-also"></a>请参阅
 
-安全中心提供的修正建议因安全警报而异。 在某些情况下，可能需要使用其他 Azure 功能来实现建议的修复操作。 例如，此攻击的修复方法是，使用[网络 ACL](../virtual-network/virtual-networks-acl.md) 或[网络安全组](../virtual-network/security-overview.md#security-rules)规则将生成此攻击的 IP 地址加入阻止名单。 有关不同类型的警报的详细信息，请参阅 [Azure 安全中心的安全警报（按类型）](security-center-alerts-type.md)。
+本文档中已经介绍了如何在安全中心配置安全策略。 若要了解有关安全中心的详细信息，请参阅以下文章：
 
-> [!NOTE]
-> 安全中心在功能有限的预览版中发布了新的一组检测。这些检测利用审核记录这种常用审核框架，检测 Linux 计算机上的恶意行为。 若要体验预览版，请向[我们](mailto:ASC_linuxdetections@microsoft.com)发送包含订阅 ID 的电子邮件。
-
-
-## <a name="see-also"></a>另请参阅
-本文档中已经介绍了如何在安全中心配置安全策略。 要了解有关安全中心的详细信息，请参阅以下内容：
-
-* [处理 Azure 安全中心的安全事件](security-center-incident.md)
-* [Azure 安全中心检测功能](security-center-detection-capabilities.md)
+* [Azure 安全中心的安全警报](security-center-alerts-overview.md)。
+* [处理安全事件](security-center-incident.md)
 * [Azure 安全中心规划和操作指南](security-center-planning-and-operations-guide.md)
 * [Azure 安全中心常见问题解答](security-center-faq.md) — 查找有关使用该服务的常见问题解答。
-* [Azure 安全性博客](http://blogs.msdn.com/b/azuresecurity/) - 查找关于 Azure 安全性及合规性的博客文章。
+* [Azure 安全性博客](https://blogs.msdn.com/b/azuresecurity/) - 查找关于 Azure 安全性及合规性的博客文章。

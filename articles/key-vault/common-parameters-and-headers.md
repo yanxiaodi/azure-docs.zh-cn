@@ -2,23 +2,19 @@
 title: 常见参数和标头
 description: 这些参数和标头常见于与 Key Vault 资源相关的所有操作。
 services: key-vault
-documentationcenter: ''
-author: lleonard-msft
-manager: mbaldwin
+author: msmbaldwin
+manager: rkarlin
 tags: azure-resource-manager
-ms.assetid: a715d13ca9-d6e8-4e54-ac5e-0ed9400fb15b15d13ca9-d6e8-4e54-ac5e-0ed9400fb15b
 ms.service: key-vault
-ms.workload: identity
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
-ms.date: 05/09/2018
-ms.author: alleonar
-ms.openlocfilehash: ead1ac550c9b7c489edefd35d5672a9955e78255
-ms.sourcegitcommit: 909469bf17211be40ea24a981c3e0331ea182996
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 01/07/2019
+ms.author: mbaldwin
+ms.openlocfilehash: 7ec8e1df71e6513b13e9c37174a3363471be01d9
+ms.sourcegitcommit: 7c5a2a3068e5330b77f3c6738d6de1e03d3c3b7d
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 09/11/2019
+ms.locfileid: "70879281"
 ---
 # <a name="common-parameters-and-headers"></a>常见参数和标头
 
@@ -34,19 +30,21 @@ ms.lasthandoff: 05/10/2018
 ## <a name="common-error-response"></a>常见错误响应
 服务使用 HTTP 状态代码指示成功或失败。 此外，失败还会包含采用以下格式的响应：
 
+```
    {  
      "error": {  
      "code": "BadRequest",  
      "message": "The key vault sku is invalid."  
      }  
    }  
+```
 
-|元素名称 | Type | 说明 |
+|元素名称 | type | 描述 |
 |---|---|---|
-| 代码 | 字符串 | 发生的错误类型。|
-| message | 字符串 | 错误原因说明。 |
+| code | string | 发生的错误类型。|
+| 消息 | string | 错误原因说明。 |
 
 
 
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
  [Azure Key Vault REST API 参考](/rest/api/keyvault/)

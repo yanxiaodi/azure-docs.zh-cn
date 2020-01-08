@@ -3,22 +3,18 @@ title: Node.js 入门指南
 description: 了解如何创建简单的 Node.js Web 应用程序并将其部署到 Azure 云服务。
 services: cloud-services
 documentationcenter: nodejs
-author: thraka
-manager: timlt
-editor: ''
-ms.assetid: 50951a87-fed4-48e0-bcfa-453b9e50452e
+author: georgewallace
 ms.service: cloud-services
-ms.workload: tbd
-ms.tgt_pltfrm: na
 ms.devlang: nodejs
-ms.topic: hero-article
+ms.topic: conceptual
 ms.date: 08/17/2017
-ms.author: adegeo
-ms.openlocfilehash: 5d69f83aed9160f94260b71e60fcf0e15b435569
-ms.sourcegitcommit: 909469bf17211be40ea24a981c3e0331ea182996
-ms.translationtype: HT
+ms.author: gwallace
+ms.openlocfilehash: 81ad3bce6c7e331fd67fba60b35de6b8a37c5da9
+ms.sourcegitcommit: 4b647be06d677151eb9db7dccc2bd7a8379e5871
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 07/19/2019
+ms.locfileid: "68359530"
 ---
 # <a name="build-and-deploy-a-nodejs-application-to-an-azure-cloud-service"></a>生成 Node.js 应用程序并将其部署到 Azure 云服务
 
@@ -27,9 +23,9 @@ ms.lasthandoff: 05/10/2018
 有关云服务以及如何将它们与 Azure 网站和虚拟机进行比较的更多信息，请参阅 [Azure 网站、云服务和虚拟机的比较]。
 
 > [!TIP]
-> 想要构建一个简单的网站？ 如果方案只涉及一个简单的网站前端，则可以考虑[使用轻型 Web 应用]。 随着 Web 应用的不断扩大和需求的变化，可以轻松升级到云服务。
+> 想要构建简单网站？ 如果方案只涉及一个简单的网站前端，则可以考虑[使用轻型 Web 应用]。 随着 Web 应用的不断扩大和需求的变化，可以轻松升级到云服务。
 
-通过学习本教程，将可以生成一个托管在 Web 角色中的简单 Web 应用程序。 将使用计算模拟器在本地测试你的应用程序，并使用 PowerShell 命令行工具来部署该应用程序。
+按照本教程，生成托管在 Web 角色中的简单 Web 应用程序。 将使用计算模拟器在本地测试你的应用程序，并使用 PowerShell 命令行工具来部署该应用程序。
 
 该应用程序是一个简单的“hello world”应用程序：
 
@@ -40,7 +36,7 @@ ms.lasthandoff: 05/10/2018
 > 本教程使用 Azure PowerShell，因此需要在 Windows 上运行。
 
 * 安装和配置 [Azure PowerShell]。
-* 下载并安装 [Azure SDK for .NET 2.7]。 在安装设置中，选择：
+* 下载并安装 [用于 .NET 2.7 的 Azure SDK]。 在安装设置中，选择：
   * MicrosoftAzureAuthoringTools
   * MicrosoftAzureComputeEmulator
 
@@ -48,18 +44,18 @@ ms.lasthandoff: 05/10/2018
 执行以下任务可创建一个新的 Azure 云服务项目以及基本的 Node.js 基架：
 
 1. 以管理员身份运行 **Windows PowerShell**；在“开始”菜单或“开始”屏幕中，搜索 **Windows PowerShell**。
-2. [将 PowerShell 连接] 到订阅。
+2. [连接 PowerShell] 到订阅。
 3. 输入以下 PowerShell cmdlet 来创建项目：
 
         New-AzureServiceProject helloworld
 
     ![New-AzureService helloworld 命令的结果][The result of the New-AzureService helloworld command]
 
-    **New-AzureServiceProject** cmdlet 将生成一个基本结构用于将 Node.js 应用程序发布到云服务。 该结构包含向 Azure 发布应用程序所需的配置文件。 该 cmdlet 还会将工作目录更改为服务的目录。
+    **New-AzureServiceProject** cmdlet 会生成一个基本结构用于将 Node.js 应用程序发布到云服务。 该结构包含向 Azure 发布应用程序所需的配置文件。 该 cmdlet 还会将工作目录更改为服务的目录。
 
     该 cmdlet 将创建以下文件：
 
-   * **ServiceConfiguration.Cloud.cscfg**、**ServiceConfiguration.Local.cscfg** 和 **ServiceDefinition.csdef**：发布应用程序所需的特定于 Azure 的文件。 有关详细信息，请参阅 [创建 Azure 托管服务概述]。
+   * **ServiceConfiguration.Cloud.cscfg**、**ServiceConfiguration.Local.cscfg** 和 **ServiceDefinition.csdef**：发布应用程序时必需的 Azure 特定文件。 有关详细信息，请参阅 [创建 Azure 托管服务概述]。
    * **deploymentSettings.json**：存储供 Azure PowerShell 部署 cmdlet 使用的本地设置。
 4. 输入以下命令添加新的 Web 角色：
 
@@ -86,7 +82,7 @@ Node.js 应用在 **server.js** 文件中定义，该文件位于 Web 角色（�
 ## <a name="deploy-the-application-to-azure"></a>将应用程序部署到 Azure
 
 > [!NOTE]
-> 要完成本教程，需要一个 Azure 帐户。 可以[激活 MSDN 订户权益](https://azure.microsoft.com/pricing/member-offers/msdn-benefits-details/?WT.mc_id=A85619ABF)或[注册免费帐户](https://azure.microsoft.com/pricing/free-trial/?WT.mc_id=A85619ABF)。
+> 若要完成本教程，需要一个 Azure 帐户。 可以[激活 MSDN 订阅者权益](https://azure.microsoft.com/pricing/member-offers/msdn-benefits-details/?WT.mc_id=A85619ABF)或[注册免费帐户](https://azure.microsoft.com/pricing/free-trial/?WT.mc_id=A85619ABF)。
 
 ### <a name="download-the-azure-publishing-settings"></a>下载 Azure 发布设置
 要将应用程序部署到 Azure，必须先为 Azure 订阅下载发布设置。
@@ -95,7 +91,7 @@ Node.js 应用在 **server.js** 文件中定义，该文件位于 Web 角色（�
 
        Get-AzurePublishSettingsFile
 
-   此操作将使用浏览器导航到发布设置下载页。 系统可能会提示使用 Microsoft 帐户登录。 如果是这样，请使用与 Azure 订阅关联的帐户。
+   此操作将使用浏览器导航到发布设置下载页。 系统可能会提示使用 Microsoft 帐户登录。 如果出现提示，请使用与 Azure 订阅关联的帐户。
 
    将已下载的配置文件保存到能够轻松访问的文件位置。
 2. 运行以下 cmdlet 以导入下载的发布配置文件：
@@ -115,7 +111,7 @@ Node.js 应用在 **server.js** 文件中定义，该文件位于 Web 角色（�
 * **-Location** 指定托管应用程序的数据中心。 若要查看可用数据中心的列表，请使用 **Get-AzureLocation** cmdlet。
 * **-Launch** 用于在部署完成后打开浏览器窗口并导航到托管服务。
 
-发布成功之后，会看到如下响应：
+发布成功之后，可看到如下响应：
 
 ![Publish-AzureService 命令的输出][The output of the Publish-AzureService command]
 
@@ -126,17 +122,17 @@ Node.js 应用在 **server.js** 文件中定义，该文件位于 Web 角色（�
 
 ![显示“hello world”页面的浏览器窗口；URL 指示该页面托管在 Azure 上。][A browser window displaying the hello world page; the URL indicates the page is hosted on Azure.]
 
-应用程序现在正在 Azure 上运行。
+应用程序现在在 Azure 上运行。
 
 **Publish-AzureServiceProject** cmdlet 执行以下步骤：
 
 1. 创建要部署的包。 该包将包含应用程序文件夹中的所有文件。
-2. 如果存储帐户不存在，将创建一个新的 **存储帐户**。 Azure 存储帐户用于存储部署期间的应用程序包。 在部署完成后，可以安全删除该存储帐户。
-3. 如果云服务尚不存在，将创建一个新的 **云服务**。 **云服务** 是一个容器，用于在将应用程序部署到 Azure 后托管该应用程序。 有关详细信息，请参阅 [创建 Azure 托管服务概述]。
+2. 如果存储帐户不存在，则创建一个新的**存储帐户** 。 Azure 存储帐户用于存储部署期间的应用程序包。 部署完成后，可以安全删除该存储帐户。
+3. 如果云服务尚不存在，会创建一个新的**云服务** 。 **云服务** 是一个容器，用于在将应用程序部署到 Azure 后托管该应用程序。 有关详细信息，请参阅 [创建 Azure 托管服务概述]。
 4. 将部署包发布到 Azure。
 
 ## <a name="stopping-and-deleting-your-application"></a>停止并删除应用程序
-部署应用程序后，你可能希望禁用它，以避免产生额外费用。 Azure 将按使用的服务器小时数对 Web 角色实例计费。 应用程序部署之后就会开始使用服务器时间，即使相关实例并未运行且处于停止状态也是如此。
+部署应用程序后，可能需要禁用它以免产生额外费用。 Azure 将按使用的服务器小时数对 Web 角色实例计费。 应用程序部署后即开始使用服务器时间，即使相关实例未运行并处于停止状态。
 
 1. 在 Windows PowerShell 窗口中，使用以下 cmdlet 以停止上一节中创建的服务部署：
 
@@ -156,19 +152,19 @@ Node.js 应用在 **server.js** 文件中定义，该文件位于 Web 角色（�
    ![Remove-AzureService 命令的状态][The status of the Remove-AzureService command]
 
    > [!NOTE]
-   > 删除服务不会删除最初发布服务时所创建的存储帐户，并且你仍需为使用的存储付费。 如果没有其他项目在使用存储，则可能需要将其删除。
+   > 删除服务不会删除最初发布服务时创建的存储帐户，用户仍需为使用的存储付费。 如果没有任何其他对象使用存储，请删除它。
 
 ## <a name="next-steps"></a>后续步骤
 有关详细信息，请参阅 [Node.js 开发人员中心]。
 
 <!-- URL List -->
 
-[Azure 网站、云服务和虚拟机的比较]: ../app-service/choose-web-site-cloud-service-vm.md
+[Azure 网站、云服务和虚拟机的比较]: /azure/architecture/guide/technology-choices/compute-decision-tree
 [使用轻型 Web 应用]: ../app-service/app-service-web-get-started-nodejs.md
 [Azure PowerShell]: /powershell/azureps-cmdlets-docs
-[Azure SDK for .NET 2.7]: http://www.microsoft.com/en-us/download/details.aspx?id=48178
-[将 PowerShell 连接]: /powershell/azureps-cmdlets-docs#step-3-connect
-[nodejs.org]: http://nodejs.org/
+[用于 .NET 2.7 的 Azure SDK]: https://www.microsoft.com/en-us/download/details.aspx?id=48178
+[连接 PowerShell]: /powershell/azureps-cmdlets-docs
+[nodejs.org]: https://nodejs.org/
 [创建 Azure 托管服务概述]: https://azure.microsoft.com/documentation/services/cloud-services/
 [Node.js 开发人员中心]: https://azure.microsoft.com/develop/nodejs/
 

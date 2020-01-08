@@ -1,21 +1,21 @@
 ---
-title: Azure Active Directory B2C：使用情况报表 API 示例和定义 | Microsoft Docs
-description: 获取有关 Azure AD B2C 租户用户、身份验证和多因素身份验证报表的指南和示例
+title: Azure Active Directory B2C 中的使用情况报表 API 示例和定义 | Microsoft Docs
+description: 获取有关 Azure AD B2C 租户用户、身份验证和多重身份验证报表的指南和示例。
 services: active-directory-b2c
-documentationcenter: dev-center-name
-author: davidmu1
-manager: mtillman
-editor: ''
-ms.service: active-directory-b2c
-ms.topic: article
+author: mmacy
+manager: celestedg
+ms.service: active-directory
+ms.topic: conceptual
 ms.workload: identity
 ms.date: 08/04/2017
-ms.author: davidmu
-ms.openlocfilehash: 07029181423927f0796cb85e728df416d01466e8
-ms.sourcegitcommit: 5b2ac9e6d8539c11ab0891b686b8afa12441a8f3
-ms.translationtype: HT
+ms.author: marsma
+ms.subservice: B2C
+ms.openlocfilehash: fe7dd90bdec816ee433310a803d85c57f4892f8c
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66508709"
 ---
 # <a name="accessing-usage-reports-in-azure-ad-b2c-via-the-reporting-api"></a>通过报告 API 访问 Azure AD B2C 中的使用情况报表
 
@@ -28,7 +28,7 @@ Azure Active Directory B2C (Azure AD B2C) 提供了基于用户登录名的身�
 本文重点介绍与计费活动有关的报表，计费活动以用户数、基于登录名的可计费身份验证数和多重身份验证数为基础。
 
 
-## <a name="prerequisites"></a>先决条件
+## <a name="prerequisites"></a>必备组件
 开始前，需要先完成[访问 Azure AD 报表 API 的先决条件](https://azure.microsoft.com/documentation/articles/active-directory-reporting-api-getting-started/)中的步骤。 创建应用程序、获取它的密码，并授予它访问 Azure AD B2C 租户报表的权限。 此处还提供 *Bash 脚本*和 *Python 脚本*示例。 
 
 ## <a name="powershell-script"></a>PowerShell 脚本
@@ -97,12 +97,12 @@ if ($oauth.access_token -ne $null) {
 
 
 ## <a name="usage-report-definitions"></a>使用情况报表定义
-* **tenantUserCount**：过去 30 天，每天租户中的用户数计数（按标识提供者的类型分类）。 （或者，`TimeStamp` 筛选器提供从指定日期到当前日期的用户计数）。 报表提供：
+* **tenantUserCount**：过去 30 天，每天租户中的用户数（按标识提供者的类型分类）。 （或者，`TimeStamp` 筛选器提供从指定日期到当前日期的用户计数）。 报表提供：
   * **TotalUserCount**：所有用户对象数。
   * **OtherUserCount**：Azure Active Directory 用户（而非 Azure AD B2C 用户）数。
   * **LocalUserCount**：使用 Azure AD B2C 租户的本地凭据创建的 Azure AD B2C 用户帐户数。
 
-* **AlternateIdUserCount**：使用外部标识提供程序（例如，Facebook、Microsoft 帐户或其他 Azure Active Directory 租户，也称为 `OrgId`）注册的 Azure AD B2C 用户数。
+* **AlternateIdUserCount**：使用外部标识提供者（例如，Facebook、Microsoft 帐户或其他 Azure Active Directory 租户，也称为 `OrgId`）注册的 Azure AD B2C 用户数。
 
 * **b2cAuthenticationCountSummary**：过去 30 天内，可计费身份验证的日计数总和（按天和身份验证流的类型分类）。
 

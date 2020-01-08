@@ -1,25 +1,25 @@
 ---
-title: "在 Azure Linux 虚拟机上设置 Oracle ASM | Microsoft Docs"
-description: "在 Azure 环境中快速启动并运行 Oracle ASM。"
+title: 在 Azure Linux 虚拟机上设置 Oracle ASM | Microsoft Docs
+description: 在 Azure 环境中快速启动并运行 Oracle ASM。
 services: virtual-machines-linux
 documentationcenter: virtual-machines
-author: RicksterCDN
-manager: timlt
-editor: 
+author: romitgirdhar
+manager: gwallace
+editor: ''
 tags: azure-resource-manager
-ms.assetid: 
+ms.assetid: ''
 ms.service: virtual-machines-linux
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-linux
 ms.workload: infrastructure
-ms.date: 07/19/2017
-ms.author: rclaus
-ms.openlocfilehash: 0e34a188271a5ac2fb6cb34a088ec3f650be6cab
-ms.sourcegitcommit: 059dae3d8a0e716adc95ad2296843a45745a415d
-ms.translationtype: HT
+ms.date: 08/02/2018
+ms.author: rogirdh
+ms.openlocfilehash: 91150251140379c15d4ab3711ded571c9ad2c024
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/09/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70101649"
 ---
 # <a name="set-up-oracle-asm-on-an-azure-linux-virtual-machine"></a>在 Azure Linux 虚拟机上设置 Oracle ASM  
 
@@ -35,13 +35,13 @@ Azure 虚拟机提供完全可配置的灵活计算环境。 本教程介绍基�
 
 [!INCLUDE [cloud-shell-try-it.md](../../../../includes/cloud-shell-try-it.md)]
 
-如果选择在本地安装并使用 CLI，本教程要求运行 Azure CLI 2.0.4 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。 
+如果选择在本地安装并使用 CLI，本教程要求运行 Azure CLI 2.0.4 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。 
 
 ## <a name="prepare-the-environment"></a>准备环境
 
 ### <a name="create-a-resource-group"></a>创建资源组
 
-若要创建资源组，请使用 [az group create](/cli/azure/group#az_group_create) 命令。 Azure 资源组是在其中部署和管理 Azure 资源的逻辑容器。 在此示例中，*eastus* 区域包含一个名为 *myResourceGroup* 的资源组。
+若要创建资源组，请使用 [az group create](/cli/azure/group) 命令。 Azure 资源组是在其中部署和管理 Azure 资源的逻辑容器。 在此示例中，*eastus* 区域包含一个名为 *myResourceGroup* 的资源组。
 
 ```azurecli-interactive
 az group create --name myResourceGroup --location eastus
@@ -49,7 +49,7 @@ az group create --name myResourceGroup --location eastus
 
 ### <a name="create-a-vm"></a>创建 VM
 
-若要创建基于 Oracle 数据库映像的虚拟机并将其配置为使用 Oracle ASM，请使用 [az vm create](/cli/azure/vm#az_vm_create) 命令。 
+若要创建基于 Oracle 数据库映像的虚拟机并将其配置为使用 Oracle ASM，请使用 [az vm create](/cli/azure/vm) 命令。 
 
 以下示例创建名为 myVM 的 VM，其大小为 Standard_DS2_v2，并包含四个 50 GB 的附加数据磁盘。 如果默认密钥位置中不存在 SSH 密钥，此示例还会创建这些密钥。  若要使用特定的一组密钥，请使用 `--ssh-key-value` 选项。  
 
@@ -89,7 +89,7 @@ ssh <publicIpAddress>
 
 若要安装 Oracle ASM，请完成以下步骤。 
 
-有关安装 Oracle ASM 的详细信息，请参阅 [适用于 Oracle Linux 6 的 Oracle ASMLib 下载内容](http://www.oracle.com/technetwork/server-storage/linux/asmlib/ol6-1709075.html)。  
+有关安装 Oracle ASM 的详细信息，请参阅 [适用于 Oracle Linux 6 的 Oracle ASMLib 下载内容](https://www.oracle.com/technetwork/server-storage/linux/asmlib/ol6-1709075.html)。  
 
 1. 需要以 root 身份登录才能继续安装 ASM：
 
@@ -103,7 +103,7 @@ ssh <publicIpAddress>
     yum list | grep oracleasm 
     yum -y install kmod-oracleasm.x86_64 
     yum -y install oracleasm-support.x86_64 
-    wget http://download.oracle.com/otn_software/asmlib/oracleasmlib-2.0.12-1.el6.x86_64.rpm 
+    wget https://download.oracle.com/otn_software/asmlib/oracleasmlib-2.0.12-1.el6.x86_64.rpm 
     yum -y install oracleasmlib-2.0.12-1.el6.x86_64.rpm 
     rm -f oracleasmlib-2.0.12-1.el6.x86_64.rpm
    ```
@@ -335,24 +335,24 @@ ssh <publicIpAddress>
 
 10. 更改文件夹权限：
 
-   ```bash
-   chmod -R 775 /opt 
-   chown grid:oinstall /opt 
-   chown oracle:oinstall /dev/sdc1 
-   chown oracle:oinstall /dev/sdd1 
-   chown oracle:oinstall /dev/sde1 
-   chown oracle:oinstall /dev/sdf1 
-   chmod 600 /dev/sdc1 
-   chmod 600 /dev/sdd1 
-   chmod 600 /dev/sde1 
-   chmod 600 /dev/sdf1
-   ```
+    ```bash
+    chmod -R 775 /opt 
+    chown grid:oinstall /opt 
+    chown oracle:oinstall /dev/sdc1 
+    chown oracle:oinstall /dev/sdd1 
+    chown oracle:oinstall /dev/sde1 
+    chown oracle:oinstall /dev/sdf1 
+    chmod 600 /dev/sdc1 
+    chmod 600 /dev/sdd1 
+    chmod 600 /dev/sde1 
+    chmod 600 /dev/sdf1
+    ```
 
 ## <a name="download-and-prepare-oracle-grid-infrastructure"></a>下载并准备 Oracle Grid Infrastructure
 
 若要下载并准备 Oracle Grid Infrastructure 软件，请完成以下步骤：
 
-1. 从 [Oracle ASM 下载页](http://www.oracle.com/technetwork/database/enterprise-edition/downloads/database12c-linux-download-2240591.html)下载 Oracle Grid Infrastructure。 
+1. 从 [Oracle ASM 下载页](https://www.oracle.com/technetwork/database/enterprise-edition/downloads/database12c-linux-download-2240591.html)下载 Oracle Grid Infrastructure。 
 
    在下载标题“Oracle Database 12c Release 1 Grid Infrastructure (12.1.0.2.0) for Linux x86-64”的下面，下载这两个 .zip 文件。
 
@@ -401,7 +401,7 @@ ssh <publicIpAddress>
 ## <a name="prepare-your-local-client-and-vm-to-run-x11"></a>准备用于运行 x11 的本地客户端和 VM
 配置 Oracle ASM 需要使用一个图形界面来完成安装和配置。 我们将使用 x11 协议来帮助完成此项安装。 如果所用的客户端系统（Mac 或 Linux）已启用并配置 X11 功能，则可以下面所述的仅适用于 Windows 计算机的配置和设置。 
 
-1. 将 [PuTTY](http://www.putty.org/) 和 [Xming](https://xming.en.softonic.com/) 下载到 Windows 计算机。 在继续之前，需要使用默认值完成安装这两个应用程序。
+1. 将 [PuTTY](https://www.putty.org/) 和 [Xming](https://xming.en.softonic.com/) 下载到 Windows 计算机。 在继续之前，需要使用默认值完成安装这两个应用程序。
 
 2. 安装 PuTTY 后，请打开命令提示符，切换到 PuTTY 文件夹（例如 C:\Program Files\PuTTY），运行 `puttygen.exe` 以生成密钥。
 
@@ -460,14 +460,14 @@ ssh <publicIpAddress>
 
    ![安装程序中的“选择安装选项”页屏幕截图](./media/oracle-asm/install01.png)
 
-3. 在“选择产品语言”页上，确保已选择“英语”或所需的语言。  单击`next`。
+3. 在“选择产品语言”页上，确保已选择“英语”或所需的语言。  单击 `next`。
 
 4. 在“创建 ASM 磁盘组”页上：
    - 输入磁盘组的名称。
    - 在“冗余”下面，选择“外部”。
    - 在“分配单元大小”下面，选择“4”。
    - 在“添加磁盘”下面，选择“ORCLASMSP”。
-   - 单击`next`。
+   - 单击 `next`。
 
 5. 在“指定 ASM 密码”页上，选择“对这些帐户使用相同的密码”选项，并输入密码。
 
@@ -512,7 +512,7 @@ ssh <publicIpAddress>
 
    此时会打开 Oracle ASM 配置助手。
 
-2. 在“配置 ASM: 磁盘组”对话框中单击 `Create` 按钮，再单击 `Show Advanced Options`。
+2. 在“配置 ASM:磁盘组”对话框中单击 `Create` 按钮，再单击 `Show Advanced Options`。
 
 3. 在“创建磁盘组”对话框中：
 
@@ -524,7 +524,7 @@ ssh <publicIpAddress>
 
    ![“创建磁盘组”对话框屏幕截图](./media/oracle-asm/asm02.png)
 
-4. 在“配置 ASM: 磁盘组”对话框中单击 `Create` 按钮，再单击 `Show Advanced Options`。
+4. 在“配置 ASM:磁盘组”对话框中单击 `Create` 按钮，再单击 `Show Advanced Options`。
 
 5. 在“创建磁盘组”对话框中：
 
@@ -539,11 +539,11 @@ ssh <publicIpAddress>
 
 6. 选择“退出”关闭 ASM 配置助手。
 
-   ![包含“退出”按钮的“配置 ASM: 磁盘组”对话框屏幕截图](./media/oracle-asm/asm05.png)
+   ![“配置 ASM: 磁盘组”对话框的屏幕截图，其中包含“退出”按钮](./media/oracle-asm/asm05.png)
 
 ## <a name="create-the-database"></a>创建数据库
 
-Oracle 数据库软件已安装在 Azure Marketplace 映像中。 若要创建数据库，请完成以下步骤：
+Oracle 数据库软件已安装在 Azure 市场映像中。 若要创建数据库，请完成以下步骤：
 
 1. 将用户切换到 Oracle 超级用户，然后初始化用于日志记录的侦听器：
 
@@ -574,7 +574,7 @@ Oracle 数据库软件已安装在 Azure Marketplace 映像中。 若要创建�
 
 ## <a name="delete-the-vm"></a>删除 VM
 
-现已成功在 Azure Marketplace 中的 Oracle DB 映像上已成功配置 Oracle 自动存储管理。  如果不再需要此 VM，可以使用以下命令删除资源组、VM 和所有相关的资源：
+现已成功在 Azure 市场中的 Oracle DB 映像上已成功配置 Oracle 自动存储管理。  如果不再需要此 VM，可以使用以下命令删除资源组、VM 和所有相关的资源：
 
 ```azurecli
 az group delete --name myResourceGroup

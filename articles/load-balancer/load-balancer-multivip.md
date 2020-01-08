@@ -1,23 +1,24 @@
 ---
-title: "云服务的多个 VIP"
-description: "概述 MultiVIP，以及如何在云服务上设置多个 VIP"
+title: 云服务的多个 VIP
+titlesuffix: Azure Load Balancer
+description: 概述 MultiVIP，以及如何在云服务上设置多个 VIP
 services: load-balancer
 documentationcenter: na
-author: KumudD
-manager: timlt
-ms.assetid: 85f6d26a-3df5-4b8e-96a1-92b2793b5284
+author: asudbring
 ms.service: load-balancer
 ms.devlang: na
 ms.topic: article
+ms.custom: seodec18
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 09/25/2017
-ms.author: kumud
-ms.openlocfilehash: b6b7b0b2d7a7f33facaf72bbd2d7937364770673
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.author: allensu
+ms.openlocfilehash: 3e97bea85d4d97b159168b21b4a6e932e655ccfb
+ms.sourcegitcommit: 9a699d7408023d3736961745c753ca3cec708f23
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 07/16/2019
+ms.locfileid: "68274709"
 ---
 # <a name="configure-multiple-vips-for-a-cloud-service"></a>为云服务配置多个 VIP
 
@@ -51,7 +52,7 @@ ms.lasthandoff: 10/11/2017
 这些限制都是暂时性的，以后随时可能更改。 请务必重新访问此页，以了解将来发生的更改。
 
 ## <a name="how-to-add-a-vip-to-a-cloud-service"></a>如何将 VIP 添加到云服务
-要将 VIP 添加到服务，请运行以下 PowerShell 命令：
+要将 VIP 添加到你的服务，请运行以下 PowerShell 命令：
 
 ```powershell
 Add-AzureVirtualIP -VirtualIPName Vip3 -ServiceName myService
@@ -120,7 +121,7 @@ Get-AzureVM -ServiceName myService -Name myVM1 |
     Update-AzureVM
 ```
 
-该命令使用端口 *8080* 上的 *TCP* 创建一个终结点（该终结点将链接到端口 *80* 上名为 *Vip2* 的 VIP），并将它链接到名为 *myService* 的云服务中名为 *myVM1* 的 VM。
+该命令使用端口 *8080* 上的 *TCP* 创建一个终结点（该终结点链接到端口 *80* 上名为 *Vip2* 的 VIP），并将它链接到名为 *myService* 的云服务中名为 *myVM1* 的 VM。
 
 若要验证配置，请运行以下 PowerShell 命令：
 
@@ -171,7 +172,7 @@ Set-AzureLoadBalancedEndpoint -ServiceName myService -LBSetName myLBSet -Virtual
 
 ## <a name="next-steps"></a>后续步骤
 
-[用于 Azure 负载均衡器的 Log Analytics](load-balancer-monitor-log.md)
+[Azure 负载平衡 Azure Monitor 日志](load-balancer-monitor-log.md)
 
 [面向 Internet 的负载均衡器概述](load-balancer-internet-overview.md)
 

@@ -1,35 +1,38 @@
 ---
 title: Terraform 和 Azure 提供程序部署槽位
 description: 有关使用 Terraform 和 Azure 提供程序部署槽位的教程
+services: terraform
+ms.service: azure
 keywords: terraform, devops, 虚拟机, Azure, 部署槽位
-author: tomarcher
+author: tomarchermsft
 manager: jeconnoc
 ms.author: tarcher
-ms.date: 4/05/2018
-ms.topic: article
-ms.openlocfilehash: 3a018dbaf90801604b13efcf8bd7afb6dbc68659
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
+ms.topic: tutorial
+ms.date: 09/20/2019
+ms.openlocfilehash: ec2ed1da46df2793a241c9c89d168a6c5d462b9d
+ms.sourcegitcommit: f2771ec28b7d2d937eef81223980da8ea1a6a531
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 09/20/2019
+ms.locfileid: "71169823"
 ---
 # <a name="use-terraform-to-provision-infrastructure-with-azure-deployment-slots"></a>结合 Azure 部署槽位使用 Terraform 来预配基础结构
 
-可以使用 [Azure 部署槽位](/azure/app-service/web-sites-staged-publishing)交换应用的不同版本。 该功能有助于最大程度地降低中断部署造成的影响。 
+可以使用 [Azure 部署槽位](/azure/app-service/deploy-staging-slots)交换应用的不同版本。 该功能有助于最大程度地降低中断部署造成的影响。 
 
 本文将会通过 GitHub 和 Azure 演练两个应用的部署，以演示部署槽位的示例用法。 一个应用托管在生产槽位中。 另一个应用托管在过渡槽位中。 （名称“生产”和“过渡”是任意给出的，可以使用任何名称，只要能表示场景即可。）配置部署槽位后，可根据需要使用 Terraform 在两个槽位之间交换。
 
 ## <a name="prerequisites"></a>先决条件
 
-- **Azure 订阅**：如果还没有 Azure 订阅，可以在开始前创建一个[免费帐户](https://azure.microsoft.com/free/?ref=microsoft.com&utm_source=microsoft.com&utm_medium=docs&utm_campaign=visualstudio)。
+- **Azure 订阅**：如果还没有 Azure 订阅，可以在开始前创建一个 [免费帐户](https://azure.microsoft.com/free/?ref=microsoft.com&utm_source=microsoft.com&utm_medium=docs&utm_campaign=visualstudio)。
 
-- **GitHub 帐户** - 需要通过一个 [GitHub](http://www.github.com) 帐户来克隆和使用测试 GitHub 存储库。
+- **GitHub 帐户**：需要通过一个 [GitHub](https://www.github.com) 帐户来克隆和使用测试 GitHub 存储库。
 
 ## <a name="create-and-apply-the-terraform-plan"></a>创建并应用 Terraform 计划
 
-1. 浏览到 [Azure 门户](http://portal.azure.com)。
+1. 浏览到 [Azure 门户](https://portal.azure.com)。
 
-1. 打开 [Azure Cloud Shell](/azure/cloud-shell/overview)。 如果事先未选择环境，请选择“Bash”作为环境。
+1. 打开 [Azure Cloud Shell](/azure/cloud-shell/overview)。 如果事先未选择环境，请选择“Bash”作为环境。 
 
     ![Cloud Shell 提示符](./media/terraform-slot-walkthru/azure-portal-cloud-shell-button-min.png)
 
@@ -71,7 +74,7 @@ ms.lasthandoff: 04/16/2018
 
 1. 在编辑器中粘贴以下代码：
 
-    ```JSON
+    ```hcl
     # Configure the Azure provider
     provider "azurerm" { }
 
@@ -140,11 +143,11 @@ ms.lasthandoff: 04/16/2018
 
 1. 关闭 Cloud Shell 窗口。
 
-1. 在 Azure 门户的主菜单中，选择“资源组”。
+1. 在 Azure 门户的主菜单中，选择“资源组”。 
 
     ![门户中的“资源组”选项](./media/terraform-slot-walkthru/resource-groups-menu-option.png)
 
-1. 在“资源组”选项卡上，选择“slotDemoResourceGroup”。
+1. 在“资源组”选项卡上，选择“slotDemoResourceGroup”。  
 
     ![Terraform 创建的资源组](./media/terraform-slot-walkthru/resource-group.png)
 
@@ -168,45 +171,45 @@ ms.lasthandoff: 04/16/2018
 
 克隆测试项目存储库后，通过以下步骤配置部署槽位：
 
-1. 在 Azure 门户的主菜单中，选择“资源组”。
+1. 在 Azure 门户的主菜单中，选择“资源组”。 
 
-1. 选择“slotDemoResourceGroup”。
+1. 选择“slotDemoResourceGroup”。 
 
-1. 选择“slotAppService”。
+1. 选择“slotAppService”。 
 
-1. 选择“部署选项”。
+1. 选择“部署选项”。 
 
     ![应用服务资源的部署选项](./media/terraform-slot-walkthru/deployment-options.png)
 
-1. 在“部署选项”选项卡上，依次选择“选择源”、“GitHub”。
+1. 在“部署选项”选项卡上，依次选择“选择源”、“GitHub”。   
 
     ![选择部署源](./media/terraform-slot-walkthru/select-source.png)
 
-1. 在 Azure 建立连接并显示所有选项后，选择“授权”。
+1. 在 Azure 建立连接并显示所有选项后，选择“授权”。 
 
-1. 在“授权”选项卡上选择“授权”，并提供所需的凭据让 Azure 访问你的 GitHub 帐户。 
+1. 在“授权”选项卡上选择“授权”，并提供所需的凭据让 Azure 访问你的 GitHub 帐户。   
 
-1. 在 Azure 验证 GitHub 凭据后，将会显示一条消息，指出已完成授权过程。 选择“确定”关闭“授权”选项卡。
+1. 在 Azure 验证 GitHub 凭据后，将会显示一条消息，指出已完成授权过程。 选择“确定”关闭“授权”选项卡。  
 
-1. 选择“选择组织”并选择自己的组织。
+1. 选择“选择组织”并选择自己的组织。 
 
-1. 选择“选择项目”。
+1. 选择“选择项目”。 
 
-1. 在“选择项目”选项卡上，选择“awesome-terraform”项目。
+1. 在“选择项目”选项卡上，选择“awesome-terraform”项目。  
 
     ![选择 awesome-terraform 项目](./media/terraform-slot-walkthru/choose-project.png)
 
-1. 选择“选择分支”。
+1. 选择“选择分支”。 
 
-1. 在“选择分支”选项卡上，选择“master”。
+1. 在“选择分支”选项卡上，选择“master”。  
 
     ![选择 master 分支](./media/terraform-slot-walkthru/choose-branch-master.png)
 
-1. 在“部署选项”选项卡上，选择“确定”。
+1. 在“部署选项”选项卡上，选择“确定”。  
 
 现已部署生产槽位。 若要部署过渡槽位，请执行本部分前面所述的所有步骤，但要做出以下修改：
 
-- 在步骤 3 中，选择“slotAppServiceSlotOne”资源。
+- 在步骤 3 中，选择“slotAppServiceSlotOne”资源。 
 
 - 在步骤 13 中，选择 working 分支而不是 master 分支。
 
@@ -216,15 +219,15 @@ ms.lasthandoff: 04/16/2018
 
 在前面的部分中，我们设置了要从 GitHub 中不同分支部署的两个槽位 - **slotAppService** 和 **slotAppServiceSlotOne**。 让我们预览 Web 应用，以验证是否已成功部署这些应用。
 
-执行以下步骤两次。 执行步骤 3 时，第一次请选择“slotAppService”，第二次请选择“slotAppServiceSlotOne”。
+执行以下步骤 2 次。 执行步骤 3 时，第一次请选择“slotAppService”，第二次请选择“slotAppServiceSlotOne”。  
 
-1. 在 Azure 门户的主菜单中，选择“资源组”。
+1. 在 Azure 门户的主菜单中，选择“资源组”。 
 
-1. 选择“slotDemoResourceGroup”。
+1. 选择“slotDemoResourceGroup”。 
 
-1. 选择“slotAppService”或“slotAppServiceSlotOne”。
+1. 选择“slotAppService”或“slotAppServiceSlotOne”。  
 
-1. 在概述页上，选择“URL”。
+1. 在概述页上，选择“URL”。 
 
     ![在概述选项卡上选择“URL”以呈现应用](./media/terraform-slot-walkthru/resource-url.png)
 
@@ -233,7 +236,7 @@ ms.lasthandoff: 04/16/2018
 >
 >
 
-对于 **slotAppService** Web 应用，将会看到一个蓝色页面，其标题为“槽位演示应用 1”。 对于 **slotAppServiceSlotOne** Web 应用，将会看到一个绿色页面，其标题为“槽位演示应用 2”。
+对于 **slotAppService** Web 应用，将会看到一个蓝色页面，其标题为“槽位演示应用 1”。  对于 **slotAppServiceSlotOne** Web 应用，将会看到一个绿色页面，其标题为“槽位演示应用 2”。 
 
 ![预览应用以测试是否已正确部署这些应用](./media/terraform-slot-walkthru/app-preview.png)
 
@@ -263,7 +266,7 @@ ms.lasthandoff: 04/16/2018
 
 1. 在编辑器中粘贴以下代码：
 
-    ```JSON
+    ```hcl
     # Configure the Azure provider
     provider "azurerm" { }
 

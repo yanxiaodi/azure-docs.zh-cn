@@ -2,25 +2,28 @@
 title: Azure 媒体服务文档 - 教程和 API 参考 | Microsoft 文档
 description: 了解如何使用媒体服务（一个可缩放的云平台）安全地流式传输广播质量的点播或直播视频。 教程、API 参考和其他资源。
 services: media-services
-author: czeumault
-manager: carolz
+author: juliako
+manager: femila
 layout: LandingPage
 ms.assetid: ''
 ms.service: media-services
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: landing-page
-ms.date: 01/23/2017
-ms.author: carolz
-ms.openlocfilehash: 809595570f1c82ff6ff99bc15bf813560510e7f2
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
+ms.date: 03/14/2019
+ms.author: juliako
+ms.openlocfilehash: f23892dbb27a77c5e5a324481d047a55c3f0d3d3
+ms.sourcegitcommit: 3102f886aa962842303c8753fe8fa5324a52834a
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 04/23/2019
+ms.locfileid: "61227802"
 ---
-# <a name="media-services-documentation"></a>媒体服务文档
+# <a name="media-services-documentation"></a>媒体服务文档  
 
 了解如何使用媒体服务（一个可缩放的云平台）流式传输广播质量的视频。 教程、API 参考和其他文档介绍了如何安全地向数百万用户传送可缩放的点播和直播视频或音频流。
+
+**注意：** 不会向媒体服务 v2 添加任何新特性或新功能。 查看最新版本：[媒体服务 v3](https://docs.microsoft.com/azure/media-services/latest/)。 另请参阅[从 v2 到 v3 的迁移指南](../latest/migrate-from-v2-to-v3.md)。
 
 <ul class="panelContent cardsFTitle">
      <li>
@@ -70,7 +73,7 @@ ms.lasthandoff: 05/07/2018
                         </div>
                     </div>
                     <div class="cardText">
-                        <h3>通过 Azure 门户开始使用 Azure 媒体服务</h3>
+                        <h3>Azure 媒体服务入门（使用 Azure 门户）</h3>
                     </div>
                 </div>
             </div>
@@ -88,7 +91,7 @@ ms.lasthandoff: 05/07/2018
                         </div>
                     </div>
                     <div class="cardText">
-                        <h3>使用 Azure 门户创建 Azure 媒体服务帐户</h3>
+                        <h3>利用 Azure 门户创建 Azure 媒体服务帐户</h3>
                     </div>
                 </div>
             </div>
@@ -106,7 +109,7 @@ ms.lasthandoff: 05/07/2018
                         </div>
                     </div>
                     <div class="cardText">
-                        <h3>使用 Azure 门户开始传送内容</h3>
+                        <h3>内容传送入门（使用 Azure 门户）</h3>
                     </div>
                 </div>
             </div>
@@ -178,8 +181,8 @@ ms.lasthandoff: 05/07/2018
                 <div class="card">
                     <div class="cardText">
                         <h3>命令行</h3>
-                        <p><a href="/powershell/resourcemanager/azurerm.media/v0.3.1/azurerm.media">PowerShell (Resource Manager)</a></p>
-                        <p><a href="/powershell/servicemanagement/azure.compute/v3.1.0/azure.compute">PowerShell（服务管理）</a></p>
+                        <p><a href="https://docs.microsoft.com/azure/azure-resource-manager/powershell-azure-resource-manager">PowerShell (Resource Manager)</a></p>
+                        <p><a href="https://docs.microsoft.com/powershell/azure/servicemanagement/install-azure-ps?view=azuresmps-4.0.0">PowerShell（服务管理）</a></p>
                     </div>
                 </div>
             </div>
@@ -190,7 +193,7 @@ ms.lasthandoff: 05/07/2018
             <div class="cardPadding">
                 <div class="card">
                     <div class="cardText">
-                        <h3>语言</h3>
+                        <h3>Languages</h3>
                         <p><a href="/dotnet/api/microsoft.windowsazure.mediaservices.client">.NET</a></p>
                    </div>
                 </div>

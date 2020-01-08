@@ -9,27 +9,29 @@ ms.reviewer: douglasl
 ms.service: data-factory
 ms.workload: data-services
 ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
-ms.date: 02/07/2018
+ms.topic: conceptual
+ms.date: 09/04/2019
 ms.author: jingwang
-ms.openlocfilehash: 8b8a200fb7234feeac8679b657c8d4be6ee8b748
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: 1096505a8789d722594cff13841e97930846ee53
+ms.sourcegitcommit: a819209a7c293078ff5377dee266fa76fd20902c
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 09/16/2019
+ms.locfileid: "71010639"
 ---
 # <a name="copy-data-from-and-to-odbc-data-stores-using-azure-data-factory"></a>使用 Azure 数据工厂从/向 ODBC 数据存储复制数据
-> [!div class="op_single_selector" title1="Select the version of Data Factory service you are using:"]
-> * [版本 1 - 正式版](v1/data-factory-odbc-connector.md)
-> * [版本 2 - 预览版](connector-odbc.md)
+> [!div class="op_single_selector" title1="选择在使用数据工厂服务版本："]
+> * [版本 1](v1/data-factory-odbc-connector.md)
+> * [当前版本](connector-odbc.md)
 
 本文概述了如何在 Azure 数据工厂中使用复制活动从/向 ODBC 数据存储复制数据。 它是基于概述复制活动总体的[复制活动概述](copy-activity-overview.md)一文。
 
-> [!NOTE]
-> 本文适用于目前处于预览状态的版本 2 数据工厂。 如果使用数据工厂服务版本 1（即正式版 (GA)），请参阅 [V1 中的 ODBC 连接器](v1/data-factory-odata-connector.md)。
-
 ## <a name="supported-capabilities"></a>支持的功能
+
+以下活动支持此 ODBC 连接器：
+
+- 带有[支持的源或接收器矩阵](copy-activity-overview.md)的[复制活动](copy-activity-overview.md)
+- [Lookup 活动](control-flow-lookup-activity.md)
 
 可将数据从 ODBC 源复制到任何受支持的接收器数据存储，或者从任何受支持的源数据存储复制到 ODBC 接收器。 有关复制活动支持作为源/接收器的数据存储列表，请参阅[支持的数据存储](copy-activity-overview.md#supported-data-stores-and-formats)表。
 
@@ -54,12 +56,12 @@ ODBC 链接服务支持以下属性：
 
 | 属性 | 说明 | 必选 |
 |:--- |:--- |:--- |
-| type | type 属性必须设置为：Odbc | 是 |
+| type | type 属性必须设置为：**Odbc** | 是 |
 | connectionString | 不包括凭据部分的连接字符串。 可以使用类似 `"Driver={SQL Server};Server=Server.database.windows.net; Database=TestDatabase;"` 的模式指定连接字符串，也可以利用在 Integration Runtime 计算机上使用 `"DSN=<name of the DSN on IR machine>;"` 设置的系统 DSN（数据源名称）（仍需要相应地指定链接服务中的凭据部分）。<br>将此字段标记为 SecureString 以安全地将其存储在数据工厂中或[引用存储在 Azure Key Vault 中的机密](store-credentials-in-key-vault.md)。| 是 |
-| authenticationType | 用于连接 ODBC 数据存储的身份验证类型。<br/>允许的值是：Basic 和 Anonymous。 | 是 |
+| authenticationType | 用于连接 ODBC 数据存储的身份验证类型。<br/>允许值包括：**Basic** 和 **Anonymous**。 | 是 |
 | userName | 如果使用基本身份验证，请指定用户名。 | 否 |
 | password | 指定为 userName 指定的用户帐户的密码。 将此字段标记为 SecureString 以安全地将其存储在数据工厂中或[引用存储在 Azure Key Vault 中的机密](store-credentials-in-key-vault.md)。 | 否 |
-| credential | 连接字符串的访问凭据部分，采用特定于驱动程序的属性值格式指定。 示例：`"RefreshToken=<secret refresh token>;"`。 将此字段标记为 SecureString。 | 否 |
+| 凭据 | 连接字符串的访问凭据部分，采用特定于驱动程序的属性值格式指定。 例如：`"RefreshToken=<secret refresh token>;"`。 将此字段标记为 SecureString。 | 否 |
 | connectVia | 用于连接到数据存储的[集成运行时](concepts-integration-runtime.md)。 如[先决条件](#prerequisites)中所述，需要自承载集成运行时。 |是 |
 
 **示例 1：使用 Basic 身份验证**
@@ -117,13 +119,13 @@ ODBC 链接服务支持以下属性：
 
 ## <a name="dataset-properties"></a>数据集属性
 
-有关可用于定义数据集的各个部分和属性的完整列表，请参阅数据集一文。 本部分提供 ODBC 数据集支持的属性列表。
+有关可用于定义数据集的各部分和属性的完整列表，请参阅[数据集](concepts-datasets-linked-services.md)一文。 本部分提供 ODBC 数据集支持的属性列表。
 
-要从/向与 ODBC 兼容的数据存储复制数据，请将数据集的 type 属性设置为“RelationalTable”。 支持以下属性：
+若要从/向 ODBC 兼容的数据存储复制数据，支持以下属性：
 
 | 属性 | 说明 | 必选 |
 |:--- |:--- |:--- |
-| type | 数据集的 type 属性必须设置为：RelationalTable | 是 |
+| type | 数据集的 type 属性必须设置为：**OdbcTable** | 是 |
 | tableName | ODBC 数据存储中表的名称。 | 源为否（如果指定了活动源中的“query”）；<br/>接收器为是 |
 
 **示例**
@@ -132,7 +134,8 @@ ODBC 链接服务支持以下属性：
 {
     "name": "ODBCDataset",
     "properties": {
-        "type": "RelationalTable",
+        "type": "OdbcTable",
+        "schema": [],
         "linkedServiceName": {
             "referenceName": "<ODBC linked service name>",
             "type": "LinkedServiceReference"
@@ -144,17 +147,19 @@ ODBC 链接服务支持以下属性：
 }
 ```
 
+如果使用`RelationalTable`的是类型化的数据集，则仍支持原样，但建议使用新的数据集。
+
 ## <a name="copy-activity-properties"></a>复制活动属性
 
 有关可用于定义活动的各部分和属性的完整列表，请参阅[管道](concepts-pipelines-activities.md)一文。 本部分提供 ODBC 源支持的属性列表。
 
 ### <a name="odbc-as-source"></a>ODBC 作为源
 
-要从与 ODBC 兼容的数据存储复制数据，请将复制活动中的源类型设置为“RelationalSource”。 复制活动**源**部分支持以下属性：
+若要从与 ODBC 兼容的数据存储复制数据，复制活动**源**部分支持以下属性：
 
 | 属性 | 说明 | 必选 |
 |:--- |:--- |:--- |
-| type | 复制活动源的 type 属性必须设置为：RelationalSource | 是 |
+| type | 复制活动源的 type 属性必须设置为：**OdbcSource** | 是 |
 | query | 使用自定义 SQL 查询读取数据。 例如：`"SELECT * FROM MyTable"`。 | 否（如果指定了数据集中的“tableName”） |
 
 **示例：**
@@ -178,7 +183,7 @@ ODBC 链接服务支持以下属性：
         ],
         "typeProperties": {
             "source": {
-                "type": "RelationalSource",
+                "type": "OdbcSource",
                 "query": "SELECT * FROM MyTable"
             },
             "sink": {
@@ -189,6 +194,8 @@ ODBC 链接服务支持以下属性：
 ]
 ```
 
+如果使用`RelationalSource`的是类型化的源，则仍支持原样，但建议使用新的源。
+
 ### <a name="odbc-as-sink"></a>ODBC 作为接收器
 
 要向与 ODBC 兼容的数据存储复制数据，请将复制活动中的接收器类型设置为“OdbcSink”。 复制活动接收器部分中支持以下属性：
@@ -196,7 +203,7 @@ ODBC 链接服务支持以下属性：
 | 属性 | 说明 | 必选 |
 |:--- |:--- |:--- |
 | type | 复制活动接收器的 type 属性必须设置为：**OdbcSink** | 是 |
-| writeBatchTimeout |超时之前等待批插入操作完成时的等待时间。<br/>允许的值为：timespan。 示例：“00:30:00”（30 分钟）。 |否 |
+| writeBatchTimeout |超时之前等待批插入操作完成时的等待时间。<br/>允许的值为：timespan。 例如：“00:30:00”（30 分钟）。 |否 |
 | writeBatchSize |缓冲区大小达到 writeBatchSize 时会数据插入 SQL 表。<br/>允许的值为：整数（行数）。 |否（默认值为 0 - 自动检测） |
 | preCopyScript |每次运行时，将数据写入到数据存储之前，指定复制活动要执行的 SQL 查询。 此属性可用于清理预先加载的数据。 |否 |
 
@@ -234,117 +241,6 @@ ODBC 链接服务支持以下属性：
     }
 ]
 ```
-
-## <a name="ibm-informix-source"></a>IBM Informix 源
-
-可以使用泛型 ODBC 连接器从 IBM Informix 数据库复制数据。
-
-在一台可以访问数据存储的计算机上设置一个自我托管的集成运行时。 Integration Runtime 使用 Informix 的 ODBC 驱动程序连接到数据存储。 因此，如果尚未在相同的计算机上安装驱动程序，请先安装。 例如，可以使用驱动程序“IBM INFORMIX ODBC 驱动程序（64 位）”。 有关详细信息，请参阅[先决条件](#prerequisites)部分。
-
-在数据工厂解决方案中使用 Informix 源之前，请参照[解决连接问题](#troubleshoot-connectivity-issues)部分中的说明验证 Integration Runtime 能否连接到数据存储。
-
-创建一个 ODBC 链接服务，将 IBM Informix 数据存储链接到 Azure 数据工厂，如以下示例所示：
-
-```json
-{
-    "name": "InformixLinkedService",
-    "properties": {
-        "type": "Odbc",
-        "typeProperties": {
-            "connectionString": {
-                "type": "SecureString",
-                "value": "<Informix connection string or DSN>"
-            },
-            "authenticationType": "Basic",
-            "userName": "<username>",
-            "password": {
-                "type": "SecureString",
-                "value": "<password>"
-            }
-        },
-        "connectVia": {
-            "referenceName": "<name of Integration Runtime>",
-            "type": "IntegrationRuntimeReference"
-        }
-    }
-}
-```
-
-从头开始阅读文章，了解在复制操作中将 ODBC 数据存储用作源/接收器数据存储的详细信息。
-
-## <a name="microsoft-access-source"></a>Microsoft Access 源
-
-可以使用泛型 ODBC 连接器从 Microsoft Access 数据库复制数据。
-
-在一台可以访问数据存储的计算机上设置一个自我托管的集成运行时。 Integration Runtime 使用 Microsoft Access 的 ODBC 驱动程序连接到数据存储。 因此，如果尚未在相同的计算机上安装驱动程序，请先安装。 有关详细信息，请参阅[先决条件](#prerequisites)部分。
-
-在数据工厂解决方案中使用 Microsoft Access 源之前，请参照[解决连接问题](#troubleshoot-connectivity-issues)部分中的说明验证 Integration Runtime 能否连接到数据存储。
-
-创建一个 ODBC 链接服务，将 Microsoft Access 数据库链接到 Azure 数据工厂，如以下示例所示：
-
-```json
-{
-    "name": "MicrosoftAccessLinkedService",
-    "properties": {
-        "type": "Odbc",
-        "typeProperties": {
-            "connectionString": {
-                "type": "SecureString",
-                "value": "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=<path to your DB file e.g. C:\\mydatabase.accdb>;"
-            },
-            "authenticationType": "Basic",
-            "userName": "<username>",
-            "password": {
-                "type": "SecureString",
-                "value": "<password>"
-            }
-        },
-        "connectVia": {
-            "referenceName": "<name of Integration Runtime>",
-            "type": "IntegrationRuntimeReference"
-        }
-    }
-}
-```
-
-从头开始阅读文章，了解在复制操作中将 ODBC 数据存储用作源/接收器数据存储的详细信息。
-
-## <a name="ge-historian-source"></a>GE Historian 源
-
-可以使用泛型 ODBC 连接器从 GE Historian 数据库复制数据。
-
-在一台可以访问数据存储的计算机上设置一个自我托管的集成运行时。 集成运行时使用 GE Historian 的 ODBC 驱动程序连接到数据存储。 因此，如果尚未在相同的计算机上安装驱动程序，请先安装。 有关详细信息，请参阅[先决条件](#prerequisites)部分。
-
-在数据工厂解决方案中使用 GE Historian 源之前，请参照[解决连接问题](#troubleshoot-connectivity-issues)部分中的说明验证 Integration Runtime 能否连接到数据存储。
-
-创建一个 ODBC 链接服务，将 Microsoft Access 数据库链接到 Azure 数据工厂，如以下示例所示：
-
-```json
-{
-    "name": "HistorianLinkedService",
-    "properties": {
-        "type": "Odbc",
-        "typeProperties": {
-            "connectionString": {
-                "type": "SecureString",
-                "value": "<GE Historian store connection string or DSN>"
-            },
-            "authenticationType": "Basic",
-            "userName": "<username>",
-            "password": {
-                "type": "SecureString",
-                "value": "<password>"
-            }
-        },
-        "connectVia": {
-            "referenceName": "<name of Integration Runtime>",
-            "type": "IntegrationRuntimeReference"
-        }
-    }
-}
-```
-
-从头开始阅读文章，了解在复制操作中将 ODBC 数据存储用作源/接收器数据存储的详细信息。
 
 ## <a name="sap-hana-sink"></a>SAP HANA 接收器
 
@@ -386,6 +282,11 @@ ODBC 链接服务支持以下属性：
 ```
 
 从头开始阅读文章，了解在复制操作中将 ODBC 数据存储用作源/接收器数据存储的详细信息。
+
+## <a name="lookup-activity-properties"></a>查找活动属性
+
+若要了解有关属性的详细信息，请检查[查找活动](control-flow-lookup-activity.md)。
+
 
 ## <a name="troubleshoot-connectivity-issues"></a>解决连接问题
 

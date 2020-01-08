@@ -1,50 +1,46 @@
 ---
-title: Azure Active Directory B2C：LinkedIn 配置 | Microsoft Docs
-description: 在 Azure Active Directory B2C 保护的应用程序中，向具有 LinkedIn 帐户的使用者提供注册和登录
+title: 使用 LinkedIn 帐户设置注册和登录 - Azure Active Directory B2C
+description: 使用 Azure Active Directory B2C，为应用程序中的客户提供通过 LinkedIn 帐户注册与登录的功能。
 services: active-directory-b2c
-documentationcenter: ''
-author: davidmu1
-manager: mtillman
-editor: ''
-ms.service: active-directory-b2c
+author: mmacy
+manager: celestedg
+ms.service: active-directory
 ms.workload: identity
-ms.topic: article
-ms.date: 12/06/2016
-ms.author: davidmu
-ms.openlocfilehash: 91970b3ec41c645cd1cd3e203cc96ad655dafd7e
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 08/08/2019
+ms.author: marsma
+ms.subservice: B2C
+ms.openlocfilehash: be347fe33e03b4c2a7ecc1015a407c5a58062326
+ms.sourcegitcommit: f209d0dd13f533aadab8e15ac66389de802c581b
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71065149"
 ---
-# <a name="azure-active-directory-b2c-provide-sign-up-and-sign-in-to-consumers-with-linkedin-accounts"></a>Azure Active Directory B2C：向具有 LinkedIn 帐户的使用者提供注册和登录
+# <a name="set-up-sign-up-and-sign-in-with-a-linkedin-account-using-azure-active-directory-b2c"></a>使用 Azure Active Directory B2C 设置通过 LinkedIn 帐户注册与登录
+
 ## <a name="create-a-linkedin-application"></a>创建 LinkedIn 应用程序
-要将 LinkedIn 用作 Azure Active Directory (Azure AD) B2C 中的标识提供者，需要创建 LinkedIn 应用程序并向其提供合适的参数。 需要一个 LinkedIn 帐户来完成此操作。 如果没有账户，可在 [https://www.linkedin.com/](https://www.linkedin.com/) 处获取。
 
-1. 转到 [LinkedIn 开发人员网站](https://www.developer.linkedin.com/)，使用 LinkedIn 帐户凭据登录。
-2. 在顶部菜单栏中单击“我的应用”，并单击“创建应用程序”。
-   
-    ![LinkedIn - 新建应用](./media/active-directory-b2c-setup-li-app/linkedin-new-app.png)
-3. 在“新建应用程序”表单中填写相关信息（“公司名称”、“名称”、“描述”、“应用程序徽标 URL”、“应用程序使用”、“网站 URL”、“业务电子邮件”和“业务电话”）。
-4. 同意“LinkedIn API 使用条款”并单击“提交”。
-   
-    ![LinkedIn - 注册应用](./media/active-directory-b2c-setup-li-app/linkedin-register-app.png)
-5. 复制“客户端 ID”和“客户端密钥”的值。 （可在“身份验证密钥”下找到它们。）将 LinkedIn 配置为租户中的标识提供者时需要这两个值。
-   
-   > [!NOTE]
-   > “客户端密钥”是一个重要的安全凭据。
-   > 
-   > 
-6. 在（**OAuth 2.0** 下的）“授权重定向 URL”字段中输入 `https://login.microsoftonline.com/te/{tenant}/oauth2/authresp`。 将 **{tenant}** 替换为租户名称（例如 contoso.onmicrosoft.com）。 单击“添加”，并单击“更新”。 **{tenant}** 值区分大小写。
-   
-    ![LinkedIn - 安装应用](./media/active-directory-b2c-setup-li-app/linkedin-setup.png)
+若要在 Azure Active Directory B2C （Azure AD B2C）中将 LinkedIn 帐户用作[标识提供者](active-directory-b2c-reference-oauth-code.md)，需要在租户中创建表示它的应用程序。 如果你没有 LinkedIn 帐户，可在 [https://www.linkedin.com/](https://www.linkedin.com/) 上注册一个。
 
-## <a name="configure-linkedin-as-an-identity-provider-in-your-tenant"></a>将 LinkedIn 配置为租户中的标识提供者
-1. 请按照以下步骤在 Azure 门户上[导航到 B2C 功能边栏选项卡](active-directory-b2c-app-registration.md#navigate-to-b2c-settings)。
-2. 在 B2C 功能边栏选项卡上，单击“标识提供者”。
-3. 单击边栏选项卡顶部的“ **+添加** ”。
-4. 为标识提供者配置提供一个友好**名称**。 例如，输入“LI”。
-5. 单击“标识提供者类型”，选择“LinkedIn”，并单击“确定”。
-6. 单击“设置此标识提供者”，并输入之前创建的 LinkedIn 应用程序的客户端 ID 和客户端密码。
-7. 单击“确定”，并单击“创建”以保存 LinkedIn 配置。
+1. 使用 LinkedIn 帐户凭据登录到 [LinkedIn 开发人员网站](https://www.developer.linkedin.com/)。
+1. 选择“我的应用”，然后单击“创建应用程序”。
+1. 输入“公司名称”、“应用程序名称”、“应用程序说明”、“应用程序徽标”、“应用程序使用”、“网站 URL”、“企业电子邮件”和“商务电话”。
+1. 同意“LinkedIn API 使用条款”并单击“提交”。
+1. 复制“客户端 ID”和“客户端密钥”的值。 可在“身份验证密钥”下找到它们。 将 LinkedIn 配置为租户中的标识提供者时需要这两个值。 “客户端密钥”是一个重要的安全凭据。
+1. 在“授权的重定向 URL”中输入 `https://your-tenant-name.b2clogin.com/your-tenant-name.onmicrosoft.com/oauth2/authresp`。 将 `your-tenant-name` 替换为租户的名称。 输入租户名称时，必须全部使用小写字母，即使租户是使用大写字母在 Azure AD B2C 中定义的，也是如此。 选择“添加”，然后单击“更新”。
 
+## <a name="configure-a-linkedin-account-as-an-identity-provider"></a>将 LinkedIn 帐户配置为标识提供者
+
+1. 以 Azure AD B2C 租户的全局管理员身份登录 [Azure 门户](https://portal.azure.com/)。
+1. 请确保使用包含 Azure AD B2C 租户的目录，方法是选择顶部菜单中的“目录 + 订阅”筛选器，然后选择包含租户的目录。
+1. 选择 Azure 门户左上角的“所有服务”，搜索并选择 **Azure AD B2C**。
+1. 选择“标识提供者”，然后选择“LinkedIn”。
+1. 输入“名称”。 例如 *LinkedIn*。
+1. 对于“客户端 ID”，请输入前面创建的 LinkedIn 应用程序的客户端 ID。
+1. 对于“客户端机密”，请输入记下的客户端机密。
+1. 选择**保存**。
+
+## <a name="migration-from-v10-to-v20"></a>从 v1.0 迁移到 v2.0
+
+LinkedIn 最近[已将其 API 从 v1.0 更新到 v2.0](https://engineering.linkedin.com/blog/2018/12/developer-program-updates)。 在迁移过程中，Azure AD B2C 只能获取 LinkedIn 用户在注册期间提供的全名。 如果电子邮件地址是注册期间收集的属性之一，则用户必须手动输入该电子邮件地址并对其进行验证。

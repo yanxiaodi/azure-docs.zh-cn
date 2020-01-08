@@ -3,22 +3,21 @@ title: 监视和管理数据管道 - Azure | Microsoft 文档
 description: 了解如何使用“监视和管理”应用来监视和管理 Azure 数据工厂和管道。
 services: data-factory
 documentationcenter: ''
-author: sharonlo101
-manager: craigg
+author: djpmsft
+ms.author: daperlov
+manager: jroth
+ms.reviewer: maghan
 ms.assetid: f3f07bc4-6dc3-4d4d-ac22-0be62189d578
 ms.service: data-factory
 ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/10/2018
-ms.author: shlo
-robots: noindex
-ms.openlocfilehash: f5ca5544a217d66d334ff468d2308af1836c7de8
-ms.sourcegitcommit: c3d53d8901622f93efcd13a31863161019325216
-ms.translationtype: HT
+ms.openlocfilehash: 052ea99f0489458269adf4dca2c6713535933638
+ms.sourcegitcommit: d200cd7f4de113291fbd57e573ada042a393e545
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/29/2018
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70139578"
 ---
 # <a name="monitor-and-manage-azure-data-factory-pipelines-by-using-the-monitoring-and-management-app"></a>使用“监视和管理”应用监视和管理 Azure 数据工厂管道
 > [!div class="op_single_selector"]
@@ -28,7 +27,7 @@ ms.lasthandoff: 03/29/2018
 >
 
 > [!NOTE]
-> 本文适用于数据工厂版本 1（正式版 (GA)）。 如果使用数据工厂服务版本 2（即预览版），请参阅[在版本 2 中监控和管理数据工厂管道](../monitor-visually.md)。
+> 本文适用于数据工厂版本 1。 如果使用数据工厂服务的当前版本，请参阅[监视和管理数据工厂管道](../monitor-visually.md)。
 
 本文介绍如何使用“监视和管理”应用监视、管理和调试数据工厂管道。 可以通过观看以下视频开始使用该应用程序：
 
@@ -59,7 +58,7 @@ ms.lasthandoff: 03/29/2018
 如果没有用于测试这些步骤的数据工厂应用程序，请完成教程：[使用数据工厂将数据从 Blob 存储复制到 SQL 数据库](data-factory-copy-data-from-azure-blob-storage-to-sql-database.md)。
 
 ## <a name="understand-the-monitoring-and-management-app"></a>了解“监视和管理”应用
-左侧有三个选项卡：“资源浏览器”、“监视视图”和“警报”。 第一个选项卡（**资源浏览器**）在默认情况下处于选中状态。
+在左侧有三个选项卡：“资源浏览器”、“监视视图”和“警报”。 第一个选项卡（**资源浏览器**）在默认情况下处于选中状态。
 
 ### <a name="resource-explorer"></a>资源浏览器
 会看到如下内容：
@@ -145,7 +144,7 @@ ms.lasthandoff: 03/29/2018
 
 ![活动窗口资源管理器向左/向右键](./media/data-factory-monitor-manage-app/ActivityWindowExplorerLeftRightArrows.png)
 
-在图示视图底部，可看到这些按钮：放大、缩小、缩放到合适大小、比例 100%、锁定布局。 “锁定布局”按钮将防止意外移动图示视图中的表和管道。 它在默认情况下处于“打开”状态。 可将其关闭，还可在图示中移动实体。 将其关闭后，可使用最后一个按钮来自动放置表和管道。 还可以通过使用鼠标滚轮来放大或缩小。
+在图示视图底部，可以看到以下按钮：放大、缩小、缩放到合适大小、比例 100%、锁定布局。 “锁定布局”按钮将防止意外移动图示视图中的表和管道。 它在默认情况下处于“打开”状态。 可将其关闭，还可在图示中移动实体。 将其关闭后，可使用最后一个按钮来自动放置表和管道。 还可以通过使用鼠标滚轮来放大或缩小。
 
 ![图示视图缩放命令](./media/data-factory-monitor-manage-app/DiagramViewZoomCommands.png)
 
@@ -160,7 +159,7 @@ ms.lasthandoff: 03/29/2018
 
 <table>
 <tr>
-    <th align="left">状态</th><th align="left">子状态</th><th align="left">说明</th>
+    <th align="left">状态</th><th align="left">子状态</th><th align="left">描述</th>
 </tr>
 <tr>
     <td rowspan="8">等待</td><td>ScheduleTime</td><td>未到运行活动窗口的时间。</td>
@@ -188,7 +187,7 @@ ms.lasthandoff: 03/29/2018
 </tr>
 <tr>
 <tr>
-<td rowspan="2">InProgress</td><td>正在验证</td><td>正在进行验证。</td>
+<td rowspan="2">正在进行</td><td>正在验证</td><td>正在进行验证。</td>
 </tr>
 <td>-</td>
 <td>正在处理活动窗口。</td>
@@ -290,7 +289,7 @@ ms.lasthandoff: 03/29/2018
 选择活动窗口，单击第一个命令栏按钮的向下键，并选择“重新运行” / “与管道中的上游一起重新运行”。 选择“与管道中的上游一起重新运行”选项时，也将重新运行所有上游活动窗口。
     ![重新运行活动窗口](./media/data-factory-monitor-manage-app/ReRunSlice.png)
 
-还可在列表中选择多个活动窗口，并同时重新运行它们。 可能希望基于状态筛选活动窗口（例如：**失败**），并在解决导致活动窗口失败的问题后重新运行失败的活动窗口。 有关在列表中筛选活动窗口的详细信息，请参阅以下部分。  
+还可在列表中选择多个活动窗口，并同时重新运行它们。 你可能希望基于状态筛选活动窗口（例如：**失败**）--并在解决导致活动窗口失败的问题后重新运行失败的活动窗口。 有关在列表中筛选活动窗口的详细信息，请参阅以下部分。  
 
 ### <a name="pauseresume-multiple-pipelines"></a>暂停/恢复多个管道
 可以通过使用 Ctrl 键对两个或更多管道进行多选。 可以使用命令栏按钮（在下图的红色矩形中突出显示）来暂停/恢复它们。

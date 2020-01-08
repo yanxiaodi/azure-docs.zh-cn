@@ -13,15 +13,18 @@ ms.devlang: na
 ms.topic: troubleshooting
 ms.date: 03/09/2018
 ms.author: tomfitz
-ms.openlocfilehash: 6d9048ae531abedb89b70989ce1c962357c514cd
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.openlocfilehash: 7938f2c47e4af8d8804191fbb9e55b379f9554ef
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60390141"
 ---
 # <a name="resolve-errors-for-resource-quotas"></a>解决资源配额错误
 
 本文介绍了部署资源时可能遇到的配额错误。
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
 ## <a name="symptom"></a>症状
 
@@ -75,10 +78,10 @@ az vm list-usage --location "South Central US"
 
 ### <a name="powershell"></a>PowerShell
 
-对于 PowerShell，可使用 Get-AzureRmVMUsage 命令查找虚拟机配额。
+对于 PowerShell，可使用 Get-AzVMUsage 命令查找虚拟机配额  。
 
 ```powershell
-Get-AzureRmVMUsage -Location "South Central US"
+Get-AzVMUsage -Location "South Central US"
 ```
 
 将返回：
@@ -100,7 +103,7 @@ Virtual Machines                             0 10000 Count
 >
 >
 
-1. 选择“订阅”。
+1. 选择 **订阅**。
 
    ![订阅](./media/resource-manager-quota-errors/subscriptions.png)
 
@@ -108,11 +111,11 @@ Virtual Machines                             0 10000 Count
 
    ![选择订阅](./media/resource-manager-quota-errors/select-subscription.png)
 
-3. 选择“使用情况 + 配额”
+3. 选择“使用情况 + 配额” 
 
    ![选择使用情况和配额](./media/resource-manager-quota-errors/select-usage-quotas.png)
 
-4. 在右上角选择“请求增加”。
+4. 在右上角选择“请求增加”  。
 
    ![请求增加](./media/resource-manager-quota-errors/request-increase.png)
 

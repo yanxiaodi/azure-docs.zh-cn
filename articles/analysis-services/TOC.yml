@@ -1,0 +1,130 @@
+- name: Azure Analysis Services 文档
+  href: index.yml
+- name: 概述
+  items:
+    - name: 什么是 Azure Analysis Services？
+      href: analysis-services-overview.md
+- name: 快速入门
+  items:
+    - name: 创建服务器 - 门户
+      href: analysis-services-create-server.md
+    - name: 创建服务器 - PowerShell
+      href: analysis-services-create-powershell.md
+    - name: 配置服务器防火墙 - 门户
+      href: analysis-services-qs-firewall.md
+- name: 教程
+  items:
+    - name: 1 - 从门户添加示例模型
+      href: analysis-services-create-sample-model.md
+    - name: 2 - 配置服务器管理员和用户角色
+      href: tutorials/analysis-services-tutorial-roles.md
+    - name: 3 - 使用 Power BI Desktop 进行连接
+      href: tutorials/analysis-services-tutorial-pbid.md
+- name: 概念
+  items:
+    - name: 身份验证和用户权限
+      href: analysis-services-manage-users.md
+    - name: 使用服务主体进行自动化
+      href: analysis-services-service-principal.md
+    - name: 客户端库
+      href: analysis-services-data-providers.md
+    - name: 兼容性级别
+      href: 'https://docs.microsoft.com/analysis-services/tabular-models/compatibility-level-for-tabular-models-in-analysis-services'
+    - name: 连接到本地数据源
+      href: analysis-services-gateway.md
+    - name: 连接到服务器
+      href: analysis-services-connect.md
+    - name: 高可用性
+      href: analysis-services-bcdr.md
+    - name: 支持的数据源
+      href: analysis-services-datasource.md
+- name: 操作说明
+  items:
+    - name: 服务器
+      items:
+        - name: 备份和还原
+          href: analysis-services-backup.md
+        - name: 配置服务器名称别名
+          href: analysis-services-server-alias.md
+        - name: 配置横向扩展
+          href: analysis-services-scale-out.md
+        - name: 安装并配置本地数据网关
+          href: analysis-services-gateway-install.md
+        - name: 对 Azure 虚拟网络上的数据源使用网关
+          href: analysis-services-vnet-gateway.md
+        - name: 管理服务器
+          href: analysis-services-manage.md
+        - name: 监视服务器指标
+          href: analysis-services-monitor.md
+        - name: 设置诊断日志记录
+          href: analysis-services-logging.md
+        - name: 创建服务主体 - Azure 门户
+          href: ../active-directory/develop/howto-create-service-principal-portal.md
+        - name: 创建服务主体 - PowerShell
+          href: ../active-directory/develop/howto-authenticate-service-principal-powershell.md
+        - name: 将服务主体添加到服务器管理员角色
+          href: analysis-services-addservprinc-admins.md
+    - name: 模型
+      items:
+        - name: 从 Visual Studio (SSDT) 部署
+          href: analysis-services-deploy.md
+        - name: 使用 REST API 进行刷新
+          href: analysis-services-async-refresh.md
+        - name: 使用逻辑应用进行刷新
+          href: analysis-services-refresh-logic-app.md
+        - name: 使用 Azure 自动化进行刷新
+          href: analysis-services-refresh-azure-automation.md
+    - name: 安全
+      items:
+        - name: 管理数据库用户
+          href: analysis-services-database-users.md
+        - name: 管理服务器管理员
+          href: analysis-services-server-admins.md
+    - name: 连接
+      items:
+        - name: 使用 Excel 进行连接
+          href: analysis-services-connect-excel.md
+        - name: 使用 Power BI 进行连接
+          href: analysis-services-connect-pbi.md
+        - name: 创建 .odc 文件
+          href: analysis-services-odc.md
+- name: 引用
+  items:
+    - name: PowerShell
+      href: analysis-services-powershell.md
+    - name: REST
+      href: /rest/api/analysisservices
+    - name: 资源管理器模板
+      href: /azure/templates/microsoft.analysisservices/servers
+    - name: DAX
+      href: 'https://docs.microsoft.com/dax/data-analysis-expressions-dax-reference'
+    - name: Power Query M
+      href: 'https://docs.microsoft.com/powerquery-m/power-query-m-reference'
+    - name: 表格模型脚本语言 (TMSL)
+      href: 'https://docs.microsoft.com/bi-reference/tmsl/tabular-model-scripting-language-tmsl-reference'
+    - name: 表格对象模型 (TOM)
+      href: 'https://docs.microsoft.com/bi-reference/tom/introduction-to-the-tabular-object-model-tom-in-analysis-services-amo'
+    - name: 资源和对象限制
+      href: analysis-services-capacity-limits.md
+- name: 资源
+  items:
+    - name: 示例
+      href: analysis-services-samples.md
+    - name: Analysis Services 团队博客
+      href: 'https://blogs.msdn.microsoft.com/analysisservices/'
+    - name: Azure Analysis Services 论坛
+      href: 'https://social.msdn.microsoft.com/Forums/en-US/home?forum=AzureAnalysisServices'
+    - name: Azure 路线图
+      href: 'https://azure.microsoft.com/roadmap/?category=intelligence-analytics'
+    - name: Azure 状态
+      href: 'https://azure.microsoft.com/status/'
+    - name: 反馈
+      href: 'https://feedback.azure.com/forums/556165-azure-analysis-services'
+    - name: 定价
+      href: 'https://azure.microsoft.com/pricing/details/analysis-services/'
+    - name: 定价计算器
+      href: 'https://azure.microsoft.com/pricing/calculator/'
+    - name: 堆栈溢出
+      href: 'https://stackoverflow.com/questions/tagged/azure-analysis-services'
+    - name: 视频
+      href: 'https://azure.microsoft.com/resources/videos/index/?services=analysis-services&sort=newest'

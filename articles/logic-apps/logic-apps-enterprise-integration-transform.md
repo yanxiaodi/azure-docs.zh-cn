@@ -1,27 +1,24 @@
 ---
-title: 使用转换转换 XML 数据 - Azure 逻辑应用 | Microsoft 文档
-description: 使用 Enterprise Integration SDK 创建转换或映射将 XML 数据在逻辑应用的格式之间转换
+title: 在格式之间转换 XML - Azure 逻辑应用 | Microsoft Docs
+description: 在带有 Enterprise Integration Pack 的 Azure 逻辑应用中创建用于在格式之间转换 XML 的转换或映射
 services: logic-apps
-documentationcenter: .net,nodejs,java
-author: msftman
-manager: anneta
-editor: cgronlun
-ms.assetid: add01429-21bc-4bab-8b23-bc76ba7d0bde
 ms.service: logic-apps
-ms.workload: integration
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.suite: integration
+author: divyaswarnkar
+ms.author: divswa
+ms.reviewer: jonfan, estfan, LADocs
 ms.topic: article
+ms.assetid: add01429-21bc-4bab-8b23-bc76ba7d0bde
 ms.date: 07/08/2016
-ms.author: LADocs; padmavc
-ms.openlocfilehash: fd59b6b3f51adb538e774bc5bb089880ca22e97e
-ms.sourcegitcommit: d74657d1926467210454f58970c45b2fd3ca088d
-ms.translationtype: HT
+ms.openlocfilehash: 4ebd96613378bbd907beb5109343a2427b1300b0
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/28/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60427207"
 ---
-# <a name="enterprise-integration-with-xml-transforms"></a>企业集成与 XML 转换
-## <a name="overview"></a>概述
+# <a name="create-maps-that-transform-xml-between-formats-in-azure-logic-apps-with-enterprise-integration-pack"></a>在带有 Enterprise Integration Pack 的 Azure 逻辑应用中创建用于在格式之间转换 XML 的映射
+
 企业集成转换连接器可将数据从一种格式转换为另一种格式。 例如，传入消息可能包含 YearMonthDay 格式的当前日期。 可以使用转换将日期格式重新设置为 MonthDayYear 格式。
 
 ## <a name="what-does-a-transform-do"></a>转换的作用是什么？
@@ -35,27 +32,27 @@ ms.lasthandoff: 03/28/2018
 
 **下面是使用转换的步骤**：
 
-### <a name="prerequisites"></a>先决条件
+### <a name="prerequisites"></a>必备组件
 
 * 创建集成帐户并向其中添加映射  
 
 现在已满足了先决条件，可以创建逻辑应用了：  
 
 1. 创建逻辑应用并[将它链接到包含映射的集成帐户](../logic-apps/logic-apps-enterprise-integration-accounts.md "了解如何将集成帐户链接到逻辑应用")。
-2. 将“请求”触发器添加到逻辑应用  
+2. 将“请求”  触发器添加到逻辑应用  
    ![](./media/logic-apps-enterprise-integration-transforms/transform-1.png)    
-3. 通过首先选择“添加操作”来添加“转换 XML”操作   
+3. 通过首先选择“添加操作”  来添加“转换 XML”  操作   
    ![](./media/logic-apps-enterprise-integration-transforms/transform-2.png)   
-4. 在搜索框中输入“转换”一词，以便在所有操作中筛选出要使用的操作  
+4. 在搜索框中输入“转换”  一词，以便在所有操作中筛选出要使用的操作  
    ![](./media/logic-apps-enterprise-integration-transforms/transform-3.png)  
-5. 选择“转换 XML”操作   
-6. 添加转换的 XML“内容”。 可使用在 HTTP 请求中收到的任何 XML 数据作为“内容”。 在此示例中，选择触发了逻辑应用的 HTTP 请求的正文。
+5. 选择“转换 XML”  操作   
+6. 添加转换的 XML“内容”  。 可使用在 HTTP 请求中收到的任何 XML 数据作为“内容”  。 在此示例中，选择触发了逻辑应用的 HTTP 请求的正文。
 
    > [!NOTE]
-   > 请确保“转换 XML”的内容是 XML。 如果内容不是 XML 格式或采用 base64 编码，则必须指定用于处理该内容的表达式。 例如，可以使用[函数](logic-apps-workflow-definition-language.md#functions)（如 ```@base64ToBinary```）来解码内容，或使用 ```@xml``` 来处理 XML 格式的内容。
+   > 请确保“转换 XML”  的内容是 XML。 如果内容不是 XML 格式或采用 base64 编码，则必须指定用于处理该内容的表达式。 例如，可以使用[函数](logic-apps-workflow-definition-language.md#functions)（如 ```@base64ToBinary```）来解码内容，或使用 ```@xml``` 来处理 XML 格式的内容。
  
 
-7. 选择要用于执行转换的“映射”的名称。 该映射必须已处于集成帐户中。 在前面的步骤中，已向逻辑应用授予了对包含映射的集成帐户的访问权限。      
+7. 选择要用于执行转换的“映射”  的名称。 该映射必须已处于集成帐户中。 在前面的步骤中，已向逻辑应用授予了对包含映射的集成帐户的访问权限。      
    ![](./media/logic-apps-enterprise-integration-transforms/transform-4.png) 
 8. 保存工作  
     ![](./media/logic-apps-enterprise-integration-transforms/transform-5.png) 
@@ -86,12 +83,12 @@ ms.lasthandoff: 03/28/2018
 
 * 映射必须还具有这些属性和 CDATA 节，该节包含对程序集代码的调用：
 
-    * “名称”是自定义程序集名称。
-    * “命名空间”是包含自定义代码的程序集中的命名空间。
+    * “名称”是自定义程序集名称  。
+    * “命名空间”是包含自定义代码的程序集中的命名空间  。
 
   此示例演示了一个映射，该映射引用名为“XslUtilitiesLib”的程序集并从该程序集调用 `circumreference` 方法。
 
-  ````xml
+  ```xml
   <?xml version="1.0" encoding="UTF-8"?>
   <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:user="urn:my-scripts">
   <msxsl:script language="C#" implements-prefix="user">
@@ -112,13 +109,13 @@ ms.lasthandoff: 03/28/2018
      </circles>
     </xsl:template>
     </xsl:stylesheet>
-  ````
+  ```
 
 
 ### <a name="byte-order-mark"></a>字节顺序标记
 默认情况下，转换的响应会以字节顺序标记 (BOM) 开头。 仅在“代码视图”编辑器中工作时，才可访问此功能。 若要禁用此功能，请为 `transformOptions` 属性指定 `disableByteOrderMark`：
 
-````json
+```json
 "Transform_XML": {
     "inputs": {
         "content": "@{triggerBody()}",
@@ -132,7 +129,7 @@ ms.lasthandoff: 03/28/2018
     "runAfter": {},
     "type": "Xslt"
 }
-````
+```
 
 
 

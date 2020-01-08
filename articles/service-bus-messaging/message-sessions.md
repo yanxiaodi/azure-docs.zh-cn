@@ -3,25 +3,29 @@ title: Azure 服务总线消息会话 | Microsoft Docs
 description: 使用会话处理一系列 Azure 服务总线消息。
 services: service-bus-messaging
 documentationcenter: ''
-author: clemensv
+author: axisc
 manager: timlt
-editor: ''
+editor: spelluru
 ms.service: service-bus-messaging
 ms.workload: na
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 01/02/2018
-ms.author: sethm
-ms.openlocfilehash: 551432cd13c16fdd5423c46ed9c6f740353808f8
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.date: 01/23/2019
+ms.author: aschhab
+ms.openlocfilehash: 7264b8e5a536c90d106b3bf4a5e26093744327d6
+ms.sourcegitcommit: c79aa93d87d4db04ecc4e3eb68a75b349448cd17
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 09/18/2019
+ms.locfileid: "71091816"
 ---
 # <a name="message-sessions-first-in-first-out-fifo"></a>消息会话：先进先出 (FIFO) 
 
 使用 Microsoft Azure 服务总线会话，能够以连贯有序的方式处理一系列无限多的相关消息。 若要在服务总线中实现 FIFO 保证，请使用会话。 服务总线没有规定消息之间的关系性质，也没有定义用于确定消息序列开始或结束位置的特定模型。
+
+> [!NOTE]
+> 服务总线的基本层不支持会话。 标准层和高级层支持会话。 有关详细信息，请参阅[服务总线定价](https://azure.microsoft.com/pricing/details/service-bus/)。
 
 任何发送程序都可以在将消息提交到主题或队列时创建会话，方法是将 [SessionId](/dotnet/api/microsoft.azure.servicebus.message.sessionid#Microsoft_Azure_ServiceBus_Message_SessionId) 属性设置为会话专属的由应用程序定义的某标识符。 在 AMQP 1.0 协议一级，此值映射到 group-id 属性。
 
@@ -37,6 +41,9 @@ ms.lasthandoff: 03/23/2018
 
 ![][2]
 
+> [!NOTE]
+> 在队列或订阅上启用会话时，客户端应用程序无法***再***发送/接收常规消息。 所有消息都必须作为会话的一部分进行发送（通过设置会话 id）并接收会话接收。
+
 会话 API 存在于队列和订阅客户端上。 可以使用一个命令性模型，控制会话和消息的接收时间；还可以使用一个基于处理程序的模型（类似于 OnMessage），此模型简化了接收循环的管理操作。
 
 ## <a name="session-features"></a>会话功能
@@ -47,7 +54,7 @@ ms.lasthandoff: 03/23/2018
 
 [MessageSession](/dotnet/api/microsoft.servicebus.messaging.messagesession) 接收程序是由接受会话的客户端创建。 客户端调用 C# 编写的 [QueueClient.AcceptMessageSession](/dotnet/api/microsoft.servicebus.messaging.queueclient.acceptmessagesession#Microsoft_ServiceBus_Messaging_QueueClient_AcceptMessageSession) 或 [QueueClient.AcceptMessageSessionAsync](/dotnet/api/microsoft.servicebus.messaging.queueclient.acceptmessagesessionasync#Microsoft_ServiceBus_Messaging_QueueClient_AcceptMessageSessionAsync)。 在反应回调模型中，它会注册会话处理程序。
 
-当 [MessageSession](/dotnet/api/microsoft.servicebus.messaging.messagesession) 对象被接受同时由客户端保留时，此客户端会对队列或订阅中的包含相应会话 [SessionId](/en-us/dotnet/api/microsoft.servicebus.messaging.messagesession.sessionid#Microsoft_ServiceBus_Messaging_MessageSession_SessionId) 的所有消息，以及在会话保留期间仍在到达且包含相应 SessionId 的所有消息一直施加排他锁。
+当 [MessageSession](/dotnet/api/microsoft.servicebus.messaging.messagesession) 对象被接受同时由客户端保留时，此客户端会对队列或订阅中的包含相应会话 [SessionId](/dotnet/api/microsoft.servicebus.messaging.messagesession.sessionid#Microsoft_ServiceBus_Messaging_MessageSession_SessionId) 的所有消息，以及在会话保留期间仍在到达且包含相应 SessionId 的所有消息一直施加排他锁。
 
 调用 Close 或 CloseAsync 时，或当锁定期满导致应用程序无法执行关闭操作时，将会解除锁定。 应将会话锁定视为对文件施加的排他锁。也就是说，应用程序应在不再需要它时和/或不需要再处理其他任何消息时关闭会话。
 
@@ -73,14 +80,22 @@ ms.lasthandoff: 03/23/2018
 
 队列或订阅中保留的会话状态计入相应实体的存储配额。 因此，当应用程序完成会话时，建议应用程序清理保留的状态，以杜绝外部管理成本。
 
+## <a name="impact-of-delivery-count"></a>传递计数的影响
+
+会话上下文中每条消息的传递数定义与会话的由于没有中的定义略有不同。 下面是一个表，汇总了传递计数增加的时间。
+
+| 应用场景 | 消息的传递计数是否递增 |
+|----------|---------------------------------------------|
+| 会话被接受，但会话锁过期（由于超时） | 是 |
+| 会话被接受，会话中的消息不会完成（即使它们已被锁定），会话也会关闭 | 否 |
+| 接受会话，消息完成，然后显式关闭会话 | 不适用（这是标准流。 此处的消息将从会话中删除） |
+
 ## <a name="next-steps"></a>后续步骤
 
-- [完整示例](https://github.com/Azure/azure-service-bus/tree/master/samples/DotNet/GettingStarted/Microsoft.Azure.ServiceBus/BasicSendReceiveUsingQueueClient)展示了如何使用 .NET Standard 库发送和接收服务总线队列中基于会话的消息。
-- [示例](https://github.com/Azure/azure-service-bus/tree/master/samples/DotNet/Microsoft.ServiceBus.Messaging/Sessions)展示了如何使用 .NET Framework 客户端处理会话感知消息。 
+- 有关使用 .NET Framework 客户端处理会话感知消息的示例，请参见 [Microsoft.Azure.ServiceBus 示例](https://github.com/Azure/azure-service-bus/tree/master/samples/DotNet/Microsoft.Azure.ServiceBus/Sessions)或 [Microsoft.ServiceBus.Messaging 示例](https://github.com/Azure/azure-service-bus/tree/master/samples/DotNet/Microsoft.ServiceBus.Messaging/Sessions)。 
 
 若要了解有关服务总线消息传送的详细信息，请参阅以下主题：
 
-* [服务总线基础知识](service-bus-fundamentals-hybrid-solutions.md)
 * [服务总线队列、主题和订阅](service-bus-queues-topics-subscriptions.md)
 * [服务总线队列入门](service-bus-dotnet-get-started-with-queues.md)
 * [如何使用服务总线主题和订阅](service-bus-dotnet-how-to-use-topics-subscriptions.md)

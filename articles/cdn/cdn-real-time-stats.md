@@ -1,30 +1,31 @@
 ---
-title: "Azure CDN 中的实时统计信息 | Microsoft Docs"
-description: "在将内容传送到客户端时，实时统计信息将提供有关 Azure CDN 性能的实时数据。"
+title: Azure CDN 中的实时统计信息 | Microsoft Docs
+description: 在将内容传送到客户端时，实时统计信息将提供有关 Azure CDN 性能的实时数据。
 services: cdn
-documentationcenter: 
+documentationcenter: ''
 author: zhangmanling
 manager: erikre
-editor: 
+editor: ''
 ms.assetid: c7989340-1172-4315-acbb-186ba34dd52a
-ms.service: cdn
+ms.service: azure-cdn
 ms.workload: tbd
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
 ms.date: 01/23/2017
 ms.author: mazha
-ms.openlocfilehash: e9b9522de6b2c54dc794b00100ffe358296ecfdd
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.openlocfilehash: d56007e5a196a0857f3b69ac51f5e3b5a88c4f6e
+ms.sourcegitcommit: ccb9a7b7da48473362266f20950af190ae88c09b
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 07/05/2019
+ms.locfileid: "67593493"
 ---
 # <a name="real-time-stats-in-microsoft-azure-cdn"></a>Microsoft Azure CDN 中的实时统计信息
 [!INCLUDE [cdn-premium-feature](../../includes/cdn-premium-feature.md)]
 
 ## <a name="overview"></a>概述
-本文档介绍 Microsoft Azure CDN 中的实时统计信息。  在将内容传送到客户端时，此功能将提供实时数据（如带宽、缓存状态和并发连接数）给 CDN 配置文件。 这样就可以随时连续监视服务的运行状况，包括上线事件。
+本文档介绍 Microsoft Azure CDN 中的实时统计信息。  在将内容传送到客户端时，此功能将提供实时数据（如带宽、缓存状态和并发连接数）给 CDN 配置文件。 这样就可以随时连续监视服务的运行状况，包括上线活动。
 
 以下是可用图表：
 
@@ -61,7 +62,7 @@ ms.lasthandoff: 10/11/2017
 “**状态代码**”图表指明特定 HTTP 响应代码在所选时间范围内的出现频率。
 
 > [!TIP]
-> 有关每个 HTTP 状态代码选项的说明，请参阅 [Azure CDN HTTP 状态代码](https://msdn.microsoft.com/library/mt759238.aspx)。
+> 有关每个 HTTP 状态代码选项的说明，请参阅 [Azure CDN HTTP 状态代码](/previous-versions/azure/mt759238(v=azure.100))。
 > 
 > 
 
@@ -75,7 +76,7 @@ HTTP 状态代码列表直接显示在图表上方。 此列表指明可纳入�
 “**缓存状态**”图表指明特定类型的缓存状态在所选时间范围内的出现频率。 
 
 > [!TIP]
-> 有关每个缓存状态代码选项的说明，请参阅 [Azure CDN 缓存状态代码](https://msdn.microsoft.com/library/mt759237.aspx)。
+> 有关每个缓存状态代码选项的说明，请参阅 [Azure CDN 缓存状态代码](/previous-versions/azure/mt759237(v=azure.100))。
 > 
 > 
 

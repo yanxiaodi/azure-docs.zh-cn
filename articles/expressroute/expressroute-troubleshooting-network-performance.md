@@ -1,24 +1,19 @@
 ---
-title: "Azure 虚拟网络性能故障排除 | Microsoft Docs"
-description: "此页提供一种标准化方法来测试 Azure 网络链接性能。"
+title: 排查虚拟网络性能问题：Azure | Microsoft Docs
+description: 此页提供一种标准化方法来测试 Azure 网络链接性能。
 services: expressroute
-documentationcenter: na
 author: tracsman
-manager: rossort
-editor: 
-ms.assetid: 
 ms.service: expressroute
-ms.devlang: na
 ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: infrastructure-services
 ms.date: 12/20/2017
 ms.author: jonor
-ms.openlocfilehash: 56f011632a2aa3ef0632efd5ace472c0fc79a329
-ms.sourcegitcommit: a648f9d7a502bfbab4cd89c9e25aa03d1a0c412b
-ms.translationtype: HT
+ms.custom: seodec18
+ms.openlocfilehash: 9ec310ffaa9d2bb297abde9341bf7b6c2dc763b4
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/22/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60883225"
 ---
 # <a name="troubleshooting-network-performance"></a>网络性能故障排除
 ## <a name="overview"></a>概述
@@ -121,7 +116,7 @@ AzureCT PowerShell 模块有两个组成部分 - [可用性测试][Availability 
 此外，也请记得查看 OSI 模型的其他层。 注意到网络和第 1 - 3 层（物理层、数据层和网络层）很容易，但是问题也可能出现在应用程序层的第 7 层。 保持开放的心态，验证假设。
 
 ## <a name="advanced-expressroute-troubleshooting"></a>高级 ExpressRoute 故障排除
-如果不确定云边缘的实际所在，那么隔离 Azure 要素便是一个难题。 使用 ExpressRoute 时，边缘是名为 Microsoft 企业边缘 (MSEE) 的网络要素。 使用 ExpressRoute 时，MSEE 是进入 Microsoft 网络的第一个接触点和离开 Microsoft 网络的最后一个跃点。 在 VNet 网关和 ExpressRoute 线路之间创建连接对象时，实际上正在连接 MSEE。 辨别 MSEE 是第一个跃点还是最后一个跃点（取决于要走哪个方向）至关重要，可隔离 Azure 网络问题，证明问题出在 Azure 上还是 WAN 或企业网络的更下游。 
+如果不确定云边缘的实际所在，那么隔离 Azure 要素便是一个难题。 使用 ExpressRoute 时，边缘是名为 Microsoft 企业边缘 (MSEE) 的网络要素。 使用 ExpressRoute 时，MSEE 是进入 Microsoft 网络的第一个接触点和离开 Microsoft 网络的最后一个跃点。  在 VNet 网关和 ExpressRoute 线路之间创建连接对象时，实际上正在连接 MSEE。 辨别 MSEE 是第一个跃点还是最后一个跃点（取决于要走哪个方向）至关重要，可隔离 Azure 网络问题，证明问题出在 Azure 上还是 WAN 或企业网络的更下游。 
 
 [![2]][2]
 
@@ -130,7 +125,7 @@ AzureCT PowerShell 模块有两个组成部分 - [可用性测试][Availability 
 >
 >
 
-如果两个 Vnet（关系图中的 Vnet A 和 B）连接到相同 ExpressRoute 线路，便可执行一系列测试以隔离 Azure 中的问题（或证明它不在 Azure 中）
+如果两个 Vnet（关系图中的 Vnet A 和 B）连接到相同 ExpressRoute 线路，便可执行一系列测试以隔离 Azure 中的问题（或证明它不在 Azure 中） 
  
 ### <a name="test-plan"></a>测试计划
 1. 在 VM1 和 VM2 之间运行 Get-LinkPerformance 测试。 此测试可让你了解到问题是否是出在本地。 如果此测试带来了可接受的延迟和带宽结果，则可将本地 VNet 网络标记为良好。
@@ -138,7 +133,7 @@ AzureCT PowerShell 模块有两个组成部分 - [可用性测试][Availability 
 3. 如果排除了 Azure，可在公司网络上执行类似的测试步骤。 如果此测试结果也是良好，则应对服务提供商或 ISP 执行测试来诊断 WAN 连接状态。 示例：在两个分支机构之间运行此测试，或在桌面和数据中心服务器之间进行测试。 根据测试内容，寻找可实现该路径的终结点（服务器、PC 等等）。
 
 >[!IMPORTANT]
-> 对于每次测试，都务必标记运行测试时的时间，并将测试结果记录在共同位置（我喜欢记录在 OneNote 或 Excel 上）。 每次测试运行应有相同的输出，以便在测试运行之间比较结果数据，并在数据中没有“遗漏”。 我使用 AzureCT 进行故障排除主要是因为多个测试间的一致性。 “魔力”在于从每个测试中获取的一致测试结果和数据输出，而非我所运行的精确负载方案。 如果稍后发现问题是偶尔发生的，每次记录时间并获得一致的数据特别有用。 要勤于采集数据，这样可避免重复测试相同的方案（多年前我了解到这不容易）。
+> 对于每次测试，都务必标记运行测试时的时间，并将测试结果记录在共同位置（我喜欢记录在 OneNote 或 Excel 上）。 每次测试运行应有相同的输出，以便在测试运行之间比较结果数据，并在数据中没有“遗漏”。 我使用 AzureCT 进行故障排除主要是因为多个测试间的一致性。 “魔力”在于从每个测试中获取的一致测试结果和数据输出，而非我所运行的精确负载方案。   如果稍后发现问题是偶尔发生的，每次记录时间并获得一致的数据特别有用。 要勤于采集数据，这样可避免重复测试相同的方案（多年前我了解到这不容易）。
 >
 >
 
@@ -185,25 +180,25 @@ AzureCT PowerShell 模块有两个组成部分 - [可用性测试][Availability 
 | | | | | | |
 |-|-|-|-|-|-|
 |ExpressRoute<br/>Location|Azure<br/>区域|估计<br/>距离 (km)|Latency|1 会话<br/>带宽|最大值<br/>带宽|
-| 西雅图 | 美国西部 2        |    191 km |   5 ms | 262.0 Mbits/sec |  3.74 Gbits/sec | 21
-| 西雅图 | 美国西部          |  1,094 km |  18 ms |  82.3 Mbits/sec |  3.70 Gbits/sec | 20
-| 西雅图 | 美国中部       |  2,357 km |  40 ms |  38.8 Mbits/sec |  2.55 Gbits/sec | 17
-| 西雅图 | 美国中南部 |  2,877 km |  51 ms |  30.6 Mbits/sec |  2.49 Gbits/sec | 19
-| 西雅图 | 美国中北部 |  2,792 km |  55 ms |  27.7 Mbits/sec |  2.19 Gbits/sec | 18
-| 西雅图 | 美国东部 2        |  3,769 km |  73 ms |  21.3 Mbits/sec |  1.79 Gbits/sec | 16
-| 西雅图 | 美国东部          |  3,699 km |  74 ms |  21.1 Mbits/sec |  1.78 Gbits/sec | 15
-| 西雅图 | 日本东部       |  7,705 km | 106 ms |  14.6 Mbits/sec |  1.22 Gbits/sec | 28
-| 西雅图 | 英国南部         |  7,708 km | 146 ms |  10.6 Mbits/sec |   896 Mbits/sec | 24
-| 西雅图 | 欧洲西部      |  7,834 km | 153 ms |  10.2 Mbits/sec |   761 Mbits/sec | 23
-| 西雅图 | 澳大利亚东部   | 12,484 km | 165 ms |   9.4 Mbits/sec |   794 Mbits/sec | 26
-| 西雅图 | 东南亚   | 12,989 km | 170 ms |   9.2 Mbits/sec |   756 Mbits/sec | 25
-| 西雅图 | 巴西南部*   | 10,930 km | 189 ms |   8.2 Mbits/sec |   699 Mbits/sec | 22
-| 西雅图 | 印度南部      | 12,918 km | 202 ms |   7.7 Mbits/sec |   634 Mbits/sec | 27
+| 西雅图 | 美国西部 2        |    191 km |   5 ms | 262.0 Mbits/sec |  3.74 Gbits/sec |
+| 西雅图 | 美国西部          |  1,094 km |  18 ms |  82.3 Mbits/sec |  3.70 Gbits/sec |
+| 西雅图 | 美国中部       |  2,357 km |  40 ms |  38.8 Mbits/sec |  2.55 Gbits/sec |
+| 西雅图 | 美国中南部 |  2,877 km |  51 ms |  30.6 Mbits/sec |  2.49 Gbits/sec |
+| 西雅图 | 美国中北部 |  2,792 km |  55 ms |  27.7 Mbits/sec |  2.19 Gbits/sec |
+| 西雅图 | 美国东部 2        |  3,769 km |  73 ms |  21.3 Mbits/sec |  1.79 Gbits/sec |
+| 西雅图 | 美国东部          |  3,699 km |  74 ms |  21.1 Mbits/sec |  1.78 Gbits/sec |
+| 西雅图 | 日本东部       |  7,705 km | 106 ms |  14.6 Mbits/sec |  1.22 Gbits/sec |
+| 西雅图 | 英国南部         |  7,708 km | 146 ms |  10.6 Mbits/sec |   896 Mbits/sec |
+| 西雅图 | 西欧      |  7,834 km | 153 ms |  10.2 Mbits/sec |   761 Mbits/sec |
+| 西雅图 | 澳大利亚东部   | 12,484 km | 165 ms |   9.4 Mbits/sec |   794 Mbits/sec |
+| 西雅图 | 东南亚   | 12,989 km | 170 ms |   9.2 Mbits/sec |   756 Mbits/sec |
+| 西雅图 | 巴西南部*   | 10,930 km | 189 ms |   8.2 Mbits/sec |   699 Mbits/sec |
+| 西雅图 | 印度南部      | 12,918 km | 202 ms |   7.7 Mbits/sec |   634 Mbits/sec |
 
 \* 巴西的延迟是一个很好的例子，其中的直线距离明显不同于光纤运行距离。 我以为延迟会在 160 ms 左右，但实际是 189 ms。 与我预期所产生的差异可能表明某处存在网络问题，但最有可能的是，光纤运行并不以直线形式转至巴西，而是从西雅图转至巴西，这一过程另有 1,000 km 左右。
 
 ## <a name="next-steps"></a>后续步骤
-1. 从 GitHub 中下载 Azure 连接工具包，地址为 [http://aka.ms/AzCT][ACT]
+1. 从 GitHub 中下载 Azure 连接工具包，地址为 [https://aka.ms/AzCT][ACT]
 2. 按照[链接性能测试][Performance Doc]的说明进行操作
 
 <!--Image References-->
@@ -215,17 +210,6 @@ AzureCT PowerShell 模块有两个组成部分 - [可用性测试][Availability 
 <!--Link References-->
 [Performance Doc]: https://github.com/Azure/NetworkMonitoring/blob/master/AzureCT/PerformanceTesting.md
 [Availability Doc]: https://github.com/Azure/NetworkMonitoring/blob/master/AzureCT/AvailabilityTesting.md
-[Network Docs]: https://docs.microsoft.com/azure/index#pivot=services&panel=network
+[Network Docs]: https://docs.microsoft.com/azure/index
 [Ticket Link]: https://portal.azure.com/#blade/Microsoft_Azure_Support/HelpAndSupportBlade/overview
-[ACT]: http://aka.ms/AzCT
-
-
-
-
-
-
-
-
-
-
-
+[ACT]: https://aka.ms/AzCT

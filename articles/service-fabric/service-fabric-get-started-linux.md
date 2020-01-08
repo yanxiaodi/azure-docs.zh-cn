@@ -4,22 +4,22 @@ description: 在 Linux 上安装运行时和 SDK 并创建本地开发群集。 
 services: service-fabric
 documentationcenter: .net
 author: mani-ramaswamy
-manager: timlt
+manager: chackdan
 editor: ''
 ms.assetid: d552c8cd-67d1-45e8-91dc-871853f44fc6
 ms.service: service-fabric
 ms.devlang: dotNet
-ms.topic: get-started-article
+ms.topic: conceptual
 ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 2/23/2018
 ms.author: subramar
-ms.openlocfilehash: 11f4e8286dc95a233efd724e272911892b75a725
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.openlocfilehash: 6916eea26f03d7b9cd0b3792fa65354619f97f74
+ms.sourcegitcommit: 3073581d81253558f89ef560ffdf71db7e0b592b
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
-ms.locfileid: "34367335"
+ms.lasthandoff: 08/06/2019
+ms.locfileid: "68828504"
 ---
 # <a name="prepare-your-development-environment-on-linux"></a>在 Linux 上准备开发环境
 > [!div class="op_single_selector"]
@@ -74,20 +74,20 @@ sudo curl -s https://raw.githubusercontent.com/Azure/service-fabric-scripts-and-
 2. 将 Service Fabric 存储库添加到源列表。
 
     ```bash
-    sudo sh -c 'echo "deb [arch=amd64] http://apt-mo.trafficmanager.net/repos/servicefabric/ xenial main" > /etc/apt/sources.list.d/servicefabric.list'
+    sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/servicefabric/ xenial main" > /etc/apt/sources.list.d/servicefabric.list'
     ```
 
 3. 将 `dotnet` 存储库添加到源列表。
 
     ```bash
-    sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list'
+    wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
+    sudo dpkg -i packages-microsoft-prod.deb
     ```
 
 4. 向 APT Keyring 添加新的 Gnu 隐私防护（GnuPG 或 GPG）密钥。
 
     ```bash
-    sudo apt-key adv --keyserver apt-mo.trafficmanager.net --recv-keys 417A0893
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
+    curl -fsSL https://packages.microsoft.com/keys/msopentech.asc | sudo apt-key add -
     ```
 
 5. 向 APT Keyring 添加官方的 Docker GPG 密钥。
@@ -103,7 +103,14 @@ sudo curl -s https://raw.githubusercontent.com/Azure/service-fabric-scripts-and-
     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     ```
 
-7. 根据新添加的存储库刷新包列表。
+7. 将 Azul JDK 密钥添加到 APT Keyring 并设置其存储库。
+
+    ```bash
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9
+    sudo apt-add-repository "deb http://repos.azul.com/azure-only/zulu/apt stable main"
+    ```
+
+8. 根据新添加的存储库刷新包列表。
 
     ```bash
     sudo apt-get update
@@ -154,7 +161,7 @@ sudo curl -s https://raw.githubusercontent.com/Azure/service-fabric-scripts-and-
 sudo apt-get install servicefabricsdkcommon
 ```
 
->   [!TIP]
+> [!TIP]
 >   以下命令自动接受 Service Fabric 包的许可证：
 >   ```bash
 >   echo "servicefabric servicefabric/accepted-eula-ga select true" | sudo debconf-set-selections
@@ -171,8 +178,8 @@ SDK 安装随附的 Service Fabric 运行时包含下表中所述的包。
 
  | | DotNetCore | Java | Python | NodeJS | 
 --- | --- | --- | --- |---
-Ubuntu | 2.0.0 | OpenJDK 1.8 | Implicit from npm | 最新 |
-RHEL | - | OpenJDK 1.8 | Implicit from npm | 最新 |
+Ubuntu | 2.0.0 | AzulJDK 1.8 | Implicit from npm | latest |
+RHEL | - | OpenJDK 1.8 | Implicit from npm | latest |
 
 ## <a name="set-up-a-local-cluster"></a>设置本地群集
 安装完成后，启动本地群集。
@@ -207,18 +214,12 @@ Service Fabric 提供基架工具，可以借助此类工具，使用 Yeoman 模
 
 1. 在计算机上安装 Node.js 和 npm。
 
-    * Ubuntu
-        ```bash
-        curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash –
-        sudo apt-get install -y nodejs 
-        ```
-
-    * Red Hat Enterprise Linux 7.4（Service Fabric 预览版支持）
-        ```bash
-        sudo yum install nodejs
-        sudo yum install npm
-        ```
-2. 通过 npm 在计算机上安装 [Yeoman](http://yeoman.io/) 模板生成器。
+    ```bash
+    sudo add-apt-repository "deb https://deb.nodesource.com/node_8.x $(lsb_release -s -c) main"
+    sudo apt-get update
+    sudo apt-get install nodejs
+    ```
+2. 通过 npm 在计算机上安装 [Yeoman](https://yeoman.io/) 模板生成器。
 
     ```bash
     sudo npm install -g yo
@@ -238,14 +239,14 @@ Service Fabric 提供基架工具，可以借助此类工具，使用 Yeoman 模
 
 ## <a name="set-up-java-development"></a>设置 Java 开发
 
-若要使用 Java 生成 Service Fabric 服务，请安装 JDK 1.8 和 Gradle 以运行生成任务。 以下代码片段安装 Open JDK 1.8 和 Gradle。 Service Fabric Java 库是从 Maven 拉取的。
+若要使用 Java 生成 Service Fabric 服务，请安装 Gradle 以运行生成任务。 运行以下命令来安装 Gradle。 Service Fabric Java 库是从 Maven 拉取的。
 
 
 * Ubuntu
 
     ```bash
-    sudo apt-get install openjdk-8-jdk-headless
-    sudo apt-get install gradle
+    curl -s https://get.sdkman.io | bash
+    sdk install gradle 5.1
     ```
 
 * Red Hat Enterprise Linux 7.4（Service Fabric 预览版支持）
@@ -259,7 +260,7 @@ Service Fabric 提供基架工具，可以借助此类工具，使用 Yeoman 模
 还需要为 Java 可执行文件安装 Service Fabric Yeo 生成器。 确保已安装 [Yeoman](#set-up-yeoman-generators-for-containers-and-guest-executables)，然后运行以下命令：
 
   ```bash
-  sudo npm install -g generator-azuresfjava
+  npm install -g generator-azuresfjava
   ```
  
 ## <a name="install-the-eclipse-plug-in-optional"></a>安装 Eclipse 插件（可选）
@@ -275,7 +276,7 @@ Service Fabric 提供基架工具，可以借助此类工具，使用 Yeoman 模
 
 2. 若要安装 Service Fabric 插件，请选择“帮助” > “安装新软件”。
 
-3. 在“使用”框中，输入 **http://dl.microsoft.com/eclipse**。
+3. 在“使用”框中，输入 **https://dl.microsoft.com/eclipse** 。
 
 4. 选择 **添加** 。
 
@@ -309,8 +310,8 @@ sudo apt-get install servicefabric servicefabricsdkcommon
 
     ```bash
     sudo apt-get remove servicefabric servicefabicsdkcommon
-    sudo npm uninstall generator-azuresfcontainer
-    sudo npm uninstall generator-azuresfguest
+    npm uninstall -g generator-azuresfcontainer
+    npm uninstall -g generator-azuresfguest
     sudo apt-get install -f
     ```
 
@@ -318,9 +319,9 @@ sudo apt-get install servicefabric servicefabricsdkcommon
 * Red Hat Enterprise Linux 7.4（Service Fabric 预览版支持）
 
     ```bash
-    sudo yum remote servicefabric servicefabicsdkcommon
-    sudo npm uninstall generator-azuresfcontainer
-    sudo npm uninstall generator-azuresfguest
+    sudo yum remove servicefabric servicefabicsdkcommon
+    npm uninstall -g generator-azuresfcontainer
+    npm uninstall -g generator-azuresfguest
     ```
 
 ## <a name="next-steps"></a>后续步骤
@@ -332,7 +333,6 @@ sudo apt-get install servicefabric servicefabricsdkcommon
 * [在 Windows 上准备 Linux 开发环境](service-fabric-local-linux-cluster-windows.md)
 * [使用 Service Fabric CLI 管理应用程序](service-fabric-application-lifecycle-sfctl.md)
 * [Service Fabric Windows 和 Linux 差异](service-fabric-linux-windows-differences.md)
-* [在 Linux 群集上自动进行操作系统修补](service-fabric-patch-orchestration-application-linux.md)
 * [Service Fabric CLI 入门](service-fabric-cli.md)
 
 <!-- Links -->

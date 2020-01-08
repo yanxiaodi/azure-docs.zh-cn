@@ -2,19 +2,20 @@
 title: Azure SQL 数据仓库常见问题解答 | Microsoft Docs
 description: 本文列出客户和开发人员提出的 Azure SQL 数据仓库常见问题
 services: sql-data-warehouse
-author: acomet
-manager: craigg-msft
+author: mlee3gsd
+manager: craigg
 ms.service: sql-data-warehouse
 ms.topic: conceptual
-ms.component: design
+ms.subservice: design
 ms.date: 04/17/2018
-ms.author: acomet
+ms.author: martinle
 ms.reviewer: igorstan
-ms.openlocfilehash: 7a570dfa6e0a2812a8dd3a25b8903c70fe07befc
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.openlocfilehash: 4679a3bb1935e9f3e2bc90c9bc9ef1247b7ecb30
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66515874"
 ---
 # <a name="sql-data-warehouse-frequently-asked-questions"></a>SQL 数据仓库常见问题解答
 
@@ -26,7 +27,7 @@ A. SQL DW 提供若干解决方案，用于保护数据（如 TDE）和审核。
 
 问： 从何处可以查明 SQL DW 符合哪些法律或业务标准？
 
-A. 请访问 [Microsoft 符合性]页面，查明产品（如 SOC 和 ISO）的各种符合性规定。 首先选择“符合性”标题，然后在页面右侧的“Microsoft 范围内云服务”部分展开 Azure，查看哪些服务是 Azure 符合性服务。
+A. 请访问 [Microsoft 符合性]页面，查明产品（如 SOC 和 ISO）的各种符合性规定。 首先选择“符合性”标题，并在页面右侧的“Microsoft 范围内云服务”部分展开 Azure，查看哪些服务是 Azure 符合性服务。
 
 问： 是否可以连接 PowerBI？
 
@@ -81,21 +82,21 @@ A. 是的。 SQL 数据仓库还提供可与 SQL 数据库搭配使用的大多�
 
 A. 可在[连接字符串]页找到 DW 驱动程序支持
 
-问：使用 SQL 数据仓库时，PolyBase 支持哪些文件格式？
+问：使用 SQL 数据仓库时，PolyBase 支持什么文件格式？
 
-答：Orc、RC、Parquet 和平面分隔文本
+答：Orc、RC、Parquet 和带分隔符的平面文本
 
-问：使用 PolyBase 时可从 SQL DW 连接哪些内容？ 
+问：使用 PolyBase 时，可以从 SQL DW 连接到什么？ 
 
 答：[Azure Data Lake Store] 和 [Azure 存储 Blob]
 
-问：连接 Azure 存储 Blob 或 ADLS 时能否进行计算下推？ 
+问：连接到 Azure 存储 Blob 或 ADLS 时，能否进行计算下推？ 
 
 答：不能，SQL DW PolyBase 仅与存储组件交互。 
 
 问：能否连接到 HDI？
 
-答：HDI 可使用 ADLS 或 WASB 作为 HDFS 层。 如果将两者中任意一种作为 HDFS 层，可以将该数据加载到 SQL DW。 但是，无法生成 HDI 实例的下推计算。 
+答：HDI 可以将 ADLS 或 WASB 用作 HDFS 层。 如果将两者中任意一种作为 HDFS 层，可以将该数据加载到 SQL DW。 但是，无法生成 HDI 实例的下推计算。 
 
 ## <a name="next-steps"></a>后续步骤
 若要深入了解 SQL 数据仓库的概述信息，请参阅[概述]页。
@@ -104,7 +105,7 @@ A. 可在[连接字符串]页找到 DW 驱动程序支持
 <!-- Article references -->
 [UserVoice]: https://feedback.azure.com/forums/307516-sql-data-warehouse
 [连接字符串]: ./sql-data-warehouse-connection-strings.md
-[Stack Overflow]: http://stackoverflow.com/questions/tagged/azure-sqldw
+[Stack Overflow]: https://stackoverflow.com/questions/tagged/azure-sqldw
 [支持票证]: ./sql-data-warehouse-get-started-create-support-ticket.md
 [安全性]: ./sql-data-warehouse-overview-manage-security.md
 [Microsoft 符合性]: https://www.microsoft.com/en-us/trustcenter/compliance/complianceofferings

@@ -4,30 +4,34 @@ description: 本主题提供 Azure 媒体服务概念的概述
 services: media-services
 documentationcenter: ''
 author: Juliako
-manager: cfowler
+manager: femila
 editor: ''
-ms.assetid: dcefc8bc-e2ea-4b38-a643-9010f4436fb5
 ms.service: media-services
 ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 07/07/2017
+ms.date: 03/14/2019
 ms.author: juliako
-ms.openlocfilehash: f9d51869b9a6ba63c73637c50f5a19e864bc23e4
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.openlocfilehash: 2b28dde812dcce120c951730c27809f7f024e122
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64681563"
 ---
-# <a name="azure-media-services-concepts"></a>Azure 媒体服务概念
+# <a name="azure-media-services-concepts"></a>Azure 媒体服务概念 
+
+> [!NOTE]
+> 不会向媒体服务 v2 添加任何新特性或新功能。 <br/>查看最新版本：[媒体服务 v3](https://docs.microsoft.com/azure/media-services/latest/)。 此外，请参阅[从 v2 到 v3 迁移指南](../latest/migrate-from-v2-to-v3.md)
+
 本部分概述最重要的媒体服务概念。
 
 ## <a name="a-idassetsassets-and-storage"></a><a id="assets"/>资产和存储
 ### <a name="assets"></a>资产
 [资产](https://docs.microsoft.com/rest/api/media/operations/asset)包含数字文件（包括视频、音频、图像、缩略图集合、文本轨道和隐藏式字幕文件）以及这些文件的相关元数据。 数字文件在上传到资产中后，即可用于媒体服务编码和流式处理工作流。
 
-资产将映射到 Azure 存储帐户中的 blob 容器，资产中的文件将作为块 blob 存储在该容器中。 Azure 媒体服务不支持页 blob。
+资产将映射到 Azure 存储帐户中的 blob 容器，资产中的文件将作为块 blob 存储在该容器中。 页 blob 不受 Azure 媒体服务支持。
 
 确定要将哪些媒体内容上传和存储到资产中时，需注意以下事项：
 
@@ -49,9 +53,9 @@ ms.lasthandoff: 05/10/2018
 
 如果计划使用渐进式下载交付 MP4，则使用此选项上传内容。
 
-**StorageEncrypted** - 使用此选项可以通过 AES 256 位加密在本地加密明文内容，然后将其上传到 Azure 存储以加密形式静态存储相关内容。 受存储加密保护的资产会在编码前自动解密并放入经过加密的文件系统中，并可选择在重新上传为新的输出资产前重新加密。 存储加密的主要用例是在磁盘上通过静态增强加密来保护高品质的输入媒体文件。 
+**StorageEncrypted** - 使用此选项可以通过 AES 256 位加密在本地加密明文内容，并将其上传到 Azure 存储中以加密形式静态存储相关内容。 受存储加密保护的资产会在编码前自动解密并放入经过加密的文件系统中，并可选择在重新上传为新的输出资产前重新加密。 存储加密的主要用例是在磁盘上通过静态增强加密来保护高品质的输入媒体文件。 
 
-要传送存储加密资产，必须配置资产的传送策略，以使媒体服务了解要如何传送内容。 在流式传输资产之前，流式处理服务器会删除存储加密，然后再使用指定的传传送策略（例如 AES、PlayReady 或无加密）流式传输内容。 
+要传送存储加密资产，必须配置资产的传送策略，以使媒体服务了解要如何传送内容。 在流式传输资产之前，流式处理服务器会删除存储加密，再使用指定的传传送策略（例如 AES、PlayReady 或无加密）流式传输用户的内容。 
 
 **CommonEncryptionProtected** - 如果要采用通用加密或 PlayReady DRM 加密（或上传已加密的）内容（例如，受 PlayReady DRM 保护的平滑流式处理），请使用此选项。
 
@@ -64,7 +68,7 @@ ms.lasthandoff: 05/10/2018
 >不同 AMS 策略的策略限制为 1,000,000 个（例如，对于定位器策略或 ContentKeyAuthorizationPolicy）。 如果始终使用相同的日期/访问权限，则应使用相同的策略 ID，例如，用于要长期就地保留的定位符的策略（非上传策略）。 有关详细信息，请参阅[此](media-services-dotnet-manage-entities.md#limit-access-policies)主题。
 
 ### <a name="blob-container"></a>Blob 容器
-一个 Blob 容器包含一组 Blob 集。 Blob 容器用作媒体服务中的访问控制分界点和资产上的共享访问签名 (SAS) 定位符。 一个 Azure 存储帐户可以包含无数个 Blob 容器。 一个容器可以存储无限个 Blob。
+一个 Blob 容器包含一组 Blob 集。 Blob 容器用作媒体服务中的访问控制分界点和资产上的共享访问签名 (SAS) 定位符。 一个 Azure 存储帐户可以包含无数个 Blob 容器。 一个容器可以存储无数个 Blob。
 
 >[!NOTE]
 > 在不使用媒体服务 API 的情况下，不应该尝试更改媒体服务生成的 BLOB 容器内容。
@@ -113,7 +117,7 @@ Azure 媒体服务提供了多个用于在云中对媒体进行编码的选项�
 ### <a name="channel"></a>通道
 在媒体服务中，[频道](https://docs.microsoft.com/rest/api/media/operations/channel)负责处理实时传送视频流内容。 通道提供输入终结点（引入 URL），然后要将该终结点提供给实时转码器。 通道从实时转码器接收实时输入流，并通过一个或多个 StreamingEndpoints 使其可用于流式处理。 通道还提供可用于预览的预览终结点（预览 URL），并在进一步处理和传递流之前对流进行验证。
 
-可以在创建通道时获取引入 URL 和预览 URL。 若要获取这些 URL，通道不一定要处于已启动状态。 准备好开始将数据从实时转码器推送到通道时，通道必须已启动。 实时转码器开始引入数据后，可以预览流。
+可以在创建通道时获取引入 URL 和预览 URL。 若要获取这些 URL，通道不一定要处于已启动状态。 准备好开始将数据从实时转码器推送到频道时，频道必须已启动。 实时转码器开始引入数据后，可以预览流。
 
 每个媒体服务帐户均可包含多个通道、多个节目以及多个 StreamingEndpoint。 根据带宽和安全性需求，StreamingEndpoint 服务可专用于一个或多个通道。 任何 StreamingEndpoint 都可以从任何通道拉取。
 
@@ -125,19 +129,19 @@ ArchiveWindowLength 还决定了客户端能够从当前实时位置按时间向
 
 每个节目（事件）都与某个资产关联。 若要发布节目，必须为关联的资产创建定位符。 创建此定位符后，可以生成提供给客户端的流 URL。
 
-一个通道最多支持三个并发运行的节目，因此可以为同一传入流创建多个存档。 这样，便可以根据需要发布和存档事件的不同部分。 例如，业务要求是存档 6 小时的节目，但只广播过去 10 分钟的内容。 为了实现此目的，需要创建两个同时运行的节目。 一个节目设置为存档 6 小时的事件但不发布该节目。 另一个节目设置为存档 10 分钟的事件，并且要发布该节目。
+一个频道最多支持三个同时运行的节目，因此可为同一传入流创建多个存档。 这样，便可以根据需要发布和存档事件的不同部分。 例如，业务要求是存档 6 小时的节目，但只广播过去 10 分钟的内容。 为了实现此目的，需要创建两个同时运行的节目。 一个节目设置为存档 6 小时的事件但不发布该节目。 另一个节目设置为存档 10 分钟的事件，并且要发布该节目。
 
 有关详细信息，请参阅：
 
-* [使用能够通过 Azure 媒体服务执行实时编码的频道](media-services-manage-live-encoder-enabled-channels.md)
+* [使用能够使用 Azure 媒体服务执行实时编码的频道](media-services-manage-live-encoder-enabled-channels.md)
 * [使用从本地编码器接收多比特率实时流的频道](media-services-live-streaming-with-onprem-encoders.md)
-* [配额和限制](media-services-quotas-and-limitations.md)。
+* [配额和限制](media-services-quotas-and-limitations.md)
 
 ## <a name="protecting-content"></a>保护内容
 ### <a name="dynamic-encryption"></a>动态加密
 使用 Azure 媒体服务，可以在媒体从离开计算机到存储、处理和传送的整个过程中确保其安全。 借助媒体服务，可以传送使用高级加密标准（AES，使用 128 位加密密钥）和通用加密（CENC，使用 PlayReady 和/或 Widevine DRM）进行动态加密的内容。 媒体服务还提供了用于向已授权客户端传送 AES 密钥和 PlayReady 许可证的服务。
 
-当前可以加密以下流格式：HLS、MPEG DASH 和平滑流。 无法加密渐进式下载。
+当前可以加密以下流格式：HLS、MPEG DASH 和平滑流式处理。 无法加密渐进式下载。
 
 如果需要媒体服务来加密资产，则需要将加密密钥（CommonEncryption 或 EnvelopeEncryption）与资产相关联，并且配置密钥的授权策略。
 
@@ -146,9 +150,9 @@ ArchiveWindowLength 还决定了客户端能够从当前实时位置按时间向
 播放器请求流时，媒体服务将使用指定的密钥通过信封加密（使用 AES）或通用加密（使用 PlayReady 或 Widevine）来动态加密内容。 为了解密流，播放器将从密钥传送服务请求密钥。 为了确定用户是否被授权获取密钥，服务将评估你为密钥指定的授权策略。
 
 ### <a name="token-restriction"></a>令牌限制
-内容密钥授权策略可能受到一种或多种授权限制：开放、令牌限制或 IP 限制。 令牌限制策略必须附带由安全令牌服务 (STS) 颁发的令牌。 媒体服务支持采用简单 Web 令牌 (SWT) 格式和 JSON Web 令牌 (JWT) 格式的令牌。 媒体服务不提供安全令牌服务。 可以创建自定义 STS 或利用 Microsoft Azure ACS 来颁发令牌。 必须将 STS 配置为创建令牌，该令牌使用指定密钥以及在令牌限制配置中指定的颁发声明进行签名。 如果令牌有效，而且令牌中的声明与为密钥（或许可证）配置的声明相匹配，则媒体服务密钥传送服务会将请求的密钥（或许可证）返回到客户端。
+内容密钥授权策略可能受到一种或多种授权限制：开放、令牌限制或 IP 限制。 令牌限制策略必须附带由安全令牌服务 (STS) 颁发的令牌。 媒体服务支持采用简单 Web 令牌 (SWT) 格式和 JSON Web 令牌 (JWT) 格式的令牌。 媒体服务不提供安全令牌服务。 可以创建自定义 STS。 必须将 STS 配置为创建令牌，该令牌使用指定密钥以及在令牌限制配置中指定的颁发声明进行签名。 如果令牌有效，而且令牌中的声明与为密钥（或许可证）配置的声明相匹配，则媒体服务密钥传送服务会将请求的密钥（或许可证）返回到客户端。
 
-在配置令牌限制策略时，必须指定主验证密钥、颁发者和受众参数。 主验证密钥包含用来为令牌签名的密钥，颁发者是颁发令牌的安全令牌服务。 受众（有时称为范围）描述该令牌的意图，或者令牌授权访问的资源。 媒体服务密钥交付服务会验证令牌中的这些值是否与模板中的值匹配。
+在配置令牌限制策略时，必须指定主验证密钥、颁发者和受众参数。 主验证密钥包含用来为令牌签名的密钥，颁发者是颁发令牌的安全令牌服务。 受众（有时称为范围）描述该令牌的意图，或者令牌授权访问的资源。 媒体服务密钥传送服务验证令牌中的这些值是否与模板中的值匹配。
 
 有关详细信息，请参阅以下文章：
 - [保护内容概述](media-services-content-protection-overview.md)
@@ -162,12 +166,12 @@ ArchiveWindowLength 还决定了客户端能够从当前实时位置按时间向
 ### <a name="streaming-endpoint"></a>流式处理终结点
 StreamingEndpoint 表示一个流服务，该服务可以直接将内容传递给客户端播放器应用程序，也可以传递给内容分发网络 (CDN) 以进一步分发（Azure 媒体服务现在还提供了 Azure CDN 集成）。流式处理终结点服务的出站流可以是实时流，也可以是媒体服务帐户中的视频点播资产。 媒体服务客户可以根据自身需要，选择**标准**流式处理终结点或者一个或多个**高级**流式处理终结点。 标准流式处理终结点适合用于大多数流式处理工作负荷。 
 
-标准流式处理终结点适合用于大多数流式处理工作负荷。 使用标准流式处理终结点，可以通过将内容动态打包成 HLS、MPEG-DASH 和平滑流，并利用 Microsoft PlayReady、Google Widevine、Apple Fairplay 和 AES128 的动态加密功能，灵活地将内容传送到近乎于每一台的设备中。  它们还从很小的受众扩展到非常大的受众，并通过 Azure CDN 集成提供数千个并发查看器。 如果有高级工作负荷或者流式处理容量要求无法适应标准流式处理终结点吞吐量目标，或者希望控制 StreamingEndpoint 服务的容量，以便处理不断增长的带宽需求，则我们建议分配缩放单位（也称为高级流单元）。
+标准流式处理终结点适合用于大多数流式处理工作负荷。 标准流式处理终结点可以动态地将内容打包成 HLS、MPEG-DASH 和平滑流式处理，并针对 Microsoft PlayReady、Google Widevine、Apple Fairplay 和 AES128 进行动态加密，从而灵活地将内容传送到几乎所有设备。  它们还从很小的受众扩展到非常大的受众，并通过 Azure CDN 集成提供数千个并发查看器。 如果有高级工作负荷或者流式处理容量要求无法适应标准流式处理终结点吞吐量目标，或者希望控制 StreamingEndpoint 服务的容量，以便处理不断增长的带宽需求，则我们建议分配缩放单元（也称为高级流单元）。
 
 建议使用动态打包和/或动态加密。
 
 >[!NOTE]
->创建 AMS 帐户后，会将一个处于“已停止”状态的**默认**流式处理终结点添加到帐户。 若要开始流式传输内容并利用动态打包和动态加密，要从中流式传输内容的流式处理终结点必须处于“正在运行”状态。 
+>创建 AMS 帐户后，会将一个处于“已停止”状态的**默认**流式处理终结点添加到帐户。  若要开始流式传输内容并利用动态打包和动态加密，要从中流式传输内容的流式处理终结点必须处于“正在运行”状态。  
 
 有关详细信息，请参阅[此](media-services-portal-manage-streaming-endpoints.md)主题。
 
@@ -181,7 +185,7 @@ StreamingEndpoint 表示一个流服务，该服务可以直接将内容传递�
 如果有存储加密的资产，在流式传输资产之前，流式处理服务器会删除存储加密，再使用指定的传送策略流式传输内容。 例如，要传送使用高级加密标准 (AES) 加密密钥加密的资产，请将策略类型设为 DynamicEnvelopeEncryption。 要删除存储加密并以明文的形式流式传输资产，请将策略类型设为 NoDynamicEncryption。
 
 ### <a name="progressive-download"></a>渐进式下载
-渐进式下载可让你在下载完整个文件之前开始播放媒体。 只能渐进式下载 MP4 文件。
+渐进式下载可在下载完整个文件之前开始播放媒体。 只能渐进式下载 MP4 文件。
 
 >[!NOTE]
 >如果希望已加密的资产可用于渐进式下载，则必须将这些资产解密。
@@ -190,8 +194,8 @@ StreamingEndpoint 表示一个流服务，该服务可以直接将内容传递�
 
 http://amstest1.streaming.mediaservices.windows.net/3c5fe676-199c-4620-9b03-ba014900f214/BigBuckBunny_H264_650kbps_AAC_und_ch2_96kbps.mp4
 
-### <a name="streaming-urls"></a>流 URL
-将内容流式传输到客户端。 若要为用户提供流 URL，必须先创建一个 OnDemandOrigin 定位符。 通过创建定位符，将提供包含要流式传输的内容的资产的基本路径。 但是，为了能够流式传输该内容，需要进一步修改此路径。 要构造流清单文件的完整 URL，必须将定位符的 Path 值与清单 (filename.ism) 文件名连接起来。 然后，向定位符路径追加 /Manifest 和相应的格式（如果需要）。
+### <a name="streaming-urls"></a>流式处理 URL
+将内容流式传输到客户端。 若要为用户提供流式处理 URL，必须先创建一个 OnDemandOrigin 定位符。 创建定位符可提供包含要流式传输的内容的资产的基本路径。 但是，为了能够流式传输该内容，需要进一步修改此路径。 要构造流清单文件的完整 URL，必须将定位符的 Path 值与清单 (filename.ism) 文件名连接起来。 然后，向定位符路径追加 /Manifest 和相应的格式（如果需要）。
 
 也可以通过 SSL 连接流式传输内容。 为此，请确保流 URL 以 HTTPS 开头。 目前，AMS 对自定义域不支持 SSL。  
 
@@ -204,25 +208,25 @@ http://amstest1.streaming.mediaservices.windows.net/3c5fe676-199c-4620-9b03-ba01
 
 {流式处理终结点名称-媒体服务帐户名称}.streaming.mediaservices.windows.net/{定位符 ID}/{文件名}.ism/Manifest
 
-http://testendpoint-testaccount.streaming.mediaservices.windows.net/fecebb23-46f6-490d-8b70-203e86b0df58/BigBuckBunny.ism/Manifest
+http:\//testendpoint-testaccount.streaming.mediaservices.windows.net/fecebb23-46f6-490d-8b70-203e86b0df58/BigBuckBunny.ism/Manifest
 
 * MPEG DASH
 
 {流式处理终结点名称-媒体服务帐户名称}.streaming.mediaservices.windows.net/{定位符 ID}/{文件名}.ism/Manifest(format=mpd-time-csf)
 
-http://testendpoint-testaccount.streaming.mediaservices.windows.net/fecebb23-46f6-490d-8b70-203e86b0df58/BigBuckBunny.ism/Manifest(format=mpd-time-csf)
+http:\//testendpoint-testaccount.streaming.mediaservices.windows.net/fecebb23-46f6-490d-8b70-203e86b0df58/BigBuckBunny.ism/Manifest(format=mpd-time-csf)
 
 * Apple HTTP 实时流 (HLS) V4
 
 {流式处理终结点名称-媒体服务帐户名称}.streaming.mediaservices.windows.net/{定位符 ID}/{文件名}.ism/Manifest(format=m3u8-aapl)
 
-http://testendpoint-testaccount.streaming.mediaservices.windows.net/fecebb23-46f6-490d-8b70-203e86b0df58/BigBuckBunny.ism/Manifest(format=m3u8-aapl)
+http:\//testendpoint-testaccount.streaming.mediaservices.windows.net/fecebb23-46f6-490d-8b70-203e86b0df58/BigBuckBunny.ism/Manifest(format=m3u8-aapl)
 
 * Apple HTTP 实时流 (HLS) V3
 
 {streaming endpoint name-media services account name}.streaming.mediaservices.windows.net/{locator ID}/{filename}.ism/Manifest(format=m3u8-aapl-v3)
 
-http://testendpoint-testaccount.streaming.mediaservices.windows.net/fecebb23-46f6-490d-8b70-203e86b0df58/BigBuckBunny.ism/Manifest(format=m3u8-aapl-v3)
+http:\//testendpoint-testaccount.streaming.mediaservices.windows.net/fecebb23-46f6-490d-8b70-203e86b0df58/BigBuckBunny.ism/Manifest(format=m3u8-aapl-v3)
 
 ## <a name="media-services-learning-paths"></a>媒体服务学习路径
 [!INCLUDE [media-services-learning-paths-include](../../../includes/media-services-learning-paths-include.md)]

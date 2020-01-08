@@ -1,40 +1,41 @@
 ---
-title: 数据科学中的特征工程 | Microsoft Docs
+title: 数据科学中的特征工程 - Team Data Science Process
 description: 解释特征工程的目的，并提供其在机器学习的数据增强过程中的作用的相关示例。
 services: machine-learning
-documentationcenter: ''
-author: deguhath
+author: marktab
 manager: cgronlun
 editor: cgronlun
-ms.assetid: 3fde69e8-5e7b-49ad-b3fb-ab8ef6503a4d
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/21/2017
-ms.author: deguhath
-ms.openlocfilehash: 0fcd17a5db1c5500c1b1591da52ba946188e8946
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: 8b0973007a78b492cff1c5ffc2ce1e43116a0847
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60398588"
 ---
 # <a name="feature-engineering-in-data-science"></a>数据科学中的特征工程
 本文章解释特征工程的目的，并提供其在机器学习的数据增强过程中的作用的相关示例。 用于说明此过程的示例来自 Azure 机器学习工作室。 
 
-[!INCLUDE [cap-create-features-data-selector](../../../includes/cap-create-features-selector.md)]
-
-该“菜单”链接到介绍如何在各种环境中为数据创建特征的文章。 此任务是[团队数据科学过程 (TDSP)](https://azure.microsoft.com/documentation/learning-paths/cortana-analytics-process/) 中的一个步骤。
+此任务是[团队数据科学过程 (TDSP)](https://docs.microsoft.com/azure/machine-learning/team-data-science-process/) 中的一个步骤。
 
 特征工程尝试通过从原始数据创建特征，帮助简化学习过程，从而增加学习算法的预测能力。 特征的工程设计和选择是 [Team Data Science Process 生命周期是什么？](overview.md)中描述的 TDSP 的一部分 特征工程和选择是 TDSP 的**开发特征**步骤的一部分。 
 
 * **特征工程**：该过程尝试从数据中的现有原始特征创建其他相关特征，并提高学习算法的预测能力。
-* **特征选择**：该过程选择原始数据特征的关键子集，试图降低定型问题的维度。
+* **特性选择**：该过程选择原始数据特征的关键子集，试图降低定型问题的维度。
 
 通常，首先应用**特征工程**生成其他特征，然后执行**特征选择**步骤，消除不相关、冗余或高度相关的特征。
 
 机器学习中使用的定型数据通常可以通过从收集的原始数据中提取特征来增强。 在学习如何分类手写字符映像的上下文中，工程特征的一个示例是创建从原始位分布数据构建的位密度映射。 与仅直接使用原始分布相比，该映射可以更有效地定位字符的边缘。
+
+若要在特定环境中创建数据功能，请参阅以下文章：
+
+* [在 SQL Server 中为数据创建功能](create-features-sql-server.md)
+* [使用 Hive 查询创建用于 Hadoop 群集中数据的功能](create-features-hive.md)
 
 [!INCLUDE [machine-learning-free-trial](../../../includes/machine-learning-free-trial.md)]
 
@@ -45,7 +46,7 @@ ms.lasthandoff: 05/03/2018
 
 开始 Azure 机器学习时，若要具体掌握此过程，最简单的方法是使用 Studio 中提供的示例。 这里介绍了两个示例：
 
-* 一个回归示例，目标值已知的监督实验中的[预测自行车租赁数量](http://gallery.cortanaintelligence.com/Experiment/Regression-Demand-estimation-4)
+* 一个回归示例，目标值已知的监督实验中的[预测自行车租赁数量](https://gallery.cortanaintelligence.com/Experiment/Regression-Demand-estimation-4)
 * 一个使用[特征哈希](https://msdn.microsoft.com/library/azure/c9a82660-2d9c-411d-8122-4d9e0b3ce92a/)的文本挖掘分类示例
 
 ## <a name="example-1-add-temporal-features-for-a-regression-model"></a>示例 1：为回归模型添加临时特征

@@ -2,17 +2,18 @@
 title: include 文件
 description: include 文件
 services: virtual-machines-linux
-author: dlepow
+author: cynthn
 ms.service: virtual-machines-linux
 ms.topic: include
-ms.date: 03/19/2018
-ms.author: danlep
+ms.date: 06/19/2018
+ms.author: cynthn
 ms.custom: include file
-ms.openlocfilehash: 3267f649e360c512a5523ce1d5948719a1969934
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.openlocfilehash: 14f5998ee1c562b649257f7dce9ffc2f52a66226
+ms.sourcegitcommit: f2771ec28b7d2d937eef81223980da8ea1a6a531
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 09/20/2019
+ms.locfileid: "71174931"
 ---
 ## <a name="deployment-considerations"></a>部署注意事项
 
@@ -20,11 +21,11 @@ ms.lasthandoff: 04/28/2018
 
 * N 系列 VM 只能按 Resource Manager 部署模型部署。
 
-* N 系列的 VM 在对其磁盘支持的 Azure 存储类型方面有所不同。 NC 和 NV VM 仅支持标准磁盘存储 (HDD) 所支持的 VM 磁盘。 NCv2、ND 和 NCv3 VM 仅支持高级磁盘存储 (SSD) 所支持的 VM 磁盘。
+* N 系列的 VM 在对其磁盘支持的 Azure 存储类型方面有所不同。 NC 和 NV VM 仅支持标准磁盘存储 (HDD) 所支持的 VM 磁盘。 NCv2、NCv3、ND、NDv2 和 NVv2 VM 仅支持高级磁盘存储 (SSD) 所支持的 VM 磁盘。
 
 * 如果需要部署的 N 系列 VM 较多，请考虑使用即用即付订阅或其他购买选项。 如果使用的是 [Azure 免费帐户](https://azure.microsoft.com/free/)，则仅可以使用有限数量的 Azure 计算核心。
 
-* 可能需要提高 Azure 订阅中的核心配额（按区域）以及单独针对 NC、NCv2、NCv3、ND 或 NV 核心的配额。 若要请求提高配额，可免费[提出在线客户支持请求](../articles/azure-supportability/how-to-create-azure-support-request.md)。 默认限制可能因订阅类别而异。
+* 可能需要提高 Azure 订阅中的核心配额（按区域）以及单独针对 NC、NCv2、NCv3、ND、NDv2、NV 或 NVv2 核心的配额。 若要请求提高配额，可免费[提出在线客户支持请求](../articles/azure-supportability/how-to-create-azure-support-request.md)。 默认限制可能因订阅类别而异。
 
 
 

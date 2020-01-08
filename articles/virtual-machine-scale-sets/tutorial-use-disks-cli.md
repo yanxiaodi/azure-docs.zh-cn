@@ -1,9 +1,9 @@
 ---
-title: 教程 - 通过 Azure CLI 2.0 创建和使用规模集的磁盘 | Microsoft Docs
-description: 了解如何通过 Azure CLI 2.0 对虚拟机规模集创建和使用托管磁盘，包括如何添加、准备、列出和分离磁盘。
+title: 教程 - 通过 Azure CLI 创建和使用规模集的磁盘 | Microsoft Docs
+description: 了解如何通过 Azure CLI 对虚拟机规模集创建和使用托管磁盘，包括如何添加、准备、列出和分离磁盘。
 services: virtual-machine-scale-sets
 documentationcenter: ''
-author: iainfoulds
+author: cynthn
 manager: jeconnoc
 editor: ''
 tags: azure-resource-manager
@@ -14,15 +14,16 @@ ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: tutorial
 ms.date: 03/27/2018
-ms.author: iainfou
+ms.author: cynthn
 ms.custom: mvc
-ms.openlocfilehash: 86ab38fffa8099f2f9f758a4da89fdfcbb3c7543
-ms.sourcegitcommit: d74657d1926467210454f58970c45b2fd3ca088d
+ms.openlocfilehash: 58090e860b79d59021d467fcf73596271c91c7f6
+ms.sourcegitcommit: 039263ff6271f318b471c4bf3dbc4b72659658ec
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/28/2018
+ms.lasthandoff: 02/06/2019
+ms.locfileid: "55751151"
 ---
-# <a name="tutorial-create-and-use-disks-with-virtual-machine-scale-set-with-the-azure-cli-20"></a>教程：通过 Azure CLI 2.0 对虚拟机规模集创建和使用磁盘
+# <a name="tutorial-create-and-use-disks-with-virtual-machine-scale-set-with-the-azure-cli"></a>教程：通过 Azure CLI 对虚拟机规模集创建和使用磁盘
 虚拟机规模集使用磁盘来存储 VM 实例的操作系统、应用程序和数据。 创建和管理规模集时，请务必选择适用于所需工作负荷的磁盘大小和配置。 本教程介绍如何创建和管理 VM 磁盘。 本教程介绍如何执行下列操作：
 
 > [!div class="checklist"]
@@ -36,7 +37,7 @@ ms.lasthandoff: 03/28/2018
 
 [!INCLUDE [cloud-shell-try-it.md](../../includes/cloud-shell-try-it.md)]
 
-如果选择在本地安装和使用 CLI，本教程要求运行 Azure CLI 2.0.29 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。
+如果选择在本地安装和使用 CLI，本教程要求运行 Azure CLI 2.0.29 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。
 
 
 ## <a name="default-azure-disks"></a>默认 Azure 磁盘
@@ -58,7 +59,7 @@ ms.lasthandoff: 03/28/2018
 
 
 ## <a name="azure-data-disks"></a>Azure 数据磁盘
-可添加额外的数据磁盘，用于安装应用程序和存储数据。 在任何需要持久和灵敏数据存储的情况下，都应使用数据磁盘。 每个数据磁盘的最大容量为 4 TB。 VM 实例的大小决定可附加的数据磁盘数。 对于每个 VM vCPU，都可以附加两个数据磁盘。
+可添加额外的数据磁盘，用于安装应用程序和存储数据。 在任何需要持久和响应性数据存储的情况下，都应使用数据磁盘。 每个数据磁盘的最大容量为 4 TB。 VM 实例的大小决定可附加的数据磁盘数。 对于每个 VM vCPU，都可以附加两个数据磁盘。
 
 ### <a name="max-data-disks-per-vm"></a>每个 VM 的最大数据磁盘数
 | Type | 常见大小 | 每个 VM 的最大数据磁盘数 |
@@ -94,13 +95,13 @@ Azure 提供两种类型的磁盘。
 可以在创建规模集时创建和附加磁盘，也可以对现有的规模集创建和附加磁盘。
 
 ### <a name="attach-disks-at-scale-set-creation"></a>创建规模集时附加磁盘
-首先，使用 [az group create](/cli/azure/group#az_group_create) 命令创建资源组。 在此示例中，在“eastus”区域中创建了名为“myResourceGroup”的资源组。
+首先，使用 [az group create](/cli/azure/group) 命令创建资源组。 在此示例中，在“eastus”区域中创建了名为“myResourceGroup”的资源组。
 
 ```azurecli-interactive
 az group create --name myResourceGroup --location eastus
 ```
 
-请使用 [az vmss create](/cli/azure/vmss#az_vmss_create) 命令创建虚拟机规模集。 以下示例创建名为“myScaleSet”的规模集，并生成 SSH 密钥（如果不存在）。 两个磁盘都是 `--data-disk-sizes-gb` 参数创建的。 第一个磁盘的大小为 *64* GB，第二个磁盘的大小为 *128* GB：
+请使用 [az vmss create](/cli/azure/vmss) 命令创建虚拟机规模集。 以下示例创建名为“myScaleSet”的规模集，并生成 SSH 密钥（如果不存在）。 两个磁盘都是 `--data-disk-sizes-gb` 参数创建的。 第一个磁盘的大小为 *64* GB，第二个磁盘的大小为 *128* GB：
 
 ```azurecli-interactive
 az vmss create \
@@ -116,7 +117,7 @@ az vmss create \
 创建和配置所有的规模集资源和 VM 实例需要几分钟时间。
 
 ### <a name="attach-a-disk-to-existing-scale-set"></a>将磁盘附加到现有规模集
-还可以将磁盘附加到现有的规模集。 使用在上一步创建的规模集通过 [az vmss disk attach](/cli/azure/vmss/disk#az_vmss_disk_attach) 添加另一磁盘。 以下示例附加另一个 *128* GB 的磁盘：
+还可以将磁盘附加到现有的规模集。 使用在上一步创建的规模集通过 [az vmss disk attach](/cli/azure/vmss/disk) 添加另一磁盘。 以下示例附加另一个 *128* GB 的磁盘：
 
 ```azurecli-interactive
 az vmss disk attach \
@@ -127,11 +128,11 @@ az vmss disk attach \
 
 
 ## <a name="prepare-the-data-disks"></a>准备数据磁盘
-创建并附加到规模集 VM 实例的磁盘为原始磁盘。 必须先对磁盘进行准备，然后才能将其用于数据和应用程序。 若要准备磁盘，请创建一个分区和一个文件系统，然后装载磁盘。
+已创建并附加到规模集 VM 实例的磁盘是原始磁盘。 将磁盘用于数据和应用程序之前，必须准备磁盘。 若要准备磁盘，需要创建分区、创建文件系统，并将其装载。
 
 若要跨规模集中的多个 VM 实例自动完成此过程，可以使用 Azure 自定义脚本扩展。 此扩展可以在每个 VM 实例上以本地方式执行脚本，以便完成各种任务，例如准备附加的数据磁盘。 有关详细信息，请参阅[自定义脚本扩展概述](../virtual-machines/linux/extensions-customscript.md)。
 
-以下示例在每个 VM 实例上执行来自 GitHub 示例存储库的脚本，使用的是 [az vmss extension set](/cli/azure/vmss/extension#az_vmss_extension_set) 命令，该命令用于准备所有原始的附加数据磁盘：
+以下示例在每个 VM 实例上执行来自 GitHub 示例存储库的脚本，使用的是 [az vmss extension set](/cli/azure/vmss/extension) 命令，该命令用于准备所有原始的附加数据磁盘：
 
 ```azurecli-interactive
 az vmss extension set \
@@ -143,7 +144,7 @@ az vmss extension set \
   --settings '{"fileUris":["https://raw.githubusercontent.com/Azure-Samples/compute-automation-configurations/master/prepare_vm_disks.sh"],"commandToExecute":"./prepare_vm_disks.sh"}'
 ```
 
-若要确认磁盘是否已正确地准备好，请通过 SSH 连接到某个 VM 实例。 使用 [az vmss list-instance-connection-info](/cli/azure/vmss#az_vmss_list_instance_connection_info) 列出规模集的连接信息：
+若要确认磁盘是否已正确地准备好，请通过 SSH 连接到某个 VM 实例。 使用 [az vmss list-instance-connection-info](/cli/azure/vmss) 列出规模集的连接信息：
 
 ```azurecli-interactive
 az vmss list-instance-connection-info \
@@ -214,7 +215,7 @@ Filesystem      Size  Used Avail Use% Mounted on
 /dev/sde1       126G   60M  120G   1% /datadisks/disk3
 ```
 
-规模集中每个 VM 实例上的磁盘采用同一方式自动进行准备。 规模集进行纵向扩展时，所需数据磁盘附加到新的 VM 实例。 自定义脚本扩展也会运行，以便自动准备磁盘。
+规模集中每个 VM 实例上的磁盘采用同一方式自动进行准备。 规模集进行纵向扩展时，所需数据磁盘会附加到新的 VM 实例。 自定义脚本扩展也会运行，以便自动准备磁盘。
 
 关闭与 VM 实例的 SSH 连接：
 
@@ -224,7 +225,7 @@ exit
 
 
 ## <a name="list-attached-disks"></a>列出附加的磁盘
-若要查看附加到规模集的磁盘的相关信息，请使用 [az vmss show](/cli/azure/vmss#az_vmss_show) 命令并对 *virtualMachineProfile.storageProfile.dataDisks* 进行查询：
+若要查看附加到规模集的磁盘的相关信息，请使用 [az vmss show](/cli/azure/vmss) 命令并对 *virtualMachineProfile.storageProfile.dataDisks* 进行查询：
 
 ```azurecli-interactive
 az vmss show \
@@ -278,7 +279,7 @@ az vmss show \
 
 
 ## <a name="detach-a-disk"></a>分离磁盘
-不再需要某个给定的磁盘时，可以将其从规模集中分离。 该磁盘会从规模集的所有 VM 实例中删除。 若要从规模集中分离某个磁盘，请使用 [az vmss disk detach](/cli/azure/vmss/disk#az_vmss_disk_detach) 并指定磁盘的 LUN。 LUN 显示在上一部分的 [az vmss show](/cli/azure/vmss#az_vmss_show) 命令的输出中。 以下示例从规模集分离 LUN *2*：
+不再需要某个给定的磁盘时，可以将其从规模集中分离。 该磁盘会从规模集的所有 VM 实例中删除。 若要从规模集中分离某个磁盘，请使用 [az vmss disk detach](/cli/azure/vmss/disk) 并指定磁盘的 LUN。 LUN 显示在上一部分的 [az vmss show](/cli/azure/vmss) 命令的输出中。 以下示例从规模集分离 LUN *2*：
 
 ```azurecli-interactive
 az vmss disk detach \
@@ -289,7 +290,7 @@ az vmss disk detach \
 
 
 ## <a name="clean-up-resources"></a>清理资源
-若要删除规模集和磁盘，请使用 [az group delete](/cli/azure/group#az_group_delete) 删除资源组及其所有资源。 `--no-wait` 参数会使光标返回提示符处，不会等待操作完成。 `--yes` 参数将确认是否希望删除资源，不会显示询问是否删除的额外提示。
+若要删除规模集和磁盘，请使用 [az group delete](/cli/azure/group) 删除资源组及其所有资源。 `--no-wait` 参数会使光标返回提示符处，不会等待操作完成。 `--yes` 参数将确认是否希望删除资源，不会显示询问是否删除的额外提示。
 
 ```azurecli-interactive
 az group delete --name myResourceGroup --no-wait --yes
@@ -297,7 +298,7 @@ az group delete --name myResourceGroup --no-wait --yes
 
 
 ## <a name="next-steps"></a>后续步骤
-本教程介绍了如何通过 Azure CLI 2.0 创建和使用规模集的磁盘：
+本教程介绍了如何通过 Azure CLI 创建和使用规模集的磁盘：
 
 > [!div class="checklist"]
 > * OS 磁盘和临时磁盘

@@ -4,27 +4,26 @@ description: 使用 Azure 资源管理器模板新建具有 Azure 诊断扩展�
 services: virtual-machines-windows
 documentationcenter: ''
 author: sbtron
-manager: jeconnoc
+manager: gwallace
 editor: ''
 tags: azure-resource-manager
 ms.assetid: 8cde8fe7-977b-43d2-be74-ad46dc946058
 ms.service: virtual-machines-windows
 ms.workload: infrastructure-services
 ms.tgt_pltfrm: vm-windows
-ms.devlang: na
 ms.topic: article
 ms.date: 05/31/2017
 ms.author: saurabh
 ms.custom: H1Hack27Feb2017
-ms.openlocfilehash: 792a3401c483327eb7fb9fcd88039bc09025b3ef
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.openlocfilehash: 9ba8fdba3b7283185920432b5b096b80b2e32021
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
-ms.locfileid: "33944949"
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70092543"
 ---
 # <a name="use-monitoring-and-diagnostics-with-a-windows-vm-and-azure-resource-manager-templates"></a>将监视和诊断与 Windows VM 和 Azure 资源管理器模板配合使用
-Azure 诊断扩展可在基于 Windows 的 Azure 虚拟机上提供监视和诊断功能。 通过将该扩展纳入为 Azure 资源管理器模板的一部分，可以在虚拟机上启用这些功能。 有关将任何扩展纳入为虚拟机模板一部分的详细信息，请参阅[使用 VM 扩展创作 Azure 资源管理器模板](../windows/template-description.md#extensions)。 本文介绍如何将 Azure 诊断扩展添加到 Windows 虚拟机模板中。  
+Azure 诊断扩展可在基于 Windows 的 Azure 虚拟机上提供监视和诊断功能。 通过将该扩展纳入为 Azure 资源管理器模板的一部分，可以在虚拟机上启用这些功能。 有关将任何扩展纳入为虚拟机模板一部分的详细信息，请参阅[使用 VM 扩展创作 Azure 资源管理器模板](../windows/template-description.md#extensions)。 本文介绍了如何将 Azure 诊断扩展添加到 Windows 虚拟机模板中。  
 
 ## <a name="add-the-azure-diagnostics-extension-to-the-vm-resource-definition"></a>将 Azure 诊断扩展添加到 VM 资源定义中
 要在 Windows 虚拟机上启用诊断扩展，需要将该扩展添加为资源管理器模板中的 VM 资源。
@@ -70,7 +69,7 @@ Azure 诊断扩展可在基于 Windows 的 Azure 虚拟机上提供监视和诊�
 "type": "Microsoft.Compute/virtualMachines/extensions",
 ```
 
-扩展始终与虚拟机关联，可以直接在虚拟机的资源节点下定义扩展，也可以在基础级别定义扩展并使用分层命名约定将其与虚拟机关联。
+扩展始终与虚拟机关联，你可以直接在虚拟机的资源节点下定义扩展，也可以在基础级别定义扩展并使用分层命名约定将其与虚拟机关联。
 
 对于虚拟机规模集，扩展配置在 *VirtualMachineProfile* 的 *extensionProfile* 属性中指定。
 
@@ -80,7 +79,7 @@ Azure 诊断扩展可在基于 Windows 的 Azure 虚拟机上提供监视和诊�
 
 *typeHandlerVersion* 指定要使用的扩展的版本。 将 autoUpgradeMinorVersion 次要版本设置为 true 可确保获得可用的最新扩展次要版本。 强烈建议始终将 *autoUpgradeMinorVersion* 设置为 **true**，这样就可以随时获得并使用具有所有新功能和缺陷修复的最新的可用诊断扩展。 
 
-*settings* 元素包含扩展的配置属性（有时称为公共配置），这些属性可以从扩展设置和读回。 xmlcfg 属性包含诊断日志基于 xml 的配置、性能计数器等等，这些项目由诊断代理收集。 有关 xml 架构本身的详细信息，请参阅[诊断配置架构](https://msdn.microsoft.com/library/azure/dn782207.aspx)。 常见的做法是将实际的 xml 配置存储为 Azure 资源管理器模板中的变量，再进行连接和 base64 编码，以设置 *xmlcfg* 的值。 请参阅[诊断配置变量](#diagnostics-configuration-variables)部分，深入了解如何在变量中存储 xml。 storageAccount 属性指定向其传输诊断数据的存储帐户的名称。 
+*settings* 元素包含扩展的配置属性（有时称为公共配置），这些属性可以从扩展设置和读回。 xmlcfg 属性包含由诊断代理收集的诊断日志、性能计数器等内容的基于 xml 的配置。 有关 xml 架构本身的详细信息，请参阅[诊断配置架构](https://msdn.microsoft.com/library/azure/dn782207.aspx)。 常见的做法是将实际的 xml 配置存储为 Azure Resource Manager 模板中的变量，然后再进行连接和 base64 编码，以设置 *xmlcfg* 的值。 请参阅[诊断配置变量](#diagnostics-configuration-variables)部分，深入了解如何在变量中存储 xml。 storageAccount 属性指定向其传输诊断数据的存储帐户的名称。 
 
 *protectedSettings* 中的属性（有时称为专用配置）可设置，但在设置之后无法读回。 protectedSettings 的只写性质使其非常适合存储类似存储帐户密钥（写入诊断数据的位置）的密码。    
 
@@ -92,17 +91,17 @@ Azure 诊断扩展可在基于 Windows 的 Azure 虚拟机上提供监视和诊�
     "type": "string",
     "metadata": {
 "description": "The name of an existing storage account to which diagnostics data is transfered."
-    }        
+    }
 },
 "existingdiagnosticsStorageResourceGroup": {
     "type": "string",
     "metadata": {
 "description": "The resource group for the storage account specified in existingdiagnosticsStorageAccountName"
-      }
+    }
 }
 ```
 
-最佳做法是在不同于虚拟机资源组的其他资源组中指定诊断存储帐户。 资源组可以被视为具有自己的生存期的部署单位，可以部署虚拟机以及在新配置更新时重新部署，但是你可能想要跨这些虚拟机部署继续在相同的存储帐户中存储诊断数据。 在不同的资源中拥有存储帐户可让存储帐户接受来自各种虚拟机部署的数据，方便解决各种版本之间的问题。
+最佳做法是在不同于虚拟机资源组的其他资源组中指定诊断存储帐户。 资源组可以视为具有自己的生存期的部署单位，可以部署虚拟机以及在新配置更新时重新部署，但是你可能想要跨这些虚拟机部署继续在相同的存储帐户中存储诊断数据。 在不同的资源中拥有存储帐户可让存储帐户接受来自各种虚拟机部署的数据，方便解决各种版本之间的问题。
 
 > [!NOTE]
 > 如果从 Visual Studio 创建 Windows 虚拟机模板，默认存储帐户可能会设置为使用将虚拟机 VHD 上传到的存储帐户。 这是为了简化 VM 的初始设置。 重构模板以使用可以当作参数传入的不同存储帐户。 
@@ -159,22 +158,22 @@ MetricAggregation 值 *PT1M* 和 *PT1H* 分别表示一分钟的聚合和一小�
 上述指标配置会在诊断存储帐户中生成具有以下命名约定的表：
 
 * **WADMetrics**：所有 WADMetrics 表的标准前缀
-* **PT1H** 或 **PT1M**：表示表中包含超过 1 小时或 1 分钟的聚合数据
-* **P10D**：表示表中包含其开始收集数据起 10 天内的数据
+* **PT1H** 或 **PT1M**：表示表中包含 1 小时或 1 分钟内的聚合数据
+* **P10D**：表示表中包含它开始收集数据起 10 天内的数据
 * **V2S**：字符串常数
 * **yyyymmdd**：表开始收集数据的日期
 
-示例：WADMetricsPT1HP10DV2S20151108 包含从 2015 年 11 月 11 日开始 10 天内长达一小时的聚合指标数据    
+例如：WADMetricsPT1HP10DV2S20151108 包含从 2015 年 11 月 11 日开始 10 天内长达一小时的聚合指标数据    
 
 每个 WADMetrics 表都包含以下列：
 
-* **PartitionKey**：分区键基于 resourceID 值构建，用于唯一地标识 VM 资源。 例如：002Fsubscriptions:<subscriptionID>:002FresourceGroups:002F<ResourceGroupName>:002Fproviders:002FMicrosoft:002ECompute:002FvirtualMachines:002F<vmName>  
+* **PartitionKey**：分区键基于 resourceID 值构造，用于唯一地标识 VM 资源。 例如： `002Fsubscriptions:<subscriptionID>:002FresourceGroups:002F<ResourceGroupName>:002Fproviders:002FMicrosoft:002ECompute:002FvirtualMachines:002F<vmName>`  
 * **RowKey**：采用 `<Descending time tick>:<Performance Counter Name>` 格式。 递减时间刻度计算公式为最大时间刻度减去聚合期的开始时间。 例如，如果取样期间从 2015 年 11 月 10 日 00:00 (UTC) 开始，则计算公式为 `DateTime.MaxValue.Ticks - (new DateTime(2015,11,10,0,0,0,DateTimeKind.Utc).Ticks)`。 对于内存可用字节性能计数器，行键如下所示：`2519551871999999999__:005CMemory:005CAvailable:0020Bytes`
 * **CounterName**：性能计数器的名称。 它与 xml 配置中定义的 *counterSpecifier* 相匹配。
 * **Maximum**：聚合期间性能计数器的最大值。
-* **Minimum**：聚合期间性能计数器的最小值。
+* **最低**：聚合期间性能计数器的最小值。
 * **Total**：聚合期间报告的性能计数器的所有值的总和。
-* **Count**：针对性能计数器报告的值总数。
+* **计数**：针对性能计数器报告的值总数。
 * **Average**：聚合期间性能计数器的平均（总计/计数）值。
 
 ## <a name="next-steps"></a>后续步骤

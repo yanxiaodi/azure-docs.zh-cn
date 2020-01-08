@@ -2,24 +2,25 @@
 title: 分布式表设计指南 - Azure SQL 数据仓库 | Microsoft Docs
 description: 有关如何在 Azure SQL 数据仓库中设计哈希分布式表和轮循机制分布式表的一些建议。
 services: sql-data-warehouse
-author: ronortloff
-manager: craigg-msft
+author: XiaoyuMSFT
+manager: craigg
 ms.service: sql-data-warehouse
 ms.topic: conceptual
-ms.component: implement
+ms.subservice: development
 ms.date: 04/17/2018
-ms.author: rortloff
+ms.author: xiaoyul
 ms.reviewer: igorstan
-ms.openlocfilehash: d65ca91fc4cffa53adf3a7c56c7919e46c5037d9
-ms.sourcegitcommit: 1362e3d6961bdeaebed7fb342c7b0b34f6f6417a
-ms.translationtype: HT
+ms.openlocfilehash: 4b322415592a7202387cb6776d2c040cda765b27
+ms.sourcegitcommit: 75a56915dce1c538dc7a921beb4a5305e79d3c7a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/18/2018
+ms.lasthandoff: 07/24/2019
+ms.locfileid: "68479347"
 ---
 # <a name="guidance-for-designing-distributed-tables-in-azure-sql-data-warehouse"></a>有关如何在 Azure SQL 数据仓库中设计分布式表的指南
 有关如何在 Azure SQL 数据仓库中设计哈希分布式表和轮循机制分布式表的一些建议。
 
-本文假设读者熟悉 SQL 数据仓库中的数据分布和数据移动概念。  有关详细信息，请参阅 [Azure SQL 数据仓库 - 大规模并行处理 (MPP) 体系结构](massively-parallel-processing-mpp-architecture.md)。 
+本文假设读者熟悉 SQL 数据仓库中的数据分布和数据移动概念。  有关详细信息，请参阅 [Azure SQL 数据仓库 - 大规模并行处理 (MPP) 体系结构](massively-parallel-processing-mpp-architecture.md)。 
 
 ## <a name="what-is-a-distributed-table"></a>什么是分布式表？
 分布式表显示为单个表，但表中的行实际存储在 60 个分布区中。 这些行使用哈希或轮循机制算法进行分布。  
@@ -28,11 +29,11 @@ ms.lasthandoff: 04/18/2018
 
 另一个表存储选项是跨所有计算节点复制一个小型表。 有关详细信息，请参阅[复制表的设计准则](design-guidance-for-replicated-tables.md)。 若要在这三个选项之间快速选择其一，请参阅[表概述](sql-data-warehouse-tables-overview.md)中的分布式表。 
 
-在设计表的过程中，尽可能多地了解数据以及数据查询方式。  例如，考虑以下问题：
+在设计表的过程中，尽可能多地了解数据以及数据查询方式。  例如，考虑以下问题：
 
-- 表有多大？   
-- 表的刷新频率是多少？   
-- 数据仓库中有事实数据表和维度表吗？   
+- 表有多大？   
+- 表的刷新频率是多少？   
+- 数据仓库中有事实数据表和维度表吗？   
 
 
 ### <a name="hash-distributed"></a>哈希分布
@@ -146,7 +147,7 @@ where two_part_name in
     from dbo.vTableSizes
     where row_count > 0
     group by two_part_name
-    having min(row_count * 1.000)/max(row_count * 1.000) > .10
+    having (max(row_count * 1.000) - min(row_count * 1.000))/max(row_count * 1.000) >= .10
     )
 order by two_part_name, row_count
 ;
@@ -173,7 +174,7 @@ order by two_part_name, row_count
 由于不能更改现有表中的分布列，因此，解决数据倾斜的典型方法是重新创建具有不同分布列的表。  
 
 ### <a name="re-create-the-table-with-a-new-distribution-column"></a>重新创建具有新分布列的表
-本示例使用 [CREATE TABLE AS SELECT](/sql/t-sql/statements/create-table-as-select-azure-sql-data-warehouse.md) 重新创建具有不同哈希分布列的表。
+本示例使用 [CREATE TABLE AS SELECT](https://docs.microsoft.com/sql/t-sql/statements/create-table-as-select-azure-sql-data-warehouse?view=aps-pdw-2016-au7) 重新创建具有不同哈希分布列的表。
 
 ```sql
 CREATE TABLE [dbo].[FactInternetSales_CustomerKey]

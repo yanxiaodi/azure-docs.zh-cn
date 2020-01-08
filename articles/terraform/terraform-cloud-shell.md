@@ -1,17 +1,20 @@
 ---
-title: "将 Terraform 与 Azure Cloud Shell 结合使用"
-description: "将 Terraform 与 Azure Cloud Shell 结合使用可简化身份验证和模板配置。"
-keywords: "terraform, devops, 规模集, 虚拟机, 网络, 存储, 模块"
-ms.service: virtual-machines-linux
-author: dcaro
-ms.author: dcaro
-ms.date: 10/19/2017
-ms.topic: article
-ms.openlocfilehash: 5157066086f1bdfa580c1946942bda4505e48935
-ms.sourcegitcommit: 059dae3d8a0e716adc95ad2296843a45745a415d
+title: 为 Terraform 配置 Azure Cloud Shell
+description: 将 Terraform 与 Azure Cloud Shell 结合使用可简化身份验证和模板配置。
+services: terraform
+ms.service: azure
+keywords: terraform, devops, 规模集, 虚拟机, 网络, 存储, 模块
+author: tomarchermsft
+manager: jeconnoc
+ms.author: tarcher
+ms.topic: tutorial
+ms.date: 09/20/2019
+ms.openlocfilehash: e0a59697a3e4da97cf082c4c771fe93ad33b6035
+ms.sourcegitcommit: f2771ec28b7d2d937eef81223980da8ea1a6a531
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/09/2018
+ms.lasthandoff: 09/20/2019
+ms.locfileid: "71173556"
 ---
 # <a name="terraform-cloud-shell-development"></a>Terraform Cloud Shell 开发 
 
@@ -30,7 +33,7 @@ Terraform 已安装并可立即在 Cloud Shell 中使用。 Terraform 脚本在�
 
 Azure Terraform 模块需要凭据才能访问 Azure 订阅中的资源并对这些资源做出更改。 在 Cloud Shell 中工作时，将以下代码添加到脚本，以便在 Cloud Shell 中使用 Azure Terraform 模块：
 
-```tf
+```hcl
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
 }
@@ -42,7 +45,7 @@ provider "azurerm" {
 
 文件和 shell 状态保留在 Cloud Shell 会话间的 Azure 存储中。 使用 [Azure 存储资源管理器](/azure/vs-azure-tools-storage-manage-with-storage-explorer)将文件从本地计算机复制和上传到 Cloud Shell。
 
-Azure CLI 2.0 可在 Cloud Shell 中使用，是一款在 `terraform apply` 或 `terraform destroy` 完成后测试配置和检查工作的出色工具。
+Azure CLI 可在 Cloud Shell 中使用，是一款在 `terraform apply` 或 `terraform destroy` 完成后测试配置和检查工作的出色工具。
 
 
 ## <a name="next-steps"></a>后续步骤

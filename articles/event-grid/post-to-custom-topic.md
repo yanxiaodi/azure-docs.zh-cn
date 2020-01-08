@@ -2,21 +2,24 @@
 title: 将事件发布到自定义 Azure 事件网格主题
 description: 说明如何将事件发布到 Azure 事件网格的自定义主题
 services: event-grid
-author: tfitzmac
+author: spelluru
 manager: timlt
 ms.service: event-grid
 ms.topic: conceptual
-ms.date: 04/17/2018
-ms.author: tomfitz
-ms.openlocfilehash: e4256de1d9112d785b6d1cd52067fc99144a0a04
-ms.sourcegitcommit: 688a394c4901590bbcf5351f9afdf9e8f0c89505
-ms.translationtype: HT
+ms.date: 01/17/2019
+ms.author: spelluru
+ms.openlocfilehash: 14ae5f2a0b6a950889d8587cd4d03ff4fc9a171b
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/18/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66304209"
 ---
 # <a name="post-to-custom-topic-for-azure-event-grid"></a>发布到 Azure 事件网格的自定义主题
 
 本文说明如何将事件发布到自定义主题。 它显示发布和事件数据的格式。 [服务级别协议 (SLA)](https://azure.microsoft.com/support/legal/sla/event-grid/v1_0/) 仅适用于与预期格式匹配的发布。
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
 ## <a name="endpoint"></a>终结点
 
@@ -33,10 +36,10 @@ az eventgrid topic show --name <topic-name> -g <topic-resource-group> --query "e
 若要使用 Azure PowerShell 获取自定义主题的终结点，请使用：
 
 ```powershell
-(Get-AzureRmEventGridTopic -ResourceGroupName <topic-resource-group> -Name <topic-name>).Endpoint
+(Get-AzEventGridTopic -ResourceGroupName <topic-resource-group> -Name <topic-name>).Endpoint
 ```
 
-## <a name="header"></a>标头
+## <a name="header"></a>Header
 
 在请求中包含一个名为 `aeg-sas-key` 的标头值，其中包含身份验证密钥。
 
@@ -51,7 +54,7 @@ az eventgrid topic key list --name <topic-name> -g <topic-resource-group> --quer
 若要使用 PowerShell 获取自定义主题的密钥，请使用：
 
 ```powershell
-(Get-AzureRmEventGridTopicKey -ResourceGroupName <topic-resource-group> -Name <topic-name>).Key1
+(Get-AzEventGridTopicKey -ResourceGroupName <topic-resource-group> -Name <topic-name>).Key1
 ```
 
 ## <a name="event-data"></a>事件数据
@@ -73,7 +76,10 @@ az eventgrid topic key list --name <topic-name> -g <topic-resource-group> --quer
 ]
 ```
 
-有关这些属性的说明，请参阅 [Azure 事件网格事件架构](event-schema.md)。 将事件发布到事件网格主题时，数组的总大小最大可为 1 MB。 数组中的每个事件被限制为 64 KB。
+有关这些属性的说明，请参阅 [Azure 事件网格事件架构](event-schema.md)。 将事件发布到事件网格主题时，数组的总大小最大可为 1 MB。 数组中的每个事件被限制为 64 KB （正式版） 或 1 MB （预览版）。
+
+> [!NOTE]
+> 事件的大小高达 64 KB 介绍了通过正式版 (GA) 服务级别协议 (SLA)。 大小最多的事件的支持 1 MB 目前处于预览状态。 超过 64 KB 的事件是按 64 KB 的增量计费。 
 
 例如，有效的事件数据架构是：
 
@@ -97,7 +103,7 @@ az eventgrid topic key list --name <topic-name> -g <topic-resource-group> --quer
 
 |结果  |响应  |
 |---------|---------|
-|成功  | 200 正常  |
+|Success  | 200 正常  |
 |事件数据的格式不正确 | 400 错误请求 |
 |访问密钥无效 | 401 未授权 |
 |终结点不正确 | 404 未找到 |

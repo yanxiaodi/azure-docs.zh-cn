@@ -1,131 +1,162 @@
 ---
-title: 使用 Node.js 查询 Azure SQL 数据库 | Microsoft Docs
-description: 本主题介绍如何使用 Node.js 创建连接到 Azure SQL 数据库的程序并使用 Transact-SQL 语句对其进行查询。
+title: 快速入门：使用 Node.js 查询 Azure SQL 数据库
+description: 如何使用 Node.js 创建连接到 Azure SQL 数据库的程序并使用 T-SQL 语句对其进行查询。
 services: sql-database
-author: CarlRabeler
-manager: craigg
 ms.service: sql-database
-ms.custom: mvc,develop apps
+ms.subservice: development
 ms.devlang: nodejs
 ms.topic: quickstart
-ms.date: 04/01/2018
-ms.author: carlrab
-ms.openlocfilehash: 0d1cdd40264ff76b0175c861b3084ed7e7b62a31
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
+author: stevestein
+ms.author: sstein
+ms.reviewer: v-masebo
+ms.date: 03/25/2019
+ms.custom: seo-javascript-september2019
+ms.openlocfilehash: b865bca5db11c4a34a1be4deb2e3145d73599e81
+ms.sourcegitcommit: ca359c0c2dd7a0229f73ba11a690e3384d198f40
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71059277"
 ---
-# <a name="use-nodejs-to-query-an-azure-sql-database"></a>使用 Node.js 查询 Azure SQL 数据库
+# <a name="quickstart-use-nodejs-to-query-an-azure-sql-database"></a>快速入门：使用 Node.js 查询 Azure SQL 数据库
 
-此快速入门演示如何使用 [Node.js](https://nodejs.org/en/) 来创建连接到 Azure SQL 数据库的程序，并使用 Transact-SQL 语句来查询数据。
+本文演示了如何使用 [Node.js](https://nodejs.org) 连接到 Azure SQL 数据库。 然后即可使用 T-SQL 语句来查询数据。
 
 ## <a name="prerequisites"></a>先决条件
 
-若要完成本快速入门，请确保符合以下条件：
+若要完成此示例，请确保具备以下先决条件：
 
-[!INCLUDE [prerequisites-create-db](../../includes/sql-database-connect-query-prerequisites-create-db-includes.md)]
+- Azure SQL 数据库。 可以根据下述快速入门之一，在 Azure SQL 数据库中创建数据库，然后对其进行配置：
 
-- 针对用于本快速入门的计算机的公共 IP 地址制定[服务器级防火墙规则](sql-database-get-started-portal.md#create-a-server-level-firewall-rule)。
+  || 单一数据库 | 托管实例 |
+  |:--- |:--- |:---|
+  | 创建| [门户](sql-database-single-database-get-started.md) | [门户](sql-database-managed-instance-get-started.md) |
+  || [CLI](scripts/sql-database-create-and-configure-database-cli.md) | [CLI](https://medium.com/azure-sqldb-managed-instance/working-with-sql-managed-instance-using-azure-cli-611795fe0b44) |
+  || [PowerShell](scripts/sql-database-create-and-configure-database-powershell.md) | [PowerShell](scripts/sql-database-create-configure-managed-instance-powershell.md) |
+  | 配置 | [服务器级别 IP 防火墙规则](sql-database-server-level-firewall-rule.md)| [从 VM 进行连接](sql-database-managed-instance-configure-vm.md)|
+  |||[从现场进行连接](sql-database-managed-instance-configure-p2s.md)
+  |加载数据|根据快速入门加载的 Adventure Works|[还原 Wide World Importers](sql-database-managed-instance-get-started-restore.md)
+  |||从 [GitHub](https://github.com/Microsoft/sql-server-samples/tree/master/samples/databases/adventure-works) 所提供的 [BACPAC](sql-database-import.md) 文件还原或导入 Adventure Works|
+  |||
 
-- 已为操作系统安装 Node.js 和相关软件：
-    - **MacOS**：安装 Homebrew 和 Node.js，然后安装 ODBC 驱动程序和 SQLCMD。 请参阅[步骤 1.2 和 1.3](https://www.microsoft.com/sql-server/developer-get-started/node/mac/)。
-    - **Ubuntu**：安装 Node.js，然后安装 ODBC 驱动程序和 SQLCMD。 请参阅[步骤 1.2 和 1.3](https://www.microsoft.com/sql-server/developer-get-started/node/ubuntu/)。
-    - **Windows**：安装 Chocolatey 和 Node.js，然后安装 ODBC 驱动程序和 SQL CMD。 请参阅[步骤 1.2 和 1.3](https://www.microsoft.com/sql-server/developer-get-started/node/windows/)。
+  > [!IMPORTANT]
+  > 本文中脚本的编写目的是使用 Adventure Works 数据库。 使用托管实例时，必须将 Adventure Works 数据库导入一个实例数据库，或者修改本文中的脚本，以便使用 Wide World Importers 数据库。
 
-## <a name="sql-server-connection-information"></a>SQL Server 连接信息
 
-[!INCLUDE [prerequisites-server-connection-info](../../includes/sql-database-connect-query-prerequisites-server-connection-info-includes.md)]
+- 适用于操作系统的 Node.js 相关软件：
 
-> [!IMPORTANT]
-> 对于在其上执行本教程操作的计算机，必须为其公共 IP 地址制定防火墙规则。 如果使用其他计算机或其他公共 IP 地址，则[使用 Azure 门户创建服务器级防火墙规则](sql-database-get-started-portal.md#create-a-server-level-firewall-rule)。 
+  - **MacOS**：安装 Homebrew 和 Node.js，然后安装 ODBC 驱动程序和 SQLCMD。 请参阅[步骤 1.2 和 1.3](https://www.microsoft.com/sql-server/developer-get-started/node/mac/)。
+  
+  - **Ubuntu**：安装 Node.js，然后安装 ODBC 驱动程序和 SQLCMD。 请参阅[步骤 1.2 和 1.3](https://www.microsoft.com/sql-server/developer-get-started/node/ubuntu/)。
+  
+  - **Windows**：安装 Chocolatey 和 Node.js，然后安装 ODBC 驱动程序和 SQLCMD。 请参阅[步骤 1.2 和 1.3](https://www.microsoft.com/sql-server/developer-get-started/node/windows/)。
 
-## <a name="create-a-nodejs-project"></a>创建 Node.js 项目
+## <a name="get-sql-server-connection-information"></a>获取 SQL Server 连接信息
 
-打开命令提示符，然后创建一个名为 sqltest 的文件夹。 导航到已创建的文件夹，并运行以下命令：
+获取连接到 Azure SQL 数据库所需的连接信息。 在后续过程中，将需要完全限定的服务器名称或主机名称、数据库名称和登录信息。
 
-    
-    npm init -y
-    npm install tedious
-    npm install async
-    
+1. 登录到 [Azure 门户](https://portal.azure.com/)。
 
-## <a name="insert-code-to-query-sql-database"></a>插入用于查询 SQL 数据库的代码
+2. 转到“SQL 数据库”或“SQL 托管实例”页。  
 
-1. 在开发环境或喜欢的文本编辑器中，创建新文件 sqltest.js。
+3. 在“概览”页中，查看单一数据库的“服务器名称”旁边的完全限定的服务器名称，或者托管实例的“主机”旁边的完全限定的服务器名称    。 若要复制服务器名称或主机名称，请将鼠标悬停在其上方，然后选择“复制”图标  。 
 
-2. 将内容替换为以下代码，为服务器、数据库、用户和密码添加相应的值。
+## <a name="create-the-project"></a>创建项目
 
-   ```js
-   var Connection = require('tedious').Connection;
-   var Request = require('tedious').Request;
+打开命令提示符，然后创建一个名为 sqltest 的文件夹  。 打开已创建的文件夹，并运行以下命令：
 
-   // Create connection to database
-   var config = 
-      {
-        userName: 'someuser', // update me
-        password: 'somepassword', // update me
-        server: 'edmacasqlserver.database.windows.net', // update me
-        options: 
-           {
-              database: 'somedb' //update me
-              , encrypt: true
-           }
-      }
-   var connection = new Connection(config);
+  ```bash
+  npm init -y
+  npm install tedious@5.0.3
+  npm install async@2.6.2
+  ```
 
-   // Attempt to connect and execute queries if connection goes through
-   connection.on('connect', function(err) 
-      {
-        if (err) 
-          {
-             console.log(err)
-          }
-       else
-          {
-              queryDatabase()
-          }
-      }
+## <a name="add-code-to-query-database"></a>添加用于查询数据库的代码
+
+1. 在喜欢的文本编辑器中，创建新文件 *sqltest.js*。
+
+1. 将其内容替换为以下代码。 然后，为服务器、数据库、用户和密码添加相应的值。
+
+    ```js
+    var Connection = require('tedious').Connection;
+    var Request = require('tedious').Request;
+
+    // Create connection to database
+    var config =
+    {
+        authentication: {
+            options: {
+                userName: 'userName', // update me
+                password: 'password' // update me
+            },
+            type: 'default'
+        },
+        server: 'your_server.database.windows.net', // update me
+        options:
+        {
+            database: 'your_database', //update me
+            encrypt: true
+        }
+    }
+    var connection = new Connection(config);
+
+    // Attempt to connect and execute queries if connection goes through
+    connection.on('connect', function(err)
+        {
+            if (err)
+            {
+                console.log(err)
+            }
+            else
+            {
+                queryDatabase()
+            }
+        }
     );
 
-   function queryDatabase()
-      { console.log('Reading rows from the Table...');
+    function queryDatabase()
+    {
+        console.log('Reading rows from the Table...');
 
-          // Read all rows from table
-        request = new Request(
-             "SELECT TOP 20 pc.Name as CategoryName, p.name as ProductName FROM [SalesLT].[ProductCategory] pc JOIN [SalesLT].[Product] p ON pc.productcategoryid = p.productcategoryid",
-                function(err, rowCount, rows) 
-                   {
-                       console.log(rowCount + ' row(s) returned');
-                       process.exit();
-                   }
-               );
-    
+        // Read all rows from table
+        var request = new Request(
+            "SELECT TOP 20 pc.Name as CategoryName, p.name as ProductName FROM [SalesLT].[ProductCategory] pc "
+                + "JOIN [SalesLT].[Product] p ON pc.productcategoryid = p.productcategoryid",
+            function(err, rowCount, rows)
+            {
+                console.log(rowCount + ' row(s) returned');
+                process.exit();
+            }
+        );
+
         request.on('row', function(columns) {
-           columns.forEach(function(column) {
-               console.log("%s\t%s", column.metadata.colName, column.value);
+            columns.forEach(function(column) {
+                console.log("%s\t%s", column.metadata.colName, column.value);
             });
-                });
+        });
         connection.execSql(request);
-      }
-```
+    }
+    ```
+
+> [!NOTE]
+> 代码示例使用适用于 Azure SQL 的 **AdventureWorksLT** 示例数据库。
 
 ## <a name="run-the-code"></a>运行代码
 
-1. 请在命令提示符处运行以下命令：
+1. 在命令提示符下运行此程序。
 
-   ```js
-   node sqltest.js
-   ```
+    ```bash
+    node sqltest.js
+    ```
 
-2. 验证是否已返回前 20 行，然后关闭应用程序窗口。
+1. 验证是否已返回前 20 行，然后关闭应用程序窗口。
 
 ## <a name="next-steps"></a>后续步骤
 
-- 了解[用于 SQL Server 的 Microsoft Node.js 驱动程序](https://docs.microsoft.com/sql/connect/node-js/node-js-driver-for-sql-server/)
-- 了解如何在 Windows/Linux/macOS 中[使用 .NET Core 连接和查询 Azure SQL 数据库](sql-database-connect-query-dotnet-core.md)。  
-- 了解[在 Windows/Linux/macOS 中通过命令行使用 .NET Core 入门](/dotnet/core/tutorials/using-with-xplat-cli)。
-- 了解如何[使用 SSMS 设计你的第一个 Azure SQL 数据库](sql-database-design-first-database.md)，或者如何[使用 .NET 设计你的第一个 Azure SQL 数据库](sql-database-design-first-database-csharp.md)。
-- 了解如何[使用 SSMS 进行连接和查询](sql-database-connect-query-ssms.md)
-- 了解如何[使用 Visual Studio Code 进行连接和查询](sql-database-connect-query-vscode.md)。
+- [用于 SQL Server 的 Microsoft Node.js 驱动程序](/sql/connect/node-js/node-js-driver-for-sql-server)
 
+- 通过 [.NET core](sql-database-connect-query-dotnet-core.md)、[Visual Studio Code](sql-database-connect-query-vscode.md) 或 [SSMS](sql-database-connect-query-ssms.md)（仅限 Windows）在 Windows/Linux/macOS 上进行连接和查询
+
+- [在 Windows/Linux/macOS 中通过命令行使用 .NET Core 入门](/dotnet/core/tutorials/using-with-xplat-cli)
+
+- 使用 [.NET](sql-database-design-first-database-csharp.md) 或 [SSMS](sql-database-design-first-database.md) 设计第一个 Azure SQL 数据库

@@ -1,27 +1,26 @@
 ---
-title: 生成并优化表以便快速将数据并行导入到 Azure VM 上的 SQL Server | Microsoft 文档
-description: 使用 SQL 分区表并行批量导入数据
+title: 在 SQL 分区表中进行并行批量数据导入 - Team Data Science Process
+description: 构建分区表来快速将数据并行批量导入到 SQL Server 数据库。
 services: machine-learning
-documentationcenter: ''
-author: deguhath
+author: marktab
 manager: cgronlun
 editor: cgronlun
-ms.assetid: ff90fdb0-5bc7-49e8-aee7-678b54f901c8
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/09/2017
-ms.author: deguhath
-ms.openlocfilehash: 55c213e26d39f1f9c27fdeae89e651a5f99a98b5
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: 253f73cc58292778d88417b693c157fcbd7d92bd
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61428285"
 ---
-# <a name="parallel-bulk-data-import-using-sql-partition-tables"></a>使用 SQL 分区表并行批量导入数据
-本文档介绍如何构建分区表来快速将数据并行批量导入 SQL Server 数据库。 要将大型数据加载/传输到 SQL 数据库，可以通过使用*分区表和视图*加快将数据导入 SQL 数据库和后续查询的速度。 
+# <a name="build-and-optimize-tables-for-fast-parallel-import-of-data-into-a-sql-server-on-an-azure-vm"></a>生成并优化表以便快速将数据并行导入到 Azure VM 上的 SQL Server
+
+本文介绍如何构建分区表来快速将数据并行批量导入到 SQL Server 数据库。 要将大型数据加载/传输到 SQL 数据库，可以通过使用*分区表和视图*加快将数据导入 SQL 数据库和后续查询的速度。 
 
 ## <a name="create-a-new-database-and-a-set-of-filegroups"></a>创建一个新数据库和一组文件组
 * [创建一个新数据库](https://technet.microsoft.com/library/ms176061.aspx)（如果不存在）。
@@ -48,9 +47,9 @@ ms.lasthandoff: 05/03/2018
          FILEGROUP [filegroup_1] 
         ( NAME = ''FileGroup1'', FILENAME = ''' + @data_path + '<file_name_1>.ndf'' , SIZE = 4096KB , FILEGROWTH = 1024KB ), 
          FILEGROUP [filegroup_2] 
-        ( NAME = ''FileGroup1'', FILENAME = ''' + @data_path + '<file_name_2>.ndf'' , SIZE = 4096KB , FILEGROWTH = 1024KB ), 
+        ( NAME = ''FileGroup2'', FILENAME = ''' + @data_path + '<file_name_2>.ndf'' , SIZE = 4096KB , FILEGROWTH = 1024KB ), 
          FILEGROUP [filegroup_3] 
-        ( NAME = ''FileGroup1'', FILENAME = ''' + @data_path + '<file_name>.ndf'' , SIZE = 102400KB , FILEGROWTH = 10240KB ), 
+        ( NAME = ''FileGroup3'', FILENAME = ''' + @data_path + '<file_name_3>.ndf'' , SIZE = 102400KB , FILEGROWTH = 10240KB ) 
          LOG ON 
         ( NAME = ''LogFileGroup'', FILENAME = ''' + @data_path + '<log_file_name>.ldf'' , SIZE = 1024KB , FILEGROWTH = 10%)
     ')
@@ -79,7 +78,7 @@ ms.lasthandoff: 05/03/2018
   若要根据函数/方案验证每个分区中的有效范围，请运行以下查询：
   
         SELECT psch.name as PartitionScheme,
-            prng.value AS ParitionValue,
+            prng.value AS PartitionValue,
             prng.boundary_id AS BoundaryID
         FROM sys.partition_functions AS pfun
         INNER JOIN sys.partition_schemes psch ON pfun.function_id = psch.function_id
@@ -96,11 +95,11 @@ ms.lasthandoff: 05/03/2018
 
 ## <a name="bulk-import-the-data-for-each-individual-partition-table"></a>批量导入每个分区表的数据
 
-* 可以使用 BCP、BULK INSERT 或其他方法（如 [SQL Server 迁移向导](http://sqlazuremw.codeplex.com/)）。 提供的示例使用 BCP 方法。
+* 可以使用 BCP、BULK INSERT 或其他方法（如 [SQL Server 迁移向导](https://sqlazuremw.codeplex.com/)）。 提供的示例使用 BCP 方法。
 * [更改数据库](https://msdn.microsoft.com/library/bb522682.aspx)，以将事务日志记录方案更改为 BULK_LOGGED 以最大限度降低日志记录开销，例如：
   
         ALTER DATABASE <database_name> SET RECOVERY BULK_LOGGED
-* 若要加快数据加载，请并行启动批量导入操作。 有关加快将大型数据批量导入到 SQL Server 数据库的提示，请参阅[一小时之内加载 1TB 数据](http://blogs.msdn.com/b/sqlcat/archive/2006/05/19/602142.aspx)。
+* 若要加快数据加载，请并行启动批量导入操作。 有关加快将大型数据批量导入到 SQL Server 数据库的提示，请参阅[一小时之内加载 1TB 数据](https://blogs.msdn.com/b/sqlcat/archive/2006/05/19/602142.aspx)。
 
 下面的 PowerShell 脚本是使用 BCP并行加载数据的示例。
 

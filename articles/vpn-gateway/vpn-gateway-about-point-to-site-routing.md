@@ -2,24 +2,17 @@
 title: 关于 Azure 点到站点路由 | Microsoft Docs
 description: 本文介绍点到站点 VPN 路由的工作原理。
 services: vpn-gateway
-documentationcenter: na
 author: cherylmc
-manager: ''
-editor: ''
-tags: azure-resource-manager
-ms.assetid: ''
 ms.service: vpn-gateway
-ms.devlang: na
 ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: infrastructure-services
-ms.date: 04/16/2018
+ms.date: 01/28/2019
 ms.author: anzaman
-ms.openlocfilehash: d25709fb4abb1b8a35596c3dc246f7419a99419b
-ms.sourcegitcommit: 1362e3d6961bdeaebed7fb342c7b0b34f6f6417a
-ms.translationtype: HT
+ms.openlocfilehash: 486a910226db5dc7b36aaf873e7bb8115eb78805
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/18/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60653453"
 ---
 # <a name="about-point-to-site-vpn-routing"></a>关于点到站点 VPN 路由
 
@@ -51,7 +44,7 @@ Azure 当前支持两种远程访问协议：IKEv2 和 SSTP。 IKEv2 可用于�
 
 * 已添加到非 Windows 客户端的路由：10.1.0.0/16、192.168.0.0/24
 
-### <a name="access"></a>Access
+### <a name="access"></a>访问
 
 * Windows 客户端可以访问 VNet1
 
@@ -81,7 +74,7 @@ Azure 当前支持两种远程访问协议：IKEv2 和 SSTP。 IKEv2 可用于�
 
 * 已添加到非 Windows 客户端的路由：10.1.0.0/16、10.2.0.0/16、10.4.0.0/16、192.168.0.0/24
 
-### <a name="access"></a>Access
+### <a name="access"></a>访问
 
 * Windows 客户端可以访问 VNet1、VNet2 和 VNet4，但必须重新下载 VPN 客户端，以使拓扑更改生效。
 
@@ -109,7 +102,7 @@ Azure 当前支持两种远程访问协议：IKEv2 和 SSTP。 IKEv2 可用于�
 
 * 已添加到非 Windows 客户端的路由：10.1.0.0/16、10.2.0.0/16、192.168.0.0/24
 
-### <a name="access"></a>Access
+### <a name="access"></a>访问
 
 * Windows 客户端只能访问 VNet1
 
@@ -137,7 +130,7 @@ Azure 当前支持两种远程访问协议：IKEv2 和 SSTP。 IKEv2 可用于�
 
 * 已添加到非 Windows 客户端的路由：10.1.0.0/16、10.2.0.0/16、10.3.0.0/16、192.168.0.0/24
 
-### <a name="access"></a>Access
+### <a name="access"></a>访问
 
 * Windows 客户端可以访问 VNet1、VNet2 和 VNet3，但必须手动添加 VNet2 和 VNet3。
 
@@ -147,7 +140,7 @@ Azure 当前支持两种远程访问协议：IKEv2 和 SSTP。 IKEv2 可用于�
 
 在此示例中，点到站点 VPN 网关连接适用于 VNet1。 VNet1 不与其他任何虚拟网络连接/对等互连，但通过未运行 BGP 的站点到站点 VPN 连接连接到本地站点。
 
-Windows 客户端可以访问 VNet1 和其他分支机构 (Site1)，但必须将到 Site1 的路由手动添加到客户端。 非 Windows 客户端可以访问 VNet1 以及本地 Site1。
+Windows 客户端和非 Windows 客户端只能访问 VNet1。
 
 ![VNet 和分支机构的路由](./media/vpn-gateway-about-point-to-site-routing/5.jpg "routing with a VNet and a branch office")
 
@@ -161,9 +154,9 @@ Windows 客户端可以访问 VNet1 和其他分支机构 (Site1)，但必须将
 
 * 已添加到 Windows 客户端的路由：10.1.0.0/16、192.168.0.0/24
 
-* 已添加到非 Windows 客户端的路由：10.1.0.0/16、10.101.0.0/16、192.168.0.0/24
+* 已添加到非 Windows 客户端的路由：10.1.0.0/16、192.168.0.0/24
 
-### <a name="access"></a>Access
+### <a name="access"></a>访问
 
 * Windows 客户端只能访问 VNet1
 
@@ -189,7 +182,7 @@ Windows 客户端可以访问 VNet 和其他分支机构 (Site1)，但必须将�
 
 * 已添加到非 Windows 客户端的路由：10.1.0.0/16、10.101.0.0/16、192.168.0.0/24
 
-### <a name="access"></a>Access
+### <a name="access"></a>访问
 
 * Windows 客户端可以访问 VNet1 和 Site1，但必须手动添加到 Site1 的路由。
 
@@ -220,7 +213,7 @@ Windows 客户端可以访问 VNet 和其他分支机构 (Site1)，但必须将�
 
 * 已添加到非 Windows 客户端的路由：10.1.0.0/16、10.2.0.0/16、10.3.0.0/16、10.101.0.0/16、192.168.0.0/24
 
-### <a name="access"></a>Access
+### <a name="access"></a>访问
 
 * Windows 客户端只能访问 VNet1
 
@@ -228,7 +221,7 @@ Windows 客户端可以访问 VNet 和其他分支机构 (Site1)，但必须将�
 
 ## <a name="multivnets2sbranchbgp"></a>使用 S2S 和分支机构连接的多个 VNet (BGP)
 
-在此示例中，点到站点 VPN 网关连接适用于 VNet1。 VNet1 使用站点到站点 VPN 连接连接到 VNet2。 VNet2 使用站点到站点 VPN 连接连接到 VNet3。 VNet1 和 VNet3 网络之间没有直接的对等互连或站点到站点 VPN 隧道。 VNet3 使用站点到站点 VPN 连接连接到分支机构 (Site1)。 所有 VPN 连接均未运行 BGP。 所有 VPN 连接均运行 BGP。
+在此示例中，点到站点 VPN 网关连接适用于 VNet1。 VNet1 使用站点到站点 VPN 连接连接到 VNet2。 VNet2 使用站点到站点 VPN 连接连接到 VNet3。 VNet1 和 VNet3 网络之间没有直接的对等互连或站点到站点 VPN 隧道。 VNet3 使用站点到站点 VPN 连接连接到分支机构 (Site1)。 所有 VPN 连接均运行 BGP。
 
 使用 Windows 的客户端可以访问使用站点到站点 VPN 连接连接的 VNet 和站点，但必须将到 VNet2、VNet3 和 Site1 的路由手动添加到该客户端。 非 Windows 客户端可以访问使用站点到站点 VPN 连接连接的 VNet 和站点，而无需任何手动干预。 访问权限是可传递的，并且客户端可访问所有已连接 VNet 和站点（本地）中的资源。
 
@@ -250,7 +243,7 @@ Windows 客户端可以访问 VNet 和其他分支机构 (Site1)，但必须将�
 
 * 已添加到非 Windows 客户端的路由：10.1.0.0/16、10.2.0.0/16、10.3.0.0/16、10.101.0.0/16、192.168.0.0/24
 
-### <a name="access"></a>Access
+### <a name="access"></a>访问
 
 * Windows 客户端可以访问 VNet1、VNet2、VNet3 和 Site1，但必须将到 VNet2、VNet3 和 Site1 的路由手动添加到客户端。
 

@@ -1,31 +1,27 @@
 ---
-title: 使用 Python 组件的 Apache Storm - Azure HDInsight | Microsoft Docs
-description: 了解如何创建使用 Python 组件的 Apache Storm 拓扑。
-services: hdinsight
-documentationcenter: ''
-author: Blackmist
-manager: cgronlun
-editor: cgronlun
+title: 通过 Python 组件 Apache Storm-Azure HDInsight
+description: 了解如何创建在 Azure HDInsight 中使用 Python 组件的 Apache Storm 拓扑
+author: hrasheed-msft
+ms.reviewer: jasonh
 keywords: apache storm python
-ms.assetid: edd0ec4f-664d-4266-910c-6ecc94172ad8
 ms.service: hdinsight
 ms.custom: hdinsightactive,hdiseo17may2017
-ms.devlang: python
 ms.topic: conceptual
 ms.date: 04/30/2018
-ms.author: larryfr
-ms.openlocfilehash: 0a8930da2d44714573155477d791dd9cb78d872a
-ms.sourcegitcommit: 6e43006c88d5e1b9461e65a73b8888340077e8a2
-ms.translationtype: HT
+ms.author: hrasheed
+ms.openlocfilehash: a15506632e90edae235c3d1889603ca4997a3398
+ms.sourcegitcommit: fa4852cca8644b14ce935674861363613cf4bfdf
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/01/2018
+ms.lasthandoff: 09/09/2019
+ms.locfileid: "70813898"
 ---
 # <a name="develop-apache-storm-topologies-using-python-on-hdinsight"></a>在 HDInsight 上使用 Python 开发 Apache Storm 拓扑
 
-了解如何创建使用 Python 组件的 Apache Storm 拓扑。 Apache Storm 支持多种语言，甚至允许将几种语言的组件组合到一个拓扑中。 借助 Flux 框架（通过 Storm 0.10.0 引入），可以轻松地创建使用 Python 组件的解决方案。
+了解如何创建使用 Python 组件的 [Apache Storm](https://storm.apache.org/) 拓扑。 Apache Storm 支持多种语言，甚至允许将几种语言的组件组合到一个拓扑中。 借助 [Flux](https://storm.apache.org/releases/current/flux.html) 框架（通过 Storm 0.10.0 引入），可以轻松地创建使用 Python 组件的解决方案。
 
-> [!IMPORTANT]
-> 本文档中的信息已使用 Storm on HDInsight 3.6 进行测试。 Linux 是 HDInsight 3.4 或更高版本上使用的唯一操作系统。 有关详细信息，请参阅 [HDInsight 在 Windows 上停用](../hdinsight-component-versioning.md#hdinsight-windows-retirement)。
+> [!IMPORTANT]  
+> 本文档中的信息已使用 Storm on HDInsight 3.6 进行测试。 
 
 [https://github.com/Azure-Samples/hdinsight-python-storm-wordcount](https://github.com/Azure-Samples/hdinsight-python-storm-wordcount) 上提供了此项目的代码。
 
@@ -35,9 +31,9 @@ ms.lasthandoff: 05/01/2018
 
 * Java JDK 1.8 或更高版本
 
-* Maven 3
+* [Apache Maven 3](https://maven.apache.org/download.cgi)
 
-* （可选）本地 Storm 开发环境。 仅当想要在本地运行拓扑时，才需要本地 Storm 环境。 有关详细信息，请参阅[设置开发环境](http://storm.apache.org/releases/1.1.0/Setting-up-development-environment.html)。
+* （可选）本地 Storm 开发环境。 仅当想要在本地运行拓扑时，才需要本地 Storm 环境。 有关详细信息，请参阅[设置开发环境](http://storm.apache.org/releases/current/Setting-up-development-environment.html)。
 
 ## <a name="storm-multi-language-support"></a>Storm 多语言支持
 
@@ -95,8 +91,8 @@ mvn clean compile package
 storm jar WordCount-1.0-SNAPSHOT.jar org.apache.storm.flux.Flux -l -R /topology.yaml
 ```
 
-> [!NOTE]
-> 此命令要求提供本地 Storm 开发环境。 有关详细信息，请参阅[设置开发环境](http://storm.apache.org/releases/1.0.1/Setting-up-development-environment.html)
+> [!NOTE]  
+> 此命令要求提供本地 Storm 开发环境。 有关详细信息，请参阅[设置开发环境](https://storm.apache.org/releases/current/Setting-up-development-environment.html)
 
 拓扑启动后，它会向本地控制台发出类似如下文本的信息：
 
@@ -138,9 +134,9 @@ storm jar WordCount-1.0-SNAPSHOT.jar org.apache.storm.flux.Flux -l -R /topology.
     storm jar WordCount-1.0-SNAPSHOT.jar org.apache.storm.flux.Flux -r -R /topology.yaml
     ```
 
-3. Storm UI 可以用于查看群集上的拓扑。 Storm UI 位于 https://mycluster.azurehdinsight.net/stormui。 将 `mycluster` 替换为群集名称。
+3. Storm UI 可以用于查看群集上的拓扑。 Storm UI 位于 https://mycluster.azurehdinsight.net/stormui 。 将 `mycluster` 替换为群集名称。
 
-> [!NOTE]
+> [!NOTE]  
 > 启动后，Storm 拓扑会一直运行，直到被停止。 若要停止拓扑，可使用以下方法之一：
 >
 > * 从命令行运行 `storm kill TOPOLOGYNAME` 命令
@@ -151,5 +147,4 @@ storm jar WordCount-1.0-SNAPSHOT.jar org.apache.storm.flux.Flux -l -R /topology.
 
 请参阅以下文档，了解配合使用 Python 和 HDInsight 的其他方式：
 
-* [如何使用 Python 流式处理 MapReduce 作业](../hadoop/apache-hadoop-streaming-python.md)
-* [如何在 Pig 和 Hive 中使用 Python 用户定义函数 (UDF) ](../hadoop/python-udf-hdinsight.md)
+* [如何在 Apache Pig 和 Apache Hive 中使用 Python 用户定义函数 (UDF)](../hadoop/python-udf-hdinsight.md)

@@ -1,24 +1,19 @@
 ---
-title: 排查在 Azure 备份中备份文件和文件夹时速度缓慢的问题 | Microsoft Docs
+title: 排查在 Azure 备份中备份文件和文件夹时速度缓慢的问题
 description: 提供了故障排除指导，帮助你诊断 Azure 备份性能问题的原因
-services: backup
-documentationcenter: ''
-author: genlin
-manager: cshepard
-editor: ''
-ms.assetid: e379180a-db13-4e0c-90e4-28e5dd6f5b14
+ms.reviewer: saurse
+author: dcurwin
+manager: carmonm
 ms.service: backup
-ms.workload: storage-backup-recovery
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: troubleshooting
-ms.date: 05/11/2018
-ms.author: genli
-ms.openlocfilehash: 6ed1e2d7bfc08afe135cb85995fdebaa30202c23
-ms.sourcegitcommit: c52123364e2ba086722bc860f2972642115316ef
-ms.translationtype: HT
+ms.date: 07/05/2019
+ms.author: dacurwin
+ms.openlocfilehash: 16a8eb4eea4e5e1e3bb49049c49d73adb99eef55
+ms.sourcegitcommit: d585cdda2afcf729ed943cfd170b0b361e615fae
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/11/2018
+ms.lasthandoff: 07/31/2019
+ms.locfileid: "68688619"
 ---
 # <a name="troubleshoot-slow-backup-of-files-and-folders-in-azure-backup"></a>排查在 Azure 备份中备份文件和文件夹时速度缓慢的问题
 本文提供故障排除指导，帮助你诊断使用 Azure 备份来备份文件和文件夹时备份性能缓慢的原因。 使用 Azure 备份代理备份文件时，备份过程花费的时间可能比预期要长。 这种延迟可能由以下一个或多个原因所造成：
@@ -28,7 +23,7 @@ ms.lasthandoff: 05/11/2018
 * [备份代理在 Azure 虚拟机 (VM) 上运行。](#cause3)  
 * [正在备份大量的（数百万个）文件。](#cause4)
 
-在开始排查问题之前，建议下载并安装[最新的 Azure 备份代理](http://aka.ms/azurebackup_agent)。 我们经常更新备份代理，以修复各种问题、添加功能和改善性能。
+在开始排查问题之前，建议下载并安装[最新的 Azure 备份代理](https://aka.ms/azurebackup_agent)。 我们经常更新备份代理，以修复各种问题、添加功能和改善性能。
 
 此外，我们强烈建议查看 [Azure Backup service FAQ](backup-azure-backup-faq.md)（Azure 备份服务常见问题），确保所遇到的问题并非任何常见配置问题。
 
@@ -86,4 +81,4 @@ Windows 提供了名为[性能监视器](https://technet.microsoft.com/magazine/
 以下迹象可帮助你了解瓶颈，并相应地采取后续步骤：
 
 * **UI 显示数据传输进度**。 数据仍在传输。 网络带宽或数据大小可能导致延迟。
-* **UI 未显示数据传输进度**。 打开位于 C:\Microsoft Azure Recovery Services Agent\Temp 中的日志，并检查日志中的 FileProvider::EndData 条目。 此条目表示数据传输已完成，正在进行目录操作。 请不要取消备份作业， 而是再等待片刻，让目录操作完成。 如果问题持续出现，请联系 [Azure 支持部门](https://portal.azure.com/#create/Microsoft.Support)。
+* **UI 未显示数据传输进度**。 打开位于 C:\Program Files\Microsoft Azure Recovery Services Agent\Temp 中的日志，并检查日志中的 FileProvider::EndData 条目。 此条目表示数据传输已完成，正在进行目录操作。 请不要取消备份作业， 而是再等待片刻，让目录操作完成。 如果问题持续出现，请联系 [Azure 支持部门](https://portal.azure.com/#create/Microsoft.Support)。

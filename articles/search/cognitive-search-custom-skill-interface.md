@@ -1,29 +1,38 @@
 ---
-title: 认知搜索管道中自定义技能的接口定义（Azure 搜索）| Microsoft Docs
+title: 认知搜索中自定义技能的接口定义 - Azure 搜索
 description: Azure 搜索的认知搜索管道中的 web-api 自定义技能的自定义数据提取接口。
-manager: pablocas
+manager: nitinme
 author: luiscabrer
+services: search
 ms.service: search
-ms.devlang: NA
 ms.topic: conceptual
-ms.date: 05/01/2018
+ms.date: 05/02/2019
 ms.author: luisca
-ms.openlocfilehash: f415eb6080a02d25fc47c40b2719544d2ea99c5b
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: b5529babfae37fa0d9f4de46018bb3b107ce4eae
+ms.sourcegitcommit: 3f22ae300425fb30be47992c7e46f0abc2e68478
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
-ms.locfileid: "33786846"
+ms.lasthandoff: 09/25/2019
+ms.locfileid: "71265828"
 ---
 # <a name="how-to-add-a-custom-skill-to-a-cognitive-search-pipeline"></a>如何将自定义技能添加到认知搜索管道
 
-在本文中，将了解如何将自定义技能添加到认知搜索管道。 Azure 搜索中的[认知搜索索引管道](cognitive-search-concept-intro.md)可以从[预定义技能](cognitive-search-predefined-skills.md)和自己创建并添加到管道中的自定义技能进行装配。
+Azure 搜索中的[认知搜索索引管道](cognitive-search-concept-intro.md)可以从[预定义技能](cognitive-search-predefined-skills.md)和自己创建并添加到管道中的[自定义技能](cognitive-search-custom-skill-web-api.md)进行装配。 本文介绍如何创建一个暴露接口的自定义技能，从而允许其包含在认知搜索管道中。 
 
-通过生成自定义技能，可插入对内容唯一的转换。 自定义技能独立执行，可应用所需的任何扩充步骤。 例如，可定义特定于域的自定义实体，生成自定义分类模型来区分商业和金融合同或文档，或者添加语音识别技能来深入了解相关内容的音频文件。 有关分步示例，请参阅[示例：创建自定义技能](cognitive-search-create-custom-skill-example.md)。
+通过生成自定义技能，可插入对内容唯一的转换。 自定义技能独立执行，可应用所需的任何扩充步骤。 例如，可定义特定于域的自定义实体，生成自定义分类模型来区分商业和金融合同或文档，或者添加语音识别技能来深入了解相关内容的音频文件。 有关分步示例，请参阅[示例：为认知搜索](cognitive-search-create-custom-skill-example.md)创建自定义技能。
 
  无论需要哪种自定义功能，都有一个简单明了的接口，可将自定义技能与其余扩充管道相连接。 [技能组合](cognitive-search-defining-skillset.md)中包含的唯一需求是，能够以可在技能组合内作为整体使用的方式接受输入并发出输出。 本文的重点是扩充管道所需的输入和输出格式。
 
 ## <a name="web-api-custom-skill-interface"></a>Web API 自定义技能接口
+
+如果未在 30 秒的期限内返回响应，自定义 WebAPI 技能终结点将默认超时。 索引管道是同步的，如果未在该期限内收到响应，索引会生成超时错误。  通过设置 timeout 参数，可以将超时配置为最长230秒：
+
+```json
+        "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
+        "description": "This skill has a 230 second timeout",
+        "uri": "https://[your custom skill uri goes here]",
+        "timeout": "PT230S",
+```
 
 目前，与自定义技能交互的唯一机制是通过 Web API 接口。 Web API 需求必须满足本节中所述的要求。
 
@@ -145,7 +154,7 @@ Web API 必须接受要处理的一组记录。 每条记录都必须包含一�
 
 ## <a name="next-steps"></a>后续步骤
 
-+ [示例：为翻译文本 API 创建自定义技能](cognitive-search-create-custom-skill-example.md)
-+ [如何定义技能组合](cognitive-search-defining-skillset.md)
-+ [创建技能组合 (REST)](ref-create-skillset.md)
++ 示例：[创建认知搜索的自定义技能](cognitive-search-create-custom-skill-example.md)
++ [如何定义技能集](cognitive-search-defining-skillset.md)
++ [创建技能组合 (REST)](https://docs.microsoft.com/rest/api/searchservice/create-skillset)
 + [如何映射扩充的域](cognitive-search-output-field-mapping.md)

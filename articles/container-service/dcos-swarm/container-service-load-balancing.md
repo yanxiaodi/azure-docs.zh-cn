@@ -1,5 +1,5 @@
 ---
-title: Azure DC/OS 群集中的负载均衡容器
+title: （已弃用）Azure DC/OS 群集中的负载均衡容器
 description: 在 Azure 容器服务 DC/OS 群集中跨多容器进行负载均衡。
 services: container-service
 author: rgardler
@@ -9,13 +9,16 @@ ms.topic: tutorial
 ms.date: 06/02/2017
 ms.author: rogardle
 ms.custom: mvc
-ms.openlocfilehash: 62967636a4d80f72f731a666947d5d4d5e47f7e5
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.openlocfilehash: 1e4c978a8767154fb6a1f9a822cb0dd8d1b8796e
+ms.sourcegitcommit: 3102f886aa962842303c8753fe8fa5324a52834a
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 04/23/2019
+ms.locfileid: "66148881"
 ---
-# <a name="load-balance-containers-in-an-azure-container-service-dcos-cluster"></a>Azure 容器服务 DC/OS 群集中的负载均衡容器
+# <a name="deprecated-load-balance-containers-in-an-azure-container-service-dcos-cluster"></a>（已弃用）在 Azure 容器服务 DC/OS 群集中对容器进行负载均衡
+
+[!INCLUDE [ACS deprecation](../../../includes/container-service-deprecation.md)]
 
 本文将探讨如何使用 Marathon-LB 在 DC/OS 托管 Azure 容器服务中创建内部负载均衡器。 利用此配置可水平扩展应用程序。 还能通过将负载均衡器和应用程序容器分别放在公共群集和专用群集上来利用公共和专用代理群集。 在本教程中：
 
@@ -26,7 +29,7 @@ ms.lasthandoff: 04/28/2018
 
 需要 ACS DC/OS 群集来完成本教程中的步骤。 必要时，[此脚本示例](./../kubernetes/scripts/container-service-cli-deploy-dcos.md)可为你创建一个。
 
-本教程需要 Azure CLI 2.0.4 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。 
+本教程需要 Azure CLI 2.0.4 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。 
 
 [!INCLUDE [cloud-shell-try-it.md](../../../includes/cloud-shell-try-it.md)]
 
@@ -34,9 +37,9 @@ ms.lasthandoff: 04/28/2018
 
 Azure 容器服务 DC/OS 群集中存在两个负载均衡层： 
 
-Azure 负载均衡器提供公用入口点，最终用户将访问这些入口点。 Azure LB 由 Azure 容器服务自动提供，默认配置为公开端口 80、443 和 8080。
+Azure 负载均衡器提供公用入口点，最终用户将访问这些入口点  。 Azure LB 由 Azure 容器服务自动提供，默认配置为公开端口 80、443 和 8080。
 
-Marathon 负载均衡器 (marathon-lb) 将入站请求路由到容纳这些请求的容器实例。 当缩放提供 Web 服务的容器时，marathon-lb 会进行动态调整。 默认情况下，容器服务中不提供此负载均衡器，但它安装简单。
+Marathon 负载均衡器 (marathon-lb) 将入站请求路由到容纳这些请求的容器实例  。 当缩放提供 Web 服务的容器时，marathon-lb 会进行动态调整。 默认情况下，容器服务中不提供此负载均衡器，但它安装简单。
 
 ## <a name="configure-marathon-load-balancer"></a>配置 Marathon 负载均衡器
 
@@ -58,7 +61,7 @@ dcos package install marathon-lb
 az acs list --resource-group myResourceGroup --query "[0].agentPoolProfiles[0].fqdn" --output tsv
 ```
 
-然后，创建命名为“hello-web.json”的文件并将以下内容复制到其中。 `HAPROXY_0_VHOST` 标签需要更新为 DC/OS 代理的 FQDN。 
+然后，创建命名为“hello-web.json”的文件并将以下内容复制到其中  。 `HAPROXY_0_VHOST` 标签需要更新为 DC/OS 代理的 FQDN。 
 
 ```json
 {

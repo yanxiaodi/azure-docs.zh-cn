@@ -3,24 +3,25 @@ title: 以无提示方式安装 Azure AD 应用代理连接器 | Microsoft Docs
 description: 介绍如何执行 Azure AD 应用程序代理连接器的无提示安装，以提供本地应用的安全远程访问权限。
 services: active-directory
 documentationcenter: ''
-author: barbkess
-manager: mtillman
+author: msmimart
+manager: CelesteDG
 ms.service: active-directory
-ms.component: app-mgmt
+ms.subservice: app-mgmt
 ms.workload: identity
 ms.tgt_pltfrm: na
 ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 05/17/2018
-ms.author: barbkess
-ms.reviewer: harshja
+ms.author: mimart
+ms.reviewer: japere
 ms.custom: it-pro
-ms.openlocfilehash: 93036b3b473de8bb0026ec0759691c20ec38401a
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.collection: M365-identity-device-management
+ms.openlocfilehash: 0eb3e52dfd02bd7948f1b5ffd908ac1255118008
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
-ms.locfileid: "34353357"
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "65782922"
 ---
 # <a name="create-an-unattended-installation-script-for-the-azure-ad-application-proxy-connector"></a>为 Azure AD 应用程序代理连接器创建无人参与安装脚本
 
@@ -33,7 +34,7 @@ ms.locfileid: "34353357"
 * 将连接器安装与注册集成为另一个过程的一部分。
 * 创建包含连接器代码但未注册的标准服务器映像。
 
-要使[应用程序代理连接器](application-proxy-connectors.md)工作，必须使用全局管理员和密码将其注册到 Azure AD 目录。 通常在连接器安装期间出现弹出窗口对话框时输入此信息，但是可改为使用 PowerShell 自动执行此过程。
+有关[应用程序代理连接器](application-proxy-connectors.md)工作，它必须注册到 Azure AD 目录使用的应用程序管理员和密码。 通常在连接器安装期间出现弹出窗口对话框时输入此信息，但是可改为使用 PowerShell 自动执行此过程。
 
 无人参与安装包括两个步骤。 第一步，安装连接器。 第二步，向 Azure AD 注册连接器。 
 
@@ -52,13 +53,13 @@ ms.locfileid: "34353357"
 * 使用离线创建的令牌注册连接器
 
 ### <a name="register-the-connector-using-a-windows-powershell-credential-object"></a>使用 Windows PowerShell 凭据对象注册连接器
-1. 创建包含目录管理用户名和密码的 Windows PowerShell 凭据对象 `$cred`。 运行以下命令，替换 \<用户名\> 和 \<密码\>：
+1. 创建包含目录管理用户名和密码的 Windows PowerShell 凭据对象 `$cred`。 运行以下命令，替换 \<用户名\> 和 \<密码\>   ：
    
         $User = "<username>"
         $PlainPassword = '<password>'
         $SecurePassword = $PlainPassword | ConvertTo-SecureString -AsPlainText -Force
         $cred = New-Object –TypeName System.Management.Automation.PSCredential –ArgumentList $User, $SecurePassword
-2. 转到 C:\Program Files\Microsoft AAD App Proxy Connector 并使用创建的 `$cred` 对象运行以下脚本：
+2. 转到 C:\Program Files\Microsoft AAD App Proxy Connector 并使用创建的 `$cred` 对象运行以下脚本  ：
    
         .\RegisterConnector.ps1 -modulePath "C:\Program Files\Microsoft AAD App Proxy Connector\Modules\" -moduleName "AppProxyPSModule" -Authenticationmode Credentials -Usercredentials $cred -Feature ApplicationProxy
 
@@ -181,6 +182,6 @@ ms.locfileid: "34353357"
 ## <a name="next-steps"></a>后续步骤 
 * [使用自己的域名发布应用程序](application-proxy-configure-custom-domain.md)
 * [启用单一登录](application-proxy-configure-single-sign-on-with-kcd.md)
-* [解决使用应用程序代理时遇到的问题](../active-directory-application-proxy-troubleshoot.md)
+* [解决使用应用程序代理时遇到的问题](application-proxy-troubleshoot.md)
 
 

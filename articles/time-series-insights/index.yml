@@ -1,42 +1,131 @@
-### YamlMime:YamlDocument
-documentType: LandingData
-title: "Azure Time Series Insights 文档"
+### YamlMime:Landing
+title: Azure Time Series Insights 文档
+summary: 了解如何通过完全托管的事件处理在云中运行 Azure IoT 分析。 实时分析来自应用程序、传感器、设备等位置的数据。
 metadata:
-  title: "Azure Time Series Insights 文档 - 教程和 API 参考 | Microsoft Docs"
-  description: "了解如何使用完全托管的事件处理在云中运行 IoT 分析。 实时分析来自应用程序、传感器、设备等的数据。"
+  title: Azure 时序见解文档 - 快速入门、教程、API 参考 | Microsoft Docs
+  description: 了解如何通过完全托管的事件处理在云中运行 Azure IoT 分析。 实时分析来自应用程序、传感器、设备等位置的数据。
   services: time-series-insights
-  author: kfile
-  manager: jhubbard
   ms.service: time-series-insights
-  ms.tgt_pltfrm: na
-  ms.devlang: na
+  ms.subservice: time-series-insights
   ms.topic: landing-page
-  ms.date: 11/13/2017
-  ms.author: kfile
-  ms.openlocfilehash: 8ccc0fe8ca23fabb6d2cb697836e8f402dbaf672
-  ms.sourcegitcommit: 48fce90a4ec357d2fb89183141610789003993d2
+  ms.collection: collection
+  author: KingdomOfEnds
+  ms.author: v-adgera
+  ms.date: 09/04/2019
+  ms.openlocfilehash: 46cea77843b388f128885891dcdbb9b01b6cd2f5
+  ms.sourcegitcommit: 29880cf2e4ba9e441f7334c67c7e6a994df21cfe
   ms.translationtype: HT
   ms.contentlocale: zh-CN
-  ms.lasthandoff: 01/12/2018
-abstract:
-  description: "了解如何设置时序见解环境，以及如何浏览和分析 IoT 解决方案或所连接对象的时序数据。 文档介绍了先决条件、操作方法、API 参考和其他文档，可帮助你在几分钟内入门。"
-sections:
-- title: "5 分钟快速入门"
-  items:
-  - type: paragraph
-    text: "了解如何部署 Log Analytics，并配置从 Azure、其他云提供程序和本地资源收集数据。"
-  - type: list
-    style: icon48
-    items:
-    - image:
-        src: https://docs.microsoft.com/azure/time-series-insights/media/index/time-series-insights.svg
-      text: "探索 Azure 时序见解"
-      href: /azure/time-series-insights/time-series-quickstart
-- title: "引用"
-  items:
-  - type: list
-    style: cards
-    className: cardsD
-    items:
-    - title: API
-      html: "<p><a href=\"/rest/api/time-series-insights-management\">资源管理 API</a></p>   <p><a href=\"/rest/api/time-series-insights/time-series-insights-reference-queryapi\">查询 API</a></p><p><a href=\"/rest/api/time-series-insights/time-series-insights-reference-query-syntax\">查询语法</a></p>"
+  ms.lasthandoff: 09/26/2019
+  ms.locfileid: "71289159"
+landingContent:
+- title: 关于 Azure 时序见解
+  linkLists:
+  - linkListType: overview
+    links:
+    - text: 什么是 Azure 时序见解预览版？
+      url: time-series-insights-update-overview.md
+    - text: 关于 Azure 时序见解正式发布版
+      url: time-series-insights-overview.md
+  - linkListType: video
+    links:
+    - text: 适用于 IoT 应用的时序见解。 (13:31)
+      url: https://channel9.msdn.com/Shows/Internet-of-Things-Show/Azure-Time-Series-Insights-e2e-solution-for-industrial-IoT-analytics
+- title: 预览版入门
+  linkLists:
+  - linkListType: quickstart
+    links:
+    - text: 探索 Azure 时序见解预览版
+      url: time-series-insights-update-quickstart.md
+  - linkListType: tutorial
+    links:
+    - text: Azure 时序见解预览版教程
+      url: time-series-insights-update-create-environment.md
+    - text: 创建单页 Web 应用
+      url: tutorial-create-tsi-sample-spa.md
+    - text: 时序见解 JavaScript 客户端库
+      url: tutorial-explore-js-client-lib.md
+  - linkListType: how-to-guide
+    links:
+    - text: 预配和管理
+      url: time-series-insights-update-how-to-manage.md
+  - linkListType: concept
+    links:
+    - text: 在时序见解资源管理器预览版中将数据可视化
+      url: time-series-insights-update-explorer.md
+- title: 规划和准备（预览版）
+  linkLists:
+  - linkListType: deploy
+    links:
+    - text: 连接到事件中心
+      url: time-series-insights-how-to-add-an-event-source-eventhub.md
+    - text: 连接到 IoT 中心
+      url: time-series-insights-how-to-add-an-event-source-iothub.md
+    - text: 规划环境
+      url: time-series-insights-update-plan.md
+    - text: 数据存储和入口
+      url: time-series-insights-update-storage-ingress.md
+  - linkListType: how-to-guide
+    links:
+    - text: 授予数据访问权限
+      url: time-series-insights-data-access.md
+    - text: 用于查询的形状 JSON
+      url: time-series-insights-update-how-to-shape-events.md
+  - linkListType: concept
+    links:
+    - text: 时序模型
+      url: time-series-insights-update-tsm.md
+- title: 正式发布版入门
+  linkLists:
+  - linkListType: quickstart
+    links:
+    - text: 浏览 Azure 时序见解 GA
+      url: time-series-quickstart.md
+  - linkListType: tutorial
+    links:
+    - text: 创建时序见解环境
+      url: tutorial-create-populate-tsi-environment.md
+    - text: 创建单页 Web 应用
+      url: tutorial-create-tsi-sample-spa.md
+    - text: 时序见解 JavaScript 客户端库
+      url: tutorial-explore-js-client-lib.md
+  - linkListType: how-to-guide
+    links:
+    - text: 创建环境
+      url: time-series-insights-get-started.md
+  - linkListType: concept
+    links:
+    - text: 在时序见解资源管理器中将数据可视化
+      url: time-series-insights-explorer.md
+- title: 规划和准备（正式发布版）
+  linkLists:
+  - linkListType: deploy
+    links:
+    - text: 连接到事件中心
+      url: time-series-insights-how-to-add-an-event-source-eventhub.md
+    - text: 连接到 IoT 中心
+      url: time-series-insights-how-to-add-an-event-source-iothub.md
+    - text: 规划环境
+      url: time-series-insights-environment-planning.md
+    - text: 缩放环境
+      url: time-series-insights-how-to-scale-your-environment.md
+  - linkListType: how-to-guide
+    links:
+    - text: 授予数据访问权限
+      url: time-series-insights-data-access.md
+    - text: 用于查询的形状 JSON
+      url: how-to-shape-query-json.md
+    - text: 发送事件
+      url: time-series-insights-send-events.md
+- title: API 参考
+  linkLists:
+  - linkListType: reference
+    links:
+    - text: Azure Time Series Insights
+      url: /rest/api/time-series-insights/
+    - text: Azure 时序见解预览版
+      url: /rest/api/time-series-insights/preview
+    - text: Azure 时序见解 GA
+      url: /rest/api/time-series-insights/ga
+    - text: JavaScript 客户端 SDK
+      url: https://github.com/microsoft/tsiclient/blob/master/docs/API.md

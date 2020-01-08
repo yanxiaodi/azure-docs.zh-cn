@@ -1,30 +1,30 @@
 ---
-title: 使用 Azure CLI 1.0 创建完整的 Linux 环境 | Microsoft 文档
-description: 使用 Azure CLI 1.0 从头开始创建存储、Linux VM、虚拟网络和子网、负载均衡器、NIC、公共 IP 和网络安全组。
+title: 使用 Azure 经典 CLI 创建完整的 Linux 环境 | Microsoft Docs
+description: 使用 Azure 经典 CLI 从头开始创建存储、Linux VM、虚拟网络和子网、负载均衡器、NIC、公共 IP 和网络安全组。
 services: virtual-machines-linux
 documentationcenter: virtual-machines
-author: iainfoulds
-manager: jeconnoc
+author: cynthn
+manager: gwallace
 editor: ''
 tags: azure-resource-manager
 ms.assetid: 4ba4060b-ce95-4747-a735-1d7c68597a1a
 ms.service: virtual-machines-linux
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-linux
 ms.workload: infrastructure
 ms.date: 02/09/2017
-ms.author: iainfou
-ms.openlocfilehash: 4a43e138d3497e01fe9e0e5c55a4a66adac767c6
-ms.sourcegitcommit: 5b2ac9e6d8539c11ab0891b686b8afa12441a8f3
-ms.translationtype: HT
+ms.author: cynthn
+ms.openlocfilehash: aaf91aa81be5fc4c5944dde804798a61ceffc5a6
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70083718"
 ---
-# <a name="create-a-complete-linux-environment-with-the-azure-cli-10"></a>使用 Azure CLI 1.0 创建完整的 Linux 环境
+# <a name="create-a-complete-linux-environment-with-the-azure-classic-cli"></a>使用 Azure 经典 CLI 创建完整的 Linux 环境
 在本文中，我们将构建一个简单网络，其中包含一个负载均衡器，以及一对可用于开发和简单计算的 VM。 将以逐条命令的方式完成整个过程，直到创建两个可以从 Internet 上的任何位置连接的有效且安全的 Linux VM。 然后，便可以继续构建更复杂的网络和环境。
 
-在此过程中，你将了解 Resource Manager 部署模型提供的依赖性层次结构及其提供的功能。 明白系统是如何构建的以后，即可使用 [Azure 资源管理器模板](../../resource-group-authoring-templates.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)更快速地重新构建系统。 此外，在了解环境的部件如何彼此配合运行后，可以更轻松地创建模板来将它们自动化。
+在此过程中，你将了解 Resource Manager 部署模型提供的依赖性层次结构及其提供的功能。 明白系统是如何构建的以后，即可使用 [Azure 资源管理器模板](../../resource-group-authoring-templates.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)更快速地重新构建系统。 此外，了解环境的各个部分如何彼此配合运行后，可以更轻松创建模板以实现自动化。
 
 该环境包含：
 
@@ -32,20 +32,20 @@ ms.lasthandoff: 04/06/2018
 * 端口 80 上有一个带负载均衡规则的负载均衡器。
 * 网络安全组 (NSG) 规则，阻止 VM 接受不需要的流量。
 
-若要创建此自定义环境，需要在 Resource Manager 模式 (`azure config mode arm`) 下安装最新的 [Azure CLI 1.0](../../cli-install-nodejs.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)。 此外，还需要一个 JSON 分析工具。 本示例使用 [jq](https://stedolan.github.io/jq/)。
+若要创建此自定义环境，需要在资源管理器模式 (`azure config mode arm`) 下安装最新的 [Azure 经典 CLI](../../cli-install-nodejs.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)。 此外，还需要一个 JSON 分析工具。 本示例使用 [jq](https://stedolan.github.io/jq/)。
 
 
 ## <a name="cli-versions-to-complete-the-task"></a>用于完成任务的 CLI 版本
 可以使用以下 CLI 版本之一完成任务：
 
-- [Azure CLI 1.0](#quick-commands) – 用于经典部署模型和资源管理部署模型（本文）的 CLI
-- [Azure CLI 2.0](create-cli-complete.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json) - 适用于资源管理部署模型的下一代 CLI
+- [Azure 经典 CLI](#quick-commands) – 用于经典部署模型和资源管理部署模型（本文）的 CLI
+- [Azure CLI](create-cli-complete.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json) - 适用于资源管理部署模型的下一代 CLI
 
 
 ## <a name="quick-commands"></a>快速命令
 如果需要快速完成任务，请参阅以下部分，其中详细说明了用于将 VM 上载到 Azure 的基本命令。 本文档的余下部分（从[此处](#detailed-walkthrough)开始）提供了每个步骤的更详细信息和上下文。
 
-确保已登录 [Azure CLI 1.0](../../cli-install-nodejs.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json) 并使用 Resource Manager 模式：
+确保已登录 [Azure 经典 CLI](../../cli-install-nodejs.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json) 并使用资源管理器模式：
 
 ```azurecli
 azure config mode arm
@@ -155,9 +155,9 @@ azure network lb probe create -g myResourceGroup -l myLoadBalancer \
 azure network lb show -g myResourceGroup -n myLoadBalancer --json | jq '.'
 ```
 
-创建第一个网络接口卡 (NIC)。 将 `#####-###-###` 部分替换为你自己的 Azure 订阅 ID。 检查所创建的资源时，订阅 ID 不会记录在 **jq** 的输出中。 还可以使用 `azure account list` 查看你的订阅 ID。
+创建第一个网络接口卡 (NIC)。 将 `#####-###-###` 部分替换为自己的 Azure 订阅 ID。 检查所创建的资源时，订阅 ID 不会记录在 **jq** 的输出中。 也可以使用 `azure account list`查看订阅 ID。
 
-以下示例创建一个名为 `myNic1` 的 NIC：
+以下示例创建名为 `myNic1`的 NIC：
 
 ```azurecli
 azure network nic create -g myResourceGroup -l westeurope \
@@ -166,7 +166,7 @@ azure network nic create -g myResourceGroup -l westeurope \
   -e "/subscriptions/########-####-####-####-############/resourceGroups/myResourceGroup/providers/Microsoft.Network/loadBalancers/myLoadBalancer/inboundNatRules/myLoadBalancerRuleSSH1"
 ```
 
-创建第二个 NIC。 以下示例创建一个名为 `myNic2` 的 NIC：
+创建第二个 NIC。 以下示例创建名为 `myNic2`的 NIC：
 
 ```azurecli
 azure network nic create -g myResourceGroup -l westeurope \
@@ -175,7 +175,7 @@ azure network nic create -g myResourceGroup -l westeurope \
   -e "/subscriptions/########-####-####-####-############/resourceGroups/myResourceGroup/providers/Microsoft.Network/loadBalancers/myLoadBalancer/inboundNatRules/myLoadBalancerRuleSSH2"
 ```
 
-使用 JSON 分析器验证两个 NIC：
+使用 JSON 分析器验证两个 NIC。
 
 ```azurecli
 azure network nic show myResourceGroup myNic1 --json | jq '.'
@@ -189,7 +189,7 @@ azure network nsg create -g myResourceGroup -l westeurope \
   -n myNetworkSecurityGroup
 ```
 
-为网络安全组添加两个入站规则。 以下示例创建两个规则（即 `myNetworkSecurityGroupRuleSSH` 和 `myNetworkSecurityGroupRuleHTTP`）：
+为网络安全组添加两个入站规则。 以下示例创建两个规则，分别名为 `myNetworkSecurityGroupRuleSSH` 和 `myNetworkSecurityGroupRuleHTTP`：
 
 ```azurecli
 azure network nsg rule create -p tcp -r inbound -y 1000 -u 22 -c allow \
@@ -269,7 +269,7 @@ azure group export myResourceGroup
 ## <a name="detailed-walkthrough"></a>详细演练
 下面的详细步骤说明构建环境时每条命令的作用。 了解这些概念有助于构建自己的自定义开发或生产环境。
 
-确保已登录 [Azure CLI 1.0](../../cli-install-nodejs.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json) 并使用 Resource Manager 模式：
+确保已登录 [Azure 经典 CLI](../../cli-install-nodejs.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json) 并使用资源管理器模式：
 
 ```azurecli
 azure config mode arm
@@ -301,7 +301,7 @@ info:    group create command OK
 ```
 
 ## <a name="create-a-storage-account"></a>创建存储帐户
-需要对 VM 磁盘和任何想要添加的额外数据磁盘使用存储帐户。 应该在创建资源组之后马上创建存储帐户。
+需要对 VM 磁盘和任何想要添加的额外数据磁盘使用存储帐户。 创建资源组后，应立即创建存储帐户。
 
 我们在此处使用 `azure storage account create` 命令，并传递帐户的位置、将要控制该帐户的资源组，以及所需的存储支持类型。 以下示例创建名为 `mystorageaccount` 的存储帐户：
 
@@ -796,7 +796,7 @@ info:    network lb rule create command OK
 ```
 
 ## <a name="create-a-load-balancer-health-probe"></a>创建负载均衡器运行状况探测
-运行状况探测定期检查受负载均衡器后面的 VM，以确保它们可以根据定义操作和响应请求。 否则，这些 VM 将从操作中删除，以确保不会将用户定向到这些 VM。 你可以针对运行状况探测定义自定义检查，以及间隔和超时值。 有关运行状况探测的详细信息，请参阅 [Load Balancer probes](../../load-balancer/load-balancer-custom-probe-overview.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)（负载均衡器探测）。 以下示例创建一个名为 `myHealthProbe` 的 TCP 运行状况探测：
+运行状况探测定期检查受负载均衡器后面的 VM，以确保它们可以根据定义操作和响应请求。 否则，会从操作中删除这些 VM，确保不会将用户定向到它们。 你可以针对运行状况探测定义自定义检查，以及间隔和超时值。 有关运行状况探测的详细信息，请参阅 [Load Balancer probes](../../load-balancer/load-balancer-custom-probe-overview.md?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)（负载均衡器探测）。 以下示例创建一个名为 `myHealthProbe` 的 TCP 运行状况探测：
 
 ```azurecli
 azure network lb probe create --resource-group myResourceGroup \
@@ -955,7 +955,7 @@ azure network lb show --resource-group myResourceGroup \
 ```
 
 ## <a name="create-an-nic-to-use-with-the-linux-vm"></a>创建用于 Linux VM 的 NIC
-由于可以将规则应用到 NIC 的使用上，因此能以编程方式使用 NIC。 可以创建多个规则。 在下面的 `azure network nic create` 命令中，要将 NIC 挂接到负载后端 IP 池，并与 NAT 规则关联以允许 SSH 流量。
+由于可以对 NIC 使用应用规则，因此能以编程方式使用 NIC。 可以创建多个规则。 在下面的 `azure network nic create` 命令中，要将 NIC 挂接到负载后端 IP 池，并与 NAT 规则关联以允许 SSH 流量。
 
 将 `#####-###-###` 部分替换为你自己的 Azure 订阅 ID。 检查所创建的资源时，订阅 ID 不会记录在 `jq` 的输出中。 还可以使用 `azure account list` 查看你的订阅 ID。
 
@@ -1053,7 +1053,7 @@ azure network nic create --resource-group myResourceGroup --location westeurope 
 ```
 
 ## <a name="create-a-network-security-group-and-rules"></a>创建网络安全组和规则
-现在，我们创建网络安全组和用于控制对 NIC 的访问的入站规则。 可将网络安全组应用到 NIC 或子网。 可以定义规则来控制出入 VM 的流量流。 以下示例创建名为 `myNetworkSecurityGroup` 的网络安全组：
+现在，我们创建网络安全组和用于控制对 NIC 的访问的入站规则。 可将网络安全组应用到 NIC 或子网。 定义用于控制传入和传出 VM 的流量流的规则。 以下示例创建名为 `myNetworkSecurityGroup` 的网络安全组：
 
 ```azurecli
 azure network nsg create --resource-group myResourceGroup --location westeurope \
@@ -1069,7 +1069,7 @@ azure network nsg rule create --resource-group myResourceGroup \
   --name myNetworkSecurityGroupRuleSSH
 ```
 
-现在，让我们为 NSG 添加入站规则以允许端口 80 上的入站连接（以支持 Web 流量）。 以下示例创建名为 `myNetworkSecurityGroupRuleHTTP` 的规则，以便在端口 80 上允许 TCP：
+现在，添加 NSG 的入站规则，允许端口 80 上的入站连接（以支持 Web 流量）。 以下示例创建名为 `myNetworkSecurityGroupRuleHTTP` 的规则，以便在端口 80 上允许 TCP：
 
 ```azurecli
 azure network nsg rule create --resource-group myResourceGroup \
@@ -1084,7 +1084,7 @@ azure network nsg rule create --resource-group myResourceGroup \
 >
 
 ## <a name="bind-to-the-nic"></a>绑定到 NIC
-将 NSG 绑定到 NIC。 需要将 NIC 与网络安全组相连接。 运行这两个命令，挂接两个 NIC：
+将 NSG 绑定到 NIC。 需要将 NIC 与网络安全组相连接。 运行以下两个命令来挂接两个 NIC：
 
 ```azurecli
 azure network nic set --resource-group myResourceGroup --name myNic1 \
@@ -1097,7 +1097,7 @@ azure network nic set --resource-group myResourceGroup --name myNic2 \
 ```
 
 ## <a name="create-an-availability-set"></a>创建可用性集
-可用性集有助于将 VM 分散到容错域和升级域。 让我们为 VM 创建可用性集。 以下示例创建一个名为 `myAvailabilitySet` 的可用性集：
+可用性集有助于将 VM 分散到容错域和升级域。 让我们为 VM 创建可用性集。 以下示例创建名为 `myAvailabilitySet`的可用性集：
 
 ```azurecli
 azure availset create --resource-group myResourceGroup --location westeurope
@@ -1179,7 +1179,7 @@ Welcome to Ubuntu 16.04.1 LTS (GNU/Linux 4.4.0-34-generic x86_64)
  * Support:        https://ubuntu.com/advantage
 
   Get cloud support with Ubuntu Advantage Cloud Guest:
-    http://www.ubuntu.com/business/services/cloud
+    https://www.ubuntu.com/business/services/cloud
 
 0 packages can be updated.
 0 updates are security updates.

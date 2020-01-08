@@ -1,26 +1,22 @@
 ---
-title: "将身份验证添加到自定义 API - Azure 逻辑应用 | Microsoft Docs"
-description: "通过逻辑应用为对自定义 API 的调用设置身份验证"
-author: ecfan
-manager: anneta
-editor: 
+title: 将身份验证添加到自定义 API - Azure 逻辑应用 | Microsoft Docs
+description: 通过 Azure 逻辑应用为调用自定义 API 设置身份验证
 services: logic-apps
-documentationcenter: 
-ms.assetid: 
 ms.service: logic-apps
-ms.workload: logic-apps
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.suite: integration
+author: ecfan
+ms.author: estfan
+ms.reviewer: klam, LADocs
 ms.topic: article
 ms.date: 09/22/2017
-ms.author: LADocs; estfan
-ms.openlocfilehash: 2528f4318d92bbfdc1008795876f0240a5e3e4f6
-ms.sourcegitcommit: f8437edf5de144b40aed00af5c52a20e35d10ba1
-ms.translationtype: HT
+ms.openlocfilehash: 555083235aff08476e82f0daa81203b66591f3cc
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 11/03/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66167304"
 ---
-# <a name="secure-calls-to-your-custom-apis-from-logic-apps"></a>通过逻辑应用保护对自定义 API 的调用
+# <a name="secure-calls-to-custom-apis-from-azure-logic-apps"></a>通过 Azure 逻辑应用保护对自定义 API 的调用
 
 要保护对 API 的调用，可通过 Azure 门户设置 Azure Active Directory (Azure AD) 身份验证，这样便无需更新代码。 或者，还可利用 API 代码要求并强制执行身份验证。
 
@@ -28,7 +24,7 @@ ms.lasthandoff: 11/03/2017
 
 通过以下方式可以保护对自定义 API 的调用：
 
-* [无需更改代码](#no-code)：通过 Azure 门户使用 [Azure Active Directory (Azure AD)](../active-directory/active-directory-whatis.md) 保护 API，以便无需更新代码或重新部署 API。
+* [无需更改代码](#no-code)：通过 Azure 门户使用 [Azure Active Directory (Azure AD)](../active-directory/fundamentals/active-directory-whatis.md) 保护 API，以便无需更新代码或重新部署 API。
 
   > [!NOTE]
   > 默认情况下，在 Azure 门户中开启的 Azure AD 身份验证不提供细化的授权。 例如，此身份验证将 API 锁定到特定租户，而不是特定用户或应用。 
@@ -98,17 +94,19 @@ ms.lasthandoff: 11/03/2017
 
 **在 PowerShell 中为逻辑应用创建应用程序标识**
 
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
+
 可使用 PowerShell 通过 Azure 资源管理器执行此任务。 在 PowerShell 中运行以下命令：
 
-1. `Switch-AzureMode AzureResourceManager`
+1. `Add-AzAccount`
 
-2. `Add-AzureAccount`
+2. `$SecurePassword = Read-Host -AsSecureString`（输入密码，然后按 Enter）
 
-3. `New-AzureADApplication -DisplayName "MyLogicAppID" -HomePage "http://mydomain.tld" -IdentifierUris "http://mydomain.tld" -Password "identity-password"`
+3. `New-AzADApplication -DisplayName "MyLogicAppID" -HomePage "http://mydomain.tld" -IdentifierUris "http://mydomain.tld" -Password $SecurePassword`
 
 4. 请务必复制所使用的“租户 ID”（Azure AD 租户的 GUID）、“应用程序 ID”和密码。
 
-有关详细信息，请了解如何[使用 PowerShell 创建服务主体以访问资源](../azure-resource-manager/resource-group-authenticate-service-principal.md)。
+有关详细信息，请了解如何[使用 PowerShell 创建服务主体以访问资源](../active-directory/develop/howto-authenticate-service-principal-powershell.md)。
 
 #### <a name="part-2-create-an-azure-ad-application-identity-for-your-web-app-or-api-app"></a>第 2 部分：为 Web 应用或 API 应用创建 Azure AD 应用程序标识
 
@@ -116,7 +114,7 @@ ms.lasthandoff: 11/03/2017
 
 **在 Azure 门户中为已部署的应用创建应用程序标识并开启身份验证**
 
-1. 在 [Azure 门户](https://portal.azure.com "https://portal.azure.com")中，找到并选择你的 Web 应用或 API 应用。 
+1. 在 [Azure 门户](https://portal.azure.com "https://portal.azure.com")中，找到并选择 Web 应用或 API 应用。 
 
 2. 在“设置”下，选择“身份验证/授权”。 在“应用服务身份验证”下，“开启”身份验证。 在“身份验证提供程序”下，选择“Azure Active Directory”。
 
@@ -190,16 +188,16 @@ ms.lasthandoff: 11/03/2017
 
 `{"tenant": "{tenant-ID}", "audience": "{client-ID-from-Part-2-web-app-or-API app}", "clientId": "{client-ID-from-Part-1-logic-app}", "secret": "{key-from-Part-1-logic-app}", "type": "ActiveDirectoryOAuth" }`
 
-| 元素 | 必选 | 说明 | 
+| 元素 | 需要 | 描述 | 
 | ------- | -------- | ----------- | 
-| tenant | 是 | Azure AD 租户的 GUID | 
-| audience | 是 | 想要访问的目标资源的 GUID - Web 应用或 API 应用的应用程序标识中的客户端 ID | 
-| clientId | 是 | 请求访问权限的客户端的 GUID - 逻辑应用的应用程序标识中的客户端 ID | 
-| secret | 是 | 请求访问令牌的客户端的应用程序标识中的密钥或密码 | 
-| type | 是 | 身份验证类型。 对于 ActiveDirectoryOAuth 身份验证，该值为 `ActiveDirectoryOAuth`。 | 
+| tenant | “是” | Azure AD 租户的 GUID | 
+| audience | “是” | 想要访问的目标资源的 GUID - Web 应用或 API 应用的应用程序标识中的客户端 ID | 
+| clientId | “是” | 请求访问权限的客户端的 GUID - 逻辑应用的应用程序标识中的客户端 ID | 
+| secret | “是” | 请求访问令牌的客户端的应用程序标识中的密钥或密码 | 
+| type | “是” | 身份验证类型。 对于 ActiveDirectoryOAuth 身份验证，该值为 `ActiveDirectoryOAuth`。 | 
 |||| 
 
-例如：
+例如:
 
 ``` json
 {
@@ -236,16 +234,16 @@ ms.lasthandoff: 11/03/2017
 
 `{"type": "clientcertificate", "password": "password", "pfx": "long-pfx-key"}`
 
-| 元素 | 必选 | 说明 | 
+| 元素 | 需要 | 描述 | 
 | ------- | -------- | ----------- | 
-| type | 是 | 身份验证类型。 对于 SSL 客户端证书，该值必须为 `ClientCertificate`。 | 
-| password | 是 | 用于访问客户端证书（PFX 文件）的密码 | 
-| pfx | 是 | 客户端证书（PFX 文件）的 base64 编码内容 | 
+| type | “是” | 身份验证类型。 对于 SSL 客户端证书，该值必须为 `ClientCertificate`。 | 
+| password | “是” | 用于访问客户端证书（PFX 文件）的密码 | 
+| pfx | “是” | 客户端证书（PFX 文件）的 base64 编码内容 | 
 |||| 
 
 <a name="basic"></a>
 
-#### <a name="basic-authentication"></a>基本身份验证
+#### <a name="basic-authentication"></a>基本验证
 
 若要验证从逻辑应用传入 Web 应用或 API 应用的请求，可以使用基本身份验证，如用户名和密码。 基本身份验证是一种常用模式，在用来生成你的 Web 应用或 API 应用的任何语言中都可以使用此身份验证。
 
@@ -253,11 +251,11 @@ ms.lasthandoff: 11/03/2017
 
 `{"type": "basic", "username": "username", "password": "password"}`。
 
-| 元素 | 必选 | 说明 | 
+| 元素 | 需要 | 描述 | 
 | ------- | -------- | ----------- | 
-| type | 是 | 要使用的身份验证类型。 对于基本身份验证，该值必须是 `Basic`。 | 
-| username | 是 | 要用于身份验证的用户名 | 
-| password | 是 | 要用于身份验证的密码 | 
+| type | “是” | 要使用的身份验证类型。 对于基本身份验证，该值必须是 `Basic`。 | 
+| username | “是” | 要用于身份验证的用户名 | 
+| password | “是” | 要用于身份验证的密码 | 
 |||| 
 
 <a name="azure-ad-code"></a>
@@ -270,7 +268,7 @@ ms.lasthandoff: 11/03/2017
 
 <!-- Going further, to implement this authentication entirely in your own code, 
 and not use the Azure portal, learn how to 
-[authenticate with on-premises Active Directory in your Azure app](../app-service/app-service-authentication-overview.md).
+[authenticate with on-premises Active Directory in your Azure app](../app-service/overview-authentication-authorization.md).
 
 To create an application identity for your logic app and use that identity to call your API, 
 you must follow the previous steps. -->

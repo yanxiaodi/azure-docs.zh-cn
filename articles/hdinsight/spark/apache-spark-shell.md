@@ -1,32 +1,27 @@
 ---
-title: 在 Azure HDInsight 中使用交互式 Spark Shell | Microsoft Docs
+title: 在 Azure HDInsight 中使用交互式 Spark Shell
 description: 交互式 Spark Shell 提供了一个读取执行打印进程，用于一次运行一个 Spark 命令并查看结果。
-services: hdinsight
-documentationcenter: ''
-tags: azure-portal
-author: maxluk
-manager: jhubbard
-editor: cgronlun
-ms.assetid: ''
 ms.service: hdinsight
+author: hrasheed-msft
+ms.author: hrasheed
+ms.reviewer: jasonh
 ms.custom: hdinsightactive
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/09/2018
-ms.author: maxluk
-ms.openlocfilehash: d2b65980516a7ae1857711f2e58d9cd0a8e8ec9a
-ms.sourcegitcommit: d78bcecd983ca2a7473fff23371c8cfed0d89627
-ms.translationtype: HT
+ms.openlocfilehash: 7aac2812787a7c14d99377754a4f85e699ef3f09
+ms.sourcegitcommit: a874064e903f845d755abffdb5eac4868b390de7
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/14/2018
+ms.lasthandoff: 07/24/2019
+ms.locfileid: "68441893"
 ---
-# <a name="run-spark-from-the-spark-shell"></a>从 Spark Shell 运行 Spark
+# <a name="run-apache-spark-from-the-spark-shell"></a>从 Spark Shell 运行 Apache Spark
 
-交互式 Spark Shell 提供了一个 REPL（读取执行打印循环）环境，用于一次运行一个 Spark 命令并查看结果。 此进程可用于开发和调试。 Spark 为其每个支持的语言（Scala、Python 和 R）提供了一个 shell。
+交互式 [Apache Spark](https://spark.apache.org/) Shell 提供了一个 REPL（读取执行打印循环）环境，用于一次运行一个 Spark 命令并查看结果。 此进程可用于开发和调试。 Spark 为其每个支持的语言都提供了一个 shell：Scala、Python 和 R。
 
-## <a name="get-to-a-spark-shell-with-ssh"></a>通过 SSH 访问 Spark Shell
+## <a name="get-to-an-apache-spark-shell-with-ssh"></a>通过 SSH 访问 Apache Spark Shell
 
-通过使用 SSH 连接到群集的主头节点访问 HDInsight 上的 Spark Shell：
+通过使用 SSH 连接到群集的主头节点访问 HDInsight 上的 Apache Spark Shell：
 
      ssh <sshusername>@<clustername>-ssh.azurehdinsight.net
 
@@ -44,7 +39,7 @@ ms.lasthandoff: 05/14/2018
 
 有关使用 SSH 连接到 HDInsight 的详细信息，请参阅[将 SSH 与 HDInsight 配合使用](../hdinsight-hadoop-linux-use-ssh-unix.md)。
 
-## <a name="run-a-spark-shell"></a>运行 Spark Shell
+## <a name="run-an-apache-spark-shell"></a>运行 Apache Spark Shell
 
 Spark 为 Scala (spark-shell)、Python (pyspark) 和 R (sparkR) 提供 shell。 在 HDInsight 群集头节点的 SSH 会话中，输入以下命令之一：
 
@@ -67,13 +62,12 @@ Spark Shell 命令（`spark-shell`、`pyspark` 或 `sparkR`）支持多个命令
 | 开关 | description | 示例 |
 | --- | --- | --- |
 | --master MASTER_URL | 指定主 URL。 在 HDInsight 中，此值始终为 `yarn`。 | `--master yarn`|
-| --jars JAR_LIST | 要包括在驱动程序和执行程序类路径中的本地 jar 的逗号分隔列表。 在 HDInsight 中，此列表包含 Azure 存储或 Data Lake Store 的默认文件系统路径。 | `--jars /path/to/examples.jar` |
+| --jars JAR_LIST | 要包括在驱动程序和执行程序类路径中的本地 jar 的逗号分隔列表。 在 HDInsight 中，此列表包含 Azure 存储或 Data Lake Storage 的默认文件系统路径。 | `--jars /path/to/examples.jar` |
 | --packages MAVEN_COORDS | 要包括在驱动程序和执行程序类路径中的 maven jar 坐标的逗号分隔列表。 依次搜索本地 maven 存储库、maven 中心存储库、使用 `--repositories` 指定的任何其他远程存储库。 坐标的格式为 *groupId*:*artifactId*:*version*。 | `--packages "com.microsoft.azure:azure-eventhubs:0.14.0"`|
 | --py-files LIST | 仅适用于 Python，要在 PYTHONPATH 上放置的 .zip、.egg 或 .py 文件的逗号分隔列表。 | `--pyfiles "samples.py"` |
 
 ## <a name="next-steps"></a>后续步骤
 
-- 有关概述，请参阅 [Azure HDInsight 上的 Spark 简介](apache-spark-overview.md)。
+- 有关概述，请参阅 [Azure HDInsight 上的 Apache Spark 简介](apache-spark-overview.md)。
 - 若要使用 Spark 群集和 SparkSQL，请参阅[在 Azure HDInsight 中创建 Apache Spark 群集](apache-spark-jupyter-spark-sql.md)。
-- 若要编写使用 Spark 处理流数据的应用程序，请参阅[什么是 Spark 结构化流式处理？](apache-spark-streaming-overview.md)。
-
+- 若要编写使用 Spark 处理流数据的应用程序，请参阅[什么是 Apache Spark 结构化流式处理？](apache-spark-streaming-overview.md)。

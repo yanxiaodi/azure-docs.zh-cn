@@ -1,12 +1,12 @@
 ---
-title: "创建 StorSimple 8000 系列支持包 | Microsoft Docs"
-description: "了解如何创建、解密和编辑 StorSimple 8000 系列设备支持包。"
+title: 创建 StorSimple 8000 系列支持包 | Microsoft Docs
+description: 了解如何创建、解密和编辑 StorSimple 8000 系列设备支持包。
 services: storsimple
-documentationcenter: 
+documentationcenter: ''
 author: alkohli
 manager: jeconnoc
-editor: 
-ms.assetid: 
+editor: ''
+ms.assetid: ''
 ms.service: storsimple
 ms.devlang: na
 ms.topic: article
@@ -14,11 +14,12 @@ ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 01/09/2018
 ms.author: alkohli
-ms.openlocfilehash: c83caae58e73d6f2d0fe086938e0bbc5cfdf80c4
-ms.sourcegitcommit: 9292e15fc80cc9df3e62731bafdcb0bb98c256e1
-ms.translationtype: HT
+ms.openlocfilehash: dfc2d8d763a1eb64a37af73e03992f2d948a6856
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/10/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61481819"
 ---
 # <a name="create-and-manage-a-support-package-for-storsimple-8000-series"></a>创建和管理 StorSimple 8000 系列支持包
 
@@ -50,7 +51,7 @@ StorSimple 支持包是一种易于使用的机制，用于收集所有相关日
    2. 在打开的对话框中，输入设备管理员密码。 默认密码为 _Password1_。
      
       ![“PowerShell 凭据”对话框](./media/storsimple-8000-create-manage-support-package/IC740962.png)
-   3. 选择“确定”。
+   3. 选择“确定”  。
    4. 在命令提示符处，输入：
      
       `Enter-PSSession $MS`
@@ -71,14 +72,14 @@ StorSimple 支持包是一种易于使用的机制，用于收集所有相关日
 
 可将以下参数用于 Export-HcsSupportPackage cmdlet。
 
-| 参数 | 必需/可选 | 说明 |
+| 参数 | 必需/可选 | 描述 |
 | --- | --- | --- |
-| `-Path` |必需 |用于提供在其中放置支持包的网络共享文件夹的位置。 |
-| `-EncryptionPassphrase` |必需 |用于提供一个密码，以便加密支持包。 |
+| `-Path` |必选 |用于提供在其中放置支持包的网络共享文件夹的位置。 |
+| `-EncryptionPassphrase` |需要 |用于提供一个密码，以便加密支持包。 |
 | `-Credential` |可选 |用于提供网络共享文件夹的访问凭据。 |
 | `-Force` |可选 |用于跳过加密密码确认步骤。 |
-| `-PackageTag` |可选 |用于在“路径”下指定一个目录，以便放置支持包。 默认值为 [设备名称]-[当前日期和时间:yyyy-MM-dd-HH-mm-ss]。 |
-| `-Scope` |可选 |指定为“群集”（默认值），以便为两个控制器创建支持包。 如果只需为当前控制器创建包，请指定“控制器”。 |
+| `-PackageTag` |可选 |用于在“路径”下指定一个目录，以便放置支持包。  默认值为 [设备名称]-[当前日期和时间:yyyy-MM-dd-HH-mm-ss]。 |
+| `-Scope` |可选 |指定为“群集”  （默认值），以便为两个控制器创建支持包。 如果只需为当前控制器创建包，请指定“控制器”。  |
 
 ## <a name="edit-a-support-package"></a>编辑支持包
 
@@ -92,7 +93,7 @@ StorSimple 支持包是一种易于使用的机制，用于收集所有相关日
 #### <a name="to-edit-a-support-package-in-windows-powershell-for-storsimple"></a>在 Windows PowerShell for StorSimple 中编辑支持包
 
 1. 如前所述生成支持包，详见：[在 Windows PowerShell for StorSimple 中创建支持包](#to-create-a-support-package-in-windows-powershell-for-storsimple)。
-2. [下载脚本](http://gallery.technet.microsoft.com/scriptcenter/Script-to-decrypt-a-a8d1ed65)到客户端本地。
+2. [下载脚本](https://gallery.technet.microsoft.com/scriptcenter/Script-to-decrypt-a-a8d1ed65)到客户端本地。
 3. 导入 Windows PowerShell 模块。 指定已将脚本下载到其中的本地文件夹的路径。 若要导入模块，请输入：
    
     `Import-module <Path to the folder that contains the Windows PowerShell script>`
@@ -120,7 +121,7 @@ StorSimple 支持包是一种易于使用的机制，用于收集所有相关日
         Supply values for the following parameters:EncryptionPassphrase: ****
 9. 记下新密码，当 Microsoft 支持部门要求提供密码时，即可将密码与之共享。
 
-### <a name="example-editing-files-in-a-support-package-on-a-password-protected-share"></a>示例：在受密码保护的共享中编辑支持包中的文件
+### <a name="example-editing-files-in-a-support-package-on-a-password-protected-share"></a>示例：编辑支持包中受密码保护共享上的文件
 
 以下示例介绍如何解密、编辑和重新加密支持包。
 

@@ -1,30 +1,21 @@
 ---
-title: "Azure 数据目录中支持的数据源 | Microsoft Docs"
-description: "本文列出当前支持的数据源的规范。"
-services: data-catalog
-documentationcenter: 
-author: steelanddata
-manager: jstevens
-editor: 
-tags: 
-ms.assetid: fd4345ca-2ed8-4c5e-9c4b-f954be2fc9f9
+title: Azure 数据目录中支持的数据源
+description: 本文列出了 Azure 数据目录当前支持的数据源的规格。
+author: JasonWHowell
+ms.author: jasonh
 ms.service: data-catalog
-ms.devlang: NA
-ms.topic: article
-ms.tgt_pltfrm: NA
-ms.workload: data-catalog
-ms.date: 01/18/2018
-ms.author: maroche
-ms.openlocfilehash: b76f3cc3d8538a50895f5be32a800cb469c81203
-ms.sourcegitcommit: be9a42d7b321304d9a33786ed8e2b9b972a5977e
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 08/01/2019
+ms.openlocfilehash: 8f148bfe08d5f7933857eb46cf0d13d4582da108
+ms.sourcegitcommit: 78ebf29ee6be84b415c558f43d34cbe1bcc0b38a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 01/19/2018
+ms.lasthandoff: 08/12/2019
+ms.locfileid: "68950277"
 ---
 # <a name="supported-data-sources-in-azure-data-catalog"></a>Azure 数据目录中支持的数据源
 
 要发布元数据，可使用公共 API、单击一次的注册工具或直接手动将信息输入到 Azure 数据目录 Web 门户。 下表汇总了目录当前支持的所有数据源以及每个数据源的发布功能。 还列出了外部数据工具（每个数据源都可从门户“open-in”体验启动它）。 第二个表包含每个数据源连接属性的详细技术规范。
-
 
 ## <a name="list-of-supported-data-sources"></a>受支持的数据源列表
 
@@ -38,7 +29,7 @@ ms.lasthandoff: 01/19/2018
        <td><b>说明</b></td>
     </tr>
     <tr>
-      <td>Azure Data Lake Store 目录</td>
+      <td>Azure Data Lake Store 目录 (仅第1代)</td>
       <td>✓</td>
       <td>✓</td>
       <td>✓</td>
@@ -46,7 +37,7 @@ ms.lasthandoff: 01/19/2018
       <td></td>
     </tr>
     <tr>
-      <td>Azure Data Lake Store 文件</td>
+      <td>Azure Data Lake Store 文件 (仅第1代)</td>
       <td>✓</td>
       <td>✓</td>
       <td>✓</td>
@@ -75,10 +66,8 @@ ms.lasthandoff: 01/19/2018
       <td>✓</td>
       <td>✓</td>
       <td>
-        <font size="2">
       </td>
       <td>
-        <font size="2">
       </td>
     </tr>
     <tr>
@@ -162,7 +151,7 @@ ms.lasthandoff: 01/19/2018
       <td></td>
     </tr>
     <tr>
-      <td>SQL 数据仓库视图</td>
+      <td>Azure SQL 数据仓库视图</td>
       <td>✓</td>
       <td>✓</td>
       <td>✓</td>
@@ -175,7 +164,7 @@ ms.lasthandoff: 01/19/2018
       <td>✓</td>
       <td>✓</td>
       <td>Excel、Power BI Desktop</td>
-      <td></td>
+      <td>SQL Server 2008 及更高版本。</td>
     </tr>
     <tr>
       <td>SQL Server Analysis Services KPI</td>
@@ -183,7 +172,7 @@ ms.lasthandoff: 01/19/2018
       <td>✓</td>
       <td>✓</td>
       <td>Excel、Power BI Desktop</td>
-      <td></td>
+      <td>SQL Server 2008 及更高版本。</td>
     </tr>
     <tr>
       <td>SQL Server Analysis Services 度量</td>
@@ -191,7 +180,7 @@ ms.lasthandoff: 01/19/2018
       <td>✓</td>
       <td>✓</td>
       <td>Excel、Power BI Desktop</td>
-      <td></td>
+      <td>SQL Server 2008 及更高版本。</td>
     </tr>
     <tr>
       <td>SQL Server Analysis Services 表</td>
@@ -199,7 +188,7 @@ ms.lasthandoff: 01/19/2018
       <td>✓</td>
       <td>✓</td>
       <td>Excel、Power BI Desktop</td>
-      <td></td>
+      <td>SQL Server 2008 及更高版本。</td>
     </tr>
     <tr>
       <td>SQL Server Reporting Services 报表</td>
@@ -207,7 +196,7 @@ ms.lasthandoff: 01/19/2018
       <td>✓</td>
       <td>✓</td>
       <td>浏览器</td>
-      <td>仅本机模式服务器。 不支持 SharePoint 模式。</td>
+      <td>仅本机模式服务器。 不支持 SharePoint 模式。 仅 SQL Server 2008 和更高版本</td>
     </tr>
     <tr>
       <td>SQL Server 表</td>
@@ -215,7 +204,7 @@ ms.lasthandoff: 01/19/2018
       <td>✓</td>
       <td>✓</td>
       <td>Excel、Power BI Desktop、SQL Server Data Tools</td>
-      <td></td>
+      <td>SQL Server 2008 及更高版本。</td>
     </tr>
     <tr>
       <td>SQL Server 视图</td>
@@ -223,7 +212,7 @@ ms.lasthandoff: 01/19/2018
       <td>✓</td>
       <td>✓</td>
       <td>Excel、Power BI Desktop、SQL Server Data Tools</td>
-      <td></td>
+      <td>SQL Server 2008 及更高版本。</td>
     </tr>
     <tr>
       <td>Teradata 表</td>
@@ -240,6 +229,14 @@ ms.lasthandoff: 01/19/2018
       <td>✓</td>
       <td>Excel</td>
       <td></td>
+    </tr>
+    <tr>
+      <td>SAP Business Warehouse</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td></td>
+      <td>仅适用于英语。 度量值不受支持。</td>
     </tr>
     <tr>
       <td>SAP HANA 视图</td>
@@ -375,7 +372,7 @@ ms.lasthandoff: 01/19/2018
       <td>✓</td>
       <td>✓</td>
       <td></td>
-      <td></td>
+      <td>仅 Azure DocumentDB 中的旧集合和 Azure Cosmos DB 中的 SQL API 集合兼容。 尚不支持较新的 Cosmos DB API。 在数据源列表中选择 Azure DocumentDB。</td>
     </tr>
     <tr>
       <td>通用 ODBC 表</td>
@@ -540,32 +537,6 @@ ms.lasthandoff: 01/19/2018
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; domain
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; account
             <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name
-        
-      </td>
-    </tr>
-    <tr>
-      <td>Cosmos</td>
-      <td>Container</td>
-      <td>Virtual cluster</td>
-      <td>
-        
-            Protocol: cosmos
-            <br>Authentication: {basic, windows}
-            <br>Address:
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; url
-        
-      </td>
-    </tr>
-    <tr>
-      <td>Cosmos</td>
-      <td>Table</td>
-      <td>Stream, stream set, view</td>
-      <td>
-        
-            Protocol: cosmos
-            <br>Authentication: {basic, windows}
-            <br>Address:
-            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; url
         
       </td>
     </tr>
@@ -1396,8 +1367,8 @@ ms.lasthandoff: 01/19/2018
     </tr>
     <tr>
       <td>Other (none of the above)</td>
-      <td>\*</td>
-      <td>\*</td>
+      <td>&#10033;</td>
+      <td>&#10033;</td>
       <td>
         
             Protocol: generic-asset

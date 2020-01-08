@@ -4,21 +4,22 @@ description: 概述如何对 Service Fabric 中的指标使用重整或打包作
 services: service-fabric
 documentationcenter: .net
 author: masnider
-manager: timlt
+manager: chackdan
 editor: ''
 ms.assetid: e5ebfae5-c8f7-4d6c-9173-3e22a9730552
-ms.service: Service-Fabric
+ms.service: service-fabric
 ms.devlang: dotnet
 ms.topic: conceptual
 ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 08/18/2017
 ms.author: masnider
-ms.openlocfilehash: a35ae5933729615d634359e64e31d43536d81431
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: 6e041e41372c72c6792c1fb4a1fbdc3bbe475b21
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60844377"
 ---
 # <a name="defragmentation-of-metrics-and-load-in-service-fabric"></a>Service Fabric 中指标和负载的重整
 Service Fabric 群集资源管理器用于管理群集中的负载指标的默认策略是分散负载。 确保均匀地使用节点，避免出现导致争用和浪费资源的热点和冷点。 若要幸免于故障，让工作负荷分布在群集中还是最安全的方法，因为它可确保某个故障不会导致给定的工作负荷大部分失效。 
@@ -40,6 +41,7 @@ Service Fabric 群集资源管理器支持另一种用于管理负载的策略 -
 下图提供了两个群集的直观表示，其中一个已经过重整，另一个则没有经过重整。 
 
 <center>
+
 ![比较均衡的群集与重整的群集][Image1]
 </center>
 
@@ -74,7 +76,7 @@ ClusterManifest.xml：
 </Section>
 ```
 
-通过 ClusterConfig.json 进行独立部署或将 Template.json 用于 Azure 托管群集：
+通过用于独立部署的 ClusterConfig.json 或用于 Azure 托管群集的 Template.json：
 
 ```json
 "fabricSettings": [

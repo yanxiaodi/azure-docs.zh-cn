@@ -2,23 +2,19 @@
 title: 在 Azure Functions 中使用代理 | Microsoft Docs
 description: 有关如何使用 Azure Functions 代理的概述
 services: functions
-documentationcenter: ''
 author: alexkarcher-msft
-manager: cfowler
-editor: ''
+manager: jeconnoc
 ms.assetid: ''
-ms.service: functions
-ms.workload: na
-ms.tgt_pltfrm: na
-ms.devlang: multiple
-ms.topic: article
+ms.service: azure-functions
+ms.topic: conceptual
 ms.date: 01/22/2018
 ms.author: alkarche
-ms.openlocfilehash: 0e7fe474c3b247baa6550770c661af62e83b3737
-ms.sourcegitcommit: 59914a06e1f337399e4db3c6f3bc15c573079832
-ms.translationtype: HT
+ms.openlocfilehash: 72e359cf5cfef2072d3511990297f67fc4df92bb
+ms.sourcegitcommit: a4b5d31b113f520fcd43624dd57be677d10fc1c0
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/20/2018
+ms.lasthandoff: 09/06/2019
+ms.locfileid: "70773058"
 ---
 # <a name="work-with-azure-functions-proxies"></a>使用 Azure Functions 代理
 
@@ -69,7 +65,7 @@ ms.lasthandoff: 04/20/2018
 
  
 >[!Note]  
->如果函数使用“函数”、“管理员”或“sys” 授权级别，将需要根据原始函数 URL 提供代码和 clientId。 在这种情况下，引用将如下所示：`"backendurl": "https://localhost/api/httptriggerC#1?code=<keyvalue>&clientId=<keyname>"`
+>如果函数使用“函数”、“管理员”或“sys” 授权级别，将需要根据原始函数 URL 提供代码和 clientId。 在这种情况下，引用如下所示：`"backendurl": "https://localhost/api/httptriggerC#1?code=<keyvalue>&clientId=<keyname>"`建议将这些密钥存储在[应用程序设置]中，并在代理中引用这些密钥。 这样可以避免在源代码中存储机密。 
 
 ### <a name="request-parameters"></a>引用请求参数
 
@@ -83,21 +79,21 @@ ms.lasthandoff: 04/20/2018
 #### <a name="additional-request-parameters"></a>其他请求参数
 除了路由模板参数以外，还可以在配置值中使用以下值：
 
-* **{request.method}**：对原始请求使用的 HTTP 方法。
-* **{request.headers.\<HeaderName\>}**：可从原始请求中读取的标头。 请将 *\<HeaderName\>* 替换为要读取的标头的名称。 如果该标头未包含在请求中，则该值为空字符串。
-* **{request.querystring.\<ParameterName\>}**：可从原始请求中读取的查询字符串参数。 请将 *\<ParameterName\>* 替换为要读取的参数的名称。 如果该参数未包含在请求中，则该值为空字符串。
+* **{request.method}** ：对原始请求使用的 HTTP 方法。
+* **{request.headers.\<HeaderName\>}** ：从原始请求中读取的标头。 请将 *\<HeaderName\>* 替换为要读取的标头的名称。 如果该标头未包含在请求中，则该值为空字符串。
+* **{request.querystring.\<ParameterName\>}** ：可从原始请求中读取的查询字符串参数。 请将 *\<ParameterName\>* 替换为要读取的参数的名称。 如果该参数未包含在请求中，则该值为空字符串。
 
 ### <a name="response-parameters"></a>引用后端响应参数
 
 在修改返回给客户端的响应过程中，可以使用响应参数。 可以在配置值中使用以下值：
 
-* **{backend.response.statusCode}**：在后端响应中返回的 HTTP 状态代码。
-* **{backend.response.statusReason}**：在后端响应中返回的 HTTP 原因短语。
-* **{backend.response.headers.\<HeaderName\>}**：可从后端响应中读取的标头。 请将 *\<HeaderName\>* 替换为要读取的标头的名称。 如果该标头未包含在响应中，则该值将为空字符串。
+* **{backend.response.statusCode}** ：在后端响应中返回的 HTTP 状态代码。
+* **{backend.response.statusReason}** ：在后端响应中返回的 HTTP 原因短语。
+* **{backend.response.headers.\<HeaderName\>}** ：可以从后端响应中读取的标头。 请将 *\<HeaderName\>* 替换为要读取的标头的名称。 如果该标头未包含在响应中，则该值将为空字符串。
 
 ### <a name="use-appsettings"></a>引用应用程序设置
 
-还可以通过将设置名称括在百分号 (%) 之间来引用[针对 Function App 定义的应用程序设置](https://docs.microsoft.com/azure/azure-functions/functions-how-to-use-azure-function-app-settings#develop)。
+还可以通过将设置名称括在百分号 (%) 之间来引用[针对 Function App 定义的应用程序设置](https://docs.microsoft.com/azure/azure-functions/functions-how-to-use-azure-function-app-settings)。
 
 例如，后端 URL *https://%ORDER_PROCESSING_HOST%/api/orders* 会将“%ORDER_PROCESSING_HOST%”替换为 ORDER_PROCESSING_HOST 设置的值。
 
@@ -152,7 +148,7 @@ Proxies.json 是由一个代理对象定义的，包括已命名的代理及其�
 > [!NOTE] 
 > Azure Functions 代理中的 route 属性不接受 Function App 主机配置的 routePrefix 属性。 如果希望包括一个如 `/api` 等前缀，必须将其包括在 route 属性中。
 
-### <a name="disableProxies"></a>禁用单个代理
+### <a name="disableProxies"></a> 禁用单个代理
 
 可以通过将 `"disabled": true` 添加到 `proxies.json` 文件中的代理来禁用单个代理。 这将导致满足 matchCondidtion 的任何请求返回 404。
 ```json
@@ -164,19 +160,36 @@ Proxies.json 是由一个代理对象定义的，包括已命名的代理及其�
             "matchCondition": {
                 "route": "/example"
             },
-            "backendUri": "www.example.com"
+            "backendUri": "https://<AnotherApp>.azurewebsites.net/api/<FunctionName>"
         }
     }
 }
 ```
+
+### <a name="applicationSettings"></a> 应用程序设置
+
+代理行为可以通过多个应用程序设置进行控制。 [Functions App 设置参考](./functions-app-settings.md)中概述了所有这些设置
+
+* [AZURE_FUNCTION_PROXY_DISABLE_LOCAL_CALL](./functions-app-settings.md#azure_function_proxy_disable_local_call)
+* [AZURE_FUNCTION_PROXY_BACKEND_URL_DECODE_SLASHES](./functions-app-settings.md#azure_function_proxy_backend_url_decode_slashes)
+
+### <a name="reservedChars"></a> 保留字符（字符串格式设置）
+
+代理使用“\”作为转义符从 JSON 文件中读取所有字符串。 代理还会解释大括号。 请参阅下面的完整示例集。
+
+|Character|转义字符|示例|
+|-|-|-|
+|{ 或 }|{{ 或 }}|`{{ example }}` --> `{ example }`
+| \ | \\\\ | `example.com\\text.html` --> `example.com\text.html`
+|"|\\\"| `\"example\"` --> `"example"`
 
 ### <a name="requestOverrides"></a>定义 requestOverrides 对象
 
 requestOverrides 对象定义调用后端资源时对请求所做的更改。 该对象由以下属性定义：
 
 * **backend.request.method**：用于调用后端的 HTTP 方法。
-* **backend.request.querystring.\<ParameterName\>**：可为后端调用设置的查询字符串参数。 请将 *\<ParameterName\>* 替换为要设置的参数的名称。 如果提供空字符串，该参数不会包含在后端请求中。
-* **backend.request.headers.\<HeaderName\>**：可为后端调用设置的标头。 请将 *\<HeaderName\>* 替换为要设置的标头的名称。 如果提供空字符串，该标头不会包含在后端请求中。
+* **backend.request.querystring.\<ParameterName\>** ：可为后端调用设置的查询字符串参数。 请将 *\<ParameterName\>* 替换为要设置的参数的名称。 如果提供空字符串，该参数不会包含在后端请求中。
+* **backend.request.headers.\<HeaderName\>** ：可为后端调用设置的标头。 请将 *\<HeaderName\>* 替换为要设置的标头的名称。 如果提供空字符串，该标头不会包含在后端请求中。
 
 值可以引用应用程序设置和原始客户端请求中的参数。
 
@@ -208,7 +221,7 @@ requestOverrides 对象定义对传回客户端的响应所做的更改。 该�
 * **response.statusCode**：要返回给客户端的 HTTP 状态代码。
 * **response.statusReason**：要返回给客户端的 HTTP 原因短语。
 * **response.body**：要返回给客户端的正文的字符串表示形式。
-* **response.headers.\<HeaderName\>**：可为返回给客户端的响应设置的标头。 请将 *\<HeaderName\>* 替换为要设置的标头的名称。 如果提供空字符串，该标头不会包含在响应中。
+* **response.headers.\<HeaderName\>** ：可为返回给客户端的响应设置的标头。 请将 *\<HeaderName\>* 替换为要设置的标头的名称。 如果提供空字符串，该标头不会包含在响应中。
 
 值可以引用应用程序设置、原始客户端请求中的参数和后端响应中的参数。
 
@@ -235,7 +248,7 @@ requestOverrides 对象定义对传回客户端的响应所做的更改。 该�
 > 在此示例中，响应正文是直接设置的，因此不需要 `backendUri` 属性。 此示例演示如何使用 Azure Functions 代理来模拟 API。
 
 [Azure 门户]: https://portal.azure.com
-[HTTP 触发器]: https://docs.microsoft.com/azure/azure-functions/functions-bindings-http-webhook#http-trigger
+[HTTP 触发器]: https://docs.microsoft.com/azure/azure-functions/functions-bindings-http-webhook
 [Modify the back-end request]: #modify-backend-request
 [Modify the response]: #modify-response
 [定义 requestOverrides 对象]: #requestOverrides

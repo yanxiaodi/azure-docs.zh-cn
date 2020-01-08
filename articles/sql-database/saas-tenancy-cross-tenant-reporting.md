@@ -1,21 +1,22 @@
 ---
 title: 针对多个 Azure SQL 数据库运行报告查询 | Microsoft Docs
 description: 使用分布式查询实现跨租户报告。
-keywords: sql 数据库教程
 services: sql-database
-author: stevestein
-manager: craigg
 ms.service: sql-database
-ms.custom: scale out apps
-ms.topic: articles
-ms.date: 04/01/2018
-ms.author: billgib
-ms.reviewer: sstein; AyoOlubeko
-ms.openlocfilehash: 9ea308cb933948d22c7b9b14b031b9fa15af9c88
-ms.sourcegitcommit: 3a4ebcb58192f5bf7969482393090cb356294399
-ms.translationtype: HT
+ms.subservice: scenario
+ms.custom: ''
+ms.devlang: ''
+ms.topic: conceptual
+author: stevestein
+ms.author: sstein
+ms.reviewers: billgib,ayolubek
+ms.date: 01/25/2019
+ms.openlocfilehash: fa8dbbbb09fbdc14049e168afe6eb4810ccc8254
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68570235"
 ---
 # <a name="cross-tenant-reporting-using-distributed-queries"></a>使用分布式查询实现跨租户报告
 
@@ -25,7 +26,7 @@ ms.lasthandoff: 04/06/2018
 本教程介绍以下内容：
 
 > [!div class="checklist"]
-
+> 
 > * 如何部署报告数据库
 > * 如何对所有租户数据库运行分布式查询
 > * 每个数据库中的全局视图如何实现跨租户的有效查询
@@ -59,16 +60,16 @@ SaaS 应用程序具有诸多优势，包括可让你使用云端存储的大量
 
 1. 在 PowerShell ISE 中，打开 ...\\Learning Modules\\Operational Analytics\\Adhoc Reporting\\Demo-AdhocReporting.ps1 脚本并设置以下值：
    * $DemoScenario = 1，购买在所有地点举行的活动的票证。
-2. 按 F5 运行脚本并生成票证销售。 脚本运行时，请继续执行本教程中的步骤。 票据数据在“运行即席分布式查询”部分中查询，所以请等待票据生成器完成。
+2. 按 F5 运行脚本并生成票证销售。 脚本运行时，请继续执行本教程中的步骤。 票证数据在“运行即席分布式查询”部分中查询，因此请等待票证生成器完成。
 
 ## <a name="explore-the-global-views"></a>浏览全局视图
 
 在 Wingtip Tickets SaaS Database Per Tenant 应用程序中，每个租户都分配有一个数据库。 因此，数据库表中包含的数据范围设置为单个租户的透视。 然而，当查询所有数据库时，请注意，弹性查询可以将数据视为由租户划分的单个逻辑数据库分片的一部分。 
 
-若要模拟此模式，请将一组“全局”视图添加到租户数据库中，以将租户 ID 投射到全局查询的每个表中。 例如，VenueEvents 视图将计算出的 VenueId 添加到从 Events 表投射的列中。 同样，VenueTicketPurchases 和 VenueTickets 视图会添加从各自表中投影的 VenueId 计算列。 VenueId 列出现后，弹性查询使用这些视图来并行查询并将其推送到合适的远程租户数据库。 这大大减少了要返回的数据量，从而使许多查询的性能大幅提高。 这些全局视图已经在所有租户数据库中预先创建。
+若要模拟此模式，请将一组“全局”视图添加到租户数据库中，以将租户 ID 投射到全局查询的每个表中。 例如，VenueEvents视图将计算出的 VenueId 添加到从 Events表投射的列中。 同样，VenueTicketPurchases 和 VenueTickets 视图会添加从各自表中投影的 VenueId 计算列。 VenueId 列出现后，弹性查询使用这些视图来并行查询并将其推送到合适的远程租户数据库。 这大大减少了要返回的数据量，从而使许多查询的性能大幅提高。 这些全局视图已经在所有租户数据库中预先创建。
 
 1. 打开 SSMS 并[连接到 tenants1-&lt;USER&gt; 服务器](saas-tenancy-wingtip-app-guidance-tips.md#explore-database-schema-and-execute-sql-queries-using-ssms)。
-1. 展开“数据库”，右键单击“contosoconcerthall”，并选择“新建查询”。
+1. 展开“数据库”，右键单击“contosoconcerthall”，然后选择“新建查询”。
 1. 运行以下查询，了解单租户表和全局视图的差异：
 
    ```T-SQL
@@ -104,7 +105,7 @@ SaaS 应用程序具有诸多优势，包括可让你使用云端存储的大量
 
 1. 在 PowerShell ISE 中打开 ...\\Learning Modules\\Operational Analytics\\Adhoc Reporting\\*Demo-AdhocReporting.ps1*。 
 
-1. 设置 $DemoScenario = 2，它表示部署特别报告数据库。
+1. 设置 **$DemoScenario = 2**,_部署特别报告数据库_。
 
 1. 按 F5 运行脚本并创建 adhocreporting 数据库。
 
@@ -126,7 +127,7 @@ SaaS 应用程序具有诸多优势，包括可让你使用云端存储的大量
 
     ![创建外部数据源](media/saas-tenancy-cross-tenant-reporting/create-external-data-source.png)
 
-   引用上一节中介绍的全局视图的外部表，通过 DISTRIBUTION = SHARDED(VenueId) 进行定义。 每个 VenueId 映射到单个数据库，这样就可以提升许多方案的性能，如下一节所示。
+   引用上一节中介绍的全局视图的外部表，通过 DISTRIBUTION = SHARDED(VenueId) 进行定义。 因为每个 VenueId 都映射到单个数据库，这样就可以提升许多方案的性能，如下一节所示。
 
     ![创建外部表](media/saas-tenancy-cross-tenant-reporting/external-tables.png)
 
@@ -146,7 +147,7 @@ SaaS 应用程序具有诸多优势，包括可让你使用云端存储的大量
 
 检查执行计划时，将鼠标悬停在计划图标上方可获取详细信息。 
 
-特别要注意是，定义外部数据源时的设置 DISTRIBUTION = SHARDED(VenueId) 可以提升许多方案的性能。 每个 VenueId 映射到单个数据库，这样就可以轻松进行远程筛选，仅返回我们需要的数据。
+特别要注意是，定义外部数据源时的设置 DISTRIBUTION = SHARDED(VenueId) 可以提升许多方案的性能。 由于每个*VenueId*映射到单个数据库, 因此可以轻松地远程执行筛选, 仅返回所需数据。
 
 1. 在 SSMS 中打开 ...\\Learning Modules\\Operational Analytics\\Adhoc Reporting\\Demo-AdhocReportingQueries.sql。
 2. 确保已连接到 adhocanalytics 数据库。
@@ -171,7 +172,7 @@ SaaS 应用程序具有诸多优势，包括可让你使用云端存储的大量
 
    此查询执行稍微有些复杂的联接和聚合操作。 大多数处理操作远程执行。  仅向头像数据库返回包含每个位置每天售票数量的单个行。
 
-   ![query](media/saas-tenancy-cross-tenant-reporting/query3-plan.png)
+   ![查询](media/saas-tenancy-cross-tenant-reporting/query3-plan.png)
 
 
 ## <a name="next-steps"></a>后续步骤
@@ -179,7 +180,7 @@ SaaS 应用程序具有诸多优势，包括可让你使用云端存储的大量
 本教程介绍了如何：
 
 > [!div class="checklist"]
-
+> 
 > * 对所有租户数据库运行分布式查询
 > * 部署报告数据库，并定义运行分布式查询所需的架构。
 

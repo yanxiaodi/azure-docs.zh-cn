@@ -1,5 +1,5 @@
 ---
-title: Azure 容器服务教程 - 缩放应用程序
+title: （已弃用）Azure 容器服务教程 - 缩放应用程序
 description: Azure 容器服务教程 - 缩放应用程序
 services: container-service
 author: dlepow
@@ -9,15 +9,19 @@ ms.topic: tutorial
 ms.date: 09/14/2017
 ms.author: danlep
 ms.custom: mvc
-ms.openlocfilehash: f643c09f00b23cd14e85e83ed0cf7ab7a13c7646
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.openlocfilehash: b16682535e7311648e832286e1e876ee0e694712
+ms.sourcegitcommit: 2469b30e00cbb25efd98e696b7dbf51253767a05
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 12/06/2018
+ms.locfileid: "52993073"
 ---
-# <a name="scale-kubernetes-pods-and-kubernetes-infrastructure"></a>缩放 Kubernetes Pod 和 Kubernetes 基础结构
+# <a name="deprecated-scale-kubernetes-pods-and-kubernetes-infrastructure"></a>（已弃用）缩放 Kubernetes Pod 和 Kubernetes 基础结构
 
-[!INCLUDE [aks-preview-redirect.md](../../../includes/aks-preview-redirect.md)]
+> [!TIP]
+> 有关使用 Azure Kubernetes 服务的此教程的更新版本，请参阅[教程：在 Azure Kubernetes 服务 (AKS) 中缩放应用程序](../../aks/tutorial-kubernetes-scale.md)。
+
+[!INCLUDE [ACS deprecation](../../../includes/container-service-kubernetes-deprecation.md)]
 
 如果已按照教程执行，则你在 Azure 容器服务中具有工作 Kubernetes 群集，并且部署了 Azure 投票应用。 
 
@@ -38,7 +42,7 @@ ms.lasthandoff: 04/28/2018
 
 ## <a name="manually-scale-pods"></a>手动缩放 Pod
 
-到目前为止，Azure 投票前端和 Redis 实例已部署，每个都有一个副本。 若要进行验证，请运行 [kubectl get](https://kubernetes.io/docs/user-guide/kubectl/v1.6/#get) 命令。
+到目前为止，Azure 投票前端和 Redis 实例已部署，每个都有一个副本。 若要进行验证，请运行 [kubectl get](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get) 命令。
 
 ```azurecli-interactive
 kubectl get pods
@@ -52,13 +56,13 @@ azure-vote-back-2549686872-4d2r5   1/1       Running   0          31m
 azure-vote-front-848767080-tf34m   1/1       Running   0          31m
 ```
 
-使用 [kubectl scale](https://kubernetes.io/docs/user-guide/kubectl/v1.6/#scale) 命令手动 `azure-vote-front` 部署中的 Pod 数。 此示例将该数量增加到 5。
+使用 [kubectl scale](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#scale) 命令手动 `azure-vote-front` 部署中的 Pod 数。 此示例将该数量增加到 5。
 
 ```azurecli-interactive
 kubectl scale --replicas=5 deployment/azure-vote-front
 ```
 
-运行 [kubectl get pods](https://kubernetes.io/docs/user-guide/kubectl/v1.6/#get) 以验证 Kubernetes 是否在创建 Pod。 一分钟左右之后，其他 Pod 在运行：
+运行 [kubectl get pods](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get) 以验证 Kubernetes 是否在创建 Pod。 一分钟左右之后，其他 Pod 在运行：
 
 ```azurecli-interactive
 kubectl get pods
@@ -90,7 +94,7 @@ resources:
      cpu: 500m
 ```
 
-下面的示例使用 [kubectl autoscale](https://kubernetes.io/docs/user-guide/kubectl/v1.6/#autoscale) 命令自动缩放 `azure-vote-front` 部署中的 Pod 数。 在此处，如果 CPU 利用率超过 50%，则自动缩放程序会将 Pod 增加到最多 10 个。
+下面的示例使用 [kubectl autoscale](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#autoscale) 命令自动缩放 `azure-vote-front` 部署中的 Pod 数。 在此处，如果 CPU 利用率超过 50%，则自动缩放程序会将 Pod 增加到最多 10 个。
 
 
 ```azurecli-interactive
@@ -114,7 +118,7 @@ azure-vote-front   Deployment/azure-vote-front   0% / 50%   3         10        
 
 ## <a name="scale-the-agents"></a>缩放代理
 
-如果在前面的教程中使用默认命令创建了 Kubernetes 群集，则它具有三个代理节点。 如果计划群集上具有更多或更少的容器工作负荷，则可以手动调整代理数。 使用 [az acs scale](/cli/azure/acs#az_acs_scale) 命令，并使用 `--new-agent-count` 参数指定代理数。
+如果在前面的教程中使用默认命令创建了 Kubernetes 群集，则它具有三个代理节点。 如果计划群集上具有更多或更少的容器工作负荷，则可以手动调整代理数。 使用 [az acs scale](/cli/azure/acs#az-acs-scale) 命令，并使用 `--new-agent-count` 参数指定代理数。
 
 下面的示例将名为 myK8sCluster 的 Kubernetes 群集中的代理节点数增加到 4 个。 该命令需要几分钟时间完成。
 

@@ -1,28 +1,29 @@
 ---
-title: "Azure 服务总线 SQLFilter 语法参考 | Microsoft Docs"
-description: "有关 SQLFilter 语法的详细信息。"
+title: Azure 服务总线 SQLFilter 语法参考 | Microsoft Docs
+description: 有关 SQLFilter 语法的详细信息。
 services: service-bus-messaging
 documentationcenter: na
-author: sethmanheim
+author: spelluru
 manager: timlt
-editor: 
-ms.assetid: 
+editor: ''
+ms.assetid: ''
 ms.service: service-bus-messaging
 ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: na
-ms.date: 02/05/2018
-ms.author: sethm
-ms.openlocfilehash: ec9d728eb31eb979e82bfb53cf619f823750e65c
-ms.sourcegitcommit: 059dae3d8a0e716adc95ad2296843a45745a415d
-ms.translationtype: HT
+ms.date: 09/05/2018
+ms.author: spelluru
+ms.openlocfilehash: e490c7c24ed38e2988c1f097b09b508746f08178
+ms.sourcegitcommit: 13d5eb9657adf1c69cc8df12486470e66361224e
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/09/2018
+ms.lasthandoff: 07/31/2019
+ms.locfileid: "60591791"
 ---
 # <a name="sqlfilter-syntax"></a>SQLFilter 语法
 
-SqlFilter 对象是 [SqlFilter 类](/dotnet/api/microsoft.servicebus.messaging.sqlfilter)的实例，代表基于 SQL 语言的筛选器表达式，该表达式针对 [BrokeredMessage](/dotnet/api/microsoft.servicebus.messaging.brokeredmessage) 进行计算。 SqlFilter 支持 SQL-92 标准的子集。  
+SqlFilter  对象是 [SqlFilter 类](/dotnet/api/microsoft.servicebus.messaging.sqlfilter)的实例，代表基于 SQL 语言的筛选器表达式，该表达式针对 [BrokeredMessage](/dotnet/api/microsoft.servicebus.messaging.brokeredmessage) 进行计算。 SqlFilter 支持 SQL-92 标准的子集。  
   
  本主题列出了有关 SqlFilter 语法的详细信息。  
   
@@ -153,7 +154,7 @@ SqlFilter 对象是 [SqlFilter 类](/dotnet/api/microsoft.servicebus.messaging.s
     2  
     ```  
   
--   `<decimal_constant>` 是一个数字字符串，不使用引号，但包含小数点。 这些值以 `System.Double` 形式存储在内部，并具有相同的范围/精度。  
+-   `<decimal_constant>` 是一个数字字符串，不使用引号，但包含小数点。 这些值作为 `System.Double` 在内部存储，并具有相同的作用域/精度。  
   
      在未来版本中，此数字可能以其他数据类型存储，目的是支持确切的数字语义，因此不应依赖于 `<decimal_constant>` 的基础数据类型为 `System.Double` 这一事实。  
   
@@ -222,29 +223,29 @@ SqlFilter 对象是 [SqlFilter 类](/dotnet/api/microsoft.servicebus.messaging.s
   
 ### <a name="property-evaluation-semantics"></a>属性求值语义  
   
--   尝试对不存在的系统属性求值会引发 [FilterException](/dotnet/api/microsoft.servicebus.messaging.filterexception) 异常。  
+- 尝试对不存在的系统属性求值会引发 [FilterException](/dotnet/api/microsoft.servicebus.messaging.filterexception) 异常。  
   
--   不存在的属性在进行内部求值时会被视为**未知**。  
+- 不存在的属性在进行内部求值时会被视为**未知**。  
   
- 算术运算符中的未知求值：  
+  算术运算符中的未知求值：  
   
--   对于二元运算符，如果操作数的左侧和/或右侧的求值结果为**未知**，则结果为**未知**。  
+- 对于二元运算符，如果操作数的左侧和/或右侧的求值结果为**未知**，则结果为**未知**。  
   
--   对于一元运算符，如果操作数的求值结果为**未知**，则结果为**未知**。  
+- 对于一元运算符，如果操作数的求值结果为**未知**，则结果为**未知**。  
   
- 二进制比较运算符中的未知求值：  
+  二进制比较运算符中的未知求值：  
   
--   如果操作数的左侧和/或右侧的求值结果为**未知**，则结果为**未知**。  
+- 如果操作数的左侧和/或右侧的求值结果为**未知**，则结果为**未知**。  
   
- `[NOT] LIKE` 中的未知求值：  
+  `[NOT] LIKE` 中的未知求值：  
   
--   如果任何操作数的求值结果为“未知”，则结果为“未知”。  
+- 如果任何操作数的求值结果为“未知”  ，则结果为“未知”  。  
   
- `[NOT] IN` 中的未知求值：  
+  `[NOT] IN` 中的未知求值：  
   
--   如果左侧操作数的求值结果为“未知”，则结果为“未知”。  
+- 如果左侧操作数的求值结果为“未知”  ，则结果为“未知”  。  
   
- **AND** 运算符中的未知求值：  
+  **AND** 运算符中的未知求值：  
   
 ```  
 +---+---+---+---+  
@@ -281,5 +282,5 @@ SqlFilter 对象是 [SqlFilter 类](/dotnet/api/microsoft.servicebus.messaging.s
 ## <a name="next-steps"></a>后续步骤
 
 - [SQLFilter 类 (.NET Framework)](/dotnet/api/microsoft.servicebus.messaging.sqlfilter)
-- [SQLFilter 类 (.NET Framework)](/dotnet/api/microsoft.azure.servicebus.filters.sqlfilter)
+- [SQLFilter 类 (.NET Framework)](/dotnet/api/microsoft.azure.servicebus.sqlfilter)
 - [SQLRuleAction 类](/dotnet/api/microsoft.servicebus.messaging.sqlruleaction)

@@ -1,23 +1,27 @@
 ---
-title: Azure 容器服务教程 - 准备应用
+title: （已弃用）Azure 容器服务教程 - 准备应用
 description: Azure 容器服务教程 - 准备应用
 services: container-service
-author: neilpeterson
+author: iainfoulds
 manager: jeconnoc
 ms.service: container-service
 ms.topic: tutorial
 ms.date: 02/26/2018
-ms.author: nepeters
+ms.author: iainfou
 ms.custom: mvc
-ms.openlocfilehash: 2fe160652bf8df289d590722ef4024f0b3dd397c
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.openlocfilehash: 961f09d7581a26596b03e7a2f8e97d98fe83e6aa
+ms.sourcegitcommit: 5839af386c5a2ad46aaaeb90a13065ef94e61e74
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 03/19/2019
+ms.locfileid: "57995394"
 ---
-# <a name="create-container-images-to-be-used-with-azure-container-service"></a>创建要与 Azure 容器服务一起使用的容器映像
+# <a name="deprecated-create-container-images-to-be-used-with-azure-container-service"></a>（已弃用）创建要与 Azure 容器服务一起使用的容器映像
 
-[!INCLUDE [aks-preview-redirect.md](../../../includes/aks-preview-redirect.md)]
+> [!TIP]
+> 有关使用 Azure Kubernetes 服务的此教程的更新版本，请参阅[教程：准备用于 Azure Kubernetes 服务 (AKS) 的应用程序](../../aks/tutorial-kubernetes-prepare-app.md)。
+
+[!INCLUDE [ACS deprecation](../../../includes/container-service-kubernetes-deprecation.md)]
 
 在本教程的第 1 部分（共 7 部分），将准备一个要在 Kubernetes 中使用的多容器应用程序。 已完成的步骤包括：  
 
@@ -99,7 +103,7 @@ b68fed4b66b6        redis             "docker-entrypoint..."   57 seconds ago   
 
 ## <a name="test-application-locally"></a>在本地测试应用程序
 
-浏览到 http://localhost:8080查看正在运行的应用程序。
+浏览到 `http://localhost:8080` 查看正在运行的应用程序。
 
 ![Azure 上的 Kubernetes 群集映像](media/container-service-kubernetes-tutorials/azure-vote.png)
 

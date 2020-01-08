@@ -1,6 +1,6 @@
 ---
-title: "Linux 虚拟机概述 | Microsoft Docs"
-description: "Azure 门户中 Linux 虚拟机概述的帮助内容"
+title: Linux 虚拟机概述 | Microsoft Docs
+description: Azure 门户中 Linux 虚拟机概述的帮助内容
 services: virtual-machines-linux
 author: sewatson
 manager: lwelicki
@@ -8,21 +8,22 @@ ms.service: virtual-machines-linux
 ms.topic: article
 ms.date: 04/27/2017
 ms.author: sewatson
-ms.openlocfilehash: 0de3fc4cab53564d7d131666e4a8c0ace8a64fb8
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
+ms.openlocfilehash: b0a8deb5f656fafde358dbcf2e1a2724f1a84113
+ms.sourcegitcommit: 509e1583c3a3dde34c8090d2149d255cb92fe991
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 05/27/2019
+ms.locfileid: "64727632"
 ---
 # <a name="linux-virtual-machines-documentation"></a>Linux 虚拟机文档
 
-Azure Linux 虚拟机使用所选 Red Hat、Ubuntu 或 Linux 分发按需提供具有高可伸缩性且十分安全的虚拟化基础结构。 使用我们的快速入门、教程和示例了解如何创建、配置、管理和缩放 Linux VM。
+Azure Linux 虚拟机可以使用 Red Hat、Ubuntu 或你选择的 Linux 发行版，按需提供具有高可伸缩性，并且十分安全的虚拟化基础结构。 使用我们的快速入门、教程和示例了解如何创建、配置、管理和缩放 Linux VM。
 
 ## <a name="5-minute-quickstarts"></a>5 分钟快速入门
 
 了解如何在运行 Ubuntu 的虚拟机中部署 NGINX Web 服务器：
 
-- [在 Azure 应用服务中创建 Java Web 应用](/azure/virtual-machines/virtual-machines-linux-quick-create-portal?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)
+- [Azure 门户](/azure/virtual-machines/virtual-machines-linux-quick-create-portal?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)
 - [Azure PowerShell](/azure/virtual-machines/virtual-machines-linux-quick-create-powershell?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)
 - [Azure CLI](/azure/virtual-machines/virtual-machines-linux-quick-create-cli?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)
 
@@ -32,7 +33,7 @@ Azure Linux 虚拟机使用所选 Red Hat、Ubuntu 或 Linux 分发按需提供�
 
 - [创建和管理 Linux VM](/azure/virtual-machines/linux/tutorial-manage-vm)
 - [创建和管理 VM 磁盘](/azure/virtual-machines/linux/tutorial-manage-disks)
-- [自动执行 VM 配置](/azure/virtual-machines/linux/tutorial-automate-vm-deployment)
+- [自动配置 VM](/azure/virtual-machines/linux/tutorial-automate-vm-deployment)
 - [创建自定义 VM 映像](/azure/virtual-machines/linux/tutorial-custom-images)
 - [创建高度可用的 VM](/azure/virtual-machines/linux/tutorial-availability-sets)
 - [创建 VM 规模集](/azure/virtual-machines/linux/tutorial-create-vmss)
@@ -45,9 +46,7 @@ Azure Linux 虚拟机使用所选 Red Hat、Ubuntu 或 Linux 分发按需提供�
 
 ## <a name="free-pluralsight-video-training"></a>免费 Pluralsight 视频培训
 
-- [管理基础结构](https://www.pluralsight.com/courses/managing-infrastructure-microsoft-azure-getting-started?twoid=d6abac77-7dcc-4d33-9e03-f85e78989f02)
-- [虚拟机入门](https://www.pluralsight.com/courses/azure-vms-getting-started?twoid=d6abac77-7dcc-4d33-9e03-f85e78989f02)
-- [IaaS 监视入门](https://www.pluralsight.com/courses/azure-iaas-monitoring-management-getting-started?twoid=d6abac77-7dcc-4d33-9e03-f85e78989f02")
+- [Azure 管理员](https://go.microsoft.com/fwlink/?linkid=2012827)
 
 ## <a name="samples"></a>示例 
 

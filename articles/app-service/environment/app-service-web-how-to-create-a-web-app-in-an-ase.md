@@ -1,24 +1,25 @@
 ---
-title: "在应用服务环境 v1 中创建 Web 应用"
-description: "了解如何在应用服务环境 v1 中创建 Web 应用和应用服务计划"
+title: 在应用服务环境 v1 中创建 Web 应用 - Azure
+description: 了解如何在应用服务环境 v1 中创建 Web 应用和应用服务计划
 services: app-service
-documentationcenter: 
+documentationcenter: ''
 author: ccompy
 manager: stefsch
-editor: 
+editor: ''
 ms.assetid: 983ba055-e9e4-495a-9342-fd3708dcc9ac
 ms.service: app-service
 ms.workload: web
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
-ms.date: 7/11/2017
+ms.date: 07/11/2017
 ms.author: ccompy
-ms.openlocfilehash: 1e8540409c6174ad02bd2d9d57c53e0279f49871
-ms.sourcegitcommit: d87b039e13a5f8df1ee9d82a727e6bc04715c341
-ms.translationtype: HT
+ms.custom: seodec18
+ms.openlocfilehash: cc40c2296e583ab93a7c34d709cfbf1334ae3926
+ms.sourcegitcommit: 82499878a3d2a33a02a751d6e6e3800adbfa8c13
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/21/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70069847"
 ---
 # <a name="create-a-web-app-in-an-app-service-environment-v1"></a>在应用服务环境 v1 中创建 Web 应用
 
@@ -49,7 +50,7 @@ ms.lasthandoff: 02/21/2018
     使用资源组能够以单位形式管理相关的 Azure 资源，并可在为应用创建基于角色的访问控制 (RBAC) 规则时发挥作用。 有关详细信息，请参阅 [Azure 资源管理器概述][ResourceGroups]。 
 4. 选择或创建应用服务计划。
    
-    应用服务计划是一组托管的 Web 应用。  选择定价时，支付的价格通常适用于应用服务计划而不是单个应用。 在 ASE 中，为分配给 ASE 的计算实例而不是向 ASP 列出的内容付费。  要增加 Web 应用的实例数，增加应用服务计划的实例数即可，此操作将影响该计划中的所有 Web 应用。  某些功能（如站点槽位或虚拟网络集成）在计划内也有数量限制。  有关详细信息，请参阅 [Azure 应用服务计划概述](../azure-web-sites-web-hosting-plans-in-depth-overview.md)
+    应用服务计划是一组托管的 Web 应用。  选择定价时，支付的价格通常适用于应用服务计划而不是单个应用。 在 ASE 中，为分配给 ASE 的计算实例而不是向 ASP 列出的内容付费。  要增加 Web 应用的实例数，增加应用服务计划的实例数即可，此操作将影响该计划中的所有 Web 应用。  某些功能（如站点槽位或虚拟网络集成）在计划内也有数量限制。  有关详细信息，请参阅 [Azure 应用服务计划概述](../overview-hosting-plans.md)
    
     可以通过查看计划名称下注释的位置，来识别 ASE 中的应用服务计划。  
    
@@ -82,7 +83,7 @@ ms.lasthandoff: 02/21/2018
     ![][3]
 
 ### <a name="selecting-a-worker-pool"></a>选择辅助角色池
-通常，在 Azure App Service 中和应用服务环境外，根据所选专用定价计划的不同，共有 3 种计算大小可用。  同理，对于 ASE，最多可以定义 3 个辅助角色池，并指定用于该辅助角色池的计算实例大小。  对 ASE 的租户来说，这意味着他们不是根据应用服务计划的计算实例大小来选择定价计划，而是选择所谓的辅助角色池。  
+通常，在 Azure 应用服务中和应用服务环境外，根据所选专用定价计划的不同，共有 3 种计算大小可用。  同理，对于 ASE，最多可以定义 3 个辅助角色池，并指定用于该辅助角色池的计算实例大小。  对 ASE 的租户来说，这意味着他们不是根据应用服务计划的计算实例大小来选择定价计划，而是选择所谓的辅助角色池。  
 
 辅助角色池选择项 UI 会在名称下方显示用于该辅助角色池的计算实例大小。  可用数量是指该池中可用的计算实例数。  此值仅指未被占用的实例数量，而总池实际上可能具有比此数值更多的实例。  如需调整应用服务环境以添加更多计算资源，请参阅[配置应用服务环境](app-service-web-configure-an-app-service-environment.md)。
 
@@ -106,9 +107,9 @@ ms.lasthandoff: 02/21/2018
 
 <!--Links-->
 [WhatisASE]: app-service-app-service-environment-intro.md
-[Appserviceplans]: ../azure-web-sites-web-hosting-plans-in-depth-overview.md
+[Appserviceplans]: ../overview-hosting-plans.md
 [HowtoCreateASE]: app-service-web-how-to-create-an-app-service-environment.md
 [HowtoScale]: app-service-web-scale-a-web-app-in-an-app-service-environment.md
 [HowtoConfigureASE]: app-service-web-configure-an-app-service-environment.md
 [ResourceGroups]: ../../azure-resource-manager/resource-group-overview.md
-[AzurePowershell]: http://azure.microsoft.com/documentation/articles/powershell-install-configure/
+[AzurePowershell]: https://azure.microsoft.com/documentation/articles/powershell-install-configure/

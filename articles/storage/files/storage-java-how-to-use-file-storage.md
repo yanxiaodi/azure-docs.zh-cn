@@ -1,24 +1,18 @@
 ---
-title: "使用 Java 针对 Azure 文件进行开发 | Microsoft Docs"
-description: "了解如何开发使用 Azure 文件来存储文件数据的 Java 应用程序和服务。"
-services: storage
-documentationcenter: java
-author: tamram
-manager: timlt
-editor: tysonn
-ms.assetid: 3bfbfa7f-d378-4fb4-8df3-e0b6fcea5b27
+title: 使用 Java 针对 Azure 文件进行开发 | Microsoft Docs
+description: 了解如何开发使用 Azure 文件来存储文件数据的 Java 应用程序和服务。
+author: roygara
 ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: Java
-ms.topic: article
+ms.topic: conceptual
 ms.date: 09/19/2017
-ms.author: renash
-ms.openlocfilehash: 8cd3698d4281b933881c45dfa5e7868bd7b0bdaf
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.author: rogarana
+ms.subservice: files
+ms.openlocfilehash: 00130114b793b5f4d4459eee3404fc4adaf6a8b4
+ms.sourcegitcommit: 800f961318021ce920ecd423ff427e69cbe43a54
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 07/31/2019
+ms.locfileid: "68699415"
 ---
 # <a name="develop-for-azure-files-with-java"></a>使用 Java 针对 Azure 文件进行开发
 [!INCLUDE [storage-selector-file-include](../../../includes/storage-selector-file-include.md)]
@@ -26,7 +20,7 @@ ms.lasthandoff: 10/11/2017
 [!INCLUDE [storage-check-out-samples-java](../../../includes/storage-check-out-samples-java.md)]
 
 ## <a name="about-this-tutorial"></a>关于本教程
-本教程将演示使用 Java 开发应用程序或服务的基础知识，这些应用程序或服务可以使用 Azure 文件来存储文件数据。 在本教程中，我们将创建一个简单的控制台应用程序，并演示如何通过 Java 和 Azure 文件执行基本操作：
+本教程将演示使用 Java 开发应用程序或服务的基础知识，这些应用程序或服务可以使用 Azure 文件来存储文件数据。 在本教程中，我们将创建一个控制台应用程序，并演示如何通过 Java 和 Azure 文件执行基本操作：
 
 * 创建和删除 Azure 文件共享
 * 创建和删除目录
@@ -34,10 +28,10 @@ ms.lasthandoff: 10/11/2017
 * 上传、下载和删除文件
 
 > [!Note]  
-> 由于 Azure 文件可以通过 SMB 进行访问，因此可以编写简单的应用程序，通过标准的 Java I/O 类来访问 Azure 文件共享。 本文介绍如何编写使用 Azure 存储 Java SDK 的应用程序，该 SDK 使用 [Azure 文件 REST API](https://docs.microsoft.com/rest/api/storageservices/fileservices/file-service-rest-api) 与 Azure 文件通信。
+> 由于 Azure 文件可以通过 SMB 进行访问，因此可以编写应用程序，通过标准的 Java I/O 类来访问 Azure 文件共享。 本文介绍如何编写使用 Azure 存储 Java SDK 的应用程序，该 SDK 使用 [Azure 文件 REST API](https://docs.microsoft.com/rest/api/storageservices/file-service-rest-api) 与 Azure 文件通信。
 
 ## <a name="create-a-java-application"></a>创建 Java 应用程序
-若要生成示例，需要 Java 开发工具包 (JDK) 和 [用于 Java 的 Azure 存储 SDK][]。 此外，应该已经创建了一个 Azure 存储帐户。
+若要生成示例，需要 Java 开发工具包 (JDK) 和[用于 Java 的 Azure 存储 SDK](https://github.com/Azure/azure-storage-java)。 此外，应该已经创建了一个 Azure 存储帐户。
 
 ## <a name="set-up-your-application-to-use-azure-files"></a>设置应用程序以使用 Azure 文件
 要使用 Azure 存储 API，请将下列语句添加到要通过其来访问存储服务的 Java 文件的顶部：
@@ -65,7 +59,7 @@ public static final String storageConnectionString =
 > 
 
 ## <a name="connecting-to-an-azure-storage-account"></a>连接到 Azure 存储帐户
-要连接到存储帐户，则需要使用 **CloudStorageAccount** 对象，以便将连接字符串传递到 **parse** 方法。
+若要连接到存储帐户，需要使用 CloudStorageAccount 对象，将连接字符串传递到其 parse 方法。
 
 ```java
 // Use the CloudStorageAccount object to connect to your storage account
@@ -144,7 +138,7 @@ if (sampleDir.createIfNotExists()) {
 ```
 
 ## <a name="delete-a-directory"></a>删除目录
-删除目录相当简单，但需注意的是，不能删除仍然包含有文件或其他目录的目录。
+删除目录很简单，但需注意的是，不能删除仍然包含文件或其他目录的目录。
 
 ```java
 // Get a reference to the root directory for the share.
@@ -160,7 +154,7 @@ if ( containerDir.deleteIfExists() ) {
 ```
 
 ## <a name="enumerate-files-and-directories-in-an-azure-file-share"></a>枚举 Azure 文件共享中的文件和目录
-可以轻松获取共享中文件和目录的列表，只需针对 CloudFileDirectory 引用调用 **listFilesAndDirectories** 即可。 该方法将返回可以对其进行循环访问的 ListFileItem 对象的列表。 例如，下面的代码将列出根目录中的文件和目录。
+可以轻松获取共享中文件和目录的列表，只需针对 CloudFileDirectory 引用调用 **listFilesAndDirectories** 即可。 该方法会返回可以对其进行循环访问的 ListFileItem 对象的列表。 例如，下面的代码将列出根目录中的文件和目录。
 
 ```java
 //Get a reference to the root directory for the share.
@@ -172,7 +166,7 @@ for ( ListFileItem fileItem : rootDir.listFilesAndDirectories() ) {
 ```
 
 ## <a name="upload-a-file"></a>上传文件
-Azure 文件共享至少包含文件所在的根目录。 在本部分，你将学习如何将文件从本地存储上传到共享所在的根目录。
+在本部分，学习如何将文件从本地存储上传到共享所在的根目录。
 
 上传文件的第一步是获取对文件所在的目录的引用。 为此，需要调用共享对象的 **getRootDirectoryReference** 方法。
 
@@ -235,6 +229,6 @@ if ( file.deleteIfExists() ) {
 * [用于 Android 的 Azure 存储 SDK](https://github.com/azure/azure-storage-android)
 * [Azure 存储客户端 SDK 参考](http://dl.windowsazure.com/storage/javadoc/)
 * [Azure 存储服务 REST API](https://msdn.microsoft.com/library/azure/dd179355.aspx)
-* [Azure 存储团队博客](http://blogs.msdn.com/b/windowsazurestorage/)
-* [使用 AzCopy 命令行实用程序传输数据](../common/storage-use-azcopy.md)
+* [Azure 存储团队博客](https://blogs.msdn.com/b/windowsazurestorage/)
+* [使用 AzCopy 命令行实用工具传输数据](../common/storage-use-azcopy.md)
 * [排查 Azure 文件问题 - Windows](storage-troubleshoot-windows-file-connection-problems.md)

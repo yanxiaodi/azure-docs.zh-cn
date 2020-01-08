@@ -1,26 +1,24 @@
 ---
-title: Team Data Science Process 生命周期的客户验收阶段 — Azure | Microsoft Docs
+title: Team Data Science Process 生命周期的客户验收阶段
 description: 你的数据科学项目客户验收阶段的目标、任务和可交付结果
 services: machine-learning
-documentationcenter: ''
-author: deguhath
+author: marktab
 manager: cgronlun
 editor: cgronlun
-ms.assetid: ''
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/04/2017
-ms.author: deguhath
-ms.openlocfilehash: cba2255cc38c9d5b40628f30c5500f8078e31355
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: 91d645e6120040870c7c1696c7bfd8f68509cb35
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60303564"
 ---
-# <a name="customer-acceptance"></a>客户验收
+# <a name="customer-acceptance-stage-of-the-team-data-science-process-lifecycle"></a>Team Data Science Process 生命周期的客户验收阶段
 
 本文概述与 Team Data Science Process (TDSP) 的客户验收阶段相关的目标、任务和可交付结果。 此过程提供可用于构建数据科学项目的建议生命周期。 该生命周期概述了项目通常执行的主要阶段（通常以迭代方式进行）：
 
@@ -47,7 +45,7 @@ ms.lasthandoff: 05/03/2018
 客户应验证系统是否满足自己的业务需求，且能否准确回答问题，以便将系统部署到生产环境中，供客户端应用程序使用。 最终确定所有文档，并进行评审。 已将项目提交到负责操作的实体。 例如，此实体可能是 IT、客户数据科学团队或负责在生产中运行系统的客户代理。 
 
 ## <a name="artifacts"></a>项目
-在此最后阶段中生成的主要项目是“客户项目退出报表”。 此技术报表包含对于了解如何操作系统有帮助的所有项目细节。 TDSP 提供[退出报表](https://github.com/Azure/Azure-TDSP-ProjectTemplate/blob/master/Docs/Project/Exit%20Report.md)模板。 可按原样使用该模板，也可以根据特定客户需求对其进行自定义。 
+在此最后阶段中生成的主要项目是“客户项目退出报表”  。 此技术报表包含对于了解如何操作系统有帮助的所有项目细节。 TDSP 提供[退出报表](https://github.com/Azure/Azure-TDSP-ProjectTemplate/blob/master/Docs/Project/Exit%20Report.md)模板。 可按原样使用该模板，也可以根据特定客户需求对其进行自定义。 
 
 
 ## <a name="next-steps"></a>后续步骤
@@ -62,4 +60,4 @@ ms.lasthandoff: 05/03/2018
 
 我们还提供了完整的演练，演示特定方案过程中的所有步骤。 [示例演练](walkthroughs.md)一文提供了包含链接和缩略图描述的方案列表。 该演练演示如何将云、本地工具以及服务结合到一个工作流或管道中，以创建智能应用程序。 
 
-有关如何在使用 Azure 机器学习工作室的 TDSP 中执行步骤的示例，请参阅[通过 Azure 机器学习使用 TDSP](http://aka.ms/datascienceprocess)。
+有关如何在使用 Azure 机器学习工作室的 TDSP 中执行步骤的示例，请参阅[通过 Azure 机器学习使用 TDSP](https://docs.microsoft.com/azure/machine-learning/team-data-science-process/)。

@@ -1,26 +1,24 @@
 ---
-title: "Azure Functions 运行时安装 | Microsoft Docs"
-description: "如何安装 Azure Functions 运行时预览版 2"
+title: Azure Functions 运行时安装 | Microsoft Docs
+description: 如何安装 Azure Functions 运行时预览版 2
 services: functions
-documentationcenter: 
 author: apwestgarth
 manager: stefsch
-editor: 
-ms.assetid: 
-ms.service: functions
-ms.workload: na
-ms.tgt_pltfrm: na
-ms.devlang: multiple
-ms.topic: article
+ms.assetid: ''
+ms.service: azure-functions
+ms.topic: conceptual
 ms.date: 11/28/2017
 ms.author: anwestg
-ms.openlocfilehash: f8ce27bf28f73818932f2ac9056d4fdd573679e8
-ms.sourcegitcommit: a48e503fce6d51c7915dd23b4de14a91dd0337d8
-ms.translationtype: HT
+ms.openlocfilehash: 0fbc76f3cb3fea84347ef55e40e1b2bed9b98152
+ms.sourcegitcommit: 44e85b95baf7dfb9e92fb38f03c2a1bc31765415
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/05/2017
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70085499"
 ---
 # <a name="install-the-azure-functions-runtime-preview-2"></a>安装 Azure Functions 运行时预览版 2
+
+[!INCLUDE [intro](../../includes/functions-runtime-preview-note.md)]
 
 若要安装 Azure Functions 运行时预览版 2，必须执行以下步骤：
 
@@ -105,36 +103,37 @@ Azure Functions 运行时预览版安装程序会引导完成 Azure Functions �
 
 在 Azure Functions 运行时预览版中创建第一个函数
 
-1. 使用 https://<machinename>.<domain> 浏览到 **Azure Functions 运行时门户** 例如 https://mycomputer.mydomain.com
+1. 以 `https://<machinename>.<domain>` 的形式浏览到 **Azure Functions 运行时门户**，例如 `https://mycomputer.mydomain.com`。
+
 1. 系统会提示**登录**。如果是在域中部署的，请使用帐户用户名和密码登录；否则，请使用本地帐户用户名和密码登录到门户。
 
-![Azure Functions 运行时预览版门户登录][14]
+    ![Azure Functions 运行时预览版门户登录][14]
 
-1. 若要创建函数应用，必须创建订阅。  在门户的左上角，单击订阅旁边的 **+** 选项
+1. 若要创建函数应用，必须创建订阅。  在门户的左上角，单击订阅旁边的 **+** 选项。
 
-![Azure Functions 运行时预览版门户订阅][15]
+    ![Azure Functions 运行时预览版门户订阅][15]
 
 1. 选择“DefaultPlan”，输入订阅名称，单击“创建”。
 
-![Azure Functions 运行时预览版门户订阅计划和名称][16]
+    ![Azure Functions 运行时预览版门户订阅计划和名称][16]
 
 1. 所有函数应用列在门户的左窗格中。  若要创建新的函数应用，请选择标题“函数应用”，单击 **+** 选项。
 
 1. 输入函数应用的名称，选择正确的订阅，选择想要对其编程的 Azure Functions 运行时版本，并单击“创建”
 
-![Azure Functions 运行时预览版门户 - 新建函数应用][17]
+    ![Azure Functions 运行时预览版门户 - 新建函数应用][17]
 
 1. 新函数应用将列入门户的左窗格中。  选择“函数”，单击门户中间窗格顶部的“新建函数”。
 
-![Azure Functions 运行时预览版模板][18]
+    ![Azure Functions 运行时预览版模板][18]
 
 1. 选择“计时器触发器”函数，在右侧浮出控件中为函数命名，将“计划”更改为 `*/5 * * * * *`（此 cron 表达式可让计时器函数每隔五秒执行一次），并单击“创建”
 
-![Azure Functions 运行时预览版 - 新计时器函数配置][19]
+    ![Azure Functions 运行时预览版 - 新计时器函数配置][19]
 
 1. 现已创建函数。  可以通过展开门户底部的“日志”窗格查看函数应用的执行日志。
 
-![Azure Functions 运行时预览版 - 函数执行][20]
+    ![Azure Functions 运行时预览版 - 函数执行][20]
 
 <!--Image references-->
 [1]: ./media/functions-runtime-install/AzureFunctionsRuntime_Installer1.png

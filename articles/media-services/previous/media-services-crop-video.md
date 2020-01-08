@@ -4,23 +4,25 @@ description: 本文说明如何使用 Media Encoder Standard 裁剪视频。
 services: media-services
 documentationcenter: ''
 author: anilmur
-manager: cfowler
+manager: femila
 editor: ''
-ms.assetid: 7628f674-2005-4531-8b61-d7a4f53e46ba
 ms.service: media-services
 ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: dotnet
 ms.topic: article
-ms.date: 08/09/2017
-ms.author: anilmur;juliako;
-ms.openlocfilehash: 2592316481c9e265fbae20b832beb21ae4905b14
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.date: 03/18/2019
+ms.author: anilmur
+ms.reviewer: juliako
+ms.openlocfilehash: 03d68cc3a60abba8b7189a9d03fbc21d7606f736
+ms.sourcegitcommit: 6a42dd4b746f3e6de69f7ad0107cc7ad654e39ae
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/07/2019
+ms.locfileid: "69016616"
 ---
-# <a name="crop-videos-with-media-encoder-standard"></a>使用 Media Encoder Standard 裁剪视频
+# <a name="crop-videos-with-media-encoder-standard"></a>使用 Media Encoder Standard 裁剪视频  
+
 可以使用 Media Encoder Standard (MES) 裁剪输入视频。 裁剪是指在视频帧内选择一个矩形窗口并且只编码该窗口内的像素的过程。 下图可帮助说明该过程。
 
 ![裁剪视频](./media/media-services-crop-video/media-services-crop-video01.png)
@@ -126,7 +128,7 @@ MES 中的裁剪是预处理阶段，因此，编码预设​​值中的裁剪�
 
 
 ## <a name="restrictions-on-cropping"></a>裁剪的限制
-裁剪功能仅供手动操作。 需要将输入视频加载到合适的编辑工具中，以便选择感兴趣的帧、放置光标以确定裁剪矩形的偏移量、确定针对该特定视频调整的编码预设值等。此功能的本意并非实现诸如自动检测及删除输入视频黑边之类的功能。
+裁剪功能仅供手动操作。 需要将输入视频加载到合适的编辑工具中，以便选择感兴趣的帧、定位光标以确定裁剪矩形的偏移量，以此确定针对该特定视频调整的编码预设值等。此功能的本意并非实现诸如自动检测及删除输入视频黑边之类的功能。
 
 裁剪功能受到以下限制。 如果不符合以下情况，编码任务可能会失败或生成非预期的输出。
 

@@ -3,7 +3,7 @@ title: 创建使用可用性区域的 Azure 规模集 | Microsoft Docs
 description: 了解如何创建使用可用性区域的 Azure 虚拟机规模集以增加冗余防止中断
 services: virtual-machine-scale-sets
 documentationcenter: ''
-author: iainfoulds
+author: cynthn
 manager: jeconnoc
 editor: ''
 tags: azure-resource-manager
@@ -13,13 +13,14 @@ ms.workload: infrastructure-services
 ms.tgt_pltfrm: vm
 ms.devlang: na
 ms.topic: article
-ms.date: 04/05/2018
-ms.author: iainfou
-ms.openlocfilehash: cc91366bda4dd443392c78cd61e5cc0ddb261fe2
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.date: 08/08/2018
+ms.author: cynthn
+ms.openlocfilehash: 0a31ed174c7a5986594f7c07b7ce00b1649413c8
+ms.sourcegitcommit: beb34addde46583b6d30c2872478872552af30a1
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 08/22/2019
+ms.locfileid: "69907982"
 ---
 # <a name="create-a-virtual-machine-scale-set-that-uses-availability-zones"></a>创建使用可用性区域的虚拟机规模集
 
@@ -33,21 +34,21 @@ ms.lasthandoff: 05/10/2018
 
 使用“最大分布”时，无论 VM 实际分布到多少个容错域，在规模集 VM 实例视图和实例元数据中都只能看到一个容错域。 每个区域中的分布是隐式的。
 
-要使用“最大分布”，请将“platformFaultDomainCount”设置为 1。 要使用“静态 5 容错域分布”，请将“platformFaultDomainCount”设置为 5。 在 API 版本 2017-12-01 中，单区域规模集和跨区域规模集的“platformFaultDomainCount”默认设置为 1。 目前，区域性规模集仅支持“静态 5 容错域分布”。
+要使用“最大分布”，请将“platformFaultDomainCount”设置为 1。 要使用“静态 5 容错域分布”，请将“platformFaultDomainCount”设置为 5。 在 API 版本 2017-12-01 中，单区域规模集和跨区域规模集的“platformFaultDomainCount”默认设置为 1。 目前, 区域 (非区域性) 规模集仅支持静态五容错域分配。
 
 ### <a name="placement-groups"></a>放置组
 
-部署规模集时，还可以选择为每个可用性区域部署单个[放置组](./virtual-machine-scale-sets-placement-groups.md)或多个放置组。 对于区域性规模集，可选择在区域中包含单个放置组或多个放置组。 对于大多数工作负荷，建议使用多个放置组，这样可以增大规模。 在 API 版本 2017-12-01 中，单区域和跨区域规模集默认为多个放置组，但区域性规模集则默认为单个放置组。
+部署规模集时，还可以选择为每个可用性区域部署单个[放置组](./virtual-machine-scale-sets-placement-groups.md)或多个放置组。 对于区域 (非区域性) 规模集, 选择是在区域中使用单个放置组, 或在区域中包含多个放置组。 对于大多数工作负荷，建议使用多个放置组，这样可以增大规模。 在 API 版本*2017-12-01*中, 规模集默认为单区域和跨区域规模集的多个放置组, 但对于区域 (非区域性) 规模集, 它们默认为单个放置组。
 
 > [!NOTE]
 > 如果使用“最大分布”，则必须使用多个放置组。
 
 ### <a name="zone-balancing"></a>区域均衡
 
-最后，对于跨多个区域部署的规模集，还可以选择“尽量实现区域均衡”或“严格执行区域均衡”。 如果每个区域中的 VM 数与规模集的所有其他区域中的 VM 数只相差 1，则可以认为该规模集“已实现均衡”。 例如：
+最后，对于跨多个区域部署的规模集，还可以选择“尽量实现区域均衡”或“严格执行区域均衡”。 如果每个区域中的 VM 数相同或与规模集的所有其他区域中的 VM 数只相差 \\ 1，则可以认为该规模集“已实现均衡”。 例如：
 
-- 某个规模集的区域 1 中有 2 个 VM，区域 2 中有 3 个 VM，区域 3 中有 3 个 VM，则可以认为该规模集已实现均衡。
-- 某个规模集的区域 1 中有 1 个 VM，区域 2 中有 3 个 VM，区域 3 中有 3 个 VM，则可以认为该规模集未实现均衡。
+- 某个规模集的区域 1 中有 2 个 VM，区域 2 中有 3 个 VM，区域 3 中有 3 个 VM，则可以认为该规模集已实现均衡。 只有一个区域具有不同的 VM 计数，它只比其他区域少 1 个 VM。 
+- 某个规模集的区域 1 中有 1 个 VM，区域 2 中有 3 个 VM，区域 3 中有 3 个 VM，则可以认为该规模集未实现均衡。 区域 1 比区域 2 和区域 3 少 2 个 VM。
 
 一个可能的情况是，规模集中的 VM 已成功创建，但这些 VM 的扩展部署失败。 在确定某个规模集是否已实现均衡时，这些 VM 虽然扩展失败，但仍计在内。 例如，如果某个规模集的区域 1 中有 3 个 VM，区域 2 中有 3 个 VM，区域 3 中有 3 个 VM，则可以认为该规模集已实现均衡，即使区域 1 中的所有扩展都失败而区域 2 和 3 中的所有扩展都成功。
 
@@ -61,10 +62,10 @@ ms.lasthandoff: 05/10/2018
 
 在单个区域中创建规模集时，可控制要运行所有这些 VM 实例的区域，规模集仅在该区域中进行托管和自动缩放。 使用区域冗余规模集，可创建跨越多个区域的单个规模集。 创建 VM 实例时，默认其在各区域中同等均衡。 如果其中一个区域中发生中断，规模集不会自动扩大以增加容量。 最佳做法是基于 CPU 或内存使用情况配置自动缩放规则。 借助自动缩放规则，规模集能够通过在其余可操作区域中横向扩展新实例，来应对该区域中的 VM 实例损失。
 
-若要使用可用性区域，必须在[受支持的 Azure 区域](../availability-zones/az-overview.md#regions-that-support-availability-zones)中创建规模集。 可以使用下列方法之一创建使用可用性区域的规模集：
+若要使用可用性区域，必须在[受支持的 Azure 区域](../availability-zones/az-overview.md#services-support-by-region)中创建规模集。 可以使用下列方法之一创建使用可用性区域的规模集：
 
 - [Azure 门户](#use-the-azure-portal)
-- [Azure CLI 2.0](#use-the-azure-cli-20)
+- Azure CLI
 - [Azure PowerShell](#use-azure-powershell)
 - [Azure 资源管理器模板](#use-azure-resource-manager-templates)
 
@@ -76,11 +77,11 @@ ms.lasthandoff: 05/10/2018
 
 将在你指定的单个区域中创建规模集和支持资源，例如 Azure 负载均衡器和公共 IP 地址。
 
-## <a name="use-the-azure-cli-20"></a>使用 Azure CLI 2.0
+## <a name="use-the-azure-cli"></a>使用 Azure CLI
 
 创建使用可用性区域的规模集的过程与[入门文章](quick-create-cli.md)中详述的过程相同。 若要使用可用性区域，必须在受支持的 Azure 区域中创建规模集。
 
-在 [az vmss create](/cli/azure/vmss#az_vmss_create) 命令中添加 `--zones` 参数并指定要使用的区域（例如区域 *1*、*2* 或 *3*）。 以下示例在区域 1 中创建名为 myScaleSet 的单个区域规模集：
+在 [az vmss create](/cli/azure/vmss) 命令中添加 `--zones` 参数并指定要使用的区域（例如区域 *1*、*2* 或 *3*）。 以下示例在区域 1 中创建名为 myScaleSet 的单个区域规模集：
 
 ```azurecli
 az vmss create \
@@ -93,11 +94,11 @@ az vmss create \
     --zones 1
 ```
 
-有关单区域规模集和网络资源的完整示例，请参阅[此示例 CLI 脚本](https://github.com/Azure/azure-docs-cli-python-samples/blob/master/virtual-machine-scale-sets/create-single-availability-zone/create-single-availability-zone.sh.)
+有关单区域规模集和网络资源的完整示例，请参阅[此示例 CLI 脚本](https://github.com/Azure/azure-docs-cli-python-samples/blob/master/virtual-machine-scale-sets/create-single-availability-zone/create-single-availability-zone.sh)
 
 ### <a name="zone-redundant-scale-set"></a>区域冗余规模集
 
-若要创建区域冗余规模集，请使用标准 SKU 公用 IP 地址和负载均衡器。 为增强冗余，标准 SKU 创建区域冗余网络资源。 有关详细信息，请参阅 [Azure 负载均衡器标准概述](../load-balancer/load-balancer-standard-overview.md)。
+若要创建区域冗余规模集，请使用标准 SKU 公用 IP 地址和负载均衡器。 为增强冗余，标准 SKU 创建区域冗余网络资源。 有关详细信息，请参阅 [Azure 负载均衡器标准概述](../load-balancer/load-balancer-standard-overview.md)和[标准负载均衡器和可用性区域](../load-balancer/load-balancer-standard-availability-zones.md)。
 
 若要创建区域冗余规模集，可使用 `--zones` 参数指定多个区域。 下例跨区域 1、2、3 创建名为 myScaleSet 的区域冗余规模集：
 
@@ -116,12 +117,12 @@ az vmss create \
 
 ## <a name="use-azure-powershell"></a>使用 Azure PowerShell
 
-若要使用可用性区域，必须在受支持的 Azure 区域中创建规模集。 在 [New-AzureRmVmssConfig](/powershell/module/azurerm.compute/new-azurermvmssconfig) 命令中添加 `-Zone` 参数并指定要使用的区域（例如区域 *1*、*2* 或 *3*）。
+若要使用可用性区域，必须在受支持的 Azure 区域中创建规模集。 在 [New-AzVmssConfig](/powershell/module/az.compute/new-azvmssconfig) 命令中添加 `-Zone` 参数并指定要使用的区域（例如区域 *1*、*2* 或 *3*）。
 
 以下示例在美国东部 2 区域 1 中创建名为 myScaleSet 的单区域规模集。 虚拟网络、公共 IP 地址和负载均衡器的 Azure 网络资源均会自动创建。 出现提示时，请针对规模集中的 VM 实例提供自己的所需管理凭据：
 
 ```powershell
-New-AzureRmVmss `
+New-AzVmss `
   -ResourceGroupName "myResourceGroup" `
   -Location "EastUS2" `
   -VMScaleSetName "myScaleSet" `
@@ -138,7 +139,7 @@ New-AzureRmVmss `
 若要创建区域冗余规模集，可使用 `-Zone` 参数指定多个区域。 以下示例跨美国东部 2 区域 1、2、3 创建名为 myScaleSet 的区域冗余规模集。 虚拟网络、公共 IP 地址和负载均衡器的区域冗余 Azure 网络资源均会自动创建。 出现提示时，请针对规模集中的 VM 实例提供自己的所需管理凭据：
 
 ```powershell
-New-AzureRmVmss `
+New-AzVmss `
   -ResourceGroupName "myResourceGroup" `
   -Location "EastUS2" `
   -VMScaleSetName "myScaleSet" `
@@ -214,7 +215,7 @@ New-AzureRmVmss `
 }
 ```
 
-如果创建公用 IP 地址或负载均衡器，则指定 "sku": { "name": "Standard" }" 属性以创建区域冗余网络资源。 还需要创建网络安全组和规则以允许任意流量。 有关详细信息，请参阅 [Azure 负载均衡器标准概述](../load-balancer/load-balancer-standard-overview.md)。
+如果创建公共 IP 地址或负载均衡器，则指定 "sku": { "name":"Standard" }" 属性以创建区域冗余网络资源。 还需要创建网络安全组和规则以允许任意流量。 有关详细信息，请参阅 [Azure 负载均衡器标准概述](../load-balancer/load-balancer-standard-overview.md)和[标准负载均衡器和可用性区域](../load-balancer/load-balancer-standard-availability-zones.md)。
 
 有关区域冗余规模集和网络资源的完整示例，请参阅[此示例资源管理器模板](https://github.com/Azure/vm-scale-sets/blob/master/preview/zones/multizone.json)
 

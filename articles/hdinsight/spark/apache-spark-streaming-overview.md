@@ -1,28 +1,23 @@
 ---
-title: Azure HDInsight 中的 Spark 流式处理 | Microsoft Docs
-description: 如何在 HDInsight Spark 群集上使用 Spark 流式处理应用程序。
-services: hdinsight
-documentationcenter: ''
-tags: azure-portal
-author: maxluk
-manager: jhubbard
-editor: cgronlun
-ms.assetid: ''
+title: Azure HDInsight 中的 Spark 流式处理
+description: 如何在 HDInsight Spark 群集上使用 Apache Spark 流式处理应用程序。
 ms.service: hdinsight
+author: hrasheed-msft
+ms.author: hrasheed
+ms.reviewer: jasonh
 ms.custom: hdinsightactive
-ms.devlang: na
-ms.topic: article
-ms.date: 02/05/2018
-ms.author: maxluk
-ms.openlocfilehash: 2f521df81e5153affa95248cda2aa001bc5d6484
-ms.sourcegitcommit: d78bcecd983ca2a7473fff23371c8cfed0d89627
-ms.translationtype: HT
+ms.topic: conceptual
+ms.date: 03/11/2019
+ms.openlocfilehash: f990e5eb2761f1743c2731f499ecc341990edf53
+ms.sourcegitcommit: fa4852cca8644b14ce935674861363613cf4bfdf
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/14/2018
+ms.lasthandoff: 09/09/2019
+ms.locfileid: "70813996"
 ---
-# <a name="overview-of-spark-streaming"></a>Spark 流式处理概述
+# <a name="overview-of-apache-spark-streaming"></a>Apache Spark 流式处理概述
 
-Spark 流式处理提供对 HDInsight Spark 群集的数据流处理，同时保证即便发生节点故障，任何输入事件也仅处理一次。 Spark 流是一个长时间运行的作业，接收各种来源（包括 Azure 事件中心、Azure IoT 中心、Kafka、Flume、Twitter、ZeroMQ、原始 TCP 套接字）的输入数据，或来自监视 HDFS 文件系统的输入数据。 与单独的事件驱动进程不同，Spark 流将输入数据批处理为时间范围，例如 2 秒的切片，然后使用映射、减少、联接和提取操作转化每批数据。 然后，Spark 流将转换后的数据写入文件系统、数据库、仪表板和控制台。
+[Apache Spark](https://spark.apache.org/) 流式处理提供对 HDInsight Spark 群集的数据流处理，同时保证即便发生节点故障，任何输入事件也仅处理一次。 Spark 流是一个长时间运行的作业，接收各种来源（包括 Azure 事件中心、Azure IoT 中心、[Apache Kafka](https://kafka.apache.org/)、[Apache Flume](https://flume.apache.org/)、Twitter、[ZeroMQ](http://zeromq.org/)、原始 TCP 套接字）的输入数据，或来自监视 [Apache Hadoop YARN](https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html) 文件系统的输入数据。 与单独的事件驱动进程不同，Spark 流将输入数据批处理为时间范围，例如 2 秒的切片，然后使用映射、减少、联接和提取操作转化每批数据。 然后，Spark 流将转换后的数据写入文件系统、数据库、仪表板和控制台。
 
 ![使用 HDInsight 和 Spark 流式处理的流处理](./media/apache-spark-streaming-overview/hdinsight-spark-streaming.png)
 
@@ -38,7 +33,7 @@ DStream 可提供基于原始事件数据的抽象层。
 
 每个 RDD 表示在用户定义的时间范围（称为*批处理间隔*）内收集的事件。 每个批处理间隔后，将生成新的 RDD，其中包含该间隔的所有数据。 连续的 RDD 集将被收集到 DStream。 例如，如果批处理间隔为 1 秒，则 DStream 将每秒发出一个批处理，其中包含一个 RDD（包含该秒期间引入的所有数据）。 处理 DStream 时，温度事件将出现在其中一个批处理中。 Spark 流式处理应用程序处理包含事件的批处理并最终作用于每个 RDD 中存储的数据。
 
-![温度事件的示例 DStream ](./media/apache-spark-streaming-overview/hdinsight-spark-streaming-example.png)
+![温度事件的示例 DStream](./media/apache-spark-streaming-overview/hdinsight-spark-streaming-example.png)
 
 ## <a name="structure-of-a-spark-streaming-application"></a>Spark 流式处理应用程序的结构
 
@@ -59,90 +54,107 @@ Spark 流式处理应用程序是一个长时间运行的应用程序，从引�
 
 #### <a name="create-a-streamingcontext"></a>创建 StreamingContext
 
-从指向群集的 SparkContext 创建 StreamingContext。 创建 StreamingContext 时，指定批处理的大小（以秒为单位），例如：
+从指向群集的 SparkContext 创建 StreamingContext。 创建 StreamingContext 时，指定批处理的大小（以秒为单位），例如：  
 
-    val ssc = new StreamingContext(spark, Seconds(1))
+```
+import org.apache.spark._
+import org.apache.spark.streaming._
+
+val ssc = new StreamingContext(sc, Seconds(1))
+```
 
 #### <a name="create-a-dstream"></a>创建 DStream
 
 使用 StreamingContext 实例，为输入源创建输入 DStream。 在本例中，应用程序监视附加到 HDInsight 群集的默认存储中的新文件的外观。
 
-    val lines = ssc.textFileStream("/uploads/2017/01/")
+```
+val lines = ssc.textFileStream("/uploads/Test/")
+```
 
 #### <a name="apply-transformations"></a>应用转换
 
 通过对 DStream 应用转换来实现处理。 此应用程序将从文件中一次接收一行文本，将每行拆分成单词。然后使用 map-reduce 模式对每个单词出现的次数进行计数。
 
-    val words = lines.flatMap(_.split(" "))
-    val pairs = words.map(word => (word, 1))
-    val wordCounts = pairs.reduceByKey(_ + _)
+```
+val words = lines.flatMap(_.split(" "))
+val pairs = words.map(word => (word, 1))
+val wordCounts = pairs.reduceByKey(_ + _)
+```
 
 #### <a name="output-results"></a>输出结果
 
 通过应用输出操作，将转换结果推送到目标系统。 在本例中，整个计算中的每个运行的结果都将打印到控制台输出中。
 
-    wordCounts.print()
+```
+wordCounts.print()
+```
 
 ### <a name="run-the-application"></a>运行应用程序
 
 启动流式处理应用程序并运行，直到收到终止信号。
 
-    ssc.start()            
-    ssc.awaitTermination()
+```
+ssc.start()
+ssc.awaitTermination()
+```
 
-有关 Spark 流 API 及其支持的事件源、转换和输出操作的详细信息，请参阅 [Spark Streaming Programming Guide](https://people.apache.org/~pwendell/spark-releases/latest/streaming-programming-guide.html)（Spark 流式处理编程指南）。
+有关 Spark 流 API 及其支持的事件源、转换和输出操作的详细信息，请参阅 [Apache Spark Streaming Programming Guide](https://people.apache.org/~pwendell/spark-releases/latest/streaming-programming-guide.html)（Apache Spark 流式处理编程指南）。
 
 下面的示例应用程序是自包含的，因此可以在 [Jupyter Notebook](apache-spark-jupyter-notebook-kernels.md) 内运行它。 此示例将在类 DummySource 中创建模拟数据源，该源每五秒输出计数器的值以及当前时间（以毫秒为单位）。 新 StreamingContext 对象的批处理间隔为 30 秒。 每次创建批处理时，流式处理都将检查生成的 RDD，将 RDD 转换为 Spark DataFrame 并通过 DataFrame 创建一个临时表。
 
-    class DummySource extends org.apache.spark.streaming.receiver.Receiver[(Int, Long)](org.apache.spark.storage.StorageLevel.MEMORY_AND_DISK_2) {
+```
+class DummySource extends org.apache.spark.streaming.receiver.Receiver[(Int, Long)](org.apache.spark.storage.StorageLevel.MEMORY_AND_DISK_2) {
 
-        /** Start the thread that simulates receiving data */
-        def onStart() {
-            new Thread("Dummy Source") { override def run() { receive() } }.start()
-        }
-
-        def onStop() {  }
-
-        /** Periodically generate a random number from 0 to 9, and the timestamp */
-        private def receive() {
-            var counter = 0  
-            while(!isStopped()) {
-                store(Iterator((counter, System.currentTimeMillis)))
-                counter += 1
-                Thread.sleep(5000)
-            }
-        }
+    /** Start the thread that simulates receiving data */
+    def onStart() {
+        new Thread("Dummy Source") { override def run() { receive() } }.start()
     }
 
-    // A batch is created every 30 seconds
-    val ssc = new org.apache.spark.streaming.StreamingContext(spark.sparkContext, org.apache.spark.streaming.Seconds(30))
+    def onStop() {  }
 
-    // Set the active SQLContext so that we can access it statically within the foreachRDD
-    org.apache.spark.sql.SQLContext.setActive(spark.sqlContext)
+    /** Periodically generate a random number from 0 to 9, and the timestamp */
+    private def receive() {
+        var counter = 0  
+        while(!isStopped()) {
+            store(Iterator((counter, System.currentTimeMillis)))
+            counter += 1
+            Thread.sleep(5000)
+        }
+    }
+}
 
-    // Create the stream
-    val stream = ssc.receiverStream(new DummySource())
+// A batch is created every 30 seconds
+val ssc = new org.apache.spark.streaming.StreamingContext(spark.sparkContext, org.apache.spark.streaming.Seconds(30))
 
-    // Process RDDs in the batch
-    stream.foreachRDD { rdd =>
+// Set the active SQLContext so that we can access it statically within the foreachRDD
+org.apache.spark.sql.SQLContext.setActive(spark.sqlContext)
 
-        // Access the SQLContext and create a table called demo_numbers we can query
-        val _sqlContext = org.apache.spark.sql.SQLContext.getOrCreate(rdd.sparkContext)
-        _sqlContext.createDataFrame(rdd).toDF("value", "time")
-            .registerTempTable("demo_numbers")
-    } 
+// Create the stream
+val stream = ssc.receiverStream(new DummySource())
 
-    // Start the stream processing
-    ssc.start()
+// Process RDDs in the batch
+stream.foreachRDD { rdd =>
 
-然后，你可以定期查询 DataFrame 来查看批处理中存在的当前值集，例如，使用以下 SQL 查询：
+    // Access the SQLContext and create a table called demo_numbers we can query
+    val _sqlContext = org.apache.spark.sql.SQLContext.getOrCreate(rdd.sparkContext)
+    _sqlContext.createDataFrame(rdd).toDF("value", "time")
+        .registerTempTable("demo_numbers")
+} 
 
-    %%sql
-    SELECT * FROM demo_numbers
+// Start the stream processing
+ssc.start()
+```
+
+在启动上面的应用程序以后，等待约 30 秒钟。  然后，你可以定期查询 DataFrame 来查看批处理中存在的当前值集，例如，使用以下 SQL 查询：
+
+```sql
+%%sql
+SELECT * FROM demo_numbers
+```
 
 生成的输出如下所示：
 
-| 值 | time |
+| value | 时间 |
 | --- | --- |
 |10 | 1497314465256 |
 |11 | 1497314470272 |
@@ -165,30 +177,52 @@ Spark 流式处理应用程序是一个长时间运行的应用程序，从引�
 
 下面的示例将更新使用 DummySource 的代码，将批处理收集到持续时间为一分钟且滑动为一分钟的窗口中。
 
-    // A batch is created every 30 seconds
-    val ssc = new org.apache.spark.streaming.StreamingContext(spark.sparkContext, org.apache.spark.streaming.Seconds(30))
+```
+class DummySource extends org.apache.spark.streaming.receiver.Receiver[(Int, Long)](org.apache.spark.storage.StorageLevel.MEMORY_AND_DISK_2) {
 
-    // Set the active SQLContext so that we can access it statically within the foreachRDD
-    org.apache.spark.sql.SQLContext.setActive(spark.sqlContext)
+    /** Start the thread that simulates receiving data */
+    def onStart() {
+        new Thread("Dummy Source") { override def run() { receive() } }.start()
+    }
 
-    // Create the stream
-    val stream = ssc.receiverStream(new DummySource())
+    def onStop() {  }
 
-    // Process batches in 1 minute windows
-    stream.window(org.apache.spark.streaming.Minutes(1)).foreachRDD { rdd =>
+    /** Periodically generate a random number from 0 to 9, and the timestamp */
+    private def receive() {
+        var counter = 0  
+        while(!isStopped()) {
+            store(Iterator((counter, System.currentTimeMillis)))
+            counter += 1
+            Thread.sleep(5000)
+        }
+    }
+}
 
-        // Access the SQLContext and create a table called demo_numbers we can query
-        val _sqlContext = org.apache.spark.sql.SQLContext.getOrCreate(rdd.sparkContext)
-        _sqlContext.createDataFrame(rdd).toDF("value", "time")
-        .registerTempTable("demo_numbers")
-    } 
+// A batch is created every 30 seconds
+val ssc = new org.apache.spark.streaming.StreamingContext(spark.sparkContext, org.apache.spark.streaming.Seconds(30))
 
-    // Start the stream processing
-    ssc.start()
+// Set the active SQLContext so that we can access it statically within the foreachRDD
+org.apache.spark.sql.SQLContext.setActive(spark.sqlContext)
+
+// Create the stream
+val stream = ssc.receiverStream(new DummySource())
+
+// Process batches in 1 minute windows
+stream.window(org.apache.spark.streaming.Minutes(1)).foreachRDD { rdd =>
+
+    // Access the SQLContext and create a table called demo_numbers we can query
+    val _sqlContext = org.apache.spark.sql.SQLContext.getOrCreate(rdd.sparkContext)
+    _sqlContext.createDataFrame(rdd).toDF("value", "time")
+    .registerTempTable("demo_numbers")
+} 
+
+// Start the stream processing
+ssc.start()
+```
 
 第一分钟后，会产生 12 个条目 - 窗口中收集到的两个批处理中各有 6 个条目。
 
-| 值 | time |
+| value | 时间 |
 | --- | --- |
 | 1 | 1497316294139 |
 | 2 | 1497316299158
@@ -207,7 +241,7 @@ Spark 流式传输 API 中可用的滑动窗口函数包括 window、countByWind
 
 ## <a name="checkpointing"></a>检查点
 
-为提供复原和容错功能，Spark 流式处理依赖检查点，确保即使出现节点故障，流处理仍可以不间断地继续。 在 HDInsight 中，Spark 创建持久存储（Azure 存储或 Data Lake Store）的检查点。 这些检查点存储关于流式处理应用程序的元数据，例如应用程序定义的配置和操作，以及已排队但尚未处理的所有批处理。 在某些情况下，检查点还包括将数据保存在 RDD 中以便更快速地基于由 Spark 托管的 RDD 中存在的内容重新生成数据状态。
+为提供复原和容错功能，Spark 流式处理依赖检查点，确保即使出现节点故障，流处理仍可以不间断地继续。 在 HDInsight 中，Spark 创建持久存储（Azure 存储或 Data Lake Storage）的检查点。 这些检查点存储关于流式处理应用程序的元数据，例如应用程序定义的配置和操作，以及已排队但尚未处理的所有批处理。 在某些情况下，检查点还包括将数据保存在 RDD 中以便更快速地基于由 Spark 托管的 RDD 中存在的内容重新生成数据状态。
 
 ## <a name="deploying-spark-streaming-applications"></a>部署 Spark 流式处理应用程序
 
@@ -215,10 +249,10 @@ Spark 流式传输 API 中可用的滑动窗口函数包括 window、countByWind
 
 ![部署 Spark 流式处理应用程序](./media/apache-spark-streaming-overview/hdinsight-spark-streaming-livy.png)
 
-此外，可以使用 GET 请求针对 LIVY 终结点检查所有应用程序的状态。 最后，可以通过针对 LIVY 终结点发出 DELETE 请求终止正在运行的应用程序。 有关 LIVY API 的详细信息，请参阅[通过 LIVY 远程作业](apache-spark-livy-rest-interface.md)
+此外，可以使用 GET 请求针对 LIVY 终结点检查所有应用程序的状态。 最后，可以通过针对 LIVY 终结点发出 DELETE 请求终止正在运行的应用程序。 有关 LIVY API 的详细信息，请参阅[使用 Apache LIVY 执行远程作业](apache-spark-livy-rest-interface.md)
 
 ## <a name="next-steps"></a>后续步骤
 
 * [在 HDInsight 中创建 Apache Spark 群集](../hdinsight-hadoop-create-linux-clusters-portal.md)
-* [Spark Streaming Programming Guide](https://people.apache.org/~pwendell/spark-releases/latest/streaming-programming-guide.html)（Spark 流式处理编程指南）
-* [通过 LIVY 以远程方式启动 Spark 作业](apache-spark-livy-rest-interface.md)
+* [Apache Spark Streaming Programming Guide](https://people.apache.org/~pwendell/spark-releases/latest/streaming-programming-guide.html)（Apache Spark 流式处理编程指南）
+* [使用 Apache LIVY 远程启动 Apache Spark 作业](apache-spark-livy-rest-interface.md)

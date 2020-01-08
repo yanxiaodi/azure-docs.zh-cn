@@ -11,16 +11,21 @@ ms.devlang: na
 ms.topic: reference
 ms.tgt_pltfrm: na
 ms.workload: na
-ms.date: 04/30/2018
+ms.date: 06/15/2018
 ms.author: tomfitz
-ms.openlocfilehash: 9507280bf5df1e63c81f0b2488b9676784c69812
-ms.sourcegitcommit: 96089449d17548263691d40e4f1e8f9557561197
-ms.translationtype: HT
+ms.openlocfilehash: 2330197b4512dfdd72de3529145103b644594e25
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/17/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64711222"
 ---
 # <a name="microsoftcommoninfobox-ui-element"></a>Microsoft.Common.InfoBox UI 元素
-可添加信息框的控件。
+可添加信息框的控件。 该框包含重要文本或警告，可帮助用户了解他们提供的值。 它还可以链接到详细信息的 URI。
+
+## <a name="ui-sample"></a>UI 示例
+![Microsoft.Common.InfoBox](./media/managed-application-elements/microsoft.common.infobox.png)
+
 
 ## <a name="schema"></a>架构
 ```json
@@ -38,7 +43,7 @@ ms.lasthandoff: 05/17/2018
 
 ## <a name="remarks"></a>备注
 
-* 对于 `icon`，请使用“无”、“信息”、“警告”或“错误”。
+* 对于 `icon`，请使用“无”、“信息”、“警告”或“错误”     。
 * `uri` 属性为可选。
 
 ## <a name="sample-output"></a>示例输出

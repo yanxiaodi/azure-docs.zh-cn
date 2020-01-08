@@ -1,6 +1,6 @@
 ---
-title: "include 文件"
-description: "include 文件"
+title: include 文件
+description: include 文件
 services: azure-resource-manager
 author: tfitzmac
 ms.service: azure-resource-manager
@@ -8,13 +8,14 @@ ms.topic: include
 ms.date: 02/20/2018
 ms.author: tomfitz
 ms.custom: include file
-ms.openlocfilehash: b9484336add0719749e9f0af56bdd70fa3906ef5
-ms.sourcegitcommit: 12fa5f8018d4f34077d5bab323ce7c919e51ce47
+ms.openlocfilehash: c1259584e91461865b0c7e7bbbd6aced1781827b
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 02/23/2018
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67708457"
 ---
-若要为资源组添加两个标记，请使用 [az group update](/cli/azure/group#az_group_update) 命令：
+若要为资源组添加两个标记，请使用 [az group update](/cli/azure/group) 命令：
 
 ```azurecli-interactive
 az group update -n myResourceGroup --set tags.Environment=Test tags.Dept=IT

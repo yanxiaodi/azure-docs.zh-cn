@@ -1,64 +1,128 @@
 ---
-title: "Azure 安全中心支持的平台 | Microsoft Docs"
-description: "本文档提供 Azure 安全中心支持的 Windows 和 Linux 操作系统列表。"
+title: Azure 安全中心支持的平台 |Microsoft Docs
+description: 本文档提供 Azure 安全中心支持的平台列表。
 services: security-center
 documentationcenter: na
-author: TerryLanfear
-manager: MBaldwin
-editor: 
+author: memildin
+manager: rkarlin
 ms.assetid: 70c076ef-3ad4-4000-a0c1-0ac0c9796ff1
 ms.service: security-center
 ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.tgt_pltfrm: na
 ms.workload: na
-ms.date: 02/15/2018
-ms.author: terrylan
-ms.openlocfilehash: 3b57cacec729bd2f2dd4acdbb9c15e69ab9f5c85
-ms.sourcegitcommit: a0be2dc237d30b7f79914e8adfb85299571374ec
-ms.translationtype: HT
+ms.date: 08/29/2019
+ms.author: memildin
+ms.openlocfilehash: 1d13db922ae84e4032304a8865ba6fcdafa65748
+ms.sourcegitcommit: 8a717170b04df64bd1ddd521e899ac7749627350
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/13/2018
+ms.lasthandoff: 09/23/2019
+ms.locfileid: "71201637"
 ---
-# <a name="supported-platforms-in-azure-security-center"></a>Azure 安全中心支持的平台
-使用经典部署模式和资源管理器部署模式创建的虚拟机 (VM) 和计算机支持安全状态监视和建议。
+# <a name="supported-platforms"></a>受支持的平台 
+
+## 虚拟机/服务器<a name="vm-server"></a>
+
+安全中心支持不同类型的混合环境上的虚拟机/服务器：
+
+* 仅 Azure
+* Azure 和本地
+* Azure 和其他云
+* Azure、其他云和本地
+
+对于在 Azure 订阅上激活的 Azure 环境，Azure 安全中心会自动发现在该订阅中部署的 IaaS 资源。
 
 > [!NOTE]
-> 了解 Azure 资源的[经典部署模型和 Resource Manager 部署模型](../azure-classic-rm.md)。
->
->
+> 若要接收整套安全功能，您必须具有[Log Analytics 代理](../azure-monitor/platform/agents-overview.md#log-analytics-agent)，该代理由 Azure 安全中心使用，并已安装并[正确配置为将数据发送到 Azure 安全中心](security-center-enable-data-collection.md#manual-agent)。
 
-## <a name="supported-platforms-for-windows-computers-and-vms"></a>Windows 计算机和 VM 支持的平台
-支持的 Windows 操作系统：
 
-* Windows Server 2008
-* Windows Server 2008 R2
-* Windows Server 2012
-* Windows Server 2012 R2
+以下部分列出了 Azure 安全中心使用的[Log Analytics 代理](../azure-monitor/platform/agents-overview.md#log-analytics-agent)可以运行的受支持的服务器操作系统。
+
+### Windows server 操作系统<a name="os-windows"></a>
+
+* Windows Server 2019
 * Windows Server 2016
-
-
-## <a name="supported-platforms-for-linux-computers-and-vms"></a>Linux 计算机和 VM 支持的平台
-支持的 Linux 操作系统：
-
-* Ubuntu 版本 12.04、14.04、16.04、16.10
-* Debian 版本 7、8
-* CentOS 版本 6.\*、7.*
-* Red Hat Enterprise Linux (RHEL) 版本 6.\*、7.*
-* SUSE Linux Enterprise Server (SLES) 版本 11 SP4+、12.*
-* Oracle Linux 版本 6.\*、7.*
+* Windows Server 2012 R2
+* Windows Server 2012
+* Windows Server 2008 R2
+* Windows Server 2008
 
 > [!NOTE]
-> Linux 操作系统暂不支持虚拟机行为分析。
->
->
+> 与 Microsoft Defender ATP 集成仅支持 Windows Server 2012 R2 和 Windows Server 2016。
 
-## <a name="vms-and-cloud-services"></a>VM 和云服务
-此外还支持云服务中运行的 VM。 仅监视云服务 web 和在生产槽运行的辅助角色。 若要了解有关云服务的详细信息，请参阅[云服务概述](../cloud-services/cloud-services-choose-me.md)。
+若要详细了解上面列出的 Windows 操作系统所支持的功能，请参阅[虚拟机/服务器支持的功能](security-center-services.md##vm-server-features)。
+
+### Linux 操作系统<a name="os-linux"></a>
+
+64 位
+
+* CentOS 6 和 7
+* Amazon Linux 2017.09
+* Oracle Linux 6 和 7
+* Red Hat Enterprise Linux Server 6 和 7
+* Debian GNU/Linux 8 和 9
+* Ubuntu Linux 14.04 LTS、16.04 LTS 和 18.04 LTS
+* SUSE Linux Enterprise Server 12
+
+32 位
+* CentOS 6
+* Oracle Linux 6
+* Red Hat Enterprise Linux Server 6
+* Debian GNU/Linux 8 和 9
+* Ubuntu Linux 14.04 LTS 和 16.04 LTS
+
+> [!NOTE]
+> 由于受支持的 Linux 操作系统的列表不断变化, 因此, 如果需要, 请单击[此处](https://github.com/microsoft/OMS-Agent-for-Linux#supported-linux-operating-systems)查看受支持版本的最新列表, 以防自上次发布本主题以来发生了更改。
+
+若要详细了解上面列出的适用于 Linux 操作系统的支持功能，请参阅[虚拟机/服务器支持的功能](security-center-services.md##vm-server-features)。
+
+### 托管虚拟机服务<a name="virtual-machine"></a>
+
+还会在客户订阅中创建虚拟机，作为某些 Azure 托管服务的一部分，例如 Azure Kubernetes （AKS）、Azure Databricks 等。 这些虚拟机也被 Azure 安全中心发现，可以根据上面列出的受支持的[Windows/Linux 操作系统](#os-windows)来安装和配置 Log analytics 代理。
+
+### 云服务<a name="cloud-services"></a>
+
+还支持在云服务中运行的虚拟机。 仅监视云服务 Web 和在生产槽运行的辅助角色。 若要了解有关云服务的详细信息，请参阅[云服务概述](../cloud-services/cloud-services-choose-me.md)。
+
+## PaaS 服务<a name="paas-services"></a>
+
+Azure 安全中心支持以下 Azure PaaS 资源：
+
+* SQL
+* PostGreSQL
+* MySQL
+* CosmosDB
+* 存储帐户
+* 应用服务
+* Functions
+* 云服务
+* VNet
+* Subnet
+* NIC
+* NSG
+* Batch 帐户
+* Service fabric 帐户
+* 自动化帐户
+* 负载均衡器
+* 搜索
+* 服务总线命名空间
+* 流分析
+* 事件中心命名空间
+* 逻辑应用
+* Redis
+* Data Lake Analytics
+* Data Lake Store
+* 密钥保管库
+
+若要详细了解适用于上述 PaaS 资源列表的支持的功能，请参阅[paas 服务支持的功能](security-center-services.md#paas-services)。
 
 ## <a name="next-steps"></a>后续步骤
 
-- [Azure 安全中心规划和操作指南](security-center-planning-and-operations-guide.md) - 了解如何规划和了解设计注意事项，以适应 Azure 安全中心
-- [Azure 安全中心按类型划分的安全警报](https://docs.microsoft.com/azure/security-center/security-center-alerts-type.md#virtual-machine-behavioral-analysis) - 了解关于安全中心中虚拟机行为分析和故障转储内存分析的详细信息
-- [Azure 安全中心常见问题解答](security-center-faq.md) - 查找有关使用服务的常见问题
-- [Azure 安全性博客](http://blogs.msdn.com/b/azuresecurity/) - 查找关于 Azure 安全性及合规性的博客文章
+- 了解[安全中心如何收集数据和 Log Analytics 代理](security-center-enable-data-collection.md)。
+- 了解[安全中心如何管理和保护数据](security-center-data-security.md)。
+- 了解如何[规划并理解设计注意事项，以便采用 Azure 安全中心](security-center-planning-and-operations-guide.md)。
+- 了解[不同云环境的可用功能](security-center-services.md)。
+- 详细了解[Azure 安全中心中的 vm & 服务器的威胁检测](security-center-alerts-iaas.md)。
+- 查找[有关使用 Azure 安全中心的常见问题](security-center-faq.md)。
+- 查找[关于 Azure 安全性和符合性的博客文章](https://blogs.msdn.com/b/azuresecurity/)。

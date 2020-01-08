@@ -1,24 +1,19 @@
 ---
-title: "ExpressRoute 线路的 NAT 要求 | Microsoft Docs"
-description: "本页提供有关为 ExpressRoute 线路配置和管理 NAT 的详细要求。"
-documentationcenter: na
+title: 线路的 NAT 要求 - ExpressRoute：Azure | Microsoft Docs
+description: 本页提供有关为 ExpressRoute 线路配置和管理 NAT 的详细要求。
 services: expressroute
 author: cherylmc
-manager: carmonm
-editor: 
-ms.assetid: 867bf936-c851-485f-84c8-d8d6e33fee9f
 ms.service: expressroute
-ms.devlang: na
-ms.topic: get-started-article
-ms.tgt_pltfrm: na
-ms.workload: infrastructure-services
-ms.date: 10/12/2017
+ms.topic: conceptual
+ms.date: 09/18/2019
 ms.author: cherylmc
-ms.openlocfilehash: 2a9903b0e3c04a7098f7a8e529801483b10af142
-ms.sourcegitcommit: 5d772f6c5fd066b38396a7eb179751132c22b681
-ms.translationtype: HT
+ms.custom: seodec18
+ms.openlocfilehash: d2879b6830a5c793358cc2200485ed971c5f3c48
+ms.sourcegitcommit: fad368d47a83dadc85523d86126941c1250b14e2
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/13/2017
+ms.lasthandoff: 09/19/2019
+ms.locfileid: "71123309"
 ---
 # <a name="expressroute-nat-requirements"></a>ExpressRoute NAT 要求
 要使用 ExpressRoute 连接到 Microsoft 云服务，需要设置并管理 NAT。 某些连接服务提供商以托管服务形式提供 NAT 的设置和管理。 请咨询连接服务提供商，以确定他们是否提供此类服务。 如果没有，则必须遵守相关要求，如下所述。 
@@ -26,7 +21,7 @@ ms.lasthandoff: 10/13/2017
 查看 [ExpressRoute 线路和路由域](expressroute-circuit-peerings.md) 页，获得各种路由域概述。 为了符合 Azure 公共和 Microsoft 对等互连的公共 IP 地址要求，建议在网络与 Microsoft 之间设置 NAT。 本部分提供需要设置的 NAT 基础结构的详细描述。
 
 ## <a name="nat-requirements-for-microsoft-peering"></a>Microsoft 对等互连的 NAT 要求
-Microsoft 对等互连路径用于连接到不支持通过 Azure 公共对等互连路径访问的 Microsoft 云服务。 服务列表包括 Office 365 服务，例如 Exchange Online、SharePoint Online、Skype for Business 和 Dynamics 365。 Microsoft 有望在 Microsoft 对等互连上支持双向连接。 定向到 Microsoft 云服务的流量必须由 SNAT 转换成有效的公共 IPv4 地址才能进入 Microsoft 网络。 从 Microsoft 云服务定向到网络的流量必须在 Internet 边缘进行 SNAT 转换，避免[非对称路由](expressroute-asymmetric-routing.md)。 下图提供了有关如何为 Microsoft 对等互连设置 NAT 的综合示意图。
+Microsoft 对等互连路径用于连接到不支持通过 Azure 公共对等互连路径访问的 Microsoft 云服务。 服务列表包括 Office 365 服务，例如 Exchange Online、SharePoint Online 和 Skype for Business。 Microsoft 有望在 Microsoft 对等互连上支持双向连接。 定向到 Microsoft 云服务的流量必须由 SNAT 转换成有效的公共 IPv4 地址才能进入 Microsoft 网络。 从 Microsoft 云服务定向到网络的流量必须在 Internet 边缘进行 SNAT 转换，避免[非对称路由](expressroute-asymmetric-routing.md)。 下图提供了有关如何为 Microsoft 对等互连设置 NAT 的综合示意图。
 
 ![](./media/expressroute-nat/expressroute-nat-microsoft.png) 
 
@@ -46,6 +41,11 @@ Microsoft 对等互连路径用于连接到不支持通过 Azure 公共对等互
 ![非对称路由与 ExpressRoute](./media/expressroute-asymmetric-routing/AsymmetricRouting2.png)
 
 ## <a name="nat-requirements-for-azure-public-peering"></a>Azure 公共对等互连的 NAT 要求
+
+> [!NOTE]
+> Azure 公共对等互连不适用于新线路。
+> 
+
 Azure 公共对等互连路径用于连接到托管于 Azure 中的所有服务的公共 IP 地址。 其中包括 [ExpessRoute 常见问题](expressroute-faqs.md) 中列出的服务以及由 Microsoft Azure 上的 ISV 托管的任何服务。 
 
 > [!IMPORTANT]

@@ -1,127 +1,140 @@
 ---
-title: 监视 B2B 事务并设置日志记录 - Azure 逻辑应用 | Microsoft Docs
-description: 监视 AS2、X12 和 EDIFACT 消息，启动集成帐户的诊断日志记录
-author: padmavc
-manager: anneta
-editor: ''
+title: 利用 Azure Monitor 日志监视 B2B 消息-Azure 逻辑应用 |Microsoft Docs
+description: 监视集成帐户和 Azure 逻辑应用的 AS2、X12 和 EDIFACT 消息，并设置 Azure Monitor 日志的诊断日志记录
 services: logic-apps
-documentationcenter: ''
-ms.assetid: bb7d9432-b697-44db-aa88-bd16ddfad23f
 ms.service: logic-apps
-ms.workload: integration
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.suite: integration
+author: divyaswarnkar
+ms.author: divswa
+ms.reviewer: jonfan, estfan, LADocs
 ms.topic: article
-ms.custom: H1Hack27Feb2017
-ms.date: 07/21/2017
-ms.author: LADocs; padmavc
-ms.openlocfilehash: 6afab12b9e2d6e8686ecbc95be9743afbe70d98c
-ms.sourcegitcommit: 6fcd9e220b9cd4cb2d4365de0299bf48fbb18c17
-ms.translationtype: HT
+ms.date: 10/23/2018
+ms.openlocfilehash: a4a7f951d34455f2e333f2c11e30d24efdfd22c1
+ms.sourcegitcommit: 55f7fc8fe5f6d874d5e886cb014e2070f49f3b94
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/05/2018
+ms.lasthandoff: 09/25/2019
+ms.locfileid: "71261210"
 ---
-# <a name="monitor-and-set-up-diagnostics-logging-for-b2b-communication-in-integration-accounts"></a>监视和设置用于在集成帐户中进行 B2B 通信的诊断日志记录
+# <a name="monitor-b2b-messages-with-azure-monitor-logs-in-azure-logic-apps"></a>在 Azure 逻辑应用中用 Azure Monitor 日志监视 B2B 消息
 
-在你通过集成帐户在两个运行的业务流程或应用程序之间设置 B2B 通信之后，这些实体可以彼此交换消息。 要确认此通信是否按预期方式工作，可通过 [Azure Log Analytics](../log-analytics/log-analytics-overview.md) 服务设置对 AS2、X12 和 EDIFACT 消息的监视以及对集成帐户的诊断日志记录。 此服务可监视云和本地环境，有助于保持其可用性和性能，还可以收集运行时详细信息和事件以进行更丰富的调试。 此外，还可以[将诊断数据用于其他服务](#extend-diagnostic-data)，如 Azure 存储和 Azure 事件中心。
+在集成帐户中的贸易合作伙伴之间建立 B2B 通信后，这些合作伙伴可以交换消息。 若要检查此通信是否按预期方式工作，可以监视 AS2、X12 和 EDIFACT 消息，并使用[Azure Monitor 日志](../log-analytics/log-analytics-overview.md)为集成帐户设置诊断日志记录。 此服务可监视云和本地环境，有助于保持其可用性和性能以及收集运行时详细信息和事件以进行更丰富的调试。 此外可以将此数据与其他服务一起使用，例如 Azure 存储和 Azure 事件中心。
 
-## <a name="requirements"></a>要求
+> [!NOTE]
+> 此页面可能仍然引用了 Microsoft Operations Management Suite (OMS)，它将[于 2019 年 1 月停用](../azure-monitor/platform/oms-portal-transition.md)，但尽可能使用 Azure Log Analytics 替换这些步骤。 
 
-* 设置有诊断日志记录的逻辑应用。 了解[如何对该逻辑应用设置日志记录](../logic-apps/logic-apps-monitor-your-logic-apps.md#azure-diagnostics)。
+[!INCLUDE [azure-monitor-log-analytics-rebrand](../../includes/azure-monitor-log-analytics-rebrand.md)]
 
-  > [!NOTE]
-  > 满足此要求后，Log Analytics 中应该已经有一个工作区。 为集成帐户设置日志记录时，应使用同一个 Log Analytics 工作区。 如果没有 Log Analytics 工作区，请了解[如何创建 Log Analytics 工作区](../log-analytics/log-analytics-quick-create-workspace.md)。
+## <a name="prerequisites"></a>先决条件
+
+* 已设置诊断日志记录的逻辑应用。 了解[如何创建逻辑应用](quickstart-create-first-logic-app-workflow.md)以及[如何为逻辑应用设置日志记录](../logic-apps/logic-apps-monitor-your-logic-apps.md#azure-diagnostics)。
+
+* 满足上述要求后，还需要一个 Log Analytics 工作区，用于通过 Azure Monitor 日志监视和跟踪 B2B 通信。 如果没有 Log Analytics 工作区，请了解[如何创建 Log Analytics 工作区](../azure-monitor/learn/quick-create-workspace.md)。
 
 * 关联到逻辑应用的集成帐户。 了解[如何创建关联到逻辑应用的集成帐户](../logic-apps/logic-apps-enterprise-integration-create-integration-account.md)。
 
-## <a name="turn-on-diagnostics-logging-for-your-integration-account"></a>为集成帐户启用诊断日志记录
+## <a name="turn-on-diagnostics-logging"></a>启用诊断日志记录
 
-可以从集成帐户直接启用日志记录，也可以[通过 Azure Monitor 服务](#azure-monitor-service)启用。 Aure Monitor 通过基础结构级数据提供基本监视。 详细了解 [Azure Monitor](../monitoring-and-diagnostics/monitoring-overview-azure-monitor.md)。
+可以从集成帐户直接启用日志记录，也可以[通过 Azure Monitor 服务](#azure-monitor-service)启用。 Aure Monitor 通过基础结构级数据提供基本监视。 详细了解 [Azure Monitor](../azure-monitor/overview.md)。
 
-### <a name="turn-on-diagnostics-logging-directly-from-your-integration-account"></a>直接从集成帐户启用诊断日志记录
+### <a name="turn-on-logging-from-integration-account"></a>从集成帐户启用日志记录
 
-1. 在 [Azure 门户](https://portal.azure.com)中，查找并选择“集成帐户”。 在“监视”下，选择“诊断日志”，如下所示：
+1. 在 [Azure 门户](https://portal.azure.com)中，查找并选择“集成帐户”。 在“监视”下，选择“诊断设置”。
 
-   ![查找并选择“集成帐户”，然后选择“诊断日志”](media/logic-apps-monitor-b2b-message/integration-account-diagnostics.png)
+   ![查找并选择“集成帐户”，选择“诊断设置”](media/logic-apps-monitor-b2b-message/find-integration-account.png)
 
-2. 选择“集成帐户”后，会自动选择以下值。 如果这些值正确无误，请选择“启用诊断”。 否则，请选择所需的值：
+1. 现可找到集成帐户并进行选择。 在筛选器列表中，选择应用到集成帐户的值。
+完成后，选择“添加诊断设置”。
 
-   1. 在“订阅”下，选择要用于集成帐户的 Azure 订阅。
-   2. 在“资源”下，选择要用于集成帐户的资源组。
-   3. 在“资源类型”下，选择“集成帐户”。 
-   4. 在“资源”下，选择“集成帐户”。 
-   5. 选择“启用诊断”。
+   | 属性 | 值 | 描述 | 
+   |----------|-------|-------------|
+   | **订阅** | <*Azure-subscription-name*> | 与集成帐户关联的 Azure 订阅 | 
+   | **资源组** | <*Azure-resource-group-name*> | 集成帐户的 Azure 资源组 | 
+   | **资源类型** | **集成帐户** | 要在其中启用日志记录的 Azure 资源类型 | 
+   | **资源** | <integration-account-name> | 要在其中启用日志记录的 Azure 资源的名称 | 
+   ||||  
+
+   例如：
 
    ![为集成帐户设置诊断](media/logic-apps-monitor-b2b-message/turn-on-diagnostics-integration-account.png)
 
-3. 在“诊断设置”、“状态”下，选择“启用”。
-
-   ![启用 Azure 诊断](media/logic-apps-monitor-b2b-message/turn-on-diagnostics-integration-account-2.png)
-
-4. 现在选择用于日志记录的 Log Analytics 工作区和数据，如下所示：
+1. 命名新的诊断设置并选择 Log Analytics 工作区和要记录的数据。
 
    1. 选择“发送到 Log Analytics”。 
-   2. 在“Log Analytics”下，选择“配置”。 
-   3. 在“OMS 工作区”下，选择要用于日志记录的 Log Analytics 工作区。
-   4. 在“日志”下，选择“IntegrationAccountTrackingEvents”类别。
-   5. 选择“保存”。
 
-   ![设置 Log Analytics，这样便可以将诊断数据发送到日志](media/logic-apps-monitor-b2b-message/send-diagnostics-data-log-analytics-workspace.png)
+   1. 在“Log Analytics”下，选择“配置”。 
 
-5. 现在[在 Log Analytics 中设置对 B2B 消息的跟踪](../logic-apps/logic-apps-track-b2b-messages-omsportal.md)。
+   1. 在“OMS 工作区”下，选择要用于日志记录的 Log Analytics 工作区。 
+
+      > [!NOTE]
+      > OMS 工作区即将替换为 Log Analytics 工作区。 
+
+   1. 在“日志”下，选择“IntegrationAccountTrackingEvents”类别，然后选择“保存”。
+
+   例如： 
+
+   ![设置 Azure Monitor 日志，以便可以将诊断数据发送到日志](media/logic-apps-monitor-b2b-message/send-diagnostics-data-log-analytics-workspace.png)
+
+1. 现在，[在 Azure Monitor 日志中设置 B2B 消息的跟踪](../logic-apps/logic-apps-track-b2b-messages-omsportal.md)。
 
 <a name="azure-monitor-service"></a>
 
-### <a name="turn-on-diagnostics-logging-through-azure-monitor"></a>通过 Azure Monitor 启用诊断日志记录
+### <a name="turn-on-logging-through-azure-monitor"></a>通过 Azure Monitor 启用日志记录
 
-1. 在 [Azure 门户](https://portal.azure.com)的 Azure 主菜单中，依次选择“监视”、“诊断日志”。 然后选择“集成帐户”，如下所示：
+1. 在 [Azure 门户](https://portal.azure.com)中的 Azure 主菜单上，选择“监视”。 选择“设置”下的“诊断设置”。 
 
-   ![选择“监视”、“诊断日志”，然后选择“集成帐户”](media/logic-apps-monitor-b2b-message/monitor-service-diagnostics-logs.png)
+   ![选择“监视”>“诊断设置”>“集成帐户”](media/logic-apps-monitor-b2b-message/monitor-diagnostics-settings.png)
 
-2. 选择“集成帐户”后，会自动选择以下值。 如果这些值正确无误，请选择“启用诊断”。 否则，请选择所需的值：
+1. 现可找到集成帐户并进行选择。 在筛选器列表中，选择应用到集成帐户的值。
+完成后，选择“添加诊断设置”。
 
-   1. 在“订阅”下，选择要用于集成帐户的 Azure 订阅。
-   2. 在“资源”下，选择要用于集成帐户的资源组。
-   3. 在“资源类型”下，选择“集成帐户”。
-   4. 在“资源”下，选择“集成帐户”。
-   5. 选择“启用诊断”。
+   | 属性 | 值 | 描述 | 
+   |----------|-------|-------------|
+   | **订阅** | <*Azure-subscription-name*> | 与集成帐户关联的 Azure 订阅 | 
+   | **资源组** | <*Azure-resource-group-name*> | 集成帐户的 Azure 资源组 | 
+   | **资源类型** | **集成帐户** | 要在其中启用日志记录的 Azure 资源类型 | 
+   | **资源** | <integration-account-name> | 要在其中启用日志记录的 Azure 资源的名称 | 
+   ||||  
+
+   例如：
 
    ![为集成帐户设置诊断](media/logic-apps-monitor-b2b-message/turn-on-diagnostics-integration-account.png)
 
-3. 在“诊断设置”下，选择“打开”。
-
-   ![启用 Azure 诊断](media/logic-apps-monitor-b2b-message/turn-on-diagnostics-integration-account-2.png)
-
-4. 现在选择用于日志记录的 Log Analytics 工作区和事件类别，如下所示：
+1. 命名新的诊断设置并选择 Log Analytics 工作区和要记录的数据。
 
    1. 选择“发送到 Log Analytics”。 
-   2. 在“Log Analytics”下，选择“配置”。 
-   3. 在“OMS 工作区”下，选择要用于日志记录的 Log Analytics 工作区。
-   4. 在“日志”下，选择“IntegrationAccountTrackingEvents”类别。
-   5. 完成后，选择“保存”。
 
-   ![设置 Log Analytics，这样便可以将诊断数据发送到日志](media/logic-apps-monitor-b2b-message/send-diagnostics-data-log-analytics-workspace.png)
+   1. 在“Log Analytics”下，选择“配置”。 
 
-5. 现在[在 Log Analytics 中设置对 B2B 消息的跟踪](../logic-apps/logic-apps-track-b2b-messages-omsportal.md)。
+   1. 在“OMS 工作区”下，选择要用于日志记录的 Log Analytics 工作区。 
 
-## <a name="extend-how-and-where-you-use-diagnostic-data-with-other-services"></a>扩展将诊断数据用于其他服务的方式和位置
+      > [!NOTE]
+      > OMS 工作区即将替换为 Log Analytics 工作区。 
 
-结合使用 Azure Log Analytics 后，可以扩展将逻辑应用的诊断数据用于其他 Azure 服务的方式，例如： 
+   1. 在“日志”下，选择“IntegrationAccountTrackingEvents”类别，然后选择“保存”。
 
-* [在 Azure 存储中存档 Azure 诊断日志](../monitoring-and-diagnostics/monitoring-archive-diagnostic-logs.md)
-* [将 Azure 诊断日志流式传输到 Azure 事件中心](../monitoring-and-diagnostics/monitoring-stream-diagnostic-logs-to-event-hubs.md) 
+   例如： 
 
-然后，可通过使用其他服务（如 [Azure 流分析](../stream-analytics/stream-analytics-introduction.md)和 [Power BI](../log-analytics/log-analytics-powerbi.md)）的遥测数据和分析来进行实时监视。 例如：
+   ![设置 Azure Monitor 日志，以便可以将诊断数据发送到日志](media/logic-apps-monitor-b2b-message/send-diagnostics-data-log-analytics-workspace.png)
+
+1. 现在，[在 Azure Monitor 日志中设置 B2B 消息的跟踪](../logic-apps/logic-apps-track-b2b-messages-omsportal.md)。
+
+## <a name="use-diagnostic-data-with-other-services"></a>将诊断数据与其他服务一起使用
+
+结合使用 Azure Monitor 日志后，可以扩展将逻辑应用的诊断数据用于其他 Azure 服务的方式，例如： 
+
+* [在 Azure 存储中存档 Azure 诊断日志](../azure-monitor/platform/archive-diagnostic-logs.md)
+* [将 Azure 诊断日志流式传输到 Azure 事件中心](../azure-monitor/platform/resource-logs-stream-event-hubs.md) 
+
+然后，可通过使用其他服务（如 [Azure 流分析](../stream-analytics/stream-analytics-introduction.md)和 [Power BI](../azure-monitor/platform/powerbi.md)）的遥测数据和分析来进行实时监视。 例如：
 
 * [将数据从事件中心流式传输到流分析](../stream-analytics/stream-analytics-define-inputs.md)
 * [在 Power BI 中使用流分析来分析流数据，并创建实时分析仪表板](../stream-analytics/stream-analytics-power-bi-dashboard.md)
 
-根据要设置的选项，确保首先[创建 Azure 存储帐户](../storage/common/storage-create-storage-account.md)或[创建 Azure 事件中心](../event-hubs/event-hubs-create.md)。 然后选择要发送诊断数据的位置选项：
+根据要设置的选项，确保先[创建 Azure 存储帐户](../storage/common/storage-create-storage-account.md)或[创建 Azure 事件中心](../event-hubs/event-hubs-create.md)。 然后，可选择要将诊断数据发送至何处。
+仅当你选择使用存储帐户时才应用保留期。
 
-![将数据发送到 Azure 存储帐户或事件中心](./media/logic-apps-monitor-b2b-message/storage-account-event-hubs.png)
-
-> [!NOTE]
-> 仅当你选择使用存储帐户时才应用保留期。
+![将数据发送到 Azure 存储帐户或事件中心](./media/logic-apps-monitor-b2b-message/diagnostics-storage-event-hub-log-analytics.png)
 
 ## <a name="supported-tracking-schemas"></a>支持的跟踪架构
 
@@ -133,6 +146,6 @@ Azure 支持这些跟踪架构类型，它们都具有除自定义类型以外�
 
 ## <a name="next-steps"></a>后续步骤
 
-* [在 Log Analytics 中跟踪 B2B 消息](../logic-apps/logic-apps-track-b2b-messages-omsportal.md "在 OMS 中跟踪 B2B 消息")
+* [在 Azure Monitor 日志中跟踪 B2B 消息](../logic-apps/logic-apps-track-b2b-messages-omsportal.md "在 Azure Monitor 日志中跟踪 B2B 消息")
 * [了解有关 Enterprise Integration Pack 的详细信息](../logic-apps/logic-apps-enterprise-integration-overview.md "了解 Enterprise Integration Pack")
 

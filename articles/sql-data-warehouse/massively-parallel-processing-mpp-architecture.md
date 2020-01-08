@@ -2,25 +2,28 @@
 title: Azure SQL 数据仓库 - MPP 体系结构 | Microsoft Docs
 description: 了解 Azure SQL 数据仓库如何将大规模并行处理 (MPP) 与 Azure 存储结合，实现高性能和可伸缩性。
 services: sql-data-warehouse
-author: ronortloff
-manager: craigg-msft
+author: mlee3gsd
+manager: craigg
 ms.service: sql-data-warehouse
 ms.topic: conceptual
-ms.component: design
+ms.subservice: design
 ms.date: 04/17/2018
-ms.author: rortloff
+ms.author: martinle
 ms.reviewer: igorstan
-ms.openlocfilehash: e8fef156f4b78c9f7241c9eb9623e061f5a31fe7
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.openlocfilehash: 25dc469c9f50dee7d088fccd214020791ff73def
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "66515796"
 ---
 # <a name="azure-sql-data-warehouse---massively-parallel-processing-mpp-architecture"></a>Azure SQL 数据仓库 - 大规模并行处理 (MPP) 体系结构
 了解 Azure SQL 数据仓库如何将大规模并行处理 (MPP) 与 Azure 存储结合，实现高性能和可伸缩性。 
 
+> [!VIDEO https://www.youtube.com/embed/PlyQ8yOb8kc]
+
 ## <a name="mpp-architecture-components"></a>MPP 体系结构组件
-SQL 数据仓库利用向外扩展体系结构在多个节点间分布数据的计算处理。 缩放单位是抽象的计算能力（称为数据仓库单位）。 SQL 数据仓库将计算与存储分离开来，使用户能够独立于系统中的数据进行规模计算。
+SQL 数据仓库利用向外扩展体系结构在多个节点间分布数据的计算处理。 缩放单位是计算能力（称为[数据仓库单位](what-is-a-data-warehouse-unit-dwu-cdwu.md)）的抽象概念。 SQL 数据仓库将计算与存储分离开来，使用户能够独立于系统中的数据进行规模计算。
 
 ![SQL 数据仓库体系结构](media/massively-parallel-processing-mpp-architecture/massively-parallel-processing-mpp-architecture.png)
 
@@ -34,7 +37,7 @@ SQL 数据仓库使用基于节点的体系结构。 应用程序将 T-SQL 命�
 * 在操作期间恢复计算容量。
 
 ### <a name="azure-storage"></a>Azure 存储
-SQL 数据仓库使用 Azure 存储保护用户数据。  由于数据通过 Azure 存储进行存储和管理，因此 SQL 数据仓库对存储消耗单独收费。 将数据本身分片到“分布区”中来优化系统性能。 可选择在定义表时用于分布数据的分片模式。 SQL 数据仓库支持以下分片模式：
+SQL 数据仓库使用 Azure 存储保护用户数据。  由于数据通过 Azure 存储进行存储和管理，因此 SQL 数据仓库对存储消耗单独收费。 将数据本身分片到“分布区”中来优化系统性能  。 可选择在定义表时用于分布数据的分片模式。 SQL 数据仓库支持以下分片模式：
 
 * 哈希
 * 轮循机制
@@ -48,7 +51,7 @@ SQL 数据仓库使用 Azure 存储保护用户数据。  由于数据通过 Azu
 
 计算节点提供计算能力。 分布区映射到计算节点以进行处理。 如果支付更多计算资源费用，SQL 数据仓库会将分布区重新映射到可用的计算节点。 计算节点数的范围是 1 到 60，它由数据仓库的服务级别确定。
 
-每个计算节点均有一个节点 ID，该 ID 会显示在系统视图中。 在名称以 sys.pdw_nodes 开头的系统视图中找到 node_id 列即可查看计算节点 ID。 有关这些系统视图的列表，请参阅 [MPP 系统视图](sql-data-warehouse-reference-tsql-statements.md)。
+每个计算节点均有一个节点 ID，该 ID 会显示在系统视图中。 在名称以 sys.pdw_nodes 开头的系统视图中找到 node_id 列即可查看计算节点 ID。 有关这些系统视图的列表，请参阅 [MPP 系统视图](https://docs.microsoft.com/sql/relational-databases/system-catalog-views/sql-data-warehouse-and-parallel-data-warehouse-catalog-views?view=aps-pdw-2016-au7)。
 
 ### <a name="data-movement-service"></a>数据移动服务
 数据移动服务 (DMS) 是一项数据传输技术，它可协调计算节点间的数据移动。 某些查询需要移动数据以确保并行查询返回准确的结果。 需要移动数据时，DMS 可确保正确的数据到达正确的位置。 
@@ -97,7 +100,7 @@ SQL 数据仓库使用 Azure 存储保护用户数据。  由于数据通过 Azu
 * [客户顾问团队博客]
 * [创建支持票证]
 * [MSDN 论坛]
-* [堆栈溢出论坛]
+* [Stackoverflow 论坛]
 * [Twitter]
 
 <!--Image references-->
@@ -121,9 +124,9 @@ SQL 数据仓库使用 Azure 存储保护用户数据。  由于数据通过 Azu
 [客户顾问团队博客]: https://blogs.msdn.microsoft.com/sqlcat/tag/sql-dw/
 [功能请求]: https://feedback.azure.com/forums/307516-sql-data-warehouse
 [MSDN 论坛]: https://social.msdn.microsoft.com/Forums/azure/home?forum=AzureSQLDataWarehouse
-[堆栈溢出论坛]: http://stackoverflow.com/questions/tagged/azure-sqldw
+[Stackoverflow 论坛]: https://stackoverflow.com/questions/tagged/azure-sqldw
 [Twitter]: https://twitter.com/hashtag/SQLDW
 [视频]: https://azure.microsoft.com/documentation/videos/index/?services=sql-data-warehouse
 [SLA for SQL Data Warehouse]: https://azure.microsoft.com/support/legal/sla/sql-data-warehouse/v1_0/
-[Volume Licensing]: http://www.microsoftvolumelicensing.com/DocumentSearch.aspx?Mode=3&DocumentTypeId=37
+[Volume Licensing]: https://www.microsoftvolumelicensing.com/DocumentSearch.aspx?Mode=3&DocumentTypeId=37
 [Service Level Agreements]: https://azure.microsoft.com/support/legal/sla/

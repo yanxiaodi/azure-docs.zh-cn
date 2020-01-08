@@ -2,7 +2,7 @@
 title: 使用 REST 管理媒体服务实体 | Microsoft Docs
 description: 了解如何使用 REST API 管理媒体服务实体。
 author: juliako
-manager: cfowler
+manager: femila
 editor: ''
 services: media-services
 documentationcenter: ''
@@ -12,22 +12,24 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 08/10/2017
+ms.date: 03/20/2019
 ms.author: juliako
-ms.openlocfilehash: 0fa7b080f360ab5f4fc50e146620f395fd57ee7a
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: ffbf30f2bfdf0a175513a8d2b9182b35c39f6aae
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60761703"
 ---
-# <a name="managing-media-services-entities-with-rest"></a>使用 REST 管理媒体服务实体 
+# <a name="managing-media-services-entities-with-rest"></a>使用 REST 管理媒体服务实体  
+
 > [!div class="op_single_selector"]
 > * [REST](media-services-rest-manage-entities.md)
 > * [.NET](media-services-dotnet-manage-entities.md)
 > 
 > 
 
-Microsoft Azure 媒体服务是一项以 OData v3 为基础的基于 REST 的服务。 你可以像在任何其他 OData 服务上一样添加、查询、更新和删除实体。 适用时，将标注例外情况。 有关 OData 的详细信息，请参阅[开放数据协议文档](http://www.odata.org/documentation/)。
+Microsoft Azure 媒体服务是一项以 OData v3 为基础的基于 REST 的服务。 你可以像在任何其他 OData 服务上一样添加、查询、更新和删除实体。 适用时，将标注例外情况。 有关 OData 的详细信息，请参阅 [开放数据协议文档](https://www.odata.org/documentation/)。
 
 本主题演示如何使用 REST 管理 Azure 媒体服务实体。
 
@@ -73,7 +75,7 @@ Microsoft Azure 媒体服务是一项以 OData v3 为基础的基于 REST 的服
     Authorization: Bearer <ENCODED JWT TOKEN> 
     Host: media.windows.net
 
-也可以检索特定实体或与特定实体关联的所有实体集，如下列示例所示：
+也可检索特定实体或与特定实体关联的所有实体集，如以下示例所示：
 
     GET https://media.windows.net/API/JobTemplates('nb:jtid:UUID:e81192f5-576f-b247-b781-70a790c20e7c') HTTP/1.1
     Content-Type: application/json;odata=verbose
@@ -131,7 +133,7 @@ Microsoft Azure 媒体服务是一项以 OData v3 为基础的基于 REST 的服
     DataServiceVersion: 3.0
     MaxDataServiceVersion: 3.0
     x-ms-version: 2.17
-    Authorization: Bearer http%3a%2f%2fschemas.xmlsoap.org%2fws%2f2005%2f05%2fidentity%2fclaims%2fnameidentifier=youraccountname&urn%3aSubscriptionId=2f84471d-b1ae-4e75-aa09-010f0fc0cf5b&http%3a%2f%2fschemas.microsoft.com%2faccesscontrolservice%2f2010%2f07%2fclaims%2fidentityprovider=https%3a%2f%2fwamsprodglobal001acs.accesscontrol.windows.net%2f&Audience=urn%3aWindowsAzureMediaServices&ExpiresOn=1337078831&Issuer=https%3a%2f%2fwamsprodglobal001acs.accesscontrol.windows.net%2f&HMACSHA256=suFkxhvPWxQVMjOYelOJfYEWkyTWJCBc02pF0N7NghI%3d
+    Authorization: Bearer <ENCODED JWT TOKEN>
     Host: media.windows.net
 
 ## <a name="updating-entities"></a>更新实体
@@ -145,7 +147,7 @@ Microsoft Azure 媒体服务是一项以 OData v3 为基础的基于 REST 的服
     DataServiceVersion: 3.0
     MaxDataServiceVersion: 3.0
     x-ms-version: 2.17
-    Authorization: Bearer http%3a%2f%2fschemas.xmlsoap.org%2fws%2f2005%2f05%2fidentity%2fclaims%2fnameidentifier=youraccountname&urn%3aSubscriptionId=2f84471d-b1ae-4e75-aa09-010f0fc0cf5b&http%3a%2f%2fschemas.microsoft.com%2faccesscontrolservice%2f2010%2f07%2fclaims%2fidentityprovider=https%3a%2f%2fwamsprodglobal001acs.accesscontrol.windows.net%2f&Audience=urn%3aWindowsAzureMediaServices&ExpiresOn=1337083279&Issuer=https%3a%2f%2fwamsprodglobal001acs.accesscontrol.windows.net%2f&HMACSHA256=DMLQXWah4jO0icpfwyws5k%2b1aCDfz9KDGIGao20xk6g%3d
+    Authorization: Bearer <ENCODED JWT TOKEN>
     Host: media.windows.net
     Content-Length: 21
     Expect: 100-continue
@@ -153,7 +155,7 @@ Microsoft Azure 媒体服务是一项以 OData v3 为基础的基于 REST 的服
     {"Name" : "NewName" }
 
 ## <a name="deleting-entities"></a>删除实体
-可以使用 DELETE HTTP 请求在媒体服务中删除实体。 删除实体的顺序可能很重要，具体视实体而定。 例如，资产等实体要求先撤消（或删除）引用该特定资产的所有定位符，再删除资产。
+可以使用 DELETE HTTP 请求在媒体服务中删除实体。 删除实体的顺序可能很重要，具体视实体而定。 例如，资产等实体要求先撤消（或删除）引用该特定资产的所有定位符，然后再删除资产。
 
 下面的示例演示如何删除用于将文件上传到 blob 存储的定位符。
 
@@ -163,7 +165,7 @@ Microsoft Azure 媒体服务是一项以 OData v3 为基础的基于 REST 的服
     DataServiceVersion: 3.0
     MaxDataServiceVersion: 3.0
     x-ms-version: 2.17
-    Authorization: Bearer http%3a%2f%2fschemas.xmlsoap.org%2fws%2f2005%2f05%2fidentity%2fclaims%2fnameidentifier=youraccountname&urn%3aSubscriptionId=2f84471d-b1ae-4e75-aa09-010f0fc0cf5b&http%3a%2f%2fschemas.microsoft.com%2faccesscontrolservice%2f2010%2f07%2fclaims%2fidentityprovider=https%3a%2f%2fwamsprodglobal001acs.accesscontrol.windows.net%2f&Audience=urn%3aWindowsAzureMediaServices&ExpiresOn=1337067658&Issuer=https%3a%2f%2fwamsprodglobal001acs.accesscontrol.windows.net%2f&HMACSHA256=dithjGvlXR9HlyAf5DE99N5OCYkPAxsHIcsTSjm9%2fVE%3d
+    Authorization: Bearer <ENCODED JWT TOKEN>
     Host: media.windows.net
     Content-Length: 0
 

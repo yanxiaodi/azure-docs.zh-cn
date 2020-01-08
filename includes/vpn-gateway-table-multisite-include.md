@@ -5,16 +5,17 @@ services: vpn-gateway
 author: cherylmc
 ms.service: vpn-gateway
 ms.topic: include
-ms.date: 03/21/2018
+ms.date: 04/26/2019
 ms.author: cherylmc
 ms.custom: include file
-ms.openlocfilehash: 23f204760b340c6fe739bd993c43dfde1be946d6
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.openlocfilehash: 7ff633b33a800e1dfe28c63b6ba880233e2b4a1c
+ms.sourcegitcommit: 3e98da33c41a7bbd724f644ce7dedee169eb5028
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 06/18/2019
+ms.locfileid: "67172788"
 ---
 | **部署模型/方法** | **Azure 门户** | **PowerShell** |
-| --- | --- | --- | --- |
-| 资源管理器 |[文章](../articles/vpn-gateway/vpn-gateway-howto-multi-site-to-site-resource-manager-portal.md) |支持 |
-| 经典 | 不支持 | [文章](../articles/vpn-gateway/vpn-gateway-multi-site.md) |
+| --- | --- | --- |
+| 资源管理器 |[教程](../articles/vpn-gateway/vpn-gateway-howto-multi-site-to-site-resource-manager-portal.md) |支持 |
+| 经典 | 不支持 | [教程](../articles/vpn-gateway/vpn-gateway-multi-site.md) |

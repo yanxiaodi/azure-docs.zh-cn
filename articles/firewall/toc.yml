@@ -1,0 +1,87 @@
+- name: Azure 防火墙文档
+  href: index.yml
+- name: 概述
+  items:
+    - name: 什么是 Azure 防火墙？
+      href: overview.md
+- name: 教程
+  expanded: true
+  items:
+    - name: 部署和配置
+      href: tutorial-firewall-deploy-portal.md
+    - name: 在混合网络中部署
+      href: tutorial-hybrid-portal.md
+    - name: 使用 DNAT 筛选入站流量
+      href: tutorial-firewall-dnat.md
+    - name: 监视诊断日志
+      href: tutorial-diagnostics.md
+- name: 示例
+  items:
+    - name: Azure PowerShell
+      href: sample-powershell.md
+    - name: Azure Monitor 日志
+      href: log-analytics-samples.md
+- name: 概念
+  items:
+    - name: FQDN 标记
+      href: fqdn-tags.md
+    - name: 基础设施 FQDN
+      href: infrastructure-fqdns.md
+    - name: 日志和指标
+      href: logs-and-metrics.md
+    - name: 威胁情报
+      href: threat-intel.md
+    - name: 规则处理逻辑
+      href: rule-processing.md
+    - name: 服务标记
+      href: service-tags.md
+- name: 操作指南
+  items:
+    - name: 使用 Azure PowerShell 进行部署
+      href: deploy-ps.md
+    - name: 在混合网络中部署 - PowerShell
+      href: tutorial-hybrid-ps.md
+    - name: 使用 Azure CLI 进行部署
+      href: deploy-cli.md
+    - name: 使用模板进行部署
+      href: deploy-template.md
+    - name: 使用多个公共 IP 进行部署
+      href: deploy-multi-public-ip-powershell.md
+    - name: 使用可用性区域进行部署
+      href: deploy-availability-zone-powershell.md
+    - name: 与负载均衡器集成
+      href: integrate-lb.md
+    - name: 带有 SQL FQDN 的应用程序规则
+      href: sql-fqdn-filtering.md
+- name: 引用
+  items:
+    - name: Azure CLI
+      href: /cli/azure/ext/azure-firewall/network/firewall
+    - name: Azure PowerShell
+      href: /powershell/module/az.network/new-azfirewall
+    - name: .NET
+      href: /dotnet/api
+    - name: Java
+      href: /java/api
+    - name: Node.js
+      href: 'https://azure.microsoft.com/develop/nodejs/#azure-sdk'
+    - name: Python
+      href: 'https://azure.microsoft.com/develop/python/'
+    - name: REST
+      href: /rest/api/firewall
+    - name: Azure 资源管理器
+      href: ../azure-resource-manager/resource-group-overview.md
+- name: 资源
+  items:
+    - name: 常见问题解答
+      href: firewall-faq.md
+    - name: 创作模板
+      href: ../azure-resource-manager/resource-group-authoring-templates.md
+    - name: Azure 路线图
+      href: 'https://azure.microsoft.com/roadmap/'
+    - name: 社区模板
+      href: 'https://azure.microsoft.com/documentation/templates'
+    - name: 定价
+      href: 'https://azure.microsoft.com/pricing/details/azure-firewall/'
+    - name: 区域可用性
+      href: 'https://azure.microsoft.com/regions/services/'

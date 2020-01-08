@@ -1,44 +1,37 @@
 ---
-title: 使用 Spark 分析 Application Insight 日志 - Azure HDInsight | Microsoft Docs
-description: 了解如何将 Application Insight 日志导出到 Blob 存储，然后使用 HDInsight 上的 Spark 分析这些日志。
-services: hdinsight
-documentationcenter: ''
-author: Blackmist
-manager: cgronlun
-editor: cgronlun
-ms.assetid: 883beae6-9839-45b5-94f7-7eb0f4534ad5
+title: 使用 Spark 分析 Application Insight 日志 - Azure HDInsight
+description: 了解如何将 Application Insight 日志导出到 Blob 存储，并使用 HDInsight 上的 Spark 分析这些日志。
+author: hrasheed-msft
+ms.author: hrasheed
+ms.reviewer: jasonh
 ms.service: hdinsight
 ms.custom: hdinsightactive
-ms.devlang: na
 ms.topic: conceptual
 ms.date: 05/09/2018
-ms.author: larryfr
-ms.openlocfilehash: 31068376e20b240a440432319e65f4e479163ee0
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.openlocfilehash: 737b049aa94ede2ffb0c1035b4cadfbed32d7dc4
+ms.sourcegitcommit: b03516d245c90bca8ffac59eb1db522a098fb5e4
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 09/19/2019
+ms.locfileid: "71145595"
 ---
-# <a name="analyze-application-insights-telemetry-logs-with-spark-on-hdinsight"></a>使用 HDInsight 上的 Spark 分析 Application Insights 遥测日志
+# <a name="analyze-application-insights-telemetry-logs-with-apache-spark-on-hdinsight"></a>使用 HDInsight 上的 Apache Spark 分析 Application Insights 遥测日志
 
-了解如何在 HDInsight 上使用 Spark 分析 Application Insight 遥测数据。
+了解如何在 HDInsight 上使用 [Apache Spark](https://spark.apache.org/) 分析 Application Insight 遥测数据。
 
-[Visual Studio Application Insights](../../application-insights/app-insights-overview.md) 是监视 Web 应用程序的分析服务。 可将 Application Insights 生成的遥测数据导出到 Azure 存储。 当数据位于 Azure 存储中后，可以使用 HDInsight 来分析数据。
+[Visual Studio Application Insights](../../azure-monitor/app/app-insights-overview.md) 是监视 Web 应用程序的分析服务。 可将 Application Insights 生成的遥测数据导出到 Azure 存储。 当数据位于 Azure 存储中后，可以使用 HDInsight 来分析数据。
 
 ## <a name="prerequisites"></a>先决条件
 
 * 配置为使用 Application Insights 的应用程序。
 
-* 熟悉基于 Linux 的 HDInsight 群集的创建过程。 有关详细信息，请参阅[在 HDInsight 上创建 Spark](apache-spark-jupyter-spark-sql.md)。
-
-  > [!IMPORTANT]
-  > 本文档中的步骤需要使用 Linux 的 HDInsight 群集。 Linux 是 HDInsight 3.4 或更高版本上使用的唯一操作系统。 有关详细信息，请参阅 [HDInsight 在 Windows 上停用](../hdinsight-component-versioning.md#hdinsight-windows-retirement)。
+* 熟悉基于 Linux 的 HDInsight 群集的创建过程。 有关详细信息，请参阅[在 HDInsight 上创建 Apache Spark](apache-spark-jupyter-spark-sql.md)。
 
 * Web 浏览器。
 
 开发和测试本文档时使用了以下资源：
 
-* 使用[配置为使用 Application Insights 的 Node.js Web 应用](../../application-insights/app-insights-nodejs.md)生成的 Application Insights 遥测数据。
+* [配置为使用 Application Insights 的 Node.js Web 应用](../../azure-monitor/app/nodejs.md)，用于生成 Application Insights 遥测数据。
 
 * HDInsight 群集上基于 Linux 的 Spark 版本 3.5 用于分析数据。
 
@@ -46,7 +39,7 @@ ms.lasthandoff: 05/10/2018
 
 下图演示了本示例的服务体系结构：
 
-![演示数据从 Application Insights 流向 Blob 存储，并使用 HDInsight 上的 Spark 进行处理的示意图](./media/apache-spark-analyze-application-insight-logs/appinsightshdinsight.png)
+![数据从 Application Insights 流动到 blob 存储，然后是 Spark](./media/apache-spark-analyze-application-insight-logs/application-insights.png)
 
 ### <a name="azure-storage"></a>Azure 存储
 
@@ -54,7 +47,7 @@ Application Insights 可以配置为持续将遥测信息导出到 blob。 HDIns
 
 * **位置**：如果存储帐户和 HDInsight 位于不同位置，则可能会增加延迟。 它还会增加成本，因为在区域之间移动数据时会收取出口费用。
 
-    > [!WARNING]
+    > [!WARNING]  
     > 不支持在 HDInsight 之外的其他位置使用存储帐户。
 
 * **Blob 类型**：HDInsight 仅支持块 Blob。 Application Insights 默认为使用块 Blob，因此，默认情况下可配合 HDInsight 一起使用。
@@ -63,11 +56,11 @@ Application Insights 可以配置为持续将遥测信息导出到 blob。 HDIns
 
 ### <a name="data-schema"></a>数据架构
 
-Application Insights 为导出到 Blob 的遥测数据格式提供[导出数据模型](../../application-insights/app-insights-export-data-model.md)信息。 本文档中的步骤使用 Spark SQL 来处理数据。 Spark SQL 可以自动针对 Application Insights 记录的 JSON 数据结构生成架构。
+Application Insights 为导出到 Blob 的遥测数据格式提供[导出数据模型](../../azure-monitor/app/export-data-model.md)信息。 本文档中的步骤使用 Spark SQL 来处理数据。 Spark SQL 可以自动针对 Application Insights 记录的 JSON 数据结构生成架构。
 
 ## <a name="export-telemetry-data"></a>导出遥测数据
 
-根据[配置连续导出](../../application-insights/app-insights-export-telemetry.md)中的步骤配置 Application Insights，将遥测信息导出到 Azure 存储 Blob。
+根据[配置连续导出](../../azure-monitor/app/export-telemetry.md)中的步骤配置 Application Insights，将遥测信息导出到 Azure 存储 Blob。
 
 ## <a name="configure-hdinsight-to-access-the-data"></a>配置 HDInsight 以访问数据
 
@@ -79,7 +72,7 @@ Application Insights 为导出到 Blob 的遥测数据格式提供[导出数据�
 
 1. 在 [Azure 门户](https://portal.azure.com)中，选择 HDInsight 群集上的 Spark。 在“快速链接”部分中，选择“群集仪表板”，并从“群集仪表板”部分中选择“Jupyter Notebook”。
 
-    ![群集仪表板](./media/apache-spark-analyze-application-insight-logs/clusterdashboards.png)
+    ![Azure 门户群集仪表板 pyspark](./media/apache-spark-analyze-application-insight-logs/hdi-cluster-dashboards.png)
 
 2. 在 Jupyter 页面右上角选择“新建”，并选择“PySpark”。 此时会打开新浏览器选项卡，其中包含基于 Python 的 Jupyter 笔记本。
 
@@ -107,17 +100,17 @@ Application Insights 为导出到 Blob 的遥测数据格式提供[导出数据�
    hdfs dfs -ls wasb://CONTAINER@STORAGEACCOUNT.blob.core.windows.net/
    ```
 
-    使用 **Shift+Enter** 执行此单元格中的命令。 将显示类似于以下文本的结果：
+    使用 **Shift+Enter** 执行此单元格中的命令。 可看到类似于以下文本的结果：
 
         Found 1 items
         drwxrwxrwx   -          0 1970-01-01 00:00 wasb://appinsights@contosostore.blob.core.windows.net/contosoappinsights_2bededa61bc741fbdee6b556571a4831
 
-    返回的 wasb 路径是 Application Insights 遥测数据的位置。 将单元格中的 `hdfs dfs -ls` 行更改为使用返回的 WASB 路径，然后再次使用 **Shift+Enter** 执行单元格中的命令。 这一次，结果应显示包含遥测数据的目录。
+    返回的 wasb 路径是 Application Insights 遥测数据的位置。 将单元格中的 `hdfs dfs -ls` 行更改为使用返回的 wasb 路径，再次使用 **SHIFT + ENTER** 执行单元格中的命令。 这一次，结果应显示包含遥测数据的目录。
 
-   > [!NOTE]
+   > [!NOTE]  
    > 本部分中的余下步骤使用了 `wasb://appinsights@contosostore.blob.core.windows.net/contosoappinsights_{ID}/Requests` 目录。 目录结构可能会有所不同。
 
-6. 在下一个单元格中，输入以下代码：将 `WASB_PATH` 替换为上一步骤中的路径。
+6. 在下一个单元格中输入以下代码：将 `WASB_PATH` 替换为上一步中的路径。
 
    ```python
    jsonFiles = sc.textFile('WASB_PATH')
@@ -203,8 +196,8 @@ Application Insights 为导出到 Blob 的遥测数据格式提供[导出数据�
 
     此查询会返回 context.location.city 不为 null 的前 20 条记录的 city 信息。
 
-   > [!NOTE]
-   > context 结构存在于由 Application Insights 记录的所有遥测中。 日志中可能没有填充 city 元素。 使用架构识别可以查询的、可能包含日志数据的其他元素。
+   > [!NOTE]  
+   > context 结构存在于由 Application Insights 记录的所有遥测中。 日志中可能没有填充 city 元素。 使用架构识别你可以查询的、可能包含日志数据的其他元素。
 
     此查询会返回类似于以下文本的信息：
 
@@ -222,7 +215,8 @@ Application Insights 为导出到 Blob 的遥测数据格式提供[导出数据�
 
 1. 在 [Azure 门户](https://portal.azure.com)中，选择 HDInsight 群集上的 Spark。 在“快速链接”部分中，选择“群集仪表板”，并从“群集仪表板”部分中选择“Jupyter Notebook”。
 
-    ![群集仪表板](./media/apache-spark-analyze-application-insight-logs/clusterdashboards.png)
+    ![Azure 门户群集仪表板 Scala](./media/apache-spark-analyze-application-insight-logs/hdi-cluster-dashboards.png)
+
 2. 在 Jupyter 页面右上角选择“新建”，并选择“Scala”。 此时会打开新浏览器选项卡，其中包含基于 Scala 的 Jupyter Notebook。
 3. 在页面上的第一个字段（称为“单元格”）中输入以下文本：
 
@@ -248,17 +242,17 @@ Application Insights 为导出到 Blob 的遥测数据格式提供[导出数据�
    hdfs dfs -ls wasb://CONTAINER@STORAGEACCOUNT.blob.core.windows.net/
    ```
 
-    使用 **Shift+Enter** 执行此单元格中的命令。 将显示类似于以下文本的结果：
+    使用 **Shift+Enter** 执行此单元格中的命令。 可看到类似于以下文本的结果：
 
         Found 1 items
         drwxrwxrwx   -          0 1970-01-01 00:00 wasb://appinsights@contosostore.blob.core.windows.net/contosoappinsights_2bededa61bc741fbdee6b556571a4831
 
-    返回的 wasb 路径是 Application Insights 遥测数据的位置。 将单元格中的 `hdfs dfs -ls` 行更改为使用返回的 WASB 路径，然后再次使用 **Shift+Enter** 执行单元格中的命令。 这一次，结果应显示包含遥测数据的目录。
+    返回的 wasb 路径是 Application Insights 遥测数据的位置。 将单元格中的 `hdfs dfs -ls` 行更改为使用返回的 wasb 路径，再次使用 **SHIFT + ENTER** 执行单元格中的命令。 这一次，结果应显示包含遥测数据的目录。
 
-   > [!NOTE]
+   > [!NOTE]  
    > 本部分中的余下步骤使用了 `wasb://appinsights@contosostore.blob.core.windows.net/contosoappinsights_{ID}/Requests` 目录。 除非遥测数据用于 Web 应用，否则此目录可能并不存在。
 
-6. 在下一个单元格中，输入以下代码：将 `WASB\_PATH` 替换为上一步骤中的路径。
+6. 在下一个单元格中输入以下代码：将 `WASB\_PATH` 替换为上一步中的路径。
 
    ```scala
    var jsonFiles = sc.textFile('WASB_PATH')
@@ -346,8 +340,8 @@ Application Insights 为导出到 Blob 的遥测数据格式提供[导出数据�
 
     此查询会返回 context.location.city 不为 null 的前 20 条记录的 city 信息。
 
-   > [!NOTE]
-   > context 结构存在于由 Application Insights 记录的所有遥测中。 日志中可能没有填充 city 元素。 使用架构识别可以查询的、可能包含日志数据的其他元素。
+   > [!NOTE]  
+   > context 结构存在于由 Application Insights 记录的所有遥测中。 日志中可能没有填充 city 元素。 使用架构识别你可以查询的、可能包含日志数据的其他元素。
    >
    >
 
@@ -365,14 +359,14 @@ Application Insights 为导出到 Blob 的遥测数据格式提供[导出数据�
 
 ## <a name="next-steps"></a>后续步骤
 
-有关使用 Spark 处理 Azure 中数据和服务的更多示例，请参阅以下文档：
+有关使用 Apache Spark 处理 Azure 中数据和服务的更多示例，请参阅以下文档：
 
-* [Spark 和 BI：使用 HDInsight 中的 Spark 和 BI 工具执行交互式数据分析](apache-spark-use-bi-tools.md)
-* [Spark 和机器学习：使用 HDInsight 中的 Spark 对使用 HVAC 数据生成温度进行分析](apache-spark-ipython-notebook-machine-learning.md)
-* [Spark 和机器学习：使用 HDInsight 中的 Spark 预测食品检查结果](apache-spark-machine-learning-mllib-ipython.md)
-* [使用 HDInsight 中的 Spark 分析网站日志](apache-spark-custom-library-website-log-analysis.md)
+* [Apache Spark 与 BI：将 HDInsight 中的 Spark 与 BI 工具配合使用来执行交互式数据分析](apache-spark-use-bi-tools.md)
+* [Apache Spark 与机器学习：使用 HDInsight 中的 Spark 来通过 HVAC 数据分析建筑物温度](apache-spark-ipython-notebook-machine-learning.md)
+* [Apache Spark 与机器学习：使用 HDInsight 中的 Spark 预测食品检验结果](apache-spark-machine-learning-mllib-ipython.md)
+* [使用 HDInsight 中的 Apache Spark 分析网站日志](apache-spark-custom-library-website-log-analysis.md)
 
 有关创建和运行 Spark 应用程序的信息，请参阅以下文档：
 
 * [使用 Scala 创建独立的应用程序](apache-spark-create-standalone-application.md)
-* [使用 Livy 在 Spark 群集中远程运行作业](apache-spark-livy-rest-interface.md)
+* [使用 Livy 在 Apache Spark 群集中远程运行作业](apache-spark-livy-rest-interface.md)

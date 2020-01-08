@@ -1,30 +1,30 @@
 ---
 title: 'Azure Functions F # 开发人员参考 | Microsoft Docs'
-description: '了解如何开发使用 F # 的 Azure 功能。'
+description: 了解如何使用 F# 脚本开发 Azure Functions。
 services: functions
 documentationcenter: fsharp
 author: sylvanc
 manager: jbronsk
-editor: ''
-tags: ''
 keywords: Azure Functions, Functions, 事件处理, webhook, 动态计算, 无服务器体系结构, F#
 ms.assetid: e60226e5-2630-41d7-9e5b-9f9e5acc8e50
-ms.service: functions
+ms.service: azure-functions
 ms.devlang: fsharp
 ms.topic: reference
-ms.tgt_pltfrm: multiple
-ms.workload: na
-ms.date: 09/09/2016
+ms.date: 10/09/2018
 ms.author: syclebsc
-ms.openlocfilehash: 2c84de3f38a49bc97fda04a7a4eb449a1f7d14bd
-ms.sourcegitcommit: 1362e3d6961bdeaebed7fb342c7b0b34f6f6417a
-ms.translationtype: HT
+ms.openlocfilehash: 23e9ffa5c86674cb34951f29573e033b4a904941
+ms.sourcegitcommit: f56b267b11f23ac8f6284bb662b38c7a8336e99b
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/18/2018
+ms.lasthandoff: 06/28/2019
+ms.locfileid: "67442227"
 ---
 # <a name="azure-functions-f-developer-reference"></a>Azure Functions F# 开发人员参考
 
-Azure Functions F# 是用于在云中轻松运行小段代码或“函数”的一个解决方案。 数据通过函数参数流入 F # 函数。 在 `function.json`指定参数名称，没有访问函数记录器和取消令牌等的预定义的名称。
+Azure Functions F# 是用于在云中轻松运行小段代码或“函数”的一个解决方案。 数据通过函数参数流入 F # 函数。 在 `function.json`指定参数名称，没有访问函数记录器和取消令牌等的预定义的名称。 
+
+>[!IMPORTANT]
+>仅 Azure Functions 运行时的[版本 1.x](functions-versions.md#creating-1x-apps) 支持 F# 脚本 (.fsx)。 如果要将 F# 与版本 2.x 运行时结合使用，必须使用预编译的 F# 类库项目 (.fs)。 就像 [C# 类库项目](functions-dotnet-class-library.md)那样，使用 Visual Studio 创建、管理和发布 F# 类库项目。 有关 Functions 版本的详细信息，请参阅 [Azure Functions 运行时版本概述](functions-versions.md)。
 
 本文假定已阅读 [Azure Functions 开发人员参考](functions-reference.md)。
 
@@ -32,6 +32,29 @@ Azure Functions F# 是用于在云中轻松运行小段代码或“函数”的�
 `.fsx` 文件是 F # 脚本。 它可以被视为包含单个文件的 F # 项目。 该文件包含程序（在此情况下，Azure 函数）和管理依赖关系的指令的代码。
 
 如果使用 Azure 函数的 `.fsx`，通常需要自动包含程序集，以便可以专注于函数而不是“样本”代码。
+
+## <a name="folder-structure"></a>文件夹结构
+
+F# 脚本项目的文件夹结构如下所示：
+
+```
+FunctionsProject
+ | - MyFirstFunction
+ | | - run.fsx
+ | | - function.json
+ | | - function.proj
+ | - MySecondFunction
+ | | - run.fsx
+ | | - function.json
+ | | - function.proj
+ | - host.json
+ | - extensions.csproj
+ | - bin
+```
+
+存在共享的 [host.json](functions-host-json.md) 文件，可用于配置函数应用。 每个函数都有自己的代码文件 (.fsx) 和绑定配置文件 (function.json)。
+
+[2.x 版](functions-versions.md) Functions 运行时中所需的绑定扩展在 `extensions.csproj` 文件中定义，实际库文件位于 `bin` 文件夹中。 本地开发时，必须[注册绑定扩展](./functions-bindings-register.md#extension-bundles)。 在 Azure 门户中开发函数时，系统将为你完成此注册。
 
 ## <a name="binding-to-arguments"></a>绑定到参数
 对于每个绑定支持某些参数，请参阅 [Azure 函数触发器和绑定开发人员参考](functions-triggers-bindings.md)。 例如，blob 触发器支持的其中一个参数绑定是 POCO，可以使用 F # 记录来表示。 例如：
@@ -56,7 +79,7 @@ type TestObject =
     { SenderName : string
       Greeting : string }
 
-let Run(req: TestObject, log: TraceWriter) =
+let Run(req: TestObject, log: ILogger) =
     { req with Greeting = sprintf "Hello, %s" req.SenderName }
 ```
 
@@ -73,11 +96,11 @@ let Run(input: string, item: byref<Item>) =
 ```
 
 ## <a name="logging"></a>日志记录
-若要记录以 F # 输出传送到 [流式传输日志](../app-service/web-sites-enable-diagnostic-log.md) 中，函数应采取 `TraceWriter` 参数。 为了保持一致，我们建议参数名为 `log`。 例如：
+若要使用 F# 将输出记录到[流式处理日志](../app-service/troubleshoot-diagnostic-logs.md)中，函数应带有 [ILogger](https://docs.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger) 类型的参数。 为了保持一致，我们建议参数名为 `log`。 例如：
 
 ```fsharp
-let Run(blob: string, output: byref<string>, log: TraceWriter) =
-    log.Verbose(sprintf "F# Azure Function processed a blob: %s" blob)
+let Run(blob: string, output: byref<string>, log: ILogger) =
+    log.LogInformation(sprintf "F# Azure Function processed a blob: %s" blob)
     output <- input
 ```
 
@@ -92,7 +115,7 @@ let Run(req: HttpRequestMessage) =
 ```
 
 ## <a name="cancellation-token"></a>取消令牌
-如果函数需要正常地处理关闭，可指定 [`CancellationToken`](https://msdn.microsoft.com/library/system.threading.cancellationtoken.aspx) 参数。 联合 `async` 可实现此目的，例如：
+如果函数需要正常地处理关闭，可指定 [`CancellationToken`](/dotnet/api/system.threading.cancellationtoken) 参数。 联合 `async` 可实现此目的，例如：
 
 ```fsharp
 let Run(req: HttpRequestMessage, token: CancellationToken)
@@ -109,8 +132,9 @@ let Run(req: HttpRequestMessage, token: CancellationToken)
 ```fsharp
 open System.Net
 open System.Threading.Tasks
+open Microsoft.Extensions.Logging
 
-let Run(req: HttpRequestMessage, log: TraceWriter) =
+let Run(req: HttpRequestMessage, log: ILogger) =
     ...
 ```
 
@@ -134,8 +158,9 @@ let Run(req: HttpRequestMessage, log: TraceWriter) =
 open System.Net
 open System.Net.Http
 open System.Threading.Tasks
+open Microsoft.Extensions.Logging
 
-let Run(req: HttpRequestMessage, log: TraceWriter) =
+let Run(req: HttpRequestMessage, log: ILogger) =
     ...
 ```
 
@@ -173,8 +198,9 @@ let Run(req: HttpRequestMessage, log: TraceWriter) =
 
 open System
 open Microsoft.Azure.WebJobs.Host
+open Microsoft.Extensions.Logging
 
-let Run(blob: string, output: byref<string>, log: TraceWriter) =
+let Run(blob: string, output: byref<string>, log: ILogger) =
     ...
 ```
 
@@ -204,7 +230,7 @@ Azure 函数执行代码时，它可以处理带有 `COMPILED` 定义的源，�
 可能希望会自动引用程序集放入编辑器 prelude，以提高编辑器与 F # 编译服务的交互。
 
 ### <a name="how-to-add-a-projectjson-file-to-your-azure-function"></a>如何添加 `project.json` 文件到 Azure 函数
-1. 首先，确保函数应用程序正在运行，可以通过在 Azure 门户中打开函数来执行此操作。 通过此操作，还可以访问显示程序包安装输出位置的流式日志日志。
+1. 首先，确保函数应用程序正在运行，可以通过在 Azure 门户中打开函数来执行此操作。 通过此操作，还可以访问将要显示程序包安装输出位置的流式传输日志。
 2. 若要上传 `project.json` 文件，请使用如何更新函数应用程序文件 中描述的其中一[种方法](functions-reference.md#fileupdate)。 如果使用 [ Azure 函数的连续部署](functions-continuous-deployment.md) ，可以添加 `project.json` 文件到临时分支，以便添加到部署的分支文件对其进行测试。
 3. 添加 `project.json` 文件后，将看到类似于函数流式日志中的实例的输出：
 
@@ -230,10 +256,11 @@ Azure 函数执行代码时，它可以处理带有 `COMPILED` 定义的源，�
 
 ```fsharp
 open System.Environment
+open Microsoft.Extensions.Logging
 
-let Run(timer: TimerInfo, log: TraceWriter) =
-    log.Info("Storage = " + GetEnvironmentVariable("AzureWebJobsStorage"))
-    log.Info("Site = " + GetEnvironmentVariable("WEBSITE_SITE_NAME"))
+let Run(timer: TimerInfo, log: ILogger) =
+    log.LogInformation("Storage = " + GetEnvironmentVariable("AzureWebJobsStorage"))
+    log.LogInformation("Site = " + GetEnvironmentVariable("WEBSITE_SITE_NAME"))
 ```
 
 ## <a name="reusing-fsx-code"></a>重用.fsx 代码
@@ -244,15 +271,15 @@ let Run(timer: TimerInfo, log: TraceWriter) =
 ```fsharp
 #load "logger.fsx"
 
-let Run(timer: TimerInfo, log: TraceWriter) =
+let Run(timer: TimerInfo, log: ILogger) =
     mylog log (sprintf "Timer: %s" DateTime.Now.ToString())
 ```
 
 `logger.fsx`
 
 ```fsharp
-let mylog(log: TraceWriter, text: string) =
-    log.Verbose(text);
+let mylog(log: ILogger, text: string) =
+    log.LogInformation(text);
 ```
 
 提供给 `#load` 指令的路径与`.fsx` 文件位置相关。

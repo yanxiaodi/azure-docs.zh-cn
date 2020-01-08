@@ -1,24 +1,22 @@
 ---
-title: 在 Azure 上使用 PySpark 和 Scala 进行 HDInsight Spark 演练 | Microsoft Docs
+title: 使用 Scala 的 PySpark 分析 HDInsight Spark - Team Data Science Process
 description: Team Data Science Process 的示例，演练如何在 Azure HDInsight Spark 上使用 PySpark 和 Scala 来执行预测分析。
 services: machine-learning
-documentationcenter: ''
-author: deguhath
-manager: jhubbard
+author: marktab
+manager: cgronlun
 editor: cgronlun
-ms.assetid: ''
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 09/04/2017
-ms.author: deguhath
-ms.openlocfilehash: 06498f55b38be98441ddceb8f1667c89d257f8fd
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: ce57c37791f9fcf353d08e177eb243f4939b52a8
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60805527"
 ---
 # <a name="hdinsight-spark-data-science-walkthroughs-using-pyspark-and-scala-on-azure"></a>在 Azure 上使用 PySpark 和 Scala 进行 HDInsight Spark 数据科学演练
 
@@ -42,7 +40,7 @@ ms.lasthandoff: 05/03/2018
 
 ## <a name="predict-taxi-tips-using-scala-on-azure-spark"></a>在 Azure Spark 上使用 Scala 预测出租车小费
 
-[在 Azure 上将 Scala 与 Spark 配合使用](scala-walkthrough.md)演练使用纽约出租车数据来预测是否会支付小费，以及预期支付的金额范围。 该演练介绍如何通过 Azure HDInsight Spark 群集上的 Spark 机器学习库 (MLlib) 和 SparkML 包，对受监督的机器学习任务使用 Scala。 它指导完成构成[数据科学过程](http://aka.ms/datascienceprocess)的任务：数据引入和浏览、可视化、特征工程、建模和模型使用。 生成的模型包括逻辑和线性回归、随机林和梯度提升树。
+[在 Azure 上将 Scala 与 Spark 配合使用](scala-walkthrough.md)演练使用纽约出租车数据来预测是否会支付小费，以及预期支付的金额范围。 该演练介绍如何通过 Azure HDInsight Spark 群集上的 Spark 机器学习库 (MLlib) 和 SparkML 包，对受监督的机器学习任务使用 Scala。 它指导完成构成[数据科学过程](https://docs.microsoft.com/azure/machine-learning/team-data-science-process/)的任务：数据引入和浏览、可视化、特征工程、建模和模型使用。 生成的模型包括逻辑和线性回归、随机林和梯度提升树。
 
 
 ## <a name="next-steps"></a>后续步骤

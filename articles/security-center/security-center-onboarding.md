@@ -3,25 +3,25 @@ title: 载入到 Azure 安全中心标准层以增强安全性 | Microsoft Docs
 description: " 了解如何载入到 Azure 安全中心标准层以增强安全性。 "
 services: security-center
 documentationcenter: na
-author: TerryLanfear
-manager: MBaldwin
-editor: ''
+author: memildin
+manager: rkarlin
 ms.assetid: 411d7bae-c9d4-4e83-be63-9f2f2312b075
 ms.service: security-center
 ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.tgt_pltfrm: na
 ms.workload: na
-ms.date: 09/14/2017
-ms.author: terrylan
-ms.openlocfilehash: d83beecfc5a8f6b8a01c64e809bc84c6fd0238bf
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.date: 02/19/2019
+ms.author: memildin
+ms.openlocfilehash: 7448516e464a379e27abd45834b31760fca3fedd
+ms.sourcegitcommit: 8a717170b04df64bd1ddd521e899ac7749627350
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 09/23/2019
+ms.locfileid: "71201851"
 ---
 # <a name="onboarding-to-azure-security-center-standard-for-enhanced-security"></a>载入到 Azure 安全中心标准层以增强安全性
-升级到安全中心标准层后，可以将增强的安全管理和威胁防护功能用于混合云工作负载。  可以免费试用标准层 60 天。 请参阅安全中心[定价页](https://azure.microsoft.com/pricing/details/security-center/)了解详细信息。
+升级到安全中心标准层后，可以将增强的安全管理和威胁防护功能用于混合云工作负载。  可以免费试用标准层。 请参阅安全中心[定价页](https://azure.microsoft.com/pricing/details/security-center/)了解详细信息。
 
 安全中心标准层包括：
 
@@ -32,66 +32,47 @@ ms.lasthandoff: 04/16/2018
 ## <a name="detecting-unprotected-resources"></a>检测未受保护的资源     
 安全中心将自动检测未启用安全中心标准层的所有 Azure 订阅或工作区。 其中包括使用安全中心免费层的 Azure 订阅和未启用安全解决方案的工作区。
 
-可以将整个 Azure 订阅升级到标准层，这样此订阅中的所有资源均将继承此层，或者可以定义唯一的策略来仅升级特定的资源组。 如果该资源组的策略设置是唯一的，则将订阅升级到标准层时安全中心不会重写定价策略。 将标准层应用到订阅仅适用于订阅中向安全中心创建的工作区报告的 VM。 将标准层应用到工作区适用于向工作区报告的所有资源。
+你可以将整个 Azure 订阅升级到标准层，这会由订阅中所有受支持的资源继承。 将标准层应用到工作区适用于向工作区报告的所有资源。
 
 > [!NOTE]
 > 你可能希望管理成本，并通过将解决方案的应用范围限制为特定的一组代理来限制为解决方案收集的数据量。 [解决方案目标](../operations-management-suite/operations-management-suite-solution-targeting.md)使用户可以向解决方案应用一个范围，并可将目标设定为工作区中的一个计算机子集。  如果使用解决方案目标功能，安全中心会将工作区列为没有解决方案。
 >
 >
 
-## <a name="upgrade-an-azure-subscription"></a>升级 Azure 订阅
-将所有订阅升级到标准层：
-1. 在“安全中心”主菜单下，选择“载入”。
-2. 在“载入高级安全”下，安全中心将列出符合载入条件的订阅。 可以通过选择“应用标准层计划”升级所有列出的订阅。
+## <a name="upgrade-an-azure-subscription-or-workspace"></a>升级 Azure 订阅或工作区
+若要将订阅或工作区升级到标准版，请执行以下操作：
+1. 在“安全中心”主菜单下，选择“入门”。
+  ![入门](./media/security-center-onboarding/get-started.png)
+2. 在“升级”下，安全中心将列出符合载入条件的订阅和工作区。 
+   - 可以单击可展开的“申请试用”来查看所有订阅和工作区的列表及其试用资格状态。
+   -    你可以升级没有资格试用的订阅和工作区。
+   -    可以选择符合试用条件的工作区和订阅来开始试用。
+3.  单击“开始试用”在所选订阅上开始试用。
+  ![选择订阅](./media/security-center-onboarding/select-subscription.png)
 
-  ![升级所有订阅][1]
-
-若要将单个订阅升级到标准层：可以通过选择“应用标准层”从“载入”升级某个订阅。 若要将订阅下的某个资源组升级到标准层，请选择此订阅：
-1. 选择一个订阅。  “安全策略”将提供有关此订阅中包含的资源组的信息。
-2. 选择此订阅或某个资源组。
-
-  ![升级所有订阅][2]
-
-3. 选择“标准层”，从“免费层”升级到“标准层”。
-4. 选择“保存”。
-
-> [!NOTE]
-> 如果之前禁用了[自动设置](security-center-enable-data-collection.md)，将订阅升级到标准层时将启用此功能。 建议启用监视代理的自动设置功能。
->
->
-
-## <a name="upgrade-a-workspace"></a>升级工作区
-将标准层应用到工作区适用于向工作区报告的所有资源。
-
-1. 返回到“载入”边栏选项卡。
-2. 选择工作区。
-
-  ![升级工作区][8]
-
-3. 选择“标准层”以进行升级。  
-4. 选择“保存”。
 
    > [!NOTE]
-   > 有一种情况是你未将免费层或标准层应用到工作区。 如果选择免费层，则安全中心的免费层功能将仅应用到 Azure VM。 免费层功能不会应用到非 Azure 计算机。 如果选择标准层，标准层功能将应用到向工作区报告的所有 Azure VM 和非 Azure 计算机。 建议应用标准层，以便为 Azure 和非 Azure 资源提供高级安全功能。
+   > 安全中心的免费功能仅适用于 Azure Vm 和 VMSS。 免费层功能不会应用到非 Azure 计算机。 如果选择 "标准"，则标准功能将应用于向工作区报告的所有 Azure Vm、VM 规模集和非 Azure 计算机。 建议应用标准层，以便为 Azure 和非 Azure 资源提供高级安全功能。
    >
    >
 
 ## <a name="onboard-non-azure-computers"></a>载入非 Azure 计算机
-安全中心可以监视非 Azure 计算机的安全状态，但首先需要载入这些资源。 可以从“载入”边栏选项卡或“计算”边栏选项卡添加非 Azure 计算机。 我们将逐步介绍这两种方法。
+安全中心可以监视非 Azure 计算机的安全状态，但首先需要载入这些资源。 可以从“入门”边栏选项卡或“计算”边栏选项卡添加非 Azure 计算机。 我们将逐步介绍这两种方法。
 
-### <a name="add-new-non-azure-computers-from-onboarding"></a>从“载入”添加新的非 Azure 计算机
+### <a name="add-new-non-azure-computers-from-getting-started"></a>从“入门”添加新的非 Azure 计算机
 
-1. 返回到“载入”。   
-2. 选择“是否要添加新的非 Azure 计算机”。
+1. 返回到“入门”。   
+2. 选择“入门”选项卡。
 
-  ![添加非 Azure 计算机][3]
+   ![非 Azure](./media/security-center-onboarding/non-azure.png)
+
+3. 单击“添加新的非 Azure 计算机”下的“配置”。 此时将显示 Log Analytics 工作区的列表。 该列表包含启用自动预配时由安全中心创建的默认工作区（如果适用）。 选择此工作区或要使用的其他工作区。
+
+   ![添加非 Azure 计算机][7]
 
 如果已有工作区，则会将它们列在“添加新的非 Azure 计算机”下。 可以将计算机添加到现有的工作区，也可以新建一个工作区。 若要新建一个工作区，请选择“添加新工作区”链接。
 
-我们将逐步介绍以下两种方法：
-
-- 新建一个工作区并添加计算机
-- 选择现有的工作区并添加计算机
+### <a name="add-new-non-azure-computers-from-compute"></a>从“计算”添加新的非 Azure 计算机
 
 **新建一个工作区并添加计算机**
 
@@ -100,6 +81,8 @@ ms.lasthandoff: 04/16/2018
    ![添加新工作区][4]
 
 2. 在“安全和审核”下，选择“OMS 工作区”以新建工作区。
+   > [!NOTE]
+   > OMS 工作区现在称为 Log Analytics 工作区。
 3. 在“OMS 工作区”下，输入工作区的相关信息。
 4. 在“OMS 工作区”下，选择“确定”。  选择“确定”后，将获取一个用于下载 Windows 或 Linux 代理的链接和工作区 ID 的密钥（用于配置此代理）。
 5. 在“安全和审核”下，选择“确定”。
@@ -112,8 +95,8 @@ ms.lasthandoff: 04/16/2018
 
    ![概述][5]
 
-2. 选择“计算”磁贴。
-3. 在“计算”下，选择“添加计算机”。
+2. 选择“计算和应用”。
+3. 在“计算和应用程序”下，选择“添加计算机”。
 
    ![“计算”边栏选项卡][6]
 
@@ -121,7 +104,7 @@ ms.lasthandoff: 04/16/2018
 
    ![添加计算机][7]
 
- “直接代理”边栏选项卡会提供一个用于下载 Windows 或 Linux 代理的链接，并提供工作区 ID 密钥（用于配置此代理）。   
+   “直接代理”边栏选项卡会提供一个用于下载 Windows 或 Linux 代理的链接，以及要在配置此代理时使用的工作区 ID 和密钥。   
 
 ## <a name="next-steps"></a>后续步骤
 在本文中，你已了解如何载入 Azure 和非 Azure 资源，以便利用安全中心的高级安全功能的优势。  若要对载入资源执行更多操作，请参阅
@@ -133,9 +116,9 @@ ms.lasthandoff: 04/16/2018
 <!--Image references-->
 [1]: ./media/security-center-onboarding/onboard.png
 [2]: ./media/security-center-onboarding/onboard-subscription.png
-[3]: ./media/security-center-onboarding/add-non-azure-resource.png
+[3]: ./media/security-center-onboarding/get-started.png
 [4]: ./media/security-center-onboarding/create-workspace.png
 [5]: ./media/security-center-onboarding/overview.png
 [6]: ./media/security-center-onboarding/compute-blade.png
-[7]: ./media/security-center-onboarding/add-non-azure-computer.png
+[7]: ./media/security-center-onboarding/add-computer.png
 [8]: ./media/security-center-onboarding/onboard-workspace.png

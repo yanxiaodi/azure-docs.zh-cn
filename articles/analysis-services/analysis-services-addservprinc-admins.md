@@ -3,17 +3,17 @@ title: 将服务主体添加到 Azure Analysis Services 服务器管理员角色
 description: 了解如何将自动化服务主体添加到服务器管理员角色
 author: minewiskan
 manager: kfile
-ms.service: analysis-services
+ms.service: azure-analysis-services
 ms.topic: conceptual
-ms.date: 04/12/2018
+ms.date: 07/29/2019
 ms.author: owend
 ms.reviewer: minewiskan
-ms.openlocfilehash: f1cc563cc13a9102dbdac7bd505b4dd844ff8247
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.openlocfilehash: a8fbbdbd647aa3d733a26ceaf72629058ae3a274
+ms.sourcegitcommit: 08d3a5827065d04a2dc62371e605d4d89cf6564f
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
-ms.locfileid: "32149257"
+ms.lasthandoff: 07/29/2019
+ms.locfileid: "68619272"
 ---
 # <a name="add-a-service-principal-to-the-server-administrator-role"></a>将服务主体添加到服务器管理员角色 
 
@@ -22,10 +22,10 @@ ms.locfileid: "32149257"
 ## <a name="before-you-begin"></a>开始之前
 在完成此项任务之前，必须有一个在 Azure Active Directory 中注册的服务主体。
 
-[创建服务主体 - Azure 门户](../azure-resource-manager/resource-group-create-service-principal-portal.md)   
-[创建服务主体 - PowerShell](../azure-resource-manager/resource-group-authenticate-service-principal.md)
+[创建服务主体 - Azure 门户](../active-directory/develop/howto-create-service-principal-portal.md)   
+[创建服务主体 - PowerShell](../active-directory/develop/howto-authenticate-service-principal-powershell.md)
 
-## <a name="required-permissions"></a>所需的权限
+## <a name="required-permissions"></a>所需权限
 若要完成此项任务，在 Azure AS 服务器上必须具备[服务器管理员](analysis-services-server-admins.md)权限。 
 
 ## <a name="add-service-principal-to-server-administrators-role"></a>将服务主体添加到服务器管理员角色
@@ -42,7 +42,7 @@ ms.locfileid: "32149257"
 
 
 > [!NOTE]
-> 对于使用 AzureRm cmdlet 进行的服务器操作，运行计划程序的服务主体还必须属于 [Azure 基于角色的访问控制 (RBAC)](../role-based-access-control/overview.md) 中资源的“所有者”角色。 
+> 对于使用 Azure PowerShell cmdlet 进行的服务器操作，运行计划程序的服务主体还必须属于 [Azure 基于角色的访问控制 (RBAC)](../role-based-access-control/overview.md) 中资源的“所有者”角色。 
 
 ## <a name="related-information"></a>相关信息
 

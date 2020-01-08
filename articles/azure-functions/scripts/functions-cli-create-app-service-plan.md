@@ -1,26 +1,23 @@
 ---
-title: "Azure CLI 脚本示例 - 在应用服务计划中创建 Function App | Microsoft Docs"
-description: "Azure CLI 脚本示例 - 在应用服务计划中创建 Function App"
+title: Azure CLI 脚本示例 - 在应用服务计划中创建 Function App | Microsoft Docs
+description: Azure CLI 脚本示例 - 在应用服务计划中创建 Function App
 services: functions
 documentationcenter: functions
-author: syntaxc4
-manager: cfowler
-editor: 
-tags: azure-service-management
+author: ggailey777
+manager: jeconnoc
 ms.assetid: 0e221db6-ee2d-4e16-9bf6-a456cd05b6e7
-ms.service: functions
+ms.service: azure-functions
 ms.devlang: azurecli
 ms.topic: sample
-ms.tgt_pltfrm: na
-ms.workload: web
-ms.date: 10/22/2018
-ms.author: cfowler
+ms.date: 07/03/2018
+ms.author: glenga
 ms.custom: mvc
-ms.openlocfilehash: d2c346424c5bcec7ec91b309799a1bf9fe3cab02
-ms.sourcegitcommit: 8c3267c34fc46c681ea476fee87f5fb0bf858f9e
+ms.openlocfilehash: 85fe8e567cd00decbefe79c77c11f777820080ee
+ms.sourcegitcommit: 3102f886aa962842303c8753fe8fa5324a52834a
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/09/2018
+ms.lasthandoff: 04/23/2019
+ms.locfileid: "60325674"
 ---
 # <a name="create-a-function-app-in-an-app-service-plan"></a>在应用服务计划中创建 Function App
 
@@ -28,11 +25,9 @@ ms.lasthandoff: 03/09/2018
 
 [!INCLUDE [quickstarts-free-trial-note](../../../includes/quickstarts-free-trial-note.md)]
 
-[!INCLUDE [quickstarts-free-trial-note](../../../includes/quickstarts-free-trial-note.md)]
-
 [!INCLUDE [cloud-shell-try-it.md](../../../includes/cloud-shell-try-it.md)]
 
-如果选择在本地安装并使用 CLI，本文要求使用 Azure CLI 2.0 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。 
+如果选择在本地安装并使用 CLI，本文要求使用 Azure CLI 2.0 或更高版本。 运行 `az --version` 即可查找版本。 如需进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。 
 
 ## <a name="sample-script"></a>示例脚本
 
@@ -48,10 +43,10 @@ ms.lasthandoff: 03/09/2018
 
 | 命令 | 说明 |
 |---|---|
-| [az group create](https://docs.microsoft.com/cli/azure/group#az_group_create) | 创建用于存储所有资源的资源组。 |
-| [az storage account create](https://docs.microsoft.com/cli/azure/storage/account#az_storage_account_create) | 创建 Azure 存储帐户。 |
-| [az appservice plan create](https://docs.microsoft.com/cli/azure/appserviceplan#az_appserviceplan_create) | 创建应用服务计划。 |
-| [az functionapp create](https://docs.microsoft.com/cli/azure/functionapp#az_functionapp_delete) | 创建 Azure Function App。 |
+| [az group create](https://docs.microsoft.com/cli/azure/group#az-group-create) | 创建用于存储所有资源的资源组。 |
+| [az storage account create](https://docs.microsoft.com/cli/azure/storage/account#az-storage-account-create) | 创建 Azure 存储帐户。 |
+| [az appservice plan create](https://docs.microsoft.com/cli/azure/appservice/plan#az-appservice-plan-create) | 创建应用服务计划。 |
+| [az functionapp create](https://docs.microsoft.com/cli/azure/functionapp#az-functionapp-create) | 在应用服务计划中创建函数应用。 |
 
 ## <a name="next-steps"></a>后续步骤
 

@@ -1,21 +1,23 @@
 ---
-title: 向充当 Azure AD B2B 用户的本地托管合作伙伴帐户授予对云资源的访问权限 | Microsoft Docs
+title: 同步到云作为 B2B 用户的 Azure Active Directory 的本地合作伙伴帐户 |Microsoft Docs
 description: 使用 Azure AD B2B 协作时所用的相同凭据，向本地托管的外部合作伙伴授予对本地和云资源的访问权限。
 services: active-directory
 ms.service: active-directory
-ms.component: B2B
-ms.topic: article
+ms.subservice: B2B
+ms.topic: conceptual
 ms.date: 04/24/2018
-ms.author: twooley
-author: twooley
-manager: mtillman
-ms.reviewer: sasubram
-ms.openlocfilehash: 71d5ce8728d876740d6ef00b55ecdc9232a06f80
-ms.sourcegitcommit: 96089449d17548263691d40e4f1e8f9557561197
-ms.translationtype: HT
+ms.author: mimart
+author: msmimart
+manager: celestedg
+ms.reviewer: mal
+ms.custom: it-pro, seo-update-azuread-jan
+ms.collection: M365-identity-device-management
+ms.openlocfilehash: 2ae75311ab61449f37ccea15a0bcb88fed80c3ed
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/17/2018
-ms.locfileid: "34266975"
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "65767341"
 ---
 # <a name="grant-locally-managed-partner-accounts-access-to-cloud-resources-using-azure-ad-b2b-collaboration"></a>使用 Azure AD B2B 协作向本地托管的合作伙伴帐户授予对云资源的访问权限
 
@@ -30,19 +32,19 @@ ms.locfileid: "34266975"
 用于实现此目的的两种常用方法是：
 
 - 指定一个未使用的本地 Active Directory 属性（例如 extensionAttribute1）来用作源属性。 
-- 或者，从其他属性派生 UserType 属性的值。 例如，如果用户的本地 Active Directory UserPrincipalName 属性以域 *@partners.contoso.com* 结尾，则你可能希望将所有用户同步为 Guest。
+- 或者，从其他属性派生 UserType 属性的值。 例如，你想要将所有用户都同步为 Guest，如果其本地 Active Directory UserPrincipalName 属性结尾域 *\@partners.contoso.com*。
  
-有关详细的属性要求，请参阅[启用 UserType 同步](../connect/active-directory-aadconnectsync-change-the-configuration.md#enable-synchronization-of-usertype)。 
+有关详细的属性要求，请参阅[启用 UserType 同步](../hybrid/how-to-connect-sync-change-the-configuration.md#enable-synchronization-of-usertype)。 
 
 ## <a name="configure-azure-ad-connect-to-sync-users-to-the-cloud"></a>配置 Azure AD Connect 来将用户同步到云
 
 在识别唯一属性后，可以配置 Azure AD Connect 来将这些用户作为 Azure AD B2B 用户（即 UserType = Guest 的用户）同步到云。 从授权角度来看，这些用户与通过 Azure AD B2B 协作邀请流程创建的 B2B 用户没有区别。
 
-有关实现说明，请参阅[启用 UserType 同步](../connect/active-directory-aadconnectsync-change-the-configuration.md#enable-synchronization-of-usertype)。
+有关实现说明，请参阅[启用 UserType 同步](../hybrid/how-to-connect-sync-change-the-configuration.md#enable-synchronization-of-usertype)。
 
 ## <a name="next-steps"></a>后续步骤
 
 - [适用于混合组织的 Azure Active Directory B2B 协作](hybrid-organizations.md)
 - [向 Azure AD 中的 B2B 用户授予对本地应用程序的访问权限](hybrid-cloud-to-on-premises.md)
-- 有关 Azure AD Connect 的概述，请参阅[将本地目录与 Azure Active Directory 进行集成](../connect/active-directory-aadconnect.md)。
+- 有关 Azure AD Connect 的概述，请参阅[将本地目录与 Azure Active Directory 进行集成](../hybrid/whatis-hybrid-identity.md)。
 

@@ -1,272 +1,440 @@
 ---
-title: 如何使用 Azure 机器学习将模型部署为 FPGA 上的 Web 服务
-description: 了解如何使用 Azure 机器学习通过在 FPGA 上运行模型部署 Web 服务。
+title: 什么是 FPGA-如何部署
+titleSuffix: Azure Machine Learning
+description: 了解如何使用 FPGA 上运行的模型部署 web 服务 Azure 机器学习，以实现超高延迟推理。
 services: machine-learning
 ms.service: machine-learning
-ms.component: core
+ms.subservice: core
 ms.topic: conceptual
-ms.reviewer: jmartens
+ms.reviewer: larryfr
 ms.author: tedway
 author: tedway
-ms.date: 05/07/2018
-ms.openlocfilehash: f3237980a1ad1969b5cf8d42d547ddf96608dd97
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.date: 07/25/2019
+ms.custom: seodec18
+ms.openlocfilehash: 9c3c844ba7044f8e1c9c313f1ac63b94310ea322
+ms.sourcegitcommit: 7f6d986a60eff2c170172bd8bcb834302bb41f71
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 09/27/2019
+ms.locfileid: "71350540"
 ---
-# <a name="deploy-a-model-as-a-web-service-on-an-fpga-with-azure-machine-learning"></a>使用 Azure 机器学习将模型部署为 FPGA 上的 Web 服务
+# <a name="what-are-field-programmable-gate-arrays-fpga-and-how-to-deploy"></a>什么是现场可编程的入口阵列（FPGA）以及如何部署
 
-阅读此文档，了解如何设置工作站环境和将模型部署为[现场可编程门阵列 (FPGA)](concept-accelerate-with-fpgas.md) 上的 Web 服务。 该 Web 服务使用 Project Brainwave 在 FPGA 上运行模型。
+本文介绍了现场可编程的入口数组（FPGA），并说明了如何使用 Azure 机器学习向 Azure FPGA 部署模型。 
 
-使用 FPGA 可实现超低的延迟推断，即使只有一个批数据大小。
+FPGA 包含一组可编程的逻辑块以及由可反复配置的互连组成的层次结构。 这种互连可以在生产之后以不同方式来配置块。 与其他芯片相比，FPGA 既有可编程性，又有很好的性能。
 
-## <a name="create-an-azure-machine-learning-model-management-account"></a>创建 Azure 机器学习模型管理帐户
+## <a name="fpgas-vs-cpu-gpu-and-asic"></a>FPGA 与CPU、GPU 和 ASIC 的对比
 
-1. 转到 [Azure 门户](https://aka.ms/aml-create-mma)中的模型管理帐户创建页。
+下面的示意图和表将 FPGA 与其他处理器进行了比较。
 
-2. 在该门户中，在“美国东部 2”区域创建模型管理帐户。
+![Azure 机器学习 FPGA 比较示意图](./media/concept-accelerate-with-fpgas/azure-machine-learning-fpga-comparison.png)
 
-   ![创建模型管理帐户的屏幕图像](media/how-to-deploy-fpga-web-service/azure-portal-create-mma.PNG)
+|处理器||描述|
+|---|:-------:|------|
+|特定于应用程序的集成电路|ASIC|自定义电路（例如 Google 的 TensorFlow 处理器单元 (TPU)）的效率最高。 它们不能根据需求的变化重新配置。|
+|现场可编程门阵列|FPGA|FPGA（例如 Azure 上提供的那些）提供接近于 ASIC 的性能。 它们也是灵活的，并且可以在一段时间后重新配置以实现新逻辑。|
+|图形处理单元|GPU|进行 AI 计算时的常用选择。 GPU 提供并行处理功能，在进行图形渲染时速度快于 CPU。|
+|中央处理单元|CPU|常规用途处理器，其性能无法胜任图形和视频处理。|
 
-3. 为模型管理帐户命名、选择订阅和资源组。
+Azure 上的 Fpga 基于 Intel 的 FPGA 设备，数据科学家和开发人员使用该设备加速实时 AI 计算。 这种启用了 FPGA 的体系结构提供了高性能、灵活性和可伸缩性，可以在 Azure 上使用。
 
-   >[!IMPORTANT]
-   >在“位置”部分，必须选择“美国东部 2”作为区域。  目前不支持其他区域。
+Fpga 可以实现实时推理（或模型评分）请求的低延迟。 不需要使用异步请求（批处理）。 批处理可能导致延迟，因为需要处理更多的数据。 神经处理单元的实现不需要批处理;因此，与 CPU 和 GPU 处理器相比，延迟时间可能会更低一些。
 
-4. 选择定价层（S1 够用，但也可选择 S2 和 S3）。  不支持“开发测试”层。  
+### <a name="reconfigurable-power"></a>可反复配置的功能
+可以针对不同类型的机器学习模型反复配置 FPGA。 利用这种灵活性，可以更轻松地根据最优化的数值精度和所用内存模型来加速应用程序。 由于 FPGA 可以反复配置，因此可以跟上快速变化的 AI 算法的要求。
 
-5. 单击“选择”确认定价层。
+## <a name="whats-supported-on-azure"></a>Azure 支持的操作
+Microsoft Azure 是世界上在 FPGA 中的最大云投资。 使用这种支持 FPGA 的体系结构，受训的神经网络就可以快速运行并降低延迟。 Azure 可以在 Fpga 上并行处理预先训练的深层神经网络（DNN），以横向扩展你的服务。 DNNs 可以预先训练，可以作为深度特征化器来传输学习内容，或者使用更新的权重进行优化。
 
-6. 单击左侧 ML 模型管理上的“创建”。
+Azure 上的 Fpga 支持：
 
-## <a name="get-model-management-account-information"></a>获取模型管理帐户信息
++ 图像分类和识别方案
++ TensorFlow 部署
++ Intel FPGA 硬件 
 
-若要获取有关模型管理帐户 (MMA) 的信息，请在 Azure 门户中单击“模型管理帐户”。
+目前提供以下 DNN 模型：
+  - ResNet 50
+  - ResNet 152
+  - DenseNet-121
+  - VGG-16
+  - SSD-VGG
 
-复制以下项的值：
+以下 Azure 区域提供 Fpga：
+  - East US
+  - 东南亚
+  - 西欧
+  - 美国西部 2
 
-+ 模型管理帐户名称（位于左上角）
-+ 资源组名称
-+ 订阅 ID
-+ 位置（使用“美国东部 2”）
+> [!IMPORTANT]
+> 若要优化滞后时间和吞吐量，将数据发送到 FPGA 模型的客户端应位于上述某个区域（即模型部署到的区域）中。
 
-![模型管理帐户信息](media/how-to-deploy-fpga-web-service/azure-portal-mma-info.PNG)
+**Azure vm 的 PBS 系列**包含 Intel Arria 10 fpga。 检查 Azure 配额分配时，它将显示为 "标准 PBS 系列个 vcpu"。 PB6 VM 具有六个个 vcpu 和一个 FPGA，并且它将在将模型部署到 FPGA 时由 Azure ML 自动进行设置。 它仅与 Azure ML 一起使用，并且不能运行任意轨道。 例如，你将无法通过轨道将 FPGA 与进行刷新，以进行加密、编码等。
 
-## <a name="set-up-your-machine"></a>设置计算机
+### <a name="scenarios-and-applications"></a>方案和应用
 
-通过以下步骤设置工作站，以便进行 FPGA 部署：
+Azure Fpga 与 Azure 机器学习集成。 Microsoft 使用 FPGA 进行 DNN 评估、必应搜索排名、软件定义网络 (SDN) 加速，以便将 CPU 解放出来完成其他任务，同时降低延迟。
 
-1. 下载并安装最新版本的 [Git](https://git-scm.com/downloads)。
+以下方案使用 Fpga：
++ [自动化光学检查系统](https://blogs.microsoft.com/ai/build-2018-project-brainwave/)
 
-2. 安装 [Anaconda (Python 3.6)](https://conda.io/miniconda.html)。
++ [地表覆盖制图](https://blogs.technet.microsoft.com/machinelearning/2018/05/29/how-to-use-fpgas-for-deep-learning-inference-to-perform-land-cover-mapping-on-terabytes-of-aerial-images/)
 
-3. 若要下载 Anaconda 环境，请在 Git 提示中使用以下命令：
 
-    ```
-    git clone https://aka.ms/aml-real-time-ai
-    ```
 
-4. 若要创建环境，请打开“Anaconda 提示”（不是 Azure Machine Learning Workbench 提示），并运行以下命令：
+## <a name="example-deploy-models-on-fpgas"></a>例如：在 FPGA 上部署模型 
 
-    > [!IMPORTANT]
-    > `environment.yml` 文件在前面步骤中克隆的 git 存储库中。 根据需要更改路径，使其指向工作站上的文件。
+你可以使用 Azure 机器学习硬件加速模型将模型部署为 Fpga 上的 web 服务。 使用 Fpga 可提供超高延迟推理，即使只使用一批。 推理或模型计分是部署模型用于预测的阶段, 最常见的是生产数据。
 
-    ```
-    conda env create -f environment.yml
-    ```
 
-5. 使用以下命令激活环境：
+### <a name="prerequisites"></a>先决条件
 
-    ```
-    conda activate amlrealtimeai
-    ```
+- Azure 订阅。  如果没有，请在开始前创建一个免费帐户。 立即试用[免费版或付费版 Azure 机器学习](https://aka.ms/AMLFree)。
 
-6. 使用以下命令启动 Jupyter Notebook 服务器：
+- FPGA 配额。 使用 Azure CLI 检查是否有配额：
 
-    ```
-    jupyter notebook
-    ```
-
-    此命令的输出类似于以下文本：
-
-    ```text
-    Copy/paste this URL into your browser when you connect for the first time, to login with a token:
-        http://localhost:8888/?token=bb2ce89cc8ae931f5df50f96e3a6badfc826ff4100e78075
+    ```shell
+    az vm list-usage --location "eastus" -o table --query "[?localName=='Standard PBS Family vCPUs']"
     ```
 
     > [!TIP]
-    > 每次运行命令时都会得到不同的令牌。
+    > 其他可能的位置为``southeastasia``、 ``westeurope``和``westus2``。
 
-    如果浏览器没有自动打开 Jupyter Notebook，请使用之前命令返回的 HTTP URL 打开此页。
+    此命令返回类似于下面的文本：
 
-    ![Jupyter Notebook 网页的图像](./media/how-to-deploy-fpga-web-service/jupyter-notebook.png)
+    ```text
+    CurrentValue    Limit    LocalName
+    --------------  -------  -------------------------
+    0               6        Standard PBS Family vCPUs
+    ```
 
-## <a name="deploy-your-model"></a>部署模型
+    请确保在__CurrentValue__下至少有6个个 vcpu。
 
-在 Jupyter Notebook 中，从 `notebooks/resnet50` 目录打开 `00_QuickStart.ipynb` 笔记本。 根据笔记本中的说明进行以下操作：
+    如果没有配额，则提交请求[https://aka.ms/accelerateAI](https://aka.ms/accelerateAI)。
 
-* 定义服务
+- 已安装 Azure 机器学习工作区以及用于 Python 的 Azure 机器学习 SDK。 有关详细信息，请参阅[创建工作区](how-to-manage-workspace.md)。
+ 
+- 用于硬件加速模型的 Python SDK：
+
+    ```shell
+    pip install --upgrade azureml-accel-models
+    ```
+
+
+## <a name="1-create-and-containerize-models"></a>1.创建和容器化模型
+
+本文档将介绍如何创建 TensorFlow 图来预处理输入图像、如何在 FPGA 上使用 ResNet 50 使其成为特征化器，然后通过针对 ImageNet 数据集定型的分类器来运行这些功能。
+
+遵照说明操作：
+
+* 定义 TensorFlow 模型
+* 转换模型
 * 部署模型
 * 使用已部署的模型
 * 删除已部署的服务
 
-> [!IMPORTANT]
-> 为优化延迟和吞吐量，工作站应位于终结点所在的 Azure 区域中。  目前是在美国东部 Azure 区域创建 API。
+使用[适用于 Python 的 Azure 机器学习 SDK](https://docs.microsoft.com/python/api/overview/azure/ml/intro?view=azure-ml-py) 创建服务定义。 服务定义是一个文件，用于根据 TensorFlow 来描述图形（输入、特征化器、分类器）的管道。 部署命令会自动将定义和图压缩到 ZIP 文件中，然后将 ZIP 文件上传到 Azure Blob 存储。 DNN 已部署为在 FPGA 上运行。
 
-## <a name="ssltls-and-authentication"></a>SSL/TLS 和身份验证
+### <a name="load-azure-ml-workspace"></a>加载 Azure ML 工作区
 
-Azure 机器学习提供 SSL 支持和基于密钥的身份验证。 这样可以限制对服务的访问权限并保护由客户端提交的数据。
-
-> [!NOTE]
-> 本部分中所述的步骤仅适用于 Azure 机器学习硬件加速模型。 有关标准的 Azure 机器学习服务，请参阅[如何在 Azure 机器学习计算上设置 SSL](https://docs.microsoft.com/azure/machine-learning/preview/how-to-setup-ssl-on-mlc) 文档。
-
-> [!IMPORTANT]
-> 只有提供了 SSL 证书和密钥的服务才启用身份验证。 
->
-> 如果未启用 SSL，Internet 上的任何用户都能调用该服务。
->
-> 如果启用了 SSL，则还需要提供身份验证密钥才能访问该服务。
-
-SSL 会对在客户端和服务之间发送的数据进行加密。 客户端还可用它来验证服务器的身份。
-
-可以在部署服务时启用 SSL，也可以通过更新已部署的服务来启用 SSL。 步骤相同：
-
-1. 获取域名。
-
-2. 获取 SSL 证书。
-
-3. 在启用 SSL 的情况下部署或更新服务。
-
-4. 更新 DNS，使其指向该服务。
-
-### <a name="acquire-a-domain-name"></a>获取域名
-
-如果还没有属于自己的域名，可从域名注册机构购买一个。 不同注册机构的流程不同，价格也不同。 注册机构还会提供管理域名的工具。 这些工具可用于将完全限定域名（如 www.contoso.com）映射到托管服务的 IP 地址。
-
-### <a name="acquire-an-ssl-certificate"></a>获取 SSL 证书
-
-获取 SSL 证书有多种方式。 最常用的方式是从证书颁发机构 (CA) 购买。 无论证书来自哪里，都需要以下文件：
-
-* 证书。 证书必须包含完整的证书链，并必须使用 PEM 编码。
-* 密钥。 密钥必须使用 PEM 编码。
-
-> [!TIP]
-> 如果证书颁发机构不能以 PEM 编码文件的方式提供证书和密钥，可使用 [OpenSSL](https://www.openssl.org/) 等实用程序来更改格式。
-
-> [!IMPORTANT]
-> 自签名证书只能用于开发。 不应在产品中使用。
->
-> 如果使用的是自签名证书，请参阅[使用具备自签名证书的服务](#self-signed)部分了解具体说明。
-
-> [!WARNING]
-> 请求证书时，必须提供服务计划使用的地址的完全限定域名 (FQDN)。 例如 www.contoso.com。验证服务身份时，会对比证书上标记的地址和客户端使用的地址。
->
-> 如果两个地址不匹配，客户端将收到错误。 
-
-### <a name="deploy-or-update-the-service-with-ssl-enabled"></a>在启用 SSL 的情况下部署或更新服务
-
-若要在部署服务时启用 SSL，请将 `ssl_enabled` 参数设置为 `True`。 将 `ssl_certificate` 参数设置为证书文件的值，将 `ssl_key` 设置为密钥文件的值。 以下示例演示了如何在部署服务时启用 SSL：
+加载 Azure ML 工作区。
 
 ```python
-from amlrealtimeai import DeploymentClient
+import os
+import tensorflow as tf
 
-subscription_id = "<Your Azure Subscription ID>"
-resource_group = "<Your Azure Resource Group Name>"
-model_management_account = "<Your AzureML Model Management Account Name>"
-location = "eastus2"
+from azureml.core import Workspace
 
-model_name = "resnet50-model"
-service_name = "quickstart-service"
-
-deployment_client = DeploymentClient(subscription_id, resource_group, model_management_account, location)
-
-with open('cert.pem','r') as cert_file:
-    with open('key.pem','r') as key_file:
-        cert = cert_file.read()
-        key = key_file.read()
-        service = deployment_client.create_service(service_name, model_id, ssl_enabled=True, ssl_certificate=cert, ssl_key=key)
+ws = Workspace.from_config()
+print(ws.name, ws.resource_group, ws.location, ws.subscription_id, sep='\n')
 ```
 
-`create_service` 操作的响应包含服务的 IP 地址。 将 DNS 名称映射到服务的 IP 地址时需使用该 IP 地址。
+### <a name="preprocess-image"></a>预处理图像
 
-该响应还包含使用服务所需的主要密钥和辅助密钥。
-
-### <a name="update-your-dns-to-point-to-the-service"></a>更新 DNS，使其指向服务
-
-使用域名注册机构提供的工具来更新域名的 DNS 记录。 该记录必须指向服务的 IP 地址。
-
-> [!NOTE]
-> 可能几分钟到几小时之后客户端才能解析域名，具体取决于注册机构和为域名配置的生存时间 (TTL)。
-
-### <a name="consuming-authenticated-services"></a>使用已经过身份验证的服务
-
-以下示例演示如何通过 Python 和 C# 使用已经过身份验证的服务：
-
-> [!NOTE]
-> 使用创建服务时返回的主要或辅助密钥替换 `authkey`。
+Web 服务的输入为 JPEG 图像。  第一步是解码 JPEG 图像并对其进行预处理。  JPEG 图像被视为字符串，结果为 tensors，这将是 ResNet 50 模型的输入。
 
 ```python
-from amlrealtimeai import PredictionClient
-client = PredictionClient(service.ipAddress, service.port, use_ssl=True, access_token="authKey")
-image_file = R'C:\path_to_file\image.jpg'
-results = client.score_image(image_file)
+# Input images as a two-dimensional tensor containing an arbitrary number of images represented a strings
+import azureml.accel.models.utils as utils
+tf.reset_default_graph()
+
+in_images = tf.placeholder(tf.string)
+image_tensors = utils.preprocess_array(in_images)
+print(image_tensors.shape)
 ```
 
-```csharp
-var client = new ScoringClient(host, 50051, useSSL, "authKey");
-float[,] result;
-using (var content = File.OpenRead(image))
-    {
-        IScoringRequest request = new ImageRequest(content);
-        result = client.Score<float[,]>(request);
-    }
+### <a name="load-featurizer"></a>Load 特征化器
+
+初始化模型并下载 ResNet50 的量化版本的 TensorFlow 检查点以用作特征化器。  您可以通过导入其他深层神经网络，将以下代码片段中的 "QuantizedResnet50" 替换为：
+
+- QuantizedResnet152
+- QuantizedVgg16
+- Densenet121
+
+```python
+from azureml.accel.models import QuantizedResnet50
+save_path = os.path.expanduser('~/models')
+model_graph = QuantizedResnet50(save_path, is_frozen=True)
+feature_tensor = model_graph.import_graph_def(image_tensors)
+print(model_graph.version)
+print(feature_tensor.name)
+print(feature_tensor.shape)
 ```
 
-其他 gRPC 客户端可通过设置授权标头对请求进行身份验证。 常规方法是创建一个结合了 `SslCredentials` 和 `CallCredentials` 的 `ChannelCredentials` 对象。 该对象将添加到请求的授权标头。 如需深入了解如何实现对特定标头的支持，请参阅 [https://grpc.io/docs/guides/auth.html](https://grpc.io/docs/guides/auth.html)。
+### <a name="add-classifier"></a>添加分类器
 
-以下示例演示如何在 C# 和 Go 中设置标头：
+已在 ImageNet 数据集上训练该分类器。  [示例笔记本](https://aka.ms/aml-notebooks)集中提供了用于传输学习和培训自定义权重的示例。
 
-```csharp
-creds = ChannelCredentials.Create(baseCreds, CallCredentials.FromInterceptor(
-                      async (context, metadata) =>
-                      {
-                          metadata.Add(new Metadata.Entry("authorization", "authKey"));
-                          await Task.CompletedTask;
-                      }));
-
+```python
+classifier_output = model_graph.get_default_classifier(feature_tensor)
+print(classifier_output)
 ```
 
-```go
-conn, err := grpc.Dial(serverAddr, 
-    grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")),
-    grpc.WithPerRPCCredentials(&authCreds{
-    Key: "authKey"}))
+### <a name="save-the-model"></a>保存模型
 
-type authCreds struct {
-    Key string
-}
+现在已加载预处理器、ResNet 50 特征化器和分类器，请将图形和关联的变量保存为模型。
 
-func (c *authCreds) GetRequestMetadata(context.Context, uri ...string) (map[string]string, error) {
-    return map[string]string{
-        "authorization": c.Key,
-    }, nil
-}
+```python
+model_name = "resnet50"
+model_save_path = os.path.join(save_path, model_name)
+print("Saving model in {}".format(model_save_path))
 
-func (c *authCreds) RequireTransportSecurity() bool {
-    return true
-}
+with tf.Session() as sess:
+    model_graph.restore_weights(sess)
+    tf.saved_model.simple_save(sess, model_save_path,
+                               inputs={'images': in_images},
+                               outputs={'output_alias': classifier_output})
 ```
 
-### <a id="self-signed"></a>使用具备自签名证书的服务
+### <a name="save-input-and-output-tensors"></a>保存输入和输出 tensors
+对于模型转换和推理，将需要在预处理和分类器步骤期间创建的输入和输出 tensors。
 
-可通过两种方式让客户端实现对使用自签名证书进行安全保护的服务器进行身份验证：
+```python
+input_tensors = in_images.name
+output_tensors = classifier_output.name
 
-* 在客户端系统上，将客户端系统上的 `GRPC_DEFAULT_SSL_ROOTS_FILE_PATH` 环境变量设置为指向证书文件。
-
-* 构造 `SslCredentials` 对象时，将证书文件的内容传递给构造函数。
-
-两种方法都会让 gRPC 将证书用作根证书。
+print(input_tensors)
+print(output_tensors)
+```
 
 > [!IMPORTANT]
-> gRPC 不接受不受信任的证书。 使用不受信任的证书将失败，并显示 `Unavailable` 状态代码。 失败的详细信息中包含 `Connection Failed`。
+> 保存输入和输出 tensors，因为对于模型转换和推理请求，将需要它们。
+
+可用模型和相应的默认分类器输出 tensors 如下所示，如果您使用了默认分类器，则可用于推理。
+
++ Resnet50, QuantizedResnet50
+  ```python
+  output_tensors = "classifier_1/resnet_v1_50/predictions/Softmax:0"
+  ```
++ Resnet152, QuantizedResnet152
+  ```python
+  output_tensors = "classifier/resnet_v1_152/predictions/Softmax:0"
+  ```
++ Densenet121, QuantizedDensenet121
+  ```python
+  output_tensors = "classifier/densenet121/predictions/Softmax:0"
+  ```
++ Vgg16, QuantizedVgg16
+  ```python
+  output_tensors = "classifier/vgg_16/fc8/squeezed:0"
+  ```
++ SsdVgg, QuantizedSsdVgg
+  ```python
+  output_tensors = ['ssd_300_vgg/block4_box/Reshape_1:0', 'ssd_300_vgg/block7_box/Reshape_1:0', 'ssd_300_vgg/block8_box/Reshape_1:0', 'ssd_300_vgg/block9_box/Reshape_1:0', 'ssd_300_vgg/block10_box/Reshape_1:0', 'ssd_300_vgg/block11_box/Reshape_1:0', 'ssd_300_vgg/block4_box/Reshape:0', 'ssd_300_vgg/block7_box/Reshape:0', 'ssd_300_vgg/block8_box/Reshape:0', 'ssd_300_vgg/block9_box/Reshape:0', 'ssd_300_vgg/block10_box/Reshape:0', 'ssd_300_vgg/block11_box/Reshape:0']
+  ```
+
+### <a name="register-model"></a>注册模型
+
+在 Azure Blob 存储中结合使用 SDK 和 ZIP 文件来[注册](./concept-model-management-and-deployment.md)模型。 添加标记和有关模型的其他元数据有助于跟踪定型模型。
+
+```python
+from azureml.core.model import Model
+
+registered_model = Model.register(workspace=ws,
+                                  model_path=model_save_path,
+                                  model_name=model_name)
+
+print("Successfully registered: ", registered_model.name,
+      registered_model.description, registered_model.version, sep='\t')
+```
+
+如果已注册某一模型并想要加载它，则可以检索它。
+
+```python
+from azureml.core.model import Model
+model_name = "resnet50"
+# By default, the latest version is retrieved. You can specify the version, i.e. version=1
+registered_model = Model(ws, name="resnet50")
+print(registered_model.name, registered_model.description,
+      registered_model.version, sep='\t')
+```
+
+### <a name="convert-model"></a>转换模型
+
+将 TensorFlow 图形转换为开放式神经网络交换格式（[ONNX](https://onnx.ai/)）。  你将需要提供输入和输出 tensors 的名称，并且你的客户端将在你使用 web 服务时使用这些名称。
+
+```python
+from azureml.accel import AccelOnnxConverter
+
+convert_request = AccelOnnxConverter.convert_tf_model(
+    ws, registered_model, input_tensors, output_tensors)
+
+# If it fails, you can run wait_for_completion again with show_output=True.
+convert_request.wait_for_completion(show_output=False)
+
+# If the above call succeeded, get the converted model
+converted_model = convert_request.result
+print("\nSuccessfully converted: ", converted_model.name, converted_model.url, converted_model.version,
+      converted_model.id, converted_model.created_time, '\n')
+```
+
+### <a name="create-docker-image"></a>创建 Docker 映像
+
+转换后的模型和所有依赖项都将添加到 Docker 映像。  然后，可以部署并实例化此 Docker 映像。  支持的部署目标包括云中的 AKS 或边缘设备，如[Azure Data Box Edge](https://docs.microsoft.com/azure/databox-online/data-box-edge-overview)。  你还可以为已注册的 Docker 映像添加标记和说明。
+
+```python
+from azureml.core.image import Image
+from azureml.accel import AccelContainerImage
+
+image_config = AccelContainerImage.image_configuration()
+# Image name must be lowercase
+image_name = "{}-image".format(model_name)
+
+image = Image.create(name=image_name,
+                     models=[converted_model],
+                     image_config=image_config,
+                     workspace=ws)
+image.wait_for_creation(show_output=False)
+```
+
+按标记列出图像并获取详细日志进行任何调试。
+
+```python
+for i in Image.list(workspace=ws):
+    print('{}(v.{} [{}]) stored at {} with build log {}'.format(
+        i.name, i.version, i.creation_state, i.image_location, i.image_build_log_uri))
+```
+
+## <a name="2-deploy-to-cloud-or-edge"></a>2.部署到云或边缘
+
+### <a name="deploy-to-the-cloud"></a>部署到云
+
+若要将模型部署为大规模生产 Web 服务，请使用 Azure Kubernetes 服务 (AKS)。 你可以使用 Azure 机器学习 SDK、CLI、" [Azure 门户](https://portal.azure.com)" 或 "[工作区" 登陆页（预览版）](https://ml.azure.com)创建一个新的。
+
+```python
+from azureml.core.compute import AksCompute, ComputeTarget
+
+# Specify the Standard_PB6s Azure VM and location. Values for location may be "eastus", "southeastasia", "westeurope", or "westus2”. If no value is specified, the default is "eastus".
+prov_config = AksCompute.provisioning_configuration(vm_size = "Standard_PB6s",
+                                                    agent_count = 1,
+                                                    location = "eastus")
+
+aks_name = 'my-aks-cluster'
+# Create the cluster
+aks_target = ComputeTarget.create(workspace=ws,
+                                  name=aks_name,
+                                  provisioning_configuration=prov_config)
+```
+
+AKS 部署可能需要大约15分钟。  检查部署是否成功。
+
+```python
+aks_target.wait_for_completion(show_output=True)
+print(aks_target.provisioning_state)
+print(aks_target.provisioning_errors)
+```
+
+将容器部署到 AKS 群集。
+```python
+from azureml.core.webservice import Webservice, AksWebservice
+
+# For this deployment, set the web service configuration without enabling auto-scaling or authentication for testing
+aks_config = AksWebservice.deploy_configuration(autoscale_enabled=False,
+                                                num_replicas=1,
+                                                auth_enabled=False)
+
+aks_service_name = 'my-aks-service'
+
+aks_service = Webservice.deploy_from_image(workspace=ws,
+                                           name=aks_service_name,
+                                           image=image,
+                                           deployment_config=aks_config,
+                                           deployment_target=aks_target)
+aks_service.wait_for_deployment(show_output=True)
+```
+
+#### <a name="test-the-cloud-service"></a>测试云服务
+Docker 映像支持 gRPC 和 TensorFlow 服务 "预测" API。  使用示例客户端调入 Docker 映像，从模型中获取预测。  示例客户端代码可用：
+- [Python](https://github.com/Azure/aml-real-time-ai/blob/master/pythonlib/amlrealtimeai/client.py)
+- [C#](https://github.com/Azure/aml-real-time-ai/blob/master/sample-clients/csharp)
+
+如果要使用 TensorFlow 服务，则可以[下载示例客户端](https://www.tensorflow.org/serving/setup)。
+
+```python
+# Using the grpc client in Azure ML Accelerated Models SDK package
+from azureml.accel import PredictionClient
+
+address = aks_service.scoring_uri
+ssl_enabled = address.startswith("https")
+address = address[address.find('/')+2:].strip('/')
+port = 443 if ssl_enabled else 80
+
+# Initialize AzureML Accelerated Models client
+client = PredictionClient(address=address,
+                          port=port,
+                          use_ssl=ssl_enabled,
+                          service_name=aks_service.name)
+```
+
+由于此分类器是在[ImageNet](http://www.image-net.org/)数据集上定型的，因此将这些类映射到用户可读的标签。
+
+```python
+import requests
+classes_entries = requests.get(
+    "https://raw.githubusercontent.com/Lasagne/Recipes/master/examples/resnet50/imagenet_classes.txt").text.splitlines()
+
+# Score image with input and output tensor names
+results = client.score_file(path="./snowleopardgaze.jpg",
+                            input_name=input_tensors,
+                            outputs=output_tensors)
+
+# map results [class_id] => [confidence]
+results = enumerate(results)
+# sort results by confidence
+sorted_results = sorted(results, key=lambda x: x[1], reverse=True)
+# print top 5 results
+for top in sorted_results[:5]:
+    print(classes_entries[top[0]], 'confidence:', top[1])
+```
+
+### <a name="clean-up-the-service"></a>清理服务
+删除 web 服务、图像和模型（必须按此顺序完成，因为存在依赖关系）。
+
+```python
+aks_service.delete()
+aks_target.delete()
+image.delete()
+registered_model.delete()
+converted_model.delete()
+```
+
+### <a name="deploy-to-a-local-edge-server"></a>部署到本地边缘服务器
+
+所有[Azure Data Box Edge 设备](https://docs.microsoft.com/azure/databox-online/data-box-edge-overview
+)都包含用于运行模型的 FPGA。  在 FPGA 上，一次只能运行一个模型。  若要运行不同的模型，只需部署一个新的容器。 有关说明和示例代码，请参阅[此 Azure 示例](https://github.com/Azure-Samples/aml-hardware-accelerated-models)。
+
+## <a name="secure-fpga-web-services"></a>保护 FPGA Web 服务
+
+若要保护 FPGA web 服务，请参阅[安全 web 服务](how-to-secure-web-service.md)文档。
+
+## <a name="next-steps"></a>后续步骤
+
+查看以下笔记本、视频和博客：
+
++ 几个[示例笔记本](https://aka.ms/aml-accel-models-notebooks)。
+
++ [“超大规模”硬件：ML at scale on top of Azure + FPGA :Build 2018 (video)](https://channel9.msdn.com/events/Build/2018/BRK3202)（超大规模的硬件：基于 Azure + FPGA 的大规模机器学习：Build 2018（视频））
+
++ [Inside the Microsoft FPGA-based configurable cloud (video)](https://channel9.msdn.com/Events/Build/2017/B8063)（深入了解基于 Microsoft FPGA 的可配置云（视频））
+
++ [用于实时 AI 的 Project Brainwave：项目主页](https://www.microsoft.com/research/project/project-brainwave/)

@@ -6,28 +6,30 @@ keywords: 剪辑;子剪辑;编码;媒体
 author: dbgeorge
 manager: jasonsue
 ms.author: dwgeo
-ms.date: 11/10/2017
+ms.date: 03/14/2019
 ms.topic: article
 ms.service: media-services
-ms.openlocfilehash: f3822386d0d16b1feaf16853424329558a18f910
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 35f1f359b44af00000ccd9047673b80ca541d376
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61243840"
 ---
-# <a name="create-clips-with-azure-media-clipper"></a>使用 Azure 媒体剪辑器创建剪辑
+# <a name="create-clips-with-azure-media-clipper"></a>使用 Azure 媒体剪辑器创建剪辑 
+
 Azure 媒体剪辑器是免费的 JavaScript 库，能让 Web 开发人员为其用户提供创建媒体剪辑的界面。 此工具可以集成到任何 Web 页面，并提供用于加载资产和提交剪辑作业的 API。
 
 Azure 媒体剪辑器能够执行：
 - 从实时存档剪裁前盖板和后盖板 
-- 编辑 AMS 实时事件、实时存档或 fMP4 VOD 文件中的视频重点 
+- 编辑 AMS 直播活动、实时存档或 fMP4 VOD 文件中的视频重点 
 - 将多个源的视频相连 
 - 从 AMS 媒体资产中生成摘要剪辑 
 - 剪辑具有帧准确度的视频 
 - 基于具有帧组 (GOP) 准确度的现有实时和 VOD 资产生成动态清单筛选器 
 - 根据媒体服务帐户中的资产生成编码作业
 
-若要请求新功能，请将意见或反馈提交至 [Azure 媒体服务 UserVoice](http://aka.ms/amsvoice/)。 如有具体问题、疑问或发现任何 bug，请通过 amcinfo@microsoft.com 与媒体服务团队联系。
+若要请求新功能，请将意见或反馈提交至 [Azure 媒体服务 UserVoice](https://aka.ms/amsvoice/)。 如有具体问题、疑问或发现任何 bug，请通过 amcinfo@microsoft.com 与媒体服务团队联系。
 
 下图阐释剪辑器接口：![Azure 媒体剪辑器](media/media-services-azure-media-clipper-overview/media-services-azure-media-clipper-interface.PNG)
 
@@ -61,7 +63,7 @@ Azure 媒体剪辑器使用现代 HTML5 技术构建并支持以下浏览器：
 - 匈牙利语
 - 意大利语
 - 日语
-- 朝鲜语
+- 韩语
 - 波兰语
 - 葡萄牙语(巴西)
 - 葡萄牙语(葡萄牙)

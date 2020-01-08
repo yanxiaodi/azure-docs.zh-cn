@@ -1,89 +1,64 @@
 ---
-title: 使用用于容器的 Web 应用从 Docker 容器注册表进行持续部署 - Azure | Microsoft Docs
-description: 如何在用于容器的 Web 应用中设置从 Docker 容器注册表进行的持续部署。
+title: 用于容器的 Web 应用的持续部署 - Azure 应用服务 | Microsoft Docs
+description: 如何在用于容器的 Web 应用中设置持续部署。
 keywords: azure 应用服务, linux, docker, acr,oss
 services: app-service
 documentationcenter: ''
-author: ahmedelnably
-manager: cfowler
+author: msangapu
+manager: jeconnoc
 editor: ''
 ms.assetid: a47fb43a-bbbd-4751-bdc1-cd382eae49f8
 ms.service: app-service
 ms.workload: na
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
-ms.date: 05/10/2017
-ms.author: aelnably;msangapu
-ms.openlocfilehash: ac35dbd041de50ab8aae1a0fb4c00fe3917a7297
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.date: 11/08/2018
+ms.author: msangapu
+ms.custom: seodec18
+ms.openlocfilehash: 1dc776f0a61ac1a29ab3fe3ebdd542469863cd50
+ms.sourcegitcommit: 82499878a3d2a33a02a751d6e6e3800adbfa8c13
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70071360"
 ---
 # <a name="continuous-deployment-with-web-app-for-containers"></a>使用用于容器的 Web 应用进行持续部署
 
 在本教程中，通过托管 [Azure 容器注册表](https://azure.microsoft.com/services/container-registry/)存储库或 [Docker 中心](https://hub.docker.com)为自定义容器映像配置持续部署。
 
-## <a name="sign-in-to-azure"></a>登录 Azure
+## <a name="enable-continuous-deployment-with-acr"></a>使用 ACR 启用持续部署
 
-登录到 [Azure 门户](https://portal.azure.com)。
+![ACR Webhook 的屏幕截图](./media/app-service-webapp-service-linux-ci-cd/ci-cd-acr-02.png)
 
-## <a name="enable-the-continuous-deployment-feature"></a>启用持续部署功能
+1. 登录到 [Azure 门户](https://portal.azure.com)。
+2. 选择页面左侧的“应用服务”选项。
+3. 选择要为其配置持续部署的应用的名称。
+4. 在“容器设置”页上，选择“单个容器”
+5. 选择“Azure 容器注册表”
+6. 选择“持续部署”>“启用”
+7. 选择“保存”以启用持续部署。
 
-可使用 [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli) 并执行以下命令来启用连续部署功能：
+## <a name="use-the-acr-webhook"></a>使用 ACR Webhook
 
-```azurecli-interactive
-az webapp deployment container config --name name --resource-group myResourceGroup --enable-cd true
-```
+启用持续部署后，可以在 Azure 容器注册表 Webhook 页上查看新创建的 Webhook。
 
-在 [Azure 门户](https://portal.azure.com/)中，选择页面左侧的“应用服务”选项。
+![ACR Webhook 的屏幕截图](./media/app-service-webapp-service-linux-ci-cd/ci-cd-acr-03.png)
 
-选择要为其配置 Docker 中心持续部署的应用的名称。
+在容器注册表中，单击“Webhook”以查看当前的 Webhook。
 
-在“Docker 容器”页上，选择“启用”，然后选择“保存”以启用持续部署。
+## <a name="enable-continuous-deployment-with-docker-hub-optional"></a>使用 Docker 中心启用持续部署（可选）
 
-![应用设置的屏幕截图](./media/app-service-webapp-service-linux-ci-cd/step2.png)
+1. 登录到 [Azure 门户](https://portal.azure.com)。
+2. 选择页面左侧的“应用服务”选项。
+3. 选择要为其配置持续部署的应用的名称。
+4. 在“容器设置”页上，选择“单个容器”
+5. 选择“Docker 中心”
+6. 选择“持续部署”>“启用”
+7. 选择“保存”以启用持续部署。
 
-## <a name="prepare-the-webhook-url"></a>准备 Webhook URL
+![应用设置的屏幕截图](./media/app-service-webapp-service-linux-ci-cd/ci-cd-docker-02.png)
 
-可使用 [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli) 并执行以下命令来获取 Webhook URL：
-
-```azurecli-interactive
-az webapp deployment container show-cd-url --name sname1 --resource-group rgname
-```
-
-对于 Webhook URL，需要以下终结点：`https://<publishingusername>:<publishingpwd>@<sitename>.scm.azurewebsites.net/docker/hook`。
-
-可以通过使用 Azure 门户下载 Web 应用发布配置文件来获取 `publishingusername` 和 `publishingpwd`。
-
-![屏幕截图：添加 Webhook 2](./media/app-service-webapp-service-linux-ci-cd/step3-3.png)
-
-## <a name="add-a-webhook"></a>添加 Webhook
-
-### <a name="azure-container-registry"></a>Azure 容器注册表
-
-1. 在注册门户页上，选择“Webhook”。
-2. 若要创建一个新的 Webhook，请选择“添加”。 
-3. 在“创建 Webhook”窗格中，为 Webhook 指定名称。 对于 Webhook URL，请提供前面部分中获取的 URL。
-
-请确保将范围定义为包含容器映像的存储库。
-
-![Webhook 的屏幕截图](./media/app-service-webapp-service-linux-ci-cd/step3ACRWebhook-1.png)
-
-更新映像时，会自动使用新映像更新 Web 应用。
-
-### <a name="docker-hub"></a>Docker 中心
-
-在“Docker 中心”页上，选择“Webhook”，并选择“创建 WEBHOOK”。
-
-![屏幕截图：添加 Webhook 1](./media/app-service-webapp-service-linux-ci-cd/step3-1.png)
-
-对于 webhook URL，提供之前获取的 URL。
-
-![屏幕截图：添加 Webhook 2](./media/app-service-webapp-service-linux-ci-cd/step3-2.png)
-
-更新映像时，会自动使用新映像更新 Web 应用。
+复制 Webhook URL。 若要添加用于 Docker 中心的 Webhook，请按照<a href="https://docs.docker.com/docker-hub/webhooks/" target="_blank">用于 Docker 中心的 Webhook</a> 进行操作。
 
 ## <a name="next-steps"></a>后续步骤
 

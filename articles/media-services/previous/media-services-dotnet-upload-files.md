@@ -4,7 +4,7 @@ description: 了解如何通过创建和上传资产将媒体内容加入媒体�
 services: media-services
 documentationcenter: ''
 author: juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: c9c86380-9395-4db8-acea-507c52066f73
 ms.service: media-services
@@ -12,34 +12,32 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 03/12/2017
+ms.date: 03/18/2019
 ms.author: juliako
-ms.openlocfilehash: 0197aabbb3a0594ed8a7c54282491298fdf7cd23
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 03b9995eab503ac1fcd4615882419dde31d4f8bf
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64869462"
 ---
-# <a name="upload-files-into-a-media-services-account-using-net"></a>使用 .NET 将文件上传到媒体服务帐户
-> [!div class="op_single_selector"]
-> * [.NET](media-services-dotnet-upload-files.md)
-> * [REST](media-services-rest-upload-files.md)
-> * [门户](media-services-portal-upload-files.md)
-> 
-> 
+# <a name="upload-files-into-a-media-services-account-using-net"></a>使用 .NET 将文件上传到媒体服务帐户 
+
+> [!NOTE]
+> 不会向媒体服务 v2 添加任何新特性或新功能。 <br/>查看最新版本：[媒体服务 v3](https://docs.microsoft.com/azure/media-services/latest/)。 此外，请参阅[从 v2 到 v3 迁移指南](../latest/migrate-from-v2-to-v3.md)
 
 在媒体服务中，可以将数字文件上传（引入）到资产中。 **资产**实体可以包含视频、音频、图像、缩略图集合、文本轨道和隐藏式字幕文件（以及这些文件的相关元数据。）上传文件完成后，相关内容即安全地存储在云中供后续处理和流式处理。
 
 资产中的文件称为 **资产文件**。 **AssetFile** 实例和实际媒体文件是两个不同的对象。 AssetFile 实例包含有关媒体文件的元数据，而媒体文件包含实际媒体内容。
 
-> [!NOTE]
-> 请注意以下事项：
-> 
-> * 生成流式处理内容的 URL 时，媒体服务会使用 IAssetFile.Name 属性的值（如 http://{AMSAccount}.origin.mediaservices.windows.net/{GUID}/{IAssetFile.Name}/streamingParameters。）出于这个原因，不允许使用百分号编码。 **Name** 属性的值不能含有任何以下[百分号编码保留字符](http://en.wikipedia.org/wiki/Percent-encoding#Percent-encoding_reserved_characters)：!*'();:@&=+$,/?%#[]"。 此外，文件扩展名中只能含有一个“.”。
-> * 名称长度不应超过 260 个字符。
-> * 支持在媒体服务中处理的最大文件大小存在限制。 有关文件大小限制的详细信息，请参阅[此文](media-services-quotas-and-limitations.md)。
-> * 不同 AMS 策略的策略限制为 1,000,000 个（例如，对于定位器策略或 ContentKeyAuthorizationPolicy）。 如果始终使用相同的日期/访问权限，则应使用相同的策略 ID，例如，用于要长期就地保留的定位符的策略（非上传策略）。 有关详细信息，请参阅[此](media-services-dotnet-manage-entities.md#limit-access-policies)文章。
-> 
+## <a name="considerations"></a>注意事项
+
+请注意以下事项：
+ 
+ * 生成流式处理内容的 URL 时，媒体服务会使用 IAssetFile.Name 属性的值（如 http://{AMSAccount}.origin.mediaservices.windows.net/{GUID}/{IAssetFile.Name}/streamingParameters。）出于这个原因，不允许使用百分号编码。 **Name** 属性的值不能含有任何以下[百分号编码保留字符](https://en.wikipedia.org/wiki/Percent-encoding#Percent-encoding_reserved_characters)：!*'();:@&=+$,/?%#[]"。 此外，文件扩展名中只能含有一个“.”。
+* 名称长度不应超过 260 个字符。
+* 支持在媒体服务中处理的最大文件大小存在限制。 有关文件大小限制的详细信息，请参阅[此文](media-services-quotas-and-limitations.md)。
+* 不同 AMS 策略的策略限制为 1,000,000 个（例如，对于定位器策略或 ContentKeyAuthorizationPolicy）。 如果始终使用相同的日期/访问权限，则应使用相同的策略 ID，例如，用于要长期就地保留的定位符的策略（非上传策略）。 有关详细信息，请参阅[此](media-services-dotnet-manage-entities.md#limit-access-policies)文章。
 
 创建资产时，可以指定以下加密选项：
 
@@ -47,19 +45,20 @@ ms.lasthandoff: 05/07/2018
   如果计划使用渐进式下载传送 MP4，则使用此选项： 
 * **CommonEncryption** - 上传经过通用加密或 PlayReady DRM 加密并保护的内容（例如，受 PlayReady DRM 保护的平滑流式处理）时使用此选项。
 * **EnvelopeEncrypted** - 如果要上传使用 AES 加密的 HLS，请使用此选项。 请注意，Transform Manager 必须已对文件进行编码和加密。
-* **StorageEncrypted** - 使用 AES-256 位加密在本地加密明文内容，然后将其上传到 Azure 存储以加密形式静态存储相关内容。 受存储加密保护的资产会在编码前自动解密并放入经过加密的文件系统中，并可选择在重新上传为新的输出资产前重新加密。 存储加密的主要用例是在磁盘上通过静态增强加密来保护高品质的输入媒体文件。
+* **StorageEncrypted** - 使用 AES-256 位加密在本地加密明文内容，并将其上传到 Azure Storage 中以加密形式静态存储相关内容。 受存储加密保护的资产会在编码前自动解密并放入经过加密的文件系统中，并可选择在重新上传为新的输出资产前重新加密。 存储加密的主要用例是在磁盘上通过静态增强加密来保护高品质的输入媒体文件。
   
     媒体服务为资产提供磁盘上的存储加密，而不是通过数字权限管理器 (DRM) 等线路提供加密。
   
     如果资产已经过存储加密，则必须配置资产传送策略。 有关详细信息，请参阅[配置资产传送策略](media-services-dotnet-configure-asset-delivery-policy.md)。
 
-如果指定使用 **CommonEncrypted** 选项或 **EnvelopeEncypted** 选项加密资产，则需要将资产关联到 **ContentKey**。 有关详细信息，请参阅[如何创建 ContentKey](media-services-dotnet-create-contentkey.md)。 
+如果指定使用 **CommonEncrypted** 选项或 **EnvelopeEncrypted** 选项加密资产，则需要将资产关联到 **ContentKey**。 有关详细信息，请参阅[如何创建 ContentKey](media-services-dotnet-create-contentkey.md)。 
 
-如果指定使用 StorageEncrypted 选项加密资产，适用于 .NET 的媒体服务 SDK 将为资产创建 StorateEncrypted ContentKey。
+如果指定使用 **StorageEncrypted** 选项加密资产，适用于 .NET 的媒体服务 SDK 将为资产创建 **StorageEncrypted** **ContentKey**。
 
 本文说明如何使用媒体服务 .NET SDK 以及媒体服务 .NET SDK 扩展将文件上传到媒体服务资产中。
 
 ## <a name="upload-a-single-file-with-media-services-net-sdk"></a>使用媒体服务 .NET SDK 上传单个文件
+
 以下代码使用 .NET 上传单个文件。 AccessPolicy 和 Locator 由 Upload 函数创建和销毁。 
 
 ```csharp
@@ -89,7 +88,7 @@ ms.lasthandoff: 05/07/2018
 ## <a name="upload-multiple-files-with-media-services-net-sdk"></a>使用媒体服务 .NET SDK 上传多个文件
 以下代码演示如何创建资产及上传多个文件。
 
-代码将执行以下操作：
+代码执行以下操作：
 
 * 使用上一步中定义的 CreateEmptyAsset 方法创建一个空资产。
 * 创建用于定义权限以及资产访问持续时间的 **AccessPolicy** 实例。
@@ -136,7 +135,7 @@ ms.lasthandoff: 05/07/2018
                 var assetFile = asset.AssetFiles.Create(Path.GetFileName(filePath));
                 Console.WriteLine("Created assetFile {0}", assetFile.Name);
 
-                // It is recommended to validate AccestFiles before upload. 
+                // It is recommended to validate AssetFiles before upload. 
                 Console.WriteLine("Start uploading of {0}", assetFile.Name);
                 uploadTasks.Add(assetFile.UploadAsync(filePath, blobTransferClient, locator, CancellationToken.None));
             }
@@ -165,7 +164,7 @@ ms.lasthandoff: 05/07/2018
 上传大量资产时，请注意以下事项：
 
 * 每个线程创建一个新的 **CloudMediaContext** 对象。 **CloudMediaContext** 类不是线程安全的。
-* 将 NumberOfConcurrentTransfers 从默认值 2 增加到更高的值（如 5）。 设置此属性将影响 **CloudMediaContext** 的所有实例。 
+* 将 NumberOfConcurrentTransfers 从默认值 2 增加到更高的值（如 5）。 设置此属性会影响 **CloudMediaContext**的所有实例。 
 * 将 ParallelTransferThreadCount 保留为默认值 10。
 
 ## <a id="ingest_in_bulk"></a>使用媒体服务 .NET SDK 批量引入资产
@@ -198,16 +197,18 @@ ms.lasthandoff: 05/07/2018
     IIngestManifestAsset bulkAsset2 =  manifest.IngestManifestAssets.Create(destAsset2, new[] { filename2, filename3 });
 ```
 
-可以使用任何能够将资产文件上传到 blob 存储容器 URI（由 IngestManifest 的 **IIngestManifest.BlobStorageUriForUpload** 属性提供）的高速客户端应用程序。 一个明显的高速上传服务就是 [Aspera On Demand for Azure 应用程序](https://datamarket.azure.com/application/2cdbc511-cb12-4715-9871-c7e7fbbb82a6)。 还可以编写代码来上传资产文件，如以下代码示例所示。
+可以使用任何能够将资产文件上传到 blob 存储容器 URI（由 IngestManifest 的 **IIngestManifest.BlobStorageUriForUpload** 属性提供）的高速客户端应用程序。 
+
+以下代码展示如何使用 .NET SDK 上传资产文件。
 
 ```csharp
-    static void UploadBlobFile(string destBlobURI, string filename)
+    static void UploadBlobFile(string containerName, string filename)
     {
         Task copytask = new Task(() =>
         {
             var storageaccount = new CloudStorageAccount(new StorageCredentials(_storageAccountName, _storageAccountKey), true);
             CloudBlobClient blobClient = storageaccount.CreateCloudBlobClient();
-            CloudBlobContainer blobContainer = blobClient.GetContainerReference(destBlobURI);
+            CloudBlobContainer blobContainer = blobClient.GetContainerReference(containerName);
 
             string[] splitfilename = filename.Split('\\');
             var blob = blobContainer.GetBlockBlobReference(splitfilename[splitfilename.Length - 1]);
@@ -273,7 +274,7 @@ ms.lasthandoff: 05/07/2018
 
 
 ## <a name="upload-files-using-net-sdk-extensions"></a>使用 .NET SDK 扩展上传文件
-以下示例演示如何使用 .NET SDK 扩展上传单个文件。 在此情况下，将使用 **CreateFromFile** 方法，但也可以使用异步版本 (**CreateFromFileAsync**)。 CreateFromFile 方法支持指定文件名、加密选项和回叫，以便报告文件的上传进度。
+以下示例演示如何使用 .NET SDK 扩展上传单个文件。 在此情况下，将使用 **CreateFromFile** 方法，但也可以使用异步版本 (**CreateFromFileAsync**)。 CreateFromFile 方法支持指定文件名、加密选项和回叫，以便报告文件的上传进度  。
 
 ```csharp
     static public IAsset UploadFile(string fileName, AssetCreationOptions options)
@@ -292,7 +293,7 @@ ms.lasthandoff: 05/07/2018
     }
 ```
 
-以下示例将调用 UploadFile 函数，并指定存储加密作为资产创建选项。  
+以下示例调用 UploadFile 函数，并指定存储加密作为资产创建选项。  
 
 ```csharp
     var asset = UploadFile(@"C:\VideoFiles\BigBuckBunny.mp4", AssetCreationOptions.StorageEncrypted);

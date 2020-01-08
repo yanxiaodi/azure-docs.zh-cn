@@ -1,104 +1,85 @@
 ---
-title: 在创建过程中启用 Azure VM 备份 | Microsoft Docs
-description: 查看在创建过程中启用 Azure 虚拟机备份的步骤。
-services: backup, virtual-machines
-documentationcenter: ''
-author: markgalioto
+title: 在创建 Azure VM 时通过 Azure 备份启用备份
+description: 介绍了如何在创建 Azure VM 时通过 Azure 备份启用备份。
+author: dcurwin
 manager: carmonm
-tags: azure-resource-manager, virtual-machine-backup
-ms.assetid: ''
-ms.service: backup, virtual-machines
-ms.devlang: na
-ms.topic: article
-ms.workload: storage-backup-recovery
-ms.date: 01/08/2018
-ms.author: trinadhk
-ms.openlocfilehash: e16714eee697d9dc8102b5f29d9639d650517562
-ms.sourcegitcommit: 34e0b4a7427f9d2a74164a18c3063c8be967b194
-ms.translationtype: HT
+ms.service: backup
+ms.topic: conceptual
+ms.date: 06/13/2019
+ms.author: dacurwin
+ms.openlocfilehash: 90f69371457bbfe37789b12971343f738ff35e8e
+ms.sourcegitcommit: 3877b77e7daae26a5b367a5097b19934eb136350
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/30/2018
+ms.lasthandoff: 07/30/2019
+ms.locfileid: "68639712"
 ---
-# <a name="enable-backup-during-azure-virtual-machine-creation"></a>在 Azure 虚拟机创建过程中启用备份 
+# <a name="enable-backup-when-you-create-an-azure-vm"></a>在创建 Azure VM 时启用备份
 
-Azure 备份服务提供创建备份并将其配置到云的接口。 通过定期执行备份（称为恢复点）保护数据。 Azure 备份可创建恢复点，这些恢复点可存储在异地冗余的恢复保管库中。 本文详细介绍了如何在通过 Azure 门户创建虚拟机 (VM) 时启用备份。  
+使用 Azure 备份服务备份 Azure 虚拟机 (VM)。 VM 是根据在备份策略中指定的计划备份的，恢复点是基于备份创建的。 恢复点存储在恢复服务保管库中。
 
-## <a name="log-in-to-azure"></a>登录 Azure 
+本文详细介绍了在 Azure 门户中创建虚拟机 (VM) 时如何启用备份。  
 
-如果尚未登录帐户，请先登录到 [Azure 门户](http://portal.azure.com)。
- 
-## <a name="create-virtual-machine-with-backup-configured"></a>使用配置的备份创建虚拟机 
+## <a name="before-you-start"></a>开始之前
 
-1. 单击 Azure 门户左上角的“新建”。 
+- 如果在创建 VM 时启用备份，请[检查](backup-support-matrix-iaas.md#supported-backup-actions)支持哪些操作系统。
 
-2. 选择“计算”，然后选择虚拟机的映像。   
+## <a name="sign-in-to-azure"></a>登录  Azure
 
-3. 输入虚拟机信息。 提供的用户名和密码用于登录到虚拟机。 完成后，单击“确定”。 
+如果尚未登录到你的帐户，请先登录到 [Azure 门户](https://portal.azure.com)。
 
-4. 为 VM 选择大小。  
+## <a name="create-a-vm-with-backup-configured"></a>创建配置了备份的 VM
 
-5. 在“设置”>“备份”下，单击“已启用”打开备份配置设置。 可以接受默认值并单击设置页上的“确定”，转到“摘要”页创建 VM。 如果需要更改值，请按照下面的步骤操作。  
+1. 在 Azure 门户中，单击“创建资源”。
 
-6. 创建或选择恢复服务保管库，其中保存了虚拟机的备份。 如果要创建恢复服务保管库，可以为该保管库选择一个资源组。  
+2. 在 Azure 市场中，单击“计算”，然后选择一个 VM 映像。
 
-    ![vm 创建页中的备份配置](./media/backup-during-vm-creation/create-vm-backup-config.png) 
+3. 根据适用于 [Windows](https://docs.microsoft.com/azure/virtual-machines/windows/quick-create-portal) 或 [Linux](https://docs.microsoft.com/azure/virtual-machines/linux/quick-create-portal) 的说明设置 VM。
 
-    > [!NOTE] 
-    > 恢复服务保管库的资源组可能与虚拟机的资源组不同。  
-    > 
-    > 
+4. 在“管理”选项卡上，在“启用备份”中，单击“开启”。
+5. Azure 备份将备份到恢复服务保管库。 如果没有现有的保管库，请单击“新建”。
+6. 接受建议的保管库名称或自己指定名称。
+7. 指定或创建保管库将位于其中的资源组。 资源组保管库可以不同于 VM 资源组。
 
-7. 默认情况下，已选择备份策略以快速保护 VM。 备份策略指定了执行备份快照的频率和这些备份副本的保留期。 可以接受默认策略，也可以创建或选择一个不同的备份策略。 要编辑备份策略，请选择“备份策略”并更改策略值。  
+    ![为 VM 启用备份](./media/backup-during-vm-creation/enable-backup.png)
 
-8. 如果对备份配置值很满意，则在“设置”页中单击“确定”。  
+8. 接受默认备份策略，或修改设置。
+    - 备份策略指定执行 VM 备份快照的频率和这些备份副本的保留期。
+    - 默认策略每天备份 VM 一次。
+    - 你可以为 Azure VM 自定义你自己的备份策略以便每日或每周进行备份。
+    - [详细了解](backup-azure-vms-introduction.md#backup-and-restore-considerations) Azure VM 的备份注意事项。
+    - [详细了解](backup-instant-restore-capability.md)即时还原功能。
 
-9. 通过验证后，在“摘要”页上单击“创建”，创建使用配置的备份设置的虚拟机。 
+      ![默认备份策略](./media/backup-during-vm-creation/daily-policy.png)
 
-## <a name="initiate-a-backup-after-creating-the-vm"></a>在创建 VM 后启动备份 
 
-虽然已创建备份策略，但是最好创建一个初始备份。 要在 VM 创建模板完成后查看虚拟机的备份详细信息，请在左侧菜单上的“操作”设置中单击“备份”。 可通过此操作触发按需备份、还原完整 VM 或所有磁盘、从 VM 备份还原文件，或更改与虚拟机关联的备份策略。  
+> [!NOTE]
+> Azure 备份服务会创建一个单独的资源组（而非 VM 资源组）来存储快照，采用的命名格式为 **AzureBackupRG_geography_number**（例如：AzureBackupRG_northeurope_1）。 此资源组中的数据将按 Azure 虚拟机备份策略的“保留即时恢复快照”部分中指定的天数保留。  对此资源组应用锁定可能会导致备份失败。<br>
+此资源组还应排除在任何名称/标记限制之外，因为限制策略会阻止在其中再次创建资源点集合，从而导致备份失败。
 
-## <a name="using-a-resource-manager-template-to-deploy-a-protected-vm"></a>使用资源管理器模板部署一个受保护的 VM
 
-前面的步骤说明了如何使用 Azure 门户来创建虚拟机，以及使用恢复服务保管库来保护该虚拟机。 如果希望快速部署一台或多台虚拟机，并使用恢复服务保管库来保护它们，请参阅模板[部署 Windows VM 并启用备份](https://azure.microsoft.com/resources/templates/101-recovery-services-create-vm-and-configure-backup/)。
+## <a name="start-a-backup-after-creating-the-vm"></a>在创建 VM 后启动备份
 
-## <a name="frequently-asked-questions"></a>常见问题 
+你的 VM 备份将根据备份策略运行。 但是，我们建议你运行一个初始备份。
 
-### <a name="which-vm-images-enable-backup-at-the-time-of-vm-creation"></a>哪些映像在创建 VM 时启用备份？ 
+创建 VM 后，请执行以下操作：
 
-下列 Microsoft 发布的核心映像支持在 VM 创建过程中启用备份。 对于其他 VM，可以在创建 VM 后启用备份。 了解有关[在创建 VM 后启用备份](quick-backup-vm-portal.md)的详细信息 
+1. 在 VM 属性中，单击“备份”。 VM 状态将保持为“初始备份挂起”，直到初始备份运行
+2. 单击“立即备份”来运行按需备份。
 
-- **Windows** - Windows Server 2016 Data center、Windows Server 2016 Data Center core、Windows Server 2012 DataCenter、Windows Server 2012 R2 DataCenter、Windows Server 2008 R2 SP1 
-- **Ubuntu** - Ubuntu Server 1710、Ubuntu Server 1704、UUbuntu Server 1604(LTS)、Ubuntu Server 1404(LTS) 
-- **Redhat** - RHEL 6.7、6.8、6.9、7.2、7.3、7.4 
-- **SUSE** - SUSE Linux Enterprise Server 11 SP4、12 SP2、12 SP3 
-- **Debian** - Debian 8、Debian 9 
-- **CentOS** - CentOS 6.9、CentOS 7.3 
-- **Oracle Linux** - Oracle Linux 6.7、6.8、6.9、7.2、7.3 
- 
-### <a name="is-backup-cost-included-in-the-vm-cost"></a>备份成本包含在 VM 成本内吗？ 
+    ![运行按需备份](./media/backup-during-vm-creation/run-backup.png)
 
-不是，备份成本是独立于或不同于虚拟机成本的。 有关备份定价的详细信息，请参阅[备份定价站点](https://azure.microsoft.com/pricing/details/backup/)。
- 
-### <a name="which-permissions-are-required-to-enable-backup-on-a-vm"></a>在 VM 上启用备份需要哪些权限？ 
+## <a name="use-a-resource-manager-template-to-deploy-a-protected-vm"></a>使用资源管理器模板部署一个受保护的 VM
 
-如果是虚拟机参与者，便可以在 VM 上启用备份。 如果使用的是自定义角色，则需要具有以下权限才可在 VM 上成功启用备份。 
+前面的步骤说明了如何使用 Azure 门户来创建虚拟机，以及使用恢复服务保管库来保护该虚拟机。 若要快速部署一台或多台虚拟机并在恢复服务保管库中保护它们，请参阅模板[部署 Windows VM 并启用备份](https://azure.microsoft.com/resources/templates/101-recovery-services-create-vm-and-configure-backup/)。
 
-- Microsoft.RecoveryServices/Vaults/write 
-- Microsoft.RecoveryServices/Vaults/read 
-- Microsoft.RecoveryServices/locations/* 
-- Microsoft.RecoveryServices/Vaults/backupFabrics/protectionContainers/protectedItems/*/read 
-- Microsoft.RecoveryServices/Vaults/backupFabrics/protectionContainers/protectedItems/read 
-- Microsoft.RecoveryServices/Vaults/backupFabrics/protectionContainers/protectedItems/write 
-- Microsoft.RecoveryServices/Vaults/backupFabrics/backupProtectionIntent/write 
-- Microsoft.RecoveryServices/Vaults/backupPolicies/read 
-- Microsoft.RecoveryServices/Vaults/backupPolicies/write 
- 
-如果恢复服务保管库和虚拟机的资源组不同，请确保具有恢复服务保管库资源组的写入权限。  
 
-## <a name="next-steps"></a>后续步骤 
 
-现已保护 VM，请参阅以下文章了解 VM 管理任务以及如何还原 VM。 
+## <a name="next-steps"></a>后续步骤
 
-- [管理和监视虚拟机](backup-azure-manage-vms.md) 
-- [恢复虚拟机](backup-azure-arm-restore-vms.md) 
+现在，你已保护了你的 VM，请了解如何管理和还原它们。
+
+- [管理和监视 VM](backup-azure-manage-vms.md)
+- [还原 VM](backup-azure-arm-restore-vms.md)
+
+如果遇到任何问题，请[查看](backup-azure-vms-troubleshoot.md)故障排除指南。

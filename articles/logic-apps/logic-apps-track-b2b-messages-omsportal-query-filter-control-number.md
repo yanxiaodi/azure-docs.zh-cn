@@ -1,128 +1,136 @@
 ---
-title: 在 Log Analytics 中查询 B2B 消息 - Azure 逻辑应用 | Microsoft Docs
-description: 创建查询来跟踪 Log Analytics 中的 AS2、X12 和 EDIFACT 消息
-author: padmavc
-manager: anneta
-editor: ''
+title: 在 Azure Monitor 日志-Azure 逻辑应用中创建跟踪查询 B2B 消息 |Microsoft Docs
+description: 使用 Azure Log Analytics 为 Azure 逻辑应用创建用于跟踪 AS2、X12 和 EDIFACT 消息的查询
 services: logic-apps
-documentationcenter: ''
-ms.assetid: bb7d9432-b697-44db-aa88-bd16ddfad23f
 ms.service: logic-apps
-ms.workload: integration
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.suite: integration
+author: divyaswarnkar
+ms.author: divswa
+ms.reviewer: jonfan, estfan, LADocs
 ms.topic: article
-ms.date: 07/21/2017
-ms.author: LADocs; padmavc
-ms.openlocfilehash: 345857801035fb7f149a57a4f0d58e7668f35b81
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.date: 10/19/2018
+ms.openlocfilehash: d4a94e75de34bbafd3bc8f1c1a0d1a6817245e5f
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60846440"
 ---
-# <a name="query-for-as2-x12-and-edifact-messages-in-log-analytics"></a>查询 Log Analytics 中的 AS2、X12 和 EDIFACT 消息
+# <a name="create-tracking-queries-for-b2b-messages-in-azure-monitor-logs-for-azure-logic-apps"></a>为 Azure 逻辑应用在 Azure Monitor 日志中创建 B2B 消息的跟踪查询
 
-若要查找使用 [Azure Log Analytics](../log-analytics/log-analytics-overview.md) 跟踪的 AS2、X12 或 EDIFACT 消息，可以创建基于具体情况筛选操作的查询。 例如，你可以根据特定的交换控制编号查找消息。
+若要查找 AS2，X12 或 EDIFACT 消息与跟踪[Azure Monitor 日志](../log-analytics/log-analytics-overview.md)，可以创建筛选器操作根据特定条件的查询。 例如，你可以根据特定的交换控制编号查找消息。
 
-## <a name="requirements"></a>要求
+> [!NOTE]
+> 此页面之前描述了如何使用 Microsoft Operations Management Suite (OMS) 执行这些任务的步骤，该解决方案将[在 2019 年 1 月停用](../azure-monitor/platform/oms-portal-transition.md)，取而代之的将是使用 Azure Log Analytics 执行这些步骤的内容。 
 
-* 已设置诊断日志记录的逻辑应用。 了解[如何创建逻辑应用](../logic-apps/quickstart-create-first-logic-app-workflow.md)以及[如何为逻辑应用设置日志记录](../logic-apps/logic-apps-monitor-your-logic-apps.md#azure-diagnostics)。
+[!INCLUDE [azure-monitor-log-analytics-rebrand](../../includes/azure-monitor-log-analytics-rebrand.md)]
+
+## <a name="prerequisites"></a>必备组件
+
+* 已设置诊断日志记录的逻辑应用。 了解[如何创建逻辑应用](quickstart-create-first-logic-app-workflow.md)以及[如何为逻辑应用设置日志记录](../logic-apps/logic-apps-monitor-your-logic-apps.md#azure-diagnostics)。
 
 * 已设置监视和日志记录的集成帐户。 了解[如何创建集成帐户](../logic-apps/logic-apps-enterprise-integration-create-integration-account.md)以及[如何为集成帐户设置监视和日志记录](../logic-apps/logic-apps-monitor-b2b-message.md)。
 
-* [将诊断数据发布到 Log Analytics](../logic-apps/logic-apps-track-b2b-messages-omsportal.md)并[在 Log Analytics 中设置消息跟踪](../logic-apps/logic-apps-track-b2b-messages-omsportal.md)（如果尚未执行这些操作）。
+* 如果你尚未准备好，[诊断数据发布到 Azure Monitor 日志](../logic-apps/logic-apps-track-b2b-messages-omsportal.md)并[设置消息在 Azure Monitor 日志中跟踪](../logic-apps/logic-apps-track-b2b-messages-omsportal.md)。
 
-> [!NOTE]
-> 满足上述要求后，Log Analytics 中应该已经有一个工作区。 应使用同一工作区来跟踪 Log Analytics 上的 B2B 通信。 
->  
-> 如果没有 Log Analytics 工作区，请了解[如何创建 Log Analytics 工作区](../log-analytics/log-analytics-quick-create-workspace.md)。
+## <a name="create-queries-with-filters"></a>创建使用筛选器的查询
 
-## <a name="create-message-queries-with-filters-in-log-analytics"></a>在 Log Analytics 中使用筛选器创建消息查询
+若要根据特定的属性或值查找消息，可以创建使用筛选器的查询。 
 
-本示例演示如何根据交换控制编号查找消息。
+1. 在 [Azure 门户](https://portal.azure.com)中，选择“所有服务”。  在搜索框中查找“log analytics”，并选择“Log Analytics”  。
 
-> [!TIP] 
-> 如果知道自己的 Log Analytics 工作区名称，请转到工作区主页 (`https://{your-workspace-name}.portal.mms.microsoft.com`)，然后从步骤 4 开始操作。 否则，从步骤 1 开始。
+   ![选择“Log Analytics”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/find-log-analytics.png)
 
-1. 在 [Azure 门户](https://portal.azure.com)中，选择“所有服务”。 搜索“日志分析”，然后选择“Log Analytics”，如下所示：
+1. 在“Log Analytics”下  ，查找并选择你的 Log Analytics 工作区。 
 
-   ![查找 Log Analytics](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/browseloganalytics.png)
+   ![选择 Log Analytics 工作区](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/select-log-analytics-workspace.png)
 
-2. 在“Log Analytics”下，查找并选择你的 Log Analytics 工作区。
+1. 在工作区菜单中的“常规”下，选择“日志(经典)”或“日志”。    
 
-   ![选择你的 Log Analytics 工作区](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/selectla.png)
+   本示例演示如何使用经典日志视图。 
+   如果在“最大化 Log Analytics 体验”部分的“搜索和分析日志”下选择了“查看日志”，则会显示“日志(经典视图)”。     
 
-3. 在“管理”下，选择“OMS 门户”。
+   ![查看经典日志](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/view-classic-logs.png)
 
-   ![选择“OMS 门户”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/omsportalpage.png)
+1. 在查询编辑框中，开始键入想要查找的字段名称。 开始键入时，查询编辑器将显示可能的匹配项和可用的操作。 创建查询后，选择“运行”或按 Enter 键。 
 
-4. 在主页上，选择“日志搜索”。
+   本示例在 **LogicAppB2B** 中搜索匹配项。 
+   详细了解如何[如何在 Azure Monitor 日志中查找数据](../log-analytics/log-analytics-log-searches.md)。
 
-   ![在主页上，选择“日志搜索”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/logsearch.png)
+   ![开始键入查询字符串](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/create-query.png)
 
-   -或-
+1. 若要更改想要查看的时间范围，请在左窗格中，从持续时间列表中进行选择或拖动滑块。 
 
-   ![在菜单上，选择“日志搜索”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/logsearch-2.png)
+   ![更改时间范围](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/change-timeframe.png)
 
-5. 在搜索框中，输入要查找的字段，然后按下 Enter 键。 开始输入时，Log Analytics 会显示你可以使用的可能的匹配和操作。 详细了解[如何在 Log Analytics 中查找数据](../log-analytics/log-analytics-log-searches.md)。
+1. 若要将筛选器添加到查询，请选择“添加”。  
 
-   本示例搜索 Type=AzureDiagnostics 的事件。
+   ![向查询添加筛选器](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/add-filter.png)
 
-   ![开始键入查询字符串](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/oms-start-query.png)
+1. 在“添加筛选器”下，输入想要查找的筛选器名称。  如果找到了该筛选器，请选择它。 在左窗格中，再次选择“添加”。 
 
-6. 在左侧栏中，选择要查看的时间范围。 若要向查询添加筛选器，选择“+添加”。
+   例如，下面是一个不同的查询，它会搜索 **Type=="AzureDiagnostics"** 事件，并通过选择 **event_record_messageProperties_interchangeControlNumber_s** 筛选器，根据交换控制编号来查找结果。
 
-   ![向查询添加筛选器](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/query1.png)
+   ![选择筛选器值](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/filter-example.png)
 
-7. 在“添加筛选器”下，输入筛选器名称，以便查找所需的筛选器。 选择筛选器，然后选择“+添加”。
+   选择“添加”后，将使用选定的筛选器事件和值更新查询。  
+   以前的结果现在也已进行了筛选。 
 
-   要查找交换控制编号，本示例搜索“interchange”一词，并选择“event_record_messageProperties_interchangeControlNumber_s”作为筛选器。
+   例如，此查询会搜索 **Type=="AzureDiagnostics"** ，并使用 **event_record_messageProperties_interchangeControlNumber_s** 筛选器，根据交换控制编号来查找结果。
 
-   ![选择筛选器](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/oms-query-add-filter.png)
-
-9. 在左侧栏中，选择要使用的筛选器值，然后选择“应用”。
-
-   本示例中，选择所需消息的交换控制编号。
-
-   ![选择筛选器值](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/oms-query-select-filter-value.png)
-
-10. 现在返回到你正在生成的查询。 查询已通过你选定的筛选器事件和值进行更新。 以前的结果现在也已进行了筛选。
-
-    ![返回到包含筛选结果的查询](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/oms-query-filtered-results.png)
+   ![筛选的结果](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/filtered-results.png)
 
 <a name="save-oms-query"></a>
 
-## <a name="save-your-query-for-future-use"></a>保存查询供将来使用
+## <a name="save-query"></a>保存查询
 
-1. 从“日志搜索”页的查询中选择“保存”。 为查询命名，选择一个类别，然后选择“保存”。
+若要在“日志(经典)”视图中保存查询，请执行以下步骤： 
 
-   ![为查询指定名称和类别](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/oms-query-save.png)
+1. 在“日志(经典)”页上的查询中，选择“分析”。   
 
-2. 若要查看查询，请选择“收藏夹”。
+   ![选择“分析”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/choose-analytics.png)
 
-   ![选择“收藏夹”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/oms-query-favorites.png)
+1. 在查询工具栏上选择“保存”  。
 
-3. 在“保存的搜索”下，选择查询，以便查看结果。 若要更新查询以便找到不同的结果，请编辑查询。
+   ![选择“保存”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/save-query.png)
 
-   ![选择查询](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/oms-log-search-find-favorites.png)
+1. 提供有关查询的详细信息，例如，为查询指定名称，选择“查询”，并提供类别名称。  完成后，选择“保存”  。
 
-## <a name="find-and-run-saved-queries-in-log-analytics"></a>查找和运行 Log Analytics 中的已保存查询
+   ![选择“保存”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/query-details.png)
 
-1. 打开 Log Analytics 工作区中主页 (`https://{your-workspace-name}.portal.mms.microsoft.com`)，然后选择“日志搜索”。
+1. 若要查看已保存的查询，请返回到查询页。 在查询工具栏上选择“保存的搜索”  。
 
-   ![在 Log Analytics 主页上，选择“日志搜索”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/logsearch.png)
+   ![选择“保存的搜索”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/choose-saved-searches.png)
 
-   -或-
+1. 在“保存的搜索”下选择自己的查询，以便查看结果。  
 
-   ![在菜单上，选择“日志搜索”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/logsearch-2.png)
+   ![选择查询](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/saved-query-results.png)
 
-2. 在“日志搜索”主页上，选择“收藏夹”。
+   若要更新查询以便找到不同的结果，请编辑查询。
 
-   ![选择“收藏夹”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/oms-log-search-favorites.png)
+## <a name="find-and-run-saved-queries"></a>查找和运行已保存的查询
 
-3. 在“保存的搜索”下，选择查询，以便查看结果。 若要更新查询以便找到不同的结果，请编辑查询。
+1. 在 [Azure 门户](https://portal.azure.com)中，选择“所有服务”。  在搜索框中查找“log analytics”，并选择“Log Analytics”  。
 
-   ![选择查询](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/oms-log-search-find-favorites.png)
+   ![选择“Log Analytics”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/find-log-analytics.png)
+
+1. 在“Log Analytics”下  ，查找并选择你的 Log Analytics 工作区。 
+
+   ![选择 Log Analytics 工作区](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/select-log-analytics-workspace.png)
+
+1. 在工作区菜单中的“常规”下，选择“日志(经典)”或“日志”。    
+
+   本示例演示如何使用经典日志视图。 
+
+1. 查询页打开之后，在查询工具栏上选择“保存的搜索”。 
+
+   ![选择“保存的搜索”](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/choose-saved-searches.png)
+
+1. 在“保存的搜索”下选择自己的查询，以便查看结果。  
+
+   ![选择查询](media/logic-apps-track-b2b-messages-omsportal-query-filter-control-number/saved-query-results.png) 
+
+   该查询将自动运行，但如果查询出于任何原因无法运行，请在查询编辑器中选择“运行”。 
 
 ## <a name="next-steps"></a>后续步骤
 

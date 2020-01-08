@@ -1,56 +1,49 @@
 ---
-title: 如何删除 HDInsight 群集 - Azure | Microsoft Docs
-description: 删除 HDInsight 群集的各种方式的相关信息。
-services: hdinsight
-documentationcenter: ''
-author: Blackmist
-manager: cgronlun
-editor: cgronlun
-ms.assetid: 55f7838b-9786-47ff-96db-1b64437bd0bb
+title: 如何删除 HDInsight 群集 | Azure
+description: 有关删除 Azure HDInsight 群集的各种方式的信息
+author: hrasheed-msft
+ms.author: hrasheed
+ms.reviewer: jasonh
 ms.service: hdinsight
-ms.devlang: na
 ms.topic: conceptual
-ms.date: 03/22/2018
-ms.author: larryfr
+ms.date: 04/17/2019
 ms.custom: H1Hack27Feb2017,hdinsightactive
-ms.openlocfilehash: 01c59d4970bca54417c9b860ec177ecf5a37d8c5
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.openlocfilehash: a28d59cb35004fac6b069f2aa41042b4d46e443f
+ms.sourcegitcommit: c79aa93d87d4db04ecc4e3eb68a75b349448cd17
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 09/18/2019
+ms.locfileid: "71091522"
 ---
 # <a name="delete-an-hdinsight-cluster-using-your-browser-powershell-or-the-azure-cli"></a>使用浏览器、PowerShell 或 Azure CLI 删除 HDInsight 群集
 
-创建群集后便开始 HDInsight 群集计费，删除群集后停止计费。 群集以每分钟按比例收费，因此无需再使用群集时，应始终将其删除。 本文档介绍如何使用 Azure 门户、Azure PowerShell 和 Azure CLI 1.0 删除群集。
+HDInsight 群集计费在创建群集之后便会开始，删除群集后才会停止。 群集以每分钟按比例收费，因此无需再使用群集时，应始终将其删除。 在本文档中，了解如何使用[Azure 门户](https://portal.azure.com)、 [Azure PowerShell Az 模块](https://docs.microsoft.com/powershell/azure/overview)和[Azure CLI](https://docs.microsoft.com/cli/azure/?view=azure-cli-latest)删除群集。
 
-> [!IMPORTANT]
-> 删除 HDInsight 群集时不会删除 Azure 存储帐户或与群集关联的 Data Lake Store。 可重新使用以后存储在这些服务中的数据。
+> [!IMPORTANT]  
+> 删除 HDInsight 群集时不会删除与群集关联的 Azure 存储帐户或 Data Lake Storage。 可重新使用以后存储在这些服务中的数据。
 
 ## <a name="azure-portal"></a>Azure 门户
 
-1. 登录 [Azure 门户](https://portal.azure.com)，并选择 HDInsight 群集。 如果 HDInsight 群集未固定到仪表板，可使用搜索字段按名称进行搜索。
-   
-    ![门户搜索](./media/hdinsight-delete-cluster/navbar.png)
+1. 登录到 [Azure 门户](https://portal.azure.com)。
 
-2. 在群集设置中，选择“删除”图标。 出现提示时，选择“是”即可删除该群集。
-   
-    ![删除图标](./media/hdinsight-delete-cluster/deletecluster.png)
+2. 在左侧菜单中，导航到“所有服务” > “分析” > “HDInsight 群集”，然后选择群集。
 
-## <a name="azure-powershell"></a>Azure PowerShell
+3. 在默认视图中，选择“删除”图标。 按提示删除群集。
 
-在 PowerShell 提示符处，使用以下命令删除群集：
+    ![HDInsight "删除群集" 按钮](./media/hdinsight-delete-cluster/hdinsight-delete-cluster.png)
 
-    Remove-AzureRmHDInsightCluster -ClusterName CLUSTERNAME
+## <a name="azure-powershell-az-module"></a>Azure PowerShell Az 模块
 
-将 **CLUSTERNAME** 替换为 HDInsight 群集名。
+在下面的代码中，将 `CLUSTERNAME` 替换为 HDInsight 群集的名称。 在 PowerShell 提示符处输入以下命令，以便删除群集：
 
-## <a name="azure-cli-10"></a>Azure CLI 1.0
+```powershell
+Remove-AzHDInsightCluster -ClusterName CLUSTERNAME
+```
 
-在提示符处，使用以下命令删除群集：
+## <a name="azure-cli"></a>Azure CLI
 
-    azure hdinsight cluster delete CLUSTERNAME
+在下面的代码中，将 `CLUSTERNAME` 替换为 HDInsight 群集的名称，将 `RESOURCEGROUP` 替换为资源组的名称。  在命令提示符处输入以下命令，以便删除群集：
 
-将 **CLUSTERNAME** 替换为 HDInsight 群集名。
-
-> [!NOTE]
-> Azure CLI 2.0 暂不支持删除 HDInsight 群集（2017 年 10 月 23 日）。
+```azurecli
+az hdinsight delete --name CLUSTERNAME --resource-group RESOURCEGROUP
+```

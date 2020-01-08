@@ -2,7 +2,7 @@
 title: Azure 媒体服务错误代码 | Microsoft Docs
 description: 本主题概述 Azure 媒体服务错误代码。
 author: Juliako
-manager: cfowler
+manager: femila
 editor: ''
 services: media-services
 documentationcenter: ''
@@ -12,13 +12,14 @@ ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
 ms.topic: article
-ms.date: 07/31/2017
+ms.date: 03/18/2019
 ms.author: juliako
-ms.openlocfilehash: 8a374393a6a5b3d563a441654b7b5df8a510f304
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: f3c362730e7908e88b363659b7fa580b6f2cddf1
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61217146"
 ---
 # <a name="azure-media-services-error-codes"></a>Azure 媒体服务错误代码
 使用 Microsoft Azure 媒体服务时，可能会收到来自服务的 HTTP 错误代码，这取决于具体的问题，例如身份验证令牌对于媒体服务不支持的操作过期。 以下是媒体服务可能返回的 **HTTP 错误代码**及可能的错误原因的列表。  
@@ -34,7 +35,7 @@ ms.lasthandoff: 05/07/2018
   > 
   > 
 * 指定了未定义的属性。 错误消息中给出了该属性名。 仅能指定是给定实体的成员的属性。 有关实体及其属性的列表，请参阅 [Azure 媒体服务 REST API 参考](https://docs.microsoft.com/rest/api/media/operations/azure-media-services-rest-api-reference)。
-* 指定了一个无效的属性值。 错误消息中给出了该属性名。 有关有效属性类型及其值的信息，请访问之前的链接。
+* 指定了一个无效的属性值。 错误消息中提供属性名称。 有关有效属性类型及其值的信息，请访问之前的链接。
 * 缺少或需要属性值。
 * 指定的部分 URL 包含错误值。
 * 曾尝试更新 WriteOnce 属性。
@@ -51,7 +52,7 @@ ms.lasthandoff: 05/07/2018
   * 令牌包含无效签名。
 
 ## <a name="403-forbidden"></a>403 禁止访问
-出于以下原因之一，未允许该请求：
+出于以下原因之一，不允许该请求：
 
 * 找不到或已删除媒体服务帐户。
 * 已禁用媒体服务帐户，且请求类型不是 HTTP GET。 服务操作也将返回 403 响应。
@@ -81,8 +82,8 @@ ms.lasthandoff: 05/07/2018
 * 曾尝试使用已用过的指定 ID 创建 ContentKey。
 * 曾尝试使用已用过的指定 ID 创建定位符。
 * IngestManifest 内多个 IngestManifestFile 具有指定名称。
-* 曾尝试将第二个存储加密 ContentKey 链接到加密了存储的资产。
-* 曾尝试将同一 ContentKey 链接到资产。
+* 尝试将第二个存储加密 ContentKey 链接到存储加密资产。
+* 尝试将同一 ContentKey 链接到资产。
 * 曾尝试向存储容器缺失或不再与资产关联的资产创建定位符。
 * 曾尝试向已使用 5 个定位符的资产创建定位符。 （Azure 存储强制执行对一个存储容器只能使用五个共享访问策略这一限制。）
 * 将资产的存储帐户链接到 IngestManifestAsset 与父 IngestManifest 所使用的存储帐户的情况不同。  
@@ -116,7 +117,7 @@ ms.lasthandoff: 05/07/2018
 > 
 
 ## <a name="see-also"></a>另请参阅
-[媒体服务管理错误代码](http://msdn.microsoft.com/library/windowsazure/dn167016.aspx)
+[媒体服务管理错误代码](https://msdn.microsoft.com/library/windowsazure/dn167016.aspx)
 
 ## <a name="next-steps"></a>后续步骤
 [!INCLUDE [media-services-learning-paths-include](../../../includes/media-services-learning-paths-include.md)]

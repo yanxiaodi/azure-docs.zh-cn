@@ -1,24 +1,19 @@
 ---
 title: Azure Monitor 中的 Azure 存储指标 | Microsoft Docs
 description: 了解 Azure Monitor 提供的新指标。
-services: storage
-documentationcenter: na
-author: fhryo-msft
-manager: cbrooks
-editor: fhryo-msft
-ms.assetid: ''
+author: normesta
 ms.service: storage
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: storage
+ms.topic: conceptual
 ms.date: 09/05/2017
-ms.author: fryu
-ms.openlocfilehash: b1d82f9b527a62109e0301907b87bd683f9912af
-ms.sourcegitcommit: d98d99567d0383bb8d7cbe2d767ec15ebf2daeb2
-ms.translationtype: HT
+ms.author: normesta
+ms.reviewer: fryu
+ms.subservice: common
+ms.openlocfilehash: c2f6847a286a9c106fc094e9f0aa315d6b1f337d
+ms.sourcegitcommit: 55f7fc8fe5f6d874d5e886cb014e2070f49f3b94
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/10/2018
+ms.lasthandoff: 09/25/2019
+ms.locfileid: "71257098"
 ---
 # <a name="azure-storage-metrics-in-azure-monitor"></a>Azure Monitor 中的 Azure 存储指标
 
@@ -28,23 +23,23 @@ Azure Monitor 提供统一的用户界面用于监视不同的 Azure 服务。 �
 
 ## <a name="access-metrics"></a>访问指标
 
-Azure Monitor 提供多种访问指标的方法。 可从 [Azure 门户](https://portal.azure.com)、Azure Monitor API（REST 和 .Net）与分析解决方案（例如 Operation Management Suite 和事件中心）访问指标。 有关详细信息，请参阅 [Azure Monitor 指标](../../monitoring-and-diagnostics/monitoring-overview-metrics.md)。
+Azure Monitor 提供多种访问指标的方法。 可从 [Azure 门户](https://portal.azure.com)、Azure Monitor API（REST 和 .NET）以及分析解决方案（例如事件中心）访问指标。 有关详细信息，请参阅 [Azure Monitor 指标](../../monitoring-and-diagnostics/monitoring-overview-metrics.md)。
 
-默认情况下，已启用指标，并且可访问过去 30 天的数据。 如需将数据保留更长一段时间，可将指标数据存档到 Azure 存储帐户。 可在 Azure Monitor 的 [诊断设置](../../monitoring-and-diagnostics/monitoring-overview-of-diagnostic-logs.md#resource-diagnostic-settings) 中完成这种配置。
+默认情况下，已启用指标，并且可访问过去 93 天的数据。 如需将数据保留更长一段时间，可将指标数据存档到 Azure 存储帐户。 可在 Azure Monitor 的 [诊断设置](../../azure-monitor/platform/resource-logs-overview.md) 中完成这种配置。
 
 ### <a name="access-metrics-in-the-azure-portal"></a>在 Azure 门户中访问指标
 
-可在 Azure 门户中访问不同时间的指标。 以下演示如何查看帐户级别的 **UsedCapacity**。
+可在 Azure 门户中访问不同时间的指标。 以下示例演示如何查看帐户级别的**事务**。
 
 ![在 Azure 门户中访问指标的屏幕截图](./media/storage-metrics-in-azure-monitor/access-metrics-in-portal.png)
 
-对于支持维度的指标，必须使用所需的维度值进行筛选。 以下示例演示如何查看帐户级别的、“成功”响应类型的“事务”。
+对于支持维度的指标，可使用所需的维度值筛选指标。 下面的示例演示了如何通过选择“API 名称”维度的值，在特定操作上查看帐户级别的“事务”。
 
 ![在 Azure 门户中访问包含维度的指标的屏幕截图](./media/storage-metrics-in-azure-monitor/access-metrics-in-portal-with-dimension.png)
 
 ### <a name="access-metrics-with-the-rest-api"></a>使用 REST API 访问指标
 
-Azure Monitor 提供 [REST API](/rest/api/monitor/) 用于读取指标定义和值。 本部分介绍如何读取存储指标。 所有 REST API 中使用了资源 ID。 有关详细信息，请阅读[了解存储中服务的资源 ID](#understanding-resource-id-for-services-in-storage)。
+Azure Monitor 提供 [REST API](/rest/api/monitor/) 用于读取指标定义和值。 本部分介绍如何读取存储指标。 所有 REST API 中使用了资源 ID。 有关详细信息，请阅读“了解存储中服务的资源 ID”。
 
 以下示例演示如何在命令行中使用 [ArmClient](https://github.com/projectkudu/ARMClient)，借助 REST API 来简化测试。
 
@@ -56,7 +51,7 @@ Azure Monitor 提供 [REST API](/rest/api/monitor/) 用于读取指标定义和�
 # Login to Azure and enter your credentials when prompted.
 > armclient login
 
-> armclient GET /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{storageAccountName}/providers/microsoft.insights/metricdefinitions?api-version=2017-05-01-preview
+> armclient GET /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{storageAccountName}/providers/microsoft.insights/metricdefinitions?api-version=2018-01-01
 
 ```
 
@@ -100,7 +95,7 @@ Azure Monitor 提供 [REST API](/rest/api/monitor/) 用于读取指标定义和�
 以下示例演示如何读取帐户级别的指标数据：
 
 ```
-> armclient GET "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{storageAccountName}/providers/microsoft.insights/metrics?metric=Availability&api-version=2017-05-01-preview&aggregation=Average&interval=PT1H"
+> armclient GET "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{storageAccountName}/providers/microsoft.insights/metrics?metricnames=Availability&api-version=2018-01-01&aggregation=Average&interval=PT1H"
 
 ```
 
@@ -139,13 +134,13 @@ Azure Monitor 提供 [REST API](/rest/api/monitor/) 用于读取指标定义和�
 
 ```
 
-### <a name="access-metrics-with-the-net-sdk"></a>使用 .Net SDK 访问指标
+### <a name="access-metrics-with-the-net-sdk"></a>使用 .NET SDK 访问指标
 
-Azure Monitor 提供 [.Net SDK](https://www.nuget.org/packages/Microsoft.Azure.Management.Monitor/)，用于读取指标定义和值。 [示例代码](https://azure.microsoft.com/resources/samples/monitor-dotnet-metrics-api/)演示如何通过不同的参数来使用 SDK。 对于存储指标，需使用 `0.18.0-preview` 或更高版本。 资源 ID 用在 .Net SDK 中。 有关详细信息，请阅读[了解存储中服务的资源 ID](#understanding-resource-id-for-services-in-storage)。
+Azure Monitor 提供 [.NET SDK](https://www.nuget.org/packages/Microsoft.Azure.Management.Monitor/)，用于读取指标定义和值。 [示例代码](https://azure.microsoft.com/resources/samples/monitor-dotnet-metrics-api/)演示如何通过不同的参数来使用 SDK。 对于存储指标，需使用 `0.18.0-preview` 或更高版本。 资源 ID 用在 .NET SDK 中。 有关详细信息，请阅读“了解存储中服务的资源 ID”。
 
-以下示例说明了如何使用 Azure Monitor .Net SDK 来读取存储指标。
+以下示例说明了如何使用 Azure Monitor .NET SDK 来读取存储指标。
 
-#### <a name="list-account-level-metric-definition-with-the-net-sdk"></a>使用 .Net SDK 列出帐户级指标定义
+#### <a name="list-account-level-metric-definition-with-the-net-sdk"></a>使用 .NET SDK 列出帐户级指标定义
 
 以下示例演示如何列出帐户级别的指标定义：
 
@@ -161,7 +156,7 @@ Azure Monitor 提供 [.Net SDK](https://www.nuget.org/packages/Microsoft.Azure.M
         var accessKey = "{AccessKey}";
 
         // Using metrics in Azure Monitor is currently free. However, if you use additional solutions ingesting metrics data, you may be billed by these solutions. For example, you are billed by Azure Storage if you archive metrics data to an Azure Storage account. Or you are billed by Operation Management Suite (OMS) if you stream metrics data to OMS for advanced analysis.
-        MonitorClient readOnlyClient = AuthenticateWithReadOnlyClient(tenantId, applicationId, accessKey, subscriptionId).Result;
+        MonitorManagementClient readOnlyClient = AuthenticateWithReadOnlyClient(tenantId, applicationId, accessKey, subscriptionId).Result;
         IEnumerable<MetricDefinition> metricDefinitions = await readOnlyClient.MetricDefinitions.ListAsync(resourceUri: resourceId, cancellationToken: new CancellationToken());
 
         foreach (var metricDefinition in metricDefinitions)
@@ -182,7 +177,7 @@ Azure Monitor 提供 [.Net SDK](https://www.nuget.org/packages/Microsoft.Azure.M
 
 如果想要列出 Blob、表、文件或队列的指标定义，必须使用 API 指定每个服务的不同资源 ID。
 
-#### <a name="read-metric-values-with-the-net-sdk"></a>使用 .Net SDK 读取指标值
+#### <a name="read-metric-values-with-the-net-sdk"></a>使用 .NET SDK 读取指标值
 
 以下示例演示如何读取帐户级别的 `UsedCapacity` 数据：
 
@@ -201,15 +196,15 @@ Azure Monitor 提供 [.Net SDK](https://www.nuget.org/packages/Microsoft.Azure.M
 
         Microsoft.Azure.Management.Monitor.Models.Response Response;
 
-        string startDate = DateTime.Now.AddHours(-3).ToString("o");
-        string endDate = DateTime.Now.ToString("o");
+        string startDate = DateTime.Now.AddHours(-3).ToUniversalTime().ToString("o");
+        string endDate = DateTime.Now.ToUniversalTime().ToString("o");
         string timeSpan = startDate + "/" + endDate;
 
         Response = await readOnlyClient.Metrics.ListAsync(
             resourceUri: resourceId,
             timespan: timeSpan,
             interval: System.TimeSpan.FromHours(1),
-            metric: "UsedCapacity",
+            metricnames: "UsedCapacity",
 
             aggregation: "Average",
             resultType: ResultType.Data,
@@ -232,7 +227,7 @@ Azure Monitor 提供 [.Net SDK](https://www.nuget.org/packages/Microsoft.Azure.M
 
 在上述示例中，如果想要读取 Blob、表、文件或队列的指标值，必须使用 API 指定每个服务的不同资源 ID。
 
-#### <a name="read-multi-dimensional-metric-values-with-the-net-sdk"></a>使用 .Net SDK 读取多维指标值
+#### <a name="read-multi-dimensional-metric-values-with-the-net-sdk"></a>使用 .NET SDK 读取多维指标值
 
 对于多维指标，如果需要读取基于特定维度值的指标数据，则需定义元数据筛选器。
 
@@ -249,12 +244,12 @@ Azure Monitor 提供 [.Net SDK](https://www.nuget.org/packages/Microsoft.Azure.M
         var applicationId = "{ApplicationID}";
         var accessKey = "{AccessKey}";
 
-        MonitorClient readOnlyClient = AuthenticateWithReadOnlyClient(tenantId, applicationId, accessKey, subscriptionId).Result;
+        MonitorManagementClient readOnlyClient = AuthenticateWithReadOnlyClient(tenantId, applicationId, accessKey, subscriptionId).Result;
 
         Microsoft.Azure.Management.Monitor.Models.Response Response;
 
-        string startDate = DateTime.Now.AddHours(-3).ToString("o");
-        string endDate = DateTime.Now.ToString("o");
+        string startDate = DateTime.Now.AddHours(-3).ToUniversalTime().ToString("o");
+        string endDate = DateTime.Now.ToUniversalTime().ToString("o");
         string timeSpan = startDate + "/" + endDate;
         // It's applicable to define meta data filter when a metric support dimension
         // More conditions can be added with the 'or' and 'and' operators, example: BlobType eq 'BlockBlob' or BlobType eq 'PageBlob'
@@ -265,7 +260,7 @@ Azure Monitor 提供 [.Net SDK](https://www.nuget.org/packages/Microsoft.Azure.M
                         resourceUri: resourceId,
                         timespan: timeSpan,
                         interval: System.TimeSpan.FromHours(1),
-                        metric: "BlobCapacity",
+                        metricnames: "BlobCapacity",
                         odataQuery: odataFilterMetrics,
                         aggregation: "Average",
                         resultType: ResultType.Data);
@@ -289,9 +284,9 @@ Azure Monitor 提供 [.Net SDK](https://www.nuget.org/packages/Microsoft.Azure.M
 
 资源 ID 是资源在 Azure 中的唯一标识符。 使用 Azure Monitor REST API 读取指标定义或值时，必须使用要对其执行操作的资源的资源 ID。 资源 ID 模板遵循以下格式：
 
-`
+```
 /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
-`
+```
 
 存储通过 Azure Monitor 提供存储帐户级别和服务级别的指标。 例如，可以仅检索 Blob 存储的指标。 每个级别有其自身的资源 ID，用于仅检索该级别的指标。
 
@@ -299,34 +294,38 @@ Azure Monitor 提供 [.Net SDK](https://www.nuget.org/packages/Microsoft.Azure.M
 
 下面显示了指定存储帐户的资源 ID 时所用的格式。
 
-`
+```
 /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{storageAccountName}
-`
+```
 
 ### <a name="resource-id-for-the-storage-services"></a>存储服务的资源 ID
 
 下面显示了指定每个存储服务的资源 ID 时所用的格式。
 
-* Blob 服务资源 ID `
+* Blob 服务资源 ID
+```
 /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{storageAccountName}/blobServices/default
-`
-* 表服务资源 ID `
+```
+* 表服务资源 ID
+```
 /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{storageAccountName}/tableServices/default
-`
-* 队列服务资源 ID `
+```
+* 队列服务资源 ID
+```
 /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{storageAccountName}/queueServices/default
-`
-* 文件服务资源 ID `
+```
+* 文件服务资源 ID
+```
 /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{storageAccountName}/fileServices/default
-`
+```
 
 ### <a name="resource-id-in-azure-monitor-rest-api"></a>Azure Monitor REST API 中的资源 ID
 
 下面显示了调用 Azure Monitor REST API 时所用的模式。
 
-`
+```
 GET {resourceId}/providers/microsoft.insights/metrics?{parameters}
-`
+```
 
 ## <a name="capacity-metrics"></a>容量度量值
 容量指标每隔一小时发送到 Azure Monitor。 值每日刷新。 时间粒度定义呈现指标值的时间间隔。 所有容量指标的受支持时间粒度为一小时 (PT1H)。
@@ -335,73 +334,90 @@ Azure 存储在 Azure Monitor 中提供以下容量指标。
 
 ### <a name="account-level"></a>帐户级别
 
-| 指标名称 | 说明 |
+| 指标名称 | 描述 |
 | ------------------- | ----------------- |
-| UsedCapacity | 存储帐户使用的存储量。 对于标准存储帐户，该指标是 Blob、表、文件和队列使用的容量总和。 对于高级存储帐户和 Blob 存储帐户，它与 BlobCapacity 相同。 <br/><br/> 单元：字节 <br/> 聚合类型：平均 <br/> 值示例：1024 |
+| UsedCapacity | 存储帐户使用的存储量。 对于标准存储帐户，该指标是 Blob、表、文件和队列使用的容量总和。 对于高级存储帐户和 Blob 存储帐户，它与 BlobCapacity 相同。 <br/><br/> 单位：字节 <br/> 聚合类型：Average <br/> 值示例：1024 |
 
 ### <a name="blob-storage"></a>Blob 存储
 
-| 指标名称 | 说明 |
+| 指标名称 | 描述 |
 | ------------------- | ----------------- |
-| BlobCapacity | 存储帐户中使用的 Blob 存储总计。 <br/><br/> 单元：字节 <br/> 聚合类型：平均 <br/> 值示例：1024 <br/> 维度：BlobType（[定义](#metrics-dimensions)） |
-| BlobCount    | 在存储帐户中存储的 Blob 对象数。 <br/><br/> 单位：计数 <br/> 聚合类型：平均 <br/> 值示例：1024 <br/> 维度：BlobType（[定义](#metrics-dimensions)） |
-| ContainerCount    | 存储帐户中的容器数。 <br/><br/> 单位：计数 <br/> 聚合类型：平均 <br/> 值示例：1024 |
+| BlobCapacity | 存储帐户中使用的 Blob 存储总计。 <br/><br/> 单位：字节 <br/> 聚合类型：Average <br/> 值示例：1024 <br/> 尺寸：**BlobType** 和 **BlobTier**（[定义](#metrics-dimensions)） |
+| BlobCount    | 在存储帐户中存储的 Blob 对象数。 <br/><br/> 单位：Count <br/> 聚合类型：Average <br/> 值示例：1024 <br/> 尺寸：**BlobType** 和 **BlobTier**（[定义](#metrics-dimensions)） |
+| ContainerCount    | 存储帐户中的容器数。 <br/><br/> 单位：Count <br/> 聚合类型：Average <br/> 值示例：1024 |
+| IndexCapacity     | ADLS Gen2 分层索引所使用的存储量 <br/><br/> 单位：字节 <br/> 聚合类型：Average <br/> 值示例：1024 |
 
 ### <a name="table-storage"></a>表存储
 
-| 指标名称 | 说明 |
+| 指标名称 | 描述 |
 | ------------------- | ----------------- |
-| TableCapacity | 存储帐户使用的表存储量。 <br/><br/> 单元：字节 <br/> 聚合类型：平均 <br/> 值示例：1024 |
-| TableCount   | 存储帐户中的表数目。 <br/><br/> 单位：计数 <br/> 聚合类型：平均 <br/> 值示例：1024 |
-| TableEntityCount | 存储帐户中的表实体数目。 <br/><br/> 单位：计数 <br/> 聚合类型：平均 <br/> 值示例：1024 |
+| TableCapacity | 存储帐户使用的表存储量。 <br/><br/> 单位：字节 <br/> 聚合类型：Average <br/> 值示例：1024 |
+| TableCount   | 存储帐户中的表数目。 <br/><br/> 单位：Count <br/> 聚合类型：Average <br/> 值示例：1024 |
+| TableEntityCount | 存储帐户中的表实体数目。 <br/><br/> 单位：Count <br/> 聚合类型：Average <br/> 值示例：1024 |
 
 ### <a name="queue-storage"></a>队列存储
 
-| 指标名称 | 说明 |
+| 指标名称 | 描述 |
 | ------------------- | ----------------- |
-| QueueCapacity | 存储帐户使用的队列存储量。 <br/><br/> 单元：字节 <br/> 聚合类型：平均 <br/> 值示例：1024 |
-| QueueCount   | 存储帐户中的队列数目。 <br/><br/> 单位：计数 <br/> 聚合类型：平均 <br/> 值示例：1024 |
-| QueueMessageCount | 存储帐户中未失效的队列消息数目。 <br/><br/>单位：计数 <br/> 聚合类型：平均 <br/> 值示例：1024 |
+| QueueCapacity | 存储帐户使用的队列存储量。 <br/><br/> 单位：字节 <br/> 聚合类型：Average <br/> 值示例：1024 |
+| QueueCount   | 存储帐户中的队列数目。 <br/><br/> 单位：Count <br/> 聚合类型：Average <br/> 值示例：1024 |
+| QueueMessageCount | 存储帐户中未失效的队列消息数目。 <br/><br/>单位：Count <br/> 聚合类型：Average <br/> 值示例：1024 |
 
 ### <a name="file-storage"></a>文件存储
 
-| 指标名称 | 说明 |
+| 指标名称 | 描述 |
 | ------------------- | ----------------- |
-| FileCapacity | 存储帐户使用的文件存储量。 <br/><br/> 单元：字节 <br/> 聚合类型：平均 <br/> 值示例：1024 |
-| FileCount   | 存储帐户中的文件数目。 <br/><br/> 单位：计数 <br/> 聚合类型：平均 <br/> 值示例：1024 |
-| FileShareCount | 存储帐户中的文件共享数目。 <br/><br/> 单位：计数 <br/> 聚合类型：平均 <br/> 值示例：1024 |
+| FileCapacity | 存储帐户使用的文件存储量。 <br/><br/> 单位：字节 <br/> 聚合类型：Average <br/> 值示例：1024 |
+| FileCount   | 存储帐户中的文件数目。 <br/><br/> 单位：Count <br/> 聚合类型：Average <br/> 值示例：1024 |
+| FileShareCount | 存储帐户中的文件共享数目。 <br/><br/> 单位：Count <br/> 聚合类型：Average <br/> 值示例：1024 |
 
 ## <a name="transaction-metrics"></a>事务度量值
 
-事务指标每隔一分钟从 Azure 存储发送到 Azure Monitor。 所有事务指标在帐户和服务级别（Blob 存储、表存储、Azure 文件和队列存储）提供。 时间粒度定义呈现指标值的时间间隔。 所有事务指标的受支持时间粒度为 PT1H 和 PT1M。
+从 Azure 存储到 Azure Monitor 的每个存储帐户请求都会发出事务指标。 如果存储帐户中没有任何活动，则在此期间不会有关于事务指标的数据。 所有事务指标在帐户和服务级别（Blob 存储、表存储、Azure 文件和队列存储）提供。 时间粒度定义呈现指标值的时间间隔。 所有事务指标的受支持时间粒度为 PT1H 和 PT1M。
 
 Azure 存储在 Azure Monitor 中提供以下事务指标。
 
-| 指标名称 | 说明 |
+| 指标名称 | 描述 |
 | ------------------- | ----------------- |
-| 事务 | 向存储服务或指定的 API 操作发出的请求数。 此数字包括成功和失败的请求数，以及引发错误的请求数。 <br/><br/> 单位：计数 <br/> 聚合类型：总计 <br/> 适用的维度：ResponseType、GeoType、ApiName（[定义](#metrics-dimensions)）<br/> 值示例：1024 |
-| 流入量 | 流入数据量。 此数字包括从外部客户端到 Azure 存储流入的数据量，以及流入 Azure 中的数据量。 <br/><br/> 单元：字节 <br/> 聚合类型：总计 <br/> 适用的维度：GeoType、ApiName（[定义](#metrics-dimensions)） <br/> 值示例：1024 |
-| 流出量 | 流出数据量。 此数字包括从外部客户端到 Azure 存储流出的数据量，以及流出 Azure 中的数据量。 因此，此数字不反映计费的流出量。 <br/><br/> 单元：字节 <br/> 聚合类型：总计 <br/> 适用的维度：GeoType、ApiName（[定义](#metrics-dimensions)） <br/> 值示例：1024 |
-| SuccessServerLatency | Azure 存储处理成功请求所用的平均时间。 此值不包括 SuccessE2ELatency 中指定的网络延迟。 <br/><br/> 单位：毫秒 <br/> 聚合类型：平均 <br/> 适用的维度：GeoType、ApiName（[定义](#metrics-dimensions)） <br/> 值示例：1024 |
-| SuccessE2ELatency | 向存储服务或指定的 API 操作发出的成功请求的平均端到端延迟。 此值包括在 Azure 存储中读取请求、发送响应和接收响应确认所需的处理时间。 <br/><br/> 单位：毫秒 <br/> 聚合类型：平均 <br/> 适用的维度：GeoType、ApiName（[定义](#metrics-dimensions)） <br/> 值示例：1024 |
-| 可用性 | 存储服务或指定的 API 操作的可用性百分比。 可用性通过由“计费请求总数”值除以适用的请求数（包括引发意外错误的请求）计算得出。 所有意外错误都会导致存储服务或指定的 API 操作的可用性下降。 <br/><br/> 单位：百分比 <br/> 聚合类型：平均 <br/> 适用的维度：GeoType、ApiName（[定义](#metrics-dimensions)） <br/> 值示例：99.99 |
+| 事务 | 向存储服务或指定的 API 操作发出的请求数。 此数字包括成功和失败的请求数，以及引发错误的请求数。 <br/><br/> 单位：Count <br/> 聚合类型：总计 <br/> 适用维度：ResponseType、GeoType、ApiName 和 Authentication（[定义](#metrics-dimensions)）<br/> 值示例：1024 |
+| 流入量 | 流入数据量。 此数值包括从外部客户端到 Azure 存储流入的数据量，以及流入 Azure 中的数据量。 <br/><br/> 单位：字节 <br/> 聚合类型：总计 <br/> 适用维度：GeoType、ApiName 和 Authentication（[定义](#metrics-dimensions)） <br/> 值示例：1024 |
+| 流出量 | 流出数据量。 此数字包括从外部客户端到 Azure 存储流出的数据量，以及流出 Azure 中的数据量。 因此，此数值不反映计费的流出量。 <br/><br/> 单位：字节 <br/> 聚合类型：总计 <br/> 适用维度：GeoType、ApiName 和 Authentication（[定义](#metrics-dimensions)） <br/> 值示例：1024 |
+| SuccessServerLatency | Azure 存储处理成功请求所用的平均时间。 此值不包括 SuccessE2ELatency 中指定的网络延迟。 <br/><br/> 单位：毫秒 <br/> 聚合类型：Average <br/> 适用维度：GeoType、ApiName 和 Authentication（[定义](#metrics-dimensions)） <br/> 值示例：1024 |
+| SuccessE2ELatency | 向存储服务或指定的 API 操作发出的成功请求的平均端到端延迟。 此值包括在 Azure 存储中读取请求、发送响应和接收响应确认所需的处理时间。 <br/><br/> 单位：毫秒 <br/> 聚合类型：Average <br/> 适用维度：GeoType、ApiName 和 Authentication（[定义](#metrics-dimensions)） <br/> 值示例：1024 |
+| 可用性 | 存储服务或指定的 API 操作的可用性百分比。 可用性通过由“计费请求总数”值除以适用的请求数（包括引发意外错误的请求）计算得出。 所有意外错误都会导致存储服务或指定的 API 操作的可用性下降。 <br/><br/> 单位：Percent <br/> 聚合类型：Average <br/> 适用维度：GeoType、ApiName 和 Authentication（[定义](#metrics-dimensions)） <br/> 值示例：99.99 |
 
 ## <a name="metrics-dimensions"></a>指标维度
 
 Azure 存储支持对 Azure Monitor 中的指标使用以下维度。
 
-| 维度名称 | 说明 |
+| 维度名称 | 描述 |
 | ------------------- | ----------------- |
-| /BlobType | 仅限 Blob 指标的 Blob 类型。 支持的值为 **BlockBlob** 和 **PageBlob**。 BlockBlob 中包含追加 Blob。 |
-| ResponseType | 事务响应类型。 可用的值包括： <br/><br/> <li>ServerOtherError：除描述的错误以外的其他所有服务器端错误 </li> <li> ServerBusyError：返回了 HTTP 503 状态代码的已经过身份验证的请求。 </li> <li> ServerTimeoutError：返回了 HTTP 500 状态代码的已超时且经过身份验证的请求。 由于服务器错误而发生超时。 </li> <li> AuthorizationError：由于未经授权访问数据或者授权失败，经过身份验证的请求失败。 </li> <li> NetworkError：由于网络错误，经过身份验证的请求失败。 往往发生于客户端在超时失效之前提前关闭了连接时。 </li> <li>    ClientThrottlingError：客户端限制错误。 </li> <li> ClientTimeoutError：返回了 HTTP 500 状态代码的已超时且经过身份验证的请求。 如果将客户端的网络超时或请求超时设置为比存储服务预期值更小的值，则预期会发生此超时。 否则，会报告为 ServerTimeoutError。 </li> <li> ClientOtherError：除描述的错误以外的其他所有客户端错误。 </li> <li> Success：成功请求|
-| GeoType | 来自主要或辅助群集的事务。 可用值包括 Primary 和 Secondary。 从辅助租户读取对象时，该维度会应用到读取访问异地冗余存储 (RA-GRS)。 |
-| ApiName | 操作的名称。 例如： <br/> <li>CreateContainer</li> <li>DeleteBlob</li> <li>GetBlob</li> 有关所有操作名称，请参阅[文档](/rest/api/storageservices/storage-analytics-logged-operations-and-status-messages#logged-operations.md)。 |
+| **BlobType** | 仅限 Blob 指标的 Blob 类型。 支持的值为 **BlockBlob**、**PageBlob** 和 **Azure Data Lake Storage**。 BlockBlob 中包含追加 Blob。 |
+| **BlobTier** | Azure 存储提供了不同的访问层，允许以最具成本效益的方式存储 Blob 对象数据。 请在 [Azure 存储 Blob 层](../blobs/storage-blob-storage-tiers.md)中查看详细信息。 支持的值包括： <br/> <li>**Hot**：热层</li> <li>**Cool**：冷层</li> <li>**存档**：存档层</li> <li>**Premium**：块 Blob 的高级层</li> <li>**P4/P6/P10/P15/P20/P30/P40/P50/P60**：高级页 Blob 的层类型</li> <li>**标准**：标准页 Blob 的层类型</li> <li>**Untiered**：常规用途 v1 存储帐户的层类型</li> |
+| **GeoType** | 来自主要或辅助群集的事务。 可用值包括 **Primary** 和 **Secondary**。 从辅助租户读取对象时，该维度会应用到读取访问异地冗余存储 (RA-GRS)。 |
+| **ResponseType** | 事务响应类型。 可用的值包括： <br/><br/> <li>**ServerOtherError**：除描述的错误以外的其他所有服务器端错误 </li> <li>**ServerBusyError**：返回了 HTTP 503 状态代码的已经过身份验证的请求。 </li> <li>**ServerTimeoutError**：返回了 HTTP 500 状态代码的超时已经过身份验证的请求。 由于服务器错误而发生超时。 </li> <li>**AuthorizationError**：由于未经授权访问数据或者授权失败，经过身份验证的请求失败。 </li> <li>**NetworkError**：由于网络错误，经过身份验证的请求失败。 往往发生于客户端在超时失效之前提前关闭了连接时。 </li> <li>**ClientThrottlingError**：客户端限制错误。 </li> <li>**ClientTimeoutError**：返回了 HTTP 500 状态代码的超时已经过身份验证的请求。 如果将客户端的网络超时或请求超时设置为比存储服务预期值更小的值，则预期会发生此超时。 否则，会报告为 ServerTimeoutError。 </li> <li>**ClientOtherError**：除描述的错误以外的其他所有客户端错误。 </li> <li>**成功**：请求成功</li> <li> **SuccessWithThrottling**：在第一次尝试时，SMB 客户端被阻止但在重试后成功的请求成功。</li> |
+| **ApiName** | 操作的名称。 例如： <br/> <li>**CreateContainer**</li> <li>**DeleteBlob**</li> <li>**GetBlob**</li> 有关所有操作名称，请参阅[文档](/rest/api/storageservices/storage-analytics-logged-operations-and-status-messages)。 |
+| **身份验证** | 事务中所用的身份验证类型。 可用的值包括： <br/> <li>**AccountKey**：事务通过存储帐户密钥进行身份验证。</li> <li>**SAS**：事务通过共享访问签名进行身份验证。</li> <li>**OAuth**：事务通过 OAuth 访问令牌进行身份验证。</li> <li>**Anonymous**：事务以匿名方式请求。 不包括预检请求。</li> <li>**AnonymousPreflight**：事务为预检请求。</li> |
 
 对于支持维度的指标，需要指定维度值才能查看相应的指标值。 例如，如果查看成功响应的 **Transactions** 值，需要使用 **Success** 筛选 **ResponseType** 维度。 或者，如果查看块 Blob 的 **BlobCount** 值，需要使用 **BlockBlob** 筛选 **BlobType** 维度。
 
 ## <a name="service-continuity-of-legacy-metrics"></a>旧指标的服务连续性
 
 旧指标可与 Azure Monitor 托管的指标一同使用。 在 Azure 存储终止旧指标的服务之前，支持范围保持不变。
+
+## <a name="faq"></a>常见问题
+
+**新指标是否支持经典存储帐户？**
+
+否，Azure Monitor 中的新指标仅支持 Azure 资源管理器存储帐户。 如果要使用存储帐户上的指标，则需要迁移到 Azure 资源管理器存储帐户。 请参阅[迁移到 Azure 资源管理器](https://docs.microsoft.com/azure/virtual-machines/windows/migration-classic-resource-manager-overview)。
+
+**Azure 存储是否支持托管磁盘或非托管磁盘的指标？**
+
+否，Azure 计算支持磁盘上的指标。 有关详细信息，请参阅此[文章](https://azure.microsoft.com/blog/per-disk-metrics-managed-disks/)。
+
+**如何使用新指标映射和迁移经典指标？**
+
+可以在 [Azure 存储指标迁移](./storage-metrics-migration.md)中找到经典指标与新指标之间的详细映射。
 
 ## <a name="next-steps"></a>后续步骤
 

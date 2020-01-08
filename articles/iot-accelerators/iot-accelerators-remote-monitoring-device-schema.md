@@ -1,33 +1,33 @@
 ---
 title: 远程监视解决方案中的设备架构 - Azure | Microsoft Docs
 description: 本文介绍用于在远程监视解决方案中定义模拟设备的 JSON 架构。
-services: iot-suite
-suite: iot-suite
 author: dominicbetts
-manager: timlt
+manager: philmea
 ms.author: dobett
-ms.service: iot-suite
-ms.date: 01/29/2018
-ms.topic: article
-ms.devlang: NA
-ms.tgt_pltfrm: NA
-ms.workload: NA
-ms.openlocfilehash: 186eaee952435573a861d144195c3165e4940cc1
-ms.sourcegitcommit: b6319f1a87d9316122f96769aab0d92b46a6879a
-ms.translationtype: HT
+ms.service: iot-accelerators
+services: iot-accelerators
+ms.date: 12/18/2018
+ms.topic: conceptual
+ms.openlocfilehash: 0f9669d491648ecc621aab27d0908dcc3dc84438
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/20/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "65823328"
 ---
 # <a name="understand-the-device-model-schema"></a>了解设备模型架构
 
-可以使用远程监视解决方案中的模拟设备来测试该解决方案的行为。 部署远程监视解决方案时，会自动预配一系列模拟设备。 我们可以自定义现有的模拟设备，或创建自己的模拟设备。
+可以使用远程监视解决方案中的模拟设备来测试该解决方案的行为。 远程监视解决方案包括用于运行模拟设备的设备模拟服务。 部署远程监视解决方案时，会自动预配一系列模拟设备。 我们可以自定义现有的模拟设备，或创建自己的模拟设备。
 
 本文介绍指定模拟设备的功能和行为的设备模型架构。 设备模型存储在 JSON 文件中。
 
+> [!NOTE]
+> 此设备模型架构仅适用于在设备模拟服务中托管的模拟设备。 如果想要创建真实设备，请参阅[将设备连接到远程监视解决方案加速器](iot-accelerators-connecting-devices.md)。
+
 以下文章与本文相关：
 
-* [实现设备模型行为](../iot-suite/iot-suite-remote-monitoring-device-behavior.md)介绍了可用于实现模拟设备行为的 JavaScript 文件。
-* [创建新模拟设备](iot-accelerators-remote-monitoring-test.md)将所有相关内容统合在一起，介绍如何在解决方案中部署新的模拟设备类型。
+* [实现设备模型行为](iot-accelerators-remote-monitoring-device-behavior.md)介绍了可用于实现模拟设备行为的 JavaScript 文件。
+* [创建新模拟设备](iot-accelerators-remote-monitoring-create-simulated-device.md)将所有相关内容统合在一起，介绍如何在解决方案中部署新的模拟设备类型。
 
 在本文中，学习如何：
 
@@ -39,7 +39,7 @@ ms.lasthandoff: 05/20/2018
 
 ## <a name="the-parts-of-the-device-model-schema"></a>设备模型架构的组成部分
 
-每个设备模型（例如冷却器或卡车）定义某种可连接到远程监视解决方案的模拟设备。 每个设备模型存储在采用以下顶级架构的 JSON 文件中：
+每个设备模型（例如冷却器或卡车）定义模拟服务可以模拟的设备类型。 每个设备模型存储在采用以下顶级架构的 JSON 文件中：
 
 ```json
 {
@@ -68,7 +68,7 @@ ms.lasthandoff: 05/20/2018
 
 下表描述了顶级架构条目：
 
-| 架构条目 | 说明 |
+| 架构条目 | 描述 |
 | -- | --- |
 | `SchemaVersion` | 架构版本始终是 `1.0.0`，特定于此文件的格式。 |
 | `Id` | 此设备模型的唯一 ID。 |
@@ -88,7 +88,7 @@ ms.lasthandoff: 05/20/2018
 * `InitialState` 定义设备状态对象的所有属性的初始值。
 * `Script` 标识按计划运行的、更新设备状态的 JavaScript 文件。 可以使用此脚本来随机化设备发送的遥测值。
 
-若要详细了解用于更新设备状态对象的 JavaScript 文件，请参阅[了解设备模型行为](iot-accelerators-remote-monitoring-device-behavior.md)。
+若要详细了解用于更新设备状态对象的 JavaScript 文件，请参阅[了解设备模型行为](../../articles/iot-accelerators/iot-accelerators-device-simulation-advanced-device.md)。
 
 以下示例演示模拟冷却器设备的设备状态对象定义：
 
@@ -127,7 +127,7 @@ ms.lasthandoff: 05/20/2018
 }
 ```
 
-解决方案启动时，会查询所有模拟设备，以生成要在 UI 中使用的 `Type` 值列表。 解决方案使用 `Latitiude` 和 `Longitude` 属性将设备位置添加到仪表板上的地图中。
+解决方案启动时，会查询所有模拟设备，以生成要在 UI 中使用的 `Type` 值列表。 解决方案使用 `Latitude` 和 `Longitude` 属性将设备位置添加到仪表板上的地图中。
 
 ## <a name="telemetry"></a>遥测
 
@@ -163,8 +163,8 @@ ms.lasthandoff: 05/20/2018
 
 * 对象 - 使用 JSON 序列化
 * 二进制 - 使用 base64 序列化
-* 文本
-* 布尔
+* Text
+* Boolean
 * Integer
 * Double
 * DateTime
@@ -203,14 +203,14 @@ ms.lasthandoff: 05/20/2018
 
 ## <a name="cloudtodevicemethods"></a>CloudToDeviceMethods
 
-模拟设备可以响应从远程监视解决方案调用的云到设备方法。 设备模型架构文件中的 `CloudToDeviceMethods` 节：
+模拟设备可以响应从 IoT 中心调用的云到设备方法。 设备模型架构文件中的 `CloudToDeviceMethods` 节：
 
 * 定义模拟设备可以响应的方法。
 * 标识包含要执行的逻辑的 JavaScript 文件。
 
-模拟设备将它支持的方法列表发送到远程监视解决方案。
+模拟设备将它支持的方法列表发送到它连接到的 IoT 中心。
 
-若要详细了解用于实现设备行为的 JavaScript 文件，请参阅[了解设备模型行为](iot-accelerators-remote-monitoring-device-behavior.md)。
+若要详细了解用于实现设备行为的 JavaScript 文件，请参阅[了解设备模型行为](../../articles/iot-accelerators/iot-accelerators-device-simulation-advanced-device.md)。
 
 以下示例指定三个支持的方法，以及用于实现这些方法的 JavaScript 文件：
 
@@ -250,5 +250,3 @@ ms.lasthandoff: 05/20/2018
 
 * [开发人员参考指南](https://github.com/Azure/azure-iot-pcs-remote-monitoring-dotnet/wiki/Developer-Reference-Guide)
 * [开发人员故障排除指南](https://github.com/Azure/azure-iot-pcs-remote-monitoring-dotnet/wiki/Developer-Troubleshooting-Guide)
-
-<!-- Next tutorials in the sequence -->

@@ -1,21 +1,22 @@
 ---
-title: Azure 容器实例教程 - 准备应用
-description: Azure 容器实例教程第 1 部分（共 3 部分）- 准备部署到 Azure 容器实例的应用
+title: 教程 - 准备用于 Azure 容器实例的容器映像
+description: Azure 容器实例教程第 1 部分（共 3 部分）- 准备容器映像中的应用以部署到 Azure 容器实例
 services: container-instances
-author: mmacy
-manager: jeconnoc
+author: dlepow
+manager: gwallace
 ms.service: container-instances
 ms.topic: tutorial
 ms.date: 03/21/2018
-ms.author: marsma
-ms.custom: mvc
-ms.openlocfilehash: 79041123196559c5759789638228ea0dd21f2762
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.author: danlep
+ms.custom: seodec18, mvc
+ms.openlocfilehash: 719237f63d387cf56ab7947f8f168e0aa4351376
+ms.sourcegitcommit: 4b431e86e47b6feb8ac6b61487f910c17a55d121
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 07/18/2019
+ms.locfileid: "68325572"
 ---
-# <a name="tutorial-create-container-for-deployment-to-azure-container-instances"></a>教程：创建部署到 Azure 容器实例的容器
+# <a name="tutorial-create-a-container-image-for-deployment-to-azure-container-instances"></a>教程：创建要部署到 Azure 容器实例的容器映像
 
 使用 Azure 容器实例可将 Docker 容器部署到 Azure 基础结构，不需要预配任何虚拟机，也不需要采用更高级别的服务。 在本教程中，我们将一个小型 Node.js Web 应用程序打包成可以使用 Azure 容器实例运行的容器映像。
 
@@ -48,7 +49,7 @@ git clone https://github.com/Azure-Samples/aci-helloworld.git
 
 ## <a name="build-the-container-image"></a>生成容器映像
 
-示例应用程序中的 Dockerfile 演示如何生成容器。 它从基于 [Alpine Linux][alpine-linux] 的[正式 Node.js 映像][docker-hub-nodeimage]（适用于容器的小型分发版）开始演示。 然后，它将应用程序文件复制到容器中，使用 Node 包管理器安装依赖项，最后启动应用程序。
+示例应用程序中的 Dockerfile 演示如何生成容器。 它从[正式 Node.js 映像][docker-hub-nodeimage]based on [Alpine Linux][alpine-linux]（适用于容器的小型分发版）开始演示。 然后，它将应用程序文件复制到容器中，使用 Node 包管理器安装依赖项，最后启动应用程序。
 
 ```Dockerfile
 FROM node:8.9.3-alpine
@@ -59,7 +60,7 @@ RUN npm install
 CMD node /usr/src/app/index.js
 ```
 
-使用 [docker build][docker-build] 命令创建容器映像，将其标记为 *aci-tutorial-app*：
+使用 [docker build][docker-build] 命令创建容器映像，并将其标记为 aci-tutorial-app  ：
 
 ```bash
 docker build ./aci-helloworld -t aci-tutorial-app
@@ -87,7 +88,7 @@ Successfully built 6edad76d09e9
 Successfully tagged aci-tutorial-app:latest
 ```
 
-使用 [docker images][docker-images] 命令查看已生成映像：
+使用 [docker images][docker-images] 命令查看生成的映像：
 
 ```bash
 docker images
@@ -116,7 +117,7 @@ $ docker run -d -p 8080:80 aci-tutorial-app
 a2e3e4435db58ab0c664ce521854c2e1a1bda88c9cf2fcff46aedf48df86cccf
 ```
 
-现在，请在浏览器中导航到 http://localhost:8080，确认容器是否正在运行。 应会看到如下所示的网页：
+现在，请在浏览器中导航到 `http://localhost:8080` ，确认容器是否正在运行。 应会看到如下所示的网页：
 
 ![在浏览器中以本地方式运行应用][aci-tutorial-app-local]
 
@@ -152,7 +153,7 @@ a2e3e4435db58ab0c664ce521854c2e1a1bda88c9cf2fcff46aedf48df86cccf
 [docker-run]: https://docs.docker.com/engine/reference/commandline/run/
 [docker-tag]: https://docs.docker.com/engine/reference/commandline/tag/
 [docker-windows]: https://docs.docker.com/docker-for-windows/
-[nodejs]: http://nodejs.org
+[nodejs]: https://nodejs.org
 
 <!-- LINKS - Internal -->
 [azure-cli-install]: /cli/azure/install-azure-cli

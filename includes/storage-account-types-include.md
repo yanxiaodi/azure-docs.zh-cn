@@ -1,29 +1,44 @@
-有两种类型的存储帐户：
+---
+title: include 文件
+description: include 文件
+services: storage
+author: tamram
+ms.service: storage
+ms.topic: include
+ms.date: 03/23/2019
+ms.author: tamram
+ms.custom: include file
+ms.openlocfilehash: 0e5c1974ecb1b3efb8df602c76700b7db04a88d7
+ms.sourcegitcommit: 29880cf2e4ba9e441f7334c67c7e6a994df21cfe
+ms.translationtype: MT
+ms.contentlocale: zh-CN
+ms.lasthandoff: 09/26/2019
+ms.locfileid: "71310520"
+---
+Azure 存储提供多种类型的存储帐户。 每个类型支持不同的功能，并具有自身的定价模型。 在创建存储帐户之前，请考虑到这些差异，以确定最适合应用程序的帐户类型。 存储帐户的类型包括：
 
-### <a name="general-purpose-storage-accounts"></a>通用存储帐户
-通用存储帐户有权使用单个帐户访问诸如表、队列、文件、Blob 和 Azure 虚拟机磁盘等 Azure 存储服务。 此类型存储帐户具有两个性能层：
+- **常规用途 v2 帐户**：Blob、文件、队列和表的基本存储帐户类型。 建议在大多数情况下使用 Azure 存储。
+- **常规用途 v1 帐户**：Blob、文件、队列和表的旧帐户类型。 如果可能，请改用常规用途 v2 帐户。
+- **块 blob 存储帐户**：仅限 Blob 的存储帐户，具有高级性能特征。 建议用于具有高事务速率、使用较小对象或要求持续低存储延迟的方案。
+- **FileStorage 存储帐户**：只包含高级性能特征的存储帐户。 建议用于企业或高性能缩放应用程序。
+- **Blob 存储帐户**：仅限 Blob 的存储帐户。 如果可能，请改用常规用途 v2 帐户。
 
-* 标准存储性能层，允许存储表、队列、文件、Blob 和 Azure 虚拟机磁盘。
-* 高级存储性能层，当前仅支持 Azure 虚拟机磁盘。 有关高级存储的详细概述，请参阅 [高级存储：适用于 Azure 虚拟机工作负荷的高性能存储](../articles/virtual-machines/windows/premium-storage.md) 。
+下表描述了存储帐户的类型及其功能：
 
-### <a name="blob-storage-accounts"></a>Blob 存储帐户
-Blob 存储帐户是将非结构化数据作为 Blob（对象）存储在 Azure 存储的专用存储帐户。 Blob 存储帐户类似于现有通用存储帐户，并且具有现在使用的所有卓越的耐用性、可用性、伸缩性和性能功能，包括用于块 blob 和追加 blob 的 100% API 一致性。 对于仅需要块 blob 或追加 blob 存储的应用程序，我们建议使用 Blob 存储帐户。
+| 存储帐户类型 | 支持的服务                       | 支持的性能层      | 支持的访问层         | 复制选项               | 部署模型<div role="complementary" aria-labelledby="deployment-model"><sup>1</sup></div> | 加密<div role="complementary" aria-labelledby="encryption"><sup>2</sup></div> |
+|----------------------|------------------------------------------|-----------------------------|--------------------------------|-----------------------------------|------------------------------|------------------------|
+| 常规用途 V2   | Blob、文件、队列、表和磁盘       | 标准、高级<div role="complementary" aria-labelledby="premium-performance"><sup>5</sup></div> | 热、冷、存档<div role="complementary" aria-labelledby="archive"><sup>3</sup></div> | LRS，GRS，RA-GRS，ZRS，GZRS （预览版），RA-GZRS （预览版）<div role="complementary" aria-labelledby="zone-redundant-storage"><sup>4</sup></div> | 资源管理器             | 已加密              |
+| 常规用途 V1   | Blob、文件、队列、表和磁盘       | 标准、高级<div role="complementary" aria-labelledby="premium-performance"><sup>5</sup></div> | 不可用                            | LRS、GRS、RA-GRS                  | 资源管理器、经典    | 已加密              |
+| 块 blob 存储   | Blob（仅限块 Blob 和追加 Blob） | 高级                       | 不可用                            | LRS                               | 资源管理器             | 已加密              |
+| FileStorage   | 仅文件 | 高级                       | 不可用                            | LRS                               | 资源管理器             | 已加密              |
+| Blob 存储         | Blob（仅限块 Blob 和追加 Blob） | 标准                      | 热、冷、存档<div role="complementary" aria-labelledby="archive"><sup>3</sup></div> | LRS、GRS、RA-GRS                  | 资源管理器             | 已加密              |
 
-> [!NOTE]
-> Blob 存储帐户仅支持块 blob 和追加 blob，不支持页 blob。
-> 
-> 
+<div id="deployment-model"><sup>1</sup>建议使用 Azure 资源管理器部署模型。 仍将在某些位置创建使用经典部署模型的存储帐户，继续支持现有的经典帐户。 有关详细信息，请参阅 <a href="https://docs.microsoft.com/azure/azure-resource-manager/resource-manager-deployment-model">Azure 资源管理器与经典部署：了解部署模型和资源状态</a>。</div>
 
-Blob 存储帐户公开 **访问层** 属性，该属性可在帐户创建过程中指定，并稍后根据需要进行修改。 根据数据访问模式可以指定两种类型的访问层：
+<div id="encryption"><sup>2</sup>使用针对静态数据的存储服务加密 (SSE) 来加密所有存储帐户。 有关详细信息，请参阅<a href="https://docs.microsoft.com/azure/storage/common/storage-service-encryption">静态数据的 Azure 存储服务加密</a>。</div>
 
-* **热** 访问层，表示被更频繁地访问存储帐户中的对象。 该访问层允许以较低访问成本存储数据。
-* **冷** 访问层，表示将不经常访问存储帐户中的对象。 该访问层允许以较低数据存储成本存储数据。
+<div id="archive"><sup>3</sup>存档层仅在单个 Blob 级别可用，在存储帐户级别不可用。 只能存档块 Blob 和追加 Blob。 有关详细信息，请参阅 <a href="https://docs.microsoft.com/azure/storage/blobs/storage-blob-storage-tiers">Azure Blob 存储：热、冷、存档存储层</a>。</div>
 
-如果数据的使用模式有所更改，也可以随时在这些访问层之间切换。 更改访问层可能会产生额外费用。 有关更多详细信息，请参阅 [Blob 存储帐户的定价和计费](../articles/storage/common/storage-account-options.md#pricing-and-billing) 。
+<div id="zone-redundant-storage"><sup>4</sup>区域冗余存储（ZRS）和异地冗余存储（GZRS）（预览版）仅适用于标准常规用途 v2 存储帐户。 有关 ZRS 的详细信息，请参阅<a href="https://docs.microsoft.com/azure/storage/common/storage-redundancy-zrs">区域冗余存储 (ZRS)：高度可用的 Azure 存储应用程序</a>。 有关 GZRS 的详细信息，请参阅<a href="https://docs.microsoft.com/azure/storage/common/storage-redundancy-gzrs">区域冗余存储以获得高可用性和最大持续性（预览版）</a>。 有关其他复制选项的详细信息，请参阅 <a href="https://docs.microsoft.com/azure/storage/common/storage-redundancy">Azure 存储复制</a>。</div>
 
-有关 Blob 存储帐户的更多详细信息，请参阅 [Azure Blob 存储：冷层和热层](../articles/storage/blobs/storage-blob-storage-tiers.md)。
-
-必须具有 Azure 订阅（这是允许访问各种 Azure 服务的计划），然后才能创建存储帐户。 可通过 [免费帐户](https://azure.microsoft.com/pricing/free-trial/)开始使用 Azure。 一旦决定购买某个订阅计划，可从各种 [购买选项](https://azure.microsoft.com/pricing/purchase-options/)中进行选择。 如果是 [MSDN 订户](https://azure.microsoft.com/pricing/member-offers/msdn-benefits-details/)，则可以获得免费的月度信用，可以将其用于各种 Azure 服务，包括 Azure 存储。 有关批量定价的信息，请参阅 [Azure 存储定价 ](https://azure.microsoft.com/pricing/details/storage/) 。
-
-若要了解如何创建存储帐户，请参阅 [创建存储帐户](../articles/storage/common/storage-create-storage-account.md#create-a-storage-account) 获取更多详细信息。 通过单个订阅，最多可以创建 200 个唯一命名的存储帐户。 有关存储帐户限制的详细信息，请参阅 [Azure 存储可伸缩性和性能目标](../articles/storage/common/storage-scalability-targets.md) 。
-
+<div id="premium-performance"><sup>5</sup>常规用途 v2 和常规用途 v1 帐户的高级性能仅适用于磁盘和页 blob。</div>

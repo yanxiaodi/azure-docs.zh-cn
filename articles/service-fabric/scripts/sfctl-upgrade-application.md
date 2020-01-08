@@ -3,24 +3,23 @@ title: Service Fabric CLI 脚本示例 - 更新群集上的应用程序
 description: Service Fabric CLI 脚本示例 - 使用新版本更新应用程序。 此示例还使用新位升级已部署的应用程序。
 services: service-fabric
 documentationcenter: ''
-author: Thraka
-manager: timlt
+author: athinanthny
+manager: chackdan
 editor: ''
 tags: ''
 ms.assetid: ''
 ms.service: service-fabric
 ms.workload: multiple
-ms.devlang: na
 ms.topic: sample
 ms.date: 12/06/2017
-ms.author: adegeo
+ms.author: atsenthi
 ms.custom: ''
-ms.openlocfilehash: e14e65e365389b33891794a3f12b86b3a4705533
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
+ms.openlocfilehash: e925f4f7b4a3da2d298413feccc94ea742e47f6b
+ms.sourcegitcommit: 18061d0ea18ce2c2ac10652685323c6728fe8d5f
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
-ms.locfileid: "34204373"
+ms.lasthandoff: 08/15/2019
+ms.locfileid: "69034709"
 ---
 # <a name="add-an-application-certificate-to-a-service-fabric-cluster"></a>将应用程序证书添加到 Service Fabric 群集
 

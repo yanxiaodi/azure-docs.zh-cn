@@ -1,11 +1,11 @@
 ---
-title: "如何使用 SendGrid 电子邮件服务 (.NET) | Microsoft Docs"
-description: "了解如何在 Azure 上使用 SendGrid 电子邮件服务发送电子邮件。 代码示例用 C# 编写且使用 .NET API。"
-services: 
+title: 如何使用 SendGrid 电子邮件服务 (.NET) | Microsoft Docs
+description: 了解如何在 Azure 上使用 SendGrid 电子邮件服务发送电子邮件。 代码示例用 C# 编写且使用 .NET API。
+services: ''
 documentationcenter: .net
 author: thinkingserious
 manager: erikre
-editor: 
+editor: ''
 ms.assetid: 21bf4028-9046-476b-9799-3d3082a0f84c
 ms.service: multiple
 ms.workload: na
@@ -13,12 +13,14 @@ ms.tgt_pltfrm: na
 ms.devlang: dotnet
 ms.topic: article
 ms.date: 02/15/2017
-ms.author: dx@sendgrid.com
-ms.openlocfilehash: a5f07d02bfe4032d77a17e5972b88f6530125f28
-ms.sourcegitcommit: 4256ebfe683b08fedd1a63937328931a5d35b157
-ms.translationtype: HT
+ms.author: erikre
+ms.reviewer: dx@sendgrid.com
+ms.openlocfilehash: c3211ba9f8a8b16ad4372c82d8e50c46f3ad6897
+ms.sourcegitcommit: de47a27defce58b10ef998e8991a2294175d2098
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 12/23/2017
+ms.lasthandoff: 07/15/2019
+ms.locfileid: "67876377"
 ---
 # <a name="how-to-send-email-using-sendgrid-with-azure"></a>如何在 Azure 中使用 SendGrid 发送电子邮件
 ## <a name="overview"></a>概述
@@ -33,7 +35,7 @@ SendGrid 是一项[基于云的电子邮件服务]，该服务提供了可靠的
 * 转发客户查询。
 * 处理传入的电子邮件。
 
-有关详细信息，请访问 [https://sendgrid.com](https://sendgrid.com) 或 SendGrid 的 [C# 库][sendgrid-csharp] GitHub 存储库。
+有关详细信息, 请[https://sendgrid.com](https://sendgrid.com)访问或 SendGrid 的[ C#库 GitHub 存储库][sendgrid-csharp]。
 
 ## <a name="create-a-sendgrid-account"></a>创建 SendGrid 帐户
 [!INCLUDE [sendgrid-sign-up](../includes/sendgrid-sign-up.md)]
@@ -42,23 +44,23 @@ SendGrid 是一项[基于云的电子邮件服务]，该服务提供了可靠的
 [SendGrid NuGet 包](https://www.nuget.org/packages/Sendgrid)是获取 SendGrid API 和使用所有依赖项配置应用程序的最简单方法。 NuGet 是 Microsoft Visual Studio 2015 及更高版本随附的一个 Visual Studio 扩展，可让用户轻松安装和更新库与工具。
 
 > [!NOTE]
-> 如果运行的 Visual Studio 版本低于 Visual Studio 2015，并且想要安装 NuGet，那么，请访问 [http://www.nuget.org](http://www.nuget.org)，并单击“安装 NuGet”按钮。
+> 如果运行的 Visual Studio 版本低于 Visual Studio 2015，并且想要安装 NuGet，那么，请访问 [https://www.nuget.org](https://www.nuget.org)，并单击“安装 NuGet”按钮  。
 >
 >
 
 若要在应用程序中安装 SendGrid NuGet 包，请执行以下操作：
 
-1. 单击“新建项目”，并选择“模板”。 
+1. 单击“新建项目”  ，并选择“模板”。 
 
    ![创建新项目][create-new-project]
-2. 在“解决方案资源管理器”中，右键单击“引用”，并单击“管理 NuGet 包”。
+2. 在“解决方案资源管理器”中，右键单击“引用”，并单击“管理 NuGet 包”。   
 
    ![SendGrid NuGet 包][SendGrid-NuGet-package]
 3. 搜索 **SendGrid**，并在结果列表中选择 **SendGrid** 项。
 4. 从版本下拉列表中选择 Nuget 包的最新稳定版本，以便使用本文中演示的对象模型和 API。
 
    ![SendGrid 包][sendgrid-package]
-5. 单击“安装”以完成安装，并关闭此对话框。
+5. 单击“安装”以完成安装，并关闭此对话框。 
 
 SendGrid 的 .NET 类库名为 **SendGrid**。 其中包含以下命名空间：
 
@@ -95,9 +97,9 @@ SendGrid 的 .NET 类库名为 **SendGrid**。 其中包含以下命名空间：
 有关 **SendGrid** 类型支持的所有属性和方法的详细信息，请参阅 GitHub 上的 [sendgrid-csharp][sendgrid-csharp]。
 
 ## <a name="how-to-send-an-email"></a>如何：发送电子邮件
-创建电子邮件后，可以使用 SendGrid 的 API 发送该邮件。 或者，可以[使用 .NET 的内置库][NET-library]。
+创建电子邮件后，可以使用 SendGrid 的 API 发送该邮件。 或者, 你可以使用[。NET 的内置库][NET-library]。
 
-发送电子邮件需要用户提供 SendGrid API 密钥。 如需有关如何配置 API 密钥的详细信息，请访问 SendGrid 的 API 密钥[文档][documentation]。
+发送电子邮件需要用户提供 SendGrid API 密钥。 如果需要有关如何配置 API 密钥的详细信息, 请访问 SendGrid 的 API 密钥[文档][documentation]。
 
 可通过 Azure 门户存储这些凭据，方法是单击“应用程序设置”，再在“应用设置”下添加键/值对。
 
@@ -231,7 +233,7 @@ SendGrid 的 .NET 类库名为 **SendGrid**。 其中包含以下命名空间：
     msg.AddAttachment(banner2);
 
 ## <a name="how-to-use-mail-settings-to-enable-footers-tracking-and-analytics"></a>如何：使用邮件设置启用页脚、跟踪和分析
-SendGrid 通过使用邮件设置和跟踪设置提供其他电子邮件功能。 可将这些设置添加到电子邮件以启用特定功能（例如点击跟踪、Google 分析、订阅跟踪等）。 如需应用的完整列表，请参阅[设置文档][settings-documentation]。
+SendGrid 通过使用邮件设置和跟踪设置提供其他电子邮件功能。 可将这些设置添加到电子邮件以启用特定功能（例如点击跟踪、Google 分析、订阅跟踪等）。 有关应用的完整列表, 请参阅[设置文档][settings-documentation]。
 
 可以使用作为 **SendGridMessage** 类的一部分实现的方法将应用应用到 **SendGrid** 电子邮件。 以下示例演示了脚注和单击跟踪筛选器：
 
@@ -247,7 +249,7 @@ SendGrid 通过使用邮件设置和跟踪设置提供其他电子邮件功能�
     msg.SetClickTracking(true);
 
 ## <a name="how-to-use-additional-sendgrid-services"></a>如何：使用其他 SendGrid 服务
-SendGrid 提供了多个 API 和 Webhook，方便用户在 Azure 应用程序中使用其他功能。 如需更多详细信息，请查看 [SendGrid API 参考][SendGrid API documentation]。
+SendGrid 提供了多个 API 和 Webhook，方便用户在 Azure 应用程序中使用其他功能。 有关更多详细信息, 请参阅[SENDGRID API 参考][SendGrid API documentation]。
 
 ## <a name="next-steps"></a>后续步骤
 此时，已了解 SendGrid 电子邮件服务的基础知识，请访问以下链接以了解更多信息。

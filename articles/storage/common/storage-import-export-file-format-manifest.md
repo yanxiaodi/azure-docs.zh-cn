@@ -1,24 +1,19 @@
 ---
-title: "Azure 导入/导出清单文件格式 | Microsoft Docs"
-description: "了解驱动器清单文件的格式。清单文件描述 Azure Blob 存储中的 Blob 与构成导入/导出服务中导入或导出作业的驱动器上的文件之间的映射。"
+title: Azure 导入/导出清单文件格式 | Microsoft Docs
+description: 了解驱动器清单文件的格式。清单文件描述 Azure Blob 存储中的 Blob 与构成导入/导出服务中导入或导出作业的驱动器上的文件之间的映射。
 author: muralikk
-manager: syadav
-editor: tysonn
 services: storage
-documentationcenter: 
-ms.assetid: f3119e1c-2c25-48ad-8752-a6ed4adadbb0
 ms.service: storage
-ms.workload: storage
-ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: article
 ms.date: 01/23/2017
 ms.author: muralikk
-ms.openlocfilehash: c1857eb94fba13c30e7f07669616f5d0ab9953f4
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.subservice: common
+ms.openlocfilehash: ee53cc3a639a79e1b29ac6cd537bfb04e05b1bca
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "61478617"
 ---
 # <a name="azure-importexport-service-manifest-file-format"></a>Azure 导入/导出服务清单文件格式
 驱动器清单文件描述 Azure Blob 存储中的 Blob 与构成导入或导出作业的驱动器上的文件之间的映射。 对于某个导入操作而言，该清单文件作为驱动器准备过程的一部分创建，在将该驱动器送至 Azure 数据中心之前已存储在驱动器上。 在导出操作过程中，Azure 导入/导出服务会在驱动器上创建并存储该清单。  
@@ -42,9 +37,9 @@ ms.lasthandoff: 10/11/2017
         Hash="md5-hash">global-properties-file-path</PropertiesPath>]  
   
       <!-- First Blob -->  
-      <Blob>  
-        <BlobPath>blob-path-relative-to-account</BlobPath>  
-        <FilePath>file-path-relative-to-transfer-disk</FilePath>  
+      <Blob>  
+        <BlobPath>blob-path-relative-to-account</BlobPath>  
+        <FilePath>file-path-relative-to-transfer-disk</FilePath>  
         [<ClientData>client-data</ClientData>]  
         [<Snapshot>snapshot</Snapshot>]  
         <Length>content-length</Length>  
@@ -52,7 +47,7 @@ ms.lasthandoff: 10/11/2017
         page-range-list-or-block-list          
         [<MetadataPath Hash="md5-hash">metadata-file-path</MetadataPath>]  
         [<PropertiesPath Hash="md5-hash">properties-file-path</PropertiesPath>]  
-      </Blob>  
+      </Blob>  
   
       <!-- Second Blob -->  
       <Blob>  
@@ -77,7 +72,7 @@ page-range-list ::=
     <PageRangeList>  
       [<PageRange Offset="page-range-offset" Length="page-range-length"   
        Hash="md5-hash"/>]  
-      [<PageRange Offset="page-range-offset" Length="page-range-length"   
+      [<PageRange Offset="page-range-offset" Length="page-range-length"   
        Hash="md5-hash"/>]  
     </PageRangeList>  
   
@@ -85,7 +80,7 @@ block-list ::=
     <BlockList>  
       [<Block Offset="block-offset" Length="block-length" [Id="block-id"]  
        Hash="md5-hash"/>]  
-      [<Block Offset="block-offset" Length="block-length" [Id="block-id"]   
+      [<Block Offset="block-offset" Length="block-length" [Id="block-id"]   
        Hash="md5-hash"/>]  
     </BlockList>  
 
@@ -95,14 +90,14 @@ block-list ::=
 
 下表指定了驱动器清单 XML 格式的数据元素和属性。  
   
-|XML 元素|类型|说明|  
+|XML 元素|Type|描述|  
 |-----------------|----------|-----------------|  
 |`DriveManifest`|Root 元素|清单文件的根元素。 该文件中的其他所有元素均位于此元素下方。|  
 |`Version`|属性，字符串|清单文件的版本。|  
 |`Drive`|嵌套的 XML 元素|包含每个驱动器的清单。|  
 |`DriveId`|String|驱动器的唯一驱动器标识符。 通过查询驱动器获取其序列号，即可找到该驱动器标识符。 该驱动器序列号通常还打印在该驱动器的外部。 `DriveID` 元素必须出现在清单元素中的任何 `BlobList` 元素之前。|  
 |`StorageAccountKey`|String|当且仅当未指定 `ContainerSas` 时，导入作业才需要此元素。 与作业关联的 Azure 存储帐户的帐户密钥。<br /><br /> 导出操作的清单中会省略此元素。|  
-|`ContainerSas`|String|当且仅当未指定 `StorageAccountKey` 时，导入作业才需要此元素。 用于访问与作业关联的 Blob 的容器 SAS。 有关其格式，请参阅[放置作业](/rest/api/storageimportexport/jobs#Jobs_CreateOrUpdate)。导出操作的清单中会省略此元素。|  
+|`ContainerSas`|String|当且仅当未指定 `StorageAccountKey` 时，导入作业才需要此元素。 用于访问与作业关联的 Blob 的容器 SAS。 有关其格式，请参阅[放置作业](/rest/api/storageimportexport/jobs)。导出操作的清单中会省略此元素。|  
 |`ClientCreator`|String|指定创建 XML 文件的客户端。 导入/导出服务不解释该值。|  
 |`BlobList`|嵌套的 XML 元素|包含作为导入或导出作业一部分的 Blob 列表。 Blob 列表中的每个 Blob 共享相同的元数据和属性。|  
 |`BlobList/MetadataPath`|String|可选。 指定磁盘上某个文件的相对路径，该文件包含针对导入操作的 Blob 列表中的 Blob 设置的默认元数据。 可以针对每个 Blob 有选择性地重写此元数据。<br /><br /> 导出操作的清单中会省略此元素。|  
@@ -111,12 +106,12 @@ block-list ::=
 |`BlobList/PropertiesPath/@Hash`|属性，字符串|为 properties 文件指定 Base16 编码 MD5 哈希值。|  
 |`Blob`|嵌套的 XML 元素|包含每个 Blob 列表中每个 Blob 的相关信息。|  
 |`Blob/BlobPath`|String|Blob 的相对 URI，以容器名称开头。 如果该 Blob 在根容器中，则必须以 `$root` 开头。|  
-|`Blob/FilePath`|String|指定驱动器上文件的相对路径。 对于导出作业，如果可能，该 Blob 路径将用作文件路径；*例如*，`pictures/bob/wild/desert.jpg` 将导出到 `\pictures\bob\wild\desert.jpg`。 但是，由于 NTFS 名称的限制，Blob 可能会导出到路径并不像 Blob 路径的文件。|  
+|`Blob/FilePath`|String|指定驱动器上文件的相对路径。 对于导出作业，如果可能，该 Blob 路径将用作文件路径；例如  ，`pictures/bob/wild/desert.jpg` 将导出到 `\pictures\bob\wild\desert.jpg`。 但是，由于 NTFS 名称的限制，Blob 可能会导出到路径并不像 Blob 路径的文件。|  
 |`Blob/ClientData`|String|可选。 包含客户提供的注释。 导入/导出服务不解释该值。|  
 |`Blob/Snapshot`|DateTime|对于导出作业而言是可选的。 指定某个已导出的 Blob 快照的快照标识符。|  
 |`Blob/Length`|Integer|指定 Blob 的总长度（字节）。 对于块 Blob，该值最大可为 200 GB；对于页 Blob，该值最大可为 1 TB。 对于页 Blob，该值必须是 512 的倍数。|  
-|`Blob/ImportDisposition`|String|对于导入作业而言是可选的，对于导出作业则可省略。 此元素指定当存在同名的 Blob 时，导入/导出作业应如何处理导入作业的大小写。 如果在导入清单中省略此值，将使用默认值 `rename`。<br /><br /> 此元素的值包括：<br /><br /> -   `no-overwrite`：如果已存在同名的目标 Blob，导入操作将跳过此文件的导入。<br />-   `overwrite`：现有目标 Blob 会被新导入的文件完全覆盖。<br />-   `rename`：新 Blob 将使用修改的名称上传。<br /><br /> 重命名规则如下：<br /><br /> -   如果 Blob 名称中不包含句点，则通过将 `(2)` 附加到原始 Blob 名称中来生成新名称；如果这个新名称还与某个现有 Blob 名称冲突，则附加 `(3)` 来代替 `(2)`；依此类推。<br />-   如果 Blob 名称中包含句点，最后一个句点后面的部分则视为扩展名。 与上面的过程相似，`(2)` 将插入到最后一个句点前面来生成新名称；如果新名称仍与某个现有 Blob 名称冲突，服务将尝试附加 `(3)`、`(4)`，依此类推，直到创建一个不冲突的名称。<br /><br /> 下面是一些示例：<br /><br /> Blob `BlobNameWithoutDot` 将重命名为：<br /><br /> `BlobNameWithoutDot (2)  // if BlobNameWithoutDot exists`<br /><br /> `BlobNameWithoutDot (3)  // if both BlobNameWithoutDot and BlobNameWithoutDot (2) exist`<br /><br /> Blob `Seattle.jpg` 将重命名为：<br /><br /> `Seattle (2).jpg  // if Seattle.jpg exists`<br /><br /> `Seattle (3).jpg  // if both Seattle.jpg and Seattle (2).jpg exist`|  
-|`PageRangeList`|嵌套的 XML 元素|对于页 Blob 而言是必需的。<br /><br /> 对于导入操作，指定要导入的文件的字节范围列表。 每个页面范围由描述该页面范围的源文件中的偏移量和长度以及区域的 MD5 哈希描述。 页面范围的 `Hash` 属性是必需的。 服务会验证 Blob 中数据的哈希是否与根据页面范围计算出的 MD5 哈希匹配。 可以使用任意数目的页面范围来描述用于某个导入的文件，但总大小不能超过 1 TB。 所有页面范围都必须按偏移量排序，不允许重叠。<br /><br /> 对于导出操作，指定已导出到驱动器的 Blob 的一组字节范围。<br /><br /> 这些页面范围一起也可能仅涵盖某个 Blob 或文件的子范围。  该文件的剩余部分未由任何页面范围涵盖符合预期，其内容可能未定义。|  
+|`Blob/ImportDisposition`|String|对于导入作业而言是可选的，对于导出作业则可省略。 此元素指定当存在同名的 Blob 时，导入/导出作业应如何处理导入作业的大小写。 如果在导入清单中省略此值，将使用默认值 `rename`。<br /><br /> 此元素的值包括：<br /><br /> -   `no-overwrite`：如果已存在同名的目标 Blob，导入操作将跳过此文件的导入。<br />-   `overwrite`：现有目标 Blob 会被新导入的文件完全覆盖。<br />-   `rename`：新 Blob 将使用修改的名称上传。<br /><br /> 重命名规则如下：<br /><br /> -   如果 Blob 名称中不包含句点，则通过将 `(2)` 附加到原始 Blob 名称中来生成新名称；如果此新名称还与某个现有 Blob 名称冲突，则附加 `(3)` 来代替 `(2)`；依此类推。<br />-   如果 Blob 名称中包含句点，最后一个句点后面的部分则视为扩展名。 与上面的过程相似，`(2)` 将插入到最后一个句点前面来生成新名称；如果新名称仍与某个现有 Blob 名称冲突，服务将尝试附加 `(3)`、`(4)`，依此类推，直到创建一个不冲突的名称。<br /><br /> 下面是一些示例：<br /><br /> Blob `BlobNameWithoutDot` 将重命名为：<br /><br /> `BlobNameWithoutDot (2)  // if BlobNameWithoutDot exists`<br /><br /> `BlobNameWithoutDot (3)  // if both BlobNameWithoutDot and BlobNameWithoutDot (2) exist`<br /><br /> Blob `Seattle.jpg` 将重命名为：<br /><br /> `Seattle (2).jpg  // if Seattle.jpg exists`<br /><br /> `Seattle (3).jpg  // if both Seattle.jpg and Seattle (2).jpg exist`|  
+|`PageRangeList`|嵌套的 XML 元素|对于页 Blob 而言是必需的。<br /><br /> 对于导入操作，指定要导入的文件的字节范围列表。 每个页面范围由描述该页面范围的源文件中的偏移量和长度以及区域的 MD5 哈希描述。 页面范围的 `Hash` 属性是必需的。 服务将验证 Blob 中数据的哈希是否与根据页面范围计算出的 MD5 哈希匹配。 可以使用任意数目的页面范围来描述用于某个导入的文件，但总大小不能超过 1 TB。 所有页面范围都必须按偏移量排序，不允许重叠。<br /><br /> 对于导出操作，指定已导出到驱动器的 Blob 的一组字节范围。<br /><br /> 这些页面范围一起也可能仅涵盖某个 Blob 或文件的子范围。  该文件的剩余部分未由任何页面范围涵盖符合预期，其内容可能未定义。|  
 |`PageRange`|XML 元素|表示页面范围。|  
 |`PageRange/@Offset`|属性，整数|指定传输文件中的偏移量，以及指定的页面范围的起始 Blob。 此值必须是 512 的倍数。|  
 |`PageRange/@Length`|属性，整数|指定页面范围的长度。 此值必须是 512 的倍数，并且不超过 4 MB。|  

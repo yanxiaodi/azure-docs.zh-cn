@@ -1,27 +1,23 @@
 ---
-title: Phoenix 查询服务器 REST SDK - Azure HDInsight | Microsoft Docs
-description: ''
-services: hdinsight
-documentationcenter: ''
-author: ashishthaps
-manager: jhubbard
-editor: cgronlun
-ms.assetid: ''
+title: Phoenix Query Server REST SDK - Azure HDInsight
+description: 在 Azure HDInsight 中安装并使用适用于 Phoenix Query Server 的 REST SDK。
 ms.service: hdinsight
-ms.custom: hdinsightactive
-ms.devlang: na
-ms.topic: article
-ms.date: 12/04/2017
+author: ashishthaps
 ms.author: ashishth
-ms.openlocfilehash: ef89bcea3eab92c3137a6f532398764462ae204c
-ms.sourcegitcommit: d78bcecd983ca2a7473fff23371c8cfed0d89627
-ms.translationtype: HT
+ms.reviewer: jasonh
+ms.custom: hdinsightactive
+ms.topic: conceptual
+ms.date: 12/04/2017
+ms.openlocfilehash: 1f468cac29579d8748f61a47b548a67d36ff8279
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/14/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64695956"
 ---
-# <a name="phoenix-query-server-rest-sdk"></a>Phoenix 查询服务器 REST SDK
+# <a name="apache-phoenix-query-server-rest-sdk"></a>Apache Phoenix 查询服务器 REST SDK
 
-[Apache Phoenix](http://phoenix.apache.org/) 是一个开源的大规模并行关系数据库层，以 [HBase](apache-hbase-overview.md) 为基础。 Phoenix 允许通过 [SQLLine](apache-hbase-phoenix-squirrel-linux.md) 之类的 SSH 工具将类 SQL 查询与 HBase 配合使用。 Phoenix 也提供名为“Phoenix 查询服务器 (PQS)”的 HTTP 服务器，这是一个瘦客户端，支持两种用于客户端通信的传输机制：JSON 和协议缓冲区。 协议缓冲区是默认的机制，提供的通信比 JSON 更高效。
+[Apache Phoenix](https://phoenix.apache.org/) 是一个以 [Apache HBase](apache-hbase-overview.md) 为基础的开源大规模并行关系数据库层。 Phoenix 允许通过 [SQLLine](apache-hbase-phoenix-squirrel-linux.md) 之类的 SSH 工具将类 SQL 查询与 HBase 配合使用。 Phoenix 也提供名为“Phoenix 查询服务器 (PQS)”的 HTTP 服务器，这是一个瘦客户端，支持两种用于客户端通信的传输机制：JSON 和协议缓冲区。 协议缓冲区是默认的机制，提供的通信比 JSON 更高效。
 
 本文介绍如何使用 PQS REST SDK 创建表、逐个或成批 upsert 行，以及使用 SQL 语句选择数据。 示例使用[适用于 Apache Phoenix 查询服务器的 Microsoft .NET 驱动程序](https://www.nuget.org/packages/Microsoft.Phoenix.Client)。 此 SDK 在 [Apache Calcite 的 Avatica](https://calcite.apache.org/avatica/) API 基础上构建，该 API 将协议缓冲区专用于序列化格式。
 
@@ -35,7 +31,7 @@ ms.lasthandoff: 05/14/2018
 
 ## <a name="instantiate-new-phoenixclient-object"></a>实例化新的 PhoenixClient 对象
 
-若要开始使用库，请实例化新的 `PhoenixClient` 对象，将包含 `Uri` 的 `ClusterCredentials` 传递到群集，并传递群集的 Hadoop 用户名和密码。
+若要开始使用库，请实例化新的 `PhoenixClient` 对象，将包含 `Uri` 的 `ClusterCredentials` 传入到群集，并传入群集的 Apache Hadoop 用户名和密码。
 
 ```csharp
 var credentials = new ClusterCredentials(new Uri("https://CLUSTERNAME.azurehdinsight.net/"), "USERNAME", "PASSWORD");
@@ -75,7 +71,7 @@ await client.ConnectionSyncRequestAsync(connId, connProperties, options);
 
 下面是一些相关属性：
 
-| 属性 | 说明 |
+| 属性 | 描述 |
 | -- | -- |
 | AutoCommit | 一个布尔值，表示是否为 Phoenix 事务启用 `autoCommit`。 |
 | ReadOnly | 一个布尔值，表示连接是否为只读。 |
@@ -86,10 +82,10 @@ await client.ConnectionSyncRequestAsync(connId, connProperties, options);
 
 下面是 `TransactionIsolation` 值：
 
-| 隔离值 | 说明 |
+| 隔离值 | 描述 |
 | -- | -- |
 | 0 | 事务不受支持。 |
-| 1 | 可能出现脏读、不可重复读和幻读。 |
+| 第 | 可能出现脏读、不可重复读和幻读。 |
 | 2 | 可以防止脏读，但会出现不可重复读和幻读。 |
 | 4 | 可以防止脏读和不可重复读，但会出现幻读。 |
 | 8 | 脏读、不可重复读和幻读都可以防止。 |
@@ -543,5 +539,5 @@ FM: 5
 
 ## <a name="next-steps"></a>后续步骤 
 
-* [HDInsight 中的 Phoenix](../hdinsight-phoenix-in-hdinsight.md)
-* [使用 HBase REST SDK](apache-hbase-rest-sdk.md)
+* [HDInsight 中的 Apache Phoenix](../hdinsight-phoenix-in-hdinsight.md)
+* [使用 Apache HBase REST SDK](apache-hbase-rest-sdk.md)

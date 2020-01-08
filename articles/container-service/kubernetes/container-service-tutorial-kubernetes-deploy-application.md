@@ -1,23 +1,27 @@
 ---
-title: Azure 容器服务教程 - 部署应用程序
+title: （已弃用）Azure 容器服务教程 - 部署应用程序
 description: Azure 容器服务教程 - 部署应用程序
 services: container-service
-author: neilpeterson
+author: iainfoulds
 manager: jeconnoc
 ms.service: container-service
 ms.topic: tutorial
 ms.date: 02/26/2018
-ms.author: nepeters
+ms.author: iainfou
 ms.custom: mvc
-ms.openlocfilehash: f8f626143e74d65fa9d4e37e1e2bfda37501f102
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
+ms.openlocfilehash: dafbb8d1221d5e9c6194611ad338b3714a089cea
+ms.sourcegitcommit: 2469b30e00cbb25efd98e696b7dbf51253767a05
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 12/06/2018
+ms.locfileid: "52998778"
 ---
-# <a name="run-applications-in-kubernetes"></a>在 Kubernetes 中运行应用程序
+# <a name="deprecated-run-applications-in-kubernetes"></a>（已弃用）在 Kubernetes 中运行应用程序
 
-[!INCLUDE [aks-preview-redirect.md](../../../includes/aks-preview-redirect.md)]
+> [!TIP]
+> 有关使用 Azure Kubernetes 服务的此教程的更新版本，请参阅[教程：在 Azure Kubernetes 服务 (AKS) 中运行应用程序](../../aks/tutorial-kubernetes-deploy-application.md)。
+
+[!INCLUDE [ACS deprecation](../../../includes/container-service-kubernetes-deprecation.md)]
 
 在本教程中（第 4 部分，共 7 部分），示例应用程序会部署到 Kubernetes 群集中。 已完成的步骤包括：
 
@@ -42,7 +46,7 @@ ms.lasthandoff: 04/28/2018
 
 在本教程中，Azure 容器注册表 (ACR) 用于存储容器映像。 运行应用程序前，需要先在 Kubernetes 清单文件中更新 ACR 登录服务器名称。
 
-使用 [az acr list](/cli/azure/acr#az_acr_list) 命令获取 ACR 登录服务器名称。
+使用 [az acr list](/cli/azure/acr#az-acr-list) 命令获取 ACR 登录服务器名称。
 
 ```azurecli-interactive
 az acr list --resource-group myResourceGroup --query "[].{acrLoginServer:loginServer}" --output table
@@ -66,7 +70,7 @@ containers:
 
 ## <a name="deploy-application"></a>部署应用程序
 
-使用 [kubectl create](https://kubernetes.io/docs/user-guide/kubectl/v1.6/#create) 命令运行该应用程序。 此命令分析清单文件并创建定义的 Kubernetes 对象。
+使用 [kubectl create](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#create) 命令运行该应用程序。 此命令分析清单文件并创建定义的 Kubernetes 对象。
 
 ```azurecli-interactive
 kubectl create -f azure-vote-all-in-one-redis.yml
@@ -85,7 +89,7 @@ service "azure-vote-front" created
 
 创建向 Internet 公开应用程序的 [Kubernetes 服务](https://kubernetes.io/docs/concepts/services-networking/service/)。 此过程可能需要几分钟。 
 
-若要监视进度，请将 [kubectl get service](https://review.docs.microsoft.com/azure/container-service/container-service-kubernetes-walkthrough?branch=pr-en-us-17681) 命令与 `--watch` 参数配合使用。
+若要监视进度，请将 [kubectl get service](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get) 命令与 `--watch` 参数配合使用。
 
 ```azurecli-interactive
 kubectl get service azure-vote-front --watch

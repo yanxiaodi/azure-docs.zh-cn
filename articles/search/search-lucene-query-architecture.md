@@ -1,20 +1,19 @@
 ---
-title: Azure 搜索中的全文搜索引擎 (Lucene) 体系结构 | Microsoft Docs
+title: 全文搜索引擎 (Lucene) 体系结构 - Azure 搜索
 description: 解释与 Azure 搜索相关的全文搜索的 Lucene 查询处理和文档检索概念。
-manager: jlembicz
+manager: nitinme
 author: yahnoosh
 services: search
 ms.service: search
-ms.devlang: NA
 ms.topic: conceptual
-ms.date: 04/20/2018
+ms.date: 08/08/2019
 ms.author: jlembicz
-ms.openlocfilehash: 4382c3001f6b0a9227407beccb483347bccb387c
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+ms.openlocfilehash: d377d6180f3d2d64f183ed574add3e7307e34fc3
+ms.sourcegitcommit: 7a6d8e841a12052f1ddfe483d1c9b313f21ae9e6
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
-ms.locfileid: "32195001"
+ms.lasthandoff: 08/30/2019
+ms.locfileid: "70186540"
 ---
 # <a name="how-full-text-search-works-in-azure-search"></a>Azure 搜索中全文搜索的工作原理
 
@@ -53,15 +52,15 @@ ms.locfileid: "32195001"
 以下示例是可以使用 [REST API](https://docs.microsoft.com/rest/api/searchservice/search-documents) 发送到 Azure 搜索的一个搜索请求。  
 
 ~~~~
-POST /indexes/hotels/docs/search?api-version=2017-11-11 
-{  
-    "search": "Spacious, air-condition* +\"Ocean view\"",  
-    "searchFields": "description, title",  
+POST /indexes/hotels/docs/search?api-version=2019-05-06
+{
+    "search": "Spacious, air-condition* +\"Ocean view\"",
+    "searchFields": "description, title",
     "searchMode": "any",
-    "filter": "price ge 60 and price lt 300",  
+    "filter": "price ge 60 and price lt 300",
     "orderby": "geo.distance(location, geography'POINT(-159.476235 22.227659)')", 
     "queryType": "full" 
- } 
+}
 ~~~~
 
 对于此请求，搜索引擎将执行以下操作：
@@ -116,7 +115,7 @@ Spacious,||air-condition*+"Ocean view"
 假设我们现在设置为 `searchMode=all`。 在这种情况下，空格被解释为“and”运算。 文档中必须包含每个剩余的字词，才能将该文档视为匹配项。 生成的示例查询将按以下方式解释： 
 
 ~~~~
-+Spacious,+air-condition*+"Ocean view"  
++Spacious,+air-condition*+"Ocean view"
 ~~~~
 
 此查询的修改查询树如下所示，其中的匹配文档是所有三个子查询的交集： 
@@ -154,7 +153,7 @@ Spacious,||air-condition*+"Ocean view"
 可以使用[分析 API](https://docs.microsoft.com/rest/api/searchservice/test-analyzer) 测试分析器的行为。 提供要分析的文本，查看给定的分析器会生成哪些字词。 例如，若要查看标准分析器如何处理文本“air-condition”，可以发出以下请求：
 
 ~~~~
-{ 
+{
     "text": "air-condition",
     "analyzer": "standard"
 }
@@ -163,7 +162,7 @@ Spacious,||air-condition*+"Ocean view"
 标准分析器会将输入文本分解成以下两个标记，使用起始和结束偏移（用于命中项突出显示）以及文本的位置（用于短语匹配）等属性来批注输入文本：
 
 ~~~~
-{  
+{
   "tokens": [
     {
       "token": "air",
@@ -185,7 +184,7 @@ Spacious,||air-condition*+"Ocean view"
 
 ### <a name="exceptions-to-lexical-analysis"></a>词法分析的例外情况 
 
-词法分析仅适用于需要完整字词的查询类型 – 字词查询或短语查询， 而不适用于使用不完整字词的查询类型 – 前缀查询、通配符查询、正则表达式查询，或者模糊查询。 这些查询类型（包括前缀查询，在本示例中包含字词 *air-condition\**）将直接添加到查询树，会绕过分析阶段。 针对这些类型的查询字词执行的唯一转换操作是转换为小写。
+词法分析仅适用于需要完整字词的查询类型 – 字词查询或短语查询， 而不适用于使用不完整字词的查询类型 – 前缀查询、通配符查询、正则表达式查询，或者模糊查询。 这些查询类型（包括前缀查询，在本示例中包含字词 `air-condition*`）将直接添加到查询树，会绕过分析阶段。 针对这些类型的查询字词执行的唯一转换操作是转换为小写。
 
 <a name="stage3"></a>
 
@@ -194,11 +193,11 @@ Spacious,||air-condition*+"Ocean view"
 文档检索是否在索引中查找包含匹配词的文档。 最好是通过一个示例来理解此阶段。 我们从一个采用以下简单架构的酒店索引着手： 
 
 ~~~~
-{   
-    "name": "hotels",     
-    "fields": [     
-        { "name": "id", "type": "Edm.String", "key": true, "searchable": false },     
-        { "name": "title", "type": "Edm.String", "searchable": true },     
+{
+    "name": "hotels",
+    "fields": [
+        { "name": "id", "type": "Edm.String", "key": true, "searchable": false },
+        { "name": "title", "type": "Edm.String", "searchable": true },
         { "name": "description", "type": "Edm.String", "searchable": true }
     ] 
 } 
@@ -207,28 +206,28 @@ Spacious,||air-condition*+"Ocean view"
 进一步假设此索引包含以下四个文档： 
 
 ~~~~
-{ 
+{
     "value": [
-        {         
-            "id": "1",         
-            "title": "Hotel Atman",         
-            "description": "Spacious rooms, ocean view, walking distance to the beach."   
-        },       
-        {         
-            "id": "2",         
-            "title": "Beach Resort",        
-            "description": "Located on the north shore of the island of Kauaʻi. Ocean view."     
-        },       
-        {         
-            "id": "3",         
-            "title": "Playa Hotel",         
+        {
+            "id": "1",
+            "title": "Hotel Atman",
+            "description": "Spacious rooms, ocean view, walking distance to the beach."
+        },
+        {
+            "id": "2",
+            "title": "Beach Resort",
+            "description": "Located on the north shore of the island of Kauaʻi. Ocean view."
+        },
+        {
+            "id": "3",
+            "title": "Playa Hotel",
             "description": "Comfortable, air-conditioned rooms with ocean view."
-        },       
-        {         
-            "id": "4",         
-            "title": "Ocean Retreat",         
+        },
+        {
+            "id": "4",
+            "title": "Ocean Retreat",
             "description": "Quiet and secluded"
-        }    
+        }
     ]
 }
 ~~~~
@@ -262,14 +261,14 @@ Spacious,||air-condition*+"Ocean view"
 | resort | 3 |
 | retreat | 4 |
 
-在标题字段中，只有 *hotel* 显示在以下两个文档中：1 和 3。
+在标题字段中，只有“酒店”显示在以下两个文档中：1、3。
 
 对于**说明**字段，索引如下所示：
 
 | 术语 | 文档列表 |
 |------|---------------|
 | air | 3
-| and | 4
+| 与 | 4
 | beach | 1
 | conditioned | 3
 | comfortable | 3
@@ -280,7 +279,7 @@ Spacious,||air-condition*+"Ocean view"
 | north | 2
 | ocean | 1, 2, 3
 | of | 2
-| on |2
+| 开 |2
 | quiet | 4
 | rooms  | 1, 3
 | secluded | 4
@@ -290,7 +289,7 @@ Spacious,||air-condition*+"Ocean view"
 | to | 1
 | view | 1, 2, 3
 | walking | 1
-| 替换为 | 3
+| 和 | 3
 
 
 **根据编制索引的字词匹配查询词**
@@ -326,7 +325,7 @@ Spacious,||air-condition*+"Ocean view"
 search=Spacious, air-condition* +"Ocean view"  
 ~~~~
 ~~~~
-{  
+{
   "value": [
     {
       "@search.score": 0.25610128,
@@ -350,7 +349,7 @@ search=Spacious, air-condition* +"Ocean view"
 }
 ~~~~
 
-文档 1 与查询的匹配程度最高，因为其说明字段中同时出现了字词 *spacious* 和所需的短语 *ocean view*。 后面的两个文档仅匹配短语 *ocean view*。 你可能会感到惊讶，尽管文档 2 和 3 都匹配相同的查询短语，但它们的相关性评分却不相同。 这是因为，评分公式除了包含 TF/IDF 以外，还包含其他组成部分。 在本例中，为文档 3 分配的评分略高，因为其说明更短。 请学习 [Lucene 的实际评分公式](https://lucene.apache.org/core/4_0_0/core/org/apache/lucene/search/similarities/TFIDFSimilarity.html)，了解字段长度和其他因素如何影响相关性评分。
+文档 1 与查询的匹配程度最高，因为其说明字段中同时出现了字词 *spacious* 和所需的短语 *ocean view*。 后面的两个文档仅匹配短语 *ocean view*。 你可能会感到惊讶，尽管文档 2 和 3 都匹配相同的查询短语，但它们的相关性评分却不相同。 这是因为，评分公式除了包含 TF/IDF 以外，还包含其他组成部分。 在本例中，为文档 3 分配的评分略高，因为其说明更短。 请学习 [Lucene 的实际评分公式](https://lucene.apache.org/core/6_6_1/core/org/apache/lucene/search/similarities/TFIDFSimilarity.html)，了解字段长度和其他因素如何影响相关性评分。
 
 某些查询类型（通配符、前缀、正则表达式）始终会给文档总评分贡献一个常量分数。 这样，便可以在结果中包含通过查询扩展找到的匹配项，但不会影响排名。 
 
@@ -384,7 +383,7 @@ Internet 搜索引擎取得的成功提高了人们对私有数据运行全文�
 
 + 生成示例索引，尝试不同的查询并查看结果。 有关说明，请参阅[在门户中生成和查询索引](search-get-started-portal.md#query-index)。
 
-+ 通过[搜索文档](https://docs.microsoft.com/rest/api/searchservice/search-documents#examples)示例部分或者通过门户中“搜索资源管理器”的[简单查询语法](https://docs.microsoft.com/rest/api/searchservice/simple-query-syntax-in-azure-search)尝试其他查询语法。
++ 通过[搜索文档](https://docs.microsoft.com/rest/api/searchservice/search-documents#bkmk_examples)示例部分或者通过门户中“搜索资源管理器”的[简单查询语法](https://docs.microsoft.com/rest/api/searchservice/simple-query-syntax-in-azure-search)尝试其他查询语法。
 
 + 如果想要在搜索应用程序中优化排名，请查看[评分配置文件](https://docs.microsoft.com/rest/api/searchservice/add-scoring-profiles-to-a-search-index)。
 
@@ -392,9 +391,7 @@ Internet 搜索引擎取得的成功提高了人们对私有数据运行全文�
 
 + [配置自定义分析器](https://docs.microsoft.com/rest/api/searchservice/custom-analyzers-in-azure-search)，针对特定的字段尽量简化处理或者进行专门处理。
 
-+ 在此演示网站并排[比较标准和英语分析器](http://alice.unearth.ai/)。 
-
-## <a name="see-also"></a>另请参阅
+## <a name="see-also"></a>请参阅
 
 [搜索文档 REST API](https://docs.microsoft.com/rest/api/searchservice/search-documents) 
 

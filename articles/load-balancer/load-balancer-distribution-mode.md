@@ -1,25 +1,28 @@
 ---
-title: 配置 Azure 负载均衡器分配模式 | Microsoft Docs
+title: 配置 Azure 负载均衡器分发模式
+titlesuffix: Azure Load Balancer
 description: 如何配置 Azure 负载均衡器的分配模式以支持源 IP 关联。
 services: load-balancer
 documentationcenter: na
-author: KumudD
-manager: timlt
-ms.assetid: 7df27a4d-67a8-47d6-b73e-32c0c6206e6e
+author: asudbring
 ms.service: load-balancer
 ms.devlang: na
 ms.topic: article
+ms.custom: seodec18
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 09/25/2017
-ms.author: kumud
-ms.openlocfilehash: ae793bad9cef86158418eb87e0c38ee0370a6bd2
-ms.sourcegitcommit: 48ab1b6526ce290316b9da4d18de00c77526a541
-ms.translationtype: HT
+ms.author: allensu
+ms.openlocfilehash: 0d3ddf2e005338a19972cfcdef025579764f7f23
+ms.sourcegitcommit: 8e1fb03a9c3ad0fc3fd4d6c111598aa74e0b9bd4
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/23/2018
+ms.lasthandoff: 08/28/2019
+ms.locfileid: "70114718"
 ---
 # <a name="configure-the-distribution-mode-for-azure-load-balancer"></a>配置 Azure 负载均衡器的分配模式
+
+[!INCLUDE [updated-for-az](../../includes/updated-for-az.md)]
 
 ## <a name="hash-based-distribution-mode"></a>基于哈希的分发模式
 
@@ -29,7 +32,7 @@ Azure 负载均衡器的默认分配模式是 5 元组哈希。 元组由源 IP�
 
 ## <a name="source-ip-affinity-mode"></a>源 IP 关联模式
 
-还可以使用源 IP 关联分配模式配置负载均衡器。 此分配模式也称为为会话关联或客户端 IP 关联。 该模式使用 2 元组（源 IP 和目标 IP）或 3 元组（源 IP、目标 IP 和协议）哈希将流量映射到可用的服务器。 使用源 IP 关联，从同一客户端计算机发起的连接会进入同一个 DIP 终结点。
+还可以使用源 IP 关联分配模式配置负载均衡器。 此分配模式也称为为会话关联或客户端 IP 关联。 该模式使用 2 元组（源 IP 和目标 IP）或 3 元组（源 IP、目标 IP 和协议）哈希将流量映射到可用的服务器。 通过使用源 IP 关联, 从同一客户端计算机启动的连接会移到同一个 DIP 终结点。
 
 下图演示 2 元组配置。 请注意 2 元组如何从负载均衡器运行到虚拟机 1 (VM1)。 VM1 随后由 VM2 和 VM3 备份。
 
@@ -39,7 +42,7 @@ Azure 负载均衡器的默认分配模式是 5 元组哈希。 元组由源 IP�
 
 另一个用例方案是媒体上传。 数据上传通过 UDP 进行，但控制平面通过 TCP 实现：
 
-* 客户端与负载均衡的公共地址发起 TCP 会话，然后定向到特定 DIP。 通道将保持活动状态以监视连接运行状况。
+* 客户端启动与负载平衡公用地址的 TCP 会话, 并定向到特定 DIP。 通道将保持活动状态以监视连接运行状况。
 * 来自同一客户端计算机的新 UDP 会话在同一个负载均衡公共终结点中发起。 连接像前面的 TCP 连接一样定向到同一个 DIP 终结点。 能够以较高的吞吐量执行媒体上传，同时通过 TCP 维护控制通道。
 
 > [!NOTE]
@@ -47,9 +50,34 @@ Azure 负载均衡器的默认分配模式是 5 元组哈希。 元组由源 IP�
 
 ## <a name="configure-source-ip-affinity-settings"></a>配置源 IP 关联设置
 
-对于虚拟机，可以使用 Azure PowerShell 来更改超时设置。 将 Azure 终结点添加到虚拟机并配置负载均衡器分配模式：
+### <a name="azure-portal"></a>Azure 门户
 
-```powershell
+可以通过在门户中修改负载均衡规则来更改分发模式的配置。
+
+1. 登录到 Azure 门户, 并通过单击 "**资源组**" 找到包含要更改的负载均衡器的资源组。
+2. 在 "负载均衡器概述" 边栏选项卡中, 单击 "**设置**" 下的**负载均衡规则**。
+3. 在 "负载均衡规则" 边栏选项卡中, 单击要更改分发模式的负载均衡规则。
+4. 在规则下, 通过更改 "**会话持久性**" 下拉框更改分发模式。  你可使用以下选项：
+    
+    * **无 (基于哈希)** -指定任何虚拟机可能会处理来自同一客户端的后续请求。
+    * **客户端 ip (源 IP 关联2元组)** -指定同一虚拟机将处理来自同一客户端 ip 地址的后续请求。
+    * **客户端 ip 和协议 (源 IP 关联3元组)** -指定相同的虚拟机将处理来自同一客户端 ip 地址和协议组合的后续请求。
+
+5. 选择分发模式, 然后单击 "**保存**"。
+
+### <a name="azure-powershell"></a>Azure PowerShell
+
+对于使用资源管理器部署的虚拟机, 请使用 PowerShell 更改现有负载均衡规则的负载均衡器分发设置。 以下命令将更新分发模式: 
+
+```azurepowershell-interactive
+$lb = Get-AzLoadBalancer -Name MyLb -ResourceGroupName MyLbRg
+$lb.LoadBalancingRules[0].LoadDistribution = 'sourceIp'
+Set-AzLoadBalancer -LoadBalancer $lb
+```
+
+对于经典虚拟机，请使用 Azure PowerShell 更改分发设置。 将 Azure 终结点添加到虚拟机并配置负载均衡器分配模式：
+
+```azurepowershell-interactive
 Get-AzureVM -ServiceName mySvc -Name MyVM1 | Add-AzureEndpoint -Name HttpIn -Protocol TCP -PublicPort 80 -LocalPort 8080 –LoadBalancerDistribution sourceIP | Update-AzureVM
 ```
 
@@ -77,13 +105,13 @@ Get-AzureVM -ServiceName mySvc -Name MyVM1 | Add-AzureEndpoint -Name HttpIn -Pro
     IdleTimeoutInMinutes : 15
     LoadBalancerDistribution : sourceIP
 
-如果 `LoadBalancerDistribution` 元素不存在，Azure 负载均衡器会使用默认的 5 元组算法。
+如果该`LoadBalancerDistribution`元素不存在, Azure 负载均衡器将使用默认的5元组算法。
 
 ### <a name="configure-distribution-mode-on-load-balanced-endpoint-set"></a>在负载均衡终结点集上配置分配模式
 
 如果终结点是负载均衡终结点集的一部分，则必须在负载均衡终结点集上配置分配模式：
 
-```powershell
+```azurepowershell-interactive
 Set-AzureLoadBalancedEndpoint -ServiceName MyService -LBSetName LBSet1 -Protocol TCP -LocalPort 80 -ProbeProtocolTCP -ProbePort 8080 –LoadBalancerDistribution sourceIP
 ```
 
@@ -124,7 +152,7 @@ Set-AzureLoadBalancedEndpoint -ServiceName MyService -LBSetName LBSet1 -Protocol
     POST https://management.core.windows.net/<subscription-id>/services/hostedservices/<cloudservice-name>/deployments/<deployment-name>?comp=UpdateLbSet   x-ms-version: 2014-09-01
     Content-Type: application/xml
 
-    <LoadBalancedEndpointList xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <LoadBalancedEndpointList xmlns="http://schemas.microsoft.com/windowsazure" xmlns:i="https://www.w3.org/2001/XMLSchema-instance">
       <InputEndpoint>
         <LoadBalancedEndpointSetName> endpoint-set-name </LoadBalancedEndpointSetName>
         <LocalPort> local-port-number </LocalPort>

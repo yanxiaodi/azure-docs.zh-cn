@@ -1,5 +1,7 @@
 - name: 数据工厂 V1 文档
   href: null
+- name: 切换到当前版本的文档
+  href: ../introduction.md
 - name: 概述
   items:
     - name: Azure 数据工厂简介
@@ -20,8 +22,6 @@
       items:
         - name: 复制向导
           href: data-factory-copy-data-wizard-tutorial.md
-        - name: Azure 门户
-          href: data-factory-copy-activity-tutorial-using-azure-portal.md
         - name: Visual Studio
           href: data-factory-copy-activity-tutorial-using-visual-studio.md
         - name: Azure PowerShell
@@ -45,7 +45,7 @@
           href: data-factory-build-your-first-pipeline-using-rest-api.md
     - name: 在本地与云之间移动数据
       href: data-factory-move-data-between-onprem-and-cloud.md
-    - name: 常见问题
+    - name: 常见问题解答
       href: data-factory-faq.md
 - name: 如何
   items:
@@ -74,7 +74,7 @@
               href: data-factory-azure-blob-connector.md
             - name: Azure Cosmos DB
               href: data-factory-azure-documentdb-connector.md
-            - name: Azure Data Lake Store
+            - name: Azure Data Lake Storage Gen1
               href: data-factory-azure-datalake-connector.md
             - name: Azure 搜索
               href: data-factory-azure-search-connector.md
@@ -184,9 +184,9 @@
 - name: 引用
   items:
     - name: 代码示例
-      href: 'https://azure.microsoft.com/en-us/resources/samples/?service=data-factory'
+      href: 'https://azure.microsoft.com/resources/samples/?service=data-factory'
     - name: Azure PowerShell
-      href: /powershell/module/azurerm.datafactories
+      href: /powershell/module/az.datafactory
     - name: .NET
       href: /dotnet/api/microsoft.azure.management.datafactories.models
     - name: REST
@@ -214,7 +214,7 @@
     - name: 服务更新
       href: 'https://azure.microsoft.com/updates/?product=data-factory'
     - name: 堆栈溢出
-      href: 'http://stackoverflow.com/questions/tagged/azure-data-factory'
+      href: 'https://stackoverflow.com/questions/tagged/azure-data-factory'
     - name: 视频
       href: 'https://azure.microsoft.com/documentation/videos/index/?services=data-factory'
     - name: 使用数据工厂和批处理来处理大规模数据集

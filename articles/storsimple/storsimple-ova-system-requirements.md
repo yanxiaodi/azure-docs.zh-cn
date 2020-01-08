@@ -1,27 +1,32 @@
 ---
-title: "Microsoft Azure StorSimple 虚拟阵列系统要求 | Microsoft Docs"
-description: "了解有关 StorSimple Virtual Array 的软件和网络要求的详细信息"
+title: Microsoft Azure StorSimple 虚拟阵列系统要求 | Microsoft Docs
+description: 了解有关 StorSimple Virtual Array 的软件和网络要求的详细信息
 services: storsimple
 documentationcenter: NA
 author: alkohli
 manager: jeconnoc
-editor: 
+editor: ''
 ms.assetid: ea1d3bca-e71b-453d-aa82-440d2638f5e3
 ms.service: storsimple
 ms.devlang: NA
 ms.topic: article
 ms.tgt_pltfrm: NA
 ms.workload: NA
-ms.date: 11/14/2017
+ms.date: 07/25/2019
 ms.author: alkohli
-ms.openlocfilehash: 5d01523f326bd7e2518bff06e62ae62db8f318d3
-ms.sourcegitcommit: 9a61faf3463003375a53279e3adce241b5700879
-ms.translationtype: HT
+ms.openlocfilehash: 65d2a21a9f40470cee1dd9d713f9f9cb5431a245
+ms.sourcegitcommit: f5cc71cbb9969c681a991aa4a39f1120571a6c2e
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 11/15/2017
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68516686"
 ---
 # <a name="storsimple-virtual-array-system-requirements"></a>StorSimple 虚拟阵列系统要求
+
+[!INCLUDE [storsimple-virtual-array-eol-banner](../../includes/storsimple-virtual-array-eol-banner.md)]
+
 ## <a name="overview"></a>概述
+
 本文介绍了 Microsoft Azure StorSimple 虚拟阵列和访问阵列的存储客户端的重要系统要求。 建议在部署 StorSimple 系统之前仔细查看信息，并且在进行部署和后续操作过程中按需重新参阅。
 
 系统要求包括：
@@ -41,13 +46,13 @@ ms.lasthandoff: 11/15/2017
 | **虚拟机监控程序** | **版本** |
 | --- | --- |
 | Hyper-V |Windows Server 2008 R2 SP1 和更高版本 |
-| VMware ESXi |5.0、5.5 和 6.0 <br> （不支持 6.5。） |
+| VMware ESXi |5.0、5.5、6.0 和 6.5。 |
 
 > [!IMPORTANT]
 > 不要将 VMware 工具安装在 StorSimple 虚拟阵列上，这将导致不支持的配置。
 
 ### <a name="virtual-device-requirements"></a>虚拟设备要求
-| **组件** | **要求** |
+| 组件 | 要求 |
 | --- | --- |
 | 虚拟处理器的最小数目（核） |4 |
 | 最小内存 (RAM) |8 GB <br> 对于文件服务器，小于 200 万个文件时为 8 GB，200 万 - 400 万个文件时为 16 GB|
@@ -60,7 +65,7 @@ ms.lasthandoff: 11/15/2017
 <sup>2</sup> - 网络要求可能会根据每日数据更改频率而有所不同。 例如，如果设备在一天中需要备份 10 GB 或更多更改，则通过 5 Mbps 连接进行的每日备份可能耗时长达 4.25 小时（如果无法压缩数据或删除重复数据）。
 
 ### <a name="supported-web-browsers"></a>受支持的 Web 浏览器
-| **组件** | **版本** | **其他要求/说明** |
+| 组件 | **版本** | **其他要求/说明** |
 | --- | --- | --- |
 | Microsoft Edge |最新版本 | |
 | Internet Explorer |最新版本 |使用 Internet Explorer 11 测试 |
@@ -93,13 +98,13 @@ ms.lasthandoff: 11/15/2017
 
 | **端口号<sup>1</sup>** | **入或出** | **端口范围** | **必需** | **说明** |
 | --- | --- | --- | --- | --- |
-| TCP 80 (HTTP) |出 |WAN |否 |出站端口用于 Internet 访问以检索更新。 <br></br>用户可配置出站 Web 代理。 |
-| TCP 443 (HTTPS) |出 |WAN |是 |出站端口用于访问云中的数据。 <br></br>用户可配置出站 Web 代理。 |
-| UDP 53 (DNS) |出 |WAN |在某些情况下；请参阅说明。 |仅当使用基于 Internet 的 DNS 服务器时，才需要此端口。 <br></br> 注意，如果部署文件服务器，建议使用本地 DNS 服务器。 |
-| UDP 123 (NTP) |出 |WAN |在某些情况下；请参阅说明。 |仅当使用基于 Internet 的 NTP 服务器时，才需要此端口。<br></br> 注意，如果部署文件服务器，建议与 Active Directory 域控制器同步时间。 |
-| TCP 80 (HTTP) |In |LAN |是 |这是 StorSimple 设备上用于本地管理的本地 UI 的入站端口。 <br></br> 注意，通过 HTTP 访问本地 UI 会自动重定向到 HTTPS。 |
-| TCP 443 (HTTPS) |In |LAN |是 |这是 StorSimple 设备上用于本地管理的本地 UI 的入站端口。 |
-| TCP 3260 (iSCSI) |In |LAN |否 |此端口用于通过 iSCSI 访问数据。 |
+| TCP 80 (HTTP) |输出 |WAN |否 |出站端口用于 Internet 访问以检索更新。 <br></br>出站 Web 代理可由用户配置。 |
+| TCP 443 (HTTPS) |输出 |WAN(广域网) |是 |出站端口用于访问云中的数据。 <br></br>用户可配置出站 Web 代理。 |
+| UDP 53 (DNS) |出 |WAN(广域网) |在某些情况下；请参阅说明。 |仅当使用基于 Internet 的 DNS 服务器时，才需要此端口。 <br></br> 注意，如果部署文件服务器，建议使用本地 DNS 服务器。 |
+| UDP 123 (NTP) |输出 |WAN(广域网) |在某些情况下；请参阅说明。 |仅当使用基于 Internet 的 NTP 服务器时，才需要此端口。<br></br> 注意，如果部署文件服务器，建议与 Active Directory 域控制器同步时间。 |
+| TCP 80 (HTTP) |流入 |LAN |是 |这是 StorSimple 设备上用于本地管理的本地 UI 的入站端口。 <br></br> 注意，通过 HTTP 访问本地 UI 会自动重定向到 HTTPS。 |
+| TCP 443 (HTTPS) |流入 |LAN |是 |这是 StorSimple 设备上用于本地管理的本地 UI 的入站端口。 |
+| TCP 3260 (iSCSI) |流入 |LAN |否 |此端口用于通过 iSCSI 访问数据。 |
 
 <sup>1</sup> 无需在公共 Internet 上打开任何入站端口。
 
@@ -124,12 +129,12 @@ ms.lasthandoff: 11/15/2017
 | --- | --- |
 | `https://*.storsimple.windowsazure.com/*`<br>`https://*.accesscontrol.windows.net/*`<br>`https://*.servicebus.windows.net/*` <br>`https://login.windows.net`|StorSimple Device Manager 服务<br>访问控制服务<br>Azure 服务总线<br>身份验证服务|
 | `http://*.backup.windowsazure.com` |设备注册 |
-| `http://crl.microsoft.com/pki/*`<br>`http://www.microsoft.com/pki/*` |证书吊销 |
+| `https://crl.microsoft.com/pki/*`<br>`https://www.microsoft.com/pki/*` |证书吊销 |
 | `https://*.core.windows.net/*`<br>`https://*.data.microsoft.com`<br>`http://*.msftncsi.com` |Azure 存储帐户和监视 |
-| `http://*.windowsupdate.microsoft.com`<br>`https://*.windowsupdate.microsoft.com`<br>`http://*.update.microsoft.com`<br> `https://*.update.microsoft.com`<br>`http://*.windowsupdate.com`<br>`http://download.microsoft.com`<br>`http://wustat.windows.com`<br>`http://ntservicepack.microsoft.com` |Microsoft 更新服务器<br> |
+| `https://*.windowsupdate.microsoft.com`<br>`https://*.windowsupdate.microsoft.com`<br>`https://*.update.microsoft.com`<br> `https://*.update.microsoft.com`<br>`http://*.windowsupdate.com`<br>`https://download.microsoft.com`<br>`http://wustat.windows.com`<br>`https://ntservicepack.microsoft.com` |Microsoft 更新服务器<br> |
 | `http://*.deploy.akamaitechnologies.com` |Akamai CDN |
 | `https://*.partners.extranet.microsoft.com/*` |支持包 |
-| `http://*.data.microsoft.com ` |Windows 中的遥测服务，请参阅[update for customer experience and diagnostic telemetry](https://support.microsoft.com/en-us/kb/3068708)（客户体验和诊断遥测的更新） |
+| `https://*.data.microsoft.com` |Windows 中的遥测服务，请参阅[update for customer experience and diagnostic telemetry](https://support.microsoft.com/en-us/kb/3068708)（客户体验和诊断遥测的更新） |
 
 ## <a name="next-steps"></a>后续步骤
 * [Prepare the portal to deploy your StorSimple Virtual Array](storsimple-virtual-array-deploy1-portal-prep.md)（准备门户以部署 StorSimple Virtual Array）

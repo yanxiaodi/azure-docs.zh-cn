@@ -4,22 +4,22 @@ description: 规划将 IaaS 资源从经典部署模型迁移到 Azure 资源管
 services: virtual-machines-windows
 documentationcenter: ''
 author: singhkays
-manager: jeconnoc
+manager: gwallace
 editor: ''
 tags: azure-resource-manager
 ms.assetid: 78492a2c-2694-4023-a7b8-c97d3708dcb7
 ms.service: virtual-machines-windows
 ms.workload: infrastructure-services
 ms.tgt_pltfrm: vm-windows
-ms.devlang: na
 ms.topic: article
 ms.date: 04/01/2017
 ms.author: kasing
-ms.openlocfilehash: 32e595b6ae01e77289a81734f61b9036835dd2fd
-ms.sourcegitcommit: 59914a06e1f337399e4db3c6f3bc15c573079832
-ms.translationtype: HT
+ms.openlocfilehash: aa36051f65936f25e4f2cc3bf03619b0f66ce5a6
+ms.sourcegitcommit: 19a821fc95da830437873d9d8e6626ffc5e0e9d6
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/20/2018
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "70165305"
 ---
 # <a name="planning-for-migration-of-iaas-resources-from-classic-to-azure-resource-manager"></a>规划将 IaaS 资源从经典部署模型迁移到 Azure 资源管理器
 尽管 Azure 资源管理器提供了许多精彩功能，但请务必计划迁移，以确保一切顺利进行。 花时间进行规划可确保执行迁移活动时不会遇到问题。
@@ -78,8 +78,8 @@ ms.lasthandoff: 04/20/2018
 
   针对确切方案（计算、网络和存储）执行实验室测试是确保顺利迁移的最佳办法。 这有助于确保：
 
-  - 待测试的是完全独立的实验室或现有的非生产环境。 建议使用可反复迁移和破坏性修改的完全独立的实验室。  下面列出了用于收集/水化实际订阅的元数据的脚本。
-  - 在单独的订阅中创建实验室是个好办法。 原因是实验室将被反复拆毁，单独拥有独立订阅可降低意外删除某实际内容的可能性。
+- 待测试的是完全独立的实验室或现有的非生产环境。 建议使用可反复迁移和破坏性修改的完全独立的实验室。  下面列出了用于收集/水化实际订阅的元数据的脚本。
+- 在单独的订阅中创建实验室是个好办法。 原因是实验室将被反复拆毁，单独拥有独立订阅可降低意外删除某实际内容的可能性。
 
   可以使用 AsmMetadataParser 工具实现此操作。 [在此处了解有关该工具的详细信息](https://github.com/Azure/classic-iaas-resourcemanager-migration/tree/master/AsmToArmMigrationApiToolset)
 
@@ -113,40 +113,42 @@ ms.lasthandoff: 04/20/2018
 
 - **可用性集** - 对于要迁移到 Azure 资源管理器的虚拟网络 (vNet)，经典部署（即云服务）包含的 VM 必须全部位于同一个可用性集中，或者 VM 均不得位于任何可用性集中。 云服务中具有多个可用性集与 Azure 资源管理器不兼容，并且迁移将暂停。  此外，不能出现一些 VM 位于可用性集，而一些 VM 不位于可用性集的情况。 若要解决此问题，需要修正或重新配置云服务。  请相应地进行规划，因为这可能很耗时。
 
-- **Web/辅助角色部署** - 包含 Web 和辅助角色的云服务无法迁移到 Azure 资源管理器。 必须先从虚拟网络中删除 Web/辅助角色，才能开始迁移。  典型的解决方案只是将 Web/辅助角色实例移到单独的经典虚拟网络中，该网络也链接到了 ExpressRoute 回路，或者将代码迁移到较新的 PaaS 应用服务（此讨论已超出本文范围）中。 在前一个重新部署用例中，创建了新的经典虚拟网络，将该 Web/辅助角色移动/重新部署到该新虚拟网络，然后从正在删除的虚拟网络中删除这些部署。 无需更改代码。 新的[虚拟网络对等互连](../../virtual-network/virtual-network-peering-overview.md)功能可以用来使包含 Web/辅助角色的经典虚拟网络和同一 Azure 区域中的其他虚拟网络（如正在迁移的虚拟网络）通力合作（**虚拟网络迁移完成后，对等虚拟网络无法迁移**），从而提供没有性能损失和延迟/带宽损失的相同功能。 鉴于增加了[虚拟网络对等互连](../../virtual-network/virtual-network-peering-overview.md)，现可轻易缓解 Web/辅助角色部署，且不会阻止到 Azure 资源管理器的迁移。
+- **Web/辅助角色部署** - 包含 Web 和辅助角色的云服务无法迁移到 Azure 资源管理器。 若要迁移 web 角色和辅助角色的内容, 需要将代码本身迁移到较新的 PaaS 应用服务 (此讨论超出了本文档的范围)。 如果希望将 web/辅助角色保持原样, 但将经典 Vm 迁移到资源管理器部署模型, 则必须先从虚拟网络中删除 web/辅助角色, 然后才能开始迁移。  典型的解决方案是将 web/辅助角色实例移到还链接到 ExpressRoute 线路的单独的经典虚拟网络。 在以前的重新部署用例中, 创建新的经典虚拟网络, 将 web/辅助角色移动/重新部署到该新虚拟网络, 然后从要移动的虚拟网络中删除这些部署。 无需更改代码。 新的[虚拟网络对等互连](../../virtual-network/virtual-network-peering-overview.md)功能可以用来使包含 Web/辅助角色的经典虚拟网络和同一 Azure 区域中的其他虚拟网络（如正在迁移的虚拟网络）通力合作（**虚拟网络迁移完成后，对等虚拟网络无法迁移**），从而提供没有性能损失和延迟/带宽损失的相同功能。 鉴于增加了[虚拟网络对等互连](../../virtual-network/virtual-network-peering-overview.md)，现可轻易缓解 Web/辅助角色部署，且不会阻止到 Azure 资源管理器的迁移。
 
-- **Azure 资源管理器配额** - 对于经典部署模型和 Azure 资源管理器部署模型，Azure 区域都有单独的配额/限制。 即使在不使用新硬件的迁移方案中*（我们正在将现有的 VM 从经典部署模型切换到 Azure 资源管理器部署模型）*，Azure 资源管理器配额仍需处于容量充足的位置，才能开始迁移。 下面列出了我们已知的导致问题的主要限制。  开具配额支持票证来提高限制。
+- **Azure 资源管理器配额** - 对于经典部署模型和 Azure 资源管理器部署模型，Azure 区域都有单独的配额/限制。 即使在不使用新硬件的迁移方案中 *（我们正在将现有的 VM 从经典部署模型切换到 Azure 资源管理器部署模型）* ，Azure 资源管理器配额仍需处于容量充足的位置，才能开始迁移。 下面列出了我们已知的导致问题的主要限制。  开具配额支持票证来提高限制。
 
     > [!NOTE]
     > 需要在与要迁移的当前环境相同的区域中提高这些限制。
     >
 
-    - 网络接口
-    - 负载均衡器
-    - 公共 IP
-    - 静态公共 IP
-    - 核心数
-    - 网络安全组
-    - 路由表
+  - 网络接口
+  - 负载平衡器
+  - 公共 IP
+  - 静态公共 IP
+  - 核心数
+  - 网络安全组
+  - 路由表
 
     可通过最新版 Azure PowerShell 使用以下命令查看当前的 Azure 资源管理器配额。
+    
+    [!INCLUDE [updated-for-az.md](../../../includes/updated-for-az.md)]
 
     **计算**（核心数、可用性集数）
 
     ```powershell
-    Get-AzureRmVMUsage -Location <azure-region>
+    Get-AzVMUsage -Location <azure-region>
     ```
 
-    **网络***（虚拟网络、静态公共 IP、公共 IP、网络安全组、网络接口、负载均衡器和路由表）*
+    **网络** *（虚拟网络、静态公共 IP、公共 IP、网络安全组、网络接口、负载均衡器和路由表）*
 
     ```powershell
-    Get-AzureRmUsage /subscriptions/<subscription-id>/providers/Microsoft.Network/locations/<azure-region> -ApiVersion 2016-03-30 | Format-Table
+    Get-AzUsage /subscriptions/<subscription-id>/providers/Microsoft.Network/locations/<azure-region> -ApiVersion 2016-03-30 | Format-Table
     ```
 
-    **存储***（存储帐户）*
+    **存储** *（存储帐户）*
 
     ```powershell
-    Get-AzureRmStorageUsage
+    Get-AzStorageUsage
     ```
 
 - **Azure 资源管理器 API 限制** - 如果有足够大的环境（如 在 VNET 中有 > 400 VM），则可能达到 Azure 资源管理器中的写入的默认 API 限制（当前为 `1200 writes/hour`）。 开始迁移前，应开具支持票证为订阅提高此限制。
@@ -154,7 +156,7 @@ ms.lasthandoff: 04/20/2018
 
 - **预配超时 VM 状态** - 如果任何虚拟机具有状态 `provisioning timed out`，则需要在迁移前解决此问题。 执行此操作的唯一方法是通过取消预配/重新预配 VM（删除、保留磁盘并重新创建 VM）来使用停机时间。
 
-- **RoleStateUnknown VM 状态** - 如果迁移因 `role state unknown` 错误消息暂停，请使用门户检查 VM 并确保其正常运行。 此错误通常数分钟后会自行消失（无需修正），通常属于虚拟机 `start`、`stop` 和 `restart` 操作期间看到的过渡类型。 **建议做法：**数分钟后尝试再次迁移。
+- **RoleStateUnknown VM 状态** - 如果迁移因 `role state unknown` 错误消息暂停，请使用门户检查 VM 并确保其正常运行。 此错误通常数分钟后会自行消失（无需修正），通常属于虚拟机 `start`、`stop` 和 `restart` 操作期间看到的过渡类型。 **建议做法：** 数分钟后尝试再次迁移。
 
 - **Fabric 群集不存在** - 在某些情况下，由于各种原因，某些 VM 无法迁移。 已知情况之一是当 VM 创建于最近（过去一周左右），且碰巧获得尚未为 Azure 资源管理器工作负荷配备的 Azure 群集。  将收到一条错误消息，指出无法迁移 `fabric cluster does not exist` 和 VM。 等待数天通常可解决此特殊问题，因为群集会很快启用 Azure 资源管理器。 但是，一个直接的解决方法是对 VM 执行 `stop-deallocate`，继续迁移，并在迁移后在 Azure 资源管理器中开始 VM 备份。
 
@@ -173,7 +175,7 @@ ms.lasthandoff: 04/20/2018
 
 1. 使用递增的优先级规划和安排虚拟网络（迁移的最小单位）。  首先处理简单的虚拟网络，然后循序渐进到更复杂的虚拟网络。
 2. 大多数客户都有非生产环境和生产环境。  最后安排生产。
-3. **（可选）**安排具有足够缓冲区的维护停机时间，以防出现意外。
+3. **（可选）** 安排具有足够缓冲区的维护停机时间，以防出现意外。
 4. 出现问题时，与支持团队沟通并保持一致。
 
 ### <a name="patterns-of-success"></a>成功模式
@@ -200,11 +202,11 @@ ms.lasthandoff: 04/20/2018
 
 对现在想要在 Azure 资源管理器中启用哪些服务具有目的性。  许多客户找到以下关于其 Azure 环境令人关注的事实：
 
-- [基于角色的访问控制](../../azure-resource-manager/resource-group-overview.md#access-control)。
-- [使用 Azure 资源管理器模板以更轻松、更可控的方式完成部署](../../azure-resource-manager/resource-group-overview.md#template-deployment)。
+- [基于角色的访问控制](../../role-based-access-control/overview.md)。
+- [使用 Azure 资源管理器模板以更轻松、更可控的方式完成部署](../../azure-resource-manager/template-deployment-overview.md)。
 - [标记](../../azure-resource-manager/resource-group-using-tags.md)。
 - [活动控制](../../azure-resource-manager/resource-group-audit.md)
-- [Azure 策略](../../azure-policy/azure-policy-introduction.md)
+- [Azure 策略](../../governance/policy/overview.md)
 
 ### <a name="pitfalls-to-avoid"></a>需避免的错误
 
@@ -217,6 +219,8 @@ ms.lasthandoff: 04/20/2018
 * [有关平台支持的从经典部署模型到 Azure 资源管理器部署模型的迁移的技术深入探讨](migration-classic-resource-manager-deep-dive.md?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json)
 * [使用 PowerShell 将 IaaS 资源从经典部署模型迁移到 Azure 资源管理器](migration-classic-resource-manager-ps.md?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json)
 * [使用 CLI 将 IaaS 资源从经典部署模型迁移到 Azure 资源管理器](../linux/migration-classic-resource-manager-cli.md?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json)
+* [VPN 网关从经典部署模型迁移到资源管理器部署模型](https://docs.microsoft.com/azure/vpn-gateway/vpn-gateway-classic-resource-manager-migration)
+* [将 ExpressRoute 线路和关联的虚拟网络从经典部署模型迁移到资源管理器部署模型](https://docs.microsoft.com/azure/expressroute/expressroute-migration-classic-resource-manager)
 * [用于帮助将 IaaS 资源从经典部署模型迁移到 Azure 资源管理器部署模型的社区工具](migration-classic-resource-manager-community-tools.md?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json)
 * [查看最常见的迁移错误](migration-classic-resource-manager-errors.md?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json)
 * [查看有关将 IaaS 资源从经典部署模型迁移到 Azure 资源管理器部署模型的最常见问题](migration-classic-resource-manager-faq.md?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json)

@@ -1,26 +1,22 @@
 ---
-title: U-SQL 目录入门 | Microsoft Docs
-description: 了解如何使用 U-SQL 目录共享代码和数据。
+title: 在 Azure Data Lake Analytics 中使用 U-SQL 目录
+description: 了解如何使用 U-SQL 目录共享代码和数据。 创建表值函数、创建视图、创建表并对其进行查询。
 services: data-lake-analytics
-documentationcenter: ''
-author: saveenr
-manager: saveenr
-editor: cgronlun
-ms.assetid: 57143396-ab86-47dd-b6f8-613ba28c28d2
 ms.service: data-lake-analytics
-ms.devlang: na
-ms.topic: article
-ms.tgt_pltfrm: na
-ms.workload: big-data
-ms.date: 05/09/2017
+author: saveenr
 ms.author: saveenr
-ms.openlocfilehash: b39b5250cc042c393216784128ffc4e2f1288f04
-ms.sourcegitcommit: 8aab1aab0135fad24987a311b42a1c25a839e9f3
-ms.translationtype: HT
+ms.reviewer: jasonwhowell
+ms.assetid: 57143396-ab86-47dd-b6f8-613ba28c28d2
+ms.topic: conceptual
+ms.date: 05/09/2017
+ms.openlocfilehash: f3b9f14be4422373fb30f8c3d4909fd9c9546fdf
+ms.sourcegitcommit: 2d9a9079dd0a701b4bbe7289e8126a167cfcb450
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/16/2018
+ms.lasthandoff: 09/29/2019
+ms.locfileid: "71672850"
 ---
-# <a name="get-started-with-the-u-sql-catalog"></a>U-SQL 目录入门
+# <a name="get-started-with-the-u-sql-catalog-in-azure-data-lake-analytics"></a>Azure Data Lake Analytics U-SQL 目录入门
 
 ## <a name="create-a-tvf"></a>创建 TVF
 
@@ -69,7 +65,7 @@ GROUP BY Region
 HAVING SUM(Duration) > 200;
 
 OUTPUT @res
-    TO "/output/SerachLog-use-tvf.csv"
+    TO "/output/SearchLog-use-tvf.csv"
     ORDER BY TotalDuration DESC
     USING Outputters.Csv();
 ```

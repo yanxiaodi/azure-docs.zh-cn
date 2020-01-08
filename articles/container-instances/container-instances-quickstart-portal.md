@@ -1,67 +1,68 @@
 ---
-title: 快速入门 - 使用 Azure 门户创建首个 Azure 容器实例容器
-description: 在本快速入门中，我们将使用 Azure 门户在 Azure 容器实例中部署一个容器
+title: 快速入门 - 将 Docker 容器部署到 Azure 容器实例 - 门户
+description: 本快速入门将使用 Azure 门户快速部署在隔离的 Azure 容器实例中运行的容器化 Web 应用
 services: container-instances
-author: mmacy
-manager: jeconnoc
+author: dlepow
+manager: gwallace
 ms.service: container-instances
 ms.topic: quickstart
-ms.date: 05/11/2018
-ms.author: marsma
-ms.custom: mvc
-ms.openlocfilehash: 6aa6fb27b2aa7c8b9614e5812fadc629b1e185f8
-ms.sourcegitcommit: fc64acba9d9b9784e3662327414e5fe7bd3e972e
+ms.date: 04/17/2019
+ms.author: danlep
+ms.custom: seodec18, mvc
+ms.openlocfilehash: bf3bea07fa2fcb67a467d4087ea9e2ccbfd95206
+ms.sourcegitcommit: 4b431e86e47b6feb8ac6b61487f910c17a55d121
 ms.translationtype: HT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/12/2018
+ms.lasthandoff: 07/18/2019
+ms.locfileid: "68325801"
 ---
-# <a name="quickstart-create-your-first-container-in-azure-container-instances"></a>快速入门：在 Azure 容器实例中创建第一个容器
+# <a name="quickstart-deploy-a-container-instance-in-azure-using-the-azure-portal"></a>快速入门：使用 Azure 门户在 Azure 中部署容器实例
 
-使用 Azure 容器实例，可以在 Azure 中轻松创建和管理 Docker 容器，无需预配虚拟机或采用更高级别的服务。 在本快速入门中，将使用 Azure 门户在 Azure 中创建容器，再通过完全限定的域名 (FQDN) 向 Internet 公开该容器。 配置一些设置后，你将在浏览器中看到以下内容：
+使用 Azure 容器实例在 Azure 中快速方便地运行无服务器 Docker 容器。 当你不需要像 AzureKubernetes 服务这样的完整容器业务流程平台时，可以按需将应用程序部署到容器实例。
 
-![在浏览器中显示的使用 Azure 容器实例部署的应用][aci-portal-07]
+本快速入门将使用 Azure 门户部署一个独立的 Docker 容器，并使其应用程序可通过完全限定的域名 (FQDN) 使用。 在配置一些设置并部署容器后，你可以浏览到正在运行的应用程序：
+
+![在浏览器中显示的已部署到 Azure 容器实例的应用][aci-portal-07]
 
 ## <a name="sign-in-to-azure"></a>登录 Azure
 
 通过 https://portal.azure.com 登录到 Azure 门户。
 
-如果还没有 Azure 订阅，可以在开始前创建一个[免费帐户][azure-free-account]。
+如果没有 Azure 订阅，请在开始之前创建一个[免费帐户][azure-free-account]。
 
 ## <a name="create-a-container-instance"></a>创建容器实例
 
-选择“创建资源” > “容器” > “容器实例”。
+选择“创建资源” > “容器” > “容器实例”    。
 
 ![开始在 Azure 门户中创建新的容器实例][aci-portal-01]
 
-在“容器名称”、“容器映像”和“资源组”文本框中输入以下值。 将其他值保留为默认值，然后选择“确定”。
+在“基本信息”页的“资源组”、“容器名称”和“容器映像”文本框中输入以下值     。 将其他值保留为默认值，然后选择“确定”  。
 
+* 资源组：“新建” > `myresourcegroup` 
 * 容器名称：`mycontainer`
-* 容器映像：`microsoft/aci-helloworld`
-* 资源组：`myResourceGroup`
+* 容器映像：`mcr.microsoft.com/azuredocs/aci-helloworld`
 
 ![在 Azure 门户中配置新的容器实例的基本设置][aci-portal-03]
 
-可以在 Azure 容器实例中创建 Windows 和 Linux 容器。 对于本快速入门，请保留默认设置 **Linux** 来部署基于 Linux 的 `microsoft/aci-helloworld` 映像。
+对于本快速入门，使用“公共”的默认“映像类型”设置以部署公共 Microsoft `aci-helloworld` 映像   。 此 Linux 映像打包了一个用 Node.js 编写的小型 Web 应用程序，该应用程序提供静态 HTML 页面。
 
-在“配置”下，为容器指定一个 **DNS 名称标签**。 该名称在创建容器实例的 Azure 区域中必须是唯一的。 容器将可通过 `<dns-name-label>.<region>.azurecontainer.io` 公开访问。
-
-将“配置”中的其他设置保留为各自的默认设置，然后选择“确定”来验证配置。
+在“网络”页，为容器指定一个“DNS 名称标签”   。 该名称在创建容器实例的 Azure 区域中必须是唯一的。 容器将可通过 `<dns-name-label>.<region>.azurecontainer.io` 公开访问。 如果收到“DNS 名称标签不可用”错误消息，请尝试使用一个不同的 DNS 名称标签。
 
 ![在 Azure 门户中配置新的容器实例][aci-portal-04]
 
-完成验证后，将显示容器的设置摘要。 选择“确定”提交容器部署请求。
+将其他设置保留为默认设置，然后选择“查看 + 创建”  。
+
+完成验证后，将显示容器的设置摘要。 选择“创建”  提交容器部署请求。
 
 ![Azure 门户中新的容器实例的设置摘要][aci-portal-05]
 
-当部署启动时，会在门户仪表板上显示一个磁贴，指明部署正在进行。 在部署后，该磁贴将显示新的容器实例。
+当部署启动时，会显示一个通知，指明部署正在进行。 部署了容器组后，会显示另一个通知。
 
-![Azure 门户中新的容器实例的创建进度][aci-portal-08]
-
-选择“mycontainer”容器实例来显示其属性。 记下容器实例的 **FQDN**（完全限定的域名）及其**状态**。
+通过导航到“资源组” > “myresourcegroup” > “mycontainer”打开容器组的概述    。 记下容器实例的 **FQDN**（完全限定的域名）及其**状态**。
 
 ![Azure 门户中的容器组概述][aci-portal-06]
 
-在其**状态**为“正在运行”后，在浏览器中导航到容器的 FQDN。
+在其**状态**为“正在运行”  后，在浏览器中导航到容器的 FQDN。
 
 ![在浏览器中显示的使用 Azure 容器实例部署的应用][aci-portal-07]
 
@@ -71,23 +72,23 @@ ms.lasthandoff: 05/12/2018
 
 当排查容器或其运行的应用程序的问题时，查看容器实例的日志非常有用。
 
-若要查看容器的日志，请在“设置”下选择“容器”，然后选择“日志”。 应当会看到在浏览器中查看应用程序时生成的 HTTP GET 请求。
+若要查看容器的日志，请在“设置”  下选择“容器”  ，然后选择“日志”  。 应当会看到在浏览器中查看应用程序时生成的 HTTP GET 请求。
 
 ![Azure 门户中的容器日志][aci-portal-11]
 
 ## <a name="clean-up-resources"></a>清理资源
 
-完成容器后，选择 *mycontainer* 容器实例的“概述”，然后选择“删除”。
+完成容器后，选择 *mycontainer* 容器实例的“概述”，然后选择“删除”。  
 
 ![在 Azure 门户中删除容器实例][aci-portal-09]
 
-在出现确认对话框时选择“是”。
+在出现确认对话框时选择“是”。 
 
 ![Azure 门户中容器实例的删除确认][aci-portal-10]
 
 ## <a name="next-steps"></a>后续步骤
 
-在本快速入门中，你已基于公共 Docker 中心注册表中的映像创建了 Azure 容器实例。 若要亲自基于专用 Azure 容器注册表生成容器映像并将其部署到 Azure 容器实例，请继续阅读 Azure 容器实例教程。
+在本快速入门中，你已基于公共 Microsoft 映像创建了一个 Azure 容器实例。 若要基于专用 Azure 容器注册表生成容器映像并部署它，请继续学习 Azure 容器实例教程。
 
 > [!div class="nextstepaction"]
 > [Azure 容器实例教程](./container-instances-tutorial-prepare-app.md)

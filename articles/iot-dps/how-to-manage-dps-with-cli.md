@@ -1,30 +1,27 @@
 ---
-title: 如何使用 Azure CLI 2.0 和 IoT 扩展管理设备预配服务 | Microsoft Docs
-description: 了解如何使用 Azure CLI 2.0 和 IoT 扩展来管理设备预配服务
-services: iot-dps
-keywords: ''
+title: 如何使用 Azure CLI 和 IoT 扩展来管理 IoT 中心设备预配服务 | Microsoft Docs
+description: 了解如何使用 Azure CLI 和 IoT 扩展来管理 IoT 中心设备预配服务
 author: chrissie926
 ms.author: menchi
 ms.date: 01/17/2018
-ms.topic: tutorial
+ms.topic: conceptual
 ms.service: iot-dps
-documentationcenter: ''
-manager: timlt
-ms.devlang: na
-ms.custom: mvc
-ms.openlocfilehash: 8e8bbf5808c11709a49f1cb6ebeba410837e5810
-ms.sourcegitcommit: e2adef58c03b0a780173df2d988907b5cb809c82
-ms.translationtype: HT
+services: iot-dps
+manager: briz
+ms.openlocfilehash: 59d2277bd99fac1e8357c1b0d7336ca7451bf8dc
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/28/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "62122857"
 ---
-# <a name="how-to-use-azure-cli-20-and-the-iot-extension-to-manage-device-provisioning-services"></a>如何使用 Azure CLI 2.0 和 IoT 扩展来管理设备预配服务
+# <a name="how-to-use-azure-cli-and-the-iot-extension-to-manage-the-iot-hub-device-provisioning-service"></a>如何使用 Azure CLI 和 IoT 扩展来管理 IoT 中心设备预配服务
 
-[Azure CLI 2.0](https://docs.microsoft.com/cli/azure?view=azure-cli-latest) 是一个开源跨平台命令行工具，用于管理 IoT Edge 等 Azure 资源。 Azure CLI 2.0 适用于 Windows、Linux 和 MacOS。 使用 Azure CLI 2.0 可以管理 Azure IoT 中心资源、设备预配服务实例和现成的链接中心。
+[Azure CLI](https://docs.microsoft.com/cli/azure?view=azure-cli-latest) 是一个开源跨平台命令行工具，用于管理 IoT Edge 等 Azure 资源。 Azure CLI 适用于 Windows、Linux 和 MacOS。 使用 Azure CLI 可以管理 Azure IoT 中心资源、设备预配服务实例和现成的链接中心。
 
-IoT 扩展丰富了 Azure CLI 2.0 的功能，例如设备管理和完整的 IoT Edge 功能。
+IoT 扩展丰富了 Azure CLI 的功能，例如设备管理和完整的 IoT Edge 功能。
 
-在本教程中，我们先完成设置 Azure CLI 2.0 和 IoT 扩展的步骤。 然后了解如何运行 CLI 命令来执行基本的设备预配服务操作。 
+在本教程中，我们先完成设置 Azure CLI 和 IoT 扩展的步骤。 然后了解如何运行 CLI 命令来执行基本的设备预配服务操作。 
 
 ## <a name="installation"></a>安装 
 
@@ -32,9 +29,9 @@ IoT 扩展丰富了 Azure CLI 2.0 的功能，例如设备管理和完整的 IoT
 
 需要 [Python 2.7x 或 Python 3.x](https://www.python.org/downloads/)。
 
-### <a name="step-2---install-azure-cli-20"></a>步骤 2 - 安装 Azure CLI 2.0
+### <a name="step-2---install-the-azure-cli"></a>步骤 2 - 安装 Azure CLI
 
-遵照[安装说明](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest)在环境中安装 Azure CLI 2.0。 Azure CLI 2.0 版本必须至少是 2.0.24 或更高。 请使用 `az –version` 验证版本。 此版本支持 az 扩展命令，并引入了 Knack 命令框架。 在 Windows 上，一种简单的安装方法是下载并安装 [MSI](https://aka.ms/InstallAzureCliWindows)。
+按照[安装说明](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest)在环境中安装 Azure CLI。 Azure CLI 版本必须至少是 2.0.24 或更高版本。 请使用 `az –version` 验证版本。 此版本支持 az 扩展命令，并引入了 Knack 命令框架。 在 Windows 上，一种简单的安装方法是下载并安装 [MSI](https://aka.ms/InstallAzureCliWindows)。
 
 ### <a name="step-3---install-iot-extension"></a>步骤 3 - 安装 IoT 扩展
 
@@ -42,7 +39,7 @@ IoT 扩展丰富了 Azure CLI 2.0 的功能，例如设备管理和完整的 IoT
 
 
 ## <a name="basic-device-provisioning-service-operations"></a>基本的设备预配服务操作
-该示例演示如何使用 CLI 命令登录到 Azure 帐户、创建 Azure 资源组（保存 Azure 解决方案相关资源的容器）、创建 IoT 中心、创建设备预配服务、列出现有的设备预配服务，并创建链接的 IoT 中心。 
+该示例演示如何使用 CLI 命令登录到 Azure 帐户、创建 Azure 资源组（保存 Azure 解决方案相关资源的容器）、创建 IoT 中心、创建设备预配服务、列出现有的设备预配服务，以及如何创建链接的 IoT 中心。 
 
 在开始之前，请完成前面所述的安装步骤。 如果没有 Azure 帐户，可以立即[创建一个免费帐户](https://azure.microsoft.com/free/?v=17.39a)。 
 
@@ -64,7 +61,7 @@ IoT 扩展丰富了 Azure CLI 2.0 的功能，例如设备管理和完整的 IoT
 
     az iot dps create --resource-group IoTHubBlogDemo --name demodps
 
-![创建 DPS][3]
+![创建设备预配服务][3]
 
     az iot dps create --resource-group IoTHubBlogDemo --name demodps2
 
@@ -72,7 +69,7 @@ IoT 扩展丰富了 Azure CLI 2.0 的功能，例如设备管理和完整的 IoT
 
     az iot dps list --resource-group IoTHubBlogDemo
 
-![列出 DPS][4]
+![列出设备预配服务][4]
 
 
 ### <a name="5-create-an-iot-hub-blogdemohub-under-the-newly-created-resource-group"></a>5.在新建的资源组下创建 IoT 中心 blogDemoHub
@@ -97,7 +94,7 @@ IoT 扩展丰富了 Azure CLI 2.0 的功能，例如设备管理和完整的 IoT
 
 
 ## <a name="next-steps"></a>后续步骤
-本教程介绍了如何：
+在本教程中，你将了解：
 
 > [!div class="checklist"]
 > * 注册设备

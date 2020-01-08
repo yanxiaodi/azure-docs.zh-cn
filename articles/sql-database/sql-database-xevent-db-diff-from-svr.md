@@ -2,42 +2,44 @@
 title: SQL 数据库中的扩展事件 | Microsoft 文档
 description: 介绍 Azure SQL 数据库中的扩展事件 (XEvents)，以及这些事件会话与 Microsoft SQL Server 中的事件会话有怎样的细微差别。
 services: sql-database
-author: MightyPen
-manager: craigg
 ms.service: sql-database
-ms.custom: monitor & tune
-ms.workload: On Demand
-ms.topic: article
-ms.date: 04/01/2018
+ms.subservice: monitor
+ms.custom: ''
+ms.devlang: ''
+ms.topic: conceptual
+author: MightyPen
 ms.author: genemi
-ms.openlocfilehash: 4a1a8a332628e79972e7c03dbc2ac839f244a002
-ms.sourcegitcommit: 3a4ebcb58192f5bf7969482393090cb356294399
-ms.translationtype: HT
+ms.reviewer: jrasnik
+ms.date: 12/19/2018
+ms.openlocfilehash: f9af487e2eb35e7dc94e1b70945d5c03ffdde2ba
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/06/2018
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68566083"
 ---
 # <a name="extended-events-in-sql-database"></a>SQL 数据库中的扩展事件
 [!INCLUDE [sql-database-xevents-selectors-1-include](../../includes/sql-database-xevents-selectors-1-include.md)]
 
-本主题说明 Azure SQL 数据库中的扩展事件与 Microsoft SQL server 中的扩展事件在实现方式上有怎样的细微差别。
+本主题说明 Azure SQL 数据库中的扩展事件与 Microsoft SQL server 中的扩展事件在实现方式上的细微差别。
 
 - SQL 数据库 V12 在 2015 年下半年度推出了扩展事件功能。
-- SQL Server 自 2008 年开始即已推出扩展事件。
+- SQL Server 自 2008 年即已推出扩展事件。
 - SQL 数据库上的扩展事件功能集是强大的 SQL Server 功能子集。
 
 *XEvents* 是不正式的别名，有时在博客或其他非正式场合表示“扩展的事件”。
 
 针对 Azure SQL 数据库和 Microsoft SQL Server 的扩展事件的其他相关信息位于：
 
-- [快速入门：SQL Server 中的扩展事件](http://msdn.microsoft.com/library/mt733217.aspx)
-- [扩展的事件](http://msdn.microsoft.com/library/bb630282.aspx)
+- [快速入门：SQL Server 中的扩展事件](https://msdn.microsoft.com/library/mt733217.aspx)
+- [扩展的事件](https://msdn.microsoft.com/library/bb630282.aspx)
 
-## <a name="prerequisites"></a>先决条件
+## <a name="prerequisites"></a>系统必备
 
 本主题假设读者有以下方面的经验：
 
 - [Azure SQL 数据库服务](https://azure.microsoft.com/services/sql-database/)。
-- Microsoft SQL Server 中的[扩展事件](http://msdn.microsoft.com/library/bb630282.aspx)。
+- Microsoft SQL Server 中的[扩展事件](https://msdn.microsoft.com/library/bb630282.aspx)。
 
 - 有关扩展事件的许多文档都适用于 SQL Server 和 SQL 数据库。
 
@@ -66,10 +68,10 @@ ms.lasthandoff: 04/06/2018
 ## <a name="transact-sql-differences"></a>Transact-SQL 的差异
 
 
-- 当在 SQL Server 上执行 [CREATE EVENT SESSION](http://msdn.microsoft.com/library/bb677289.aspx) 命令时，请使用 **ON SERVER** 子句。 但在 SQL 数据库上，应改为使用 **ON DATABASE** 子句。
+- 当在 SQL Server 上执行 [CREATE EVENT SESSION](https://msdn.microsoft.com/library/bb677289.aspx) 命令时，请使用 **ON SERVER** 子句。 但在 SQL 数据库上，应改为使用 **ON DATABASE** 子句。
 
 
-- **ON DATABASE** 子句也适用于 [ALTER EVENT SESSION](http://msdn.microsoft.com/library/bb630368.aspx) 和 [DROP EVENT SESSION](http://msdn.microsoft.com/library/bb630257.aspx) Transact-SQL 命令。
+- **ON DATABASE** 子句也适用于 [ALTER EVENT SESSION](https://msdn.microsoft.com/library/bb630368.aspx) 和 [DROP EVENT SESSION](https://msdn.microsoft.com/library/bb630257.aspx) Transact-SQL 命令。
 
 
 - 最佳实践是在 **CREATE EVENT SESSION** 或 **ALTER EVENT SESSION** 语句中包含 **STARTUP_STATE = ON** 的事件会话选项。
@@ -77,9 +79,9 @@ ms.lasthandoff: 04/06/2018
 
 ## <a name="new-catalog-views"></a>新的目录视图
 
-扩展事件功能受多个[目录视图](http://msdn.microsoft.com/library/ms174365.aspx)的支持。 目录视图告诉你有关当前数据库中用户创建的事件会话的*元数据或定义*的信息。 视图不会返回有关活动事件会话的实例的信息。
+扩展事件功能受多个[目录视图](https://msdn.microsoft.com/library/ms174365.aspx)的支持。 目录视图显示有关当前数据库中用户创建的事件会话的*元数据或定义*的信息。 视图不会返回有关活动事件会话的实例的信息。
 
-| 目录视图<br/>名称 | 说明 |
+| 目录视图<br/>名称 | 描述 |
 |:--- |:--- |
 | **sys.database_event_session_actions** |返回针对事件会话的每个事件执行的每个操作所对应的行。 |
 | **sys.database_event_session_events** |返回事件会话中每个事件所对应的行。 |
@@ -87,13 +89,13 @@ ms.lasthandoff: 04/06/2018
 | **sys.database_event_session_targets** |返回事件会话的每个事件目标所对应的行。 |
 | **sys.database_event_sessions** |返回 SQL 数据库中每个事件会话所对应的行。 |
 
-在 Microsoft SQL Server 中，类似目录视图的名称包含 *.server\_* 而不是 *.database\_*。 名称模式类似于 **sys.server_event_%**。
+在 Microsoft SQL Server 中，类似目录视图的名称包含 *.server\_* 而不是 *.database\_* 。 名称模式类似于 **sys.server_event_%** 。
 
-## <a name="new-dynamic-management-views-dmvshttpmsdnmicrosoftcomlibraryms188754aspx"></a>新的动态管理视图 [(DMV)](http://msdn.microsoft.com/library/ms188754.aspx)
+## <a name="new-dynamic-management-views-dmvshttpsmsdnmicrosoftcomlibraryms188754aspx"></a>新的动态管理视图 [(DMV)](https://msdn.microsoft.com/library/ms188754.aspx)
 
-Azure SQL 数据库具有支持扩展事件的[动态管理视图 (DMV)](http://msdn.microsoft.com/library/bb677293.aspx)。 DMV 告诉你有关*活动*事件会话的信息。
+Azure SQL 数据库具有支持扩展事件的[动态管理视图 (DMV)](https://msdn.microsoft.com/library/bb677293.aspx)。 DMV 显示有关 *活动* 事件会话的信息。
 
-| DMV 的名称 | 说明 |
+| DMV 的名称 | 描述 |
 |:--- |:--- |
 | **sys.dm_xe_database_session_event_actions** |返回有关事件会话操作的信息。 |
 | **sys.dm_xe_database_session_events** |返回有关会话事件的信息。 |
@@ -113,7 +115,7 @@ Azure SQL 数据库具有支持扩展事件的[动态管理视图 (DMV)](http://
 - **sys.dm_xe_objects**
 - **sys.dm_xe_packages**
 
- <a name="sqlfindseventsactionstargets" id="sqlfindseventsactionstargets"></a>
+  <a name="sqlfindseventsactionstargets" id="sqlfindseventsactionstargets"></a>
 
 ## <a name="find-the-available-extended-events-actions-and-targets"></a>查找可用的扩展事件、操作和目标
 
@@ -146,11 +148,11 @@ SELECT
 
 以下是可以从 SQL 数据库上的事件会话捕获结果的目标：
 
-- [环形缓冲区目标](http://msdn.microsoft.com/library/ff878182.aspx) - 在内存中短暂保存事件数据。
-- [事件计数器目标](http://msdn.microsoft.com/library/ff878025.aspx) - 统计在扩展事件会话期间发生的所有事件。
-- [事件文件目标](http://msdn.microsoft.com/library/ff878115.aspx) - 将完整缓冲区写入 Azure 存储容器。
+- [环形缓冲区目标](https://msdn.microsoft.com/library/ff878182.aspx) - 在内存中短暂保存事件数据。
+- [事件计数器目标](https://msdn.microsoft.com/library/ff878025.aspx) - 统计在扩展事件会话期间发生的所有事件。
+- [事件文件目标](https://msdn.microsoft.com/library/ff878115.aspx) - 将完整缓冲区写入 Azure 存储容器。
 
-[Windows 事件跟踪 (ETW)](http://msdn.microsoft.com/library/ms751538.aspx) API 不适用于 SQL 数据库上的扩展事件。
+[Windows 事件跟踪 (ETW)](https://msdn.microsoft.com/library/ms751538.aspx) API 不适用于 SQL 数据库上的扩展事件。
 
 ## <a name="restrictions"></a>限制
 
@@ -169,13 +171,13 @@ SELECT
 
 - 读取
 - 写入
-- 列出
+- 列表
 
 ## <a name="performance-considerations"></a>性能注意事项
 
 在某些情况下，大量使用扩展事件可能会累积过多的活动内存，使整个系统变得不太正常。 因此，Azure SQL 数据库系统会动态设置和调整事件会话可以累积的活动内存量限制。 动态计算会考虑许多因素。
 
-如果收到错误消息，指出已强制实施内存最大值，则可以采取以下一些纠正措施：
+如果收到错误消息，指出已强制实施内存最大值，可采取以下纠正措施：
 
 - 运行更少的并发事件会话。
 - 通过对事件会话执行 **CREATE** 和 **ALTER** 语句，减少在 **MAX\_MEMORY** 子句中指定的内存量。
@@ -184,17 +186,17 @@ SELECT
 
 **事件文件**目标在将数据保存到 Azure 存储 Blob 时可能会遇到网络延迟或故障。 SQL 数据库中的其他事件可能会延迟，因为它们要等待网络通信完成。 这种延迟可能会导致工作负荷变慢。
 
-- 要缓解这种性能风险，请避免在事件会话定义中将 **EVENT_RETENTION_MODE** 选项设为 **NO_EVENT_LOSS**。
+- 若要缓解这种性能风险，请避免在事件会话定义中将 **EVENT_RETENTION_MODE** 选项设为 **NO_EVENT_LOSS**。
 
 ## <a name="related-links"></a>相关链接
 
 - [对 Azure 存储使用 Azure PowerShell](../storage/common/storage-powershell-guide-full.md)。
-- [Azure 存储 Cmdlet](http://msdn.microsoft.com/library/dn806401.aspx)
+- [Azure 存储 Cmdlet](https://docs.microsoft.com/powershell/module/Azure.Storage)
 - [对 Azure 存储使用 Azure PowerShell](../storage/common/storage-powershell-guide-full.md) - 提供有关 PowerShell 和 Azure 存储服务的综合信息。
 - [如何通过 .NET 使用 Blob 存储](../storage/blobs/storage-dotnet-how-to-use-blobs.md)
-- [CREATE CREDENTIAL (Transact-SQL)](http://msdn.microsoft.com/library/ms189522.aspx)
-- [CREATE EVENT SESSION (Transact-SQL)](http://msdn.microsoft.com/library/bb677289.aspx)
-- [Jonathan Kehayias 撰写的有关 Microsoft SQL Server 中扩展事件的博客文章](http://www.sqlskills.com/blogs/jonathan/category/extended-events/)
+- [CREATE CREDENTIAL (Transact-SQL)](https://msdn.microsoft.com/library/ms189522.aspx)
+- [CREATE EVENT SESSION (Transact-SQL)](https://msdn.microsoft.com/library/bb677289.aspx)
+- [Jonathan Kehayias 撰写的有关 Microsoft SQL Server 中扩展事件的博客文章](https://www.sqlskills.com/blogs/jonathan/category/extended-events/)
 
 
 - Azure *服务更新*网页，使用参数将范围缩小到 Azure SQL 数据库：
@@ -206,6 +208,6 @@ SELECT
 <!--
 ('lock_acquired' event.)
 
-- Code sample for SQL Server: [Determine Which Queries Are Holding Locks](http://msdn.microsoft.com/library/bb677357.aspx)
-- Code sample for SQL Server: [Find the Objects That Have the Most Locks Taken on Them](http://msdn.microsoft.com/library/bb630355.aspx)
+- Code sample for SQL Server: [Determine Which Queries Are Holding Locks](https://msdn.microsoft.com/library/bb677357.aspx)
+- Code sample for SQL Server: [Find the Objects That Have the Most Locks Taken on Them](https://msdn.microsoft.com/library/bb630355.aspx)
 -->

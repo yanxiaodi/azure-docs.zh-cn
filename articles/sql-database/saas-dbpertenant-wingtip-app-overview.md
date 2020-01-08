@@ -1,20 +1,22 @@
 ---
 title: Azure SQL 数据库多租户应用示例 - Wingtip SaaS | Microsoft Docs
 description: 借助使用 Azure SQL 数据库的示例多租户应用程序，了解 Wingtip SaaS 示例
-keywords: sql 数据库教程
 services: sql-database
-author: stevestein
-manager: craigg
 ms.service: sql-database
-ms.custom: scale out apps
-ms.topic: article
-ms.date: 04/01/2018
+ms.subservice: scenario
+ms.custom: ''
+ms.devlang: ''
+ms.topic: conceptual
+author: stevestein
 ms.author: sstein
-ms.openlocfilehash: cf54c789d766c4bd3d353028e75e34c961470070
-ms.sourcegitcommit: 9cdd83256b82e664bd36991d78f87ea1e56827cd
-ms.translationtype: HT
+ms.reviewer: ''
+ms.date: 09/24/2018
+ms.openlocfilehash: 16f4bb946af4720a327a8755c6bf9187f3b71ba6
+ms.sourcegitcommit: 7c4de3e22b8e9d71c579f31cbfcea9f22d43721a
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/16/2018
+ms.lasthandoff: 07/26/2019
+ms.locfileid: "68570338"
 ---
 # <a name="introduction-to-a-multitenant-saas-app-that-uses-the-database-per-tenant-pattern-with-sql-database"></a>多租户 SaaS 应用简介，该应用通过“每个租户各有数据库”模式使用 SQL 数据库
 
@@ -37,16 +39,16 @@ Wingtip SaaS 应用使用“每个租户各有数据库”模型。 它使用 SQ
 部署应用后，请浏览基于初始部署制作的以下教程。 这些教程探索常见 SaaS 模式，这些模式利用 SQL 数据库、Azure SQL 数据仓库和其他 Azure 服务的内置功能。 教程包括 PowerShell 脚本及详细说明。 这些说明可简化对应用程序中相同 SaaS 管理模式的理解和实现。
 
 
-| 教程 | 说明 |
+| 教程 | 描述 |
 |:--|:--|
 | [SQL 数据库多租户 SaaS 应用示例指南和提示](saas-tenancy-wingtip-app-guidance-tips.md) | 下载并运行 PowerShell 脚本，准备应用程序部件。 |
 |[部署和浏览 Wingtip SaaS 应用程序](saas-dbpertenant-get-started-deploy.md)|  使用 Azure 订阅部署并浏览 Wingtip SaaS 应用程序。 |
 |[预配和编录租户](saas-dbpertenant-provision-and-catalog.md)| 了解应用程序如何使用目录数据库连接到租户，以及目录如何将租户映射到其数据。 |
 |[监视和管理性能](saas-dbpertenant-performance-monitoring.md)| 了解如何使用 SQL 数据库的监视功能，以及如何设置在超出性能阈值时发出警报。 |
-|[使用 Azure Log Analytics 进行监视](saas-dbpertenant-log-analytics.md) | 了解如何使用 [Log Analytics](../log-analytics/log-analytics-overview.md) 监视多个池中的大量资源。 |
+|[监视 Azure Monitor 日志](saas-dbpertenant-log-analytics.md) | 了解如何使用[Azure Monitor 日志](../log-analytics/log-analytics-overview.md)来监视跨多个池的大量资源。 |
 |[还原单个租户](saas-dbpertenant-restore-single-tenant.md)| 了解如何将租户数据库还原到先前的时间点。 此外，请了解如何还原到并行数据库，这会使现有租户数据库保持联机。 |
 |[管理租户数据库架构](saas-tenancy-schema-management.md)| 了解如何跨所有租户数据库更新架构和更新参考数据。 |
-|[运行跨租户分布式查询](saas-tenancy-cross-tenant-reporting.md) | 创建即席分析数据库，并跨所有租户运行实时分布式查询。  |
+|[运行跨租户分布式查询](saas-tenancy-cross-tenant-reporting.md) | 创建即席分析数据库, 并跨所有租户运行实时分布式查询。  |
 |[对提取的租户数据运行分析](saas-tenancy-tenant-analytics.md) | 将租户数据提取到分析数据库或数据仓库，以运行脱机分析查询。 |
 
 

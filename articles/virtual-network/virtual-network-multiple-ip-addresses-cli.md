@@ -1,25 +1,24 @@
 ---
-title: 使用 Azure CLI 创建具有多个 IP 地址的 VM | Microsoft Docs
+title: 使用 Azure CLI 创建具有多个 IP 地址的 VM
+titlesuffix: Azure Virtual Network
 description: 了解如何使用 Azure 命令行接口 (CLI) 将多个 IP 地址分配给虚拟机。
 services: virtual-network
 documentationcenter: na
-author: jimdial
-manager: jeconnoc
-editor: ''
-tags: azure-resource-manager
-ms.assetid: ''
+author: KumudD
+manager: twooley
 ms.service: virtual-network
 ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 11/17/2016
-ms.author: jimdial
-ms.openlocfilehash: c11883156f53ab53ebe6f84d66232f81f8cf31ff
-ms.sourcegitcommit: 1362e3d6961bdeaebed7fb342c7b0b34f6f6417a
-ms.translationtype: HT
+ms.author: kumud
+ms.openlocfilehash: 3b00bbb5903156da625b7caaca9b1a2cff212421
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/18/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64699351"
 ---
 # <a name="assign-multiple-ip-addresses-to-virtual-machines-using-the-azure-cli"></a>使用 Azure CLI 将多个 IP 地址分配给虚拟机
 
@@ -33,7 +32,7 @@ ms.lasthandoff: 04/18/2018
 
 下面的步骤说明如何根据方案中所述，创建具有多个 IP 地址的示例虚拟机。 根据实现的需要，需要更改 "" 中的变量值和 IP 地址类型。 
 
-1. 安装 [Azure CLI 2.0](/cli/azure/install-az-cli2)（如果尚未安装）。
+1. 安装 [Azure CLI](/cli/azure/install-azure-cli)（如果尚未安装）。
 2. 通过完成[为 Linux VM 创建 SSH 公钥和私钥对](../virtual-machines/linux/mac-create-ssh-keys.md?toc=%2fazure%2fvirtual-network%2ftoc.json)中的步骤创建适用于 Linux VM 的 SSH 公钥和私钥对。
 3. 从命令行界面使用命令 `az login` 登录，并选择要使用的订阅。
 4. 通过在 Linux 或 Mac 计算机上执行以下脚本创建 VM。 该脚本创建一个资源组、一个虚拟网络 (VNet)、一个具有三个 IP 配置的 NIC 和一个附加有两个 NIC 的 VM。 NIC、公共 IP 地址、虚拟网络和 VM 资源必须存在于同一位置和同一订阅中。 虽然资源不必都存在于同一资源组中，但是在以下脚本中资源都存在于同一资源组中。
@@ -48,7 +47,7 @@ az group create --name $RgName --location $Location
     
 # Create a public IP address resource with a static IP address using the `--allocation-method Static` option. If you
 # do not specify this option, the address is allocated dynamically. The address is assigned to the resource from a pool
-# of IP adresses unique to each Azure region. Download and view the file from
+# of IP addresses unique to each Azure region. Download and view the file from
 # https://www.microsoft.com/en-us/download/details.aspx?id=41653 that lists the ranges for each region.
 
 PipName="myPublicIP"
@@ -110,7 +109,7 @@ az network nic ip-config create \
 
 # Create a third IP configuration, and associate it to the NIC. This configuration has  static private IP address and   # no public IP address.
 
-azure network nic ip-config create \
+az network nic ip-config create \
 --resource-group $RgName \
 --nic-name $NicName \
 --private-ip-address 10.0.0.6 \
@@ -125,13 +124,13 @@ azure network nic ip-config create \
 VmName="myVm"
 
 # Replace the value for the following **VmSize** variable with a value from the
-# https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-sizes rticle. The script fails if the VM size
-# is not supported in the location you select. Run the `azure vm sizes --location estcentralus` command to get a full list
+# https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-sizes article. The script fails if the VM size
+# is not supported in the location you select. Run the `azure vm sizes --location eastcentralus` command to get a full list
 # of VMs in US West Central, for example.
 
 VmSize="Standard_DS1"
 
-# Replace the value for the OsImage variable value with a value for *urn* from the utput returned by entering the
+# Replace the value for the OsImage variable value with a value for *urn* from the output returned by entering the
 # `az vm image list` command.
 
 OsImage="credativ:Debian:8:latest"
@@ -156,7 +155,7 @@ az vm create \
 
 除了创建具有附带 3 个 IP 配置的 NIC 的 VM，该脚本还创建：
 
-- 创建单个高级托管磁盘（默认情况下），但对于可以创建的磁盘类型，可以有其他选择。 有关详细信息，请阅读[使用 Azure CLI 2.0 创建 Linux VM](../virtual-machines/linux/quick-create-cli.md?toc=%2fazure%2fvirtual-network%2ftoc.json) 一文。
+- 创建单个高级托管磁盘（默认情况下），但对于可以创建的磁盘类型，可以有其他选择。 有关详细信息，请阅读[使用 Azure CLI 创建 Linux VM](../virtual-machines/linux/quick-create-cli.md?toc=%2fazure%2fvirtual-network%2ftoc.json) 一文。
 - 一个包含 1 个子网和 2 个公共 IP 地址的虚拟网络。 或者，可以使用*现有*虚拟网络、子网、NIC 或公共 IP 地址资源。 若要了解如何使用现有网络资源，而不是创建其他资源，请输入 `az vm create -h`。
 
 公共 IP 地址会产生少许费用。 有关 IP 地址定价的详细信息，请阅读 [IP 地址定价](https://azure.microsoft.com/pricing/details/ip-addresses)页。 在一个订阅中可以使用的公共 IP 地址数有限制。 有关限制的详细信息，请阅读 [Azure limits](../azure-subscription-service-limits.md#networking-limits)（Azure 限制）一文。
@@ -167,9 +166,9 @@ az vm create \
 
 ## <a name="add"></a>将 IP 地址添加到 VM
 
-完成以下步骤可将其他专用和公共 IP 地址添加到现有 Azure 网络接口。 这些示例是基于本文中所述的[方案](#Scenario)制作的。
+完成以下步骤可将其他专用和公共 IP 地址添加到现有 Azure 网络接口。 这些示例是基于本文中所述的[方案](#scenario)制作的。
 
-1. 打开命令行界面，然后在单个会话中完成本部分中的剩余步骤。 如果尚未安装并配置 Azure CLI，请完成 [Azure CLI 2.0 安装](/cli/azure/install-az-cli2?toc=%2fazure%2fvirtual-network%2ftoc.json)一文中的步骤，并使用 `az-login` 命令登录到 Azure 帐户。
+1. 打开命令行界面，然后在单个会话中完成本部分中的剩余步骤。 如果尚未安装并配置 Azure CLI，请完成 [Azure CLI 安装](/cli/azure/install-az-cli2?toc=%2fazure%2fvirtual-network%2ftoc.json)一文中的步骤，并使用 `az-login` 命令登录到 Azure 帐户。
 
 2. 根据要求完成以下部分之一中的步骤：
 
@@ -189,13 +188,13 @@ az vm create \
 
     **添加公共 IP 地址**
     
-    可以通过将某个公共 IP 地址关联到新的 IP 配置或现有 IP 配置，来添加该地址。 根据需要完成以下部分之一中的步骤。
+    可以通过将某个公共 IP 地址关联到新的 IP 配置或现有 IP 配置，来添加该地址。 根据需要，完成以下任一部分中的步骤。
 
     公共 IP 地址会产生少许费用。 有关 IP 地址定价的详细信息，请阅读 [IP 地址定价](https://azure.microsoft.com/pricing/details/ip-addresses)页。 在一个订阅中可以使用的公共 IP 地址数有限制。 有关限制的详细信息，请阅读 [Azure limits](../azure-subscription-service-limits.md#networking-limits)（Azure 限制）一文。
 
     - **将资源关联到新的 IP 配置**
     
-        每当在新 IP 配置中添加公共 IP 地址时，还必须添加一个专用 IP 地址，因为所有 IP 配置都必须有专用 IP 地址。 可以添加现有的公共 IP 地址资源，或新建一个。 若要新建此类资源，请输入以下命令：
+        每次在新 IP 配置中添加公共 IP 地址时，还必须添加专用 IP 地址，因为所有 IP 配置都必须具有专用 IP 地址。 可以添加现有的公共 IP 地址资源，或新建一个。 若要新建此类资源，请输入以下命令：
     
         ```bash
         az network public-ip create \
@@ -205,7 +204,7 @@ az vm create \
         --dns-name mypublicdns3
         ```
 
-        若要新建具有静态专用 IP 地址和关联的 myPublicIP3 公共 IP 地址资源的 IP 配置，请输入下面的命令：
+        若要新建具有静态专用 IP 地址和关联的 myPublicIP3  公共 IP 地址资源的 IP 配置，请输入下面的命令：
 
         ```bash
         az network nic ip-config create \

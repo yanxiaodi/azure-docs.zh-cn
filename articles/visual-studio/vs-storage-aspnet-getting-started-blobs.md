@@ -3,19 +3,20 @@ title: 开始使用 Azure Blob 存储和 Visual Studio 连接服务 (ASP.NET) | 
 description: 在使用 Visual Studio 连接服务连接到存储帐户后，如何开始在 Visual Studio 中的 ASP.NET 项目中使用 Azure Blob 存储
 services: storage
 author: ghogen
-manager: douge
-ms.assetid: b3497055-bef8-4c95-8567-181556b50d95
+manager: jillfra
 ms.prod: visual-studio-dev15
 ms.technology: vs-azure
-ms.workload: azure
+ms.custom: vs-azure
+ms.workload: azure-vs
 ms.topic: conceptual
 ms.date: 12/07/2017
 ms.author: ghogen
-ms.openlocfilehash: 55b083ac5384e749098338d2f3b7b24bfe16fe8f
-ms.sourcegitcommit: fa493b66552af11260db48d89e3ddfcdcb5e3152
-ms.translationtype: HT
+ms.openlocfilehash: 7fede4a554fc2fd97b5b786a483f6da4f4336248
+ms.sourcegitcommit: 0e59368513a495af0a93a5b8855fd65ef1c44aac
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 04/23/2018
+ms.lasthandoff: 08/15/2019
+ms.locfileid: "69512364"
 ---
 # <a name="get-started-with-azure-blob-storage-and-visual-studio-connected-services-aspnet"></a>开始使用 Azure Blob 存储和 Visual Studio 连接服务 (ASP.NET)
 
@@ -23,7 +24,7 @@ ms.lasthandoff: 04/23/2018
 > - [ASP.NET](./vs-storage-aspnet-getting-started-blobs.md)
 > - [ASP.NET Core](./vs-storage-aspnet-core-getting-started-blobs.md)
 
-Azure Blob 存储是一种将非结构化数据作为对象或 Blob 存储在云中的服务。 Blob 存储可以存储任何类型的文本或二进制数据，例如文档、媒体文件或应用程序安装程序。 Blob 存储也称为对象存储。
+Azure Blob 存储是一种将非结构化数据作为对象或 Blob 存储在云中的服务。 Blob 存储可以存储任何类型的文本或二进制数据，例如文档、媒体文件或应用程序安装程序。 Blob 存储也称为对象存储。 若要了解有关 Blob 存储的详细信息，请参阅 [Azure Blob 存储简介](../storage/blobs/storage-blobs-introduction.md)。
 
 本教程介绍如何针对使用 Blob 存储的一些常见方案编写 ASP.NET 代码。 方案包括创建 Blob 容器，以及上传、列出、下载和删除 Blob。
 
@@ -32,9 +33,6 @@ Azure Blob 存储是一种将非结构化数据作为对象或 Blob 存储在云
 ## <a name="prerequisites"></a>先决条件
 
 * [Microsoft Visual Studio](https://www.visualstudio.com/downloads/)
-
-[!INCLUDE [storage-blob-concepts-include](../../includes/storage-blob-concepts-include.md)]
-
 
 [!INCLUDE [storage-development-environment-include](../../includes/vs-storage-aspnet-getting-started-setup-dev-env.md)]
 
@@ -57,7 +55,7 @@ Azure Blob 存储是一种将非结构化数据作为对象或 Blob 存储在云
 1. 将以下 `using` 指令添加到 `BlobsController.cs` 文件：
 
     ```csharp
-    using Microsoft.Azure;
+    using Microsoft.WindowsAzure;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
     ```
@@ -134,11 +132,11 @@ Blob 容器是由 Blob 和文件夹组成的嵌套式层次结构。 本文档�
 
 1. 在**解决方案资源管理器**中，右键单击“视图”文件夹。
 
-2. 从上下文菜单中，选择“添加” > “新建文件夹”。 将新文件夹命名为 *Blobs*。 
+1. 如果没有 Blob 文件夹，则创建一个。 从上下文菜单中，选择“添加” > “新建文件夹”。 将新文件夹命名为 *Blobs*。 
  
 1. 在**解决方案资源管理器**中，展开“视图”文件夹并右键单击“Blob”。
 
-4. 从上下文菜单中，选择“添加” > “视图”。
+1. 从上下文菜单中，选择“添加” > “视图”。
 
 1. 在“添加视图”对话框中，输入 **CreateBlobContainer** 作为视图名称，并选择“添加”。
 
@@ -415,7 +413,7 @@ Blob 容器是由 Blob 和文件夹组成的嵌套式层次结构。 本文档�
     }
     ```
     
-    下面演示了已完成的 `ListBlobs` 方法（包含所要创建的本地文件的完全限定路径）：
+    下面演示了已完成的 `DownloadBlob` 方法（包含所要创建的本地文件的完全限定路径）：
     
     ```csharp
     public string DownloadBlob()

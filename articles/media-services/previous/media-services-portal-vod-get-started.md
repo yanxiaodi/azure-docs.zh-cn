@@ -4,24 +4,27 @@ description: 本教程介绍了在 Azure 门户中使用 Azure 媒体服务应�
 services: media-services
 documentationcenter: ''
 author: Juliako
-manager: cfowler
+manager: femila
 editor: ''
 ms.assetid: 6c98fcfa-39e6-43a5-83a5-d4954788f8a4
 ms.service: media-services
 ms.workload: media
 ms.tgt_pltfrm: na
 ms.devlang: na
-ms.topic: get-started-article
-ms.date: 08/07/2017
+ms.topic: conceptual
+ms.date: 03/19/2019
 ms.author: juliako
-ms.openlocfilehash: 11babf8a66c38354499ce85fad424fed04c07c15
-ms.sourcegitcommit: e221d1a2e0fb245610a6dd886e7e74c362f06467
-ms.translationtype: HT
+ms.openlocfilehash: 4a947c01d63e3842ead91481e480024a54380144
+ms.sourcegitcommit: 470041c681719df2d4ee9b81c9be6104befffcea
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/07/2018
+ms.lasthandoff: 07/12/2019
+ms.locfileid: "69015057"
 ---
 # <a name="get-started-with-delivering-content-on-demand-by-using-the-azure-portal"></a>使用 Azure 门户按需传送内容入门
-[!INCLUDE [media-services-selector-get-started](../../../includes/media-services-selector-get-started.md)]
+
+> [!NOTE]
+> 不会向媒体服务 v2 添加任何新特性或新功能。 <br/>查看最新版本：[媒体服务 v3](https://docs.microsoft.com/azure/media-services/latest/)。 另请参阅[从 v2 到 v3 的迁移指南](../latest/migrate-from-v2-to-v3.md)
 
 本教程介绍了在 Azure 门户中使用 Azure 媒体服务应用程序实施基本的视频点播内容传送服务的步骤。
 
@@ -54,13 +57,13 @@ ms.lasthandoff: 05/07/2018
 4. 选择“启动”图标。
 5. 选择“保存”按钮。
 
-## <a name="upload-files"></a>上传文件
+## <a name="upload-files"></a>上载文件
 若要使用媒体服务来流式传输视频，请先上传源视频、将其编码成多个比特率，然后发布结果。 第一步在本部分介绍。 
 
 1. 在 [Azure 门户](https://portal.azure.com/)中，选择 Azure 媒体服务帐户。
 2. 选择“设置” > “资产”。 然后选择“上传”按钮。
    
-    ![上传文件](./media/media-services-portal-vod-get-started/media-services-upload.png)
+    ![上载文件](./media/media-services-portal-vod-get-started/media-services-upload.png)
    
     此时会显示“上传视频资产”窗口。
    
@@ -88,12 +91,12 @@ ms.lasthandoff: 05/07/2018
    可以编辑输出资产名称和作业名称，以便管理资源。
    
    ![对资产进行编码](./media/media-services-portal-vod-get-started/media-services-encode1.png)
-5. 选择**创建**。
+5. 选择“创建”。
 
 ### <a name="monitor-encoding-job-progress"></a>监视编码作业进度
 若要监视编码作业的进度，请先选择“设置”（位于页面顶部），然后选择“作业”。
 
-![作业](./media/media-services-portal-vod-get-started/media-services-jobs.png)
+![作业(Job)](./media/media-services-portal-vod-get-started/media-services-jobs.png)
 
 ## <a name="publish-content"></a>发布内容
 若要为用户提供一个可用来流式传输内容或下载内容的 URL，首先必须通过创建定位符来发布资产。 定位符提供对资产中文件的访问权限。 Azure 媒体服务支持两种类型的定位符： 
@@ -122,7 +125,7 @@ ms.lasthandoff: 05/07/2018
 > 
 > 
 
-可以使用 [REST API](https://docs.microsoft.com/rest/api/media/operations/locator#update_a_locator) 或 [.NET API](http://go.microsoft.com/fwlink/?LinkID=533259) 来更新定位符的过期日期。 
+可以使用 [REST API](https://docs.microsoft.com/rest/api/media/operations/locator#update_a_locator) 或 [.NET API](https://go.microsoft.com/fwlink/?LinkID=533259) 来更新定位符的过期日期。 
 
 > [!NOTE]
 > 更新共享访问签名定位符的过期日期时，URL 会发生变化。
@@ -149,7 +152,7 @@ URL 将添加到“已发布 URL”列表。
 
 * 若要启动流式处理，请开始运行“默认”流式处理终结点。
 * 确保视频已发布。
-* Azure 门户媒体播放器从默认的流式处理终结点播放。 若要从非默认流式处理终结点播放，请选择并复制该 URL，然后将其粘贴到其他播放器中。 例如，可以在 [Azure Media Player](http://amsplayer.azurewebsites.net/azuremediaplayer.html) 上测试视频。
+* Azure 门户媒体播放器从默认的流式处理终结点播放。 若要从非默认流式处理终结点播放，请选择并复制该 URL，然后将其粘贴到其他播放器中。 例如，可以在 [Azure Media Player](https://aka.ms/azuremediaplayer) 上测试视频。
 
 ## <a name="provide-feedback"></a>提供反馈
 [!INCLUDE [media-services-user-voice-include](../../../includes/media-services-user-voice-include.md)]

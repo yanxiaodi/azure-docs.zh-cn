@@ -1,33 +1,34 @@
 ---
-title: 使用 Azure 策略限制 VM 扩展安装 | Microsoft Docs
-description: 使用 Azure 策略限制 VM 扩展部署。
+title: 使用 Azure Policy 限制 VM 扩展安装 | Microsoft Docs
+description: 使用 Azure Policy 限制 VM 扩展部署。
 services: virtual-machines-linux
 documentationcenter: ''
-author: danielsollondon
-manager: jeconnoc
+author: axayjo
+manager: gwallace
 editor: ''
 ms.service: virtual-machines-linux
-ms.devlang: na
 ms.topic: article
 ms.tgt_pltfrm: vm-linux
 ms.workload: infrastructure-services
 ms.date: 03/23/2018
-ms.author: danis;cynthn
-ms.openlocfilehash: 8e65b82730884947633688db9ed50080b96e0b8e
-ms.sourcegitcommit: d74657d1926467210454f58970c45b2fd3ca088d
-ms.translationtype: HT
+ms.author: akjosh
+ms.reviewer: cynthn
+ms.openlocfilehash: 20099bb32a1984be0bfbbaaa4e7bc6cd4481a806
+ms.sourcegitcommit: f2771ec28b7d2d937eef81223980da8ea1a6a531
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 03/28/2018
+ms.lasthandoff: 09/20/2019
+ms.locfileid: "71174033"
 ---
-# <a name="use-azure-policy-to-restrict-extensions-installation-on-linux-vms"></a>使用 Azure 策略限制 Linux VM 上的扩展安装
+# <a name="use-azure-policy-to-restrict-extensions-installation-on-linux-vms"></a>使用 Azure Policy 限制 Linux VM 上的扩展安装
 
-如果想要阻止在 Linux VM 上使用或安装某些扩展，可以使用 CLI 创建 Azure 策略以限制资源组中的 VM 扩展。 
+如果想要阻止在 Linux VM 上使用或安装某些扩展，可以使用 CLI 创建 Azure Policy 以限制资源组中的 VM 扩展。 
 
-本教程在 Azure Cloud Shell 中使用 CLI，后者已不断更新到最新版本。 如果要在本地运行 Azure CLI，则需要安装版本 2.0.26 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI 2.0]( /cli/azure/install-azure-cli)。 
+本教程在 Azure Cloud Shell 中使用 CLI，后者已不断更新到最新版本。 如果要在本地运行 Azure CLI，则需要安装版本 2.0.26 或更高版本。 运行 `az --version` 即可查找版本。 如果需要进行安装或升级，请参阅[安装 Azure CLI]( /cli/azure/install-azure-cli)。 
 
 ## <a name="create-a-rules-file"></a>创建规则文件
 
-若要限制可以安装哪些扩展，需要使用[规则](/azure/azure-policy/policy-definition#policy-rule)来提供用于识别扩展的逻辑。
+若要限制可以安装哪些扩展，需要使用[规则](../../governance/policy/concepts/definition-structure.md#policy-rule)来提供用于识别扩展的逻辑。
 
 本示例演示如何通过在 Azure Cloud Shell 中创建规则文件来拒绝安装“Microsoft.OSTCExtensions”发布的扩展，但如果在本地使用 CLI，也可以创建一个本地文件并将路径 (~/clouddrive) 替换为计算机上本地文件的路径。
 
@@ -68,7 +69,7 @@ vim ~/clouddrive/azurepolicy.rules.json
 
 ## <a name="create-a-parameters-file"></a>创建参数文件
 
-还需要一个[参数](/azure/azure-policy/policy-definition#parameters)文件，以创建一个用于传入要阻止的扩展列表的结构。 
+还需要一个[参数](../../governance/policy/concepts/definition-structure.md#parameters)文件，以创建一个用于传入要阻止的扩展列表的结构。 
 
 本示例演示如何在 Cloud Shell 中为 Linux VM 创建参数文件，但如果在本地使用 CLI，也可以创建一个本地文件并将路径 (~/clouddrive) 替换为计算机上本地文件的路径。
 
@@ -97,7 +98,7 @@ vim ~/clouddrive/azurepolicy.parameters.json
 
 ## <a name="create-the-policy"></a>创建策略
 
-策略定义是用于存储想要使用的配置的对象。 策略定义使用规则和参数文件定义策略。 使用 [az policy definition create](/cli/azure/role/assignment?view=azure-cli-latest#az_role_assignment_create) 创建策略定义。
+策略定义是用于存储想要使用的配置的对象。 策略定义使用规则和参数文件定义策略。 使用 [az policy definition create](/cli/azure/role/assignment?view=azure-cli-latest) 创建策略定义。
 
 在此示例中，规则和参数是在 cloud shell 中创建并存储为 .json 文件的文件。
 
@@ -114,9 +115,9 @@ az policy definition create \
 
 ## <a name="assign-the-policy"></a>分配策略
 
-此示例使用 [az policy assignment create](/cli/azure/policy/assignment#az_policy_assignment_create) 将策略分配给资源组。 **myResourceGroup** 资源组中创建的任何 VM 将不能安装适用于 Linux 的 Linux VM 访问扩展或自定义脚本扩展。 该资源组必须存在，然后才能分配策略。
+此示例使用 [az policy assignment create](/cli/azure/policy/assignment) 将策略分配给资源组。 **myResourceGroup** 资源组中创建的任何 VM 将不能安装适用于 Linux 的 Linux VM 访问扩展或自定义脚本扩展。 该资源组必须存在，然后才能分配策略。
 
-使用 [az account list](/cli/azure/account?view=azure-cli-latest#az_account_list) 获取你的订阅 ID 以替换示例中的订阅 ID。
+使用 [az account list](/cli/azure/account?view=azure-cli-latest) 获取你的订阅 ID 以替换示例中的订阅 ID。
 
 
 ```azurecli-interactive
@@ -170,6 +171,6 @@ az policy assignment delete --name 'not-allowed-vmextension-linux' --resource-gr
 az policy definition delete --name 'not-allowed-vmextension-linux'
 ```
 
-
 ## <a name="next-steps"></a>后续步骤
-有关详细信息，请参阅 [Azure 策略](../../azure-policy/azure-policy-introduction.md)。
+
+有关详细信息，请参阅 [Azure Policy](../../governance/policy/overview.md)。

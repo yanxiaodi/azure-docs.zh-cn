@@ -1,10 +1,10 @@
 ---
-title: 基于角色的 Azure 微服务生命周期概述 | Microsoft Docs
+title: 概述 Azure Service Fabric 执行组件生命周期 | Microsoft Docs
 description: 介绍 Service Fabric Reliable Actor 生命周期、垃圾回收和如何手动删除执行组件及其状态
 services: service-fabric
 documentationcenter: .net
 author: amanbha
-manager: timlt
+manager: chackdan
 editor: vturecek
 ms.assetid: b91384cc-804c-49d6-a6cb-f3f3d7d65a8e
 ms.service: service-fabric
@@ -14,11 +14,12 @@ ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 10/06/2017
 ms.author: amanbha
-ms.openlocfilehash: 4e919c565574e0765227abda5832c858c36a77c0
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: f81fde441a2f0dc2504601f82e5b890eb6e216de
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "62105286"
 ---
 # <a name="actor-lifecycle-automatic-garbage-collection-and-manual-delete"></a>执行组件生命周期、自动垃圾回收和手动删除
 当第一次调用执行组件的任何方法时即可激活该执行组件。 如果在可配置的一段时间内未使用执行组件，则此执行组件将停用（执行组件运行时对其进行垃圾回收）。 还可以在任何时候手动删除执行组件及其状态。
@@ -26,9 +27,9 @@ ms.lasthandoff: 05/16/2018
 ## <a name="actor-activation"></a>执行组件激活
 当激活了某个执行组件，将出现以下情况：
 
-* 当调用执行组件时，如果执行组件尚未处于活动状态，则将创建新的执行组件。
+* 当调用执行组件时，如果执行组件尚未处于活动状态，则创建新的执行组件。
 * 如果执行组件为维护状态，则加载此执行组件的状态。
-* 将调用 `OnActivateAsync` (C#) 或 `onActivateAsync` (Java) 方法（该方法可以在执行组件实现中被覆盖）。
+* 将调用 `OnActivateAsync` (C#) 或 `onActivateAsync` (Java) 方法（这些方法可以在执行组件实现中被重写）。
 * 现在该执行组件被视为处于活动状态。
 
 ## <a name="actor-deactivation"></a>执行组件停用
@@ -51,7 +52,7 @@ ms.lasthandoff: 05/16/2018
 * 正在调用的 `IRemindable.ReceiveReminderAsync` 方法（仅当执行组件使用提醒时该方法才可用）
 
 > [!NOTE]
-> 如果执行组件使用计时器，且计时器回调得到调用，则不计为“正在使用”。
+> 如果执行组件使用计时器，且计时器回调得到调用，则不  计为“正在使用”。
 >
 >
 
@@ -121,8 +122,8 @@ public class Program
 * [执行组件可重入性](service-fabric-reliable-actors-reentrancy.md)
 * [执行组件诊断和性能监视](service-fabric-reliable-actors-diagnostics.md)
 * [执行组件 API 参考文档](https://msdn.microsoft.com/library/azure/dn971626.aspx)
-* [C# 代码示例](https://github.com/Azure-Samples/service-fabric-dotnet-getting-started)
-* [Java 代码示例](http://github.com/Azure-Samples/service-fabric-java-getting-started)
+* [C# 示例代码](https://github.com/Azure-Samples/service-fabric-dotnet-getting-started)
+* [Java 代码示例](https://github.com/Azure-Samples/service-fabric-java-getting-started)
 
 <!--Image references-->
 [1]: ./media/service-fabric-reliable-actors-lifecycle/garbage-collection.png

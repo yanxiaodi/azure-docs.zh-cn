@@ -4,7 +4,7 @@ description: 按照 Service Fabric 客户端 REST API 规范生成和使用 Serv
 services: service-fabric
 documentationcenter: java
 author: rapatchi
-manager: timlt
+manager: chackdan
 editor: ''
 ms.assetid: ''
 ms.service: service-fabric
@@ -14,11 +14,12 @@ ms.tgt_pltfrm: NA
 ms.workload: NA
 ms.date: 11/27/2017
 ms.author: rapatchi
-ms.openlocfilehash: bc5302b9af023b04fb6b1654ac13e9fc02e0a465
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: 97bba87331965b0f7ce20ec2ee089e0e18f72457
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60720274"
 ---
 # <a name="azure-service-fabric-java-client-apis"></a>Azure Service Fabric Java 客户端 API
 
@@ -70,7 +71,7 @@ ms.lasthandoff: 05/16/2018
     autorest --input-file=servicefabric.json --java --output-folder=java-rest-api-code --namespace=servicefabricrest
     ```
    
-   以下命令使用 ``servicefabric.json`` 规范文件作为输入，在 ``java-rest-api-     code`` 文件夹中生成 Java 客户端代码，然后将代码封装在 ``servicefabricrest`` 命名空间中。 执行此步骤后，会生成 ``models`` 和 ``implemenation`` 两个文件夹，并会在 ``java-rest-api-code`` 文件夹中生成 ``ServiceFabricClientAPIs.java`` 和 ``package-info.java`` 两个文件。
+   以下命令使用 ``servicefabric.json`` 规范文件作为输入，在 ``java-rest-api-     code`` 文件夹中生成 Java 客户端代码，然后将代码封装在 ``servicefabricrest`` 命名空间中。 执行此步骤后，会生成 ``models`` 和 ``implementation`` 两个文件夹，并会在 ``java-rest-api-code`` 文件夹中生成 ``ServiceFabricClientAPIs.java`` 和 ``package-info.java`` 两个文件。
 
 
 ## <a name="include-and-use-the-generated-client-in-your-project"></a>在项目中包括和使用生成的客户端
@@ -125,11 +126,11 @@ ms.lasthandoff: 05/16/2018
 你会发现每个 API 有四个实现重载。 如果有可选参数，你会发现另外还有四个包含这些可选参数的变体。 这里以 API ``removeReplica`` 为例。
  1. **public void removeReplica(String nodeName, UUID partitionId, String replicaId, Boolean forceRemove, Long timeout)**
     * 这是 removeReplica API 调用的同步变体
- 2. **public ServiceFuture<Void> removeReplicaAsync(String nodeName, UUID partitionId, String replicaId, Boolean forceRemove, Long timeout, final ServiceCallback<Void> serviceCallback)**
+ 2. **公共 ServiceFuture\<Void > removeReplicaAsync (字符串节点名称、 UUID partitionId、 字符串 replicaId、 布尔 forceRemove、 长超时，最终 ServiceCallback\<Void > serviceCallback)**
     * 若要使用基于未来的异步编程并使用回调，则可使用 API 调用的此变体
- 3. **public Observable<Void> removeReplicaAsync(String nodeName, UUID partitionId, String replicaId)**
+ 3. **公共的可观察量\<Void > removeReplicaAsync （字符串 nodeName、 UUID partitionId、 字符串 replicaId）**
     * 若要使用反应式异步编程，则可使用 API 调用的此变体
- 4. **public Observable<ServiceResponse<Void>> removeReplicaWithServiceResponseAsync(String nodeName, UUID partitionId, String replicaId)**
+ 4. **public Observable\<ServiceResponse\<Void>> removeReplicaWithServiceResponseAsync(String nodeName, UUID partitionId, String replicaId)**
     * 若要使用反应式异步编程并处理原始 REST 响应，则可使用 API 调用的此变体
 
 ## <a name="next-steps"></a>后续步骤

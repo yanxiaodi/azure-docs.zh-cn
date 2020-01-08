@@ -1,28 +1,23 @@
 ---
-title: 使用 HBase .NET SDK - Azure HDInsight | Microsoft Docs
+title: 使用 HBase .NET SDK - Azure HDInsight
 description: 使用 HBase .NET SDK 创建和删除表，以及读取和写入数据。
-services: hdinsight
-documentationcenter: ''
-tags: azure-portal
 author: ashishthaps
-manager: jhubbard
-editor: cgronlun
-ms.assetid: ''
+ms.reviewer: jasonh
 ms.service: hdinsight
 ms.custom: hdinsightactive
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 12/13/2017
 ms.author: ashishth
-ms.openlocfilehash: f0e2c6412a965c73b0055a24c799e05ad582a8c7
-ms.sourcegitcommit: d78bcecd983ca2a7473fff23371c8cfed0d89627
-ms.translationtype: HT
+ms.openlocfilehash: d998ff44804a2dcd2b3282679a9cb53f893991e3
+ms.sourcegitcommit: 8ef0a2ddaece5e7b2ac678a73b605b2073b76e88
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/14/2018
+ms.lasthandoff: 09/17/2019
+ms.locfileid: "71077169"
 ---
-# <a name="use-the-hbase-net-sdk"></a>使用 HBase .NET SDK
+# <a name="use-the-net-sdk-for-apache-hbase"></a>使用 .NET SDK for Apache HBase
 
-[HBase](apache-hbase-overview.md) 提供两种主要的数据处理选择：[Hive 查询，以及调用 HBase 的 RESTful API](apache-hbase-tutorial-get-started-linux.md)。 可以通过 `curl` 命令或类似的实用工具直接使用 REST API。
+[Apache HBase](apache-hbase-overview.md) 提供了两个用于处理数据的主要选项：[Apache Hive 查询和调用 HBase 的 RESTful API](apache-hbase-tutorial-get-started-linux.md)。 可以通过 `curl` 命令或类似的实用工具直接使用 REST API。
 
 对于 C# 和 .NET 应用程序，[用于 .NET 的 Microsoft HBase REST 客户端库](https://www.nuget.org/packages/Microsoft.HBase.Client/)提供基于 HBase REST API 的客户端库。
 
@@ -41,13 +36,13 @@ var credentials = new ClusterCredentials(new Uri("https://CLUSTERNAME.azurehdins
 client = new HBaseClient(credentials);
 ```
 
-将 CLUSTERNAME 替换为 HDInsight HBase 群集名称，将 USERNAME 和 PASSWORD 替换为在创建群集时指定的 Hadoop 凭据。 默认的 Hadoop 用户名为 **admin**。
+将 CLUSTERNAME 替换为 HDInsight HBase 群集名称，将 USERNAME 和 PASSWORD 替换为在创建群集时指定的 Apache Hadoop 凭据。 默认的 Hadoop 用户名为 **admin**。
 
-## <a name="create-a-new-table"></a>创建新表
+## <a name="create-a-new-table"></a>新建表
 
 HBase 在表中存储数据。 表包含 *Rowkey*、主键以及一个或多个名为“列系列”的列组。 每个表中的数据按 Rowkey 范围水平分布到多个区域。 每个区域都有一个开始键和结束键。 一个表可以有一个或多个区域。 随着表中数据的增长，HBase 会将大区域拆分为较小的区域。 区域存储在区域服务器中，一个区域服务器可以存储多个区域。
 
-数据以物理方式存储在 *HFile* 中。 单个 HFile 包含的数据适用于一个表、一个区域和一个列系列。 HFile 中的行在存储时按 Rowkey 排序。 每个 HFile 都有一个 B+ 树索引，用于快速检索行。
+数据以物理方式存储在 *HFile* 中。 单个 HFile 包含的数据适用于一个表、一个区域和一个列系列。 HFile 中的行在存储时按 Rowkey 排序。 每个 HFile 都有一个B+ 树索引，用于快速检索行。
 
 若要创建新表，请指定 `TableSchema` 和列。 以下代码检查“RestSDKTable”表是否已存在 - 如果不存在，则会创建该表。
 
@@ -117,9 +112,9 @@ set.rows.Add(row);
 await client.StoreCellsAsync("RestSDKTable", set);
 ```
 
-HBase 可实现 BigTable，因此数据格式如下所示：
+HBase 可实现 [Cloud BigTable](https://cloud.google.com/bigtable/)，因此数据格式如下所示：
 
-![具有“群集用户”角色的用户](./media/apache-hbase-rest-sdk/table.png)
+![Apache HBase 示例数据输出](./media/apache-hbase-rest-sdk/hdinsight-table-roles.png)
 
 ## <a name="select-data"></a>选择数据
 
@@ -193,4 +188,4 @@ finally
 ## <a name="next-steps"></a>后续步骤
 
 * [HDInsight 中的 Apache HBase 入门示例](apache-hbase-tutorial-get-started-linux.md)
-* 根据[使用 HBase 分析实时 Twitter 观点](../hdinsight-hbase-analyze-twitter-sentiment.md)中的说明，生成端到端应用程序
+* 根据[使用 Apache HBase 分析实时 Twitter 观点](../hdinsight-hbase-analyze-twitter-sentiment.md)中的说明，生成端到端应用程序

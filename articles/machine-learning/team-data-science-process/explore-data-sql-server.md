@@ -1,31 +1,28 @@
 ---
-title: 浏览 Azure 上 SQL Server 虚拟机中的数据 | Microsoft Docs
-description: 如何浏览存储在 Azure 上 SQL Server VM 中的数据。
+title: 浏览 SQL Server 虚拟机中的数据 - Team Data Science Process
+description: 如何使用 SQL 或编程语言（如 Python）浏览 Azure 上的 SQL Server VM 中存储的数据。
 services: machine-learning
-documentationcenter: ''
-author: deguhath
+author: marktab
 manager: cgronlun
 editor: cgronlun
-ms.assetid: ccbb3085-af9e-4ec2-9df2-15dcab261d05
 ms.service: machine-learning
-ms.workload: data-services
-ms.tgt_pltfrm: na
-ms.devlang: na
+ms.subservice: team-data-science-process
 ms.topic: article
 ms.date: 11/09/2017
-ms.author: deguhath
-ms.openlocfilehash: 68c8386917599afcf2819ff97453de77dea90215
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.author: tdsp
+ms.custom: seodec18, previous-author=deguhath, previous-ms.author=deguhath
+ms.openlocfilehash: be75490e4e86956337ce38133df6095790b3a374
+ms.sourcegitcommit: 41ca82b5f95d2e07b0c7f9025b912daf0ab21909
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "60303635"
 ---
 # <a name="explore-data-in-sql-server-virtual-machine-on-azure"></a>浏览 Azure 上 SQL Server 虚拟机中的数据
-本文档介绍如何浏览存储在 Azure 上 SQL Server VM 中的数据。 可通过使用 SQL 或 Python 等编程语言的数据整理来实现上述目的。
 
-以下**菜单**带有描述如何使用工具从不同存储环境浏览数据的主题的链接。 此任务是 Cortana Analytics 过程 (CAP) 中的一个步骤。
+本文介绍如何浏览存储在 Azure 上 SQL Server VM 中的数据。 可通过使用 SQL 或 Python 等编程语言的数据整理来实现上述目的。
 
-[!INCLUDE [cap-explore-data-selector](../../../includes/cap-explore-data-selector.md)]
+此任务是[团队数据科学过程](overview.md)中的一个步骤。
 
 > [!NOTE]
 > 本文档中的示例 SQL 语句假定数据在 SQL Server 中。 如果不是这样，请参阅云数据科学进程映射，了解如何将数据移到 SQL Server。
@@ -49,7 +46,7 @@ ms.lasthandoff: 05/03/2018
     `select <column_name>, count(*) from <tablename> group by <column_name>`
 
 > [!NOTE]
-> 有关实际的示例，可以使用 [NYC 出租车数据集](http://www.andresmh.com/nyctaxitrips/)，并参考名为[使用 IPython Notebook 和 SQL Server 的 NYC 数据整理](https://github.com/Azure/Azure-MachineLearning-DataScience/blob/master/Misc/DataScienceProcess/iPythonNotebooks/machine-Learning-data-science-process-sql-walkthrough.ipynb)的IPNB，以获取端到端的演练。
+> 有关实际的示例，可以使用 [NYC 出租车数据集](https://www.andresmh.com/nyctaxitrips/)，并参考名为[使用 IPython Notebook 和 SQL Server 的 NYC 数据整理](https://github.com/Azure/Azure-MachineLearning-DataScience/blob/master/Misc/DataScienceProcess/iPythonNotebooks/machine-Learning-data-science-process-sql-walkthrough.ipynb)的IPNB，以获取端到端的演练。
 > 
 > 
 
@@ -62,10 +59,10 @@ ms.lasthandoff: 05/03/2018
     import pyodbc    
     conn = pyodbc.connect('DRIVER={SQL Server};SERVER=<servername>;DATABASE=<dbname>;UID=<username>;PWD=<password>')
 
-Python 中的 [Pandas 库](http://pandas.pydata.org/)提供一组丰富的数据结构，以及针对 Python 编程的数据操作的数据分析工具。 以下代码读取从 SQL Server 数据库返回到 Pandas 数据帧的结果：
+Python 中的 [Pandas 库](https://pandas.pydata.org/)提供一组丰富的数据结构，以及针对 Python 编程的数据操作的数据分析工具。 以下代码读取从 SQL Server 数据库返回到 Pandas 数据帧的结果：
 
     # Query database and load the returned results in pandas data frame
-    data_frame = pd.read_sql('''select <columnname1>, <cloumnname2>... from <tablename>''', conn)
+    data_frame = pd.read_sql('''select <columnname1>, <columnname2>... from <tablename>''', conn)
 
 现可使用 Pandas 数据帧，如本主题中[处理数据科学环境中的 Azure Blob 数据](data-blob.md)所述。
 

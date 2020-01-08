@@ -1,11 +1,11 @@
 ---
-title: "使用 Azure 网络观察程序执行数据包检查 | Microsoft 文档"
-description: "本文介绍如何在 VM 中使用网络观察程序执行深度数据包检查"
+title: 使用 Azure 网络观察程序执行数据包检查 | Microsoft 文档
+description: 本文介绍如何在 VM 中使用网络观察程序执行深度数据包检查
 services: network-watcher
 documentationcenter: na
-author: jimdial
-manager: timlt
-editor: 
+author: KumudD
+manager: twooley
+editor: ''
 ms.assetid: 7b907d00-9c35-40f5-a61e-beb7b782276f
 ms.service: network-watcher
 ms.devlang: na
@@ -13,12 +13,13 @@ ms.topic: article
 ms.tgt_pltfrm: na
 ms.workload: infrastructure-services
 ms.date: 02/22/2017
-ms.author: jdial
-ms.openlocfilehash: 1ad6ca4abe73336ce9ce3539fdaf2a9d7dd23fa6
-ms.sourcegitcommit: 6699c77dcbd5f8a1a2f21fba3d0a0005ac9ed6b7
-ms.translationtype: HT
+ms.author: kumud
+ms.openlocfilehash: 7f3fc69bbfd881a26ceb25705852558b66c60153
+ms.sourcegitcommit: d4dfbc34a1f03488e1b7bc5e711a11b72c717ada
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 10/11/2017
+ms.lasthandoff: 06/13/2019
+ms.locfileid: "64716900"
 ---
 # <a name="packet-inspection-with-azure-network-watcher"></a>使用 Azure 网络观察程序执行数据包检查
 
@@ -30,7 +31,7 @@ ms.lasthandoff: 10/11/2017
 
 本方案假设已在虚拟机上运行数据包捕获。 若要了解如何创建数据包捕获，请访问 [Manage packet captures with the portal](network-watcher-packet-capture-manage-portal.md)（使用门户管理数据包捕获）；若要了解如何使用 REST 进行相应操作，请访问 [Managing Packet Captures with REST API](network-watcher-packet-capture-manage-rest.md)（使用 REST API 管理数据包捕获）。
 
-## <a name="scenario"></a>方案
+## <a name="scenario"></a>场景
 
 本方案中的操作：
 
@@ -78,7 +79,7 @@ ms.lasthandoff: 10/11/2017
 
 ### <a name="step-1"></a>步骤 1
 
-使用前一方案中的同一个捕获。单击“统计信息” > “协议层次结构”
+使用前一方案中的同一个捕获。单击“统计信息” > “协议层次结构”  
 
 ![协议层次结构菜单][2]
 
@@ -94,7 +95,7 @@ ms.lasthandoff: 10/11/2017
 
 ### <a name="step-1"></a>步骤 1
 
-使用前一方案中的同一个捕获。单击“统计信息” > “IPv4 统计信息” > “目标和端口”
+使用前一方案中的同一个捕获。单击“统计信息” > “IPv4 统计信息” > “目标和端口”   
 
 ![数据包捕获窗口][4]
 

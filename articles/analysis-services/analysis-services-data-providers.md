@@ -3,39 +3,39 @@ title: 连接到 Azure Analysis Services 所需的客户端库 | Microsoft Docs
 description: 介绍了客户端应用程序和工具连接 Azure Analysis Services 时所需的客户端库
 author: minewiskan
 manager: kfile
-ms.service: analysis-services
+ms.service: azure-analysis-services
 ms.topic: conceptual
-ms.date: 05/16/2018
+ms.date: 09/09/2019
 ms.author: owend
 ms.reviewer: minewiskan
-ms.openlocfilehash: c6c92bdd2461a0f1147f15b5c1134c189c55a37c
-ms.sourcegitcommit: eb75f177fc59d90b1b667afcfe64ac51936e2638
-ms.translationtype: HT
+ms.openlocfilehash: 9e597b03abfdeda01d74986b7b30c14de46fd3f1
+ms.sourcegitcommit: 65131f6188a02efe1704d92f0fd473b21c760d08
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/16/2018
-ms.locfileid: "34193302"
+ms.lasthandoff: 09/10/2019
+ms.locfileid: "70861136"
 ---
 # <a name="client-libraries-for-connecting-to-azure-analysis-services"></a>用于连接到 Azure Analysis Services 的客户端库
 
-客户端应用程序和工具连接到 Analysis Services 服务器时需要使用客户端库。 
+客户端应用程序和工具连接到 Analysis Services 服务器时需要使用客户端库。 Microsoft 客户端应用程序（例如 Power BI Desktop、Excel、SQL Server Management Studio (SSMS) 和 SQL Server Data Tools (SSDT)）会安装全部三个客户端库并通过定期的应用程序更新来更新它们。 在某些情况下，可能需要安装较新版本的客户端库。 自定义客户端应用程序还需要安装客户端库。
 
 ## <a name="download-the-latest-client-libraries-windows-installer"></a>下载最新客户端库 (Windows Installer)  
 
 |下载  |产品版本  | 
 |---------|---------|
-|[MSOLAP (amd64)](https://go.microsoft.com/fwlink/?linkid=829576)    |    15.0.1.395      |
-|[MSOLAP (x86)](https://go.microsoft.com/fwlink/?linkid=829575)     |    15.0.1.395      |
-|[AMO](https://go.microsoft.com/fwlink/?linkid=829578)     |   15.0.4     |
-|[ADOMD](https://go.microsoft.com/fwlink/?linkid=829577)     |    15.0.4     |
+|[MSOLAP (amd64)](https://go.microsoft.com/fwlink/?linkid=829576)    |    15.1.1.25    |
+|[MSOLAP (x86)](https://go.microsoft.com/fwlink/?linkid=829575)     |     15.1.1.25       |
+|[AMO](https://go.microsoft.com/fwlink/?linkid=829578)     |   18.0.5.0    |
+|[ADOMD](https://go.microsoft.com/fwlink/?linkid=829577)     |    18.0.5.0     |
 
 ## <a name="amo-and-adomd-nuget-packages"></a>AMO 和 ADOMD（NuGet 包）
 
 Analysis Services Management Objects (AMO) 和 ADOMD 客户端库在 [NuGet.org](https://www.nuget.org/) 上作为可安装的程序包提供。建议你迁移到 NuGet 引用而非使用 Windows Installer。 
 
-|程序包  | 产品版本  | 
+|package  | 产品版本  | 
 |---------|---------|
-|[AMO](https://www.nuget.org/packages/Microsoft.AnalysisServices.retail.amd64/)    |    15.0.2.0      |
-|[ADOMD](https://www.nuget.org/packages/Microsoft.AnalysisServices.AdomdClient.retail.amd64/)     |   15.0.2.0      |
+|[AMO](https://www.nuget.org/packages/Microsoft.AnalysisServices.retail.amd64/)    |    18.0.5     |
+|[ADOMD](https://www.nuget.org/packages/Microsoft.AnalysisServices.AdomdClient.retail.amd64/)     |   18.0.5      |
 
 NuGet 包程序集 AssemblyVersion 遵循语义版本控制：MAJOR.MINOR.PATCH。 NuGet 引用加载预期的版本，即使 GAC 中存在不同的版本（由 MSI 安装导致的）。 PATCH 将随每次发布递增。 AMO 和 ADOMD 版本保持同步。
 
@@ -45,7 +45,7 @@ Analysis Services 利用三个客户端库（也称为数据提供程序）。 A
 
 Microsoft 客户端应用程序（例如 Power BI Desktop 和 Excel）会安装所有这三个客户端库，有新版本可用时，会更新这些库。 某些客户端库可能不是 Azure Analysis Services 所需要的最新版本，具体取决于更新的版本或频率。 这同样适用于自定义应用程序或其他界面，例如 AsCmd、TOM、ADOMD.NET。 这些应用程序需要手动或以编程方式安装库。 用于手动安装的客户端库作为可分发程序包包含在 SQL Server 功能包中。 但是，这些客户端库与 SQL Server 版本关联，可能不是最新的。  
 
-进行客户端连接的客户端库不同于从 Azure Analysis Services 服务器连接到数据源时需要的数据提供程序。 若要详细了解数据源连接，请参阅[数据源连接](analysis-services-datasource.md)。
+用于客户端连接的客户端库不同于从 Azure Analysis Services 服务器连接到数据源时所需的数据提供程序。 若要详细了解数据源连接，请参阅[数据源连接](analysis-services-datasource.md)。
 
 ## <a name="client-library-types"></a>客户端库类型
 
@@ -59,21 +59,21 @@ Microsoft 客户端应用程序（例如 Power BI Desktop 和 Excel）会安装�
 
 ### <a name="amo"></a>AMO  
 
- AMO 是用于服务器管理和数据定义的托管客户端库。 它由工具和客户端应用程序安装和使用。 例如，SQL Server Management Studio (SSMS) 使用 AMO 连接到 Analysis Services。 使用 AMO 的连接通常非常精简，由 `“data source=\<servername>”` 组成。 建立连接后，可以使用 API 来处理数据库集合和主要对象。 SSDT 和 SSMS 都使用 AMO 连接到 Analysis Services 实例。  
+ AMO 是用于服务器管理和数据定义的托管客户端库。 它由工具和客户端应用程序安装和使用。 例如，SQL Server Management Studio (SSMS) 使用 AMO 连接到 Analysis Services。 使用 AMO 的连接通常非常精简，由 `"data source=\<servername>"` 组成。 建立连接后，可以使用 API 来处理数据库集合和主要对象。 SSDT 和 SSMS 都使用 AMO 连接到 Analysis Services 实例。  
 
   
 ### <a name="adomd"></a>ADOMD
 
  ADOMD.NET 是用于查询 Analysis Services 数据的托管数据客户端库。 它由工具和客户端应用程序安装和使用。 
   
- 连接到数据库时，所有三个库的连接字符串属性相似。 使用 [Microsoft.AnalysisServices.AdomdClient.AdomdConnection.ConnectionString](https://msdn.microsoft.com/library/microsoft.analysisservices.adomdclient.adomdconnection.connectionstring.aspx) 为 ADOMD.NET 定义的几乎任何连接字符串同样适用于 AMO 和 Analysis Services OLE DB 提供程序 (MSOLAP)。 若要了解详细信息，请参阅[连接字符串属性 &#40;Analysis Services&#41;](https://docs.microsoft.com/sql/analysis-services/instances/connection-string-properties-analysis-services)。  
+ 连接到数据库时，所有三个库的连接字符串属性相似。 使用 [Microsoft.AnalysisServices.AdomdClient.AdomdConnection.ConnectionString](/dotnet/api/microsoft.analysisservices.adomdclient.adomdconnection.connectionstring#Microsoft_AnalysisServices_AdomdClient_AdomdConnection_ConnectionString) 为 ADOMD.NET 定义的几乎任何连接字符串同样适用于 AMO 和 Analysis Services OLE DB 提供程序 (MSOLAP)。 若要了解详细信息，请参阅[连接字符串属性 &#40;Analysis Services&#41;](https://docs.microsoft.com/analysis-services/instances/connection-string-properties-analysis-services)。  
 
   
 ##  <a name="bkmk_LibUpdate"></a>如何确定客户端库版本   
   
 ### <a name="oleddb-msolap"></a>OLEDDB (MSOLAP)  
   
-1.  转到 C:\Program Files\Microsoft Analysis Services\AS OLEDB\。 如果有多个文件夹，请选择较大的数字。
+1.  转到  `C:\Program Files\Microsoft Analysis Services\AS OLEDB\` 。 如果有多个文件夹，请选择较大的数字。
   
 2.  右键单击“msolap.dll” > “属性” > “详细信息”。 如果文件名为 msolap140.dll，则它早于最新版本并且应当升级。
     
@@ -82,12 +82,12 @@ Microsoft 客户端应用程序（例如 Power BI Desktop 和 Excel）会安装�
   
 ### <a name="amo"></a>AMO
 
-1. 转到 `C:\Windows\Microsoft.NET\assembly\GAC_MSIL\Microsoft.AnalysisServices\`。 如果有多个文件夹，请选择较大的数字。
+1. 转到  `C:\Windows\Microsoft.NET\assembly\GAC_MSIL\Microsoft.AnalysisServices\` 。 如果有多个文件夹，请选择较大的数字。
 2. 右键单击“Microsoft.AnalysisServices” > ，选择“属性” > “详细信息”。  
 
 ### <a name="adomd"></a>ADOMD
 
-1. 转到 `C:\Windows\Microsoft.NET\assembly\GAC_MSIL\Microsoft.AnalysisServices.AdomdClient\`。 如果有多个文件夹，请选择较大的数字。
+1. 转到  `C:\Windows\Microsoft.NET\assembly\GAC_MSIL\Microsoft.AnalysisServices.AdomdClient\` 。 如果有多个文件夹，请选择较大的数字。
 2. 右键单击“Microsoft.AnalysisServices.AdomdClient” > ，选择“属性” > “详细信息”。  
 
 

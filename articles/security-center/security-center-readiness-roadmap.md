@@ -3,22 +3,22 @@ title: Azure 安全中心就绪情况路线图 | Microsoft Docs
 description: 本文档提供了 Azure 安全中心的就绪情况路线图。
 services: security-center
 documentationcenter: na
-author: terrylan
-manager: ndicola
-editor: ''
+author: memildin
+manager: rkarlin
 ms.assetid: fece670cc-df70-445d-9773-b32cbaba8d4a
 ms.service: security-center
 ms.devlang: na
-ms.topic: hero-article
+ms.topic: conceptual
 ms.tgt_pltfrm: na
 ms.workload: na
 ms.date: 04/03/2018
 ms.author: yurid
-ms.openlocfilehash: 51dd957a94d1e10658678d9123e9cce6183c0ab0
-ms.sourcegitcommit: ca05dd10784c0651da12c4d58fb9ad40fdcd9b10
-ms.translationtype: HT
+ms.openlocfilehash: a5d11be7d4fbe7f23b5584775c5d9a57c2214155
+ms.sourcegitcommit: 8a717170b04df64bd1ddd521e899ac7749627350
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/03/2018
+ms.lasthandoff: 09/23/2019
+ms.locfileid: "71200986"
 ---
 # <a name="azure-security-center-readiness-roadmap"></a>Azure 安全中心就绪情况路线图
 本文档提供的就绪情况路线图有助于 Azure 安全中心入门。
@@ -66,9 +66,8 @@ Azure 安全中心为 Azure、本地和其他云中运行的工作负载提供�
 
 文章    
 * [在 Azure 安全中心进行安全运行状况监视](https://docs.microsoft.com/azure/security-center/security-center-monitoring)
-* [保护 Azure 安全中心中的虚拟机](https://docs.microsoft.com/azure/security-center/security-center-virtual-machine-recommendations)
+* [在 Azure 安全中心保护计算机和应用程序](security-center-virtual-machine-protection.md)
 * [保护 Azure 安全中心中的网络](https://docs.microsoft.com/azure/security-center/security-center-network-recommendations)
-* [保护 Azure 安全中心中的应用程序](https://docs.microsoft.com/azure/security-center/security-center-application-recommendations)
 * [在 Azure 安全中心保护 Azure SQL 服务和数据](https://docs.microsoft.com/azure/security-center/security-center-sql-service-recommendations)
 
 
@@ -106,18 +105,18 @@ Azure VM 可以充分利用安全中心的高级云防御功能。 这些功能�
 
 * [安全中心动手实验](https://www.microsoft.com/handsonlabs/SelfPacedLabs/?storyGuid=78871abf-6f35-4aa0-840f-d801f5cdbd72)
 * [安全中心的 Web 应用程序防火墙 (WAF) 建议攻略](https://gallery.technet.microsoft.com/ASC-Playbook-Protect-38bd47ff)
-* [Azure Security Center Playbook: Security Alerts](https://gallery.technet.microsoft.com/Azure-Security-Center-f621a046)（Azure 安全中心 Playbook：安全警报）
+* [Azure 安全中心 Playbook：安全警报](https://gallery.technet.microsoft.com/Azure-Security-Center-f621a046)
 
 ## <a name="additional-resources"></a>其他资源
 * [安全中心文档页](https://docs.microsoft.com/azure/security-center/)
 * [安全中心 REST API 文档页](https://msdn.microsoft.com/library/mt704034.aspx)
 * [Azure 安全中心常见问题 (FAQ)](https://docs.microsoft.com/azure/security-center/security-center-faq)
 * [安全中心定价页](https://azure.microsoft.com/pricing/details/security-center/)
-* [标识安全最佳做法](https://docs.microsoft.com/azure/security/azure-security-identity-management-best-practices)
-* [网络安全最佳实践](https://docs.microsoft.com/azure/security/azure-security-network-security-best-practices)
+* [标识安全最佳做法](https://docs.microsoft.com/azure/security/fundamentals/identity-management-best-practices)
+* [网络安全最佳实践](https://docs.microsoft.com/azure/security/fundamentals/network-best-practices)
 * [PaaS 建议](https://docs.microsoft.com/azure/security/security-paas-deployments)
-* [合规性](https://www.microsoft.com/trustcenter/Compliance/Due-Diligence-Checklist)
-* [OMS customers can now use Azure Security Center to protect their hybrid cloud workloads](https://blogs.technet.microsoft.com/msoms/2017/09/25/oms-customers-can-now-use-azure-security-center-to-protect-their-hybrid-cloud-workloads/)（OMS 客户现在可以使用 Azure 安全中心来保护其混合云工作负荷）
+* [合规性](https://www.microsoft.com/en-us/trustcenter/compliance/due-diligence-checklist)
+* [Log analytics 客户现在可以使用 Azure 安全中心来保护其混合云工作负荷](https://blogs.technet.microsoft.com/msoms/2017/09/25/oms-customers-can-now-use-azure-security-center-to-protect-their-hybrid-cloud-workloads/)
 
 ## <a name="community-resources"></a>社区资源
 

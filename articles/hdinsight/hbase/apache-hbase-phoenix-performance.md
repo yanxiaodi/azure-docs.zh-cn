@@ -1,28 +1,23 @@
 ---
-title: Azure HDInsight 中的 Phoenix 性能 | Microsoft Docs
-description: 有关优化 Phoenix 性能的最佳做法。
-services: hdinsight
-documentationcenter: ''
-tags: azure-portal
+title: Azure HDInsight 中的 Phoenix 性能
+description: 优化 Azure HDInsight 群集 Apache Phoenix 性能的最佳做法
 author: ashishthaps
-manager: jhubbard
-editor: cgronlun
-ms.assetid: ''
+ms.reviewer: jasonh
 ms.service: hdinsight
 ms.custom: hdinsightactive
-ms.devlang: na
-ms.topic: article
+ms.topic: conceptual
 ms.date: 01/22/2018
 ms.author: ashishth
-ms.openlocfilehash: b4c1e3fb919ab9ad88a15b51a5e204290a7a12cf
-ms.sourcegitcommit: d78bcecd983ca2a7473fff23371c8cfed0d89627
-ms.translationtype: HT
+ms.openlocfilehash: b2a40802070510939332c3f5e876293445cf2df1
+ms.sourcegitcommit: fa4852cca8644b14ce935674861363613cf4bfdf
+ms.translationtype: MT
 ms.contentlocale: zh-CN
-ms.lasthandoff: 05/14/2018
+ms.lasthandoff: 09/09/2019
+ms.locfileid: "70810430"
 ---
-# <a name="phoenix-performance-best-practices"></a>Phoenix 性能最佳实践
+# <a name="apache-phoenix-performance-best-practices"></a>Apache Phoenix 性能最佳做法
 
-Phoenix 性能的最重要方面是优化基础 HBase。 Phoenix 在 HBase 的顶层创建一个关系数据模型，用于将 SQL 查询转换为 HBase 操作，例如扫描。 表架构的设计、主键中字段的选择和排序，以及索引的用法都会影响 Phoenix 的性能。
+[Apache Phoenix](https://phoenix.apache.org/) 性能的最重要方面是优化基础 [Apache HBase](https://hbase.apache.org/)。 Phoenix 在 HBase 的顶层创建一个关系数据模型，用于将 SQL 查询转换为 HBase 操作，例如扫描。 表架构的设计、主键中字段的选择和排序，以及索引的用法都会影响 Phoenix 的性能。
 
 ## <a name="table-schema-design"></a>表架构设计
 
@@ -36,31 +31,31 @@ Phoenix 表的架构设计包括主键设计、列系列设计、单个列的设
 
 例如，联系人表包含名字、姓氏、电话号码和地址，所有这些数据都包含在同一个列系列中。 可以基于不断递增的序列号定义主键：
 
-|rowkey|       地址|   phone| firstName| lastName|
+|rowkey|       地址|   电话| firstName| lastName|
 |------|--------------------|--------------|-------------|--------------|
 |  1000|1111 San Gabriel Dr.|1-425-000-0002|    John|Dole|
 |  8396|5415 San Gabriel Dr.|1-230-555-0191|  Calvin|Raji|
 
 但是，如果经常按 lastName 执行查询，则使用此主键可能性能不佳，因为每个查询需要扫描整个表才能读取每个 lastName 的值。 此时，可以基于 lastName、firstName 和社会安全号码列定义主键。 最后一列用于区分位于同一地址、使用相同姓名的两位居民（例如父亲和儿子）。
 
-|rowkey|       地址|   phone| firstName| lastName| socialSecurityNum |
+|rowkey|       地址|   电话| firstName| lastName| socialSecurityNum |
 |------|--------------------|--------------|-------------|--------------| ---|
 |  1000|1111 San Gabriel Dr.|1-425-000-0002|    John|Dole| 111 |
 |  8396|5415 San Gabriel Dr.|1-230-555-0191|  Calvin|Raji| 222 |
 
 Phoenix 使用此新主键生成的行键是：
 
-|rowkey|       地址|   phone| firstName| lastName| socialSecurityNum |
+|rowkey|       地址|   电话| firstName| lastName| socialSecurityNum |
 |------|--------------------|--------------|-------------|--------------| ---|
 |  Dole-John-111|1111 San Gabriel Dr.|1-425-000-0002|    John|Dole| 111 |
 |  Raji-Calvin-222|5415 San Gabriel Dr.|1-230-555-0191|  Calvin|Raji| 222 |
 
 在上面的第一行中，行键的数据按如下方式表示：
 
-|rowkey|       key|   值| 
+|rowkey|       钥|   value| 
 |------|--------------------|---|
 |  Dole-John-111|地址 |1111 San Gabriel Dr.|  
-|  Dole-John-111|phone |1-425-000-0002|  
+|  Dole-John-111|电话 |1-425-000-0002|  
 |  Dole-John-111|firstName |John|  
 |  Dole-John-111|lastName |Dole|  
 |  Dole-John-111|socialSecurityNum |111| 
@@ -118,7 +113,7 @@ Phoenix 索引是一个 HBase 表，存储索引表中的部分或全部数据�
 
 例如，在示例联系人表中，可以只是基于 socialSecurityNum 列创建辅助索引。 此辅助索引可以加速按 socialSecurityNum 值执行筛选的查询，但检索其他字段值需要针对主表执行另一次读取。
 
-|rowkey|       地址|   phone| firstName| lastName| socialSecurityNum |
+|rowkey|       地址|   电话| firstName| lastName| socialSecurityNum |
 |------|--------------------|--------------|-------------|--------------| ---|
 |  Dole-John-111|1111 San Gabriel Dr.|1-425-000-0002|    John|Dole| 111 |
 |  Raji-Calvin-222|5415 San Gabriel Dr.|1-230-555-0191|  Calvin|Raji| 222 |
@@ -229,9 +224,9 @@ Phoenix 索引是一个 HBase 表，存储索引表中的部分或全部数据�
 
     CREATE TABLE CONTACTS (...) DISABLE_WAL=true;
 
-有关此选项和其他选项的详细信息，请参阅 [Phoenix 语法](http://phoenix.apache.org/language/index.html#options)。
+有关此选项和其他选项的详细信息，请参阅 [Apache Phoenix 语法](https://phoenix.apache.org/language/index.html#options)。
 
 ## <a name="next-steps"></a>后续步骤
 
-* [Phoenix 优化指南](https://phoenix.apache.org/tuning_guide.html)
-* [辅助索引](http://phoenix.apache.org/secondary_indexing.html)
+* [Apache Phoenix 优化指南](https://phoenix.apache.org/tuning_guide.html)
+* [辅助索引](https://phoenix.apache.org/secondary_indexing.html)
